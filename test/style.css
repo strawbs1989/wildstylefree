@@ -1,0 +1,259 @@
+/* Reset & Fonts */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* Header */
+header {
+  background-color: DodgerBlue;
+  color: white;
+  padding: 20px 0;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 60px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.listen-now {
+  background-color: #04AA6D;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+  background-color: #04AA6D;
+  color: white;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.now-playing-wrapper {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.now-playing-wrapper h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.now-playing {
+  font-size: 16px;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+
+/* Presenters */
+.presenters {
+  padding: 60px 0;
+  background: #fff;
+  text-align: center;
+}
+
+.presenters-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.presenter-card {
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.presenter-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* unsigned */
+.unsigned {
+  padding: 60px 0;
+  background: #fff;
+  text-align: center;
+}
+
+.unsigned-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.unsigned-card {
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.unsigned-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+
+
+/* dj of the year */
+.dj-of-the-year {
+  padding: 60px 0;
+  background: #fff;
+  text-align: center;
+}
+
+.dj-of-the-year {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.dj-of-the-year {
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.dj-of-the-year img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Dj Profile */
+.profile-section {
+  padding: 60px 0;
+  background: #fff;
+}
+
+.profile-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  justify-content: center;
+}
+
+.profile-image img {
+  max-width: 300px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.profile-info {
+  max-width: 600px;
+  text-align: left;
+}
+
+.profile-info h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.profile-info p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.profile-info ul {
+  list-style: square inside;
+  padding-left: 0;
+  margin-bottom: 15px;
+}
+
+/* Sections */
+.schedule, .birthday, .volunteer {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.birthday form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.birthday input, .birthday button {
+  padding: 12px;
+  font-size: 16px;
+  
+}
+
+.requests button {
+  background-color: #111;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.volunteer .btn {
+  padding: 12px 25px;
+  background-color: #04AA6D;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.volunteer .btn:hover {
+  background-color: #007d50;
+}
+
+/* Footer */
+footer {
+  background-color: #111;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.social-icons a {
+  margin: 0 10px;
+  color: white;
+  font-size: 20px;
+}
