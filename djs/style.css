@@ -74,11 +74,10 @@
     .dj-card h3 { margin-top: 0.5rem; }
     .dj-card p { color: #bbb; }
 
-    footer {
-      background: #000;
-      color: #aaa;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      border-top: 4px solid red;
-    }
+    .footer a {
+    color: #aaa;
+    transition: color 0.3s ease;
+  }
+  .footer a:hover {
+    color: red;
+  }
