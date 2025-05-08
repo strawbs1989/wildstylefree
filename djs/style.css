@@ -1,104 +1,84 @@
-.dj-profile {
-  background: #000;
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-  border: 4px solid #ff0000;
-  border-radius: 10px;
-  max-width: 300px;
-  margin: 20px auto;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Oswald', sans-serif; background-color: #111; color: #fff; line-height: 1.6; }
 
-.dj-profile img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.dj-profile h2 {
-  font-size: 24px;
-  margin: 10px 0;
-  font-family: 'Arial Black', sans-serif;
-}
-
-.dj-profile p {
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-.stream-icons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.stream-icons img {
-  width: 40px;
-  height: auto;
-}
-
-.contact {
-  font-size: 14px;
-  margin-top: 10px;
-  color: #ccc;
-}
-
- body {
-      margin: 0;
-      font-family: 'Oswald', sans-serif;
-      background-color: #111;
-      color: #fff;
-    }
     header {
-      background: #000;
+      background-color: #000;
+      border-bottom: 4px solid red;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 4px solid red;
     }
-    header h1 {
+    header h1 { color: red; font-size: 2rem; }
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: red; }
+
+    .hero {
+      background: url('images/studio.jpg') no-repeat center center/cover;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+    .hero h2 {
+      font-size: 3rem;
+      background: rgba(0,0,0,0.6);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      border: 3px solid red;
+    }
+
+    section {
+      padding: 2rem;
+    }
+
+    .djs, .schedule {
+      background: #1c1c1c;
+      margin-bottom: 2rem;
+      border: 3px solid red;
+      border-radius: 10px;
+    }
+
+    .djs h2, .schedule h2 {
+      text-align: center;
       color: red;
-      margin: 0;
-      font-size: 2rem;
+      margin-bottom: 1rem;
     }
+
     .dj-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
-      padding: 2rem;
+      padding: 1rem 2rem;
     }
+
     .dj-card {
-      background: #1c1c1c;
-      border: 3px solid red;
-      border-radius: 10px;
       text-align: center;
+      background: #222;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255,0,0,0.3);
     }
     .dj-card img {
       width: 100%;
-      height: auto;
       border-bottom: 2px solid red;
     }
-    .dj-card h2 {
-      margin: 0.5rem 0 0.2rem;
-      color: #fff;
-      font-size: 1.5rem;
-    }
-    .dj-card p {
-      margin: 0 0 1rem;
-      font-size: 1rem;
-      color: #ccc;
-    }
+    .dj-card h3 { margin-top: 0.5rem; }
+    .dj-card p { color: #bbb; }
+
     footer {
+      background: #000;
+      color: #aaa;
       text-align: center;
       padding: 1rem;
-      background: #000;
-      color: #777;
       font-size: 0.9rem;
       border-top: 4px solid red;
     }
