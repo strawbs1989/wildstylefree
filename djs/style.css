@@ -65,7 +65,7 @@ Specificity: (0,1,0)
       padding: 2rem;
     }
 
-      .dj-card {
+         .dj-card {
   background-color: #1c1c1c;
   border: 3px solid red;
   border-radius: 12px;
@@ -81,7 +81,7 @@ Specificity: (0,1,0)
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
   transform: translateY(-5px);
 }
-4pm
+
 .dj-card img {
   border-radius: 10px;
   border: 2px solid red;
