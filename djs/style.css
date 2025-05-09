@@ -9,6 +9,16 @@
       justify-content: space-between;
       align-items: center;
     }
+	
+	.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 60px;
+}
     header h1 { color: red; font-size: 2rem; }
     nav a {
       color: white;
