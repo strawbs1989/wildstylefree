@@ -65,39 +65,37 @@ Specificity: (0,1,0)
       padding: 2rem;
     }
 
-    .djs, .schedule {
-      background: #1c1c1c;
-      margin-bottom: 2rem;
-      border: 3px solid red;
-      border-radius: 10px;
-    }
+      .dj-card {
+  background-color: #1c1c1c;
+  border: 3px solid red;
+  border-radius: 12px;
+  color: #ccc;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
 
-    .djs h2, .schedule h2 {
-      text-align: center;
-      color: red;
-      margin-bottom: 1rem;
-    }
+.dj-card:hover {
+  border-color: white;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+  transform: translateY(-5px);
+}
+4pm
+.dj-card img {
+  border-radius: 10px;
+  border: 2px solid red;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
 
-    .dj-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      padding: 1rem 2rem;
-    }
-
-    .dj-card {
-      text-align: center;
-      background: #222;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(255,0,0,0.3);
-    }
-    .dj-card img {
-      width: 100%;
-      border-bottom: 2px solid red;
-    }
-    .dj-card h3 { margin-top: 0.5rem; }
-    .dj-card p { color: #bbb; }
+.dj-card:hover img {
+  border-color: white;
+  transform: scale(1.02);
+}
 
     .footer a {
     color: #aaa;
@@ -106,3 +104,5 @@ Specificity: (0,1,0)
   .footer a:hover {
     color: red;
   }
+  
+  
