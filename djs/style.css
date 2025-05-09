@@ -64,6 +64,8 @@ Specificity: (0,1,0)
     section {
       padding: 2rem;
     }
+	
+	
 
          .dj-card {
   background-color: #1c1c1c;
@@ -82,11 +84,19 @@ Specificity: (0,1,0)
   transform: translateY(-5px);
 }
 
+.dj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
 .dj-card img {
   width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 0;
+  aspect-ratio: 1 / 1; /* Keeps the image square */
+  border-radius: 0; /* Square corners */
   object-fit: cover;
+  border: 2px solid red;
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .dj-card:hover img {
