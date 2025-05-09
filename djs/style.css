@@ -19,6 +19,21 @@
 .logo {
   height: 60px;
 }
+
+.container, 
+.container-fluid, 
+.container-lg, 
+.container-md, 
+.container-sm, 
+.container-xl
+Specificity: (0,1,0)
+ {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
     header h1 { color: red; font-size: 2rem; }
     nav a {
       color: white;
