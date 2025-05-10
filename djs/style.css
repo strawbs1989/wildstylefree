@@ -130,7 +130,7 @@ a:hover {
 }
 
 .dj-card img {
-  width: 100%;
+  
   aspect-ratio: 1 / 1; /* Keeps the image square */
   border-radius: 0; /* Square corners */
   object-fit: cover;
