@@ -1,23 +1,35 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Oswald', sans-serif; background-color: #111; color: #fff; line-height: 1.6; }
 
-    header {
-      background-color: #000;
-      border-bottom: 4px solid red;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-	
-	.header-container {
+    .header-wrapper {
+  margin: 2rem;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
+}
+
+.header-content nav a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 1rem;
+  transition: color 0.3s ease;
+}
+
+.header-content nav a:hover {
+  color: red;
 }
 
 .logo {
-  height: 60px;
+  height: 80px;
+  border: 2px solid red;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
 }
 
 .container, 
