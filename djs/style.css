@@ -105,8 +105,8 @@ a:hover {
   border: 3px solid red;
 }
 
-/* DJ Cards (excluding header) */
-.card {
+/* Presenters */
+.dj-card {
   background-color: #1c1c1c;
   border: 3px solid red;
   border-radius: 12px;
@@ -117,23 +117,28 @@ a:hover {
   transition: all 0.3s ease;
 }
 
-.card:hover {
+.dj-card:hover {
   border-color: white;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
   transform: translateY(-5px);
 }
 
-.card img {
-  border-radius: 10px;
-  border: 2px solid red;
+.dj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.dj-card img {
   width: 100%;
-  height: auto;
-  max-height: 300px;
+  aspect-ratio: 1 / 1; /* Keeps the image square */
+  border-radius: 0; /* Square corners */
   object-fit: cover;
+  border: 2px solid red;
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.card:hover img {
+.dj-card:hover img {
   border-color: white;
   transform: scale(1.02);
 }
