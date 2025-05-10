@@ -1,36 +1,15 @@
-/* Reset & Base Styling */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Oswald', sans-serif; background-color: #111; color: #fff; line-height: 1.6; }
 
-body {
-  font-family: 'Oswald', sans-serif;
-  background-color: #111;
-  color: #fff;
-  line-height: 1.6;
-}
-
-a {
-  color: #ccc;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: red;
-}
-
-/* Header */
-.header-wrapper {
-  background-color: #1c1c1c;
-  border: 3px solid red;
-  border-radius: 12px;
-  color: #ccc;
-  text-align: center;
-  padding: 1rem;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    .header-wrapper {
+      background-color: #1c1c1c;
+    border: 3px solid red;
+    border-radius: 12px;
+    color: #ccc;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    
 }
 
 .header-flex {
@@ -40,73 +19,107 @@ a:hover {
   flex-wrap: wrap;
 }
 
-.logo {
-  height: 80px;
-  border: 2px solid red;
-  border-radius: 8px;
-  padding: 4px;
-  box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
-}
-
-/* Now Playing */
 .now-playing {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
-  font-size: 0.9rem;
 }
 
 #NowOn {
-  padding: 0.4rem 1rem;
-  border: 1px dashed #ccc;
+  font-size: 12px;
+  color: white;
+  background: transparent;
+  border: 1px dashed #aaa;
+  padding: 0.5rem;
   border-radius: 6px;
   cursor: pointer;
-  color: white;
-  font-size: 14px;
-  max-width: 300px;
-  text-align: right;
 }
 
 .WimpyPlayerPopup902 {
+  font-size: 16px;
   background-color: red;
   color: white !important;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 1rem;
   border-radius: 8px;
-  display: inline-block;
-  text-align: center;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(255,0,0,0.4);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header-content nav a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 1rem;
+  transition: color 0.3s ease;
+}
+
+.header-content nav a:hover {
+  color: red;
+}
+
+.logo {
+  height: 80px;
+  border: 2px solid red;
   box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
 }
 
-.WimpyPlayerPopup902:hover {
-  background-color: white;
-  color: red !important;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+.container, 
+.container-fluid, 
+.container-lg, 
+.container-md, 
+.container-sm, 
+.container-xl
+Specificity: (0,1,0)
+ {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
+    header h1 { color: red; font-size: 2rem; }
+    nav a {
+      color: black;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: red; }
 
-/* Hero Section */
-.hero {
-  background: url('images/studio.jpg') no-repeat center center/cover;
-  height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-}
+    .hero {
+      background: url('images/studio.jpg') no-repeat center center/cover;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+    .hero h2 {
+      font-size: 3rem;
+      background: rgba(0,0,0,0.6);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      border: 3px solid red;
+    }
 
-.hero h2 {
-  font-size: 3rem;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  border: 3px solid red;
-}
+    section {
+      padding: 2rem;
+    }
+	
+	
 
-/* Presenters */
-.dj-card {
+         .dj-card {
   background-color: #1c1c1c;
   border: 3px solid red;
   border-radius: 12px;
@@ -143,54 +156,12 @@ a:hover {
   transform: scale(1.02);
 }
 
-/* Footer */
-.footer {
-  background-color: #000;
-  color: #aaa;
-  font-size: 0.9rem;
-  border-top: 3px solid red;
-}
-
-.footer h5 {
-  color: red;
-  margin-bottom: 1rem;
-}
-
-.footer a {
-  color: #aaa;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer a:hover {
-  color: red;
-}
-
-.footer img {
-  border-radius: 8px;
-}
-
-/* Banner */
-#banner img {
-  border: 3px solid red;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .header-flex {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    .footer a {
+    color: #aaa;
+    transition: color 0.3s ease;
   }
-
-  .now-playing {
-    align-items: center;
-    text-align: center;
+  .footer a:hover {
+    color: red;
   }
-
-  .logo {
-    height: 60px;
-  }
-}
+  
+  
