@@ -152,6 +152,20 @@ a:hover {
   color: #fff;
 }
 
+/* Form */
+form.grid input,
+form.grid textarea,
+form.grid button {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+form.grid {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
 /* Footer */
 .footer {
   background-color: #000;
