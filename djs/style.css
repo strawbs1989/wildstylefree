@@ -166,6 +166,25 @@ form.grid {
   margin: 0 auto;
 }
 
+/* Birthday Styling */
+birthday {
+padding: 60px 0;
+text-align: center;
+}
+.birthday form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.birthday input, .birthday button {
+  padding: 12px;
+  font-size: 16px;
+  
+}
+
 /* Footer */
 .footer {
   background-color: #000;
