@@ -94,12 +94,12 @@ a:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: black;
+  color: white;
 }
 
 .hero h2 {
   font-size: 3rem;
-  background: gb(12 120 243) !important;
+  background: rgba(0, 0, 0, 0.6);
   padding: 1rem 2rem;
   border-radius: 10px;
   border: 3px solid red;
