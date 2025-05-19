@@ -105,6 +105,54 @@ a:hover {
   border: 3px solid red;
 }
 
+/* Chat */
+body {
+    margin: 0;
+    background: #121212;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+  }
+
+  .chat-jukebox-wrapper {
+    background: #1e1e1e;
+    border: 3px solid #ff0050;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 0, 80, 0.6);
+  }
+
+  .jukebox-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .jukebox-audio {
+    width: 100%;
+    margin-bottom: 30px;
+    outline: none;
+    border-radius: 8px;
+  }
+
+  .chat-iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+    border-radius: 10px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .chat-jukebox-wrapper {
+      width: 90%;
+      padding: 20px;
+    }
+  }
+  
 /* DJs Page Styling */
 .djs-page {
   padding: 2rem;
