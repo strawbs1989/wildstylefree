@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Professional Chatbox</title>
-  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body onload="showLogin()">
 
-  <!-- Login / Signup Modals -->
-  <center><p>Users Add You're Username NO password</center></p>
+  <center><p>Users Add Your Username NO password</p></center>
+
   <div id="loginModal" class="modal">
     <h2>Admin/User Login</h2>
     <input type="text" id="loginUser" placeholder="Username" />
@@ -26,7 +26,6 @@
     <button onclick="showLogin()">Back to Login</button>
   </div>
 
-  <!-- Main chat container -->
   <div id="container" style="display:none;">
     <div id="sidebar">
       <h3>👑 Admins</h3>
@@ -46,6 +45,7 @@
     </div>
   </div>
 
-  <script src="https://wildstyle.vip/test/script.js"></script>
+  <script type="module" src="script.js"></script>
+
 </body>
 </html>
