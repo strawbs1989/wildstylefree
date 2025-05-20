@@ -1,42 +1,70 @@
 body {
-  background-color: white;
-  color: black;
-  font-family: sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
+  font-family: sans-serif;
+  background: white;
+  color: black;
+}
+
+#container {
+  display: flex;
+  height: 100vh;
+}
+
+#sidebar {
+  width: 200px;
+  background: #f1f1f1;
+  padding: 10px;
+  border-right: 1px solid #ccc;
+}
+
+#sidebar h3 {
+  margin-top: 0;
+}
+
+#sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+#sidebar button {
+  margin-top: 10px;
+  width: 100%;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px;
 }
 
 #chatbox {
-  width: 100%;
-  max-width: 400px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 10px;
-  border-radius: 12px;
-  background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 #messages {
-  height: 300px;
+  flex: 1;
   overflow-y: auto;
   border: 1px solid #ccc;
-  padding: 10px;
   margin-bottom: 10px;
+  padding: 5px;
 }
 
 #chatInput {
-  width: 75%;
-  padding: 8px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+#chatbox button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
   margin-right: 5px;
 }
 
-button {
-  padding: 8px 12px;
-  background: red;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
+#admin-controls {
+  margin-top: 10px;
 }

@@ -7,15 +7,22 @@
   <link rel="stylesheet" href="https://wildstyle.vip/test/style.css"/>
 </head>
 <body>
-  <div id="chatbox">
-    <div id="messages"></div>
-    <input type="text" id="chatInput" placeholder="Type a message..." />
-    <button onclick="sendMessage()">Send</button>
-    <div id="admin-controls">
-      <button onclick="clearChat()">🧹 Clear Chat</button>
-      <button onclick="toggleMuteAll()">🔇 Mute All</button>
-      <button onclick="blockUser()">🚫 Block User</button>
-      <button onclick="unblockUser()">✅ Unblock User</button>
+  <div id="container">
+    <div id="sidebar">
+      <h3>👑 Admins</h3>
+      <ul id="adminList"></ul>
+      <button onclick="changeName()">✏️ Change Name</button>
+    </div>
+    <div id="chatbox">
+      <div id="messages"></div>
+      <input type="text" id="chatInput" placeholder="Type a message..." />
+      <button onclick="sendMessage()">Send</button>
+      <div id="admin-controls">
+        <button onclick="clearChat()">🧹 Clear Chat</button>
+        <button onclick="toggleMuteAll()">🔇 Mute All</button>
+        <button onclick="blockUser()">🚫 Block User</button>
+        <button onclick="unblockUser()">✅ Unblock User</button>
+      </div>
     </div>
   </div>
   <script src="https://wildstyle.vip/test/script.js"></script>
