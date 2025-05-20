@@ -1,5 +1,5 @@
 let currentUser = { username: "Jay", role: "admin" };
-let isMuted = false;
+let muted = false;
 let blockedUsers = ["UnknownUser1", "SpamBot"];
 
 function sendMessage() {
@@ -7,13 +7,8 @@ function sendMessage() {
   const message = input.value.trim();
   if (!message) return;
 
-  if (isMuted) {
-    alert("Chat is muted. Please wait.");
-    return;
-  }
-
-  if (currentUser.role !== "admin" && isBlocked(currentUser.username)) {
-    alert("You're blocked from chatting.");
+  if (currentUser.role !== "admin" && (isBlocked(currentUser.username) || muted)) {
+    alert("You are not allowed to send messages.");
     return;
   }
 
@@ -32,40 +27,26 @@ function displayMessage(user, text) {
 }
 
 function clearChat() {
-  if (currentUser.role !== "admin") {
-    alert("You do not have permission to clear the chat.");
-    return;
-  }
   document.getElementById("messages").innerHTML = "";
 }
 
-function muteAll() {
-  if (currentUser.role !== "admin") {
-    alert("You do not have permission to mute all users.");
-    return;
-  }
-  isMuted = !isMuted;
-  alert(isMuted ? "All users are muted." : "Users can send messages again.");
+function toggleMuteAll() {
+  muted = !muted;
+  alert(muted ? "All users are now muted." : "Users are unmuted.");
 }
 
-function blockUser(username) {
-  if (currentUser.role !== "admin") {
-    alert("You do not have permission to block users.");
-    return;
+function blockUser() {
+  const userToBlock = prompt("Enter the username to block:");
+  if (userToBlock && !blockedUsers.includes(userToBlock)) {
+    blockedUsers.push(userToBlock);
+    alert(`${userToBlock} has been blocked.`);
   }
-  if (blockedUsers.includes(username)) {
-    alert(`${username} is already blocked.`);
-    return;
-  }
-  blockedUsers.push(username);
-  alert(`${username} has been blocked.`);
 }
 
-function unblockUser(username) {
-  if (currentUser.role !== "admin") {
-    alert("You do not have permission to unblock users.");
-    return;
+function unblockUser() {
+  const userToUnblock = prompt("Enter the username to unblock:");
+  if (userToUnblock && blockedUsers.includes(userToUnblock)) {
+    blockedUsers = blockedUsers.filter(user => user !== userToUnblock);
+    alert(`${userToUnblock} has been unblocked.`);
   }
-  blockedUsers = blockedUsers.filter(user => user !== username);
-  alert(`${username} has been unblocked.`);
 }
