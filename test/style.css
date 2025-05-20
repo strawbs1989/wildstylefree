@@ -1,25 +1,42 @@
+body {
+  background-color: white;
+  color: black;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
 #chatbox {
   width: 100%;
   max-width: 400px;
-  border: 2px solid #444;
   padding: 10px;
   border-radius: 12px;
-  background: #1e1e1e;
-  color: #fff;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
+
 #messages {
   height: 300px;
   overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
   margin-bottom: 10px;
 }
+
 #chatInput {
-  width: 80%;
+  width: 75%;
   padding: 8px;
+  margin-right: 5px;
 }
+
 button {
   padding: 8px 12px;
-  background: #444;
+  background: red;
   border: none;
   color: white;
   cursor: pointer;
+  border-radius: 4px;
 }
