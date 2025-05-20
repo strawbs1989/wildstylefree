@@ -6,8 +6,27 @@
   <title>Professional Chatbox</title>
   <link rel="stylesheet" href="https://wildstyle.vip/test/style.css"/>
 </head>
-<body>
-  <div id="container">
+<body onload="showLogin()">
+
+  <!-- Login / Signup Modals -->
+  <div id="loginModal" class="modal">
+    <h2>Admin/User Login</h2>
+    <input type="text" id="loginUser" placeholder="Username" />
+    <input type="password" id="loginPass" placeholder="Password (admins only)" />
+    <button onclick="login()">Login</button>
+    <button onclick="showSignup()">Sign Up (Admins only)</button>
+  </div>
+
+  <div id="signupModal" class="modal" style="display:none;">
+    <h2>Admin Sign Up</h2>
+    <input type="text" id="signupUser" placeholder="New admin username" />
+    <input type="password" id="signupPass" placeholder="New admin password" />
+    <button onclick="signup()">Sign Up</button>
+    <button onclick="showLogin()">Back to Login</button>
+  </div>
+
+  <!-- Main chat container -->
+  <div id="container" style="display:none;">
     <div id="sidebar">
       <h3>👑 Admins</h3>
       <ul id="adminList"></ul>
@@ -17,7 +36,7 @@
       <div id="messages"></div>
       <input type="text" id="chatInput" placeholder="Type a message..." />
       <button onclick="sendMessage()">Send</button>
-      <div id="admin-controls">
+      <div id="admin-controls" style="display:none;">
         <button onclick="clearChat()">🧹 Clear Chat</button>
         <button onclick="toggleMuteAll()">🔇 Mute All</button>
         <button onclick="blockUser()">🚫 Block User</button>
@@ -25,6 +44,7 @@
       </div>
     </div>
   </div>
+
   <script src="https://wildstyle.vip/test/script.js"></script>
 </body>
 </html>

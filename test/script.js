@@ -1,93 +1,182 @@
-let currentUser = { username: "Jay", role: "admin" };
+let admins = loadAdmins(); // { username: hashedPass }
+let blockedUsers = [];
 let muted = false;
-let blockedUsers = ["UnknownUser1", "SpamBot"];
-let admins = ["Jay", "Laura"];
+let currentUser = null;
 
-function init() {
+function showLogin() {
+  document.getElementById("loginModal").style.display = "block";
+  document.getElementById("signupModal").style.display = "none";
+  document.getElementById("container").style.display = "none";
+}
+
+function showSignup() {
+  document.getElementById("signupModal").style.display = "block";
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("container").style.display = "none";
+}
+
+function loadAdmins() {
+  const stored = localStorage.getItem("chatAdmins");
+  return stored ? JSON.parse(stored) : {};
+}
+
+function saveAdmins() {
+  localStorage.setItem("chatAdmins", JSON.stringify(admins));
+}
+
+function hashPass(pass) {
+  return btoa(pass); // simple encoding for demo only
+}
+
+function signup() {
+  const user = document.getElementById("signupUser").value.trim();
+  const pass = document.getElementById("signupPass").value;
+
+  if (!user || !pass) {
+    alert("Please enter username and password");
+    return;
+  }
+  if (admins[user]) {
+    alert("Username already taken");
+    return;
+  }
+  admins[user] = hashPass(pass);
+  saveAdmins();
+  alert(`Admin "${user}" registered! You can now log in.`);
+  showLogin();
+}
+
+function login() {
+  const user = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value;
+
+  if (!user) {
+    alert("Please enter username");
+    return;
+  }
+
+  if (admins[user]) {
+    if (hashPass(pass) === admins[user]) {
+      currentUser = { username: user, role: "admin" };
+    } else {
+      alert("Wrong password for admin.");
+      return;
+    }
+  } else {
+    currentUser = { username: user, role: "guest" };
+  }
+
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("signupModal").style.display = "none";
+  document.getElementById("container").style.display = "flex";
+
   updateAdminList();
+  updateAdminControls();
+  addSystemMessage(`${currentUser.username} logged in as ${currentUser.role}`);
+}
+
+function updateAdminList() {
+  const list = document.getElementById("adminList");
+  list.innerHTML = "";
+  Object.keys(admins).forEach(admin => {
+    const li = document.createElement("li");
+    li.textContent = admin;
+    list.appendChild(li);
+  });
+}
+
+function updateAdminControls() {
+  const controls = document.getElementById("admin-controls");
+  controls.style.display = currentUser.role === "admin" ? "block" : "none";
 }
 
 function sendMessage() {
   const input = document.getElementById("chatInput");
-  const message = input.value.trim();
-  if (!message) return;
+  const msg = input.value.trim();
 
-  if (isBlocked(currentUser.username) || (muted && currentUser.role !== "admin")) {
-    alert("You are not allowed to send messages.");
-    return;
-  }
+  if (!msg) return;
+  if (muted && currentUser.role !== "admin") return alert("Chat is muted.");
+  if (blockedUsers.includes(currentUser.username)) return alert("You are blocked.");
 
-  displayMessage(currentUser.username, message);
+  const messages = document.getElementById("messages");
+  const div = document.createElement("div");
+
+  div.innerHTML = `
+    <strong>${currentUser.username}</strong>
+    ${currentUser.role === "admin" ? '<span class="admin-badge">Admin</span>' : ''}: 
+    ${escapeHtml(msg)}
+  `;
+  messages.appendChild(div);
   input.value = "";
-}
-
-function isBlocked(username) {
-  return blockedUsers.includes(username);
-}
-
-function displayMessage(user, text) {
-  const msgDiv = document.createElement("div");
-  msgDiv.textContent = `${user}: ${text}`;
-  document.getElementById("messages").appendChild(msgDiv);
+  messages.scrollTop = messages.scrollHeight;
 }
 
 function clearChat() {
+  if (currentUser.role !== "admin") return;
   document.getElementById("messages").innerHTML = "";
 }
 
 function toggleMuteAll() {
+  if (currentUser.role !== "admin") return;
   muted = !muted;
-  alert(muted ? "All users are now muted." : "Users are unmuted.");
+  alert(muted ? "All users muted." : "Users can send messages again.");
 }
 
 function blockUser() {
-  if (currentUser.role !== "admin") {
-    alert("Only admins can block users.");
+  if (currentUser.role !== "admin") return alert("Admins only.");
+  const username = prompt("Enter username to block:");
+  if (!username) return;
+  if (blockedUsers.includes(username)) {
+    alert(`${username} is already blocked.`);
     return;
   }
-  const userToBlock = prompt("Enter the username to block:");
-  if (userToBlock && !blockedUsers.includes(userToBlock)) {
-    blockedUsers.push(userToBlock);
-    alert(`${userToBlock} has been blocked.`);
-  }
+  blockedUsers.push(username);
+  alert(`${username} has been blocked.`);
 }
 
 function unblockUser() {
-  if (currentUser.role !== "admin") {
-    alert("Only admins can unblock users.");
+  if (currentUser.role !== "admin") return alert("Admins only.");
+  const username = prompt("Enter username to unblock:");
+  if (!username) return;
+  const idx = blockedUsers.indexOf(username);
+  if (idx === -1) {
+    alert(`${username} is not blocked.`);
     return;
   }
-  const userToUnblock = prompt("Enter the username to unblock:");
-  if (userToUnblock && blockedUsers.includes(userToUnblock)) {
-    blockedUsers = blockedUsers.filter(user => user !== userToUnblock);
-    alert(`${userToUnblock} has been unblocked.`);
-  }
-}
-
-function updateAdminList() {
-  const adminList = document.getElementById("adminList");
-  adminList.innerHTML = "";
-  admins.forEach(admin => {
-    const li = document.createElement("li");
-    li.textContent = admin;
-    adminList.appendChild(li);
-  });
+  blockedUsers.splice(idx, 1);
+  alert(`${username} has been unblocked.`);
 }
 
 function changeName() {
-  const newName = prompt("Enter your new display name:");
-  if (newName) {
-    const oldName = currentUser.username;
-    currentUser.username = newName;
-    if (currentUser.role === "admin") {
-      const index = admins.indexOf(oldName);
-      if (index !== -1) {
-        admins[index] = newName;
-      }
-    }
-    updateAdminList();
-    alert(`Your name has been changed to ${newName}`);
+  const newName = prompt("Enter your new username:");
+  if (!newName) return;
+  if (admins[newName]) {
+    alert("Username already taken.");
+    return;
   }
+  if (currentUser.role === "admin") {
+    // Rename admin in admins object
+    admins[newName] = admins[currentUser.username];
+    delete admins[currentUser.username];
+    saveAdmins();
+  }
+  currentUser.username = newName;
+  updateAdminList();
+  addSystemMessage(`User changed name to ${newName}`);
 }
 
-window.onload = init;
+function addSystemMessage(msg) {
+  const messages = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.style.fontStyle = "italic";
+  div.style.color = "gray";
+  div.textContent = msg;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
