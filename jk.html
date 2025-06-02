@@ -11,76 +11,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- Now Playing Script -->
-  <script>
-    var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
-    DH[1][10] = 'Monday at 12:00 PM<br>Emma Scotts Pluggin Baby Show<br>with Emma Scott';
-	DH[1][08] = 'Monday at 12 PM<br>James<br>with Gospal';
-      DH[1][17] = 'Monday at 5:00 PM<br>DJ ShawnDawg<br>With<br>DA MIX';
-      DH[1][18] = 'HOTSHOT MIX<br>with hotshotdj<br>Monday at 6 PM<br>hotshot mix';
-      DH[1][19] = 'Mix Set<br>with DJ DEZZY<br>Monday at 8 PM<br>Mix';
-      DH[1][17] = 'No Show<br>Auto<br>Monday at 5 PM<br>No Genre';
-      DH[1][18] = 'No Show<br>Auto<br>Monday at 6 PM<br>No Genre';
-      DH[1][20] = 'No Show<br>Auto<br>Monday at 8 PM<br>No Genre';
-      DH[1][22] = 'No Show<br>Auto<br>Monday 10 to Midnight<br>No Genre';
-      DH[1][23] = 'No Show<br>Auto<br>Monday at 11 PM<br>No Genre';
-      DH[2][01] = 'The Mix<br>With Renaldo<br>Tuesday at 1:00 AM<br>MIX';
-	  DH[2][12] = 'Raphsody<br>with DJ Mary<br>Tuesday at 12 AM<br>Raphsody';';
-      DH[2][08] = 'No Show<br>with Automix<br>Tuesday at 8 AM<br>Mix n Match';
-      DH[2][16] = 'No Show<br>Auto<br>Tuesday at 4 PM<br>No Genre';
-      DH[2][20] = 'No Show<br>Auto<br>Tuesday at 8 PM<br>No Genre';
-      DH[3][00] = 'Raphosdy<br>with DJ Sailor<br>Wednesday at 12 AM<br>Raphosdy';';
-	  DH[3][20] = 'Mixed<br>with Ronald<br>Wednesday at 8 PM<br>No Show';';
-      DH[3][20] = 'Dub<br>with Automix<br>Wednesday at 8 PM<br>Dub';';
-      DH[3][12] = 'Raphosdy<br>With Sailor<br>Wednesday 12 AM<br>Raphosdy';
-      DH[3][16] = 'No Show<br>Auto<br>Wednesday at 4 PM<br>No Genre';
-      DH[3][22] = 'No Show<br>Auto<br>Wednesday at 10 PM<br>No Genre';
-      DH[4][12] = 'SoulfulExpress<br>with autodj<br>Thursday Noon to 2 AM<br>Express';
-      DH[4][00] = 'No Show<br>Auto<br>Thursday 12 AM<br>Mix n Match';
-      DH[4][13] = 'automix<br>with autodj<br>Thursday at 1 PM<br>mix';
-      DH[4][14] = 'The Hour<br>with DJ V-Jeezy<br>Thursday at 2 PM<br>No Genre';
-      DH[4][22] = 'No Show<br>Auto<br>Thursday 10 PM<br>All In One';
-      DH[5][12] = 'Raphosdy<br>with DJ Sailor<br>Friday at 12 AM<br>Raphosdy';';
-      DH[5][12] = 'Friday at 12 AM<br>With Sailor Mary<br>Raphsody';
-      DH[5][16] = 'Friday at Noon<br>All things dancey<br>with Steven';
-      DH[5][20] = 'Friday at 8 PM<br>Dance<br>with Steven';
-      DH[5][09] = 'Friday at 9 AM<br>Mix n Match<br>with Autobox';
-      DH[5][14] = 'Friday at 2 PM<br>automix<br>with autodj';
-      DH[5][15] = 'Friday at 3 PM<br>automix<br>with autodj';
-      DH[5][16] = 'Friday at 4 PM<br>automix<br>with autodj';
-      DH[5][17] = 'Friday at 5 PM<br>automix<br>with autodj';
-      DH[5][19] = 'Friday at 7 PM<br>Mix n Match<br>with Autobox';
-      DH[5][22] = 'Friday at 10 PM<br>Auto<br>No Show';
-      DH[5][23] = 'Friday at 11 PM<br>automix<br>with autodj';
-      DH[6][18] = 'Saturday at 8 PM<br>Happy Hour<br>with EchoFalls';
-	  DH[6][22] = 'Saturday at 10 PM<br>Garage<br>with Phillip';
-      DH[6][16] = 'Saturday at 4 PM<br>HotShot DJbr>with HotShot';
-      DH[6][14] = 'Saturday at 2 PM<br>Monty Wolf<br>Deep Cuts';
-      DH[6][20] = 'Saturday at 8 PM<br>The Mix<br>with Tristan';
-      DH[6][23] = 'Saturday at 11 PM<br>mix<br>with autodj';
-      DH[7][20] = 'Sunday at 8 PM<br>Happy Hour<br>with echofalls';
-      DH[7][18] = 'Sunday at 6 PM<br>HotShot DJ<br>HOTSHOT';
-	  DH[7][19] = 'Sunday at 7 PM<br>Gospel<br>With James';
-    // Add more shows here...
-    function NowON() {
-      const now = new Date();
-      const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
-      document.getElementById("NowOn").innerHTML = show;
-    }
-  </script>
+  
 </head>
 
-<body onload="NowON()">
+
 
   <!-- Header -->
   <header class="dj-card header-wrapper">
     <div class="container header-container">
       <img src="/images/logo.png" alt="Wildstyle Radio Logo" class="logo">
-      <div class="now-playing">
-        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
-        <a class="WimpyPlayerPopup902" href="javascript:;" onclick="window.open('https://live365.com/embeds/v1/player/a50378?s=md&m=dark&c=mp3','wimpyPlayerPopupWindow','width=527,height=280')">🎧 Listen Now</a>
-      </div>
-    </div>
+      
   </header>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-black px-4">
