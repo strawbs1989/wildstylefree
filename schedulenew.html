@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Editable DJ Schedule</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #222; color: white; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; background: #333; }
+    th, td { border: 1px solid #444; padding: 10px; text-align: center; }
+    th { background: #e91e63; }
+    td[contenteditable="true"] { background: #fff; color: #000; }
+    td.booked-by-jay { background: #ffeb3b; }
+    td.booked-by-laura { background: #8bc34a; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+<a href="/index.html">Home!</a>
+  <h2>Wildstyle Radio - Editable DJ Schedule</h2>
+  <table id="scheduleTable">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Add as many time rows as you need -->
+      <tr>
+        <td>12am - 2am</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+      <tr>
+        <td>2am - 4am</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>4am - 6am</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>6am - 8am</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>8am - 10am</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>10am - 12pm</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>13pm - 17pm</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>17pm - 19pm</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>19pm - 21pm</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+    </tbody>
+	<tr>
+        <td>21pm - 23pm</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+	  <tr>
+        <td>23pm - 00:00am</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+      </tr>
+  </table>
+
+  <button onclick="submitSchedule()">Submit Changes</button>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwW3RKWmjkaVVc_q3I329xBsPpmWIX43yXJYKa4WGsvDgpgT-WXxdWGbHcG3ZriEIWf/exec";
+
+    document.querySelectorAll('#scheduleTable td[contenteditable]').forEach((cell, index) => {
+      cell.addEventListener('input', () => {
+        const row = cell.parentNode.rowIndex - 1;
+        const col = cell.cellIndex - 1;
+        const value = cell.innerText.trim();
+
+        // Optional color coding
+        cell.className = '';
+        if (value.toLowerCase().includes('jay')) cell.classList.add('booked-by-jay');
+        if (value.toLowerCase().includes('laura')) cell.classList.add('booked-by-laura');
+
+        fetch(scriptURL, {
+          method: 'POST',
+          body: JSON.stringify([{ row, col, value }]),
+          headers: { 'Content-Type': 'application/json' }
+        }).then(res => console.log('Saved:', value));
+      });
+    });
+
+    function submitSchedule() {
+      alert("All changes auto-save! You’re good to go 😎");
+    }
+  </script>
+</body>
+</html>
