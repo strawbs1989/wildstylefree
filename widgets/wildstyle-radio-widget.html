@@ -31,14 +31,27 @@
       margin-top: 10px;
     }
 
-    .now-playing {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #00ffcc;
+    .iframe-wrap {
+      position: relative;
+      width: 100%;
+      height: 150px;
+      margin-top: 15px;
     }
 
-    .now-playing span {
-      font-weight: bold;
+    .iframe-wrap iframe {
+      width: 100%;
+      height: 150px;
+      border: none;
+    }
+
+    .iframe-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: linear-gradient(to top, black 80%, transparent);
+      pointer-events: none;
     }
   </style>
 </head>
@@ -46,37 +59,17 @@
 
   <div class="widget-container">
     <h3>🎧 Wildstyle Radio</h3>
+
     <audio id="audioPlayer" controls>
       <source src="https://streaming.live365.com/a50378" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
 
-    <div class="now-playing" id="nowPlaying">
-      Loading track...
+    <div class="iframe-wrap">
+      <iframe src="https://live365.com/embed/played.html?station=a50378"></iframe>
+      <div class="iframe-overlay"></div>
     </div>
   </div>
-
-  <script>
-    async function fetchNowPlaying() {
-      try {
-        const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://public.api.live365.com/station/a50378');
-        const response = await fetch(proxyUrl);
-        const result = await response.json();
-        const data = JSON.parse(result.contents);
-
-        const artist = data?.now_playing?.artist || "Unknown Artist";
-        const title = data?.now_playing?.title || "Unknown Track";
-
-        document.getElementById('nowPlaying').innerHTML = `🎵 <span>${title}</span> by <span>${artist}</span>`;
-      } catch (error) {
-        document.getElementById('nowPlaying').textContent = "Track info unavailable.";
-        console.error("Error fetching track:", error);
-      }
-    }
-
-    fetchNowPlaying();
-    setInterval(fetchNowPlaying, 15000); // update every 15 sec
-  </script>
 
 </body>
 </html>
