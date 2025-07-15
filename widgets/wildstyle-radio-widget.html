@@ -20,6 +20,9 @@
       box-shadow: 0 0 12px #ff0055;
       max-width: 420px;
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     h3 {
@@ -29,14 +32,14 @@
     }
 
     .elfsight-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 100%;
       max-width: 400px;
       height: 200px;
-      margin: 15px auto 0 auto;
+      margin-top: 15px;
       overflow: hidden;
-	  display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .iframe-wrap {
@@ -74,6 +77,11 @@
       <div class="elfsight-app-fbb959cd-8c45-49af-82b9-ee049038a7e8" data-elfsight-app-lazy></div>
     </div>
 
+    <!-- Now Playing from Live365 -->
+    <div class="iframe-wrap">
+      <iframe src="https://live365.com/embed/played.html?station=a50378"></iframe>
+      <div class="iframe-overlay"></div>
+    </div>
   </div>
 
 </body>
