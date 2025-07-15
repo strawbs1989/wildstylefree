@@ -12,35 +12,16 @@
     }
 
     .widget-container {
-      background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
-      border: 2px solid #ff0055;
-      border-radius: 12px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 0 12px #ff0055;
-      max-width: 420px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  border: 2px solid #ff007f;
+  padding: 20px;
+  text-align: center;
+}
 
-    h3 {
-      margin: 0;
-      font-size: 18px;
-      color: #ffcc00;
-    }
-
-    .elfsight-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      max-width: 400px;
-      height: 200px;
-      margin-top: 15px;
-      overflow: hidden;
-    }
+.elfsight-container {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
 
     .iframe-wrap {
       position: relative;
@@ -68,21 +49,16 @@
 </head>
 <body>
 
-  <div class="widget-container">
-    <h3>🎧 Wildstyle Radio</h3>
+  
+    <div class="widget-container">
+  <h3>🎧 Wildstyle Radio</h3>
 
-    <!-- Elfsight Radio Player -->
-    <div class="elfsight-container">
-      <script src="https://static.elfsight.com/platform/platform.js" async></script>
-      <div class="elfsight-app-fbb959cd-8c45-49af-82b9-ee049038a7e8" data-elfsight-app-lazy></div>
-    </div>
-
-    <!-- Now Playing from Live365 -->
-    <div class="iframe-wrap">
-      <iframe src="https://live365.com/embed/played.html?station=a50378"></iframe>
-      <div class="iframe-overlay"></div>
-    </div>
+  <!-- Elfsight Radio Player -->
+  <div class="elfsight-container" style="display: flex; justify-content: center;">
+    <script src="https://static.elfsight.com/platform/platform.js" async></script>
+    <div class="elfsight-app-fbb959cd-8c45-49af-82b9-ee049038a7e8"></div>
   </div>
+</div>
 
 </body>
 </html>
