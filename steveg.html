@@ -14,7 +14,65 @@
   
 </head>
 
+<!-- Now Playing Script -->
+  <script>
+  var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
 
+  // MONDAY
+  DH[1][12] = "12pm – 2pm<br>James – Hip Hop";
+  DH[1][14] = "2pm – 4pm<br>DJBabyJayne – Mashup";
+  DH[1][17] = "5pm – 7pm<br>DJ ShawnDawg – DA MIX";
+  DH[1][18] = "6pm – 8pm<br>Graham – HotShot Mix";
+  DH[1][20] = "8pm – 10pm<br>DJ Dezzy – Mix Set";
+  DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
+
+  // TUESDAY
+  DH[2][01] = "1am – 2am<br>James – Mix";
+  DH[2][06] = "6am – 8am<br>Dj Dave– 60's - 70's";
+  DH[2][16] = "4pm – 8pm<br>Dj Skip– Randoms";
+  DH[2][21] = "9pm – 8am<br>Dj Joseph– Randoms";
+
+  // WEDNESDAY
+  DH[3][0]  = "12am – 2am<br>DJ Mary – Raphosdy";
+  DH[3][20] = "8pm – 10pm<br>Ron(SandMan)";
+  DH[3][22] = "10pm – 12pm<br>Reece";
+
+  // THURSDAY
+  DH[4][0]  = "12am – 2am<br>Sailor Mary – Raphosdy";
+  DH[4][03] = "3am – 9am<br>Wayne";
+  DH[4][16] = "4pm – 8pm<br>DJ Skip";
+  DH[4][19] = "7pm – 8pm<br>EchoFalls";
+  DH[4][20] = "8pm – 11pm<br>Suzie Mac";
+  DH[4][23] = "11pm – 1am<br>Mark";
+
+  // FRIDAY
+  DH[5][15]  = "3pm – 4pm<br>HotShot DJ";
+  DH[5][14] = "2pm – 4pm<br>HotShotDj – HotShot Mix";
+  DH[5][16] = "4pm – 6pm<br>Steven – All Things Dancey";
+  DH[5][18] = "6pm – 8pm<br>Steven – All Things Dancey";
+
+  // SATURDAY
+  DH[6][17] = "5pm – 6pm<br>HotShot DJ – HotShot Mix";
+  DH[6][19] = "7pm – 12am<br>AutoDj – The MIX";
+  DH[6][20] = "8pm – 10pm<br>AutoDj – The MIX";
+  DH[6][20] = "8pm – 9pm<br>DJ EchoFalls – Happy Hour Vibes";
+  DH[6][22] = "10pm – 12am<br>Phillip – Garage Explosion";
+
+  // SUNDAY
+  DH[7][18] = "6pm – 8pm<br>HotShot DJ – HotShot Mix";
+  DH[7][19] = "7pm – 10pm<br>James – Gospel";
+  DH[7][20] = "8pm – 9pm<br>DJ EchoFalls – Happy Hour Vibes";
+  DH[7][22] = "10pm – 12am<br>Phil – Garage Explosion";
+
+  function NowON() {
+    const now = new Date();
+    const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
+    document.getElementById("NowOn").innerHTML = show;
+  }
+</script>
+</head>
+
+<body onload="NowON()">
 
   <!-- Header -->
   <header class="dj-card header-wrapper">
