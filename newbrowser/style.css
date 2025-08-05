@@ -1,0 +1,144 @@
+body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0a0a0a;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to right, #1f1f1f, #2a2a2a);
+      padding: 10px 20px;
+      border-bottom: 2px solid #0ff;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      color: #0ff;
+      letter-spacing: 1px;
+    }
+
+    .search-bar {
+      flex-grow: 1;
+      margin: 0 20px;
+      display: flex;
+      align-items: center;
+      background-color: #1a1a1a;
+      border: 2px solid #0ff;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1em;
+    }
+
+    .security-icon {
+      margin-left: 10px;
+      color: limegreen;
+      font-size: 1.2em;
+    }
+
+    .tabs {
+      display: flex;
+      background: #121212;
+      padding: 5px 10px;
+      border-bottom: 1px solid #0ff;
+    }
+
+    .tab {
+      padding: 8px 16px;
+      margin-right: 5px;
+      background-color: #1f1f1f;
+      border: 1px solid #0ff;
+      border-radius: 4px 4px 0 0;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background-color: #0ff;
+      color: #000;
+    }
+
+    .content {
+      padding: 20px;
+      background: #0a0a0a;
+      height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .loading {
+      font-size: 1.2em;
+      color: #0ff;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    iframe.radio {
+      margin-top: 20px;
+      border: 2px solid #0ff;
+      border-radius: 8px;
+      width: 100%;
+      height: 80px;
+    }
+
+    .bookmarks {
+      padding: 10px 20px;
+      background: #1a1a1a;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #0ff;
+    }
+
+    .bookmark {
+      background: #0ff;
+      color: #000;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: #0ff;
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    body.light-mode {
+      background-color: #f0f0f0;
+      color: #000;
+    }
+    body.light-mode header,
+    body.light-mode .tabs,
+    body.light-mode .bookmarks {
+      background: #fff;
+      border-color: #00f;
+    }
+    body.light-mode .tab {
+      background-color: #eee;
+      border-color: #00f;
+    }
+    body.light-mode .tab.active {
+      background-color: #00f;
+      color: #fff;
+    }
