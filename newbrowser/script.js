@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.key === "Enter") {
       const query = searchInput.value.trim();
       if (query) {
-        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        const searchUrl = `https://www.yahoo.com/search?q=${encodeURIComponent(query)}`;
         window.open(searchUrl, "_blank");
       }
     }
