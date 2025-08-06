@@ -48,7 +48,7 @@ document.getElementById("searchInput").addEventListener("keydown", function (e) 
 
     let url = query;
     if (!isURL) {
-      url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+      url = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
     } else if (!query.startsWith("http")) {
       url = `https://${query}`;
     }
