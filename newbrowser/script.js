@@ -1,60 +1,82 @@
 let tabCounter = 1;
 
-function switchTab(event, tabId) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+function handleSearch(event) {
+  if (event.key === "Enter") {
+    const query = event.target.value;
+    const isURL = query.includes(".") && !query.includes(" ");
+    const url = isURL ? (query.startsWith("http") ? query : "https://" + query)
+                      : `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 
-  event.target.classList.add("active");
-  document.getElementById(tabId).classList.add("active");
+    openInNewTab(url);
+  }
+}
+
+function openInNewTab(url) {
+  const iframe = `<iframe src="${url}" style="width:100%; height:90vh; border:none;"></iframe>`;
+  const tabId = "tab" + tabCounter;
+  const newTabContent = document.createElement("div");
+  newTabContent.classList.add("tab-content");
+  newTabContent.id = tabId;
+  newTabContent.innerHTML = iframe;
+
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+
+  const newTab = document.createElement("div");
+  newTab.classList.add("tab", "active");
+  newTab.innerText = "Tab " + tabCounter;
+  newTab.onclick = (e) => switchTab(e, tabId);
+
+  document.getElementById("tabs").insertBefore(newTab, document.querySelector(".new-tab-btn"));
+  document.getElementById("tabContents").appendChild(newTabContent);
+
+  newTabContent.style.display = "block";
+  tabCounter++;
 }
 
 function addNewTab() {
-  const tabs = document.getElementById("tabs");
-  const contents = document.getElementById("tabContents");
+  const tabId = "tab" + tabCounter;
+  const newTabContent = document.createElement("div");
+  newTabContent.classList.add("tab-content");
+  newTabContent.id = tabId;
+  newTabContent.innerHTML = "<p>New blank tab. Enter a search or URL.</p>";
 
-  const newTabId = `tab${tabCounter++}`;
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
 
-  // Create new tab button
-  const tab = document.createElement("div");
-  tab.className = "tab";
-  tab.textContent = "New Tab";
-  tab.onclick = function (e) {
-    switchTab(e, newTabId);
-  };
-  tabs.insertBefore(tab, document.querySelector(".new-tab-btn"));
+  const newTab = document.createElement("div");
+  newTab.classList.add("tab", "active");
+  newTab.innerText = "Tab " + tabCounter;
+  newTab.onclick = (e) => switchTab(e, tabId);
 
-  // Create new content pane
-  const content = document.createElement("div");
-  content.className = "tab-content";
-  content.id = newTabId;
-  content.innerHTML = `
-    <h2>Welcome to WildstyleRadio Browser</h2>
-    <p>This is your stylish, secure browsing experience.</p>
-  `;
-  contents.appendChild(content);
+  document.getElementById("tabs").insertBefore(newTab, document.querySelector(".new-tab-btn"));
+  document.getElementById("tabContents").appendChild(newTabContent);
 
-  // Switch to new tab
-  tab.click();
+  newTabContent.style.display = "block";
+  tabCounter++;
 }
 
-// Search or URL handler
-document.getElementById("searchInput").addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    const query = this.value.trim();
-    if (query === "") return;
+function switchTab(event, tabId) {
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
 
-    const activeContent = document.querySelector(".tab-content.active");
-    const isURL = query.startsWith("http://") || query.startsWith("https://") || query.includes(".");
+  event.target.classList.add("active");
+  document.getElementById(tabId).style.display = "block";
+}
 
-    let url = query;
-    if (!isURL) {
-      url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-    } else if (!query.startsWith("http")) {
-      url = `https://${query}`;
-    }
-
-    activeContent.innerHTML = `
-      <iframe src="${url}" style="width: 100%; height: 100%; border: none;"></iframe>
-    `;
+function addBookmark() {
+  const activeTab = document.querySelector(".tab.active");
+  if (!activeTab || activeTab.innerText === "New Tab") return alert("Nothing to bookmark!");
+  const name = prompt("Bookmark name:");
+  if (name) {
+    const link = document.createElement("a");
+    link.href = "#";
+    link.innerText = name;
+    link.style.margin = "0 5px";
+    link.onclick = () => {
+      const tabId = activeTab.innerText.toLowerCase().replace(" ", "");
+      switchTab({ target: activeTab }, tabId);
+    };
+    document.getElementById("bookmarks").appendChild(link);
   }
-});
+}
