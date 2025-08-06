@@ -1,82 +1,85 @@
+let tabCount = 1;
+
 function handleSearch(event) {
-  if (event.key === "Enter") {
+  if (event.key === 'Enter') {
     const query = event.target.value.trim();
-    const url = getSearchUrl(query);
-    openInNewTab(url);
+    if (!query) return;
+
+    let url;
+    if (query.includes('.') || query.startsWith('http')) {
+      url = query.startsWith('http') ? query : `https://${query}`;
+    } else {
+      url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    }
+
+    addNewTabWithContent(`<iframe src="${url}" frameborder="0" style="width: 100%; height: 80vh;"></iframe>`);
+    event.target.value = '';
   }
-}
-
-function getSearchUrl(query) {
-  // Check if the input is a full URL
-  if (query.startsWith("http://") || query.startsWith("https://")) {
-    return query;
-  } else if (query.includes(".")) {
-    return "http://" + query;
-  } else {
-    // If not a URL, treat as a DuckDuckGo search
-    return `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
-  }
-}
-
-function openInNewTab(url) {
-  const tabId = `tab-${Date.now()}`;
-  const tab = document.createElement("div");
-  tab.className = "tab";
-  tab.textContent = url;
-  tab.onclick = (event) => switchTab(event, tabId);
-
-  const content = document.createElement("iframe");
-  content.src = url;
-  content.className = "tab-content";
-  content.id = tabId;
-
-  document.getElementById("tabs").appendChild(tab);
-  document.getElementById("tabContents").appendChild(content);
-
-  switchTab(null, tabId);
 }
 
 function switchTab(event, tabId) {
-  const tabs = document.querySelectorAll(".tab");
-  tabs.forEach((tab) => tab.classList.remove("active"));
-  if (event) event.target.classList.add("active");
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
 
-  const contents = document.querySelectorAll(".tab-content");
-  contents.forEach((content) => (content.style.display = "none"));
-
-  const selected = document.getElementById(tabId);
-  if (selected) selected.style.display = "block";
+  document.getElementById(tabId).style.display = 'block';
+  event.target.classList.add('active');
 }
 
 function addNewTab() {
-  const newTabId = `tab-${Date.now()}`;
-  const tab = document.createElement("div");
-  tab.className = "tab active";
-  tab.textContent = "New Tab";
-  tab.onclick = (event) => switchTab(event, newTabId);
+  const tabId = `tab-${++tabCount}`;
 
-  const content = document.createElement("div");
-  content.className = "tab-content";
-  content.id = newTabId;
-  content.innerHTML = "<h2>New Tab</h2><p>Start browsing!</p>";
+  const tab = document.createElement('div');
+  tab.className = 'tab';
+  tab.textContent = `Tab ${tabCount}`;
+  tab.onclick = (e) => switchTab(e, tabId);
 
-  // Clear other active tabs
-  document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach((c) => (c.style.display = "none"));
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.id = tabId;
+  content.innerHTML = `<p>New tab ready. Type in the search bar to start browsing.</p>`;
 
-  document.getElementById("tabs").appendChild(tab);
-  document.getElementById("tabContents").appendChild(content);
-  content.style.display = "block";
+  document.getElementById('tabs').insertBefore(tab, document.querySelector('.new-tab-btn'));
+  document.getElementById('tabContents').appendChild(content);
+
+  tab.click(); // Switch to new tab
+}
+
+function addNewTabWithContent(html) {
+  const tabId = `tab-${++tabCount}`;
+
+  const tab = document.createElement('div');
+  tab.className = 'tab';
+  tab.textContent = `Tab ${tabCount}`;
+  tab.onclick = (e) => switchTab(e, tabId);
+
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.id = tabId;
+  content.innerHTML = html;
+
+  document.getElementById('tabs').insertBefore(tab, document.querySelector('.new-tab-btn'));
+  document.getElementById('tabContents').appendChild(content);
+
+  tab.click();
 }
 
 function addBookmark() {
-  const currentUrl = document.querySelector(".tab-content:not([style*='display: none'])")?.src;
-  if (currentUrl) {
-    const bookmarks = document.getElementById("bookmarks");
-    const bookmark = document.createElement("div");
-    bookmark.textContent = currentUrl;
-    bookmark.className = "bookmark";
-    bookmark.onclick = () => openInNewTab(currentUrl);
-    bookmarks.appendChild(bookmark);
+  const currentTab = document.querySelector('.tab.active');
+  const contentId = currentTab ? currentTab.textContent : null;
+  const tabContent = document.getElementById(contentId);
+
+  if (!tabContent) return;
+
+  const urlInput = prompt("Enter URL to bookmark:");
+  if (urlInput) {
+    const bookmarksBar = document.getElementById('bookmarks');
+    const link = document.createElement('a');
+    link.href = urlInput;
+    link.target = '_blank';
+    link.textContent = '🔗 Bookmark';
+    link.style.marginLeft = '10px';
+    link.style.color = '#00ffd5';
+
+    bookmarksBar.appendChild(link);
   }
 }
