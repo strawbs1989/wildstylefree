@@ -4,8 +4,7 @@ function handleSearch(event) {
   if (event.key === "Enter") {
     const query = event.target.value;
     const isURL = query.includes(".") && !query.includes(" ");
-    const url = isURL ? (query.startsWith("http") ? query : "https://" + query)
-                      : `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    const searchUrl = `https://duckduckgo.com/?q=${query}`;
 
     openInNewTab(url);
   }
