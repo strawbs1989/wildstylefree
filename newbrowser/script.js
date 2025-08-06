@@ -1,81 +1,82 @@
-let tabCounter = 1;
-
 function handleSearch(event) {
   if (event.key === "Enter") {
-    const query = event.target.value;
-    const isURL = query.includes(".") && !query.includes(" ");
-    const searchUrl = `https://duckduckgo.com/?q=${query}`;
-
+    const query = event.target.value.trim();
+    const url = getSearchUrl(query);
     openInNewTab(url);
   }
 }
 
-function openInNewTab(url) {
-  const iframe = `<iframe src="${url}" style="width:100%; height:90vh; border:none;"></iframe>`;
-  const tabId = "tab" + tabCounter;
-  const newTabContent = document.createElement("div");
-  newTabContent.classList.add("tab-content");
-  newTabContent.id = tabId;
-  newTabContent.innerHTML = iframe;
-
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
-
-  const newTab = document.createElement("div");
-  newTab.classList.add("tab", "active");
-  newTab.innerText = "Tab " + tabCounter;
-  newTab.onclick = (e) => switchTab(e, tabId);
-
-  document.getElementById("tabs").insertBefore(newTab, document.querySelector(".new-tab-btn"));
-  document.getElementById("tabContents").appendChild(newTabContent);
-
-  newTabContent.style.display = "block";
-  tabCounter++;
+function getSearchUrl(query) {
+  // Check if the input is a full URL
+  if (query.startsWith("http://") || query.startsWith("https://")) {
+    return query;
+  } else if (query.includes(".")) {
+    return "http://" + query;
+  } else {
+    // If not a URL, treat as a DuckDuckGo search
+    return `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
+  }
 }
 
-function addNewTab() {
-  const tabId = "tab" + tabCounter;
-  const newTabContent = document.createElement("div");
-  newTabContent.classList.add("tab-content");
-  newTabContent.id = tabId;
-  newTabContent.innerHTML = "<p>New blank tab. Enter a search or URL.</p>";
+function openInNewTab(url) {
+  const tabId = `tab-${Date.now()}`;
+  const tab = document.createElement("div");
+  tab.className = "tab";
+  tab.textContent = url;
+  tab.onclick = (event) => switchTab(event, tabId);
 
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+  const content = document.createElement("iframe");
+  content.src = url;
+  content.className = "tab-content";
+  content.id = tabId;
 
-  const newTab = document.createElement("div");
-  newTab.classList.add("tab", "active");
-  newTab.innerText = "Tab " + tabCounter;
-  newTab.onclick = (e) => switchTab(e, tabId);
+  document.getElementById("tabs").appendChild(tab);
+  document.getElementById("tabContents").appendChild(content);
 
-  document.getElementById("tabs").insertBefore(newTab, document.querySelector(".new-tab-btn"));
-  document.getElementById("tabContents").appendChild(newTabContent);
-
-  newTabContent.style.display = "block";
-  tabCounter++;
+  switchTab(null, tabId);
 }
 
 function switchTab(event, tabId) {
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+  const tabs = document.querySelectorAll(".tab");
+  tabs.forEach((tab) => tab.classList.remove("active"));
+  if (event) event.target.classList.add("active");
 
-  event.target.classList.add("active");
-  document.getElementById(tabId).style.display = "block";
+  const contents = document.querySelectorAll(".tab-content");
+  contents.forEach((content) => (content.style.display = "none"));
+
+  const selected = document.getElementById(tabId);
+  if (selected) selected.style.display = "block";
+}
+
+function addNewTab() {
+  const newTabId = `tab-${Date.now()}`;
+  const tab = document.createElement("div");
+  tab.className = "tab active";
+  tab.textContent = "New Tab";
+  tab.onclick = (event) => switchTab(event, newTabId);
+
+  const content = document.createElement("div");
+  content.className = "tab-content";
+  content.id = newTabId;
+  content.innerHTML = "<h2>New Tab</h2><p>Start browsing!</p>";
+
+  // Clear other active tabs
+  document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach((c) => (c.style.display = "none"));
+
+  document.getElementById("tabs").appendChild(tab);
+  document.getElementById("tabContents").appendChild(content);
+  content.style.display = "block";
 }
 
 function addBookmark() {
-  const activeTab = document.querySelector(".tab.active");
-  if (!activeTab || activeTab.innerText === "New Tab") return alert("Nothing to bookmark!");
-  const name = prompt("Bookmark name:");
-  if (name) {
-    const link = document.createElement("a");
-    link.href = "#";
-    link.innerText = name;
-    link.style.margin = "0 5px";
-    link.onclick = () => {
-      const tabId = activeTab.innerText.toLowerCase().replace(" ", "");
-      switchTab({ target: activeTab }, tabId);
-    };
-    document.getElementById("bookmarks").appendChild(link);
+  const currentUrl = document.querySelector(".tab-content:not([style*='display: none'])")?.src;
+  if (currentUrl) {
+    const bookmarks = document.getElementById("bookmarks");
+    const bookmark = document.createElement("div");
+    bookmark.textContent = currentUrl;
+    bookmark.className = "bookmark";
+    bookmark.onclick = () => openInNewTab(currentUrl);
+    bookmarks.appendChild(bookmark);
   }
 }
