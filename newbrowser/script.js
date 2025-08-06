@@ -1,80 +1,49 @@
-const tabsContainer = document.getElementById('tabs');
-const tabContents = document.getElementById('tabContents');
-const searchBox = document.getElementById('searchBox');
+// Handle search functionality
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("searchInput");
 
-// Add first tab content
-let currentTabIndex = 0;
-
-function addNewTab(url = 'about:blank') {
-  const tab = document.createElement('div');
-  tab.className = 'tab';
-  tab.innerText = 'New Tab';
-  tab.onclick = () => switchTab(tab);
-
-  const content = document.createElement('div');
-  content.className = 'tab-content';
-  const iframe = document.createElement('iframe');
-  iframe.src = url;
-  content.appendChild(iframe);
-
-  tabsContainer.insertBefore(tab, tabsContainer.querySelector('.new-tab-btn'));
-  tabContents.appendChild(content);
-
-  switchTab(tab);
-}
-
-function switchTab(tabElement) {
-  const tabs = document.querySelectorAll('.tab');
-  const contents = document.querySelectorAll('.tab-content');
-
-  tabs.forEach(t => t.classList.remove('active'));
-  contents.forEach(c => c.classList.remove('active'));
-
-  tabElement.classList.add('active');
-  const index = Array.from(tabsContainer.children).indexOf(tabElement);
-  contents[index].classList.add('active');
-  currentTabIndex = index;
-}
-
-function handleSearch() {
-  const query = searchBox.value.trim();
-  if (!query) return;
-
-  const url = isValidURL(query) 
-    ? formatURL(query)
-    : `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-
-  addNewTab(url);
-  searchBox.value = '';
-}
-
-searchBox.addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') {
-    handleSearch();
-  }
+  searchInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const query = searchInput.value.trim();
+      if (query) {
+        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        window.open(searchUrl, "_blank");
+      }
+    }
+  });
 });
 
-function isValidURL(str) {
-  try {
-    new URL(str);
-    return true;
-  } catch {
-    return false;
+// Handle tab switching
+function switchTab(event, tabName) {
+  const tabs = document.querySelectorAll(".tab");
+  tabs.forEach(tab => tab.classList.remove("active"));
+  event.target.classList.add("active");
+
+  const content = document.getElementById("content");
+  if (tabName === "home") {
+    content.innerHTML = `
+      <h2>Welcome to WildstyleRadio Browser</h2>
+      <p>Your secure, stylish browsing starts here. This is a prototype layout designed to mimic a secure custom browser for desktop and Android.</p>
+      <p class="loading">Loading secure modules...</p>
+      <iframe class="radio" src="https://yourstreamurl.com/embed" title="Wildstyle Radio Player"></iframe>
+    `;
+  } else if (tabName === "wildstyle") {
+    content.innerHTML = `<iframe src="https://wildstyle.vip" width="100%" height="600px" style="border:none;"></iframe>`;
+  } else if (tabName === "nowPlaying") {
+    content.innerHTML = `<iframe src="https://wildstyle.vip/nowplaying" width="100%" height="600px" style="border:none;"></iframe>`;
   }
 }
 
-function formatURL(str) {
-  if (!str.startsWith('http')) {
-    return 'https://' + str;
-  }
-  return str;
-}
-
-function addBookmark() {
-  const tabs = document.querySelectorAll('.tab-content iframe');
-  const current = tabs[currentTabIndex];
-  if (current && current.src) {
-    alert('Bookmark saved: ' + current.src);
-    // Here you could save to localStorage or show in a list
+// Theme toggle
+function toggleTheme() {
+  const body = document.body;
+  if (body.classList.contains("dark")) {
+    body.classList.remove("dark");
+    body.style.background = "#fff";
+    body.style.color = "#000";
+  } else {
+    body.classList.add("dark");
+    body.style.background = "#0a0a0a";
+    body.style.color = "#fff";
   }
 }
