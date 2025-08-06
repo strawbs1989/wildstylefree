@@ -59,23 +59,38 @@ header {
 }
 
 .tabs {
-  display: flex;
-  gap: 10px;
-  flex-grow: 1;
-}
+      display: flex;
+      background: #111;
+      overflow-x: auto;
+    }
 
-.tab {
-  background-color: #333;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #fff;
-}
+    .tab {
+      padding: 10px 15px;
+      background: #222;
+      color: #fff;
+      cursor: pointer;
+      border-right: 1px solid #333;
+      user-select: none;
+    }
 
-.tab.active {
-  background-color: #0ff;
-  color: #000;
-}
+    .tab.active {
+      background: #444;
+    }
+
+    .tab-content {
+      display: none;
+      height: 85vh;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
 .new-tab-btn {
   background-color: #0ff;
