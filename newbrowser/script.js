@@ -38,7 +38,7 @@ searchInput.addEventListener('keypress', function(e) {
     const query = searchInput.value.trim();
     if (!query) return;
 
-    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    const searchUrl = `https://www.duckduckgo.com/search?q=${encodeURIComponent(query)}`;
 
     const tabIndex = document.querySelectorAll('.tab').length;
 
