@@ -1,65 +1,60 @@
+let tabCounter = 1;
+
 function switchTab(event, tabId) {
-  const allTabs = document.querySelectorAll(".tab");
-  const allContents = document.querySelectorAll(".tab-content");
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
 
-  allTabs.forEach(tab => tab.classList.remove("active"));
-  allContents.forEach(content => content.classList.remove("active"));
-
-  event.currentTarget.classList.add("active");
-  const selectedContent = document.getElementById(tabId);
-  if (selectedContent) {
-    selectedContent.classList.add("active");
-  }
+  event.target.classList.add("active");
+  document.getElementById(tabId).classList.add("active");
 }
 
 function addNewTab() {
-  const tabsContainer = document.getElementById("tabs");
-  const tabContentsContainer = document.getElementById("tabContents");
+  const tabs = document.getElementById("tabs");
+  const contents = document.getElementById("tabContents");
 
-  const newTabId = "tab" + Date.now();
+  const newTabId = `tab${tabCounter++}`;
 
   // Create new tab button
-  const newTab = document.createElement("div");
-  newTab.className = "tab";
-  newTab.textContent = "New Tab";
-  newTab.onclick = (event) => switchTab(event, newTabId);
-  tabsContainer.insertBefore(newTab, tabsContainer.querySelector(".new-tab-btn"));
+  const tab = document.createElement("div");
+  tab.className = "tab";
+  tab.textContent = "New Tab";
+  tab.onclick = function (e) {
+    switchTab(e, newTabId);
+  };
+  tabs.insertBefore(tab, document.querySelector(".new-tab-btn"));
 
-  // Create new tab content
-  const newContent = document.createElement("div");
-  newContent.className = "tab-content";
-  newContent.id = newTabId;
-  newContent.classList.add("active");
-  newContent.innerHTML = `
-    <h2>New Tab</h2>
-    <p>Search or browse below...</p>
-    <iframe class="radio" src="https://yourstreamurl.com/embed" title="Wildstyle Radio Player"></iframe>
+  // Create new content pane
+  const content = document.createElement("div");
+  content.className = "tab-content";
+  content.id = newTabId;
+  content.innerHTML = `
+    <h2>Welcome to WildstyleRadio Browser</h2>
+    <p>This is your stylish, secure browsing experience.</p>
   `;
+  contents.appendChild(content);
 
-  // Deactivate all existing tabs and contents
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
-
-  // Activate new tab and content
-  newTab.classList.add("active");
-  tabContentsContainer.appendChild(newContent);
+  // Switch to new tab
+  tab.click();
 }
 
-function toggleTheme() {
-  document.body.classList.toggle("dark-mode");
-}
+// Search or URL handler
+document.getElementById("searchInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    const query = this.value.trim();
+    if (query === "") return;
 
-// Search functionality
-document.addEventListener("DOMContentLoaded", () => {
-  const searchInput = document.getElementById("searchInput");
+    const activeContent = document.querySelector(".tab-content.active");
+    const isURL = query.startsWith("http://") || query.startsWith("https://") || query.includes(".");
 
-  searchInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      const query = searchInput.value.trim();
-      if (query) {
-        const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-        window.open(url, "_blank");
-      }
+    let url = query;
+    if (!isURL) {
+      url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    } else if (!query.startsWith("http")) {
+      url = `https://${query}`;
     }
-  });
+
+    activeContent.innerHTML = `
+      <iframe src="${url}" style="width: 100%; height: 100%; border: none;"></iframe>
+    `;
+  }
 });
