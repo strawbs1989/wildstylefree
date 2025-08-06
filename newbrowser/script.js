@@ -1,89 +1,64 @@
-let tabId = 0;
-let currentTab = null;
+let tabs = [];
+let currentTab = 0;
 
-function addNewTab(url = 'https://www.bing.com') {
-  tabId++;
-  const tabLabel = `Tab ${tabId}`;
+function addNewTab(url = "https://wildstyle.vip") {
+  const tabIndex = tabs.length;
+  const tab = document.createElement("div");
+  tab.className = "tab";
+  tab.textContent = `Tab ${tabIndex + 1}`;
+  tab.onclick = (e) => switchTab(e, tabIndex);
 
-  // Create tab button
-  const tab = document.createElement('div');
-  tab.className = 'tab';
-  tab.textContent = tabLabel;
-  tab.dataset.id = tabId;
-  tab.onclick = () => switchTab(tabId);
-  document.getElementById('tabs').insertBefore(tab, document.querySelector('.new-tab-btn'));
+  document.getElementById("tabs").insertBefore(tab, document.querySelector(".new-tab-btn"));
 
-  // Create iframe
-  const iframe = document.createElement('iframe');
+  const iframe = document.createElement("iframe");
+  iframe.className = "tab-frame";
   iframe.src = url;
-  iframe.id = `iframe-${tabId}`;
-  iframe.className = 'tab-frame';
-  document.getElementById('tabContents').appendChild(iframe);
+  iframe.style.display = "none";
+  document.getElementById("tabContents").appendChild(iframe);
 
-  switchTab(tabId);
+  tabs.push({ tab, iframe });
+
+  switchTab(null, tabIndex);
 }
 
-function switchTab(id) {
-  currentTab = id;
-
-  // Handle tab UI
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.id == id);
+function switchTab(event, index) {
+  tabs.forEach((obj, i) => {
+    obj.tab.classList.remove("active");
+    obj.iframe.style.display = "none";
   });
 
-  document.querySelectorAll('iframe').forEach(iframe => {
-    iframe.classList.remove('active');
-  });
-
-  const activeFrame = document.getElementById(`iframe-${id}`);
-  if (activeFrame) activeFrame.classList.add('active');
+  tabs[index].tab.classList.add("active");
+  tabs[index].iframe.style.display = "block";
+  currentTab = index;
 }
 
-function handleSearch(event) {
-  if (event.key === 'Enter') {
+function handleSearchInput(event) {
+  if (event.key === "Enter") {
     const input = event.target.value.trim();
-    let url = '';
+    if (!input) return;
 
-    // Check if it's a full URL
-    if (input.startsWith('http://') || input.startsWith('https://')) {
-      url = input;
-    } else if (input.includes('.') && !input.includes(' ')) {
-      url = `https://${input}`;
-    } else {
-      // Treat as a search query
-      const searchQuery = encodeURIComponent(input);
-      url = `https://www.google.com/search?q=${searchQuery}`;
+    let url = input;
+    if (!input.startsWith("http://") && !input.startsWith("https://") && !input.includes(".")) {
+      url = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+    } else if (!input.startsWith("http")) {
+      url = "https://" + input;
     }
 
-    // Load into active tab
-    if (currentTab) {
-      const iframe = document.getElementById(`iframe-${currentTab}`);
-      if (iframe) iframe.src = url;
-    } else {
-      addNewTab(url);
-    }
-
-    event.target.value = '';
+    tabs[currentTab].iframe.src = url;
+    event.target.value = ""; // clear input
   }
 }
 
 function addBookmark() {
-  const iframe = document.getElementById(`iframe-${currentTab}`);
-  if (!iframe) return;
-
-  const url = iframe.src;
-  const name = prompt('Bookmark name:', url);
-  if (!name) return;
-
-  const bookmark = document.createElement('div');
-  bookmark.textContent = name;
-  bookmark.className = 'tab';
-  bookmark.onclick = () => addNewTab(url);
-
-  document.getElementById('bookmarks').appendChild(bookmark);
+  const currentURL = tabs[currentTab].iframe.src;
+  alert("Bookmark saved: " + currentURL);
 }
 
-// Load default tab on startup
+// Initialize first tab
 window.onload = () => {
-  addNewTab();
+  tabs.push({
+    tab: document.querySelector(".tab"),
+    iframe: document.querySelector(".tab-frame")
+  });
+  document.getElementById("searchBox").addEventListener("keydown", handleSearchInput);
 };
