@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WildstyleRadio Browser</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://wildstyle.vip/newbrowser/style.css"/>
 </head>
 <body>
   <header>
@@ -14,7 +14,8 @@
         type="text" 
         id="searchBox" 
         placeholder="Search or enter URL..." 
-        onkeydown="handleSearch(event)" />
+        onkeydown="handleSearch(event)"
+      />
     </div>
     <div class="bookmarks" id="bookmarks">
       <span onclick="addBookmark()">🔖 Add Bookmark</span>
@@ -22,17 +23,14 @@
   </header>
 
   <div class="tabs" id="tabs">
-    <div class="tab active" onclick="switchTab(event, 'home')">New Tab</div>
+    <!-- Tabs will appear here -->
     <button class="new-tab-btn" onclick="addNewTab()">➕ New Tab</button>
   </div>
 
   <div class="tab-contents" id="tabContents">
-    <div class="tab-content" id="home">
-      <h2>Welcome to WildstyleRadio Browser</h2>
-      <p>This is your stylish, secure browsing experience.</p>
-    </div>
+    <!-- Tab iframes will be injected here -->
   </div>
 
-  <script src="script.js"></script>
+  <script src="https://wildstyle.vip/newbrowser/script.js"></script>
 </body>
 </html>
