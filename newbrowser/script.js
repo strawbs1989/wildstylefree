@@ -43,7 +43,7 @@ searchInput.addEventListener('keypress', function(e) {
     if (!query) return;
 
     // Use Brave Search (DuckDuckGo blocks iframes)
-    const searchUrl = `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
+    const searchUrl = `https://search.brave.com/?q=${encodeURIComponent(query)}`;
 
     addTab(`Search: ${query}`, searchUrl);
     searchInput.value = '';
