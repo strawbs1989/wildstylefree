@@ -1,60 +1,36 @@
-const tabs = document.getElementById('tabs');
-const tabContents = document.getElementById('tabContents');
-const searchInput = document.getElementById('searchInput');
-
-function switchTab(event, index) {
-  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-  event.target.classList.add('active');
-  document.querySelectorAll('.tab-content')[index].classList.add('active');
-}
-
-function addNewTab(url = 'https://wildstyle.vip/news') {
-  const tabIndex = document.querySelectorAll('.tab').length;
-
-  const newTab = document.createElement('div');
-  newTab.className = 'tab';
-  newTab.innerText = `Tab ${tabIndex}`;
-  newTab.onclick = function(event) {
-    switchTab(event, tabIndex);
-  };
-  tabs.appendChild(newTab);
-
-  const content = document.createElement('div');
-  content.className = 'tab-content';
-  content.innerHTML = `<iframe src="${url}" frameborder="0"></iframe>`;
-  tabContents.appendChild(content);
-
-  newTab.click();
-}
-
-function openBookmark(url) {
-  addNewTab(url);
-}
-
-searchInput.addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    const query = searchInput.value.trim();
-    if (!query) return;
-
-    const isURL = query.startsWith('http://') || query.startsWith('https://');
-    
-    // If it's a direct URL, open normally
-    if (isURL) {
-      addNewTab(query);
-    } else {
-      // Open search-results.html and pass the query in the URL
-      const searchUrl = `search-results.html?q=${encodeURIComponent(query)}`;
-      addNewTab(searchUrl);
+function handleSearch(event) {
+      if (event.key === "Enter") {
+        const query = document.getElementById("searchInput").value.trim();
+        if (query !== "") {
+          const searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+          window.open(searchUrl, '_blank');
+        }
+      }
     }
 
-    searchInput.value = '';
-  }
-});
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
 
+    function switchTab(event, tabName) {
+      const tabs = document.querySelectorAll(".tab");
+      tabs.forEach(tab => tab.classList.remove("active"));
+      event.target.classList.add("active");
 
-// Load default tab
-window.onload = () => {
-  addNewTab('https://wildstyle.vip');
-};
+      const content = document.getElementById("content");
+      if (tabName === 'home') {
+        content.innerHTML = `
+          <h2>Welcome to WildstyleRadio Browser</h2>
+          <p>Your secure, stylish browsing starts here. This is a prototype layout designed to mimic a secure custom browser for desktop and Android.</p>
+          <p class="loading">Loading secure modules...</p>
+          <iframe class="radio" src="https://yourstreamurl.com/embed" title="Wildstyle Radio Player"></iframe>
+        `;
+      } else if (tabName === 'wildstyle') {
+        content.innerHTML = `<iframe src="https://wildstyle.vip" style="width:100%; height:80vh; border:none;"></iframe>`;
+      } else if (tabName === 'nowPlaying') {
+        content.innerHTML = `
+          <h2>Now Playing on WildstyleRadio</h2>
+          <iframe src="https://yourstreamurl.com/nowplaying" style="width:100%; height:80vh; border:none;"></iframe>
+        `;
+      }
+    }
