@@ -10,12 +10,12 @@ function switchTab(event, index) {
   document.querySelectorAll('.tab-content')[index].classList.add('active');
 }
 
-function addNewTab(title = "New Tab", url = "https://wildstyle.vip/news") {
+function addNewTab(url = 'https://wildstyle.vip/news') {
   const tabIndex = document.querySelectorAll('.tab').length;
 
   const newTab = document.createElement('div');
   newTab.className = 'tab';
-  newTab.innerText = title;
+  newTab.innerText = `Tab ${tabIndex}`;
   newTab.onclick = function(event) {
     switchTab(event, tabIndex);
   };
@@ -23,10 +23,14 @@ function addNewTab(title = "New Tab", url = "https://wildstyle.vip/news") {
 
   const content = document.createElement('div');
   content.className = 'tab-content';
-  content.innerHTML = `<iframe src="${url}" frameborder="0" allowfullscreen></iframe>`;
+  content.innerHTML = `<iframe src="${url}" frameborder="0"></iframe>`;
   tabContents.appendChild(content);
 
   newTab.click();
+}
+
+function openBookmark(url) {
+  addNewTab(url);
 }
 
 searchInput.addEventListener('keypress', function(e) {
@@ -34,14 +38,15 @@ searchInput.addEventListener('keypress', function(e) {
     const query = searchInput.value.trim();
     if (!query) return;
 
-    // ✅ Redirecting to your own search results page instead of external iframe
-    const searchUrl = `https://wildstyle.vip/search-results.html?q=${encodeURIComponent(query)}`;
+    const isURL = query.startsWith('http://') || query.startsWith('https://');
+    const finalUrl = isURL ? query : `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
 
-    addNewTab(`Search: ${query}`, searchUrl);
+    addNewTab(finalUrl);
     searchInput.value = '';
   }
 });
 
-function toggleTheme() {
-  document.body.classList.toggle('light-theme');
-}
+// Load default tab
+window.onload = () => {
+  addNewTab('https://wildstyle.vip');
+};
