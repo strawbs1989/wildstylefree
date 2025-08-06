@@ -39,12 +39,20 @@ searchInput.addEventListener('keypress', function(e) {
     if (!query) return;
 
     const isURL = query.startsWith('http://') || query.startsWith('https://');
-    const finalUrl = isURL ? query : `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+    
+    // If it's a direct URL, open normally
+    if (isURL) {
+      addNewTab(query);
+    } else {
+      // Open search-results.html and pass the query in the URL
+      const searchUrl = `search-results.html?q=${encodeURIComponent(query)}`;
+      addNewTab(searchUrl);
+    }
 
-    addNewTab(finalUrl);
     searchInput.value = '';
   }
 });
+
 
 // Load default tab
 window.onload = () => {
