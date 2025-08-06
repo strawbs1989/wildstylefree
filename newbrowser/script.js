@@ -35,7 +35,7 @@ searchInput.addEventListener('keypress', function(e) {
     if (!query) return;
 
     // ✅ Redirecting to your own search results page instead of external iframe
-    const searchUrl = `https://bing.com/search-results.html?q=${encodeURIComponent(query)}`;
+    const searchUrl = `https://wildstyle.vip/newbrowser/search-results.html?q=${encodeURIComponent(query)}`;
 
     addNewTab(`Search: ${query}`, searchUrl);
     searchInput.value = '';
