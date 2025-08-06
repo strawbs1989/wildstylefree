@@ -2,43 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Search Results</title>
+  <title>Redirecting to Bing Search</title>
   <style>
     body {
       font-family: sans-serif;
       text-align: center;
       padding: 50px;
-    }
-
-    h1 {
-      color: #fff;
-    }
-
-    body {
-      background: #000;
+      background-color: #000;
       color: #0f0;
     }
-
     a {
       color: #0ff;
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>Redirecting you to your search results...</h1>
-  <p>If you're not redirected, <a id="searchLink" href="#">click here</a>.</p>
+  <h1>Redirecting to Bing...</h1>
+  <p>If not redirected, <a id="searchLink" href="#">click here</a>.</p>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('q');
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q");
 
     if (query) {
-      const targetURL = `https://bing.com/?q=${encodeURIComponent(query)}`;
-      document.getElementById('searchLink').href = targetURL;
-      window.location.href = targetURL;
+      const redirectUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+      document.getElementById("searchLink").href = redirectUrl;
+      window.location.href = redirectUrl;
     } else {
-      document.querySelector('h1').textContent = "No search query provided.";
+      document.querySelector("h1").textContent = "No search query provided.";
     }
   </script>
 </body>
