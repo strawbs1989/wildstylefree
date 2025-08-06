@@ -1,71 +1,99 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Orbitron', sans-serif;
   margin: 0;
+  padding: 0;
   background: #111;
-  color: white;
+  color: #fff;
 }
 
 header {
-  background-color: #222;
-  padding: 10px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  padding: 10px 20px;
 }
 
-.address-bar {
-  display: flex;
-  justify-content: center;
+.logo {
+  font-size: 24px;
 }
 
-#searchInput {
-  width: 90%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  padding: 6px;
   font-size: 16px;
+  border: none;
+  border-radius: 4px;
+}
+
+.security-icon {
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.bookmarks {
+  display: flex;
+  gap: 15px;
+  padding: 10px 20px;
+  background: #333;
+}
+
+.bookmark {
+  color: #fff;
+  text-decoration: none;
 }
 
 .tabs {
   display: flex;
   align-items: center;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 5px 0;
+  background: #444;
+  padding: 10px 20px;
 }
 
 .tab {
-  background: #333;
+  margin-right: 10px;
   padding: 8px 16px;
-  border-radius: 6px;
+  background: #666;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .tab.active {
-  background: #0d6efd;
+  background: #00bcd4;
 }
 
 .new-tab-btn {
   background: #28a745;
   border: none;
-  color: white;
   padding: 8px 12px;
-  border-radius: 6px;
   cursor: pointer;
+  border-radius: 4px;
+  color: white;
 }
 
 .tab-contents {
-  height: calc(100vh - 140px);
-  overflow: hidden;
+  padding: 20px;
 }
 
 .tab-content {
   display: none;
-  height: 100%;
-  padding: 20px;
-  overflow-y: auto;
 }
 
 .tab-content.active {
   display: block;
+}
+
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
 }
