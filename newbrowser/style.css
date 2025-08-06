@@ -1,71 +1,66 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  background: #111;
+  background: #1e1e2f;
   color: white;
 }
 
 header {
-  background-color: #222;
+  background: #2d2d44;
   padding: 10px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.address-bar {
-  display: flex;
-  justify-content: center;
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
-#searchInput {
-  width: 90%;
-  padding: 10px;
-  border-radius: 8px;
+.search-container input {
+  padding: 8px;
+  width: 350px;
   border: none;
-  font-size: 16px;
+  border-radius: 5px;
+}
+
+.bookmarks {
+  margin-left: 10px;
 }
 
 .tabs {
   display: flex;
+  background: #3a3a5d;
+  padding: 5px;
   align-items: center;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 5px 0;
 }
 
 .tab {
-  background: #333;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 10px;
+  background: #5b5b8a;
+  margin-right: 5px;
   cursor: pointer;
+  border-radius: 5px 5px 0 0;
 }
 
 .tab.active {
-  background: #0d6efd;
+  background: #7e7eb1;
+  font-weight: bold;
 }
 
 .new-tab-btn {
-  background: #28a745;
+  padding: 5px 10px;
+  margin-left: auto;
+  background: #4caf50;
   border: none;
+  border-radius: 5px;
   color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
   cursor: pointer;
 }
 
 .tab-contents {
-  height: calc(100vh - 140px);
-  overflow: hidden;
-}
-
-.tab-content {
-  display: none;
-  height: 100%;
   padding: 20px;
-  overflow-y: auto;
-}
-
-.tab-content.active {
-  display: block;
+  background: #2b2b4f;
+  min-height: 400px;
 }
