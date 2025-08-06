@@ -1,85 +1,89 @@
-let tabCount = 1;
+let tabId = 0;
+let currentTab = null;
+
+function addNewTab(url = 'https://www.bing.com') {
+  tabId++;
+  const tabLabel = `Tab ${tabId}`;
+
+  // Create tab button
+  const tab = document.createElement('div');
+  tab.className = 'tab';
+  tab.textContent = tabLabel;
+  tab.dataset.id = tabId;
+  tab.onclick = () => switchTab(tabId);
+  document.getElementById('tabs').insertBefore(tab, document.querySelector('.new-tab-btn'));
+
+  // Create iframe
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  iframe.id = `iframe-${tabId}`;
+  iframe.className = 'tab-frame';
+  document.getElementById('tabContents').appendChild(iframe);
+
+  switchTab(tabId);
+}
+
+function switchTab(id) {
+  currentTab = id;
+
+  // Handle tab UI
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.id == id);
+  });
+
+  document.querySelectorAll('iframe').forEach(iframe => {
+    iframe.classList.remove('active');
+  });
+
+  const activeFrame = document.getElementById(`iframe-${id}`);
+  if (activeFrame) activeFrame.classList.add('active');
+}
 
 function handleSearch(event) {
   if (event.key === 'Enter') {
-    const query = event.target.value.trim();
-    if (!query) return;
+    const input = event.target.value.trim();
+    let url = '';
 
-    let url;
-    if (query.includes('.') || query.startsWith('http')) {
-      url = query.startsWith('http') ? query : `https://${query}`;
+    // Check if it's a full URL
+    if (input.startsWith('http://') || input.startsWith('https://')) {
+      url = input;
+    } else if (input.includes('.') && !input.includes(' ')) {
+      url = `https://${input}`;
     } else {
-      url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+      // Treat as a search query
+      const searchQuery = encodeURIComponent(input);
+      url = `https://www.google.com/search?q=${searchQuery}`;
     }
 
-    addNewTabWithContent(`<iframe src="${url}" frameborder="0" style="width: 100%; height: 80vh;"></iframe>`);
+    // Load into active tab
+    if (currentTab) {
+      const iframe = document.getElementById(`iframe-${currentTab}`);
+      if (iframe) iframe.src = url;
+    } else {
+      addNewTab(url);
+    }
+
     event.target.value = '';
   }
 }
 
-function switchTab(event, tabId) {
-  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-
-  document.getElementById(tabId).style.display = 'block';
-  event.target.classList.add('active');
-}
-
-function addNewTab() {
-  const tabId = `tab-${++tabCount}`;
-
-  const tab = document.createElement('div');
-  tab.className = 'tab';
-  tab.textContent = `Tab ${tabCount}`;
-  tab.onclick = (e) => switchTab(e, tabId);
-
-  const content = document.createElement('div');
-  content.className = 'tab-content';
-  content.id = tabId;
-  content.innerHTML = `<p>New tab ready. Type in the search bar to start browsing.</p>`;
-
-  document.getElementById('tabs').insertBefore(tab, document.querySelector('.new-tab-btn'));
-  document.getElementById('tabContents').appendChild(content);
-
-  tab.click(); // Switch to new tab
-}
-
-function addNewTabWithContent(html) {
-  const tabId = `tab-${++tabCount}`;
-
-  const tab = document.createElement('div');
-  tab.className = 'tab';
-  tab.textContent = `Tab ${tabCount}`;
-  tab.onclick = (e) => switchTab(e, tabId);
-
-  const content = document.createElement('div');
-  content.className = 'tab-content';
-  content.id = tabId;
-  content.innerHTML = html;
-
-  document.getElementById('tabs').insertBefore(tab, document.querySelector('.new-tab-btn'));
-  document.getElementById('tabContents').appendChild(content);
-
-  tab.click();
-}
-
 function addBookmark() {
-  const currentTab = document.querySelector('.tab.active');
-  const contentId = currentTab ? currentTab.textContent : null;
-  const tabContent = document.getElementById(contentId);
+  const iframe = document.getElementById(`iframe-${currentTab}`);
+  if (!iframe) return;
 
-  if (!tabContent) return;
+  const url = iframe.src;
+  const name = prompt('Bookmark name:', url);
+  if (!name) return;
 
-  const urlInput = prompt("Enter URL to bookmark:");
-  if (urlInput) {
-    const bookmarksBar = document.getElementById('bookmarks');
-    const link = document.createElement('a');
-    link.href = urlInput;
-    link.target = '_blank';
-    link.textContent = '🔗 Bookmark';
-    link.style.marginLeft = '10px';
-    link.style.color = '#00ffd5';
+  const bookmark = document.createElement('div');
+  bookmark.textContent = name;
+  bookmark.className = 'tab';
+  bookmark.onclick = () => addNewTab(url);
 
-    bookmarksBar.appendChild(link);
-  }
+  document.getElementById('bookmarks').appendChild(bookmark);
 }
+
+// Load default tab on startup
+window.onload = () => {
+  addNewTab();
+};
