@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WildstyleRadio Browser</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://wildstyle.vip/newbrowser/style.css" />
 </head>
 <body>
   <header>
-    <div class="logo">WildstyleRadio</div>
+    <div class="logo">🌐 WildstyleRadio</div>
     <div class="search-container">
       <input 
         type="text" 
         id="searchBox" 
-        placeholder="Search or enter a URL..." 
+        placeholder="Search Wildstyle or enter URL..." 
       />
     </div>
     <div class="bookmarks" id="bookmarks">
@@ -22,14 +22,16 @@
   </header>
 
   <div class="tabs" id="tabs">
-    <div class="tab active" onclick="switchTab(event, 0)">New Tab</div>
-    <button class="new-tab-btn" onclick="addNewTab()">➕ New Tab</button>
+    <div class="tab active" onclick="switchTab(this)">New Tab</div>
+    <button class="new-tab-btn" onclick="addNewTab()">➕</button>
   </div>
 
   <div class="tab-contents" id="tabContents">
-    <iframe class="tab-frame" src="https://wildstyle.vip" frameborder="0"></iframe>
+    <div class="tab-content active">
+      <iframe src="about:blank"></iframe>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="https://wildstyle.vip/newbrowser/script.js"></script>
 </body>
 </html>
