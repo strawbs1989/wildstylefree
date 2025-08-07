@@ -2,7 +2,7 @@ function handleSearch(event) {
       if (event.key === "Enter") {
         const query = document.getElementById("searchInput").value.trim();
         if (query !== "") {
-          const searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+          const searchUrl = `https://www.wildstyle.vip/search/search?q=${encodeURIComponent(query)}`;
           window.open(searchUrl, '_blank');
         }
       }
