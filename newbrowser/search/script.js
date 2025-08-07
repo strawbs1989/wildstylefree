@@ -48,13 +48,10 @@ addTabButton.addEventListener('click', () => {
 searchBar.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const query = searchBar.value.trim();
-    let url;
-    try {
-      url = new URL(query).href;
-    } catch {
-      url = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+    if (query) {
+      const searchURL = `search/search-results.html?q=${encodeURIComponent(query)}`;
+      createTab(searchURL);
     }
-    createTab(url);
   }
 });
 
