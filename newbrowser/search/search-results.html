@@ -14,13 +14,10 @@
   <iframe id="resultsFrame" src=""></iframe>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get('q');
-    if (query) {
-      // Using DuckDuckGo
-      const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
-      document.getElementById("resultsFrame").src = searchUrl;
-    }
-  </script>
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get("q");
+  document.getElementById("results").textContent = `You searched for: ${query}`;
+</script>
+
 </body>
 </html>
