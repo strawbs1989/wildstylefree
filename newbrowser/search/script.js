@@ -1,59 +1,44 @@
-const searchBar = document.getElementById('searchBar');
-const addTabButton = document.getElementById('addTab');
-const tabsContainer = document.getElementById('tabs');
-const tabContents = document.getElementById('tabContents');
+const params = new URLSearchParams(window.location.search);
+    const query = params.get("q") || "";
+    document.getElementById("queryText").innerHTML = `Searching for: <em>${query}</em>`;
 
-let tabs = [];
+    // Example content database (you can replace this later with your real data)
+    const data = [
+      {
+        title: "Live DJs Tonight - Wildstyle",
+        description: "Check out the live DJ lineup happening tonight on Wildstyle.vip!",
+        url: "https://wildstyle.vip/schedule"
+      },
+      {
+        title: "Top Anthems Playlist",
+        description: "Listen to our handpicked music anthems from Wildstyle Radio.",
+        url: "https://wildstyle.vip/anthems"
+      },
+      {
+        title: "Meet the Presenters",
+        description: "Get to know the Wildstyle Radio presenters and DJs.",
+        url: "https://wildstyle.vip/presenters"
+      }
+    ];
 
-function createTab(url = 'https://wildstyle.vip', isPinned = false) {
-  const id = Date.now();
-  const tab = {
-    id,
-    url,
-    pinned: isPinned
-  };
+    // Simple search function
+    const resultsDiv = document.getElementById("results");
+    const lowerQuery = query.toLowerCase();
+    const matches = data.filter(item =>
+      item.title.toLowerCase().includes(lowerQuery) ||
+      item.description.toLowerCase().includes(lowerQuery)
+    );
 
-  tabs.push(tab);
-  renderTabs();
-  openTab(id);
-}
-
-function renderTabs() {
-  tabsContainer.innerHTML = '';
-  tabs.forEach(tab => {
-    const tabBtn = document.createElement('div');
-    tabBtn.className = 'tab';
-    tabBtn.textContent = tab.pinned ? '📌 Wildstyle' : new URL(tab.url).hostname;
-    tabBtn.onclick = () => openTab(tab.id);
-    if (tab.active) tabBtn.classList.add('active');
-    tabsContainer.appendChild(tabBtn);
-  });
-}
-
-function openTab(id) {
-  tabs.forEach(tab => (tab.active = tab.id === id));
-  renderTabs();
-  const tab = tabs.find(t => t.id === id);
-  tabContents.innerHTML = `<iframe src="${tab.url}" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>`;
-}
-
-function openBookmark(url) {
-  createTab(url);
-}
-
-addTabButton.addEventListener('click', () => {
-  createTab('https://www.bing.com');
-});
-
-searchBar.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    const query = searchBar.value.trim();
-    if (query) {
-      const searchURL = `search/search-results.html?q=${encodeURIComponent(query)}`;
-      createTab(searchURL);
+    if (matches.length === 0) {
+      resultsDiv.innerHTML = "<p>No results found. Try another search term.</p>";
+    } else {
+      matches.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "result";
+        div.innerHTML = `
+          <h3><a href="${item.url}" target="_blank">${item.title}</a></h3>
+          <p>${item.description}</p>
+        `;
+        resultsDiv.appendChild(div);
+      });
     }
-  }
-});
-
-// Initial pinned tab for Wildstyle
-createTab('https://wildstyle.vip', true);
