@@ -1,44 +1,49 @@
-const params = new URLSearchParams(window.location.search);
-    const query = params.get("q") || "";
-    document.getElementById("queryText").innerHTML = `Searching for: <em>${query}</em>`;
+let tabId = 0;
+const tabsContainer = document.getElementById("tabs");
+const tabContents = document.getElementById("tabContents");
+const searchBar = document.getElementById("searchBar");
+const addTabBtn = document.getElementById("addTab");
 
-    // Example content database (you can replace this later with your real data)
-    const data = [
-      {
-        title: "Live DJs Tonight - Wildstyle",
-        description: "Check out the live DJ lineup happening tonight on Wildstyle.vip!",
-        url: "https://wildstyle.vip/schedule"
-      },
-      {
-        title: "Top Anthems Playlist",
-        description: "Listen to our handpicked music anthems from Wildstyle Radio.",
-        url: "https://wildstyle.vip/anthems"
-      },
-      {
-        title: "Meet the Presenters",
-        description: "Get to know the Wildstyle Radio presenters and DJs.",
-        url: "https://wildstyle.vip/presenters"
-      }
-    ];
+function createTab(query = "") {
+  const id = `tab-${tabId++}`;
+  const tab = document.createElement("div");
+  tab.className = "tab";
+  tab.textContent = query || "New Tab";
+  tab.dataset.id = id;
 
-    // Simple search function
-    const resultsDiv = document.getElementById("results");
-    const lowerQuery = query.toLowerCase();
-    const matches = data.filter(item =>
-      item.title.toLowerCase().includes(lowerQuery) ||
-      item.description.toLowerCase().includes(lowerQuery)
-    );
+  const iframe = document.createElement("iframe");
+  iframe.id = id;
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
 
-    if (matches.length === 0) {
-      resultsDiv.innerHTML = "<p>No results found. Try another search term.</p>";
-    } else {
-      matches.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "result";
-        div.innerHTML = `
-          <h3><a href="${item.url}" target="_blank">${item.title}</a></h3>
-          <p>${item.description}</p>
-        `;
-        resultsDiv.appendChild(div);
-      });
-    }
+  if (query) {
+    iframe.src = `search-results.html?q=${encodeURIComponent(query)}`;
+  } else {
+    iframe.src = "new-tab.html";
+  }
+
+  tab.onclick = () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll("iframe").forEach(f => f.style.display = "none");
+    tab.classList.add("active");
+    iframe.style.display = "block";
+  };
+
+  tabsContainer.appendChild(tab);
+  tabContents.appendChild(iframe);
+  tab.click();
+}
+
+addTabBtn.onclick = () => createTab();
+
+searchBar.addEventListener("keypress", e => {
+  if (e.key === "Enter" && searchBar.value.trim()) {
+    createTab(searchBar.value.trim());
+    searchBar.value = "";
+  }
+});
+
+window.onload = () => {
+  createTab();
+};
