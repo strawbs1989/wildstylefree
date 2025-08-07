@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wildstyle Browser</title>
-  <link rel="stylesheet" href="https://wildstyle.vip/newbrowser/search/style.css">
+  <link rel="stylesheet" href="https://wildstyle.vip/newbrowser/search/style.css" />
 </head>
 <body>
-  <header>
-    <div class="logo">Wildstyle Browser</div>
-    <input type="text" id="searchBar" placeholder="Search or enter URL...">
-    <button id="addTab">+</button>
-  </header>
-
-  <div class="bookmarks">
-    <button onclick="openBookmark('https://wildstyle.vip')">Wildstyle</button>
-    <button onclick="openBookmark('https://bing.com')">Bing</button>
-    <button onclick="openBookmark('https://duckduckgo.com')">DuckDuckGo</button>
-    <button onclick="openBookmark('https://yahoo.com')">Yahoo</button>
+  <div id="browser">
+    <div id="tabs"></div>
+    <div id="search-bar-container">
+      <input type="text" id="searchBar" placeholder="Search Wildstyle...">
+      <button id="addTab">+</button>
+    </div>
+    <div id="tabContents"></div>
   </div>
-
-  <div class="tabs" id="tabs"></div>
-
-  <div class="tab-contents" id="tabContents"></div>
 
   <script src="https://wildstyle.vip/newbrowser/search/script.js"></script>
 </body>
