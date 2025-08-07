@@ -2,85 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Wildstyle Search Results</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
+      background-color: #0f0f0f;
+      color: white;
+      font-family: sans-serif;
       padding: 20px;
-    }
-    .results {
-      margin-top: 20px;
     }
     .result {
       background: #222;
-      padding: 15px;
+      padding: 10px;
       margin-bottom: 10px;
-      border-left: 5px solid #f05;
-    }
-    .result h3 {
-      margin: 0 0 5px 0;
-    }
-    .result p {
-      margin: 0;
-    }
-    .result a {
-      color: #4fc3f7;
-      text-decoration: none;
+      border-left: 4px solid #ff007f;
     }
   </style>
 </head>
 <body>
-  <h1>Wildstyle Search Results</h1>
-  <p id="queryText">Searching for: <em>...</em></p>
-  
-  <div class="results" id="results"></div>
+  <h2>Search Results for "<span id="query"></span>"</h2>
+  <div id="results"></div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const query = params.get("q") || "";
-    document.getElementById("queryText").innerHTML = `Searching for: <em>${query}</em>`;
+    const query = params.get("q");
+    document.getElementById("query").textContent = query;
 
-    // Example content database (you can replace this later with your real data)
-    const data = [
-      {
-        title: "Live DJs Tonight - Wildstyle",
-        description: "Check out the live DJ lineup happening tonight on Wildstyle.vip!",
-        url: "https://wildstyle.vip/schedule"
-      },
-      {
-        title: "Top Anthems Playlist",
-        description: "Listen to our handpicked music anthems from Wildstyle Radio.",
-        url: "https://wildstyle.vip/anthems"
-      },
-      {
-        title: "Meet the Presenters",
-        description: "Get to know the Wildstyle Radio presenters and DJs.",
-        url: "https://wildstyle.vip/presenters"
-      }
+    const dummyResults = [
+      { title: "Wildstyle Radio Homepage", url: "https://wildstyle.vip", description: "The best underground & club music" },
+      { title: "DJ EchoFalls Live Sets", url: "https://wildstyle.vip/echofalls", description: "Stream past and live shows from EchoFalls." },
+      { title: "Wildstyle Events", url: "https://wildstyle.vip/events", description: "Check out the hottest Wildstyle parties and festivals." }
     ];
 
-    // Simple search function
-    const resultsDiv = document.getElementById("results");
-    const lowerQuery = query.toLowerCase();
-    const matches = data.filter(item =>
-      item.title.toLowerCase().includes(lowerQuery) ||
-      item.description.toLowerCase().includes(lowerQuery)
+    const filtered = dummyResults.filter(r => 
+      r.title.toLowerCase().includes(query.toLowerCase()) || 
+      r.description.toLowerCase().includes(query.toLowerCase())
     );
 
-    if (matches.length === 0) {
-      resultsDiv.innerHTML = "<p>No results found. Try another search term.</p>";
+    const resultsContainer = document.getElementById("results");
+    if (filtered.length === 0) {
+      resultsContainer.innerHTML = "<p>No results found.</p>";
     } else {
-      matches.forEach(item => {
+      filtered.forEach(result => {
         const div = document.createElement("div");
         div.className = "result";
-        div.innerHTML = `
-          <h3><a href="${item.url}" target="_blank">${item.title}</a></h3>
-          <p>${item.description}</p>
-        `;
-        resultsDiv.appendChild(div);
+        div.innerHTML = `<h3><a href="${result.url}" target="_blank" style="color:#ff007f;">${result.title}</a></h3><p>${result.description}</p>`;
+        resultsContainer.appendChild(div);
       });
     }
   </script>
