@@ -11,83 +11,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-   <!-- Now Playing Script -->
-  <script>
-  var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
-
-  // MONDAY
-  DH[1][12] = '12am – 4am<br>Steve G";
-  DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
-  DH[1][14] = "2pm – 4pm<br>BabyJane";
-  DH[1][17] = "5pm – 7pm<br>Lewis";
-  DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
-  DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
-
-  // TUESDAY
-  DH[2][01] = "1am – 2am<br>James – Mix";
-  DH[2][06] = "6am – 8am<br>Dj Dave– 60's - 70's";
-  DH[2][13] = "1pm – 4pm<br>Jimmy D";
-  DH[2][16] = "4pm – 8pm<br>Dj Skip - Randoms";
-  DH[2][20] = "8pm – 10pm<br>Dj Lewis";
-
-  // WEDNESDAY
-  DH[3][12]  = "12am – 2am<br>OddBall";
-  DH[3][10]  = "10am – 12pm<br>HotshotDj";
-  DH[3][13] = "1pm – 4pm<br>JimmyD";
-  DH[3][17] = "5pm – 7pm<br>Damian";
-  DH[3][19] = "7pm – 9pm<br>Sal";
-  DH[3][22] = "10pm – 12pm<br>Reece";
-  
-
-  // THURSDAY
-  DH[4][0]  = "12am – 4am<br>Steve G";
-  DH[4][03] = "3am – 9am<br>Wayne";
-  DH[4][10] = "10am – 12am<br>HotShot";
-  DH[4][14] = "2pm – 4pm<br>Steven -ItalianStallion";
-  DH[4][16] = "4pm - 7pm<br>DJSkip";
-  DH[4][19] = "7pm - 8pm<br>EchoFalls";
-  DH[4][20] = "8pm - 11pm<br>Suzie Mac";
-  
-
-  // FRIDAY
-  DH[5][0]  = "12am – 4am<br>SteveG";
-  DH[5][13] = "1pm – 4pm<br>JimmyD";
-  DH[3][16] = "4pm – 8pm<br>StevenD";
-  DH[3][20] = "8pm – 9pm<br>DJ VI";
-  DH[3][22] = "10pm – 12am<br>System Dynamics";
-  
-
-  // SATURDAY
-  DH[7][0] = "12am – 2am<br>Trevor Nannab";
-  DH[7][02] = "2am – 4am<br>DJ AJ";
-  DH[7][10] = "10am – 12am<br>Kevin Lee";
-  DH[7][13] = "1pm – 4pm<br>JimmyD";
-  DH[7][19] = "7pm – 9pm<br>DJ VI";
-  
-
-  // SUNDAY
-  DH[7][11] = "11am – 1pm<br>JimmyD";
-  DH[7][13] = "1pm – 3pm<br>JK";
-  DH[7][17] = "5pm – 7pm<br>DJ Lewis";
-  DH[7][20] = "8pm – 9pm<br>DJ EchoFalls";
-  
-
-  function NowON() {
-    const now = new Date();
-    const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
-    document.getElementById("NowOn").innerHTML = show;
-  }
-</script>
-</head>
-
-<body onload="NowON()">
+   
 
   <!-- Header -->
   <header class="dj-card header-wrapper">
     <div class="container header-container">
       <img src="/images/logo.png" alt="Wildstyle Radio Logo" class="logo">
       <div class="now-playing">
-        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
+        
         <a class="WimpyPlayerPopup902" href="javascript:;" onclick="window.open('https://onlineradiobox.com/uk/coolvibesradio/','wimpyPlayerPopupWindow','width=527,height=280')">🎧 Listen Now</a>
       </div>
     </div>
