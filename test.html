@@ -1,131 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio Demo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wildstyle Radio — Demo (Responsive Desktop + Mobile)</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      text-align: center;
+    /* =====================
+       Wildstyle Responsive Demo
+       Desktop-first layout with mobile fallback
+       ===================== */
+
+    :root{
+      --bg:#0b0b0b;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent1:#e60073;
+      --accent2:#0033cc;
+      --glass: rgba(255,255,255,0.04);
+      --radius:14px;
+      --max-width:1200px;
+      --gutter:20px;
+      --card-padding:18px;
+      --text:#e6eef8;
     }
-    header {
-      background: #000;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#050506 0%, #0b0b0b 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:40px 20px;
+      display:flex;justify-content:center;
     }
-    header h1 { margin: 0; font-size: 1.2rem; }
-    nav a {
-      color: #fff;
-      margin: 0 0.5rem;
-      text-decoration: none;
-      font-size: 0.9rem;
+
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:var(--gutter);
     }
-    .hero {
-      padding: 2rem 1rem;
-      background: linear-gradient(135deg, #e60073, #0033cc);
+
+    /* Header */
+    header{
+      grid-column:1/-1;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 26px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-bottom:1px solid rgba(255,255,255,0.03);
     }
-    .hero h2 { font-size: 1.5rem; margin-bottom: 1rem; }
-    .hero button {
-      background: #fff;
-      color: #000;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 25px;
-      font-weight: bold;
+    .brand{
+      display:flex;gap:14px;align-items:center;
     }
-    section {
-      padding: 1.5rem 1rem;
-      border-bottom: 1px solid #333;
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:18px;box-shadow:0 6px 14px rgba(0,0,0,0.6);
     }
-    .dj-card, .mix-card {
-      background: #222;
-      padding: 1rem;
-      border-radius: 10px;
-      margin-bottom: 1rem;
+    .brand h1{margin:0;font-size:1.05rem;letter-spacing:1px}
+    nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-size:0.95rem}
+    nav a:hover{color:var(--text)}
+
+    /* Main content area */
+    main{padding:26px;}
+
+    /* Hero */
+    .hero{
+      display:grid;grid-template-columns: 1fr 260px;gap:20px;align-items:center;margin-bottom:22px;
+      background:linear-gradient(90deg, rgba(230,6,115,0.06), rgba(0,51,204,0.03));
+      border-radius:var(--radius);padding:22px;
     }
-    .dj-card img, .mix-card img {
-      width: 100%;
-      border-radius: 10px;
+    .hero h2{margin:0;font-size:1.6rem;line-height:1.05}
+    .hero p{color:var(--muted);margin-top:8px}
+    .hero .cta{
+      margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap
     }
-    .schedule {
-      display: flex;
-      overflow-x: auto;
-      gap: 1rem;
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;border:none;cursor:pointer;font-weight:700;font-size:0.95rem
     }
-    .show {
-      background: #333;
-      padding: 1rem;
-      border-radius: 10px;
-      min-width: 150px;
-      flex-shrink: 0;
+    .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.5)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
+
+    /* Now Playing card */
+    .now-playing{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:16px;border-radius:12px;display:flex;gap:16px;align-items:center;box-shadow:inset 0 -1px 0 rgba(255,255,255,0.01);
     }
-    footer {
-      background: #000;
-      padding: 1rem;
-      font-size: 0.8rem;
+    .now-playing img{width:120px;height:80px;border-radius:8px;object-fit:cover}
+    .now-playing .meta{flex:1;text-align:left}
+    .now-playing h4{margin:0;font-size:1rem}
+    .now-playing p{margin:6px 0 0;color:var(--muted);font-size:0.9rem}
+
+    .visualizer{height:6px;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:6px;margin-top:10px;overflow:hidden}
+
+    /* Grid of sections */
+    .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px}
+    .card{background:var(--panel);padding:var(--card-padding);border-radius:12px}
+    .card h3{margin:0 0 10px 0}
+    .artist{display:flex;gap:12px;align-items:center}
+    .artist img{width:72px;height:72px;border-radius:10px;object-fit:cover}
+
+    /* Sidebar */
+    aside{padding:26px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.015));border-left:1px solid rgba(255,255,255,0.02)}
+    .player{position:sticky;top:26px}
+    .player-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px}
+    .player-card .title{font-weight:700}
+    .up-next{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+    .up-next .mini{display:flex;gap:8px;align-items:center}
+    .mini img{width:44px;height:44px;border-radius:8px;object-fit:cover}
+
+    /* Schedule grid */
+    .schedule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .show-card{background:transparent;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;background:var(--glass);font-size:0.85rem;color:var(--muted)}
+
+    footer{grid-column:1/-1;padding:16px 26px;border-top:1px solid rgba(255,255,255,0.02);display:flex;justify-content:space-between;align-items:center}
+
+    /* Responsive: collapse to single column on small screens */
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr; padding:0}
+      header{padding:12px 16px}
+      .hero{grid-template-columns:1fr;}
+      .cards{grid-template-columns:1fr}
+      .schedule-grid{grid-template-columns:repeat(2,1fr)}
+      aside{padding:18px}
     }
-    footer a { color: #fff; margin: 0 0.5rem; }
+
+    @media (max-width:520px){
+      body{padding:18px}
+      .container{border-radius:12px}
+      header{padding:12px}
+      .logo{width:48px;height:48px}
+      .brand h1{font-size:1rem}
+      nav{display:none}
+      .hero h2{font-size:1.15rem}
+      .card{padding:12px}
+      .player{position:static}
+      .schedule-grid{grid-template-columns:1fr}
+      .show-card{min-height:80px}
+    }
+
+    /* small utility */
+    .muted{color:var(--muted)}
+    a.icon{opacity:0.9}
   </style>
 </head>
 <body>
-  <header>
-    <h1>WILDSTYLE</h1>
-    <nav>
-      <a href="#">DJs</a>
-      <a href="#">Schedule</a>
-      <a href="#">Merch</a>
-    </nav>
-  </header>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">WS</div>
+        <div>
+          <h1>Wildstyle Radio</h1>
+          <div class="muted" style="font-size:0.85rem">United by Beats • Powered by Passion</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#">DJs</a>
+        <a href="#">Schedule</a>
+        <a href="#">Listen</a>
+        <a href="#">Merch</a>
+      </nav>
+    </header>
 
-  <div class="hero">
-    <h2>United by Beats,<br>Powered by Passion.</h2>
-    <button>▶ Listen Live</button>
+    <main>
+      <section class="hero">
+        <div>
+          <h2>Live Underground Music, Global Vibes.</h2>
+          <p class="muted">Unsigned artists • Exclusive mixes • Live DJ shows</p>
+          <div class="cta">
+            <button class="btn btn-primary">▶ Listen Live</button>
+            <button class="btn btn-ghost">📅 View Schedule</button>
+            <button class="btn btn-ghost">🎶 Request a Song</button>
+          </div>
+          <div style="margin-top:14px;color:var(--muted);font-size:0.9rem">Next: <strong>DJ Echo</strong> — 22:00</div>
+        </div>
+
+        <div>
+          <div class="now-playing">
+            <img src="https://via.placeholder.com/320x200?text=DJ" alt="now playing">
+            <div class="meta">
+              <h4>DJ Echo — Midnight Drive</h4>
+              <p class="muted">Now playing: "Night Frequencies"</p>
+              <div class="visualizer" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:10px;justify-content:space-between">
+            <div class="tag">DnB</div>
+            <div class="tag">Live</div>
+            <div class="tag">Online</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Artist of the Week</h3>
+          <div class="artist">
+            <img src="https://via.placeholder.com/200x200?text=Artist" alt="artist">
+            <div style="text-align:left">
+              <strong>Hannah Flame</strong>
+              <p class="muted" style="margin-top:8px">A rising producer from Bristol combining grime and techno. Featured mix and interview.</p>
+              <div style="margin-top:10px"><button class="btn btn-ghost">Listen to Mix</button></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Latest Mix</h3>
+          <div>
+            <img src="https://via.placeholder.com/440x180?text=Mix+Cover" alt="mix cover" style="width:100%;border-radius:10px">
+            <p class="muted" style="margin-top:8px">Episode 42 — Raw Selections with DJ Kruz. 90 minutes of exclusive cuts.</p>
+            <div style="margin-top:10px"><button class="btn btn-primary">▶ Play Mix</button></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Community</h3>
+          <p class="muted">Join the street team, shoutouts and birthdays. Sign up to get involved and win merch.</p>
+          <div style="margin-top:10px"><button class="btn btn-ghost">Join Street Team</button></div>
+        </article>
+
+        <article class="card">
+          <h3>Shows — Today</h3>
+          <div class="schedule-grid">
+            <div class="show-card"><strong>18:00</strong><div class="muted">Beginner Beats</div></div>
+            <div class="show-card"><strong>20:00</strong><div class="muted">Urban Sessions</div></div>
+            <div class="show-card"><strong>22:00</strong><div class="muted">Late Night DnB</div></div>
+            <div class="show-card"><strong>00:00</strong><div class="muted">Afterhours</div></div>
+            <div class="show-card"><strong>02:00</strong><div class="muted">Global Mix</div></div>
+            <div class="show-card"><strong>04:00</strong><div class="muted">Rewind</div></div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <aside>
+      <div class="player">
+        <div class="player-card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="title">Live Player</div>
+              <div class="muted">Stream: wildstyle.vip/live</div>
+            </div>
+            <div style="text-align:right">
+              <div class="muted">Listeners</div>
+              <div style="font-weight:700">1,243</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <!-- basic HTML audio placeholder -->
+            <audio controls style="width:100%">
+              <source src="#" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+
+          <div class="up-next">
+            <div class="mini"><img src="https://via.placeholder.com/80x80" alt="up"><div class="muted">22:00 - DJ Echo</div></div>
+            <div class="mini"><img src="https://via.placeholder.com/80x80" alt="up"><div class="muted">23:00 - DJ Kruz</div></div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card" style="padding:12px">
+          <h4 style="margin-top:0">Quick Links</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <a class="icon" href="#">🎧 Listen</a>
+            <a class="icon" href="#">📩 Requests</a>
+            <a class="icon" href="#">🛒 Merch</a>
+            <a class="icon" href="#">📣 Advertise</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <footer>
+      <div class="muted">© Wildstyle Radio • All Rights Reserved</div>
+      <div>
+        <a class="muted" href="#">Facebook</a>
+        <a class="muted" href="#" style="margin-left:12px">Instagram</a>
+        <a class="muted" href="#" style="margin-left:12px">YouTube</a>
+      </div>
+    </footer>
   </div>
-
-  <section>
-    <h3>Now Playing</h3>
-    <div class="dj-card">
-      <img src="https://via.placeholder.com/400x200" alt="DJ image">
-      <p><strong>DJ Name</strong><br>Track Title</p>
-    </div>
-  </section>
-
-  <section>
-    <h3>Artist of the Week</h3>
-    <div class="dj-card">
-      <img src="https://via.placeholder.com/400x200" alt="Artist image">
-      <p>Short bio goes here...</p>
-    </div>
-  </section>
-
-  <section>
-    <h3>Latest Mix</h3>
-    <div class="mix-card">
-      <img src="https://via.placeholder.com/400x200" alt="Mix image">
-      <p>Episode description...</p>
-    </div>
-  </section>
-
-  <section>
-    <h3>Upcoming Shows</h3>
-    <div class="schedule">
-      <div class="show">Show 1<br>10pm</div>
-      <div class="show">Show 2<br>11pm</div>
-      <div class="show">Show 3<br>12am</div>
-    </div>
-  </section>
-
-  <footer>
-    <p>© Wildstyle Radio</p>
-    <a href="#">Facebook</a>
-    <a href="#">Instagram</a>
-    <a href="#">YouTube</a>
-  </footer>
 </body>
 </html>
