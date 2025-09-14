@@ -12,7 +12,13 @@
  
 </head>
 <body>
-
+<header class="site-header">
+    <div class="logo">Wildstyle Radio</div>
+    <nav>
+      <a href="/test/schedule.html">Schedule</a>
+      
+    </nav>
+  </header>
 <div class="wrap">
   <!-- header -->
   <header>
@@ -45,101 +51,37 @@
         <div class="now-meta" id="nowMeta">Loading current show…</div>
       </div>
 
-      <!-- schedule -->
-      <div class="schedule-grid">
-        <!-- Monday example; more days follow -->
-        <div class="sched-card" id="mon-card">
-          <h4>Monday</h4>
-          <div id="mon-now" style="margin-bottom:8px"></div>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <li><strong>12am – 2am:</strong> DJ Riddler - Riddlers Killer Rockshow</li>
-            <li><strong>4am:</strong> </li>
-            <li><strong>12pm – 2pm:</strong> James - Wizard Of Rock</li>
-            <li><strong>2pm - 4pm:</strong> BabyJane</li>
-            <li><strong>3pm - 5pm:</strong> James Stephen</li>
-            <li><strong>5pm – 7pm:</strong> Lewis - Mix</li>
-            <li><strong>7pm – 9pm:</strong> DJ Josh</li>
-            <li><strong>7pm – 10pm:</strong> DJ Dezzy Mac - Mixture (takin break)</li>
-            <li><strong>10pm – 12am:</strong> DJ Jaydon Mac - Grime</li>
-          </ul>
-        </div>
+      <!-- Unsigned Section -->
+  <section class="container py-5" id="djs">
+    <h2 class="text-danger text-center mb-4">Meet Our Unsigned Artists</h2>
+    <div class="container my-4">
+  <div class="row g-3">
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/alberto.png" alt="Alberto" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/showdown.jpg" alt="ShowDown" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/joe.png" alt="Nzondi" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/hypnotised.jpg" alt="Hypnotised" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/ferreira.jpg" alt="Hypnotised" class="img-fluid rounded shadow-sm">
+    </div>
+	
 
-        <!-- add other days cards as needed (Tue-Sun). Keep IDs so Now-On shows update per day if desired -->
-        <div class="sched-card">
-          <h4>Tuesday</h4>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <li><strong>1am – 2am:</strong> Wizard Of Rock</li>
-            <li><strong>3am – 6am:</strong> Dani - DJ Queen Dani</li>
-            <li><strong>6am – 8am:</strong> Dj Dave – 60's - 70's</li>
-            <li><strong>3pm – 5pm:</strong> James Stephen</li>
-            <li><strong>8pm – 10pm:</strong> Dj Lewis</li>
-            <li><strong>10am – 12pm:</strong> HothotDJ</li>
-          </ul>
-        </div>
+  </div>
+</div>
 
-        <div class="sched-card">
-          <h4>Wednesday</h4>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <li><strong>3pm – 5pm:</strong> James Stephen</li>
-            <li><strong>6pm – 7pm:</strong> DJ European BOB</li>
-            <li><strong>8pm – 10pm:</strong> Steve DJ Smith</li>
-            <li><strong>10pm – 12pm:</strong> Reece</li>
-          </ul>
-        </div>
-
-        <div class="sched-card">
-          <h4>Thursday</h4>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <li><strong>4am – 6am:</strong> Dani - DJ Queen Dani</li>
-            <li><strong>8am – 10am:</strong> Coll</li>
-            <li><strong>12am – 4am:</strong> Steve Gunn</li>
-            <li><strong>10am – 12pm:</strong> Gordan</li>
-            <li><strong>3pm – 4pm:</strong> James Stephen</li>
-            <li><strong>5pm – 7pm:</strong> DJ Flash</li>
-            <li><strong>7pm – 8pm:</strong> Echofalls (DJ Strawbs)</li>
-            <li><strong>8pm – 10pm:</strong> Moofie</li>
-            <li><strong>10pm – 11pm:</strong> MottMuzik</li>
-          </ul>
-        </div>
-
-        <div class="sched-card">
-          <h4>Friday</h4>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <li><strong>4am – 6am:</strong> Dani - DJ Queen Dani</li>
-            <li><strong>12am – 4am:</strong> SteveG</li>
-            <li><strong>10am – 12pm:</strong> Vish</li>
-            <li><strong>3pm – 5pm:</strong> James Stephen</li>
-            <li><strong>4pm – 8pm:</strong> StevenD</li>
-            <li><strong>8pm – 10pm:</strong> Wendall</li>
-            <li><strong>10pm – 11pm:</strong> Rebecca - DJ Mix&Match</li>
-          </ul>
-        </div>
-
-        <div class="sched-card">
-          <h4>Saturday</h4>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <li><strong>12am – 2am:</strong> Trevor Nannab</li>
-            <li><strong>2am – 4am:</strong> DJ AJ</li>
-            <li><strong>6am – 10am:</strong> Cam</li>
-            <li><strong>10am – 12am:</strong> Kevin Lee</li>
-            <li><strong>4pm – 6pm:</strong> The Byrdman</li>
-            <li><strong>8pm – 9pm:</strong> Daniel</li>
-          </ul>
-        </div>
-
-        <div class="sched-card">
-          <h4>Sunday</h4>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <li><strong>8am – 10am:</strong> The Byrdman</li>
-            <li><strong>10am – 12pm:</strong> HotShot - 80's 90's</li>
-            <li><strong>11am – 1pm:</strong> JimmyD</li>
-            <li><strong>1pm – 3pm:</strong> JK</li>
-            <li><strong>5pm – 7pm:</strong> DJ Lewis</li>
-            <li><strong>7pm – 8pm:</strong> DJ European Bob</li>
-            <li><strong>8pm – 9pm:</strong> BIG BOSS Dj Echofalls</li>
-            <li><strong>9pm – 12am:</strong> Popped Radio</li>
-          </ul>
-        </div>
+  </section>
 
       </div>
     </main>
