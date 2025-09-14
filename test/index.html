@@ -1,46 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <style>
-    body {
-      background-color: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-    header {
-      background: #000;
-      padding: 1rem;
-      text-align: center;
-    }
-    header img {
-      max-height: 60px;
-    }
-    .btn.primary {
-      background: #e63946;
-      border: none;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-    }
-    .btn.ghost {
-      border: 1px solid #fff;
-      background: transparent;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-    }
-    .card.show {
-      background: #e63946;
-      color: #fff;
-      font-weight: bold;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildstyle Remix — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo">WS</div>
+        <div class="brand-text">
+          <h1>Wildstyle Remix</h1>
+          <div class="sub">United by beats — powered by passion</div>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <a href="#">Home</a>
+        <a href="#">DJs</a>
+        <a href="#">Schedule</a>
+        <a href="#">Chat</a>
+        <a href="#">Merch</a>
+        <a class="listen" href="https://streaming.live365.com/a50378">▶ Listen</a>
+      </nav>
+    </div>
+  </header>
 
-  <!-- Now Playing Script -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-left">
+        <h2>Live underground music — 24/7</h2>
+        <p class="lead">Fresh mixes, unsigned talent, and late-night sessions. Tune in and join the crowd.</p>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="togglePlayer()">▶ Live Player</button>
+<audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
+
+<script>
+  function togglePlayer() {
+    const player = document.getElementById('livePlayer');
+    const btn = event.target;
+    if (player.paused) {
+      player.play();
+      btn.textContent = "⏸ Pause Player";
+    } else {
+      player.pause();
+      btn.textContent = "▶ Live Player";
+    }
+  }
+</script>
+
+          <a class="btn ghost" href="mailto:requests@wildstyle.vip">Request A Song</a>
+        </div>
+        <div class="now-placeholder">
+          <strong>Now Playing:</strong><span><a href="https://live365.com/embeds/v1/player/a50378?s=md&m=dark&c=mp3" target="_blank"></a></span>
+
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="player-card">
+          <!-- Placeholder player (no real stream) -->
+          <div class="player-thumb">Player</div>
+          <div class="player-meta">
+            <div class="title">DJ Demo — Mix Set</div>
+            <div class="meta-muted">00:00 / 90:00</div>
+            <div class="player-controls">
+              <button>⏯</button> <button>⏭</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dj-spotlight">
+          <div class="spot-head">DJ Spotlight</div>
+          <div class="spot-body">
+            <img src="https://via.placeholder.com/300x180?text=DJ+Spotlight" alt="spot">
+            <div class="spot-info">
+              <!-- Now Playing Script -->
   <script>
   var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
 
@@ -60,12 +97,15 @@
   DH[2][15] = "3pm – 5pm<br>James Stephen";
   DH[2][20] = "8pm – 10pm<br>Dj Lewis";
   DH[2][010] = "10am – 12pm<br>HothotDJ";
+  
 
   // WEDNESDAY
    DH[3][15]  = "3pm – 5pm<br>James Stephen";
    DH[3][18]  = "6pm – 7pm<br>DJ European BOB";
    DH[3][20]  = "8pm – 10pm<br>Steve DJ Smith";
    DH[3][22]  = "10pm – 12pm<br>Reece";
+   
+  
 
   // THURSDAY
    DH[4][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
@@ -77,7 +117,7 @@
    DH[4][19]  = "7pm – 8pm<br>Echofalls(DJ Strawbs)";
    DH[4][20]  = "8pm – 10pm<br>Moofie";
    DH[4][22]  = "10pm – 11pm<br>MottMuzik";
-
+ 
   // FRIDAY
   DH[5][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
   DH[5][0]  = "12am – 4am<br>SteveG";
@@ -86,6 +126,7 @@
   DH[5][16] = "4pm – 8pm<br>StevenD";
   DH[5][20] = "8pm – 10pm<br>Wendall";
   DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
+  
 
   // SATURDAY
   DH[6][0] = "12am – 2am<br>Trevor Nannab";
@@ -94,6 +135,7 @@
   DH[6][06] = "6am – 10am<br>Cam";
   DH[6][10] = "10am – 12am<br>Kevin Lee";
   DH[6][20] = "8pm – 9pm<br>Daniel";
+  
 
   // SUNDAY
   DH[7][08] = "8am – 10am<br>The Byrdman";
@@ -104,66 +146,85 @@
   DH[7][19] = "7pm - 8pm<br>DJ European Bob";
   DH[7][20] = "8pm - 9pm<br>BIG BOSS Dj Echofalls";
   DH[7][21] = "9pm - 12am<br>Popped Radio";
+  
+  
 
   function NowON() {
     const now = new Date();
     const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
     document.getElementById("NowOn").innerHTML = show;
-    document.getElementById("nowPlayingCard").innerHTML = show;
   }
-  </script>
+</script>
 </head>
 
 <body onload="NowON()">
-  <header>
-    <img src="logo.png" alt="Wildstyle Radio Logo">
-    <h1>Wildstyle Radio</h1>
-    <button class="btn primary" onclick="togglePlayer()">▶ Live Player</button>
-    <audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
-    <a class="btn ghost" href="mailto:requests@wildstyle.vip">Request A Song</a>
-    <div>
-      <strong>Now Playing:</strong>
-      <span id="NowOn"></span>
-    </div>
-  </header>
 
-  <!-- Highlight Now Playing Card -->
-  <div id="nowPlayingCard" class="card show text-center p-3 mb-3">Loading current show...</div>
-
-  <!-- Monday Schedule Example -->
-  <div class="container my-4">
-    <div class="row">
-      <div class="col-md-6 col-lg-4">
-        <div class="card p-3 h-100">
-          <h4 class="card-title text-danger">Monday</h4>
-          <ul class="list-unstyled text-dark">
-            <li><strong>12am – 2am:</strong> DJ Riddler -Riddlers Killer Rockshow</li>
-            <li><strong>4am:</strong> </li>
-            <li><strong>12pm – 2pm:</strong> James - Wizard Of Rock</li>
-            <li><strong>2pm - 4pm:</strong> BabyJane</li>
-            <li><strong>3pm - 5pm:</strong> James Stephen</li>
-            <li><strong>5pm – 7pm:</strong> Lewis - Mix</li>
-            <li><strong>7pm – 9pm:</strong> DJ Josh</li>
-            <li><strong>7pm – 10pm:</strong> DJ Dezzy Mac - Mixture (takin break)</li>
-            <li><strong>10pm – 12am:</strong> DJ Jaydon Mac - Grime</li>
-          </ul>
+  <!-- Header -->
+  <header class="dj-card header-wrapper">
+    <div class="container header-container">
+	  
+      <div class="now-playing">
+        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
+        
+      </div>
+              <a class="link" href="#">Listen to recent mix</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <script>
-    function togglePlayer() {
-      const player = document.getElementById('livePlayer');
-      const btn = event.target;
-      if (player.paused) {
-        player.play();
-        btn.textContent = "⏸ Pause Player";
-      } else {
-        player.pause();
-        btn.textContent = "▶ Live Player";
-      }
-    }
-  </script>
+  <section class="upcoming wrap">
+    <h3>Upcoming Shows</h3>
+    <div class="carousel">
+      <div class="card show">Mon 22:00 — Late Night DnB</div>
+      <div class="card show">Tue 20:00 — Bassline Sessions</div>
+      <div class="card show">Wed 19:00 — Urban Beats</div>
+      <div class="card show">Fri 23:00 — Afterhours</div>
+    </div>
+  </section>
+
+  <section class="artists wrap">
+    <h3>Unsigned Artist Showcase</h3>
+    <div class="grid">
+      <div class="card artist">
+        <img src="https://wildstyle.vip/unsigned/alberto.png" alt="artist">
+        <div class="card-body"><strong>Alberto</strong><p class="meta-muted">Electronic producer</p></div>
+      </div>
+      <div class="card artist">
+        <img src="https://wildstyle.vip/unsigned/showdown.jpg" alt="artist">
+        <div class="card-body"><strong>ShowDown</strong><p class="meta-muted">High-energy beats</p></div>
+      </div>
+      <div class="card artist">
+        <img src="https://via.placeholder.com/600x400?text=Artist" alt="artist">
+        <div class="card-body"><strong>Rising Star</strong><p class="meta-muted">Indie-electro</p></div>
+      </div>
+      <div class="card artist">
+        <img src="https://via.placeholder.com/600x400?text=Artist" alt="artist">
+        <div class="card-body"><strong>Newcomer</strong><p class="meta-muted">Experimental</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="community wrap">
+    <h3>Join the community</h3>
+    <p class="meta-muted">Chat with DJs and listeners on Discord, get shoutouts, and win merch.</p>
+    <a class="btn primary" href="https://discord.gg/29J27WbHYD" target="_blank">💬 Join Discord</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-left">
+        <div class="logo small">WS</div>
+        <div class="meta-muted">© 2025 Wildstyle Remix</div>
+      </div>
+      <div class="footer-right">
+        <a href="#" class="meta-muted">Facebook</a>
+        <a href="#" class="meta-muted">Instagram</a>
+        <a href="#" class="meta-muted">YouTube</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
