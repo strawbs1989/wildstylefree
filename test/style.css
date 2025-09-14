@@ -87,4 +87,22 @@ body{margin:0;background:linear-gradient(180deg,#050505,#0b0b0b);color:#fff;font
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 6px;
 }
+/* Now Playing */
+.now-playing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
 
+#NowOn {
+  padding: 0.4rem 1rem;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  max-width: 300px;
+  text-align: right;
+}
