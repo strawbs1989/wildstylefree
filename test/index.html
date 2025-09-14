@@ -34,8 +34,24 @@
         <h2>Live underground music — 24/7</h2>
         <p class="lead">Fresh mixes, unsigned talent, and late-night sessions. Tune in and join the crowd.</p>
         <div class="hero-actions">
-          <a class="btn primary" href="https://streaming.live365.com/a50378">▶ Live Player</a>
-          <a class="btn ghost" href="requests@wildstyle.vip">Request A Song</a>
+          <button class="btn primary" onclick="togglePlayer()">▶ Live Player</button>
+<audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
+
+<script>
+  function togglePlayer() {
+    const player = document.getElementById('livePlayer');
+    const btn = event.target;
+    if (player.paused) {
+      player.play();
+      btn.textContent = "⏸ Pause Player";
+    } else {
+      player.pause();
+      btn.textContent = "▶ Live Player";
+    }
+  }
+</script>
+
+          <a class="btn ghost" href="mailto:requests@wildstyle.vip">Request A Song</a>
         </div>
         <div class="now-placeholder">
           <strong>Now Playing:</strong><span><a href="https://live365.com/embeds/v1/player/a50378?s=md&m=dark&c=mp3" target="_blank"></a></span>
