@@ -3,12 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Wildstyle Remix — Official</title>
+  <title>Wildstyle Remix — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/test/style.css">
 </head>
-
-<body onload="NowON()">
+<body>
   <header class="site-header">
     <div class="wrap">
       <div class="brand">
@@ -19,11 +18,12 @@
         </div>
       </div>
       <nav class="main-nav">
-        <a href="index.html">Home</a>
+        <a href="#">Home</a>
         <a href="#">DJs</a>
-        <a href="schedule.html">Schedule</a>
+        <a href="#">Schedule</a>
         <a href="#">Chat</a>
         <a href="#">Merch</a>
+        
       </nav>
     </div>
   </header>
@@ -33,51 +33,170 @@
       <div class="hero-left">
         <h2>Live underground music — 24/7</h2>
         <p class="lead">Fresh mixes, unsigned talent, and late-night sessions. Tune in and join the crowd.</p>
-        
         <div class="hero-actions">
           <button class="btn primary" onclick="togglePlayer()">▶ Live Player</button>
-          <audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
+<audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
+
+<script>
+  function togglePlayer() {
+    const player = document.getElementById('livePlayer');
+    const btn = event.target;
+    if (player.paused) {
+      player.play();
+      btn.textContent = "⏸ Pause Player";
+    } else {
+      player.pause();
+      btn.textContent = "▶ Live Player";
+    }
+  }
+</script>
+
           <a class="btn ghost" href="mailto:requests@wildstyle.vip">Request A Song</a>
         </div>
-
         <div class="now-placeholder">
-          <strong>Now Playing:</strong> <span id="NowOn">Loading...</span>
+          <strong>Now Playing:</strong><span><a href="https://live365.com/embeds/v1/player/a50378?s=md&m=dark&c=mp3" target="_blank"></a></span>
+
         </div>
       </div>
 
       <div class="hero-right">
         <div class="dj-spotlight">
+          <!-- Placeholder player (no real stream) -->
           <div class="spot-head">DJ Spotlight</div>
-          <div class="spot-body">
+          <div class="player-meta">
+            <div class="title">DJ Demo — Mix Set</div>
+            <div class="meta-muted">00:00 / 90:00</div>
+            <div class="player-controls">
+              <button>⏯</button> <button>⏭</button>
+            </div>
+          </div>
+        </div>
+
+        
+          
+          
             <img src="https://via.placeholder.com/300x180?text=DJ+Spotlight" alt="spot">
-            <div class="spot-info">Unsigned Artist Showcase</div>
+            <div class="spot-info">
+              <!-- Now Playing Script -->
+  <script>
+  var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
+
+  // MONDAY
+  DH[1][12] = '12am – 4am<br>Steve G";
+  DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
+  DH[1][14] = "2pm – 4pm<br>BabyJane";
+  DH[1][15] = "3pm – 5pm<br>James Stephen";
+  DH[1][17] = "5pm – 7pm<br>Lewis";
+  DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
+  DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
+
+  // TUESDAY
+  DH[2][01] = "1am – 2am<br>Wizard Of Rock";
+  DH[2][03] = "3am – 6am<br>Dani - DJ Queen Dani";
+  DH[2][06] = "6am – 8am<br>Dj Dave– 60's - 70's";
+  DH[2][15] = "3pm – 5pm<br>James Stephen";
+  DH[2][20] = "8pm – 10pm<br>Dj Lewis";
+  DH[2][010] = "10am – 12pm<br>HothotDJ";
+  
+
+  // WEDNESDAY
+   DH[3][15]  = "3pm – 5pm<br>James Stephen";
+   DH[3][18]  = "6pm – 7pm<br>DJ European BOB";
+   DH[3][20]  = "8pm – 10pm<br>Steve DJ Smith";
+   DH[3][22]  = "10pm – 12pm<br>Reece";
+   
+  
+
+  // THURSDAY
+   DH[4][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
+   DH[4][08]  = "8am – 10am<br>Coll";
+   DH[4][0]  = "12am – 4am<br>Steve Gunn";
+   DH[4][10]  = "10am – 12pm<br>Gordan";
+   DH[4][15]  = "3pm – 4pm<br>James Stephen";
+   DH[4][17]  = "5pm – 7pm<br>DJ Flash";
+   DH[4][19]  = "7pm – 8pm<br>Echofalls(DJ Strawbs)";
+   DH[4][20]  = "8pm – 10pm<br>Moofie";
+   DH[4][22]  = "10pm – 11pm<br>MottMuzik";
+ 
+  // FRIDAY
+  DH[5][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
+  DH[5][0]  = "12am – 4am<br>SteveG";
+  DH[5][10]  = "10am – 12pm<br>Vish";
+  DH[5][15] = "3pm – 5pm<br>James Stephen";
+  DH[5][16] = "4pm – 8pm<br>StevenD";
+  DH[5][20] = "8pm – 10pm<br>Wendall";
+  DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
+  
+
+  // SATURDAY
+  DH[6][0] = "12am – 2am<br>Trevor Nannab";
+  DH[6][02] = "2am – 4am<br>DJ AJ";
+  DH[6][16] = "4pm – 6pm<br>The Byrdman";
+  DH[6][06] = "6am – 10am<br>Cam";
+  DH[6][10] = "10am – 12am<br>Kevin Lee";
+  DH[6][20] = "8pm – 9pm<br>Daniel";
+  
+
+  // SUNDAY
+  DH[7][08] = "8am – 10am<br>The Byrdman";
+  DH[7][10] = "10am – 12pm<br>HotShot - 80's 90's";
+  DH[7][11] = "11am – 1pm<br>JimmyD";
+  DH[7][13] = "1pm – 3pm<br>JK";
+  DH[7][17] = "5pm – 7pm<br>DJ Lewis";
+  DH[7][19] = "7pm - 8pm<br>DJ European Bob";
+  DH[7][20] = "8pm - 9pm<br>BIG BOSS Dj Echofalls";
+  DH[7][21] = "9pm - 12am<br>Popped Radio";
+  
+  
+
+  function NowON() {
+    const now = new Date();
+    const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
+    document.getElementById("NowOn").innerHTML = show;
+  }
+</script>
+</head>
+
+<body onload="NowON()">
+
+  <!-- Header -->
+  <!-- Wildstyle Info Panel -->
+<section class="xr-info">
+  <h3 class="text-danger">Wildstyle Info</h3>
+  <div class="info-card">
+    <p><strong>Top Request:</strong> DJ Dezzy Mac – Mixture</p>
+    <p><strong>Now Listening:</strong> 128 people worldwide</p>
+    <p><strong>Latest Location:</strong> London, UK</p>
+    <p><strong>Requests Today:</strong> 47</p>
+    <p><strong>Bitrate:</strong> 320 kbps</p>
+  </div>
+</section>
+  <header class="dj-card header-wrapper">
+    <div class="container header-container">
+	  
+      <div class="now-playing">
+        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
+        
+      </div>
+              <a class="link" href="#">Listen to recent mix</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- XR Info -->
-  <div class="xr-info" id="infoDisplay">
-    <h3 class="text-danger">Wildstyle Info</h3>
-    <div class="info-card" id="infoCard">
-      <p>Loading info...</p>
-    </div>
-  </div>
-
-  <!-- Upcoming Shows -->
   <section class="upcoming wrap">
     <h3>Upcoming Shows</h3>
     <div class="carousel">
-      <div class="card show">Mon 12am – 2am — DJ Riddler - Killer Rockshow</div>
-      <div class="card show">Mon 12pm – 2pm — James - Wizard Of Rock</div>
+      <div class="card show">Mon 12am – 2am: — DJ Riddler -Riddlers Killer Rockshow</div>
+	  <div class="card show">Mon 12pm – 2pm: — James - Wizard Of Rock</div>
       <div class="card show">Tue 20:00 — Bassline Sessions</div>
       <div class="card show">Wed 19:00 — Urban Beats</div>
       <div class="card show">Fri 23:00 — Afterhours</div>
     </div>
   </section>
 
-  <!-- Unsigned Artist Showcase -->
   <section class="artists wrap">
     <h3>Unsigned Artist Showcase</h3>
     <div class="grid">
@@ -100,7 +219,6 @@
     </div>
   </section>
 
-  <!-- Community -->
   <section class="community wrap">
     <h3>Join the community</h3>
     <p class="meta-muted">Chat with DJs and listeners on Discord, get shoutouts, and win merch.</p>
@@ -120,60 +238,5 @@
       </div>
     </div>
   </footer>
-
-  <!-- JS -->
-  <script>
-    function togglePlayer() {
-      const player = document.getElementById('livePlayer');
-      const btn = event.target;
-      if (player.paused) {
-        player.play();
-        btn.textContent = "⏸ Pause Player";
-      } else {
-        player.pause();
-        btn.textContent = "▶ Live Player";
-      }
-    }
-
-    // Schedule Matrix
-    var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
-    DH[1][12] = "12pm – 2pm<br>James - Wizard Of Rock";
-    DH[1][14] = "2pm – 4pm<br>BabyJane";
-    DH[1][15] = "3pm – 5pm<br>James Stephen";
-    DH[1][17] = "5pm – 7pm<br>Lewis";
-    DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
-    DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
-    // ... (rest of week filled the same way)
-
-    function NowON() {
-      const now = new Date();
-      const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
-      document.getElementById("NowOn").innerHTML = show;
-    }
-
-    // XR Info extractor
-    function extractAndDisplayInfo() {
-      const loadDiv = document.querySelector('#load_xrinfo');
-      if (!loadDiv) {
-        document.querySelector('#infoCard').innerHTML = '<p>No data available</p>';
-        return;
-      }
-      const links = loadDiv.querySelectorAll('a');
-      let listenerLocation = links[1]?.textContent.trim() || 'N/A';
-      let recentQuestion = 'N/A';
-      let likes = 'N/A';
-      links.forEach(link => {
-        const text = link.textContent.trim();
-        if (text.includes('They asked me how I knew')) recentQuestion = text;
-        if (text.includes('likes')) likes = text;
-      });
-      document.querySelector('#infoCard').innerHTML = `
-        <p><strong>Listener Location:</strong> ${listenerLocation}</p>
-        <p><strong>Recent Question:</strong> ${recentQuestion}</p>
-        <p><strong>Number of Likes:</strong> ${likes}</p>`;
-    }
-    setInterval(extractAndDisplayInfo, 30000);
-    extractAndDisplayInfo();
-  </script>
 </body>
 </html>
