@@ -1,50 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Professional Chatbox</title>
-  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildstyle Remix — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body onload="showLogin()">
-
-  <!-- Login / Signup Modals -->
-  <div id="loginModal" class="modal">
-    <h2>Admin/User Login</h2>
-    <input type="text" id="loginUser" placeholder="Username" />
-    <input type="password" id="loginPass" placeholder="Password (admins only)" />
-    <button onclick="login()">Login</button>
-    <button onclick="showSignup()">Sign Up (Admins only)</button>
-  </div>
-
-  <div id="signupModal" class="modal" style="display:none;">
-    <h2>Admin Sign Up</h2>
-    <input type="text" id="signupUser" placeholder="New admin username" />
-    <input type="password" id="signupPass" placeholder="New admin password" />
-    <button onclick="signup()">Sign Up</button>
-    <button onclick="showLogin()">Back to Login</button>
-  </div>
-
-  <!-- Main chat container -->
-  <div id="container" style="display:none;">
-    <div id="sidebar">
-      <h3>👑 Admins</h3>
-      <ul id="adminList"></ul>
-      <button onclick="changeName()">✏️ Change Name</button>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo">WS</div>
+        <div class="brand-text">
+          <h1>Wildstyle Remix</h1>
+          <div class="sub">United by beats — powered by passion</div>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <a href="#">Home</a>
+        <a href="#">DJs</a>
+        <a href="#">Schedule</a>
+        <a href="#">Chat</a>
+        <a href="#">Merch</a>
+        <a class="listen" href="#">▶ Listen</a>
+      </nav>
     </div>
-    <div id="chatbox">
-      <div id="messages"></div>
-      <input type="text" id="chatInput" placeholder="Type a message..." />
-      <button onclick="sendMessage()">Send</button>
-      <div id="admin-controls" style="display:none;">
-        <button onclick="clearChat()">🧹 Clear Chat</button>
-        <button onclick="toggleMuteAll()">🔇 Mute All</button>
-        <button onclick="blockUser()">🚫 Block User</button>
-        <button onclick="unblockUser()">✅ Unblock User</button>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-left">
+        <h2>Live underground music — 24/7</h2>
+        <p class="lead">Fresh mixes, unsigned talent, and late-night sessions. Tune in and join the crowd.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#">▶ Live Player</a>
+          <a class="btn ghost" href="#">Request A Song</a>
+        </div>
+        <div class="now-placeholder">
+          <strong>Now Playing:</strong> <span>Placeholder — DJ Demo</span>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="player-card">
+          <!-- Placeholder player (no real stream) -->
+          <div class="player-thumb">Player</div>
+          <div class="player-meta">
+            <div class="title">DJ Demo — Mix Set</div>
+            <div class="meta-muted">00:00 / 90:00</div>
+            <div class="player-controls">
+              <button>⏯</button> <button>⏭</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dj-spotlight">
+          <div class="spot-head">DJ Spotlight</div>
+          <div class="spot-body">
+            <img src="https://via.placeholder.com/300x180?text=DJ+Spotlight" alt="spot">
+            <div class="spot-info">
+              <strong>DJ Luna</strong>
+              <p class="meta-muted">Electro + House — Weekly mix</p>
+              <a class="link" href="#">Listen to recent mix</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <script src="https://wildstyle.vip/test/script.js"></script>
+  <section class="upcoming wrap">
+    <h3>Upcoming Shows</h3>
+    <div class="carousel">
+      <div class="card show">Mon 22:00 — Late Night DnB</div>
+      <div class="card show">Tue 20:00 — Bassline Sessions</div>
+      <div class="card show">Wed 19:00 — Urban Beats</div>
+      <div class="card show">Fri 23:00 — Afterhours</div>
+    </div>
+  </section>
+
+  <section class="artists wrap">
+    <h3>Unsigned Artist Showcase</h3>
+    <div class="grid">
+      <div class="card artist">
+        <img src="https://wildstyle.vip/unsigned/alberto.png" alt="artist">
+        <div class="card-body"><strong>Alberto</strong><p class="meta-muted">Electronic producer</p></div>
+      </div>
+      <div class="card artist">
+        <img src="https://wildstyle.vip/unsigned/showdown.jpg" alt="artist">
+        <div class="card-body"><strong>ShowDown</strong><p class="meta-muted">High-energy beats</p></div>
+      </div>
+      <div class="card artist">
+        <img src="https://via.placeholder.com/600x400?text=Artist" alt="artist">
+        <div class="card-body"><strong>Rising Star</strong><p class="meta-muted">Indie-electro</p></div>
+      </div>
+      <div class="card artist">
+        <img src="https://via.placeholder.com/600x400?text=Artist" alt="artist">
+        <div class="card-body"><strong>Newcomer</strong><p class="meta-muted">Experimental</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="community wrap">
+    <h3>Join the community</h3>
+    <p class="meta-muted">Chat with DJs and listeners on Discord, get shoutouts, and win merch.</p>
+    <a class="btn primary" href="https://discord.gg/29J27WbHYD" target="_blank">💬 Join Discord</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-left">
+        <div class="logo small">WS</div>
+        <div class="meta-muted">© 2025 Wildstyle Remix</div>
+      </div>
+      <div class="footer-right">
+        <a href="#" class="meta-muted">Facebook</a>
+        <a href="#" class="meta-muted">Instagram</a>
+        <a href="#" class="meta-muted">YouTube</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
