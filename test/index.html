@@ -54,37 +54,7 @@
           <a class="btn ghost" href="mailto:requests@wildstyle.vip">Request A Song</a>
         </div>
         <div class="now-placeholder">
-          <strong>Now Playing:</strong><span><span class="cc_streaminfo" id="nowPlaying" data-type="song" data-username="coolvibes">Loading ...</span>
-
-<script type="text/javascript" src="https://streaming.live365.com/a50378"></script>
-
-<script>
-  // Example: Periodically fetch current song info if you have an API endpoint
-  // Replace 'your-api-endpoint' with your actual data source
-  const nowPlayingElement = document.getElementById('nowPlaying');
-
-  function updateNowPlaying() {
-    fetch('your-api-endpoint') // Replace with your actual API URL
-      .then(response => response.json())
-      .then(data => {
-        // Assuming the API returns { song: "Song Title", artist: "Artist Name" }
-        if(data.song && data.artist) {
-          nowPlayingElement.textContent = `${data.song} - ${data.artist}`;
-        } else {
-          nowPlayingElement.textContent = 'Loading ...';
-        }
-      })
-      .catch(() => {
-        nowPlayingElement.textContent = 'Loading ...';
-      });
-  }
-
-  // Update every 30 seconds
-  setInterval(updateNowPlaying, 30000);
-
-  // Initial load
-  updateNowPlaying();
-</script>
+          <strong>Now Playing:</strong><span><a href="https://streaming.live365.com/a50378" target="_blank"></a></span>
 
         </div>
       </div>
