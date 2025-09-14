@@ -152,17 +152,60 @@
 <body onload="NowON()">
 
   <!-- Header -->
-  <!-- Wildstyle Info Panel -->
-<section class="xr-info">
+  <!-- Your info display container -->
+<div class="xr-info" id="infoDisplay">
   <h3 class="text-danger">Wildstyle Info</h3>
-  <div class="info-card">
-    <p><strong>Top Request:</strong> DJ Dezzy Mac – Mixture</p>
-    <p><strong>Now Listening:</strong> 128 people worldwide</p>
-    <p><strong>Latest Location:</strong> London, UK</p>
-    <p><strong>Requests Today:</strong> 47</p>
-    <p><strong>Bitrate:</strong> 320 kbps</p>
+  <div class="info-card" id="infoCard">
+    <p>Loading info...</p>
   </div>
-</section>
+</div>
+
+<script>
+function extractAndDisplayInfo() {
+  const loadDiv = document.querySelector('#load_xrinfo');
+  if (!loadDiv) {
+    document.querySelector('#infoCard').innerHTML = '<p>No data available</p>';
+    return;
+  }
+
+  const links = loadDiv.querySelectorAll('a');
+
+  let listenerLocation = 'N/A';
+  let recentQuestion = 'N/A';
+  let likes = 'N/A';
+
+  // Extract listener location (second link)
+  if (links.length > 1) {
+    listenerLocation = links[1].textContent.trim();
+  }
+
+  // Loop through links to find the recent question and likes
+  links.forEach(link => {
+    const text = link.textContent.trim();
+
+    // Recent question
+    if (text.includes('They asked me how I knew')) {
+      recentQuestion = text;
+    }
+    // Likes count
+    if (text.includes('likes')) {
+      likes = text;
+    }
+  });
+
+  // Update your info panel
+  document.querySelector('#infoCard').innerHTML = `
+    <p><strong>Listener Location:</strong> ${listenerLocation}</p>
+    <p><strong>Recent Question:</strong> ${recentQuestion}</p>
+    <p><strong>Number of Likes:</strong> ${likes}</p>
+  `;
+}
+
+// Run every 30 seconds
+setInterval(extractAndDisplayInfo, 30000);
+// Run on page load
+extractAndDisplayInfo();
+</script>
   <header class="dj-card header-wrapper">
     <div class="container header-container">
 	  
