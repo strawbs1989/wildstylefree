@@ -1,277 +1,442 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Wildstyle Remix — Demo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/test/style.css">
+  <title>Wildstyle Radio — Live Dashboard</title>
+
+  <!-- Basic bootstrap for layout -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --bg:#07070a;
+      --panel:#0f1114;
+      --muted:#aab3c5;
+      --accent1:#ff0032;
+      --accent2:#0096ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --card-pad:14px;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#040406);font-family:Inter, system-ui, -apple-system, Arial, sans-serif;color:#fff}
+    .wrap{max-width:1100px;margin:28px auto;padding:18px}
+    header{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.006));box-shadow:0 8px 30px rgba(0,0,0,0.7)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900}
+    .brand h1{margin:0;font-size:1.1rem;letter-spacing:1px}
+    .controls{display:flex;gap:8px;align-items:center}
+
+    /* Buttons */
+    .btn-ws{border-radius:999px;padding:8px 14px;font-weight:700;border:none;cursor:pointer}
+    .btn-play{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;box-shadow:0 8px 26px rgba(0,0,0,0.6)}
+    .btn-mail{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+
+    /* Now playing small section */
+    .nowline{display:flex;gap:12px;align-items:center;font-size:0.95rem;color:var(--muted)}
+    .nowline strong{color:#fff}
+
+    /* Layout grid */
+    .grid{display:grid;grid-template-columns: 1fr 360px;gap:18px;margin-top:18px}
+    main{min-height:360px;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));}
+    aside{padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.012));border-left:1px solid rgba(255,255,255,0.02)}
+
+    /* Now Playing card (big) */
+    .now-card{background:var(--panel);padding:16px;border-radius:10px;margin-bottom:14px}
+    .now-card h3{margin:0;color:var(--accent1)}
+    .now-meta{color:var(--muted);margin-top:8px}
+
+    /* Who's Listening (wildstyle theme) */
+    .listeners{background:#0a0a0f;padding:14px;border-radius:12px;box-shadow:0 0 20px rgba(255,0,50,0.12),0 0 30px rgba(0,150,255,0.08)}
+    .listeners-title{display:flex;align-items:center;justify-content:center;gap:12px;font-weight:700;color:#fff;text-shadow:0 0 8px rgba(255,0,50,0.06)}
+    .listener-count{display:inline-block;margin-left:8px;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,var(--accent1),var(--accent2));font-family:monospace;box-shadow:0 0 10px rgba(255,0,50,0.45);transition:transform .18s,box-shadow .18s}
+    .pulse{animation:ws-pulse 1s ease-in-out 2}
+    @keyframes ws-pulse{0%{transform:scale(1);box-shadow:0 0 8px rgba(255,0,50,0.45)}50%{transform:scale(1.12);box-shadow:0 0 20px rgba(255,0,50,0.7)}100%{transform:scale(1);box-shadow:0 0 10px rgba(255,0,50,0.45)}}
+
+    .listener-box{background:#111;padding:10px;border-radius:8px;color:#ddd;font-family:monospace;max-height:320px;overflow:auto;border:1px solid rgba(255,255,255,0.04)}
+    .listener-item{background:#151515;margin:8px 0;padding:10px;border-radius:8px;border-left:3px solid var(--accent1);display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .listener-info{font-size:0.9rem;color:#fff}
+    .listener-meta{font-size:0.82rem;color:var(--muted)}
+
+    /* Schedule */
+    .schedule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+    .sched-card{background:linear-gradient(180deg,#0f1114,#0b0c10);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+    .sched-card h4{color:var(--accent2);margin-bottom:8px}
+
+    /* footer */
+    footer{margin-top:18px;padding:10px;color:var(--muted);text-align:center;font-size:0.9rem}
+
+    /* Responsiveness */
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
+      aside{order:2}
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap">
-      <div class="brand">
-        <div class="logo">WS</div>
-        <div class="brand-text">
-          <h1>Wildstyle Remix</h1>
-          <div class="sub">United by beats — powered by passion</div>
-        </div>
+
+<div class="wrap">
+  <!-- header -->
+  <header>
+    <div class="brand">
+      <div class="logo">WS</div>
+      <div>
+        <h1>Wildstyle Radio</h1>
+        <div style="font-size:0.82rem;color:var(--muted)">United by Beats • Powered by Passion</div>
       </div>
-      <nav class="main-nav">
-        <a href="#">Home</a>
-        <a href="#">DJs</a>
-        <a href="#">Schedule</a>
-        <a href="#">Chat</a>
-        <a href="#">Merch</a>
-        
-      </nav>
+    </div>
+
+    <div class="controls">
+      <div class="nowline">
+        <strong>Now Playing:</strong> <span id="NowOn" style="margin-left:8px">Loading…</span>
+      </div>
+
+      <button class="btn-ws btn-play" id="playBtn" onclick="togglePlayer()" style="margin-left:12px">▶ Live Player</button>
+      <audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
+
+      <a class="btn-ws btn-mail" href="mailto:requests@wildstyle.vip" style="margin-left:10px">Request A Song</a>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="hero-left">
-        <h2>Live underground music — 24/7</h2>
-        <p class="lead">Fresh mixes, unsigned talent, and late-night sessions. Tune in and join the crowd.</p>
-        <div class="hero-actions">
-          <button class="btn primary" onclick="togglePlayer()">▶ Live Player</button>
-<audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
+  <div class="grid">
+    <!-- main column -->
+    <main>
+      <!-- Now card (bigger) -->
+      <div class="now-card">
+        <h3>Now On Wildstyle</h3>
+        <div class="now-meta" id="nowMeta">Loading current show…</div>
+      </div>
 
-<script>
-  function togglePlayer() {
-    const player = document.getElementById('livePlayer');
-    const btn = event.target;
-    if (player.paused) {
-      player.play();
-      btn.textContent = "⏸ Pause Player";
-    } else {
-      player.pause();
-      btn.textContent = "▶ Live Player";
-    }
-  }
-</script>
-
-          <a class="btn ghost" href="mailto:requests@wildstyle.vip">Request A Song</a>
+      <!-- schedule -->
+      <div class="schedule-grid">
+        <!-- Monday example; more days follow -->
+        <div class="sched-card" id="mon-card">
+          <h4>Monday</h4>
+          <div id="mon-now" style="margin-bottom:8px"></div>
+          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
+            <li><strong>12am – 2am:</strong> DJ Riddler - Riddlers Killer Rockshow</li>
+            <li><strong>4am:</strong> </li>
+            <li><strong>12pm – 2pm:</strong> James - Wizard Of Rock</li>
+            <li><strong>2pm - 4pm:</strong> BabyJane</li>
+            <li><strong>3pm - 5pm:</strong> James Stephen</li>
+            <li><strong>5pm – 7pm:</strong> Lewis - Mix</li>
+            <li><strong>7pm – 9pm:</strong> DJ Josh</li>
+            <li><strong>7pm – 10pm:</strong> DJ Dezzy Mac - Mixture (takin break)</li>
+            <li><strong>10pm – 12am:</strong> DJ Jaydon Mac - Grime</li>
+          </ul>
         </div>
-        <div class="now-placeholder">
-          <strong>Now Playing:</strong><span><a href="https://streaming.live365.com/a50378" target="_blank"></a></span>
 
+        <!-- add other days cards as needed (Tue-Sun). Keep IDs so Now-On shows update per day if desired -->
+        <div class="sched-card">
+          <h4>Tuesday</h4>
+          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
+            <li><strong>1am – 2am:</strong> Wizard Of Rock</li>
+            <li><strong>3am – 6am:</strong> Dani - DJ Queen Dani</li>
+            <li><strong>6am – 8am:</strong> Dj Dave – 60's - 70's</li>
+            <li><strong>3pm – 5pm:</strong> James Stephen</li>
+            <li><strong>8pm – 10pm:</strong> Dj Lewis</li>
+            <li><strong>10am – 12pm:</strong> HothotDJ</li>
+          </ul>
+        </div>
+
+        <div class="sched-card">
+          <h4>Wednesday</h4>
+          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
+            <li><strong>3pm – 5pm:</strong> James Stephen</li>
+            <li><strong>6pm – 7pm:</strong> DJ European BOB</li>
+            <li><strong>8pm – 10pm:</strong> Steve DJ Smith</li>
+            <li><strong>10pm – 12pm:</strong> Reece</li>
+          </ul>
+        </div>
+
+        <div class="sched-card">
+          <h4>Thursday</h4>
+          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
+            <li><strong>4am – 6am:</strong> Dani - DJ Queen Dani</li>
+            <li><strong>8am – 10am:</strong> Coll</li>
+            <li><strong>12am – 4am:</strong> Steve Gunn</li>
+            <li><strong>10am – 12pm:</strong> Gordan</li>
+            <li><strong>3pm – 4pm:</strong> James Stephen</li>
+            <li><strong>5pm – 7pm:</strong> DJ Flash</li>
+            <li><strong>7pm – 8pm:</strong> Echofalls (DJ Strawbs)</li>
+            <li><strong>8pm – 10pm:</strong> Moofie</li>
+            <li><strong>10pm – 11pm:</strong> MottMuzik</li>
+          </ul>
+        </div>
+
+        <div class="sched-card">
+          <h4>Friday</h4>
+          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
+            <li><strong>4am – 6am:</strong> Dani - DJ Queen Dani</li>
+            <li><strong>12am – 4am:</strong> SteveG</li>
+            <li><strong>10am – 12pm:</strong> Vish</li>
+            <li><strong>3pm – 5pm:</strong> James Stephen</li>
+            <li><strong>4pm – 8pm:</strong> StevenD</li>
+            <li><strong>8pm – 10pm:</strong> Wendall</li>
+            <li><strong>10pm – 11pm:</strong> Rebecca - DJ Mix&Match</li>
+          </ul>
+        </div>
+
+        <div class="sched-card">
+          <h4>Saturday</h4>
+          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
+            <li><strong>12am – 2am:</strong> Trevor Nannab</li>
+            <li><strong>2am – 4am:</strong> DJ AJ</li>
+            <li><strong>6am – 10am:</strong> Cam</li>
+            <li><strong>10am – 12am:</strong> Kevin Lee</li>
+            <li><strong>4pm – 6pm:</strong> The Byrdman</li>
+            <li><strong>8pm – 9pm:</strong> Daniel</li>
+          </ul>
+        </div>
+
+        <div class="sched-card">
+          <h4>Sunday</h4>
+          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
+            <li><strong>8am – 10am:</strong> The Byrdman</li>
+            <li><strong>10am – 12pm:</strong> HotShot - 80's 90's</li>
+            <li><strong>11am – 1pm:</strong> JimmyD</li>
+            <li><strong>1pm – 3pm:</strong> JK</li>
+            <li><strong>5pm – 7pm:</strong> DJ Lewis</li>
+            <li><strong>7pm – 8pm:</strong> DJ European Bob</li>
+            <li><strong>8pm – 9pm:</strong> BIG BOSS Dj Echofalls</li>
+            <li><strong>9pm – 12am:</strong> Popped Radio</li>
+          </ul>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- sidebar -->
+    <aside>
+      <!-- Live Player info and listeners -->
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-weight:700">Live Player</div>
+          <div id="liveListenersBadge" style="color:var(--muted);font-size:0.9rem">Listeners</div>
+        </div>
+        <div style="margin-bottom:8px">
+          <!-- small player placeholder -->
+          <audio id="sidePlayer" controls style="width:100%">
+            <source src="https://streaming.live365.com/a50378" type="audio/mpeg">
+            Your browser doesn't support audio.
+          </audio>
         </div>
       </div>
 
-      <div class="hero-right">
-        <div class="dj-spotlight">
-          <!-- Placeholder player (no real stream) -->
-          <div class="spot-head">DJ Spotlight</div>
-          <div class="spot-body">
-            <img src="https://via.placeholder.com/300x180?text=DJ+Spotlight" alt="spot">
-            <div class="spot-info">
-          </div>
-        </div>          
-            
-              <!-- Now Playing Script -->
-  <script>
-  var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
-
-  // MONDAY
-  DH[1][12] = '12am – 4am<br>Steve G";
-  DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
-  DH[1][14] = "2pm – 4pm<br>BabyJane";
-  DH[1][15] = "3pm – 5pm<br>James Stephen";
-  DH[1][17] = "5pm – 7pm<br>Lewis";
-  DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
-  DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
-
-  // TUESDAY
-  DH[2][01] = "1am – 2am<br>Wizard Of Rock";
-  DH[2][03] = "3am – 6am<br>Dani - DJ Queen Dani";
-  DH[2][06] = "6am – 8am<br>Dj Dave– 60's - 70's";
-  DH[2][15] = "3pm – 5pm<br>James Stephen";
-  DH[2][20] = "8pm – 10pm<br>Dj Lewis";
-  DH[2][010] = "10am – 12pm<br>HothotDJ";
-  
-
-  // WEDNESDAY
-   DH[3][15]  = "3pm – 5pm<br>James Stephen";
-   DH[3][18]  = "6pm – 7pm<br>DJ European BOB";
-   DH[3][20]  = "8pm – 10pm<br>Steve DJ Smith";
-   DH[3][22]  = "10pm – 12pm<br>Reece";
-   
-  
-
-  // THURSDAY
-   DH[4][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
-   DH[4][08]  = "8am – 10am<br>Coll";
-   DH[4][0]  = "12am – 4am<br>Steve Gunn";
-   DH[4][10]  = "10am – 12pm<br>Gordan";
-   DH[4][15]  = "3pm – 4pm<br>James Stephen";
-   DH[4][17]  = "5pm – 7pm<br>DJ Flash";
-   DH[4][19]  = "7pm – 8pm<br>Echofalls(DJ Strawbs)";
-   DH[4][20]  = "8pm – 10pm<br>Moofie";
-   DH[4][22]  = "10pm – 11pm<br>MottMuzik";
- 
-  // FRIDAY
-  DH[5][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
-  DH[5][0]  = "12am – 4am<br>SteveG";
-  DH[5][10]  = "10am – 12pm<br>Vish";
-  DH[5][15] = "3pm – 5pm<br>James Stephen";
-  DH[5][16] = "4pm – 8pm<br>StevenD";
-  DH[5][20] = "8pm – 10pm<br>Wendall";
-  DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
-  
-
-  // SATURDAY
-  DH[6][0] = "12am – 2am<br>Trevor Nannab";
-  DH[6][02] = "2am – 4am<br>DJ AJ";
-  DH[6][16] = "4pm – 6pm<br>The Byrdman";
-  DH[6][06] = "6am – 10am<br>Cam";
-  DH[6][10] = "10am – 12am<br>Kevin Lee";
-  DH[6][20] = "8pm – 9pm<br>Daniel";
-  
-
-  // SUNDAY
-  DH[7][08] = "8am – 10am<br>The Byrdman";
-  DH[7][10] = "10am – 12pm<br>HotShot - 80's 90's";
-  DH[7][11] = "11am – 1pm<br>JimmyD";
-  DH[7][13] = "1pm – 3pm<br>JK";
-  DH[7][17] = "5pm – 7pm<br>DJ Lewis";
-  DH[7][19] = "7pm - 8pm<br>DJ European Bob";
-  DH[7][20] = "8pm - 9pm<br>BIG BOSS Dj Echofalls";
-  DH[7][21] = "9pm - 12am<br>Popped Radio";
-  
-  
-
-  function NowON() {
-    const now = new Date();
-    const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
-    document.getElementById("NowOn").innerHTML = show;
-  }
-</script>
-</head>
-
-<body onload="NowON()">
-
-  <!-- Header -->
-  <!-- Your info display container -->
-<div class="xr-info" id="infoDisplay">
-  <h3 class="text-danger">Wildstyle Info</h3>
-  <div class="info-card" id="infoCard">
-    <p>Loading info...</p>
+      <!-- WHO'S LISTENING panel -->
+      <div class="listeners">
+        <div class="listeners-title">
+          Who's Listening <span id="listenerCount" class="listener-count">🎧 0</span>
+        </div>
+        <div id="listenerList" class="listener-box">Loading live listeners...</div>
+      </div>
+    </aside>
   </div>
+
+  <footer>
+    Wildstyle Radio • Built for the movement
+  </footer>
 </div>
 
 <script>
-function extractAndDisplayInfo() {
-  const loadDiv = document.querySelector('#load_xrinfo');
-  if (!loadDiv) {
-    document.querySelector('#infoCard').innerHTML = '<p>No data available</p>';
-    return;
+/* -----------------------
+   Play / Pause main play button
+   ----------------------- */
+function togglePlayer(){
+  const player = document.getElementById('livePlayer');
+  const btn = document.getElementById('playBtn');
+  if(player.paused){
+    player.play().catch(()=>{}); // autoplay block may apply
+    btn.textContent = '⏸ Pause Player';
+  } else {
+    player.pause();
+    btn.textContent = '▶ Live Player';
   }
-
-  const links = loadDiv.querySelectorAll('a');
-
-  let listenerLocation = 'N/A';
-  let recentQuestion = 'N/A';
-  let likes = 'N/A';
-
-  // Extract listener location (second link)
-  if (links.length > 1) {
-    listenerLocation = links[1].textContent.trim();
-  }
-
-  // Loop through links to find the recent question and likes
-  links.forEach(link => {
-    const text = link.textContent.trim();
-
-    // Recent question
-    if (text.includes('They asked me how I knew')) {
-      recentQuestion = text;
-    }
-    // Likes count
-    if (text.includes('likes')) {
-      likes = text;
-    }
-  });
-
-  // Update your info panel
-  document.querySelector('#infoCard').innerHTML = `
-    <p><strong>Listener Location:</strong> ${listenerLocation}</p>
-    <p><strong>Recent Question:</strong> ${recentQuestion}</p>
-    <p><strong>Number of Likes:</strong> ${likes}</p>
-  `;
 }
 
-// Run every 30 seconds
-setInterval(extractAndDisplayInfo, 30000);
-// Run on page load
-extractAndDisplayInfo();
-</script>
-  <header class="dj-card header-wrapper">
-    <div class="container header-container">
-	  
-      <div class="now-playing">
-        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
-        
-      </div>
-              <a class="link" href="#">Listen to recent mix</a>
-            </div>
-          </div>
+/* -----------------------
+   Now Playing schedule logic
+   - A robust mapping: scheduleMap keyed by weekday names
+   - Will show a sensible "Now On" string
+   ----------------------- */
+const scheduleMap = {
+  Monday: {
+    0: "", 1: "12am – 2am: DJ Riddler - Riddlers Killer Rockshow",
+    12: "12pm – 2pm: James - Wizard Of Rock",
+    14: "2pm – 4pm: BabyJane",
+    15: "3pm – 5pm: James Stephen",
+    17: "5pm – 7pm: Lewis - Mix",
+    19: "7pm – 10pm: DJ Dezzy Mac - Mixture",
+    22: "10pm – 12am: DJ Jaydon Mac - Grime"
+  },
+  Tuesday: {
+    1: "1am – 2am: Wizard Of Rock",
+    3: "3am – 6am: Dani - DJ Queen Dani",
+    6: "6am – 8am: Dj Dave – 60's - 70's",
+    15: "3pm – 5pm: James Stephen",
+    20: "8pm – 10pm: Dj Lewis",
+    10: "10am – 12pm: HothotDJ"
+  },
+  Wednesday: {
+    15: "3pm – 5pm: James Stephen",
+    18: "6pm – 7pm: DJ European BOB",
+    20: "8pm – 10pm: Steve DJ Smith",
+    22: "10pm – 12pm: Reece"
+  },
+  Thursday: {
+    4: "4am – 6am: Dani - DJ Queen Dani",
+    8: "8am – 10am: Coll",
+    0: "12am – 4am: Steve Gunn",
+    10: "10am – 12pm: Gordan",
+    15: "3pm – 4pm: James Stephen",
+    17: "5pm – 7pm: DJ Flash",
+    19: "7pm – 8pm: Echofalls (DJ Strawbs)",
+    20: "8pm – 10pm: Moofie",
+    22: "10pm – 11pm: MottMuzik"
+  },
+  Friday: {
+    4: "4am – 6am: Dani - DJ Queen Dani",
+    0: "12am – 4am: SteveG",
+    10: "10am – 12pm: Vish",
+    15: "3pm – 5pm: James Stephen",
+    16: "4pm – 8pm: StevenD",
+    20: "8pm – 10pm: Wendall",
+    22: "10pm – 11pm: Rebecca - DJ Mix&Match"
+  },
+  Saturday: {
+    0: "12am – 2am: Trevor Nannab",
+    2: "2am – 4am: DJ AJ",
+    6: "6am – 10am: Cam",
+    10: "10am – 12am: Kevin Lee",
+    16: "4pm – 6pm: The Byrdman",
+    20: "8pm – 9pm: Daniel"
+  },
+  Sunday: {
+    8: "8am – 10am: The Byrdman",
+    10: "10am – 12pm: HotShot - 80's 90's",
+    11: "11am – 1pm: JimmyD",
+    13: "1pm – 3pm: JK",
+    17: "5pm – 7pm: DJ Lewis",
+    19: "7pm – 8pm: DJ European Bob",
+    20: "8pm – 9pm: BIG BOSS Dj Echofalls",
+    21: "9pm – 12am: Popped Radio"
+  }
+};
+
+function getNowShow(){
+  const now = new Date();
+  // map JS weekday (0 Sun..6 Sat) to name
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayName = dayNames[now.getDay()];
+  const hour = now.getHours();
+  const daySchedule = scheduleMap[dayName] || {};
+  // find exact hour match, or find the latest entry before current hour
+  if(daySchedule[hour]) return `${dayName} ${formatHour(hour)} — ${daySchedule[hour]}`;
+  // search backwards to find most recent scheduled time <= hour
+  const keys = Object.keys(daySchedule).map(k=>parseInt(k)).sort((a,b)=>a-b);
+  for(let i = keys.length-1; i>=0; i--){
+    if(keys[i] <= hour && keys[i] !== 0){ // honor entry
+      return `${dayName} ${formatHour(keys[i])} — ${daySchedule[keys[i]]}`;
+    }
+    if(keys[i] === 0 && hour < 6){ // midnight-early morning slot
+      return `${dayName} 00:00 — ${daySchedule[0]}`;
+    }
+  }
+  return `No Show Scheduled — check the schedule`;
+}
+function formatHour(h){
+  // simple label for display: return e.g. 22:00 or 00:00
+  return (h<10?'0'+h:h)+':00';
+}
+function refreshNowOn(){
+  const nowText = getNowShow();
+  document.getElementById('NowOn').textContent = nowText;
+  document.getElementById('nowMeta').innerHTML = nowText;
+}
+refreshNowOn();
+setInterval(refreshNowOn, 60_000); // update every minute
+
+/* -----------------------
+   Live listeners from realtime.csv
+   - expects realtime.csv in same folder
+   - shows active_session_count > 0
+   - pulses counter when new listeners join
+   ----------------------- */
+let lastCount = 0;
+async function updateListeners(){
+  try{
+    const res = await fetch('realtime.csv?_=' + Date.now()); // cache buster
+    const text = await res.text();
+    // parse csv robustly enough for simple format (no embedded commas)
+    const lines = text.trim().split(/\r?\n/).filter(Boolean);
+    if(lines.length < 2){
+      document.getElementById('listenerList').innerHTML = '<p style="color:var(--muted)">No data</p>';
+      document.getElementById('listenerCount').textContent = '🎧 0';
+      return;
+    }
+    // headers
+    const headers = lines[0].split(',').map(h=>h.trim());
+    const rows = lines.slice(1).map(line=>{
+      // naive split: good for your CSV structure
+      const cells = line.split(',').map(c=>c.trim());
+      const obj = {};
+      headers.forEach((h,i)=>obj[h]=cells[i]||'');
+      return obj;
+    });
+
+    const active = rows.filter(r => parseInt(r.active_session_count||0) > 0);
+    const count = active.length;
+    // set badge
+    const badge = document.getElementById('listenerCount');
+    badge.textContent = `🎧 ${count}`;
+    // pulse if count increased
+    if(count > lastCount){
+      badge.classList.add('pulse');
+      setTimeout(()=>badge.classList.remove('pulse'), 1200);
+    }
+    lastCount = count;
+    // also update small text in sidebar
+    document.getElementById('liveListenersBadge').textContent = `${count} live`;
+
+    if(count === 0){
+      document.getElementById('listenerList').innerHTML = '<p style="color:var(--muted)">No active listeners right now 🔇</p>';
+      return;
+    }
+
+    // build items
+    const items = active.map(r=>{
+      const country = r.country || 'Unknown';
+      const region = r.region || '';
+      const city = r.city || '';
+      const platform = r.platform || 'Unknown';
+      const durationSec = parseInt(r.duration||0);
+      const durationMin = Math.max(1, Math.round(durationSec/60));
+      return {country,region,city,platform,durationMin};
+    });
+
+    // make HTML
+    const html = items.map(it=>`
+      <div class="listener-item">
+        <div class="listener-info">🌍 <strong>${it.country}</strong> — ${it.region}${it.city?(', ' + it.city):''}</div>
+        <div style="text-align:right">
+          <div class="listener-meta">💻 ${it.platform}</div>
+          <div class="listener-meta">⏱ ${it.durationMin} min</div>
         </div>
       </div>
-    </div>
-  </section>
+    `).join('');
+    document.getElementById('listenerList').innerHTML = html;
 
-  <section class="upcoming wrap">
-    <h3>Upcoming Shows</h3>
-    <div class="carousel">
-      <div class="card show">Mon 12am – 2am: — DJ Riddler -Riddlers Killer Rockshow</div>
-	  <div class="card show">Mon 12pm – 2pm: — James - Wizard Of Rock</div>
-      <div class="card show">Tue 20:00 — Bassline Sessions</div>
-      <div class="card show">Wed 19:00 — Urban Beats</div>
-      <div class="card show">Fri 23:00 — Afterhours</div>
-    </div>
-  </section>
+  }catch(err){
+    console.error('listeners error', err);
+    document.getElementById('listenerList').innerHTML = '<p style="color:var(--muted)">Error loading listeners</p>';
+  }
+}
 
-  <section class="artists wrap">
-    <h3>Unsigned Artist Showcase</h3>
-    <div class="grid">
-      <div class="card artist">
-        <img src="https://wildstyle.vip/unsigned/alberto.png" alt="artist">
-        <div class="card-body"><strong>Alberto</strong><p class="meta-muted">Electronic producer</p></div>
-      </div>
-      <div class="card artist">
-        <img src="https://wildstyle.vip/unsigned/showdown.jpg" alt="artist">
-        <div class="card-body"><strong>ShowDown</strong><p class="meta-muted">High-energy beats</p></div>
-      </div>
-      <div class="card artist">
-        <img src="https://via.placeholder.com/600x400?text=Artist" alt="artist">
-        <div class="card-body"><strong>Rising Star</strong><p class="meta-muted">Indie-electro</p></div>
-      </div>
-      <div class="card artist">
-        <img src="https://via.placeholder.com/600x400?text=Artist" alt="artist">
-        <div class="card-body"><strong>Newcomer</strong><p class="meta-muted">Experimental</p></div>
-      </div>
-    </div>
-  </section>
+// start updates every 20s
+updateListeners();
+setInterval(updateListeners, 20_000);
 
-  <section class="community wrap">
-    <h3>Join the community</h3>
-    <p class="meta-muted">Chat with DJs and listeners on Discord, get shoutouts, and win merch.</p>
-    <a class="btn primary" href="https://discord.gg/29J27WbHYD" target="_blank">💬 Join Discord</a>
-  </section>
+</script>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <div class="footer-left">
-        <div class="logo small">WS</div>
-        <div class="meta-muted">© 2025 Wildstyle Remix</div>
-      </div>
-      <div class="footer-right">
-        <a href="#" class="meta-muted">Facebook</a>
-        <a href="#" class="meta-muted">Instagram</a>
-        <a href="#" class="meta-muted">YouTube</a>
-      </div>
-    </div>
-  </footer>
 </body>
 </html>
