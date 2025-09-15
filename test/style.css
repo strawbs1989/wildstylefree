@@ -34,25 +34,7 @@ a { color: #ff3366; text-decoration: none; }
 .main-nav a.active { color: #ff3366; }
 
 
-/* Now Playing */
-.now-playing {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
 
-#NowOn {
-  padding: 0.4rem 1rem;
-  border: 1px dashed #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  font-size: 14px;
-  max-width: 300px;
-  text-align: right;
-}
 
 .hero {
   display: flex;
