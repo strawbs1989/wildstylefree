@@ -81,3 +81,30 @@ a { color: #ff3366; text-decoration: none; }
   display: flex;
   justify-content: space-between;
 }
+
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.live-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.now-playing {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.dj-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.card.dj img {
+  width: 100%;
+  border-radius: 8px;
+}
+
