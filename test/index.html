@@ -16,6 +16,87 @@
         <div class="brand-text">
           <h1>Wildstyle Remix</h1>
           <div class="sub">United by beats — powered by passion</div>
+		  <!-- Now Playing Script -->
+  <script>
+  var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
+
+  // MONDAY
+  DH[1][12] = '12am – 4am<br>Steve G";
+  DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
+  DH[1][14] = "2pm – 4pm<br>BabyJane";
+  DH[1][15] = "3pm – 5pm<br>James Stephen";
+  DH[1][17] = "5pm – 7pm<br>Lewis";
+  DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
+  DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
+
+  // TUESDAY
+  DH[2][01] = "1am – 2am<br>Wizard Of Rock";
+  DH[2][03] = "3am – 6am<br>Dani - DJ Queen Dani";
+  DH[2][06] = "6am – 8am<br>Dj Dave– 60's - 70's";
+  DH[2][15] = "3pm – 5pm<br>James Stephen";
+  DH[2][20] = "8pm – 10pm<br>Dj Lewis";
+  DH[2][010] = "10am – 12pm<br>HothotDJ";
+  
+
+  // WEDNESDAY
+   DH[3][15]  = "3pm – 5pm<br>James Stephen";
+   DH[3][18]  = "6pm – 7pm<br>DJ European BOB";
+   DH[3][20]  = "8pm – 10pm<br>Steve DJ Smith";
+   DH[3][22]  = "10pm – 12pm<br>Reece";
+   
+  
+
+  // THURSDAY
+   DH[4][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
+   DH[4][08]  = "8am – 10am<br>Coll";
+   DH[4][0]  = "12am – 4am<br>Steve Gunn";
+   DH[4][10]  = "10am – 12pm<br>Gordan";
+   DH[4][15]  = "3pm – 4pm<br>James Stephen";
+   DH[4][17]  = "5pm – 7pm<br>DJ Flash";
+   DH[4][19]  = "7pm – 8pm<br>Echofalls(DJ Strawbs)";
+   DH[4][20]  = "8pm – 10pm<br>Moofie";
+   DH[4][22]  = "10pm – 11pm<br>MottMuzik";
+ 
+  // FRIDAY
+  DH[5][04]  = "4am – 6am<br>Dani - DJ Queen Dani";
+  DH[5][0]  = "12am – 4am<br>SteveG";
+  DH[5][10]  = "10am – 12pm<br>Vish";
+  DH[5][15] = "3pm – 5pm<br>James Stephen";
+  DH[5][16] = "4pm – 8pm<br>StevenD";
+  DH[5][20] = "8pm – 10pm<br>Wendall";
+  DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
+  
+
+  // SATURDAY
+  DH[6][0] = "12am – 2am<br>Trevor Nannab";
+  DH[6][02] = "2am – 4am<br>DJ AJ";
+  DH[6][16] = "4pm – 6pm<br>The Byrdman";
+  DH[6][06] = "6am – 10am<br>Cam";
+  DH[6][10] = "10am – 12am<br>Kevin Lee";
+  DH[6][20] = "8pm – 9pm<br>Daniel";
+  
+
+  // SUNDAY
+  DH[7][08] = "8am – 10am<br>The Byrdman";
+  DH[7][10] = "10am – 12pm<br>HotShot - 80's 90's";
+  DH[7][11] = "11am – 1pm<br>JimmyD";
+  DH[7][13] = "1pm – 3pm<br>JK";
+  DH[7][17] = "5pm – 7pm<br>DJ Lewis";
+  DH[7][19] = "7pm - 8pm<br>DJ European Bob";
+  DH[7][20] = "8pm - 9pm<br>BIG BOSS Dj Echofalls";
+  DH[7][21] = "9pm - 12am<br>Popped Radio";
+  
+  
+
+  function NowON() {
+    const now = new Date();
+    const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
+    document.getElementById("NowOn").innerHTML = show;
+  }
+</script>
+</head>
+
+<body onload="NowON()">
         </div>
       </div>
       <nav class="main-nav">
@@ -70,10 +151,12 @@
     <h3>Upcoming Shows</h3>
     <div class="carousel">
       <div class="card show">Mon 12am – 2am — DJ Riddler - Killer Rockshow</div>
-      <div class="card show">Mon 12pm – 2pm — James - Wizard Of Rock</div>
-      <div class="card show">Tue 20:00 — Bassline Sessions</div>
-      <div class="card show">Wed 19:00 — Urban Beats</div>
-      <div class="card show">Fri 23:00 — Afterhours</div>
+      <div class="card show">Tue 12pm – 2pm — James - Wizard Of Rock</div>
+      <div class="card show">Wed 15:00 — James Stephen</div>
+	  <div class="card show">Thu 08:00 — Coll in the morning</div>
+      <div class="card show">Fri 12:00 — SteveG</div>
+	  <div class="card show">Sat 10:00pm — DJ Nero</div>
+	  <div class="card show">Sun 08:00 — The Byrdman</div>
     </div>
   </section>
 
