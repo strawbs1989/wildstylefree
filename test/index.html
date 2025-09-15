@@ -1,113 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Wildstyle Radio — Live Dashboard</title>
-
-  <!-- Basic bootstrap for layout -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/test/style.css">
-  <script defer src="/test/script.js"></script>
- 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Radio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="wrap">
-  <!-- header -->
   <header>
-    <div class="brand">
-      <div class="logo">WS</div>
-      <div>
-        <h1>Wildstyle Radio</h1>
-        <div style="font-size:0.82rem;color:var(--muted)">United by Beats • Powered by Passion</div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <div class="nowline">
-        <strong>Now Playing:</strong> <span id="NowOn" style="margin-left:8px">Loading…</span>
-      </div>
-
-      <button class="btn-ws btn-play" id="playBtn" onclick="togglePlayer()" style="margin-left:12px">▶ Live Player</button>
-      <audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
-
-      <a class="btn-ws btn-mail" href="mailto:requests@wildstyle.vip" style="margin-left:10px">Request A Song</a>
-    </div>
-  </header>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-black px-4">
-    <a class="navbar-brand" href="#">Wildstyle Radio</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="/test/schedule.html">Schedule</a></li>
-		  
+    <div class="logo">Wildstyle</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="https://discord.gg/29J27WbHYD" target="_blank">Community</a></li>
       </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-left">
+      <h1>Welcome to Wildstyle Radio</h1>
+      <p>United by beats, powered by passion. Tune in live 24/7.</p>
     </div>
-  </nav>
-  <div class="grid">
-    <!-- main column -->
-    <main>
-      <!-- Now card (bigger) -->
-      <div class="now-card">
-        <h3>Now On Wildstyle</h3>
-        <div class="now-meta" id="nowMeta">Loading current show…</div>
+    <div class="hero-right">
+      <div class="dj-spotlight">
+        <div class="spot-head">DJ Spotlight</div>
+        <div class="spot-body">
+          <img src="https://via.placeholder.com/300x180?text=DJ+Spotlight" alt="spot">
+          <div class="spot-info">
+            <p>Catch our unsigned artist showcase and upcoming shows here!</p>
+          </div>
+        </div>
       </div>
-
-      <!-- schedule -->
-      <div class="schedule-grid">
-        <!-- Monday example; more days follow -->
-        <div class="sched-card" id="mon-card">
-          <h4>Unsigned</h4>
-          <div id="mon-now" style="margin-bottom:8px"></div>
-          <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;color:var(--muted)">
-            <div class="col-6 col-md-4 col-lg-3">
-      <img src="https://wildstyle.vip/unsigned/alberto.png" alt="Alberto" class="img-fluid rounded shadow-sm">
     </div>
-          </ul>
-        </div>
+  </section>
 
-        
+  <section class="community wrap">
+    <h3>Join the community</h3>
+    <p class="meta-muted">Chat with DJs and listeners on Discord, get shoutouts, and win merch.</p>
+    <a class="btn primary" href="https://discord.gg/29J27WbHYD" target="_blank">💬 Join Discord</a>
+  </section>
 
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-left">
+        <div class="logo small">WS</div>
+        <div class="meta-muted">© 2025 Wildstyle Remix</div>
       </div>
-    </main>
-
-    <!-- sidebar -->
-    <aside>
-      <!-- Live Player info and listeners -->
-      <div style="margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-weight:700">Live Player</div>
-          <div id="liveListenersBadge" style="color:var(--muted);font-size:0.9rem">Listeners</div>
-        </div>
-        <div style="margin-bottom:8px">
-          <!-- small player placeholder -->
-          <audio id="sidePlayer" controls style="width:100%">
-            <source src="https://streaming.live365.com/a50378" type="audio/mpeg">
-            Your browser doesn't support audio.
-          </audio>
-        </div>
+      <div class="footer-right">
+        <a href="#" class="meta-muted">Facebook</a>
+        <a href="#" class="meta-muted">Instagram</a>
+        <a href="#" class="meta-muted">YouTube</a>
       </div>
-
-      <!-- WHO'S LISTENING panel -->
-      <div class="listeners">
-        <div class="listeners-title">
-          Who's Listening <span id="listenerCount" class="listener-count">🎧 0</span>
-        </div>
-        <div id="listenerList" class="listener-box">Loading live listeners...</div>
-      </div>
-    </aside>
-  </div>
-
-  <footer>
-    Wildstyle Radio • Built for the movement
+    </div>
   </footer>
-</div>
-
-
-
 </body>
 </html>
