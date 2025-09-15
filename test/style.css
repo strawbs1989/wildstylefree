@@ -1,66 +1,156 @@
-:root{
-  --bg:#070707;
-  --card:#121212;
-  --muted:#9aa3b2;
-  --accent1:#e60073;
-  --accent2:#0033cc;
-  --glass: rgba(255,255,255,0.03);
-  --radius:12px;
-  --wrap:1100px;
-  --gap:18px;
+/* ===== Global Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box}
-body{margin:0;background:linear-gradient(180deg,#050505,#0b0b0b);color:#fff;font-family:Inter, Arial, sans-serif;line-height:1.4}
-.wrap{width:90%;max-width:var(--wrap);margin:0 auto;padding:30px 0}
-.site-header{background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(255,255,255,0.02)}
-.site-header .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{background:linear-gradient(135deg,var(--accent1),var(--accent2));width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px}
-.brand-text h1{margin:0;font-family:Oswald, sans-serif;font-size:18px;letter-spacing:1px}
-.sub{color:var(--muted);font-size:12px;margin-top:2px}
+body {
+  font-family: "Arial", sans-serif;
+  background: #0d0d0d;
+  color: #f5f5f5;
+  line-height: 1.6;
+}
 
-.main-nav{display:flex;gap:14px;align-items:center}
-.main-nav a{color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
-.main-nav a.listen{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;padding:8px 12px;border-radius:999px;text-decoration:none}
+a {
+  color: #ff1744;
+  text-decoration: none;
+  transition: 0.3s;
+}
 
-.hero{padding:40px 0;background:linear-gradient(90deg, rgba(230,6,115,0.06), rgba(0,51,204,0.04));margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.02)}
-.hero-inner{display:grid;grid-template-columns:1fr 360px;gap:var(--gap);align-items:start}
-.hero h2{font-size:30px;margin:0 0 10px;font-family:Oswald, sans-serif}
-.lead{color:var(--muted);margin:0 0 16px}
-.hero-actions{display:flex;gap:12px}
-.btn{display:inline-block;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700}
-.btn.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.6)}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+a:hover {
+  color: #ff4081;
+}
 
-.player-card{background:var(--card);padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center}
-.player-thumb{width:90px;height:72px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:700}
-.player-meta .title{font-weight:700}
-.meta-muted{color:var(--muted);font-size:13px}
+/* ===== Header ===== */
+header {
+  background: linear-gradient(90deg, #111, #222);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-.dj-spotlight{margin-top:16px}
-.spot-head{font-weight:700;margin-bottom:8px}
-.spot-body{display:flex;gap:12px;align-items:center}
-.spot-body img{width:120px;height:80px;object-fit:cover;border-radius:8px}
-.spot-info .link{color:var(--accent2);text-decoration:none;font-weight:700;margin-top:8px;display:inline-block}
+header .logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ff1744;
+}
 
-.upcoming{padding-top:24px;padding-bottom:24px}
-.carousel{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
-.card.show{min-width:200px;padding:16px;border-radius:10px;background:linear-gradient(180deg,#151515,#0f0f0f);text-align:center;font-weight:700}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
 
-.artists .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
-.card.artist{background:linear-gradient(180deg,#0f0f0f,#101010);overflow:hidden;border-radius:10px}
-.card.artist img{width:100%;display:block}
-.card-body{padding:12px}
+nav ul li a {
+  color: #f5f5f5;
+  font-weight: 500;
+}
 
-.community{text-align:center;padding:36px 0}
-.site-footer{background:rgba(0,0,0,0.6);border-top:1px solid rgba(255,255,255,0.02);padding:18px 0;margin-top:20px}
-.site-footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.site-footer .footer-right a{margin-left:14px;color:var(--muted);text-decoration:none;font-weight:600}
+nav ul li a:hover {
+  color: #ff1744;
+}
 
-@media (max-width:900px){
-  .hero-inner{grid-template-columns:1fr}
-  .hero-right{order:2}
-  .main-nav{display:none}
-  .wrap{padding:20px}
+/* ===== Hero Section ===== */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 2rem;
+  background: url("https://via.placeholder.com/1400x400/111/fff?text=Wildstyle+Radio+Banner") no-repeat center/cover;
+  border-bottom: 4px solid #ff1744;
+}
+
+.hero-left h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+}
+
+.hero-left p {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+.hero-right {
+  max-width: 360px;
+  background: #1a1a1a;
+  border: 2px solid #ff1744;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(255, 23, 68, 0.5);
+}
+
+.dj-spotlight .spot-head {
+  background: #ff1744;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5rem;
+}
+
+.dj-spotlight img {
+  width: 100%;
+  display: block;
+}
+
+.spot-info {
+  padding: 1rem;
+}
+
+/* ===== Community Section ===== */
+.community {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: #111;
+  border-top: 3px solid #ff1744;
+  border-bottom: 3px solid #ff1744;
+}
+
+.community h3 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.community p {
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+.btn.primary {
+  display: inline-block;
+  background: #ff1744;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: #ff4081;
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  background: #111;
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-footer .logo.small {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff1744;
+}
+
+.footer-right a {
+  margin-left: 1rem;
+  color: #aaa;
+}
+
+.footer-right a:hover {
+  color: #ff1744;
 }
