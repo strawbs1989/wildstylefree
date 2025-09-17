@@ -8,15 +8,15 @@
 
   <!-- Basic bootstrap for layout -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/test/style.css">
-  <script defer src="/test/script.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
 <header class="site-header">
     <div class="logo">Wildstyle Radio</div>
     <nav>
-      <a href="/test/schedule.html">Schedule</a>
-      <a href="/test/djs.html">DJs</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="djs.html">DJs</a>
     </nav>
   </header>
 <div class="wrap container">
@@ -50,19 +50,37 @@
         </div>
       </div>
 
-      <!-- Featured Unsigned Artist (replaces schedule on index) -->
-      <div class="card mb-3 unsigned-feature">
-        <div class="card-body d-flex gap-3">
-          <div style="flex:0 0 260px">
-            <img src="https://wildstyle.vip/unsigned/alberto.png" alt="Unsigned" class="img-fluid rounded">
-          </div>
-          <div>
-            <h4 id="featured-name">Alberto</h4>
-            <p id="featured-desc">Electronic producer. Fresh beats and experimental textures.</p>
-            <p><a id="featured-link" href="#">Listen / Contact</a></p>
-          </div>
-        </div>
-      </div>
+      <!-- Unsigned Section -->
+  <section class="container py-5" id="djs">
+    <h2 class="text-danger text-center mb-4">Meet Our Unsigned Artists</h2>
+    <div class="container my-4">
+  <div class="row g-3">
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/alberto.png" alt="Alberto" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/showdown.jpg" alt="ShowDown" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/joe.png" alt="Nzondi" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/hypnotised.jpg" alt="Hypnotised" class="img-fluid rounded shadow-sm">
+    </div>
+    
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="https://wildstyle.vip/unsigned/ferreira.jpg" alt="Hypnotised" class="img-fluid rounded shadow-sm">
+    </div>
+	
+
+  </div>
+</div>
+
+  </section>
 
       <!-- DJ of the week -->
       <div class="card mb-3">
@@ -131,8 +149,8 @@
       <!-- XR Info panel -->
       <div class="card">
         <div class="card-body">
-          <h5>WSR Info</h5>
-          <div id="infoCard">Loading WSR info…</div>
+          <h5>XR Info</h5>
+          <div id="infoCard">Loading XR info…</div>
         </div>
       </div>
     </aside>
