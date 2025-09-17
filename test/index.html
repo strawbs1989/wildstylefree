@@ -38,6 +38,18 @@
       <!-- hidden audio element used by play/pause -->
       <audio id="livePlayer" src="https://streaming.live365.com/a50378"></audio>
     </div>
+	<!-- sidebar -->
+    <aside class="col-lg-4">
+      <!-- Who's Listening panel -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong>Who's Listening</strong>
+            <span id="listenerCount" class="muted small">🎧 0</span>
+          </div>
+          <div id="listenerList" class="listener-box muted">Loading live listeners...</div>
+        </div>
+      </div>
   </header>
 
   <div class="grid row mt-3">
