@@ -1,23 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WildStyle Radio</title>
+
 </head>
 <body>
-  <header>
-    <img id="logo" src="assets/logo.png" alt="Wildstyle Logo">
-    <label class="switch">
-      <input type="checkbox" id="modeToggle">
-      <span class="slider"></span>
-    </label>
-  </header>
-  <main>
-    <h1>Welcome to Wildstyle Radio</h1>
-    <p>Enjoy the music, vibes, and festive cheer!</p>
-  </main>
-  <script src="js/script.js"></script>
+
+<header>
+  <h1>WildStyle Radio</h1>
+  <nav>
+    <a href="#now-playing">Now Playing</a>
+    <a href="#upcoming-shows">Upcoming Shows</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#djs">DJs</a>
+    <a href="#unsigned-artists">Unsigned Artists</a>
+    <a href="#dj-highlights">DJ Highlights</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<section id="now-playing">
+  <h2>Now Playing</h2>
+  <div id="current-song">Loading current song...</div>
+  <button id="playPause">Play/Pause</button>
+</section>
+
+<section id="upcoming-shows">
+  <h2>Upcoming Shows</h2>
+  <ul>
+    <li>Monday 8PM - Hip Hop Night</li>
+    <li>Tuesday 9PM - Indie Vibes</li>
+    <!-- Add more shows -->
+  </ul>
+</section>
+
+<section id="listeners">
+  <h2>Live Listeners</h2>
+  <p id="listeners-count">Loading...</p>
+</section>
+
+<section id="unsigned-artists">
+  <h2>Unsigned Artist Showcase</h2>
+  <div class="artist">
+    <img src="artist1.jpg" alt="Artist 1" width="100" />
+    <h3>Artist Name 1</h3>
+    <p>Genre, bio, etc.</p>
+  </div>
+  <!-- More artists -->
+</section>
+
+<section id="dj-highlights">
+  <h2>DJ Highlights</h2>
+  <div class="dj">
+    <img src="dj1.jpg" alt="DJ 1" width="100" />
+    <h3>DJ Name 1</h3>
+    <p>Bio and highlights</p>
+  </div>
+  <!-- More DJs -->
+</section>
+
+<section id="request">
+  <h2>Request a Song</h2>
+  <a class="request-button" href="mailto:requests@wildstyle.vip">Send a Request</a>
+</section>
+
+
+
+<section id="djs">
+  <h2>Our Djs</h2>
+  <div class="profiles">
+    <div class="profile">
+      <img src="dj1.jpg" alt="DJ 1" width="100"/>
+      <h3>DJ Name 1</h3>
+      <p>Bio and experience</p>
+    </div>
+    <!-- More DJ profiles -->
+  </div>
+</section>
+
+<section id="about">
+  <h2>About WildStyle Radio</h2>
+  <p>Experience rewind, live streams, and community-driven programming.</p>
+</section>
+
+<!-- Player for streaming -->
+<audio id="stream" src="https://yourstreamingurl.com/stream.mp3" controls></audio>
+
+
+
 </body>
 </html>
