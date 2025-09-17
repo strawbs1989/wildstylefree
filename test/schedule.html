@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,46 +6,65 @@
   <title>Wildstyle Radio — Schedule</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
 </head>
 <body>
+<header class="site-header">
+  <div class="logo">Wildstyle Radio</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="djs.html">DJs</a>
+  </nav>
+</header>
+
 <div class="wrap container py-4">
   <header class="d-flex justify-content-between align-items-center mb-3">
     <div class="brand d-flex align-items-center gap-3"><div class="logo-box">WS</div><div><h1 class="h5 mb-0">Wildstyle Radio</h1><div class="muted small">Schedule</div></div></div>
-    <nav><a href="index.html">Home</a> | <a href="djs.html">DJs</a></nav>
   </header>
 
   <h2>Weekly Schedule</h2>
-  <div class="schedule-grid mt-3">
-    <div class="sched-card card mb-3">
-      <div class="card-body">
-        <h4>Monday</h4>
-        <ul class="list-unstyled muted small">
-          <li><strong>12am – 2am:</strong> DJ Riddler - Riddlers Killer Rockshow</li>
-          <li><strong>12pm – 2pm:</strong> James - Wizard Of Rock</li>
-          <li><strong>2pm - 4pm:</strong> BabyJane</li>
-          <li><strong>3pm - 5pm:</strong> James Stephen</li>
-          <li><strong>5pm – 7pm:</strong> Lewis - Mix</li>
-          <li><strong>7pm – 10pm:</strong> DJ Dezzy Mac - Mixture (takin break)</li>
-          <li><strong>10pm – 12am:</strong> DJ Jaydon Mac - Grime</li>
-        </ul>
-      </div>
+
+  <!-- Monday -->
+  <div class="sched-card card mb-3" id="monday">
+    <div class="card-body">
+      <h4>Monday</h4>
+      <ul class="list-unstyled muted small">
+        <li><strong>12am – 2am:</strong> DJ Riddler - Riddlers Killer Rockshow</li>
+        <li><strong>12pm – 2pm:</strong> James - Wizard Of Rock</li>
+        <li><strong>2pm - 4pm:</strong> BabyJane</li>
+        <li><strong>3pm - 5pm:</strong> James Stephen</li>
+        <li><strong>5pm – 7pm:</strong> Lewis - Mix</li>
+        <li><strong>7pm – 10pm:</strong> DJ Dezzy Mac - Mixture</li>
+        <li><strong>10pm – 12am:</strong> DJ Jaydon Mac - Grime</li>
+      </ul>
     </div>
-
-    <!-- other days -->
-    <div class="sched-card card mb-3"><div class="card-body"><h4>Tuesday</h4><ul class="list-unstyled muted small"><li>1am – 2am: Wizard Of Rock</li><li>3am – 6am: Dani - DJ Queen Dani</li><li>6am – 8am: Dj Dave – 60's - 70's</li><li>3pm – 5pm: James Stephen</li><li>8pm – 10pm: Dj Lewis</li><li>10am – 12pm: HothotDJ</li></ul></div></div>
-
-    <div class="sched-card card mb-3"><div class="card-body"><h4>Wednesday</h4><ul class="list-unstyled muted small"><li>3pm – 5pm: James Stephen</li><li>6pm – 7pm: DJ European BOB</li><li>8pm – 10pm: Steve DJ Smith</li><li>10pm – 12pm: Reece</li></ul></div></div>
-
-    <div class="sched-card card mb-3"><div class="card-body"><h4>Thursday</h4><ul class="list-unstyled muted small"><li>4am – 6am: Dani - DJ Queen Dani</li><li>8am – 10am: Coll</li><li>12am – 4am: Steve Gunn</li><li>10am – 12pm: Gordan</li><li>3pm – 4pm: James Stephen</li><li>5pm – 7pm: DJ Flash</li><li>7pm – 8pm: Echofalls (DJ Strawbs)</li><li>8pm – 10pm: Moofie</li><li>10pm – 11pm: MottMuzik</li></ul></div></div>
-
-    <div class="sched-card card mb-3"><div class="card-body"><h4>Friday</h4><ul class="list-unstyled muted small"><li>4am – 6am: Dani - DJ Queen Dani</li><li>12am – 4am: SteveG</li><li>10am – 12pm: Vish</li><li>3pm – 5pm: James Stephen</li><li>4pm – 8pm: StevenD</li><li>8pm – 10pm: Wendall</li><li>10pm – 11pm: Rebecca - DJ Mix&Match</li></ul></div></div>
-
-    <div class="sched-card card mb-3"><div class="card-body"><h4>Saturday</h4><ul class="list-unstyled muted small"><li>12am – 2am: Trevor Nannab</li><li>2am – 4am: DJ AJ</li><li>6am – 10am: Cam</li><li>10am – 12am: Kevin Lee</li><li>4pm – 6pm: The Byrdman</li><li>8pm – 9pm: Daniel</li></ul></div></div>
-
-    <div class="sched-card card mb-3"><div class="card-body"><h4>Sunday</h4><ul class="list-unstyled muted small"><li>8am – 10am: The Byrdman</li><li>10am – 12pm: HotShot - 80's 90's</li><li>11am – 1pm: JimmyD</li><li>1pm – 3pm: JK</li><li>5pm – 7pm: DJ Lewis</li><li>7pm – 8pm: DJ European Bob</li><li>8pm – 9pm: BIG BOSS Dj Echofalls</li><li>9pm – 12am: Popped Radio</li></ul></div></div>
-
   </div>
+
+  <!-- Tuesday -->
+  <div class="sched-card card mb-3">
+    <div class="card-body">
+      <h4>Tuesday</h4>
+      <ul class="list-unstyled muted small">
+        <li>1am – 2am: Wizard Of Rock</li>
+        <li>3am – 6am: Dani - DJ Queen Dani</li>
+        <li>6am – 8am: Dj Dave – 60's - 70's</li>
+        <li>3pm – 5pm: James Stephen</li>
+        <li>8pm – 10pm: Dj Lewis</li>
+        <li>10am – 12pm: HothotDJ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Wednesday - Sunday (same structure) -->
+  <div class="sched-card card mb-3"><div class="card-body"><h4>Wednesday</h4><ul class="list-unstyled muted small"><li>3pm – 5pm: James Stephen</li><li>6pm – 7pm: DJ European BOB</li><li>8pm – 10pm: Steve DJ Smith</li><li>10pm – 12pm: Reece</li></ul></div></div>
+
+  <div class="sched-card card mb-3"><div class="card-body"><h4>Thursday</h4><ul class="list-unstyled muted small"><li>4am – 6am: Dani - DJ Queen Dani</li><li>8am – 10am: Coll</li><li>12am – 4am: Steve Gunn</li><li>10am – 12pm: Gordan</li><li>3pm – 4pm: James Stephen</li><li>5pm – 7pm: DJ Flash</li><li>7pm – 8pm: Echofalls (DJ Strawbs)</li><li>8pm – 10pm: Moofie</li><li>10pm – 11pm: MottMuzik</li></ul></div></div>
+
+  <div class="sched-card card mb-3"><div class="card-body"><h4>Friday</h4><ul class="list-unstyled muted small"><li>4am – 6am: Dani - DJ Queen Dani</li><li>12am – 4am: SteveG</li><li>10am – 12pm: Vish</li><li>3pm – 5pm: James Stephen</li><li>4pm – 8pm: StevenD</li><li>8pm – 10pm: Wendall</li><li>10pm – 11pm: Rebecca - DJ Mix&Match</li></ul></div></div>
+
+  <div class="sched-card card mb-3"><div class="card-body"><h4>Saturday</h4><ul class="list-unstyled muted small"><li>12am – 2am: Trevor Nannab</li><li>2am – 4am: DJ AJ</li><li>6am – 10am: Cam</li><li>10am – 12am: Kevin Lee</li><li>4pm – 6pm: The Byrdman</li><li>8pm – 9pm: Daniel</li></ul></div></div>
+
+  <div class="sched-card card mb-3"><div class="card-body"><h4>Sunday</h4><ul class="list-unstyled muted small"><li>8am – 10am: The Byrdman</li><li>10am – 12pm: HotShot - 80's 90's</li><li>11am – 1pm: JimmyD</li><li>1pm – 3pm: JK</li><li>5pm – 7pm: DJ Lewis</li><li>7pm – 8pm: DJ European Bob</li><li>8pm – 9pm: BIG BOSS Dj Echofalls</li><li>9pm – 12am: Popped Radio</li></ul></div></div>
+
 </div>
 </body>
 </html>
