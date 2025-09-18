@@ -4,11 +4,11 @@ function fetchNowPlaying() {
 }
 
 function fetchListeners() {
-  document.getElementById('listeners').innerText = 'X listeners from ExperienceRewind'; // Replace with real fetch
+  document.getElementById('listeners').innerText = 'X listeners from WSR'; // Replace with real fetch
 }
 
 function fetchXRInfo() {
-  document.getElementById('xr-text').innerText = 'ExperienceRewind - The ultimate radio experience!';
+  document.getElementById('xr-text').innerText = 'WSR-The Beats That Match!';
 }
 
 // Periodic updates
