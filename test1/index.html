@@ -4,13 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>WildStyle Radio</title>
-<!-- Google Fonts for a modern look -->
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/test1/style.css">
-<script defer src="/test1/script.js"></script>
-<!-- Font Awesome for icons -->
+<!-- Styles -->
+<link rel="stylesheet" href="/test1/style.css" />
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
+<!-- Scripts -->
+<script defer src="/test1/script.js"></script>
 </head>
 <body>
 
@@ -27,9 +28,9 @@
   </nav>
 </header>
 
-<div class="main-container">
+<main class="main-container">
 
-  <!-- Now Playing & Who's Listening -->
+  <!-- Now Playing & Listeners -->
   <section class="now-playing-section" id="now-playing">
     <div class="now-playing">
       <h2>Now Playing</h2>
@@ -41,13 +42,13 @@
     </div>
   </section>
 
-  <!-- Play/Pause & Request Buttons + XR info -->
+  <!-- Play/Pause & Request -->
   <section style="text-align:center; margin-bottom:20px;">
     <button id="play-pause"><i class="fas fa-play"></i></button>
     <button onclick="window.location='mailto:requests@wildstyle.vip'"><i class="fas fa-envelope"></i> Request</button>
   </section>
 
-  <!-- XR Info Scrolling -->
+  <!-- XR Info -->
   <div class="xr-info">
     <div class="xr-text" id="xr-text">Loading XR info...</div>
   </div>
@@ -56,32 +57,29 @@
   <section class="section" id="upcoming-shows">
     <h2>Upcoming Shows</h2>
     <div class="showcase-cards" id="upcoming-shows-cards">
-      <!-- Placeholder for upcoming shows -->
+      <!-- Example show -->
       <div class="card">
         <h3>Show Title 1</h3>
         <p>Date & Time</p>
         <p>Description</p>
       </div>
-      <!-- Add more as needed -->
     </div>
   </section>
 
-  <!-- Unsigned Artist Showcase -->
+  <!-- Unsigned Artists -->
   <section class="section" id="unsigned-artists">
     <h2>Unsigned Artist Showcase</h2>
     <div class="showcase-cards" id="unsigned-artists-cards">
-      <!-- Replace these images with actual unsigned artists -->
-      <img src="https://wildstyle.vip/images/unsigned1.jpg" alt="Unsigned Artist 1" style="width:80px; height:auto; margin:5px;">
-      <img src="https://wildstyle.vip/images/unsigned2.jpg" alt="Unsigned Artist 2" style="width:80px; height:auto; margin:5px;">
-      <img src="https://wildstyle.vip/images/unsigned3.jpg" alt="Unsigned Artist 3" style="width:80px; height:auto; margin:5px;">
+      <img src="https://wildstyle.vip/images/unsigned1.jpg" alt="Unsigned Artist 1" style="width:80px; margin:5px;">
+      <img src="https://wildstyle.vip/images/unsigned2.jpg" alt="Unsigned Artist 2" style="width:80px; margin:5px;">
+      <img src="https://wildstyle.vip/images/unsigned3.jpg" alt="Unsigned Artist 3" style="width:80px; margin:5px;">
     </div>
   </section>
 
-  <!-- DJ Showcase -->
+  <!-- DJs Showcase -->
   <section class="section" id="djs">
     <h2>Best DJ Showcase</h2>
     <div class="showcase-cards" id="djs-cards">
-      <!-- Replace with actual DJ images -->
       <div class="card">
         <img src="https://wildstyle.vip/images/dj1.jpg" alt="DJ 1" />
         <h3>DJ Name 1</h3>
@@ -97,11 +95,10 @@
     </div>
   </section>
 
-</div>
+</main>
 
 <!-- Footer -->
 <footer style="background:#000; padding:20px; text-align:center;">
-  <!-- Social Buttons -->
   <div style="margin-bottom:10px;">
     <a href="https://facebook.com" target="_blank" style="margin:0 10px; color:#fff;"><i class="fab fa-facebook-f fa-2x"></i></a>
     <a href="https://twitter.com" target="_blank" style="margin:0 10px; color:#fff;"><i class="fab fa-twitter fa-2x"></i></a>
@@ -110,5 +107,6 @@
   <p>&copy; WILDSTYLE 2025/2029</p>
   <button onclick="window.location='mailto:requests@wildstyle.vip'" style="margin-top:10px; padding:10px 20px; border:none; border-radius:50px; background:#ff4081; color:#fff; cursor:pointer;">Request a Song</button>
 </footer>
+
 </body>
 </html>
