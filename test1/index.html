@@ -1,112 +1,117 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>WildStyle Radio</title>
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet" />
-<!-- Styles -->
-<link rel="stylesheet" href="/test1/style.css" />
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<!-- Scripts -->
-<script defer src="/test1/script.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildstyle Radio — New Site</title>
+ <link rel="stylesheet" href="/test1/style.css">
+  <script defer src="/test1/script.js"></script>
 </head>
 <body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABK0lEQVR4nO3YsQ3CUBBF0bM8kiC5h0h0qkOCQ1e6q2Vucg2iQ/9y2k8m8lNq3c4du2b0u7c9YB8A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A9wG4A+gE2x5m2u0oJ3wAAAABJRU5ErkJggg==" alt="logo">
+        <div>
+          <h1>Wildstyle Radio</h1>
+          <div style="font-size:12px;color:var(--muted)">United by beats • Powered by passion</div>
+        </div>
+      </div>
 
-<header>
-  <img src="https://wildstyle.vip/images/logo.png" alt="WildStyle Logo" id="logo" />
-  <nav>
-    <ul>
-      <li><a href="#now-playing">Now Playing</a></li>
-      <li><a href="#upcoming-shows">Upcoming Shows</a></li>
-      <li><a href="#unsigned-artists">Unsigned Artists</a></li>
-      <li><a href="dj.html">DJs</a></li>
-      <li><a href="schedule.html">Schedule</a></li>
-    </ul>
+      <div class="controls">
+        <button id="playPause" class="btn">Play</button>
+        <a class="request" href="mailto:requests@wildstyle.vip">Request</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mainnav">
+    <div class="container">
+      <a href="#home" class="navlink active">Home</a>
+      <a href="#showcase" class="navlink">Unsigned Showcase</a>
+      <a href="#djs" class="navlink">DJs</a>
+      <a href="#schedule" class="navlink">Schedule</a>
+      <a href="#contact" class="navlink">Contact</a>
+    </div>
   </nav>
-</header>
 
-<main class="main-container">
+  <main class="container">
+    <section class="content">
 
-  <!-- Now Playing & Listeners -->
-  <section class="now-playing-section" id="now-playing">
-    <div class="now-playing">
-      <h2>Now Playing</h2>
-      <p id="current-track">Loading...</p>
-    </div>
-    <div class="whos-listening">
-      <h2>Who's Listening</h2>
-      <p id="listeners">Loading...</p>
-    </div>
-  </section>
-
-  <!-- Play/Pause & Request -->
-  <section style="text-align:center; margin-bottom:20px;">
-    <button id="play-pause"><i class="fas fa-play"></i></button>
-    <button onclick="window.location='mailto:requests@wildstyle.vip'"><i class="fas fa-envelope"></i> Request</button>
-  </section>
-
-  <!-- XR Info -->
-  <div class="xr-info">
-    <div class="xr-text" id="xr-text">Loading WSR info...</div>
-  </div>
-
-  <!-- Upcoming Shows -->
-  <section class="section" id="upcoming-shows">
-    <h2>Upcoming Shows</h2>
-    <div class="showcase-cards" id="upcoming-shows-cards">
-      <!-- Example show -->
-      <div class="card">
-        <h3>Show Title 1</h3>
-        <p>Date & Time</p>
-        <p>Description</p>
+      <div class="card now-playing" id="nowPlaying">
+        <div style="width:72px;height:72px;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center">🎧</div>
+        <div class="meta">
+          <div style="font-weight:700">Now Playing</div>
+          <div id="nowMeta" style="color:var(--muted);font-size:14px">No trackinfo available</div>
+        </div>
+        <div style="text-align:right;color:var(--muted);font-size:13px">Live • <span id="listeners">—</span> listeners</div>
       </div>
-    </div>
-  </section>
 
-  <!-- Unsigned Artists -->
-  <section class="section" id="unsigned-artists">
-    <h2>Unsigned Artist Showcase</h2>
-    <div class="showcase-cards" id="unsigned-artists-cards">
-      <img src="https://wildstyle.vip/images/unsigned1.jpg" alt="Unsigned Artist 1" style="width:80px; margin:5px;">
-      <img src="https://wildstyle.vip/images/unsigned2.jpg" alt="Unsigned Artist 2" style="width:80px; margin:5px;">
-      <img src="https://wildstyle.vip/images/unsigned3.jpg" alt="Unsigned Artist 3" style="width:80px; margin:5px;">
-    </div>
-  </section>
-
-  <!-- DJs Showcase -->
-  <section class="section" id="djs">
-    <h2>Best DJ Showcase</h2>
-    <div class="showcase-cards" id="djs-cards">
-      <div class="card">
-        <img src="https://wildstyle.vip/images/dj1.jpg" alt="DJ 1" />
-        <h3>DJ Name 1</h3>
+      <div class="card" id="showcase">
+        <h3>Unsigned Artist Showcase</h3>
+        <p style="color:var(--muted)">Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip</p>
+        <div class="showcase-grid">
+          <img src="https://via.placeholder.com/400x300?text=Artist+1" alt="artist 1">
+          <img src="https://via.placeholder.com/400x300?text=Artist+2" alt="artist 2">
+          <img src="https://via.placeholder.com/400x300?text=Artist+3" alt="artist 3">
+          <img src="https://via.placeholder.com/400x300?text=Artist+4" alt="artist 4">
+        </div>
       </div>
-      <div class="card">
-        <img src="https://wildstyle.vip/images/dj2.jpg" alt="DJ 2" />
-        <h3>DJ Name 2</h3>
+
+      <div class="card" id="djs">
+        <h3>DJ Showcase</h3>
+        <div class="dj-card">
+          <img src="https://via.placeholder.com/280x200?text=DJ+Showcase" alt="dj showcase">
+          <div>
+            <h4>Resident DJs</h4>
+            <p style="color:var(--muted)">Professional DJ profiles. Visit the DJs page for full roster.</p>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <img src="https://wildstyle.vip/images/dj3.jpg" alt="DJ 3" />
-        <h3>DJ Name 3</h3>
+
+      
+    </section>
+
+    <aside class="sidebar">
+      <div class="card sidebar-section">
+        <h4>Who's listening</h4>
+        <div id="whoListening">
+          <div>Location: <span id="location">—</span></div>
+          <div>Top shout-outs:</div>
+          <ul id="shoutouts" style="color:var(--muted)">
+            <li>No shout-outs yet</li>
+          </ul>
+        </div>
       </div>
+
+      <div class="card sidebar-section">
+        <h4>WSR Info</h4>
+        <div id="wsrInfo" style="color:var(--muted)">
+          <div id="xrTop">Loading XR info…</div>
+          <div id="xrStats" style="margin-top:8px"></div>
+        </div>
+      </div>
+
+      <div class="card sidebar-section">
+        <h4>Listen</h4>
+        <div>
+          <audio id="player" preload="none"></audio>
+          <div style="margin-top:8px;color:var(--muted)">Stream: 128kbps • <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div>© Wildstyle Radio</div>
+    <div class="social">
+      <a href="#">Facebook</a>
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
     </div>
-  </section>
+  </footer>
 
-</main>
-
-<!-- Footer -->
-<footer style="background:#000; padding:20px; text-align:center;">
-  <div style="margin-bottom:10px;">
-    <a href="https://facebook.com" target="_blank" style="margin:0 10px; color:#fff;"><i class="fab fa-facebook-f fa-2x"></i></a>
-    <a href="https://twitter.com" target="_blank" style="margin:0 10px; color:#fff;"><i class="fab fa-twitter fa-2x"></i></a>
-    <a href="https://instagram.com" target="_blank" style="margin:0 10px; color:#fff;"><i class="fab fa-instagram fa-2x"></i></a>
-  </div>
-  <p>&copy; WILDSTYLE 2025/2029</p>
-  <button onclick="window.location='mailto:requests@wildstyle.vip'" style="margin-top:10px; padding:10px 20px; border:none; border-radius:50px; background:#ff4081; color:#fff; cursor:pointer;">Request a Song</button>
-</footer>
-
+ 
 </body>
 </html>
