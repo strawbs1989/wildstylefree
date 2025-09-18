@@ -1,8 +1,273 @@
-body { font-family: Arial, sans-serif; margin: 0; background: #111; color: #eee; }
-header { background: #222; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-.logo { font-size: 1.5em; font-weight: bold; color: #e91e63; }
-.controls button { padding: 5px 10px; background: #e91e63; border: none; color: #fff; cursor: pointer; }
-h2 { border-bottom: 2px solid #e91e63; padding-bottom: 5px; }
-.artist-grid, .dj-grid { display: flex; gap: 10px; flex-wrap: wrap; }
-.artist img, .dj img { width: 150px; border-radius: 8px; }
-footer { background: #222; text-align: center; padding: 10px; margin-top: 20px; }
+ /* Index */
+ /* Reset and base styles */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    line-height: 1.6;
+  }
+
+  /* Header styles */
+  header {
+    background-color: #000;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  #logo {
+    max-width: 200px;
+    height: auto;
+  }
+
+  /* Navigation */
+  nav {
+    margin-top: 10px;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  nav ul li {
+    margin: 0 15px;
+  }
+
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1em;
+    transition: color 0.3s;
+  }
+
+  nav ul li a:hover {
+    color: #ff4081;
+  }
+
+  /* Main content */
+.main-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Now Playing & Who's Listening */
+.now-playing-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  background: #222;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.now-playing {
+  flex: 1 1 300px;
+  text-align: center;
+}
+
+.now-playing h2 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+button {
+  background-color: #ff4081;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #e73370;
+}
+
+/* XR Info scrolling */
+.xr-info {
+  background-color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.xr-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll-left 20s linear infinite;
+  font-size: 1em;
+  color: #fff;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Shows & DJ showcase */
+.section {
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  color: #ff4081;
+  text-align: center;
+}
+
+.showcase-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.card {
+  background-color: #222;
+  padding: 15px;
+  border-radius: 8px;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+@media(max-width: 768px) {
+  .now-playing-section {
+    flex-direction: column;
+  }
+  nav ul {
+    flex-direction: column;
+  }
+  nav ul li {
+    margin: 10px 0;
+  }
+  .showcase-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+ /* Index */
+ /* Schedule Style */
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    padding: 20px;
+  }
+  h1 {
+    text-align:center;
+    margin-bottom:20px;
+    color:#ff4081;
+  }
+  table {
+    width:100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border:1px solid #444;
+    padding:10px;
+    text-align:center;
+  }
+  th {
+    background-color:#222;
+    font-size:1.2em;
+  }
+  tr:nth-child(even) {
+    background-color:#1a1a1a;
+  }
+  @media(max-width:768px){
+    table, thead, tbody, th, td, tr {
+      display:block;
+    }
+    th {
+      display:none;
+    }
+    td {
+      margin-bottom:10px;
+      position: relative;
+      padding-left:50%;
+    }
+    td::before {
+      content: attr(data-label);
+      position: absolute;
+      left:10px;
+      top:10px;
+      font-weight: bold;
+    }
+  }
+  /* Schedule Style */
+  /* DJ Style */
+    body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    padding: 20px;
+  }
+  h1 {
+    text-align:center;
+    margin-bottom:30px;
+    color:#ff4081;
+  }
+  .djs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .dj-card {
+    background-color: #222;
+    border-radius:8px;
+    padding:15px;
+    text-align:center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .dj-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .dj-card img {
+    max-width:100%;
+    border-radius:50%;
+    margin-bottom:10px;
+  }
+  h3 {
+    margin-top:10px;
+  }
