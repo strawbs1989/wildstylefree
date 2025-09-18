@@ -1,96 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>WildStyle Radio</title>
-<!-- Stylesheets -->
-  <link rel="stylesheet" href="https://wildstyle.vip/test1/style.css">
-  <script defer src="https://wildstyle.vip/test1/script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Radio</title>
+  <link rel="stylesheet" href="/test/style.css">
+  <script src="/test/script.js" defer></script>
 </head>
 <body>
-
-<header>
-  <h1>WildStyle Radio</h1>
-  <nav>
-    <a href="#now-playing">Now Playing</a>
-    <a href="#upcoming-shows">Upcoming Shows</a>
-    <a href="#schedule">Schedule</a>
-    <a href="#djs">DJs</a>
-    <a href="#unsigned-artists">Unsigned Artists</a>
-    <a href="#dj-highlights">DJ Highlights</a>
-    <a href="#about">About</a>
-  </nav>
-</header>
-
-<section id="now-playing">
-  <h2>Now Playing</h2>
-  <div id="current-song">Loading current song...</div>
-  <button id="playPause">Play/Pause</button>
-</section>
-
-<section id="upcoming-shows">
-  <h2>Upcoming Shows</h2>
-  <ul>
-    <li>Monday 8PM - Hip Hop Night</li>
-    <li>Tuesday 9PM - Indie Vibes</li>
-    <!-- Add more shows -->
-  </ul>
-</section>
-
-<section id="listeners">
-  <h2>Live Listeners</h2>
-  <p id="listeners-count">Loading...</p>
-</section>
-
-<section id="unsigned-artists">
-  <h2>Unsigned Artist Showcase</h2>
-  <div class="artist">
-    <img src="artist1.jpg" alt="Artist 1" width="100" />
-    <h3>Artist Name 1</h3>
-    <p>Genre, bio, etc.</p>
-  </div>
-  <!-- More artists -->
-</section>
-
-<section id="dj-highlights">
-  <h2>DJ Highlights</h2>
-  <div class="dj">
-    <img src="dj1.jpg" alt="DJ 1" width="100" />
-    <h3>DJ Name 1</h3>
-    <p>Bio and highlights</p>
-  </div>
-  <!-- More DJs -->
-</section>
-
-<section id="request">
-  <h2>Request a Song</h2>
-  <a class="request-button" href="mailto:requests@wildstyle.vip">Send a Request</a>
-</section>
-
-
-
-<section id="djs">
-  <h2>Our Djs</h2>
-  <div class="profiles">
-    <div class="profile">
-      <img src="dj1.jpg" alt="DJ 1" width="100"/>
-      <h3>DJ Name 1</h3>
-      <p>Bio and experience</p>
+  <header>
+    <div class="logo">WILDSTYLE RADIO</div>
+    <div class="controls">
+      <button id="playPauseBtn">▶ Play</button>
+      <span id="nowPlaying">Now Playing: DJ Spotlight Mix</span>
     </div>
-    <!-- More DJ profiles -->
-  </div>
-</section>
+  </header>
 
-<section id="about">
-  <h2>About WildStyle Radio</h2>
-  <p>Experience rewind, live streams, and community-driven programming.</p>
-</section>
+  <main>
+    <section class="spotlight">
+      <h2>DJ Spotlight</h2>
+      <p>Featured DJ of the week bringing underground sounds.</p>
+    </section>
 
-<!-- Player for streaming -->
-<audio id="stream" src="https://yourstreamingurl.com/stream.mp3" controls></audio>
+    <section class="unsigned">
+      <h2>Unsigned Artists</h2>
+      <div class="artist-grid">
+        <div class="artist"><img src="images/unsigned1.jpg" alt="Artist 1"><p>Unsigned Artist 1</p></div>
+        <div class="artist"><img src="images/unsigned2.jpg" alt="Artist 2"><p>Unsigned Artist 2</p></div>
+        <div class="artist"><img src="images/unsigned3.jpg" alt="Artist 3"><p>Unsigned Artist 3</p></div>
+      </div>
+    </section>
 
+    <section class="upcoming">
+      <h2>Upcoming Shows</h2>
+      <ul>
+        <li>Friday: House Night w/ DJ Laura</li>
+        <li>Saturday: Drum & Bass w/ DJ Jay</li>
+        <li>Sunday: Chill Vibes w/ DJ Hannah</li>
+      </ul>
+    </section>
 
+    <section class="requests">
+      <h2>Make a Request</h2>
+      <button id="requestBtn">Request a Track</button>
+    </section>
 
+    <section class="listeners">
+      <h2>Who's Listening</h2>
+      <p id="listenerCount">Live listeners: 0</p>
+    </section>
+
+    <section class="xr-info">
+      <h2>XR Info</h2>
+      <p>Exclusive underground updates, stories & more...</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Wildstyle Radio</p>
+  </footer>
 </body>
 </html>
