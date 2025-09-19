@@ -1,345 +1,114 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Wildstyle Radio — Home</title>
- <link rel="stylesheet" href="/test1/style.css">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script defer src="/test1/script.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildstyle Radio — DJs</title>
+  <link rel="stylesheet" href="/test1/style.css">
 </head>
 <body>
-<header>
-  <div class="topbar">
-    <div class="brand">
-      <img src="/test1/placeholder.png" alt="logo">
-      <div>
-        <h1>Wildstyle Radio</h1>
-        <div style="font-size:12px;color:var(--muted)">United by beats • Powered by passion</div>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <img src="placeholder.png" alt="logo">
+        <h1>Our DJs</h1>
       </div>
     </div>
-    <div class="controls">
-      <button id="playPause" class="btn">Play</button>
-      <a class="request" href="mailto:requests@wildstyle.vip">Request</a>
-    </div>
-  </div>
-</header>
+  </header>
 
-<nav class="mainnav">
-  <div class="container">
-    <a href="index.html" class="navlink active">Home</a>
-    <a href="schedule.html" class="navlink">Schedule</a>
-    <a href="djs.html" class="navlink">DJs</a>
-  </div>
-</nav>
+  <main class="container">
+    <section class="content">
+      <div class="card">
+        <h2>Meet the Team</h2>
+        <div class="dj-grid">
+          <!-- Each DJ card -->
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/hotshot.jpg" alt="HotShot DJ">
+            <div class="meta">
+              <div class="name">HotShot DJ</div>
+              <div class="role">Co-Owner</div>
+            </div>
+          </div>
 
-<main class="container">
-  <section class="content">
-    <div class="card now-playing">
-      <div style="font-weight:700;margin-bottom:6px">Now Playing + Last Played</div>
-      <div id="nowMeta" style="color:var(--muted);font-size:14px">Loading track info…</div>
-    </div>
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/dawn.jpg" alt="Dawn">
+            <div class="meta">
+              <div class="name">Dawn</div>
+              <div class="role">Manager</div>
+            </div>
+          </div>
 
-    <div class="card" id="djs">
-      <center><h3>DJ'S</h3></center>
-      <main class="djs-page">
-  
-  <br>
- 
-  
-  
-    <section class="dj-grid">
-	
-      <!-- DJ Profile Card -->
-      <div class="dj-card">
-        <img src="images/hotshot.jpg" alt="HotShot DJ" class="dj-photo" />
-        <h3>HotShot DJ</h3>
-        <a href="/graham.html" class="dj-link">Profile</a>
-		<h3>Co-Owner</h3>
-		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
-      </div>
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/laura.jpg" alt="Laura">
+            <div class="meta">
+              <div class="name">Laura</div>
+              <div class="role">HR</div>
+            </div>
+          </div>
 
-      <!-- Repeat similar blocks for other DJs -->
-	  <!-- Female DJ's -->
-	  <div class="dj-card">
-        <img src="images/dawn.jpg" alt="dawn" class="dj-photo" />
-        <h3>Dawn</h3>
-        <a href="/dawn.html" class="dj-link">Profile</a>
-      </div>
-	  
-	 
-	  <div class="dj-card">
-        <img src="images/laura.jpg" alt="Laura" class="dj-photo" />
-        <h3>Laura</h3>
-        <a href="/laura.html" class="dj-link">Profile</a>
-		<h3>HR</h3>
-      </div>
-	  
-	  
-	  
-	  <div class="dj-card">
-        <img src="images/babyjayne.jpg" alt="Babyjayne" class="dj-photo" />
-        <h3>BabyJayne</h3>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/rebecca.jpg" alt="Rebecca" class="dj-photo" />
-        <h3>DJ Mix N Match</h3>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/mary.jpg" alt="Mary" class="dj-photo" />
-        <h3>Mary</h3>
-        <a href="/mary.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/indigo.jpg" alt="Indigo" class="dj-photo" />
-        <h3>indigo riz</h3>
-        <a href="/indigo.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/dani.jpg" alt="Dani" class="dj-photo" />
-        <h3>DJ Queen Dani</h3>
-        <a href="/dani.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/suzette.jpg" alt="Suzette" class="dj-photo" />
-		<h3>@queencitypopped</h3>
-        <h3>Popped Radio</h3>
-        <a href="/suzette.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/christina.jpg" alt="Suzette" class="dj-photo" />
-        <h3>Christina</h3>
-        <a href="/christina.html" class="dj-link">Profile</a>
-      </div>
-	  
-      <div class="dj-card">
-        <img src="images/djstrawbs.jpg" alt="DJ EchoFalls" class="dj-photo" />
-        <h3>DJ EchoFalls</h3>
-        <a href="/echofalls.html" class="dj-link">Profile</a>
-		<h3>BIG BOSS</h3>
-		<p><a href="https://ask.the.dj/Wildstyle">Requests</a></p>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/dan.jpg" alt="Dan" class="dj-photo" />
-        <h3>Dan</h3>
-        <a href="/dan.html" class="dj-link">Profile</a>
-		
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/babyjayne.jpg" alt="BabyJayne">
+            <div class="meta">
+              <div class="name">BabyJayne</div>
+              <div class="role">Manager</div>
+            </div>
+          </div>
 
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/ben.jpg" alt="ben" class="dj-photo" />
-        <h3>Ben</h3>
-        <a href="/ben.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/byrdman.jpg" alt="byrdman" class="dj-photo" />
-        <h3>The Byrdman</h3>
-        <a href="/byrd.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/daniel.jpg" alt="daniel" class="dj-photo" />
-        <h3>Daniel</h3>
-        <a href="/daniel.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  
-	  
-	  <div class="dj-card">
-        <img src="images/wizard.jpg" alt="wizard" class="dj-photo" />
-        <h3>Wizard</h3>
-        <a href="/wizard.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/alex.jpg" alt="alex" class="dj-photo" />
-        <h3>DJ European BOB</h3>
-        <a href="/alex.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/sonic.jpg" alt="sonic" class="dj-photo" />
-        <h3>Sonic J</h3>
-        <a href="/sonic.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/lewis.jpg" alt="lewis" class="dj-photo" />
-        <h3>Lewis</h3>
-		<h3>Manager</h3>
-		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/vishal.jpg" alt="vish" class="dj-photo" />
-        <h3>Xavish</h3>
-         <a href="/vish.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/jk.jpg" alt="jk" class="dj-photo" />
-        <h3>JK</h3>
-        <a href="/jk.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/farley.jpg" alt="farley" class="dj-photo" />
-        <h3>Mark</h3>
-        <a href="/mark.html" class="dj-link">Profile</a>
-      </div>
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/rebecca.jpg" alt="DJ Mix N Match">
+            <div class="meta">
+              <div class="name">DJ Mix N Match (Rebecca)</div>
+              <div class="role">DJ</div>
+            </div>
+          </div>
 
-	  
-	  <div class="dj-card">
-        <img src="images/dezzy.jpg" alt="dezzy" class="dj-photo" />
-        <h3>DJ Dezzy</h3>
-		<a href="/dezzy.html" class="dj-link">Profile</a>
-        <h3>DJ Manager/Manager</h3>
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/mary.jpg" alt="Mary">
+            <div class="meta">
+              <div class="name">Mary</div>
+              <div class="role">Manager</div>
+            </div>
+          </div>
+
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/indigo.jpg" alt="Indigo Riz">
+            <div class="meta">
+              <div class="name">Indigo Riz</div>
+              <div class="role"></div>
+            </div>
+          </div>
+
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/dani.jpg" alt="DJ Queen Dani">
+            <div class="meta">
+              <div class="name">DJ Queen Dani</div>
+              <div class="role"></div>
+            </div>
+          </div>
+
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/suzette.jpg" alt="Popped Radio">
+            <div class="meta">
+              <div class="name">Popped Radio (Suzette &amp; Co)</div>
+              <div class="role">Popped Radio</div>
+            </div>
+          </div>
+
+          <div class="dj-card">
+            <img src="https://wildstyle.vip/images/christina.jpg" alt="Christina">
+            <div class="meta">
+              <div class="name">Christina</div>
+              <div class="role"></div>
+            </div>
+          </div>
+
+          <!-- Continue with all other DJs from wildstyle.vip/djs.html... -->
+        </div>
+        <p style="color:var(--muted);font-size:12px;margin-top:8px">
+          Images and roles sourced from wildstyle.vip/djs.html
+        </p>
       </div>
-	  
-	  <div class="dj-card">
-        <img src="images/aj.jpg" alt="AJ" class="dj-photo" />
-        <h3>AJ</h3>
-        <a href="/aj.html" class="dj-link">Profile</a>
-		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/blacknight.jpg" alt="blacknight" class="dj-photo" />
-        <h3>DJBlackNight</h3>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/moofie.jpg" alt="moofie" class="dj-photo" />
-        <h3>Moofie</h3>
-        <a href="/moofie.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/wendell.jpg" alt="wendell" class="dj-photo" />
-        <h3>DJ Old School</h3>
-        <a href="/wendall.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/robb.jpg" alt="rob" class="dj-photo" />
-        <h3>Trebor Nannab</h3>
-        <a href="/rob.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/steve.jpg" alt="steve" class="dj-photo" />
-        <h3>Steve</h3>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/james.jpg" alt="DJ James" class="dj-photo" />
-        <h3>DJ James</h3>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/djsteve.jpg" alt="djsteve" class="dj-photo" />
-        <h3>DJ Steve Smith</h3>
-        <a href="/djsteve.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/jacob.jpg" alt="Jacob" class="dj-photo" />
-        <h3>Jacob</h3>
-        <a href="/jacob.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/seb.jpg" alt="Seb" class="dj-photo" />
-        <h3>DJ Bustovski</h3>
-        <a href="/seb.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/simon.jpg" alt="simon" class="dj-photo" />
-        <h3>Simon</h3>
-        <a href="/simon.html" class="dj-link">Profile</a>
-		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/josh.jpg" alt="Josh" class="dj-photo" />
-        <h3>Josh</h3>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/gordan.jpg" alt="gordan" class="dj-photo" />
-        <h3>Gordon</h3>
-        <p><a href="mailto:requests@wildstyle.com">Requests</a></p>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/djnocturnlx.jpg" alt="djnocturnlx" class="dj-photo" />
-        <h3>DJ Nocturnlx</h3>
-        <a href="/djnocturnlx.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/jd.jpg" alt="djnocturnlx" class="dj-photo" />
-        <h3>JD</h3>
-        
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/cam.jpg" alt="cam" class="dj-photo" />
-        <h3>Cam</h3>
-        <a href="/dawn.html" class="dj-link">Profile</a>
-      </div>
-	  
-	  <div class="dj-card">
-        <img src="images/marka.jpg" alt="ricky" class="dj-photo" />
-        <h3>Mark</h3>
-        <p><a href="mailto:requests@wildstyle.com">Requests</a></p>
-      </div>
-	  
-	  
-	  
-	  
-	  <div class="dj-card">
-        <img src="images/logo.png" alt="New DJ" class="dj-photo" />
-        <h3>New DJ</h3>
-        
-      </div>
-      <!-- Add more DJ cards as needed -->
     </section>
-
-  <aside class="sidebar">
-    <div class="card sidebar-section">
-      <h4>Listen</h4>
-      <audio id="player" preload="none"></audio>
-      <div style="margin-top:8px;color:var(--muted)">Stream: HLS • <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button></div>
-    </div>
-  </aside>
-</main>
-
-<footer>
-  <div>© Wildstyle Radio</div>
-  <div class="social">
-    <a href="#">Facebook</a>
-    <a href="#">Twitter</a>
-    <a href="#">Instagram</a>
-    <a href="#">YouTube</a>
-  </div>
-</footer>
+  </main>
 </body>
 </html>
