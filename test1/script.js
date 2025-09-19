@@ -1,37 +1,49 @@
-// Basic player logic
-const streamUrl = 'https://streaming.live365.com/a50378';
+// Wildstyle Radio - script.js with HLS.js integration and styled tracks
 const audio = document.getElementById('player');
-audio.src = streamUrl;
-audio.crossOrigin = 'anonymous';
+
+function initPlayer() {
+  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(streamUrl);
+    hls.attachMedia(audio);
+  } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+    audio.src = streamUrl;
+  } else {
+    audio.src = 'https://streaming.live365.com/a50378';
+  }
+}
+initPlayer();
 
 const playBtn = document.getElementById('playPause');
-playBtn.addEventListener('click', ()=>{
-  if(audio.paused){
-    audio.play().catch(e=>console.warn('play failed',e));
-    playBtn.textContent='Pause';
-  } else { audio.pause(); playBtn.textContent='Play'; }
+playBtn.addEventListener('click', () => {
+  if (audio.paused) {
+    audio.play().catch(e => console.warn('play failed', e));
+    playBtn.textContent = 'Pause';
+  } else {
+    audio.pause();
+    playBtn.textContent = 'Play';
+  }
 });
 
-document.getElementById('openPlayer').addEventListener('click', ()=>{ 
-  audio.paused?audio.play():audio.pause(); 
-  playBtn.textContent = audio.paused? 'Play':'Pause' 
+document.getElementById('openPlayer').addEventListener('click', () => {
+  audio.paused ? audio.play() : audio.pause();
+  playBtn.textContent = audio.paused ? 'Play' : 'Pause';
 });
 
-// Nav links smooth scroll + active state
-document.querySelectorAll('.navlink').forEach(a=>{
-  a.addEventListener('click', ()=>{
-    document.querySelectorAll('.navlink').forEach(x=>x.classList.remove('active'));
+// Nav link active state
+document.querySelectorAll('.navlink').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('.navlink').forEach(x => x.classList.remove('active'));
     a.classList.add('active');
   });
 });
 
-// Fetch XR info (static placeholders)
-const xrTopEl = document.getElementById('xrTop');
-const xrStatsEl = document.getElementById('xrStats');
-xrTopEl.innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
-xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
+// WSR Info placeholders
+document.getElementById('xrTop').innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
+document.getElementById('xrStats').innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
 
-// Now Playing + Last Played fetch from Live365
+// Now Playing + Last Played
 const nowMeta = document.getElementById('nowMeta');
 async function fetchNowPlaying() {
   try {
@@ -40,17 +52,15 @@ async function fetchNowPlaying() {
     if (data && data.length > 0) {
       nowMeta.innerHTML = '';
 
-      // Now Playing track
+      // Now Playing
       const current = data[0];
       const nowDiv = document.createElement('div');
+      nowDiv.classList.add('track');
       nowDiv.innerHTML = `
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-          <img src="${current.art || 'placeholder.png'}" 
-               alt="art" style="width:48px;height:48px;object-fit:cover;border-radius:4px;">
-          <div>
-            <div style="font-weight:600;">${current.title || 'Unknown Title'}</div>
-            <div style="color:var(--muted);font-size:13px;">${current.artist || 'Unknown Artist'}</div>
-          </div>
+        <img src="${current.art || 'placeholder.png'}" alt="art">
+        <div class="info">
+          <div class="title">${current.title || 'Unknown Title'}</div>
+          <div class="artist">${current.artist || 'Unknown Artist'}</div>
         </div>`;
       nowMeta.appendChild(nowDiv);
 
@@ -61,19 +71,15 @@ async function fetchNowPlaying() {
       divider.style.margin = '8px 0';
       nowMeta.appendChild(divider);
 
-      // Last Played tracks (4)
+      // Last Played (4 tracks)
       data.slice(1,5).forEach(track => {
         const li = document.createElement('div');
-        li.style.display = 'flex';
-        li.style.alignItems = 'center';
-        li.style.gap = '8px';
-        li.style.marginBottom = '6px';
+        li.classList.add('track','small');
         li.innerHTML = `
-          <img src="${track.art || 'placeholder.png'}" 
-               alt="art" style="width:36px;height:36px;object-fit:cover;border-radius:4px;">
-          <div>
-            <div style="font-size:14px;">${track.title || 'Unknown Title'}</div>
-            <div style="color:var(--muted);font-size:12px;">${track.artist || 'Unknown Artist'}</div>
+          <img src="${track.art || 'placeholder.png'}" alt="art">
+          <div class="info">
+            <div class="title">${track.title || 'Unknown Title'}</div>
+            <div class="artist">${track.artist || 'Unknown Artist'}</div>
           </div>`;
         nowMeta.appendChild(li);
       });
@@ -85,23 +91,19 @@ async function fetchNowPlaying() {
   }
 }
 fetchNowPlaying();
-setInterval(fetchNowPlaying, 30000);
+setInterval(fetchNowPlaying,30000);
 
-// Populate DJ page roster (copied)
+// DJ Roster
 const djSection = document.getElementById('djs');
-const djList = [
-  'HotShot DJ','EchoFalls','Ben','Wizard','Lewis','JK','Nkabie','DJ Dezzy','King Kenny','Rob','DJBlackNight','Moofie','Trebor Nannab','Steve','DJ Blade Sparx','Steve G','DJ Nocturnlx','JD','Kevin','Mark','Dawn','Laura','BabyJayne','Mary'
-];
+const djList = ['HotShot DJ','EchoFalls','Ben','Wizard','Lewis','JK','Nkabie','DJ Dezzy','King Kenny','Rob','DJBlackNight','Moofie','Trebor Nannab','Steve','DJ Blade Sparx','Steve G','DJ Nocturnlx','JD','Kevin','Mark','Dawn','Laura','BabyJayne','Mary'];
 const ul = document.createElement('ul');
 djList.forEach(name=>{const li=document.createElement('li');li.textContent=name;ul.appendChild(li)});
 djSection.appendChild(ul);
 
-// Who's listening & shoutouts placeholders
+// Who's Listening placeholders
 document.getElementById('location').textContent = 'United Kingdom (estimated)';
 const shoutouts = document.getElementById('shoutouts'); shoutouts.innerHTML='';
-['Jay from Cornwall','Laura in Plymouth','Hannah - sending love'].forEach(s=>{
-  const li=document.createElement('li');li.textContent=s;shoutouts.appendChild(li)
-});
+['Jay from Cornwall','Laura in Plymouth','Hannah - sending love'].forEach(s=>{const li=document.createElement('li');li.textContent=s;shoutouts.appendChild(li)});
 
-// Accessibility: stop audio when user navigates away
+// Stop audio when leaving
 window.addEventListener('pagehide', ()=>{ audio.pause(); playBtn.textContent='Play' });
