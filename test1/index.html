@@ -89,26 +89,36 @@
         </div>
       </div>
 
-      <div class="card sidebar-section">
-        <h4>Who's listening</h4>
-        <div id="whoListening">
-          <div>Location: <span id="location">—</span></div>
-          <div>Top shout-outs:</div>
-          <ul id="shoutouts" style="color:var(--muted)">
-            <li>No shout-outs yet</li>
-          </ul>
-        </div>
-      </div>
+      <aside class="sidebar">
+  <div class="card sidebar-section">
+    <h4>Listen</h4>
+    <audio id="player" preload="none"></audio>
+    <div style="margin-top:8px;color:var(--muted)">
+      Stream: HLS • 
+      <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
+    </div>
+  </div>
 
-      <div class="card sidebar-section">
-        <h4>WSR Info</h4>
-        <div id="wsrInfo" style="color:var(--muted)">
-          <div id="xrTop">Loading XR info…</div>
-          <div id="xrStats" style="margin-top:8px"></div>
-        </div>
-      </div>
-    </aside>
-  </main>
+  <!-- Updated Who's Listening -->
+  <div class="card sidebar-section">
+    <h4>Who's listening</h4>
+    <div id="whoListening">
+      <div>Total listeners: <span id="listenerTotal">—</span></div>
+      <div>Top locations:</div>
+      <ul id="listenerLocations" style="color:var(--muted)">
+        <li>Loading…</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card sidebar-section">
+    <h4>WSR Info</h4>
+    <div id="wsrInfo" style="color:var(--muted)">
+      <div id="xrTop">Loading XR info…</div>
+      <div id="xrStats" style="margin-top:8px"></div>
+    </div>
+  </div>
+</aside>
 
   <footer>
     <div>© Wildstyle Radio</div>

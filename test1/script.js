@@ -45,20 +45,6 @@ document.querySelectorAll('.navlink').forEach(a => {
   });
 });
 
-// Who's listening & shoutouts (placeholder)
-const locationEl = document.getElementById('location');
-if (locationEl) locationEl.textContent = 'United Kingdom (estimated)';
-
-const shoutouts = document.getElementById('shoutouts');
-if (shoutouts) {
-  shoutouts.innerHTML = '';
-  ['Jay from Cornwall', 'Laura in Plymouth', 'Hannah - sending love'].forEach(s => {
-    const li = document.createElement('li');
-    li.textContent = s;
-    shoutouts.appendChild(li);
-  });
-}
-
 // Now Playing (main content) — no last played
 async function fetchNowPlayingMain() {
   try {
@@ -78,19 +64,12 @@ async function fetchNowPlayingMain() {
 fetchNowPlayingMain();
 setInterval(fetchNowPlayingMain, 30000);
 
-// Accessibility: stop audio when navigating away
-window.addEventListener('pagehide', () => {
-  audio.pause();
-  if (playBtn) playBtn.textContent = 'Play';
-});
-
+// Who's Listening (auto from CSV)
 async function fetchWhoListening() {
   try {
-    // Fetch CSV (adjust path if needed)
     const res = await fetch("/test1/real_time_sessions.csv");
     const csvText = await res.text();
 
-    // Parse CSV into rows
     const rows = csvText.trim().split("\n").map(r => r.split(","));
     const headers = rows[0];
     const dataRows = rows.slice(1);
@@ -112,15 +91,12 @@ async function fetchWhoListening() {
       locations[key] = (locations[key] || 0) + count;
     });
 
-    // Update total
     document.getElementById("listenerTotal").textContent = total;
 
-    // Sort locations by count
     const top = Object.entries(locations)
       .sort((a,b) => b[1] - a[1])
       .slice(0,5);
 
-    // Fill list
     const ul = document.getElementById("listenerLocations");
     ul.innerHTML = "";
     top.forEach(([loc, count]) => {
@@ -133,8 +109,11 @@ async function fetchWhoListening() {
     console.error("Error loading Who's Listening CSV:", err);
   }
 }
-
-// Load immediately + refresh every 60s
 fetchWhoListening();
 setInterval(fetchWhoListening, 60000);
 
+// Accessibility: stop audio when navigating away
+window.addEventListener('pagehide', () => {
+  audio.pause();
+  if (playBtn) playBtn.textContent = 'Play';
+});
