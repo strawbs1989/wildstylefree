@@ -1,85 +1,123 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Wildstyle Radio — Home</title>
- <link rel="stylesheet" href="/test1/style.css">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script defer src="/test1/script.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildstyle Radio — Home</title>
+  <link rel="stylesheet" href="/test1/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script defer src="/test1/script.js"></script>
 </head>
 <body>
-<header>
-  <div class="topbar">
-    <div class="brand">
-      <img src="/test1/placeholder.png" alt="logo">
-      <div>
-        <h1>Wildstyle Radio</h1>
-        <div style="font-size:12px;color:var(--muted)">United by beats • Powered by passion</div>
-      </div>
-    </div>
-    <div class="controls">
-      <button id="playPause" class="btn">Play</button>
-      <a class="request" href="mailto:requests@wildstyle.vip">Request</a>
-    </div>
-  </div>
-</header>
-
-<nav class="mainnav">
-  <div class="container">
-    <a href="index.html" class="navlink active">Home</a>
-    <a href="schedule.html" class="navlink">Schedule</a>
-    <a href="djs.html" class="navlink">DJs</a>
-  </div>
-</nav>
-
-<main class="container">
-  <section class="content">
-    <div class="card now-playing">
-      <div style="font-weight:700;margin-bottom:6px">Now Playing + Last Played</div>
-      <div id="nowMeta" style="color:var(--muted);font-size:14px">Loading track info…</div>
-    </div>
-
-    <div class="card" id="showcase">
-      <h3>Unsigned Artist Showcase</h3>
-      <p style="color:var(--muted)">Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip</p>
-      <div class="showcase-grid">
-        <img src="/test1/unsigned/tristan.jpg" alt="artist 1">
-        <img src="/test1/unsigned/pete.jpg" alt="artist 2">
-        <img src="/test1/unsigned/dont.jpg" alt="artist 3">
-        <img src="/test1/unsigned/joe.png" alt="artist 4">
-      </div>
-    </div>
-
-    <div class="card" id="djs">
-      <h3>DJ Showcase</h3>
-      <div class="dj-card">
-        <img src="/test1/images/babyjayne.jpg" alt="dj showcase">
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <img src="placeholder.png" alt="logo">
         <div>
-          <h4>Resident DJs</h4>
-          <p style="color:var(--muted)">Professional DJ profiles. Visit the <a href="djs.html">DJs page</a> for full roster.</p>
+          <h1>Wildstyle Radio</h1>
+          <div style="font-size:12px;color:var(--muted)">
+            United by beats • Powered by passion
+          </div>
         </div>
       </div>
+      <div class="controls">
+        <button id="playPause" class="btn">Play</button>
+        <a class="request" href="mailto:requests@wildstyle.vip">Request</a>
+      </div>
     </div>
-  </section>
+  </header>
 
-  <aside class="sidebar">
-    <div class="card sidebar-section">
-      <h4>Listen</h4>
-      <audio id="player" preload="none"></audio>
-      <div style="margin-top:8px;color:var(--muted)">Stream: HLS • <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button></div>
+  <nav class="mainnav">
+    <div class="container">
+      <a href="index.html" class="navlink active">Home</a>
+      <a href="schedule.html" class="navlink">Schedule</a>
+      <a href="djs.html" class="navlink">DJs</a>
     </div>
-  </aside>
-</main>
+  </nav>
 
-<footer>
-  <div>© Wildstyle Radio</div>
-  <div class="social">
-    <a href="#">Facebook</a>
-    <a href="#">Twitter</a>
-    <a href="#">Instagram</a>
-    <a href="#">YouTube</a>
-  </div>
-</footer>
+  <main class="container">
+    <section class="content">
+      <!-- Now Playing -->
+      <div class="card" id="nowPlaying">
+        <h3>Now Playing</h3>
+        <div id="now-playing-box">
+          <img id="np-art" src="placeholder.png" alt="Album Art">
+          <div id="np-text">
+            <div id="np-title">Loading...</div>
+            <div id="np-artist"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unsigned Artist Showcase -->
+      <div class="card" id="showcase">
+        <h3>Unsigned Artist Showcase</h3>
+        <p style="color:var(--muted)">
+          Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip
+        </p>
+        <div class="showcase-grid">
+          <img src="/test1/unsigned/tristan.jpg" alt="artist 1">
+          <img src="/test1/unsigned/pete.jpg" alt="artist 2">
+          <img src="/test1/unsigned/dont.jpg" alt="artist 3">
+          <img src="/test1/unsigned/joe.png" alt="artist 4">
+        </div>
+      </div>
+
+      <!-- DJ Showcase -->
+      <div class="card" id="djs">
+        <h3>DJ Showcase</h3>
+        <div class="dj-card">
+          <img src="https://wildstyle.vip/images/babyjayne.jpg" alt="dj showcase">
+          <div>
+            <h4>Resident DJs</h4>
+            <p style="color:var(--muted)">
+              Professional DJ profiles. Visit the
+              <a href="djs.html">DJs page</a> for full roster.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card sidebar-section">
+        <h4>Listen</h4>
+        <audio id="player" preload="none"></audio>
+        <div style="margin-top:8px;color:var(--muted)">
+          Stream: HLS •
+          <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
+        </div>
+      </div>
+
+      <div class="card sidebar-section">
+        <h4>Who's listening</h4>
+        <div id="whoListening">
+          <div>Location: <span id="location">—</span></div>
+          <div>Top shout-outs:</div>
+          <ul id="shoutouts" style="color:var(--muted)">
+            <li>No shout-outs yet</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card sidebar-section">
+        <h4>WSR Info</h4>
+        <div id="wsrInfo" style="color:var(--muted)">
+          <div id="xrTop">Loading XR info…</div>
+          <div id="xrStats" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div>© Wildstyle Radio</div>
+    <div class="social">
+      <a href="#">Facebook</a>
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+    </div>
+  </footer>
 </body>
 </html>
