@@ -83,3 +83,58 @@ window.addEventListener('pagehide', () => {
   audio.pause();
   if (playBtn) playBtn.textContent = 'Play';
 });
+
+async function fetchWhoListening() {
+  try {
+    // Fetch CSV (adjust path if needed)
+    const res = await fetch("/test1/real_time_sessions.csv");
+    const csvText = await res.text();
+
+    // Parse CSV into rows
+    const rows = csvText.trim().split("\n").map(r => r.split(","));
+    const headers = rows[0];
+    const dataRows = rows.slice(1);
+
+    const countryIdx = headers.indexOf("country");
+    const cityIdx = headers.indexOf("city");
+    const countIdx = headers.indexOf("active_session_count");
+
+    let total = 0;
+    const locations = {};
+
+    dataRows.forEach(r => {
+      const country = r[countryIdx];
+      const city = r[cityIdx];
+      const count = parseInt(r[countIdx] || "0", 10);
+      total += count;
+
+      const key = `${country} (${city})`;
+      locations[key] = (locations[key] || 0) + count;
+    });
+
+    // Update total
+    document.getElementById("listenerTotal").textContent = total;
+
+    // Sort locations by count
+    const top = Object.entries(locations)
+      .sort((a,b) => b[1] - a[1])
+      .slice(0,5);
+
+    // Fill list
+    const ul = document.getElementById("listenerLocations");
+    ul.innerHTML = "";
+    top.forEach(([loc, count]) => {
+      const li = document.createElement("li");
+      li.textContent = `${loc} — ${count}`;
+      ul.appendChild(li);
+    });
+
+  } catch (err) {
+    console.error("Error loading Who's Listening CSV:", err);
+  }
+}
+
+// Load immediately + refresh every 60s
+fetchWhoListening();
+setInterval(fetchWhoListening, 60000);
+
