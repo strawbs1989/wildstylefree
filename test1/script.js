@@ -2,7 +2,7 @@
 const audio = document.getElementById('player');
 
 function initPlayer() {
-  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
+  const streamUrl = 'https://streaming.live365.com/a50378';
 
   if (window.Hls && Hls.isSupported()) {
     const hls = new Hls();
