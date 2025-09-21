@@ -129,34 +129,21 @@ window.addEventListener('pagehide', () => {
   if (playBtn) playBtn.textContent = 'Play';
 });
 
-// WSR Stats
-async function fetchWSRLiveStats() {
+
+// WSR Info (placeholder until XR API/server integration)
+function loadWSRInfo() {
   const xrTopEl = document.getElementById('xrTop');
   const xrStatsEl = document.getElementById('xrStats');
 
-  try {
-    // Replace with your real streaminfo URL if you get one working
-    const res = await fetch("https://streaming.live365.com/a50378");
-    if (!res.ok) throw new Error("Streaminfo endpoint not ok");
-
-    const data = await res.json();
-    // Suppose data has fields: title, listeners, etc
-    const title = data.current_track || data.title || "Unknown Track";
-    const listeners = data.listeners_count || data.current_listeners || 0;
-
-    xrTopEl.innerHTML = `Now playing: <strong>${title}</strong>`;
-    xrStatsEl.innerHTML = `Current listeners: <strong>${listeners}</strong>`;
-  } catch (err) {
-    console.warn("WSR Live stats fetch failed:", err);
-    // Fallback static
+  if (xrTopEl && xrStatsEl) {
+    // Example info – replace with real API values if available
     xrTopEl.innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
     xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
   }
 }
 
-// Call it at load, then periodically
-fetchWSRLiveStats();
-setInterval(fetchWSRLiveStats, 60000);
+// Load once at startup
+loadWSRInfo();
 
 
 
