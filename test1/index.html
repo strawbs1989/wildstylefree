@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/test1/style.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script defer src="/test1/script.js"></script>
+  <script src="/test1/requests.js"></script>
 </head>
 <body>
   <header>
@@ -48,7 +49,12 @@
           </div>
         </div>
       </div>
-
+      <!-- Requests -->
+	  <div id="request-box" class="request-container">
+  <h3>🎵 Song Requests</h3>
+  <button id="request-btn" disabled>Loading...</button>
+  <p id="request-status"></p>
+</div>
       <!-- Unsigned Artist Showcase -->
       <div class="card" id="showcase">
         <h3>Unsigned Artist Showcase</h3>
