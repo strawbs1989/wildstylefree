@@ -48,7 +48,7 @@ document.querySelectorAll('.navlink').forEach(a => {
 // Now Playing (main content) — no last played
 async function fetchNowPlayingMain() {
   try {
-    const res = await fetch("https://api.live365.com/station/a50378");
+    const res = await fetch("https://das-edge12-live365-dal02.cdnstream.com/metadata'");
     const data = await res.json();
     const np = data.now_playing;
 
