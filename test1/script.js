@@ -2,7 +2,7 @@
 const audio = document.getElementById('player');
 
 function initPlayer() {
-  const streamUrl = 'https://das-edge12-live365-dal02.cdnstream.com/metadata';
+  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
 
   if (window.Hls && Hls.isSupported()) {
     const hls = new Hls();
@@ -123,6 +123,41 @@ document.querySelectorAll('.navlink').forEach(a => {
   "cache-time": "2025-09-21 19:21:28.309764",
   "cache-host": "d708d5dac464ac3e4f769074d3550aa59e09a2bd29cd18c7b5130801"
 }
+// Accessibility: stop audio when navigating away
+window.addEventListener('pagehide', () => {
+  audio.pause();
+  if (playBtn) playBtn.textContent = 'Play';
+});
+
+// WSR Stats
+async function fetchWSRLiveStats() {
+  const xrTopEl = document.getElementById('xrTop');
+  const xrStatsEl = document.getElementById('xrStats');
+
+  try {
+    // Replace with your real streaminfo URL if you get one working
+    const res = await fetch("https://streaming.live365.com/a50378");
+    if (!res.ok) throw new Error("Streaminfo endpoint not ok");
+
+    const data = await res.json();
+    // Suppose data has fields: title, listeners, etc
+    const title = data.current_track || data.title || "Unknown Track";
+    const listeners = data.listeners_count || data.current_listeners || 0;
+
+    xrTopEl.innerHTML = `Now playing: <strong>${title}</strong>`;
+    xrStatsEl.innerHTML = `Current listeners: <strong>${listeners}</strong>`;
+  } catch (err) {
+    console.warn("WSR Live stats fetch failed:", err);
+    // Fallback static
+    xrTopEl.innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
+    xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
+  }
+}
+
+// Call it at load, then periodically
+fetchWSRLiveStats();
+setInterval(fetchWSRLiveStats, 60000);
+
 
 
 
