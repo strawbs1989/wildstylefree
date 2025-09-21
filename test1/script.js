@@ -2,7 +2,7 @@
 const audio = document.getElementById('player');
 
 function initPlayer() {
-  const streamUrl = 'https://streaming.live365.com/metadata';
+  const streamUrl = 'https://das-edge12-live365-dal02.cdnstream.com/metadata';
 
   if (window.Hls && Hls.isSupported()) {
     const hls = new Hls();
