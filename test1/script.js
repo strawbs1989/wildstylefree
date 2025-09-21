@@ -173,3 +173,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+((i,c)=>{if(!window.history.state||!window.history.state.key){let p=Math.random().toString(32).slice(2);window.history.replaceState({key:p},"")}try{let d=JSON.parse(sessionStorage.getItem(i)||"{}")[c||window.history.state.key];typeof d=="number"&&window.scrollTo(0,d)}catch(p){console.error(p),sessionStorage.removeItem(i)}})("positions", null)
