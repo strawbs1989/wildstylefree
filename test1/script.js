@@ -46,83 +46,72 @@ document.querySelectorAll('.navlink').forEach(a => {
 });
 
 // Now Playing (main content) — no last played
-{
-  "name": "Wildstyleradio",
-  "station-logo": "https://media.live365.com/download/a6fa5836-cc54-4daf-bb69-637f14ed0587.png",
-  "station-logo-dominant-color": "#3c3145",
-  "genres": [
-    "Alternative",
-    "80s",
-    "90s",
-    "00s",
-    "Drum 'n' Bass"
-  ],
-  "website": "https://wildstyle.vip",
-  "timezone": "UTC",
-  "stream-urls": [
-    {
-      "high_quality": "https://streaming.live365.com/a50378",
-      "encoding": "mp3"
-    },
-    {
-      "low_quality": "https://streaming.live365.com/a50378",
-      "encoding": "mp3"
-    },
-    {
-      "hls": "https://streaming.live365.com/a50378/playlist.m3u8",
-      "encoding": "mp3"
-    }
-  ],
-  "stream-url": "https://streaming.live365.com/a50378",
-  "stream-hls-url": "https://streaming.live365.com/a50378/playlist.m3u8",
-  "listening-urls": [
-    {
-      "url": "https://streaming.live365.com/a50378",
-      "encoding": "mp3",
-      "bitrate": 128
-    }
-  ],
-  "description": "Where music comes alive!",
-  "facebook": "https://www.facebook.com/wildstyleuk",
-  "twitter": null,
-  "instagram": null,
-  "current-track": {
-    "title": "Popped Radio TAKEOVER from the Queen City NY",
-    "artist": "",
-    "art": "https://broadcaster.live365.com/static/assets/img/blankart.jpg",
-    "start": "2025-09-21 19:12:47.990327+00:00",
-    "played": "True",
-    "sync_offset": 0,
-    "duration": null,
-    "source": "live",
-    "status": "playing"
-  },
-  "last-played": [
-    {
-      "title": "",
-      "artist": "",
-      "art": "https://broadcaster.live365.com/static/assets/img/blankart.jpg",
-      "start": "2025-09-21 19:05:07.947151+00:00",
-      "played": true,
-      "sync_offset": 0,
-      "duration": null,
-      "end": null,
-      "source": "live"
-    }
-  ],
-  "mount-id": "a50378",
-  "cover": "https://media.live365.com/download/c1f99e18-3cb2-4389-901b-3f7b4a036812.jpg",
-  "auto_dj_on": false,
-  "live_dj_on": true,
-  "active_mount": "live",
-  "is_playing": true,
-  "station_enabled": true,
-  "slug": "Wildstyleradio",
-  "listeners": 6,
-  "station_type": "broadcaster",
-  "cache-time": "2025-09-21 19:21:28.309764",
-  "cache-host": "d708d5dac464ac3e4f769074d3550aa59e09a2bd29cd18c7b5130801"
+async function fetchNowPlayingMain() {
+  try {
+    const res = await fetch("https://api.live365.com/station/a50378");
+    const data = await res.json();
+    const np = data.now_playing;
+
+    document.getElementById("np-art").src = np.art || "placeholder.png";
+    document.getElementById("np-title").textContent = np.title || "Unknown Title";
+    document.getElementById("np-artist").textContent = np.artist || "Unknown Artist";
+  } catch (err) {
+    console.error("Now Playing fetch error:", err);
+    document.getElementById("np-title").textContent = "Error loading track";
+    document.getElementById("np-artist").textContent = "";
+  }
 }
+fetchNowPlayingMain();
+setInterval(fetchNowPlayingMain, 30000);
+
+// Who's Listening (auto from CSV)
+async function fetchWhoListening() {
+  try {
+    const res = await fetch("/test1/real_time_sessions.csv");
+    const csvText = await res.text();
+
+    const rows = csvText.trim().split("\n").map(r => r.split(","));
+    const headers = rows[0];
+    const dataRows = rows.slice(1);
+
+    const countryIdx = headers.indexOf("country");
+    const cityIdx = headers.indexOf("city");
+    const countIdx = headers.indexOf("active_session_count");
+
+    let total = 0;
+    const locations = {};
+
+    dataRows.forEach(r => {
+      const country = r[countryIdx];
+      const city = r[cityIdx];
+      const count = parseInt(r[countIdx] || "0", 10);
+      total += count;
+
+      const key = `${country} (${city})`;
+      locations[key] = (locations[key] || 0) + count;
+    });
+
+    document.getElementById("listenerTotal").textContent = total;
+
+    const top = Object.entries(locations)
+      .sort((a,b) => b[1] - a[1])
+      .slice(0,5);
+
+    const ul = document.getElementById("listenerLocations");
+    ul.innerHTML = "";
+    top.forEach(([loc, count]) => {
+      const li = document.createElement("li");
+      li.textContent = `${loc} — ${count}`;
+      ul.appendChild(li);
+    });
+
+  } catch (err) {
+    console.error("Error loading Who's Listening CSV:", err);
+  }
+}
+fetchWhoListening();
+setInterval(fetchWhoListening, 60000);
+
 // Accessibility: stop audio when navigating away
 window.addEventListener('pagehide', () => {
   audio.pause();
