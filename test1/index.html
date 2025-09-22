@@ -16,21 +16,15 @@
       <div class="brand">
         <img src="placeholder.png" alt="logo">
         <div>
-          <aside class="sidebar">
-  <div class="card sidebar-section">
-    <h4>Listen</h4>
-    <audio id="player" preload="none"></audio>
-    <div style="margin-top:8px;color:var(--muted)">
-      Stream: HLS • 
-      <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
-    </div>
-  </div>
-         <!-- Requests -->
-	  <div id="request-box" class="request-container">
-  <h3>🎵 Song Requests</h3>
-  <button id="request-btn" disabled>Loading...</button>
-  <p id="request-status"></p>
-</div>
+          <h1>Wildstyle Radio</h1>
+          <div style="font-size:12px;color:var(--muted)">
+            United by beats • Powered by passion
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="playPause" class="btn">Play</button>
+        <a class="request" href="mailto:requests@wildstyle.vip">Request</a>
       </div>
     </div>
   </header>
@@ -46,18 +40,17 @@
   <main class="container">
     <section class="content">
       <!-- Now Playing -->
-    <div class="card now-playing">
-  <h4>Now Playing</h4>
-  <div id="nowPlaying">
-    <img id="npArt" src="/test1/placeholder.png" alt="Album Art" style="width:100px; height:100px; border-radius:8px;">
-    <div>
-      <div id="npTitle" style="font-weight:bold;">Loading…</div>
-      <div id="npArtist" style="color:var(--muted);">Please wait</div>
-    </div>
-  </div>
+      <div class="card now-playing">
+        <h4>Now Playing</h4>
+        <div id="nowPlaying" style="display:flex;gap:12px;align-items:center;">
+          <img id="npArt" src="/test1/placeholder.png" alt="Album Art" style="width:100px; height:100px; border-radius:8px;">
+          <div>
+            <div id="npTitle" style="font-weight:bold;">Loading…</div>
+            <div id="npArtist" style="color:var(--muted);">Please wait</div>
+          </div>
+        </div>
+      </div>
 
-  
-     
       <!-- Unsigned Artist Showcase -->
       <div class="card" id="showcase">
         <h3>Unsigned Artist Showcase</h3>
@@ -86,38 +79,47 @@
           </div>
         </div>
       </div>
+
+      <!-- Requests -->
+      <div id="request-box" class="request-container card">
+        <h3>🎵 Song Requests</h3>
+        <button id="request-btn" disabled>Loading...</button>
+        <p id="request-status"></p>
+      </div>
     </section>
 
-      <aside class="sidebar">
-  <div class="card sidebar-section">
-    <h4>Listen</h4>
-    <audio id="player" preload="none"></audio>
-    <div style="margin-top:8px;color:var(--muted)">
-      Stream: HLS • 
-      <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
-    </div>
-  </div>
+    <aside class="sidebar">
+      <div class="card sidebar-section">
+        <h4>Listen</h4>
+        <audio id="player" preload="none"></audio>
+        <div style="margin-top:8px;color:var(--muted)">
+          Stream: HLS • 
+          <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
+        </div>
+      </div>
 
-  <!-- Updated Who's Listening -->
-  <div class="card sidebar-section">
-    <h4>Who's listening</h4>
-    <div id="whoListening">
-      <div>Total listeners: <span id="listenerTotal">—</span></div>
-      <div>Top locations:</div>
-      <ul id="listenerLocations" style="color:var(--muted)">
-        <li>Loading…</li>
-      </ul>
-    </div>
-  </div>
+      <!-- Who's Listening -->
+      <div class="card sidebar-section">
+        <h4>Who's listening</h4>
+        <div id="whoListening">
+          <div>Total listeners: <span id="listenerTotal">—</span></div>
+          <div>Top locations:</div>
+          <ul id="listenerLocations" style="color:var(--muted)">
+            <li>Loading…</li>
+          </ul>
+        </div>
+      </div>
 
-  <div class="card sidebar-section">
-    <h4>WSR Info</h4>
-    <div id="wsrInfo" style="color:var(--muted)">
-      <div id="xrTop">Loading XR info…</div>
-      <div id="xrStats" style="margin-top:8px"></div>
-    </div>
-  </div>
-</aside>
+      <!-- WSR Info -->
+      <div class="card sidebar-section">
+        <h4>WSR Info</h4>
+        <div id="wsrInfo" style="color:var(--muted)">
+          <div id="xrTop">Loading XR info…</div>
+          <div id="xrStats" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </aside>
+  </main>
 
   <footer>
     <div>© Wildstyle Radio</div>

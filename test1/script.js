@@ -45,6 +45,7 @@ document.querySelectorAll('.navlink').forEach(a => {
   });
 });
 
+// Now Playing (Live365 API)
 async function fetchNowPlaying() {
   try {
     const res = await fetch("https://api.live365.com/station/a50378");
@@ -53,7 +54,6 @@ async function fetchNowPlaying() {
     if (data && data.currentTrack) {
       document.getElementById("npTitle").textContent = data.currentTrack.title || "Unknown Title";
       document.getElementById("npArtist").textContent = data.currentTrack.artist || "Unknown Artist";
-
       const art = data.currentTrack.art || "/test1/placeholder.png";
       document.getElementById("npArt").src = art;
     }
@@ -61,10 +61,9 @@ async function fetchNowPlaying() {
     console.error("Now Playing fetch error:", err);
   }
 }
-
-// fetch immediately + refresh every 20s
 fetchNowPlaying();
 setInterval(fetchNowPlaying, 20000);
+
 // Who's Listening (auto from CSV)
 async function fetchWhoListening() {
   try {
@@ -95,8 +94,8 @@ async function fetchWhoListening() {
     document.getElementById("listenerTotal").textContent = total;
 
     const top = Object.entries(locations)
-      .sort((a,b) => b[1] - a[1])
-      .slice(0,5);
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
 
     const ul = document.getElementById("listenerLocations");
     ul.innerHTML = "";
@@ -105,7 +104,6 @@ async function fetchWhoListening() {
       li.textContent = `${loc} — ${count}`;
       ul.appendChild(li);
     });
-
   } catch (err) {
     console.error("Error loading Who's Listening CSV:", err);
   }
