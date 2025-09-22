@@ -116,3 +116,19 @@ window.addEventListener('pagehide', () => {
   audio.pause();
   if (playBtn) playBtn.textContent = 'Play';
 });
+
+
+// WSR Info (placeholder until XR API/server integration)
+function loadWSRInfo() {
+  const xrTopEl = document.getElementById('xrTop');
+  const xrStatsEl = document.getElementById('xrStats');
+
+  if (xrTopEl && xrStatsEl) {
+    // Example info – replace with real API values if available
+    xrTopEl.innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
+    xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
+  }
+}
+
+// Load once at startup
+loadWSRInfo();
