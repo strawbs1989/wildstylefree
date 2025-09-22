@@ -48,7 +48,7 @@ document.querySelectorAll('.navlink').forEach(a => {
  // Now Playing functionality
 class NowPlayingWidget {
     constructor() {
-        this.apiUrl = "https://api.live365.com/station/a50378";
+        this.apiUrl = "https://live365.com/embeds/v1/player/a50378?";
         this.updateInterval = 30000; // 30 seconds
         this.intervalId = null;
         this.isLoading = false;
