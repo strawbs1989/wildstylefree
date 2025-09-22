@@ -2,7 +2,7 @@
 const audio = document.getElementById('player');
 
 function initPlayer() {
-  const stream-hls-Url = 'https://streaming.live365.com/a50378/playlist.m3u8';
+  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
 
   if (window.Hls && Hls.isSupported()) {
     const hls = new Hls();
@@ -45,8 +45,6 @@ document.querySelectorAll('.navlink').forEach(a => {
   });
 });
 
-// Now Playing 
-
 async function fetchNowPlaying() {
   try {
     const res = await fetch("https://api.live365.com/station/a50378");
@@ -67,8 +65,6 @@ async function fetchNowPlaying() {
 // fetch immediately + refresh every 20s
 fetchNowPlaying();
 setInterval(fetchNowPlaying, 20000);
-
-
 // Who's Listening (auto from CSV)
 async function fetchWhoListening() {
   try {
@@ -122,25 +118,3 @@ window.addEventListener('pagehide', () => {
   audio.pause();
   if (playBtn) playBtn.textContent = 'Play';
 });
-
-
-// WSR Info (placeholder until XR API/server integration)
-function loadWSRInfo() {
-  const xrTopEl = document.getElementById('xrTop');
-  const xrStatsEl = document.getElementById('xrStats');
-
-  if (xrTopEl && xrStatsEl) {
-    // Example info – replace with real API values if available
-    xrTopEl.innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
-    xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
-  }
-}
-
-// Load once at startup
-loadWSRInfo();
-
-
-
-
-
-
