@@ -48,7 +48,7 @@ document.querySelectorAll('.navlink').forEach(a => {
  // Now Playing functionality
 class NowPlayingWidget {
     constructor() {
-        this.apiUrl = "https://console.live365.com/api/v1/insights/realtime-sessions?page=1&per_page=30";
+        this.apiUrl = "https://api.live365.com/station/Wildstyleradio-a50378";
         this.updateInterval = 30000; // 30 seconds
         this.intervalId = null;
         this.isLoading = false;
