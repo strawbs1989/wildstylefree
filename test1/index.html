@@ -45,16 +45,22 @@
   <main class="container">
     <section class="content">
       <!-- Now Playing -->
-    <div class="card" id="nowPlaying">
-        <h3>Now Playing</h3>
-        <div id="now-playing-box">
-            <img id="np-art" src="placeholder.png" alt="Album Art">
-            <div id="np-text">
-                <div id="np-title">Loading...</div>
-                <div id="np-artist"></div>
-            </div>
-        </div>
+    <div class="card now-playing">
+  <h4>Now Playing</h4>
+  <div id="nowPlaying">
+    <img id="npArt" src="/test1/placeholder.png" alt="Album Art" style="width:100px; height:100px; border-radius:8px;">
+    <div>
+      <div id="npTitle" style="font-weight:bold;">Loading…</div>
+      <div id="npArtist" style="color:var(--muted);">Please wait</div>
     </div>
+  </div>
+
+  <!-- Simple custom player -->
+  <audio id="wsrPlayer" controls>
+    <source src="https://streaming.live365.com/a50378" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</div>
      
       <!-- Unsigned Artist Showcase -->
       <div class="card" id="showcase">

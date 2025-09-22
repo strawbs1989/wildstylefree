@@ -48,7 +48,7 @@ document.querySelectorAll('.navlink').forEach(a => {
  // Now Playing functionality
 class NowPlayingWidget {
     constructor() {
-        this.apiUrl = "https://api.live365.com/station/a50378";
+        this.apiUrl = "https://api.live365.com/station/Wildstyleradio-a50378";
         this.updateInterval = 30000; // 30 seconds
         this.intervalId = null;
         this.isLoading = false;
@@ -248,6 +248,29 @@ function loadWSRInfo() {
 
 // Load once at startup
 loadWSRInfo();
+
+// playing 
+
+async function fetchNowPlaying() {
+  try {
+    const res = await fetch("https://api.live365.com/station/a50378");
+    const data = await res.json();
+
+    if (data && data.currentTrack) {
+      document.getElementById("npTitle").textContent = data.currentTrack.title || "Unknown Title";
+      document.getElementById("npArtist").textContent = data.currentTrack.artist || "Unknown Artist";
+
+      const art = data.currentTrack.art || "/test1/placeholder.png";
+      document.getElementById("npArt").src = art;
+    }
+  } catch (err) {
+    console.error("Now Playing fetch error:", err);
+  }
+}
+
+// fetch immediately + refresh every 20s
+fetchNowPlaying();
+setInterval(fetchNowPlaying, 20000);
 
 
 
