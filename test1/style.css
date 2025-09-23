@@ -155,15 +155,20 @@ card {
 }
 
 .gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
 }
 
 .gallery-item {
-  flex: 1 1 calc(25% - 15px); /* 4 per row on desktop */
-  box-sizing: border-box;
-  text-align: center; /* centers all text and links inside */
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .gallery-item img {
@@ -175,18 +180,26 @@ card {
 .desc {
   margin-top: 6px;
   font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+.gallery-item h3 {
+  margin: 4px 0;
+  font-size: 13px;
+  font-weight: normal;
   color: var(--muted);
 }
 
 .dj-link {
   display: inline-block;
-  margin-top: 6px;
+  margin-top: 8px;
   padding: 6px 12px;
   background: var(--accent);
   color: #fff;
-  text-decoration: none;
   border-radius: 6px;
   font-size: 14px;
+  text-decoration: none;
   transition: background 0.2s ease;
 }
 
