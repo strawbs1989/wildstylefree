@@ -11,32 +11,42 @@ function initPlayer() {
     hls.attachMedia(audio);
 
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      console.log('HLS manifest loaded, player ready');
-      playBtn.disabled = false; // enable button
+      console.log('✅ HLS manifest loaded');
+      playBtn.disabled = false;
+      playBtn.textContent = 'Play';
+    });
+
+    hls.on(Hls.Events.ERROR, (event, data) => {
+      console.error('HLS error:', data);
+      playBtn.textContent = 'Stream Error';
+      playBtn.disabled = true;
     });
   } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-    // Native HLS (Safari, iOS)
-    audio.src = streamUrl;
+    audio.src = streamUrl; // Safari native HLS
     playBtn.disabled = false;
   } else {
-    // Fallback MP3
-    audio.src = 'https://streaming.live365.com/a50378';
+    audio.src = 'https://streaming.live365.com/a50378'; // MP3 fallback
     playBtn.disabled = false;
   }
 }
 initPlayer();
 
 // Play/Pause toggle
-playBtn.addEventListener('click', () => {
-  if (audio.paused) {
-    audio.play().then(() => {
+playBtn.addEventListener('click', async () => {
+  try {
+    if (audio.paused) {
+      await audio.play();
       playBtn.textContent = 'Pause';
-    }).catch(e => console.warn('play failed', e));
-  } else {
-    audio.pause();
-    playBtn.textContent = 'Play';
+    } else {
+      audio.pause();
+      playBtn.textContent = 'Play';
+    }
+  } catch (e) {
+    console.error('Play failed:', e);
+    playBtn.textContent = 'Error';
   }
 });
+
 
 
 // Nav links active state
