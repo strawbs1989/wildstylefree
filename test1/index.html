@@ -30,12 +30,30 @@
 
         <!-- Song Requests -->
         <div id="request-box" class="request-container card" style="padding:8px 12px;">
-          <h3 style="margin:0;font-size:16px;">🎵 Song Requests</h3>
-          <button id="request-btn" disabled>Loading...</button>
-          <p id="request-status" style="margin:4px 0 0;font-size:13px;"></p>
-        </div>
-      </div>
-    </div>
+  <h3 style="margin:0;font-size:16px;">🎵 Song Requests</h3>
+  <p id="request-status" style="margin:4px 0 8px;font-size:13px;">Checking schedule...</p>
+
+  <!-- Formspree Form -->
+  <form id="requestForm" action="https://formspree.io/f/xzzjblby" method="POST" style="display:none;">
+    <label for="dj_name" style="font-size:13px;">DJ Name You Wish The Request To Go To:</label><br>
+    <input type="text" id="dj_name" name="dj_name" required><br><br>
+
+    <label for="your_name" style="font-size:13px;">Your Name:</label><br>
+    <input type="text" id="your_name" name="your_name" required><br><br>
+
+    <label for="shoutout" style="font-size:13px;">Your Shout-Out Request:</label><br>
+    <input type="text" id="shoutout" name="shoutout" size="50" required><br><br>
+
+    <input type="submit" value="Send">
+    <input type="reset" value="Reset">
+  </form>
+
+  <!-- Success Message -->
+  <div id="success" style="display:none;margin-top:8px;font-size:13px;color:green;">
+    ✅ Request sent! Thank you for your shout-out.
+  </div>
+</div>
+
   </header>
 
   <nav class="mainnav">
