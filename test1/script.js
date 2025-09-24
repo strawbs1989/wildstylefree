@@ -137,7 +137,7 @@ loadWSRInfo();
 
 // Define live shows
 const liveShows = [
-  { day: "Thursday", start: "19:00", end: "20:00" },
+  { day: "Wednesday", start: "15:00", end: "17:00" },
   { day: "Sunday", start: "20:00", end: "21:00" },
 ];
 
