@@ -1,41 +1,42 @@
 // Basic player logic with HLS support
 const audio = document.getElementById('player');
+  const playBtn = document.getElementById('playPause');
 
-function initPlayer() {
-  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
+  function initPlayer() {
+    const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
 
-  if (window.Hls && Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(streamUrl);
-    hls.attachMedia(audio);
-  } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-    audio.src = streamUrl; // native HLS
-  } else {
-    audio.src = 'https://streaming.live365.com/a50378'; // fallback MP3
+    if (window.Hls && Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(streamUrl);
+      hls.attachMedia(audio);
+
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        console.log('HLS manifest loaded, player ready');
+        playBtn.disabled = false; // enable button once ready
+      });
+    } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+      // Native HLS (Safari, iOS)
+      audio.src = streamUrl;
+      playBtn.disabled = false;
+    } else {
+      // Fallback to MP3 stream
+      audio.src = 'https://streaming.live365.com/a50378';
+      playBtn.disabled = false;
+    }
   }
-}
-initPlayer();
+  initPlayer();
 
-const playBtn = document.getElementById('playPause');
-if (playBtn) {
+  // Play/Pause toggle
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
-      audio.play().catch(e => console.warn('play failed', e));
-      playBtn.textContent = 'Pause';
+      audio.play().then(() => {
+        playBtn.textContent = 'Pause';
+      }).catch(e => console.warn('play failed', e));
     } else {
       audio.pause();
       playBtn.textContent = 'Play';
     }
   });
-}
-
-const openBtn = document.getElementById('openPlayer');
-if (openBtn) {
-  openBtn.addEventListener('click', () => {
-    audio.paused ? audio.play() : audio.pause();
-    if (playBtn) playBtn.textContent = audio.paused ? 'Play' : 'Pause';
-  });
-}
 
 // Nav links active state
 document.querySelectorAll('.navlink').forEach(a => {
