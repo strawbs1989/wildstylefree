@@ -24,11 +24,14 @@
       </div>
 
        <!-- Controls (Play + Requests side by side) -->
-      <div class="controls" style="display:flex;gap:16px;align-items:center;">
-        <!-- Play Button -->
-        <button id="playPause" class="btn">Play</button>
+<div class="controls" style="display:flex;gap:16px;align-items:center;">
+  <!-- Hidden audio element -->
+  <audio id="player" preload="none"></audio>
 
-<!-- Your player logic -->
+  <!-- Play Button -->
+  <button id="playPause" class="btn" disabled>Play</button>
+
+
         <!-- Song Requests -->
         <div id="request-box" class="request-container card" style="padding:8px 12px;">
 		<button id="request-btn" disabled>Loading...</button>
