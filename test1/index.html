@@ -23,13 +23,19 @@
         </div>
       </div>
 
-       <!-- Controls -->
-<div class="controls" style="display:flex;gap:16px;align-items:center;">
-  <!-- Audio element -->
-  <audio id="player" preload="none"></audio>
+       <audio id="myAudio">
+   <source src="https://streaming.live365.com/a50378">
+   Unfortunately your browser doesn't support html5 audio streaming, please update your browser.
+</audio>
 
-  <!-- Play Button -->
-  <button id="playPause" class="btn" disabled>Loading...</button>
+<button id="control" class="control" onclick="audioControl()">
+   <div id="playdiv" style="display:block">
+      <img src="https://wildstyle.vip/test1/images/play.png" width="96" height="96" alt="Play"/>
+   </div>
+   <div id="pausediv" style="display:none">
+      <img src="https://wildstyle.vip/test1/images/pause.png" width="96" height="96" alt="Pause"/>
+   </div>
+</button>
 
 
         <!-- Song Requests -->
