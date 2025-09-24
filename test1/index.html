@@ -23,21 +23,33 @@
         </div>
       </div>
 
-       <audio id="myAudio">
-   <source src="https://streaming.live365.com/a50378">
-   Unfortunately your browser doesn't support html5 audio streaming, please update your browser.
-</audio>
-
-<div style="text-align:right;">
-  <button id="control" class="control" onclick="audioControl()" style="background:none;border:none;cursor:pointer;">
+       <!-- Controls Row (Play + Request side by side) -->
+<div class="controls-bar">
+  <!-- Play/Pause icon button -->
+  <button id="control" class="control" onclick="audioControl()">
     <div id="playdiv" style="display:block">
-      <img src="https://wildstyle.vip/test1/images/play.png" width="96" height="96" alt="Play"/>
+      <img src="/test1/images/play.png" width="48" height="48" alt="Play"/>
     </div>
     <div id="pausediv" style="display:none">
-      <img src="https://wildstyle.vip/test1/images/pause.png" width="96" height="96" alt="Pause"/>
+      <img src="/test1/images/pause.png" width="48" height="48" alt="Pause"/>
     </div>
   </button>
+
+  <!-- Requests button -->
+  <a href="mailto:requests@wildstyle.vip" class="btn">🎵 Request</a>
 </div>
+
+<!-- Listen box (sidebar) -->
+<aside class="sidebar">
+  <div class="card sidebar-section">
+    <h4>Listen</h4>
+    <audio id="myAudio" preload="none"></audio>
+    <div style="margin-top:8px;color:var(--muted)">
+      Stream: HLS
+    </div>
+  </div>
+</aside>
+
 
 
         <!-- Song Requests -->
