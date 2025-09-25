@@ -23,16 +23,20 @@
     </div>
 
     <!-- Controls (right side) -->
-    <div class="controls-bar">
-      <!-- Play/Pause icon button -->
-      <button id="control" class="control" onclick="audioControl()">
-        <div id="playdiv" style="display:block">
-          <img src="/test1/images/play.png" width="36" height="36" alt="Play"/>
-        </div>
-        <div id="pausediv" style="display:none">
-          <img src="/test1/images/pause.png" width="36" height="36" alt="Pause"/>
-        </div>
-      </button>
+<div class="controls-bar">
+  <!-- Play/Pause icon button -->
+  <button id="control" class="control" onclick="audioControl()">
+    <div id="playdiv" style="display:block">
+      <img src="/test1/images/play.png" width="36" height="36" alt="Play"/>
+    </div>
+    <div id="pausediv" style="display:none">
+      <img src="/test1/images/pause.png" width="36" height="36" alt="Pause"/>
+    </div>
+  </button>
+
+  <!-- Hidden audio element (this is required) -->
+  <audio id="myAudio" preload="none"></audio>
+</div>
 
       <!-- Requests -->
       <div id="request-box" class="request-container card" style="padding:8px 12px;">
