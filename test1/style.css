@@ -240,12 +240,22 @@ card {
   color: #000;
 }
 
+.topbar {
+  display: flex;
+  justify-content: space-between; /* logo left, controls right */
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
 .controls-bar {
   display: flex;
-  justify-content: flex-end; /* align to the right */
-  gap: 12px;
-  margin-bottom: 10px;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto; /* push to the far right */
 }
+
 
 .controls-bar .btn {
   background: var(--accent);
