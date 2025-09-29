@@ -1,18 +1,39 @@
 // Basic player logic with HLS support
-function audioControl() {
-    var playdiv = document.getElementById('playdiv');
-    var pausediv = document.getElementById('pausediv');
-    var myAudio = document.getElementById('myAudio');
-    if (myAudio.paused) {
-    myAudio.play();
-    pausediv.style.display = 'block';
-    playdiv.style.display = 'none';
-    } else {
-    myAudio.pause();
-    pausediv.style.display = 'none';
-    playdiv.style.display = 'block';
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  const myAudio = document.getElementById('myAudio');
+  const playdiv = document.getElementById('playdiv');
+  const pausediv = document.getElementById('pausediv');
+  const controlBtn = document.getElementById('control');
+  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
+
+  // Attach HLS
+  if (window.Hls && Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(streamUrl);
+    hls.attachMedia(myAudio);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      console.log('✅ HLS manifest loaded');
+    });
+  } else if (myAudio.canPlayType('application/vnd.apple.mpegurl')) {
+    myAudio.src = streamUrl;
+  } else {
+    myAudio.src = 'https://streaming.live365.com/a50378';
   }
+
+  // Play/Pause
+  controlBtn.addEventListener('click', () => {
+    if (myAudio.paused) {
+      myAudio.play().then(() => {
+        playdiv.style.display = 'none';
+        pausediv.style.display = 'block';
+      }).catch(e => console.error('❌ Play failed:', e));
+    } else {
+      myAudio.pause();
+      playdiv.style.display = 'block';
+      pausediv.style.display = 'none';
+    }
+  });
+});
 
 
 
