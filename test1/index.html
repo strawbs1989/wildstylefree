@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="/test1/style.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script defer src="/test1/script.js"></script>
-  <script src="/test1/request.js"></script>
-  <script src="/test1/listening.js"></script>
+  <!-- keep your other scripts if you need them -->
+  <!-- <script src="/test1/request.js"></script>
+  <script src="/test1/listening.js"></script> -->
 </head>
 <body>
 <header>
@@ -26,26 +27,25 @@
 
     <!-- Right side: Audio + Requests -->
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px;">
-      <!-- Audio player -->
-      <audio id="myAudio" preload="none"></audio>
+      <!-- Single audio element controlled everywhere -->
+      <audio id="myAudio" preload="none" crossorigin="anonymous"></audio>
 
-      <!-- Play/Pause -->
+      <!-- Play/Pause (icon swap) -->
       <button id="control" class="control" style="background:none;border:none;cursor:pointer;">
         <div id="playdiv" style="display:block">
-          <img src="https://wildstyle.vip/test1/images/play.png" width="48" height="48" alt="Play"/>
+          <img src="https://wildstyle.vip/test1/images/play.png" width="48" height="48" alt="Play">
         </div>
         <div id="pausediv" style="display:none">
-          <img src="https://wildstyle.vip/test1/images/pause.png" width="48" height="48" alt="Pause"/>
+          <img src="https://wildstyle.vip/test1/images/pause.png" width="48" height="48" alt="Pause">
         </div>
       </button>
 
-      <!-- Song Requests -->
+      <!-- Song Requests (always visible; status text changes) -->
       <div id="request-box" class="request-container card" style="padding:8px 12px;max-width:260px;">
         <h3 style="margin:0;font-size:16px;">🎵 Song Requests</h3>
-        <p id="request-status" style="margin:4px 0 8px;font-size:13px;">Checking schedule...</p>
+        <p id="request-status" style="margin:4px 0 8px;font-size:13px;">Checking schedule…</p>
 
-        <!-- Formspree Form -->
-        <form id="requestForm" action="https://formspree.io/f/xzzjblby" method="POST" style="display:none;">
+        <form id="requestForm" action="https://formspree.io/f/xzzjblby" method="POST">
           <label for="dj_name" style="font-size:13px;">DJ Name:</label><br>
           <input type="text" id="dj_name" name="dj_name" required><br><br>
 
@@ -59,7 +59,6 @@
           <input type="reset" value="Reset">
         </form>
 
-        <!-- Success Message -->
         <div id="success" style="display:none;margin-top:8px;font-size:13px;color:green;">
           ✅ Request sent! Thank you for your shout-out.
         </div>
@@ -71,14 +70,11 @@
 <!-- Navigation -->
 <nav class="mainnav">
   <div class="container">
-    <!-- Desktop Links -->
     <div class="nav-links">
       <a href="index.html" class="navlink active">Home</a>
       <a href="schedule.html" class="navlink">Schedule</a>
       <a href="djs.html" class="navlink">DJs</a>
     </div>
-
-    <!-- Hamburger (mobile only) -->
     <button id="menuToggle" class="hamburger" aria-label="Toggle Menu">☰</button>
   </div>
 </nav>
@@ -102,9 +98,7 @@
     <!-- Unsigned Artist Showcase -->
     <div class="card" id="showcase">
       <h3>Unsigned Artist Showcase</h3>
-      <p style="color:var(--muted)">
-        Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip
-      </p>
+      <p style="color:var(--muted)">Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip</p>
       <div class="showcase-grid">
         <img src="/test1/unsigned/tristan.jpg" alt="artist 1">
         <img src="/test1/unsigned/pete.jpg" alt="artist 2">
@@ -130,13 +124,19 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
+    <!-- Listen (uses same #myAudio via Open Player button) -->
+    <div class="card sidebar-section">
+      <h4>Listen</h4>
+      <div style="margin-top:8px;color:var(--muted)">
+        Stream: HLS • <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
+      </div>
+    </div>
+
     <!-- Donate -->
     <div class="card sidebar-section">
       <h4>Support Wildstyle Radio</h4>
-      <p style="color:var(--muted); font-size:14px;">
-        Help us keep the music going by donating via PayPal:
-      </p>
-      <a href="https://www.paypal.com/donate/?hosted_button_id=3H7L8BG32ELLS" 
+      <p style="color:var(--muted); font-size:14px;">Help us keep the music going by donating via PayPal:</p>
+      <a href="https://www.paypal.com/donate/?hosted_button_id=3H7L8BG32ELLS"
          target="_blank" class="btn"
          style="display:inline-block; text-align:center; padding:10px 16px; font-weight:600;">
         🎵 Donate with PayPal
