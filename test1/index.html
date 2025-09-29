@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -12,160 +12,82 @@
 </head>
 <body>
   <header>
-  <div class="topbar">
-    <!-- Brand -->
-    <div class="brand">
-      <img src="/test1/placeholder.png" alt="logo">
-      <div>
-        <h1>Wildstyle Radio</h1>
-        <div style="font-size:12px;color:var(--muted)">United by beats • Powered by passion</div>
+    <div class="topbar">
+      <!-- Brand -->
+      <div class="brand">
+        <img src="/test1/placeholder.png" alt="logo">
+        <div>
+          <h1>Wildstyle Radio</h1>
+          <div style="font-size:12px;color:var(--muted)">
+            United by beats • Powered by passion
+          </div>
+        </div>
       </div>
-    </div>
 
-       <audio id="myAudio">
-   <source src="https://streaming.live365.com/a50378">
-   Unfortunately your browser doesn't support html5 audio streaming, please update your browser.
-</audio>
+      <!-- Audio player -->
+      <audio id="myAudio" preload="none"></audio>
 
-<div style="text-align:right;">
-  <button id="control" class="control" onclick="audioControl()" style="background:none;border:none;cursor:pointer;">
-    <div id="playdiv" style="display:block">
-      <img src="https://wildstyle.vip/test1/images/play.png" width="96" height="96" alt="Play"/>
-    </div>
-    <div id="pausediv" style="display:none">
-      <img src="https://wildstyle.vip/test1/images/pause.png" width="96" height="96" alt="Pause"/>
-    </div>
-  </button>
-</div>
-
+      <!-- Controls + Song Requests (right side) -->
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+        <!-- Play/Pause -->
+        <button id="control" class="control" style="background:none;border:none;cursor:pointer;">
+          <div id="playdiv" style="display:block">
+            <img src="https://wildstyle.vip/test1/images/play.png" width="48" height="48" alt="Play"/>
+          </div>
+          <div id="pausediv" style="display:none">
+            <img src="https://wildstyle.vip/test1/images/pause.png" width="48" height="48" alt="Pause"/>
+          </div>
+        </button>
 
         <!-- Song Requests -->
-        <div id="request-box" class="request-container card" style="padding:8px 12px;">
-		<button id="request-btn" disabled>Loading...</button>
-          <p id="request-status" style="margin:4px 0 0;font-size:13px;"></p>
-  <h3 style="margin:0;font-size:16px;">🎵 Song Requests</h3>
-  <p id="request-status" style="margin:4px 0 8px;font-size:13px;">Checking schedule...</p>
+        <div id="request-box" class="request-container card" style="padding:8px 12px;max-width:250px;">
+          <h3 style="margin:0;font-size:16px;">🎵 Song Requests</h3>
+          <p id="request-status" style="margin:4px 0 8px;font-size:13px;">Checking schedule...</p>
+          <!-- Formspree Form -->
+          <form id="requestForm" action="https://formspree.io/f/xzzjblby" method="POST" style="display:none;">
+            <label for="dj_name" style="font-size:13px;">DJ Name:</label><br>
+            <input type="text" id="dj_name" name="dj_name" required><br><br>
 
-  <!-- Formspree Form -->
-  <form id="requestForm" action="https://formspree.io/f/xzzjblby" method="POST" style="display:none;">
-    <label for="dj_name" style="font-size:13px;">DJ Name You Wish The Request To Go To:</label><br>
-    <input type="text" id="dj_name" name="dj_name" required><br><br>
+            <label for="your_name" style="font-size:13px;">Your Name:</label><br>
+            <input type="text" id="your_name" name="your_name" required><br><br>
 
-    <label for="your_name" style="font-size:13px;">Your Name:</label><br>
-    <input type="text" id="your_name" name="your_name" required><br><br>
+            <label for="shoutout" style="font-size:13px;">Your Shout-Out:</label><br>
+            <input type="text" id="shoutout" name="shoutout" size="40" required><br><br>
 
-    <label for="shoutout" style="font-size:13px;">Your Shout-Out Request:</label><br>
-    <input type="text" id="shoutout" name="shoutout" size="50" required><br><br>
+            <input type="submit" value="Send">
+            <input type="reset" value="Reset">
+          </form>
 
-    <input type="submit" value="Send">
-    <input type="reset" value="Reset">
-  </form>
-
-  <!-- Success Message -->
-  <div id="success" style="display:none;margin-top:8px;font-size:13px;color:green;">
-    ✅ Request sent! Thank you for your shout-out.
-  </div>
-
-    <!-- Controls -->
-<div class="controls-bar" style="display:flex;gap:12px;align-items:center;">
-  <button id="control" style="background:none;border:none;cursor:pointer;">
-    <div id="playdiv" style="display:block">
-      <img src="/test1/images/play.png" width="36" height="36" alt="Play"/>
-    </div>
-    <div id="pausediv" style="display:none">
-      <img src="/test1/images/pause.png" width="36" height="36" alt="Pause"/>
-    </div>
-  </button>
-  <audio id="myAudio" preload="none"></audio>
-
-</div>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const myAudio = document.getElementById('myAudio');
-  const playdiv = document.getElementById('playdiv');
-  const pausediv = document.getElementById('pausediv');
-  const controlBtn = document.getElementById('control');
-  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
-
-  // Attach HLS
-  if (window.Hls && Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(streamUrl);
-    hls.attachMedia(myAudio);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      console.log('✅ HLS manifest loaded');
-    });
-  } else if (myAudio.canPlayType('application/vnd.apple.mpegurl')) {
-    myAudio.src = streamUrl;
-  } else {
-    myAudio.src = 'https://streaming.live365.com/a50378';
-  }
-
-  // Play/Pause
-  controlBtn.addEventListener('click', () => {
-    if (myAudio.paused) {
-      myAudio.play().then(() => {
-        playdiv.style.display = 'none';
-        pausediv.style.display = 'block';
-      }).catch(e => console.error('❌ Play failed:', e));
-    } else {
-      myAudio.pause();
-      playdiv.style.display = 'block';
-      pausediv.style.display = 'none';
-    }
-  });
-});
-</script>
-	  
-
-
-      <!-- Requests -->
-      <div id="request-box" class="request-container card" style="padding:8px 12px;">
-        <h3 style="margin:0;font-size:16px;">🎵 Song Requests</h3>
-        <button id="request-btn" disabled>Loading...</button>
-        <p id="request-status" style="margin:4px 0 8px;font-size:13px;">Checking schedule...</p>
-
-        
-        <!-- Formspree Form -->
-        <form id="requestForm" action="https://formspree.io/f/xzzjblby" method="POST" style="display:none;">
-          <label for="dj_name" style="font-size:13px;">DJ Name You Wish The Request To Go To:</label><br>
-          <input type="text" id="dj_name" name="dj_name" required><br><br>
-
-          <label for="your_name" style="font-size:13px;">Your Name:</label><br>
-          <input type="text" id="your_name" name="your_name" required><br><br>
-
-          <label for="shoutout" style="font-size:13px;">Your Shout-Out Request:</label><br>
-          <input type="text" id="shoutout" name="shoutout" size="50" required><br><br>
-
-          <input type="submit" value="Send">
-          <input type="reset" value="Reset">
-        </form>
+          <!-- Success Message -->
+          <div id="success" style="display:none;margin-top:8px;font-size:13px;color:green;">
+            ✅ Request sent! Thank you for your shout-out.
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
+  <!-- Navigation -->
   <nav class="mainnav">
-  <div class="container">
-    <!-- Desktop Links -->
-    <div class="nav-links">
-      <a href="index.html" class="navlink active">Home</a>
-      <a href="schedule.html" class="navlink">Schedule</a>
-      <a href="djs.html" class="navlink">DJs</a>
+    <div class="container">
+      <!-- Desktop Links -->
+      <div class="nav-links">
+        <a href="index.html" class="navlink active">Home</a>
+        <a href="schedule.html" class="navlink">Schedule</a>
+        <a href="djs.html" class="navlink">DJs</a>
+      </div>
+
+      <!-- Hamburger (mobile only) -->
+      <button id="menuToggle" class="hamburger" aria-label="Toggle Menu">☰</button>
     </div>
+  </nav>
 
-    <!-- Hamburger (visible only on mobile) -->
-    <button id="menuToggle" class="hamburger" aria-label="Toggle Menu">☰</button>
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-nav">
+    <a href="index.html" class="navlink">Home</a>
+    <a href="schedule.html" class="navlink">Schedule</a>
+    <a href="djs.html" class="navlink">DJs</a>
   </div>
-</nav>
-
-<!-- Mobile Menu -->
-<div id="mobileMenu" class="mobile-nav">
-  <a href="index.html" class="navlink">Home</a>
-  <a href="schedule.html" class="navlink">Schedule</a>
-  <a href="djs.html" class="navlink">DJs</a>
-</div>
-
 
   <main class="container">
     <section class="content">
@@ -178,9 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- Unsigned Artist Showcase -->
       <div class="card" id="showcase">
         <h3>Unsigned Artist Showcase</h3>
-        <p style="color:var(--muted)">
-          Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip
-        </p>
+        <p style="color:var(--muted)">Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip</p>
         <div class="showcase-grid">
           <img src="/test1/unsigned/tristan.jpg" alt="artist 1">
           <img src="/test1/unsigned/pete.jpg" alt="artist 2">
@@ -197,8 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div>
             <h4>Resident DJs</h4>
             <p style="color:var(--muted)">
-              Professional DJ profiles. Visit the
-              <a href="djs.html">DJs page</a> for full roster.
+              Professional DJ profiles. Visit the <a href="djs.html">DJs page</a> for full roster.
             </p>
           </div>
         </div>
@@ -211,26 +130,18 @@ document.addEventListener("DOMContentLoaded", () => {
         <h4>Listen</h4>
         <audio id="player" preload="none"></audio>
         <div style="margin-top:8px;color:var(--muted)">
-          Stream: HLS • 
-          <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
+          Stream: HLS • <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
         </div>
       </div>
-	  
-	  <!-- Donate -->
-<aside class="sidebar">
-  <div class="card sidebar-section">
-    <h4>Support Wildstyle Radio</h4>
-    <p style="color:var(--muted); font-size:14px;">
-      Help us keep the music going by donating via PayPal:
-    </p>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=3H7L8BG32ELLS" 
-       target="_blank" 
-       class="btn" 
-       style="display:inline-block; text-align:center; padding:10px 16px; font-weight:600;">
-      🎵 Donate with PayPal
-    </a>
-  </div>
-</aside>
+
+      <!-- Donate -->
+      <div class="card sidebar-section">
+        <h4>Support Wildstyle Radio</h4>
+        <p style="color:var(--muted); font-size:14px;">Help us keep the music going by donating via PayPal:</p>
+        <a href="https://www.paypal.com/donate/?hosted_button_id=3H7L8BG32ELLS" target="_blank" class="btn" style="display:inline-block; text-align:center; padding:10px 16px; font-weight:600;">
+          🎵 Donate with PayPal
+        </a>
+      </div>
 
       <!-- Who's Listening -->
       <div class="card sidebar-section">
