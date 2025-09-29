@@ -100,9 +100,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <nav class="mainnav">
     <div class="container">
-      <a href="index.html" class="navlink active">Home</a>
-      <a href="schedule.html" class="navlink">Schedule</a>
-      <a href="djs.html" class="navlink">DJs</a>
+      <!-- Hamburger Toggle -->
+<button id="menuToggle" class="hamburger" aria-label="Toggle Menu">
+  ☰
+</button>
+
+<!-- Mobile Menu -->
+<nav id="mobileMenu" class="mobile-nav">
+  <a href="index.html">Home</a>
+  <a href="schedule.html">Schedule</a>
+  <a href="djs.html">DJs</a>
+</nav>
     </div>
   </nav>
 
