@@ -165,56 +165,70 @@ function loadWSRInfo() {
 }
 loadWSRInfo();
 
-// ========= Song Requests logic =========
-// Always show the form so users can send; status tells if live or off-air
+// ===== SONG REQUEST OPEN/CLOSE SYSTEM =====
+
+// Define live shows
 const liveShows = [
-  { day: "Wednesday", start: "15:00", end: "17:00" },
-  { day: "Sunday",    start: "20:00", end: "21:00" },
+  { day: "Thursday", start: "19:00", end: "20:00" },
+  { day: "Sunday", start: "20:00", end: "21:00" },
 ];
 
+// Check if a show is live
 function isLiveNow() {
   const now = new Date();
   const dayName = now.toLocaleDateString("en-GB", { weekday: "long" });
-  const current = now.toTimeString().slice(0,5);
-  return liveShows.some(s => s.day === dayName && current >= s.start && current < s.end);
+  const currentTime = now.toTimeString().slice(0, 5); // HH:MM
+
+  return liveShows.some(show =>
+    show.day === dayName && currentTime >= show.start && currentTime < show.end
+  );
 }
 
+// Update request form visibility
 function updateRequestStatus() {
+  const form = document.getElementById("requestForm");
   const status = document.getElementById("request-status");
-  const form   = document.getElementById("requestForm");
-  if (!status || !form) return;
 
-  // Keep the form visible, change the message only
+  if (!form || !status) return;
+
   if (isLiveNow()) {
+    form.style.display = "block";
     status.textContent = "✅ Requests are OPEN — your DJ is live!";
   } else {
-    status.textContent = "ℹ️ Off-air: your request will be queued for the next live show.";
+    form.style.display = "none";
+    status.textContent = "❌ Requests are CLOSED — please come back during a live show.";
   }
 }
-updateRequestStatus();
+
+// Run check every 30s
 setInterval(updateRequestStatus, 30000);
+window.addEventListener("load", updateRequestStatus);
 
-// Formspree submit
+// Handle Formspree submission
 document.addEventListener("DOMContentLoaded", () => {
-  const form    = document.getElementById("requestForm");
+  const form = document.getElementById("requestForm");
   const success = document.getElementById("success");
-  if (!form) return;
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    fetch(form.action, {
-      method: "POST",
-      body: data,
-      headers: { Accept: "application/json" }
-    }).then(resp => {
-      if (resp.ok) {
-        form.reset();
-        if (success) success.style.display = "block";
-        setTimeout(() => { if (success) success.style.display = "none"; }, 4000);
-      } else {
-        alert("⚠️ There was an issue sending your request.");
-      }
-    }).catch(() => alert("⚠️ Network error. Try again later."));
-  });
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" }
+      }).then(response => {
+        if (response.ok) {
+          form.reset();
+          form.style.display = "none";
+          success.style.display = "block";
+        } else {
+          alert("⚠️ There was an issue sending your request.");
+        }
+      }).catch(() => {
+        alert("⚠️ Network error. Try again later.");
+      });
+    });
+  }
 });
