@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
 // Nav links active state
 document.querySelectorAll('.navlink').forEach(a => {
   a.addEventListener('click', () => {
