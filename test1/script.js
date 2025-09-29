@@ -1,4 +1,6 @@
+// ======================
 // Basic player logic with HLS support
+// ======================
 document.addEventListener("DOMContentLoaded", () => {
   const myAudio = document.getElementById('myAudio');
   const playdiv = document.getElementById('playdiv');
@@ -35,8 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
+// ======================
 // Nav links active state
+// ======================
 document.querySelectorAll('.navlink').forEach(a => {
   a.addEventListener('click', () => {
     document.querySelectorAll('.navlink').forEach(x => x.classList.remove('active'));
@@ -44,7 +47,9 @@ document.querySelectorAll('.navlink').forEach(a => {
   });
 });
 
+// ======================
 // Now Playing (Live365 API)
+// ======================
 async function fetchNowPlaying() {
   try {
     const res = await fetch("https://api.live365.com/station/a50378");
@@ -63,7 +68,9 @@ async function fetchNowPlaying() {
 fetchNowPlaying();
 setInterval(fetchNowPlaying, 20000);
 
+// ======================
 // Who's Listening (auto from CSV)
+// ======================
 async function fetchWhoListening() {
   try {
     const res = await fetch("/test1/real_time_sessions.csv");
@@ -110,48 +117,47 @@ async function fetchWhoListening() {
 fetchWhoListening();
 setInterval(fetchWhoListening, 60000);
 
-// Accessibility: stop audio when navigating away
+// ======================
+// Stop audio when leaving page
+// ======================
 window.addEventListener('pagehide', () => {
-  audio.pause();
-  if (playBtn) playBtn.textContent = 'Play';
+  const myAudio = document.getElementById('myAudio');
+  if (myAudio && !myAudio.paused) {
+    myAudio.pause();
+  }
 });
 
-
-// WSR Info (placeholder until XR API/server integration)
+// ======================
+// WSR Info placeholder
+// ======================
 function loadWSRInfo() {
   const xrTopEl = document.getElementById('xrTop');
   const xrStatsEl = document.getElementById('xrStats');
 
   if (xrTopEl && xrStatsEl) {
-    // Example info – replace with real API values if available
     xrTopEl.innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
     xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
   }
 }
-
-// Load once at startup
 loadWSRInfo();
 
-// ===== SONG REQUEST OPEN/CLOSE SYSTEM =====
-
-// Define live shows
+// ======================
+// SONG REQUEST SYSTEM
+// ======================
 const liveShows = [
   { day: "Wednesday", start: "15:00", end: "17:00" },
   { day: "Sunday", start: "20:00", end: "21:00" },
 ];
 
-// Check if a show is live
 function isLiveNow() {
   const now = new Date();
   const dayName = now.toLocaleDateString("en-GB", { weekday: "long" });
   const currentTime = now.toTimeString().slice(0, 5); // HH:MM
-
   return liveShows.some(show =>
     show.day === dayName && currentTime >= show.start && currentTime < show.end
   );
 }
 
-// Update request form visibility
 function updateRequestStatus() {
   const form = document.getElementById("requestForm");
   const status = document.getElementById("request-status");
@@ -166,12 +172,12 @@ function updateRequestStatus() {
     status.textContent = "❌ Requests are CLOSED — please come back during a live show.";
   }
 }
-
-// Run check every 30s
 setInterval(updateRequestStatus, 30000);
 window.addEventListener("load", updateRequestStatus);
 
-// Handle Formspree submission
+// ======================
+// Formspree submission
+// ======================
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("requestForm");
   const success = document.getElementById("success");
@@ -189,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok) {
           form.reset();
           form.style.display = "none";
-          success.style.display = "block";
+          if (success) success.style.display = "block";
         } else {
           alert("⚠️ There was an issue sending your request.");
         }
@@ -200,12 +206,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// menubar
+// ======================
+// Mobile nav toggle
+// ======================
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("menuToggle");
   const menu = document.getElementById("mobileMenu");
 
-  toggle.addEventListener("click", () => {
-    menu.classList.toggle("show");
-  });
+  if (toggle && menu) {
+    toggle.addEventListener("click", () => {
+      menu.classList.toggle("show");
+    });
+  }
 });
