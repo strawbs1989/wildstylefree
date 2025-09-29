@@ -146,20 +146,26 @@ document.addEventListener("DOMContentLoaded", () => {
 </header>
 
   <nav class="mainnav">
-    <div class="container">
-      <!-- Hamburger Toggle -->
-<button id="menuToggle" class="hamburger" aria-label="Toggle Menu">
-  ☰
-</button>
+  <div class="container">
+    <!-- Desktop Links -->
+    <div class="nav-links">
+      <a href="index.html" class="navlink active">Home</a>
+      <a href="schedule.html" class="navlink">Schedule</a>
+      <a href="djs.html" class="navlink">DJs</a>
+    </div>
+
+    <!-- Hamburger (visible only on mobile) -->
+    <button id="menuToggle" class="hamburger" aria-label="Toggle Menu">☰</button>
+  </div>
+</nav>
 
 <!-- Mobile Menu -->
-<nav id="mobileMenu" class="mobile-nav">
-  <a href="index.html">Home</a>
-  <a href="schedule.html">Schedule</a>
-  <a href="djs.html">DJs</a>
-</nav>
-    </div>
-  </nav>
+<div id="mobileMenu" class="mobile-nav">
+  <a href="index.html" class="navlink">Home</a>
+  <a href="schedule.html" class="navlink">Schedule</a>
+  <a href="djs.html" class="navlink">DJs</a>
+</div>
+
 
   <main class="container">
     <section class="content">
