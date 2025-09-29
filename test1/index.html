@@ -1,4 +1,4 @@
-<!doctype html> 
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -11,7 +11,7 @@
   <script src="/test1/listening.js"></script>
 </head>
 <body>
-  <header>
+<header>
   <div class="topbar">
     <!-- Brand -->
     <div class="brand">
@@ -24,9 +24,8 @@
       </div>
     </div>
 
-    <!-- Right side controls -->
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
-      
+    <!-- Right side: Audio + Requests -->
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px;">
       <!-- Audio player -->
       <audio id="myAudio" preload="none"></audio>
 
@@ -41,7 +40,7 @@
       </button>
 
       <!-- Song Requests -->
-      <div id="request-box" class="request-container card" style="padding:8px 12px;max-width:250px;">
+      <div id="request-box" class="request-container card" style="padding:8px 12px;max-width:260px;">
         <h3 style="margin:0;font-size:16px;">🎵 Song Requests</h3>
         <p id="request-status" style="margin:4px 0 8px;font-size:13px;">Checking schedule...</p>
 
@@ -69,116 +68,112 @@
   </div>
 </header>
 
-  
-
-
-  <!-- Navigation -->
-  <nav class="mainnav">
-    <div class="container">
-      <!-- Desktop Links -->
-      <div class="nav-links">
-        <a href="index.html" class="navlink active">Home</a>
-        <a href="schedule.html" class="navlink">Schedule</a>
-        <a href="djs.html" class="navlink">DJs</a>
-      </div>
-
-      <!-- Hamburger (mobile only) -->
-      <button id="menuToggle" class="hamburger" aria-label="Toggle Menu">☰</button>
+<!-- Navigation -->
+<nav class="mainnav">
+  <div class="container">
+    <!-- Desktop Links -->
+    <div class="nav-links">
+      <a href="index.html" class="navlink active">Home</a>
+      <a href="schedule.html" class="navlink">Schedule</a>
+      <a href="djs.html" class="navlink">DJs</a>
     </div>
-  </nav>
 
-  <!-- Mobile Menu -->
-  <div id="mobileMenu" class="mobile-nav">
-    <a href="index.html" class="navlink">Home</a>
-    <a href="schedule.html" class="navlink">Schedule</a>
-    <a href="djs.html" class="navlink">DJs</a>
+    <!-- Hamburger (mobile only) -->
+    <button id="menuToggle" class="hamburger" aria-label="Toggle Menu">☰</button>
   </div>
+</nav>
 
-  <main class="container">
-    <section class="content">
-      <!-- Now Playing -->
-      <div class="card now-playing">
-        <h4>Now Playing</h4>
-        <iframe width="320" height="166" frameborder="0" scrolling="no" src="https://live365.com/embeds/v1/player/a50378?s=md&m=dark&c=mp3"></iframe>
-      </div>
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-nav">
+  <a href="index.html" class="navlink">Home</a>
+  <a href="schedule.html" class="navlink">Schedule</a>
+  <a href="djs.html" class="navlink">DJs</a>
+</div>
 
-      <!-- Unsigned Artist Showcase -->
-      <div class="card" id="showcase">
-        <h3>Unsigned Artist Showcase</h3>
-        <p style="color:var(--muted)">Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip</p>
-        <div class="showcase-grid">
-          <img src="/test1/unsigned/tristan.jpg" alt="artist 1">
-          <img src="/test1/unsigned/pete.jpg" alt="artist 2">
-          <img src="/test1/unsigned/dont.jpg" alt="artist 3">
-          <img src="/test1/unsigned/joe.png" alt="artist 4">
-        </div>
-      </div>
-
-      <!-- DJ Showcase -->
-      <div class="card" id="djs">
-        <h3>DJ Showcase</h3>
-        <div class="dj-card">
-          <img src="https://wildstyle.vip/images/babyjayne.jpg" alt="dj showcase">
-          <div>
-            <h4>Resident DJs</h4>
-            <p style="color:var(--muted)">
-              Professional DJ profiles. Visit the <a href="djs.html">DJs page</a> for full roster.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="card sidebar-section">
-        <h4>Listen</h4>
-        <audio id="player" preload="none"></audio>
-        <div style="margin-top:8px;color:var(--muted)">
-          Stream: HLS • <button id="openPlayer" class="btn" style="padding:6px 8px">Open Player</button>
-        </div>
-      </div>
-
-      <!-- Donate -->
-      <div class="card sidebar-section">
-        <h4>Support Wildstyle Radio</h4>
-        <p style="color:var(--muted); font-size:14px;">Help us keep the music going by donating via PayPal:</p>
-        <a href="https://www.paypal.com/donate/?hosted_button_id=3H7L8BG32ELLS" target="_blank" class="btn" style="display:inline-block; text-align:center; padding:10px 16px; font-weight:600;">
-          🎵 Donate with PayPal
-        </a>
-      </div>
-
-      <!-- Who's Listening -->
-      <div class="card sidebar-section">
-        <h4>Who's listening</h4>
-        <div id="whoListening">
-          <div>Total listeners: <span id="listenerTotal">—</span></div>
-          <div>Top locations:</div>
-          <ul id="listenerLocations" style="color:var(--muted)">
-            <li>Loading…</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- WSR Info -->
-      <div class="card sidebar-section">
-        <h4>WSR Info</h4>
-        <div id="wsrInfo" style="color:var(--muted)">
-          <div id="xrTop">Loading XR info…</div>
-          <div id="xrStats" style="margin-top:8px"></div>
-        </div>
-      </div>
-    </aside>
-  </main>
-
-  <footer>
-    <div>© Wildstyle Radio</div>
-    <div class="social">
-      <a href="#">Facebook</a>
-      <a href="#">Twitter</a>
-      <a href="#">Instagram</a>
-      <a href="#">YouTube</a>
+<main class="container">
+  <section class="content">
+    <!-- Now Playing -->
+    <div class="card now-playing">
+      <h4>Now Playing</h4>
+      <iframe width="320" height="166" frameborder="0" scrolling="no"
+        src="https://live365.com/embeds/v1/player/a50378?s=md&m=dark&c=mp3"></iframe>
     </div>
-  </footer>
+
+    <!-- Unsigned Artist Showcase -->
+    <div class="card" id="showcase">
+      <h3>Unsigned Artist Showcase</h3>
+      <p style="color:var(--muted)">
+        Spotlight for up-and-coming artists. Submit to requests@wildstyle.vip
+      </p>
+      <div class="showcase-grid">
+        <img src="/test1/unsigned/tristan.jpg" alt="artist 1">
+        <img src="/test1/unsigned/pete.jpg" alt="artist 2">
+        <img src="/test1/unsigned/dont.jpg" alt="artist 3">
+        <img src="/test1/unsigned/joe.png" alt="artist 4">
+      </div>
+    </div>
+
+    <!-- DJ Showcase -->
+    <div class="card" id="djs">
+      <h3>DJ Showcase</h3>
+      <div class="dj-card">
+        <img src="https://wildstyle.vip/images/babyjayne.jpg" alt="dj showcase">
+        <div>
+          <h4>Resident DJs</h4>
+          <p style="color:var(--muted)">
+            Professional DJ profiles. Visit the <a href="djs.html">DJs page</a> for full roster.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <!-- Donate -->
+    <div class="card sidebar-section">
+      <h4>Support Wildstyle Radio</h4>
+      <p style="color:var(--muted); font-size:14px;">
+        Help us keep the music going by donating via PayPal:
+      </p>
+      <a href="https://www.paypal.com/donate/?hosted_button_id=3H7L8BG32ELLS" 
+         target="_blank" class="btn"
+         style="display:inline-block; text-align:center; padding:10px 16px; font-weight:600;">
+        🎵 Donate with PayPal
+      </a>
+    </div>
+
+    <!-- Who's Listening -->
+    <div class="card sidebar-section">
+      <h4>Who's listening</h4>
+      <div id="whoListening">
+        <div>Total listeners: <span id="listenerTotal">—</span></div>
+        <div>Top locations:</div>
+        <ul id="listenerLocations" style="color:var(--muted)">
+          <li>Loading…</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WSR Info -->
+    <div class="card sidebar-section">
+      <h4>WSR Info</h4>
+      <div id="wsrInfo" style="color:var(--muted)">
+        <div id="xrTop">Loading XR info…</div>
+        <div id="xrStats" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <div>© Wildstyle Radio</div>
+  <div class="social">
+    <a href="#">Facebook</a>
+    <a href="#">Twitter</a>
+    <a href="#">Instagram</a>
+    <a href="#">YouTube</a>
+  </div>
+</footer>
 </body>
 </html>
