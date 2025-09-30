@@ -99,8 +99,8 @@ a.request {
 /* Navigation */
 nav.mainnav {
   background: var(--card);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: 4px solid #0066FF;																																																				;
+  border-bottom: 4px solid #0066FF;
 }
 
 nav .container {
