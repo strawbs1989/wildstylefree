@@ -142,8 +142,7 @@ main.container {
 
 .card {
   background: var(--card);
-  border: 1px solid var(--border);
-  padding: 14px;
+  border: 1px solid #0f66da;
   border-radius: 8px;
 }
 
