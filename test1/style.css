@@ -98,7 +98,7 @@ a.request {
 
 /* Navigation */
 nav.mainnav {
-  background: var(--card);
+  background: #004d99(--card);
   border-top: 4px solid #0066FF;																																																				;
   border-bottom: 4px solid #0066FF;
 }
@@ -113,7 +113,7 @@ nav .container {
 }
 
 nav a {
-  color: #000;
+  color: #fff;
   text-decoration: none;
   padding: 8px 10px;
   border-radius: 6px;
