@@ -1,12 +1,15 @@
-// Basic player logic with HLS support
+// ========= Audio Player (HLS-first) =========
 document.addEventListener("DOMContentLoaded", () => {
-  const myAudio = document.getElementById('myAudio');
-  const playdiv = document.getElementById('playdiv');
-  const pausediv = document.getElementById('pausediv');
-  const controlBtn = document.getElementById('control');
+  const myAudio   = document.getElementById('myAudio');
+  const playdiv   = document.getElementById('playdiv');
+  const pausediv  = document.getElementById('pausediv');
+  const control   = document.getElementById('control');
+  const openBtn   = document.getElementById('openPlayer');
   const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
 
-  // Attach HLS
+  if (!myAudio) return;
+
+  // HLS attach
   if (window.Hls && Hls.isSupported()) {
     const hls = new Hls();
     hls.loadSource(streamUrl);
@@ -15,28 +18,58 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log('✅ HLS manifest loaded');
     });
   } else if (myAudio.canPlayType('application/vnd.apple.mpegurl')) {
-    myAudio.src = streamUrl;
+    myAudio.src = streamUrl; // native HLS
   } else {
-    myAudio.src = 'https://streaming.live365.com/a50378';
+    myAudio.src = 'https://streaming.live365.com/a50378'; // MP3 fallback
   }
 
-  // Play/Pause
-  controlBtn.addEventListener('click', () => {
+  // Toggle UI helper
+  function updateIcons() {
     if (myAudio.paused) {
-      myAudio.play().then(() => {
-        playdiv.style.display = 'none';
-        pausediv.style.display = 'block';
-      }).catch(e => console.error('❌ Play failed:', e));
+      if (playdiv)  playdiv.style.display  = 'block';
+      if (pausediv) pausediv.style.display = 'none';
     } else {
-      myAudio.pause();
-      playdiv.style.display = 'block';
-      pausediv.style.display = 'none';
+      if (playdiv)  playdiv.style.display  = 'none';
+      if (pausediv) pausediv.style.display = 'block';
     }
+  }
+
+  // Button: topbar icon
+  if (control) {
+    control.addEventListener('click', () => {
+      if (myAudio.paused) {
+        myAudio.play().then(updateIcons).catch(e => console.error('❌ Play failed:', e));
+      } else {
+        myAudio.pause();
+        updateIcons();
+      }
+    });
+  }
+
+  // Button: sidebar "Open Player" uses same audio
+  if (openBtn) {
+    openBtn.addEventListener('click', () => {
+      if (myAudio.paused) {
+        myAudio.play().then(updateIcons).catch(e => console.error('❌ Play failed:', e));
+      } else {
+        myAudio.pause();
+        updateIcons();
+      }
+    });
+  }
+
+  // Keep icons in sync with real state
+  myAudio.addEventListener('play', updateIcons);
+  myAudio.addEventListener('pause', updateIcons);
+  myAudio.addEventListener('ended', updateIcons);
+
+  // Stop audio when leaving page
+  window.addEventListener('pagehide', () => {
+    if (!myAudio.paused) myAudio.pause();
   });
 });
 
-
-// Nav links active state
+// ========= Desktop/Mobile nav active state =========
 document.querySelectorAll('.navlink').forEach(a => {
   a.addEventListener('click', () => {
     document.querySelectorAll('.navlink').forEach(x => x.classList.remove('active'));
@@ -44,17 +77,29 @@ document.querySelectorAll('.navlink').forEach(a => {
   });
 });
 
-// Now Playing (Live365 API)
+// ========= Mobile nav toggle =========
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("menuToggle");
+  const menu   = document.getElementById("mobileMenu");
+  if (toggle && menu) {
+    toggle.addEventListener("click", () => menu.classList.toggle("show"));
+  }
+});
+
+// ========= Now Playing (guarded; skip if elements not present) =========
 async function fetchNowPlaying() {
+  const titleEl = document.getElementById("npTitle");
+  const artistEl = document.getElementById("npArtist");
+  const artEl = document.getElementById("npArt");
+  if (!titleEl || !artistEl || !artEl) return; // using iframe on home page
+
   try {
     const res = await fetch("https://api.live365.com/station/a50378");
     const data = await res.json();
-
     if (data && data.currentTrack) {
-      document.getElementById("npTitle").textContent = data.currentTrack.title || "Unknown Title";
-      document.getElementById("npArtist").textContent = data.currentTrack.artist || "Unknown Artist";
-      const art = data.currentTrack.art || "/test1/placeholder.png";
-      document.getElementById("npArt").src = art;
+      titleEl.textContent  = data.currentTrack.title || "Unknown Title";
+      artistEl.textContent = data.currentTrack.artist || "Unknown Artist";
+      artEl.src            = data.currentTrack.art || "/test1/placeholder.png";
     }
   } catch (err) {
     console.error("Now Playing fetch error:", err);
@@ -63,8 +108,12 @@ async function fetchNowPlaying() {
 fetchNowPlaying();
 setInterval(fetchNowPlaying, 20000);
 
-// Who's Listening (auto from CSV)
+// ========= Who's Listening (guarded) =========
 async function fetchWhoListening() {
+  const totalEl = document.getElementById("listenerTotal");
+  const listEl  = document.getElementById("listenerLocations");
+  if (!totalEl || !listEl) return;
+
   try {
     const res = await fetch("/test1/real_time_sessions.csv");
     const csvText = await res.text();
@@ -74,34 +123,29 @@ async function fetchWhoListening() {
     const dataRows = rows.slice(1);
 
     const countryIdx = headers.indexOf("country");
-    const cityIdx = headers.indexOf("city");
-    const countIdx = headers.indexOf("active_session_count");
+    const cityIdx    = headers.indexOf("city");
+    const countIdx   = headers.indexOf("active_session_count");
 
     let total = 0;
     const locations = {};
 
     dataRows.forEach(r => {
       const country = r[countryIdx];
-      const city = r[cityIdx];
-      const count = parseInt(r[countIdx] || "0", 10);
+      const city    = r[cityIdx];
+      const count   = parseInt(r[countIdx] || "0", 10);
       total += count;
-
       const key = `${country} (${city})`;
       locations[key] = (locations[key] || 0) + count;
     });
 
-    document.getElementById("listenerTotal").textContent = total;
+    totalEl.textContent = total;
 
-    const top = Object.entries(locations)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-
-    const ul = document.getElementById("listenerLocations");
-    ul.innerHTML = "";
+    const top = Object.entries(locations).sort((a,b) => b[1]-a[1]).slice(0,5);
+    listEl.innerHTML = "";
     top.forEach(([loc, count]) => {
       const li = document.createElement("li");
       li.textContent = `${loc} — ${count}`;
-      ul.appendChild(li);
+      listEl.appendChild(li);
     });
   } catch (err) {
     console.error("Error loading Who's Listening CSV:", err);
@@ -110,33 +154,22 @@ async function fetchWhoListening() {
 fetchWhoListening();
 setInterval(fetchWhoListening, 60000);
 
-// Accessibility: stop audio when navigating away
-window.addEventListener('pagehide', () => {
-  audio.pause();
-  if (playBtn) playBtn.textContent = 'Play';
-});
-
-
-// WSR Info (placeholder until XR API/server integration)
+// ========= WSR Info (placeholder until real source) =========
 function loadWSRInfo() {
   const xrTopEl = document.getElementById('xrTop');
   const xrStatsEl = document.getElementById('xrStats');
+  if (!xrTopEl || !xrStatsEl) return;
 
-  if (xrTopEl && xrStatsEl) {
-    // Example info – replace with real API values if available
-    xrTopEl.innerHTML = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
-    xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
-  }
+  xrTopEl.innerHTML  = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
+  xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
 }
-
-// Load once at startup
 loadWSRInfo();
 
 // ===== SONG REQUEST OPEN/CLOSE SYSTEM =====
 
 // Define live shows
 const liveShows = [
-  { day: "Wednesday", start: "15:00", end: "17:00" },
+  { day: "Thursday", start: "19:00", end: "20:00" },
   { day: "Sunday", start: "20:00", end: "21:00" },
 ];
 
@@ -198,14 +231,4 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-});
-
-// menubar
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("menuToggle");
-  const menu = document.getElementById("mobileMenu");
-
-  toggle.addEventListener("click", () => {
-    menu.classList.toggle("show");
-  });
 });
