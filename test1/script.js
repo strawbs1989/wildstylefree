@@ -199,10 +199,10 @@ function updateRequestStatus() {
     status.textContent = "❌ Requests are CLOSED — please come back during a live show.";
   }
 }
-
+// Top10
 async function fetchTop10Played() {
   try {
-    const res = await fetch("https://api.live365.com/station/a50378/played");
+    const res = await fetch("https://api.live365.com/station/a50378/");
     const data = await res.json();
 
     if (!data || !data.data) {
