@@ -201,53 +201,33 @@ function updateRequestStatus() {
 }
 // Top10
 async function fetchTop10Played() {
+  const box = document.getElementById("top10played");
+  if (!box) return;
+
   try {
-    const res = await fetch("https://api.live365.com/station/a50378/");
+    const res = await fetch("/test1/top10.json", { cache: "no-store" });
     const data = await res.json();
 
-    if (!data || !data.data) {
-      document.getElementById("top10played").innerHTML = "<li>No play data available</li>";
-      return;
-    }
-
-    // Count plays per track and keep artwork
-    const counts = {};
-    data.data.forEach(item => {
-      const key = `${item.artist} - ${item.title}`;
-      if (!counts[key]) {
-        counts[key] = { count: 0, art: item.art || "/test1/placeholder.png" };
-      }
-      counts[key].count++;
-    });
-
-    // Sort by count and slice top 10
-    const top10 = Object.entries(counts)
-      .sort((a, b) => b[1].count - a[1].count)
-      .slice(0, 10);
-
-    const list = document.getElementById("top10played");
-    list.innerHTML = "";
-
-    top10.forEach(([track, info], i) => {
+    box.innerHTML = "";
+    data.forEach((track, i) => {
       const li = document.createElement("li");
-      li.classList.add("track-item");
+      li.className = "track-item";
       li.innerHTML = `
-        <img src="${info.art}" alt="${track}" class="track-art">
+        <img src="${track.art || "/test1/placeholder.png"}" class="track-art">
         <div class="track-meta">
-          <strong>${i + 1}. ${track}</strong><br>
-          <span class="requested">Played ${info.count} times</span>
-        </div>
-      `;
-      list.appendChild(li);
+          <strong>${i + 1}. ${track.artist} - ${track.title}</strong><br>
+          <span>Played ${track.count} times</span>
+        </div>`;
+      box.appendChild(li);
     });
   } catch (err) {
-    console.error("Error fetching Top 10 Played:", err);
-    document.getElementById("top10played").innerHTML = "<li>Error loading Top 10 Played</li>";
+    console.error("Top10 error:", err);
+    box.innerHTML = "<li>Error loading Top 10 Played</li>";
   }
 }
 
-// Load on page start
 fetchTop10Played();
+
 // Refresh every 5 minutes
 setInterval(fetchTop10Played, 300000);
 
