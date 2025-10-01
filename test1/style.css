@@ -362,4 +362,58 @@ footer {
   font-size: 12px;
   color: var(--muted);
 }
+/* DJ Grid */
+.dj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.gallery-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+  transition: transform 0.2s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.gallery-item .desc {
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.gallery-item h3 {
+  font-size: 0.9rem;
+  margin: 4px 0;
+  color: var(--muted);
+}
+
+.gallery-item .dj-link {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+.gallery-item .dj-link:hover {
+  background: #0f6fbd;
+}
+
 
