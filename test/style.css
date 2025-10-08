@@ -1,0 +1,257 @@
+/* ---------------------------
+   Wildstyle Radio Main Style
+   United by Beats • Powered by Passion
+---------------------------- */
+
+:root {
+  --wild-pink: #ff0077;
+  --wild-blue: #007bff;
+  --wild-dark: #111;
+  --wild-light: #fff;
+  --wild-gray: #f5f5f5;
+  --gradient: linear-gradient(135deg, var(--wild-pink), var(--wild-blue));
+}
+
+/* Reset + basics */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: "Inter", Arial, sans-serif;
+  background: var(--wild-light);
+  color: var(--wild-dark);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Smooth fade-in */
+body {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------------------------
+   Header
+---------------------------- */
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(180deg, #ffffff, #f7f7f7);
+  border-bottom: 1px solid #eee;
+}
+
+header img {
+  width: 130px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.tagline {
+  margin-top: 0.6rem;
+  font-size: 1.1rem;
+  color: #444;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+}
+
+/* Visualizer Bar */
+.visualizer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  margin-top: 1.5rem;
+  height: 50px;
+}
+
+.bar {
+  width: 6px;
+  border-radius: 8px;
+  background: var(--gradient);
+  animation: bounce 1s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%,100% {height: 10px; opacity: 0.5;}
+  50% {height: 40px; opacity: 1;}
+}
+
+/* ---------------------------
+   Section Headers
+---------------------------- */
+section h2 {
+  text-align: center;
+  color: var(--wild-dark);
+  margin: 2rem 0 1rem;
+  font-size: 1.8rem;
+  position: relative;
+}
+
+section h2::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 3px;
+  background: var(--gradient);
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 3px;
+}
+
+/* ---------------------------
+   DJ Spotlight
+---------------------------- */
+.dj-spotlight {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 1rem;
+  justify-content: center;
+}
+
+.dj-card {
+  background: var(--wild-light);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 15px;
+  flex: 0 0 250px;
+  scroll-snap-align: center;
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dj-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 0, 119, 0.4);
+}
+
+.dj-card img {
+  width: 100%;
+  border-radius: 12px;
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.dj-card h3 {
+  font-size: 1.2rem;
+  color: var(--wild-pink);
+}
+
+.dj-card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ---------------------------
+   Request Queue
+---------------------------- */
+.request-queue {
+  background: #fff;
+  border-radius: 15px;
+  max-width: 600px;
+  margin: 1rem auto;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  padding: 1rem;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.request-item {
+  padding: 0.7rem;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+.request-item:last-child { border-bottom: none; }
+
+.request-item:hover {
+  background: #f8f8f8;
+}
+
+.request-item strong {
+  color: var(--wild-blue);
+}
+
+/* ---------------------------
+   Stats Section
+---------------------------- */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  background: #fafafa;
+  padding: 2rem 1rem;
+  border-radius: 20px;
+  max-width: 900px;
+  margin: 2rem auto;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.stat-box {
+  text-align: center;
+  min-width: 150px;
+}
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255, 0, 119, 0.2);
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* ---------------------------
+   Footer
+---------------------------- */
+footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  background: linear-gradient(180deg, #ffffff, #f2f2f2);
+  border-top: 1px solid #eee;
+}
+
+footer a {
+  color: var(--wild-blue);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------
+   Responsive Design
+---------------------------- */
+@media (max-width: 768px) {
+  .dj-card {
+    flex: 0 0 80%;
+  }
+  header img {
+    width: 100px;
+  }
+  .stat-number {
+    font-size: 1.8rem;
+  }
+}

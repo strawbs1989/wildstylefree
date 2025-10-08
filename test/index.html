@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildstyle Radio — United by Beats</title>
+  <link rel="stylesheet" href="/test/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script defer src="/test/script.js"></script>
+  <style>
+    body {
+      background: linear-gradient(180deg, #fff, #f2f2f2);
+      font-family: "Inter", sans-serif;
+      color: #111;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    header img {
+      width: 120px;
+      border-radius: 10px;
+    }
+    .tagline {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      color: #555;
+      animation: fadeTagline 12s infinite;
+    }
+    @keyframes fadeTagline {
+      0%,33% {opacity:1; content:"United by Beats • Powered by Passion";}
+      34%,66% {opacity:1; content:"Where Underground Meets Airwaves";}
+      67%,100% {opacity:1; content:"Beats. Unity. Wildstyle.";}
+    }
+    /* Visualizer */
+    .visualizer {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 5px;
+      margin-top: 1rem;
+    }
+    .bar {
+      width: 5px;
+      height: 10px;
+      background: linear-gradient(180deg, #ff0077, #007bff);
+      border-radius: 10px;
+      animation: bounce 1s infinite ease-in-out;
+    }
+    @keyframes bounce {
+      0%,100% {height: 10px;}
+      50% {height: 40px;}
+    }
+
+    /* Section Titles */
+    section h2 {
+      text-align: center;
+      margin: 2rem 0 1rem;
+      color: #222;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+    }
+
+    /* DJ Spotlight Carousel */
+    .dj-spotlight {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 1rem;
+      padding: 1rem;
+      justify-content: center;
+    }
+    .dj-card {
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      flex: 0 0 250px;
+      scroll-snap-align: center;
+      text-align: center;
+      padding: 1rem;
+      transition: transform 0.3s;
+    }
+    .dj-card:hover { transform: scale(1.05); }
+    .dj-card img {
+      width: 100%;
+      border-radius: 10px;
+      height: 200px;
+      object-fit: cover;
+    }
+    .dj-card h3 { margin: 0.5rem 0 0.2rem; }
+    .dj-card p { font-size: 0.9rem; color: #666; }
+
+    /* Request Queue */
+    .request-queue {
+      background: #fff;
+      border-radius: 15px;
+      max-width: 600px;
+      margin: 1rem auto;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      padding: 1rem;
+    }
+    .request-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    .request-item:last-child { border-bottom: none; }
+    .request-item strong { color: #007bff; }
+
+    /* Wildstyle Stats */
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      background: #fafafa;
+      padding: 2rem 1rem;
+      border-radius: 20px;
+      max-width: 900px;
+      margin: 2rem auto;
+    }
+    .stat-box {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff0077;
+    }
+    .stat-label {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      background: #fff;
+      color: #666;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="/test1/placeholder.png" alt="Wildstyle Radio Logo">
+  <div class="tagline">United by Beats • Powered by Passion</div>
+
+  <!-- Visualizer -->
+  <div class="visualizer">
+    <div class="bar" style="animation-delay:0s"></div>
+    <div class="bar" style="animation-delay:0.1s"></div>
+    <div class="bar" style="animation-delay:0.2s"></div>
+    <div class="bar" style="animation-delay:0.3s"></div>
+    <div class="bar" style="animation-delay:0.4s"></div>
+    <div class="bar" style="animation-delay:0.5s"></div>
+    <div class="bar" style="animation-delay:0.6s"></div>
+  </div>
+</header>
+
+<!-- DJ Spotlight -->
+<section id="dj-spotlight">
+  <h2>🎧 DJ Spotlight</h2>
+  <div class="dj-spotlight">
+    <div class="dj-card">
+      <img src="/test1/djs/echofalls.jpg" alt="DJ EchoFalls">
+      <h3>DJ EchoFalls</h3>
+      <p>Frequency Shift<br>Thurs 7–8PM • Sun 8–9PM</p>
+    </div>
+    <div class="dj-card">
+      <img src="/test1/djs/hotshot.jpg" alt="HotShot DJ">
+      <h3>HotShot</h3>
+      <p>HotShot Mix<br>Fri 9–11PM</p>
+    </div>
+    <div class="dj-card">
+      <img src="/test1/djs/laura.jpg" alt="DJ Laura">
+      <h3>Laura</h3>
+      <p>Electric Nights<br>Wed 8–10PM</p>
+    </div>
+  </div>
+</section>
+
+<!-- Request Queue -->
+<section id="request-queue">
+  <h2>📨 Latest Requests</h2>
+  <div class="request-queue" id="requests">
+    <div>Loading requests...</div>
+  </div>
+</section>
+
+<!-- Wildstyle Stats -->
+<section id="stats">
+  <h2>📊 Wildstyle Stats</h2>
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-number" data-target="39">0</div>
+      <div class="stat-label">DJs On Air</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" data-target="72">0</div>
+      <div class="stat-label">Hours Broadcast Weekly</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" data-target="12">0</div>
+      <div class="stat-label">Countries Tuned In</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" data-target="1000">0</div>
+      <div class="stat-label">Listeners This Month</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Wildstyle Radio • <a href="https://wildstyle.vip">wildstyle.vip</a><br>
+  United by Beats • Powered by Passion</p>
+</footer>
+
+<script>
+/* Request Queue Fetch */
+async function loadRequests() {
+  const box = document.getElementById("requests");
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbz_DpOgEO3Wcid-7MTv22arYiLZh5wLDNlwlPHjJxfUYo6nhqZnXsAU0xLXofogMyg/exec");
+    const data = await res.json();
+    box.innerHTML = "";
+    data.slice(-5).reverse().forEach(req => {
+      const div = document.createElement("div");
+      div.className = "request-item";
+      div.innerHTML = `<strong>${req.name}</strong> requested <em>${req.song}</em>`;
+      box.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Request error:", err);
+    box.innerHTML = "<div>Could not load requests.</div>";
+  }
+}
+loadRequests();
+
+/* Stats Animation */
+const counters = document.querySelectorAll('.stat-number');
+const speed = 150;
+counters.forEach(counter => {
+  const animate = () => {
+    const value = +counter.getAttribute('data-target');
+    const data = +counter.innerText;
+    const time = value / speed;
+    if (data < value) {
+      counter.innerText = Math.ceil(data + time);
+      setTimeout(animate, 20);
+    } else {
+      counter.innerText = value;
+    }
+  }
+  animate();
+});
+
+/* Tagline Rotator */
+const taglines = [
+  "United by Beats • Powered by Passion",
+  "Where Underground Meets Airwaves",
+  "Beats. Unity. Wildstyle."
+];
+let idx = 0;
+setInterval(() => {
+  idx = (idx + 1) % taglines.length;
+  document.querySelector('.tagline').innerText = taglines[idx];
+}, 4000);
+</script>
+
+</body>
+</html>
