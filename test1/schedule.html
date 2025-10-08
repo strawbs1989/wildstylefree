@@ -173,7 +173,7 @@ console.log("Live365 data:", data);(
 
   if (!res.ok) throw new Error("Live365 fetch failed");
 
-  const data = await res.json();
+  data = await res.json();
   const artist = (data.artist || "").trim();
   const title  = (data.title || "").trim();
 
