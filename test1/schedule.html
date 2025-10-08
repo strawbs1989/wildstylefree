@@ -164,10 +164,10 @@ async function updateNowOnAir() {
 
   try {
     // 1️⃣ Get Live365 data
-    const res = await fetch("https://api.live365.com/station/a50378");
+    const res = await fetch("https://public.api.live365.com/v1/nowplaying/a50378");
     const data = await res.json();
-    const artist = (data.now_playing?.artist || "").trim();
-    const title  = (data.now_playing?.title || "").trim();
+    const artist = (data.artist || "").trim();
+    const title  = (data.title || "").trim();
 
     if (!artist && !title) {
       section.className = "offair";
