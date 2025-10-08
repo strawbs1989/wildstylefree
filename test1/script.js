@@ -168,7 +168,7 @@ loadWSRInfo();
 // ===== SONG REQUEST OPEN/CLOSE SYSTEM =====
 
 // Define live shows
-const liveShows = [
+const liveShowsSchedule = [
   { day: "Thursday", start: "19:00", end: "20:00" },
   { day: "Sunday", start: "20:00", end: "21:00" },
 ];
