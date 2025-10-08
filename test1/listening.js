@@ -25,7 +25,10 @@ async function fetchWhoListening() {
       locations[key] = (locations[key] || 0) + count;
     });
 
-    document.getElementById("listenerTotal").textContent = total;
+    const box = document.getElementById("whosListening");
+if (!box) return; // stops the script if the element isn't found
+box.textContent = "..." // existing code
+
 
     const top = Object.entries(locations)
       .sort((a,b) => b[1] - a[1])
