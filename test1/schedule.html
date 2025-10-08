@@ -161,49 +161,7 @@
     <a href="#">Instagram</a>
     <a href="#">YouTube</a>
   </div>
- <script>
-// --- Wildstyle "Now On-Air" Display ---
-async function updateNowOnAir() {
-  const statusBox = document.getElementById("onair-status");
-  const detailsBox = document.getElementById("onair-details");
 
-  try {
-    const res = await fetch("https://api.live365.com/station/a50378");
-    const data = await res.json();
-    const artist = (data.now_playing?.artist || "").trim();
-    const title = (data.now_playing?.title || "").trim();
-
-    // If nothing playing
-    if (!artist && !title) {
-      statusBox.textContent = "🕓 Off Air";
-      detailsBox.textContent = "No current broadcast.";
-      document.getElementById("now-on").className = "offair";
-      return;
-    }
-
-    // Detect AutoDJ
-    if (/auto|rotation|playlist/i.test(artist)) {
-      statusBox.textContent = "🕓 Off Air — AutoDJ";
-      detailsBox.textContent = "Music rotation running";
-      document.getElementById("now-on").className = "offair";
-      return;
-    }
-
-    // On air now
-    statusBox.innerHTML = "🔴 Now On Air";
-    detailsBox.innerHTML = `<strong>${artist}</strong><br>${title}`;
-    document.getElementById("now-on").className = "onair";
-
-  } catch (err) {
-    console.error("On-air status error:", err);
-    statusBox.textContent = "Error checking stream.";
-  }
-}
-
-// Run immediately + every 90 sec
-updateNowOnAir();
-setInterval(updateNowOnAir, 90000);
-</script>
 
 
 </footer>
