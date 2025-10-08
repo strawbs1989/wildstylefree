@@ -162,65 +162,111 @@
     <a href="#">YouTube</a>
   </div>
   <script>
-// --- Wildstyle "Now On-Air" Schedule Highlighter ---
-async function highlightNowPlaying() {
-  try {
-    const res = await fetch("https://api.live365.com/station/a50378");
-    const data = await res.json();
-    const currentArtist = (data.now_playing?.artist || "").toLowerCase().trim();
-    const currentTitle = (data.now_playing?.title || "").toLowerCase().trim();
-
-    // Custom map (Live365 artist -> DJ name)
-    const djMap = {
-      "dj echofalls": "dj echofalls",
-      "echofalls": "dj echofalls",
-      "hotshot": "hotshot",
-      "dj hotshot": "hotshot",
-      "queen dani": "dani",
-      "dj queen dani": "dani",
-      "dj lewis": "dj lewis",
-      "dj dezzy mac": "dj dezzy mac",
-      "dj nero": "dj nero",
-      "lil devil": "lil devil",
-      "popped radio": "popped radio",
-      "danplayzbangers": "danplayzbangers",
-      "steve g": "steve g",
-      "mottmuzik": "mottmuzik",
-      "vish": "vish",
-      "wendell": "wendell"
-    };
-
-    // Normalize current name to compare with schedule
-    const currentName = djMap[currentArtist] || currentArtist;
-
-    // Remove old highlights
-    document.querySelectorAll(".show.live").forEach(el => {
-      el.classList.remove("live");
-      const tag = el.querySelector(".live-tag");
-      if (tag) tag.remove();
-    });
-
-    // Find matching schedule entries
-    document.querySelectorAll(".show").forEach(el => {
-      const dj = el.dataset.dj?.toLowerCase() || "";
-      const show = el.dataset.show?.toLowerCase() || "";
-      if (dj.includes(currentName) || currentName.includes(dj) || show.includes(currentName) || currentTitle.includes(show)) {
-        el.classList.add("live");
-        const tag = document.createElement("span");
-        tag.className = "live-tag";
-        tag.textContent = "LIVE NOW";
-        el.appendChild(tag);
-      }
-    });
-
-  } catch (err) {
-    console.error("Highlight error:", err);
+(function() {
+  // Parse "HH:MM" to minutes from midnight; supports "24:00"
+  function parseHM(s) {
+    const [h, m] = s.split(':').map(Number);
+    const hh = (h === 24 ? 24 : h);
+    return hh * 60 + (m || 0);
   }
-}
 
-// Run immediately, then update every 2 mins
-highlightNowPlaying();
-setInterval(highlightNowPlaying, 120000);
+  // Current time in Europe/London (handles BST/UTC automatically)
+  function nowLondon() {
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/London',
+      weekday: 'long',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).formatToParts(new Date());
+    const obj = Object.fromEntries(parts.map(p => [p.type, p.value]));
+    const day = obj.weekday; // "Monday"..."Sunday"
+    const minutes = parseInt(obj.hour, 10) * 60 + parseInt(obj.minute, 10);
+    return { day, minutes };
+  }
+
+  const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  function prevDayName(dayName) {
+    const i = DAYS.indexOf(dayName);
+    return DAYS[(i + 6) % 7];
+  }
+
+  function clearMarks() {
+    document.querySelectorAll('.show.live, .show.next').forEach(el => {
+      el.classList.remove('live', 'next');
+      el.querySelectorAll('.live-tag, .next-tag').forEach(b => b.remove());
+    });
+  }
+
+  function badge(el, text, cls) {
+    const b = document.createElement('span');
+    b.className = cls;
+    b.textContent = text;
+    el.appendChild(b);
+  }
+
+  function highlightSchedule() {
+    clearMarks();
+
+    const shows = Array.from(document.querySelectorAll('.show[data-day][data-start][data-end]'));
+    if (!shows.length) return;
+
+    const { day: today, minutes: nowMin } = nowLondon();
+
+    // Find live show (supports cross-midnight, e.g. 23:00–01:00)
+    let liveEl = null;
+    for (const el of shows) {
+      const d = el.dataset.day;
+      const s = parseHM(el.dataset.start);
+      const e = parseHM(el.dataset.end);
+
+      const sameDayNormal = (d === today && s <= nowMin && nowMin < e && e > s);
+      const crossesMidnight = (e <= s); // e.g. 23:00 to 01:00
+
+      const liveTodayPart = crossesMidnight && d === today && nowMin >= s;
+      const liveAfterMidnightPart = crossesMidnight && prevDayName(today) === d && nowMin < e;
+
+      if (sameDayNormal || liveTodayPart || liveAfterMidnightPart) {
+        liveEl = el;
+        break;
+      }
+    }
+
+    if (liveEl) {
+      liveEl.classList.add('live');
+      badge(liveEl, 'LIVE NOW', 'live-tag');
+    }
+
+    // Find "next up" (first show later today, else first show tomorrow)
+    let nextEl = null;
+    const todayLater = shows
+      .filter(el => el.dataset.day === today)
+      .map(el => ({ el, start: parseHM(el.dataset.start) }))
+      .filter(o => o.start > nowMin)
+      .sort((a,b) => a.start - b.start);
+
+    if (todayLater.length) {
+      nextEl = todayLater[0].el;
+    } else {
+      const i = DAYS.indexOf(today);
+      const tomorrow = DAYS[(i + 1) % 7];
+      const tomorrowFirst = shows
+        .filter(el => el.dataset.day === tomorrow)
+        .map(el => ({ el, start: parseHM(el.dataset.start) }))
+        .sort((a,b) => a.start - b.start)[0];
+      if (tomorrowFirst) nextEl = tomorrowFirst.el;
+    }
+
+    if (nextEl && nextEl !== liveEl) {
+      nextEl.classList.add('next');
+      badge(nextEl, 'NEXT', 'next-tag');
+    }
+  }
+
+  // Run now and every minute
+  highlightSchedule();
+  setInterval(highlightSchedule, 60000);
+})();
 </script>
 
 </footer>
