@@ -161,113 +161,50 @@
     <a href="#">Instagram</a>
     <a href="#">YouTube</a>
   </div>
-  <script>
-(function() {
-  // Parse "HH:MM" to minutes from midnight; supports "24:00"
-  function parseHM(s) {
-    const [h, m] = s.split(':').map(Number);
-    const hh = (h === 24 ? 24 : h);
-    return hh * 60 + (m || 0);
-  }
+ <script>
+// --- Wildstyle "Now On-Air" Display ---
+async function updateNowOnAir() {
+  const statusBox = document.getElementById("onair-status");
+  const detailsBox = document.getElementById("onair-details");
 
-  // Current time in Europe/London (handles BST/UTC automatically)
-  function nowLondon() {
-    const parts = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Europe/London',
-      weekday: 'long',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    }).formatToParts(new Date());
-    const obj = Object.fromEntries(parts.map(p => [p.type, p.value]));
-    const day = obj.weekday; // "Monday"..."Sunday"
-    const minutes = parseInt(obj.hour, 10) * 60 + parseInt(obj.minute, 10);
-    return { day, minutes };
-  }
+  try {
+    const res = await fetch("https://api.live365.com/station/a50378");
+    const data = await res.json();
+    const artist = (data.now_playing?.artist || "").trim();
+    const title = (data.now_playing?.title || "").trim();
 
-  const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  function prevDayName(dayName) {
-    const i = DAYS.indexOf(dayName);
-    return DAYS[(i + 6) % 7];
-  }
-
-  function clearMarks() {
-    document.querySelectorAll('.show.live, .show.next').forEach(el => {
-      el.classList.remove('live', 'next');
-      el.querySelectorAll('.live-tag, .next-tag').forEach(b => b.remove());
-    });
-  }
-
-  function badge(el, text, cls) {
-    const b = document.createElement('span');
-    b.className = cls;
-    b.textContent = text;
-    el.appendChild(b);
-  }
-
-  function highlightSchedule() {
-    clearMarks();
-
-    const shows = Array.from(document.querySelectorAll('.show[data-day][data-start][data-end]'));
-    if (!shows.length) return;
-
-    const { day: today, minutes: nowMin } = nowLondon();
-
-    // Find live show (supports cross-midnight, e.g. 23:00–01:00)
-    let liveEl = null;
-    for (const el of shows) {
-      const d = el.dataset.day;
-      const s = parseHM(el.dataset.start);
-      const e = parseHM(el.dataset.end);
-
-      const sameDayNormal = (d === today && s <= nowMin && nowMin < e && e > s);
-      const crossesMidnight = (e <= s); // e.g. 23:00 to 01:00
-
-      const liveTodayPart = crossesMidnight && d === today && nowMin >= s;
-      const liveAfterMidnightPart = crossesMidnight && prevDayName(today) === d && nowMin < e;
-
-      if (sameDayNormal || liveTodayPart || liveAfterMidnightPart) {
-        liveEl = el;
-        break;
-      }
+    // If nothing playing
+    if (!artist && !title) {
+      statusBox.textContent = "🕓 Off Air";
+      detailsBox.textContent = "No current broadcast.";
+      document.getElementById("now-on").className = "offair";
+      return;
     }
 
-    if (liveEl) {
-      liveEl.classList.add('live');
-      badge(liveEl, 'LIVE NOW', 'live-tag');
+    // Detect AutoDJ
+    if (/auto|rotation|playlist/i.test(artist)) {
+      statusBox.textContent = "🕓 Off Air — AutoDJ";
+      detailsBox.textContent = "Music rotation running";
+      document.getElementById("now-on").className = "offair";
+      return;
     }
 
-    // Find "next up" (first show later today, else first show tomorrow)
-    let nextEl = null;
-    const todayLater = shows
-      .filter(el => el.dataset.day === today)
-      .map(el => ({ el, start: parseHM(el.dataset.start) }))
-      .filter(o => o.start > nowMin)
-      .sort((a,b) => a.start - b.start);
+    // On air now
+    statusBox.innerHTML = "🔴 Now On Air";
+    detailsBox.innerHTML = `<strong>${artist}</strong><br>${title}`;
+    document.getElementById("now-on").className = "onair";
 
-    if (todayLater.length) {
-      nextEl = todayLater[0].el;
-    } else {
-      const i = DAYS.indexOf(today);
-      const tomorrow = DAYS[(i + 1) % 7];
-      const tomorrowFirst = shows
-        .filter(el => el.dataset.day === tomorrow)
-        .map(el => ({ el, start: parseHM(el.dataset.start) }))
-        .sort((a,b) => a.start - b.start)[0];
-      if (tomorrowFirst) nextEl = tomorrowFirst.el;
-    }
-
-    if (nextEl && nextEl !== liveEl) {
-      nextEl.classList.add('next');
-      badge(nextEl, 'NEXT', 'next-tag');
-    }
+  } catch (err) {
+    console.error("On-air status error:", err);
+    statusBox.textContent = "Error checking stream.";
   }
+}
 
-  // Run now and every minute
-  highlightSchedule();
-  setInterval(highlightSchedule, 60000);
-})();
+// Run immediately + every 90 sec
+updateNowOnAir();
+setInterval(updateNowOnAir, 90000);
 </script>
+
 
 </footer>
 </body>
