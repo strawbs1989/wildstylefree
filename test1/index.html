@@ -303,13 +303,14 @@ const djMap = {
     const mappedDJ = djMap[currentDJ] || currentDJ;
 
     // 4️⃣ Find matching show from schedule
-    const allShows = document.querySelectorAll(".show");
-    let matchedShow = null;
-    allShows.forEach(show => {
-      const dj = show.dataset.dj?.toLowerCase() || "";
-      const showName = show.dataset.show?.toLowerCase() || "";
-      if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matchedShow = show;
-    });
+const allShows = document.querySelectorAll(".show");
+let matchedShow = null;
+allShows.forEach(show => {
+  const dj = show.dataset.dj?.toLowerCase() || "";
+  const showName = show.dataset.show?.toLowerCase() || "";
+  if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matchedShow = show;
+});
+
 
     // 5️⃣ Update DOM
     if (matchedShow) {

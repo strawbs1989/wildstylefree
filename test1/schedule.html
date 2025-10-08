@@ -151,7 +151,133 @@
 </section>
 
 </main>
+<script>
+// --- Wildstyle "Now On-Air" + Schedule Sync ---
+async function updateNowOnAir() {
+  const section = document.getElementById("now-on");
+  const status = document.getElementById("onair-status");
+  const details = document.getElementById("onair-details");
 
+  try {
+    // 1️⃣ Get Live365 data
+    const res = await fetch("https://api.live365.com/station/a50378");
+    const data = await res.json();
+    const artist = (data.now_playing?.artist || "").trim();
+    const title  = (data.now_playing?.title || "").trim();
+
+    if (!artist && !title) {
+      section.className = "offair";
+      status.textContent = "🕓 Off Air";
+      details.textContent = "No current broadcast";
+      return;
+    }
+
+    // 2️⃣ Normalize name for comparison
+    const currentDJ = artist.toLowerCase();
+
+    // 3️⃣ Custom DJ mapping for mismatched names
+const djMap = {
+  "autodj": "autodj",
+  "james - wizard of rock": "james - wizard of rock",
+  "wizard of rock": "james - wizard of rock",
+  "james stephen": "james stephen",
+  "babyjayne": "babyjayne",
+  "lewis": "lewis",
+  "dj lewis": "dj lewis",
+  "dj echofalls": "dj echofalls",
+  "echofalls": "dj echofalls",
+  "hotshot": "hotshot",
+  "dj hotshot": "hotshot",
+  "queen dani": "dj queen dani",
+  "dj queen dani": "dj queen dani",
+  "dj dezzy mac": "dj dezzy mac",
+  "dezzy mac": "dj dezzy mac",
+  "dj jaydon mac": "dj jaydon mac",
+  "jaydon mac": "dj jaydon mac",
+  "steve d j smith": "steve d j smith",
+  "steve g": "steve g",
+  "steven d": "steven d",
+  "mottmuzik": "mottmuzik",
+  "vish": "vish",
+  "wendell": "wendell",
+  "gordan": "gordan",
+  "christina": "christina",
+  "coll": "coll",
+  "j k": "jk",
+  "jk": "jk",
+  "cam": "cam",
+  "the byrdman": "the byrdman",
+  "dj european bob": "dj european bob",
+  "european bob": "dj european bob",
+  "danplayzbangers": "danplayzbangers",
+  "dan playz bangers": "danplayzbangers",
+  "daniel": "daniel",
+  "dj nero": "dj nero",
+  "nero": "dj nero",
+  "dj mary sailor": "dj mary sailor",
+  "mary sailor": "dj mary sailor",
+  "rob": "rob - trevor nannab",
+  "trevor nannab": "rob - trevor nannab",
+  "amar": "dj aj",
+  "dj aj": "dj aj",
+  "lil devil": "lil devil",
+  "rebecca": "rebecca - dj mix n match",
+  "dj mix n match": "rebecca - dj mix n match",
+  "daniel": "daniel",
+  "popped radio": "popped radio",
+  "suzette": "popped radio",
+  "dani": "dj queen dani",
+  "dani - dj queen dani": "dj queen dani",
+  "steve d": "steve d j smith",
+  "steve smith": "steve d j smith",
+  "dj james": "james stephen",
+  "dj james stephen": "james stephen",
+  "dani queen": "dj queen dani",
+  "reese": "reece",
+  "reece": "reece"
+};
+
+    const mappedDJ = djMap[currentDJ] || currentDJ;
+
+    // 4️⃣ Find matching show from schedule
+const allShows = document.querySelectorAll(".show");
+let matchedShow = null;
+allShows.forEach(show => {
+  const dj = show.dataset.dj?.toLowerCase() || "";
+  const showName = show.dataset.show?.toLowerCase() || "";
+  if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matchedShow = show;
+});
+
+
+    // 5️⃣ Update DOM
+    if (matchedShow) {
+      const showTitle = matchedShow.dataset.show;
+      const timeSlot  = matchedShow.dataset.time;
+      section.className = "onair";
+      status.innerHTML = "🔴 Now On Air";
+      details.innerHTML = `
+        <strong>${artist}</strong><br>
+        ${showTitle} <br>
+        <span style="font-size:0.9rem;opacity:0.9;">${timeSlot}</span>
+      `;
+    } else {
+      // default fallback if nothing matched
+      section.className = "onair";
+      status.innerHTML = "🔴 Now On Air";
+      details.innerHTML = `<strong>${artist}</strong><br>${title}`;
+    }
+  } catch (err) {
+    console.error("On-air check error:", err);
+    section.className = "offair";
+    status.textContent = "Error checking stream.";
+    details.textContent = "";
+  }
+}
+
+// Run immediately + refresh every 90 seconds
+updateNowOnAir();
+setInterval(updateNowOnAir, 90000);
+</script>
 
 <footer>
   <div>© Wildstyle Radio</div>
