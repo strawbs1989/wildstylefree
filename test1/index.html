@@ -222,120 +222,61 @@ async function updateNowOnAir() {
   const details = document.getElementById("onair-details");
 
   try {
-    // 1️⃣ Get Live365 data
-    const res = await fetch("https://public.api.live365.com/v1/nowplaying/a50378");
-    const data = await res.json();
-    const artist = (data.artist || "").trim();
-    const title  = (data.title || "").trim();
+    // 1️⃣ Get Live365 data (new endpoint + CORS safe)
+let data;
+try {
+  const res = await fetch(
+    "https://api.allorigins.win/raw?url=" +
+    encodeURIComponent("https://public.api.live365.com/v1/nowplaying/a50378")
+  );
+  if (!res.ok) throw new Error("Live365 fetch failed");
+  data = await res.json();
+} catch (err) {
+  console.error("Fetch error:", err);
+  section.className = "offair";
+  status.textContent = "Error checking stream (fetch).";
+  return;
+}
 
-    if (!artist && !title) {
-      section.className = "offair";
-      status.textContent = "🕓 Off Air";
-      details.textContent = "No current broadcast";
-      return;
-    }
+// 2️⃣ Read the now-playing info
+const artist = (data.artist || "").trim();
+const title  = (data.title || "").trim();
 
-    // 2️⃣ Normalize name for comparison
-    const currentDJ = artist.toLowerCase();
+if (!artist && !title) {
+  section.className = "offair";
+  status.textContent = "🕓 Off Air";
+  details.textContent = "No current broadcast.";
+  return;
+}
 
-    // 3️⃣ Custom DJ mapping for mismatched names
-const djMap = {
-  "autodj": "autodj",
-  "james - wizard of rock": "james - wizard of rock",
-  "wizard of rock": "james - wizard of rock",
-  "james stephen": "james stephen",
-  "babyjayne": "babyjayne",
-  "lewis": "lewis",
-  "dj lewis": "dj lewis",
-  "dj echofalls": "dj echofalls",
-  "echofalls": "dj echofalls",
-  "hotshot": "hotshot",
-  "dj hotshot": "hotshot",
-  "queen dani": "dj queen dani",
-  "dj queen dani": "dj queen dani",
-  "dj dezzy mac": "dj dezzy mac",
-  "dezzy mac": "dj dezzy mac",
-  "dj jaydon mac": "dj jaydon mac",
-  "jaydon mac": "dj jaydon mac",
-  "steve d j smith": "steve d j smith",
-  "steve g": "steve g",
-  "steven d": "steven d",
-  "mottmuzik": "mottmuzik",
-  "vish": "vish",
-  "wendell": "wendell",
-  "gordan": "gordan",
-  "christina": "christina",
-  "coll": "coll",
-  "j k": "jk",
-  "jk": "jk",
-  "cam": "cam",
-  "the byrdman": "the byrdman",
-  "dj european bob": "dj european bob",
-  "european bob": "dj european bob",
-  "danplayzbangers": "danplayzbangers",
-  "dan playz bangers": "danplayzbangers",
-  "daniel": "daniel",
-  "dj nero": "dj nero",
-  "nero": "dj nero",
-  "dj mary sailor": "dj mary sailor",
-  "mary sailor": "dj mary sailor",
-  "rob": "rob - trevor nannab",
-  "trevor nannab": "rob - trevor nannab",
-  "amar": "dj aj",
-  "dj aj": "dj aj",
-  "lil devil": "lil devil",
-  "rebecca": "rebecca - dj mix n match",
-  "dj mix n match": "rebecca - dj mix n match",
-  "daniel": "daniel",
-  "popped radio": "popped radio",
-  "suzette": "popped radio",
-  "dani": "dj queen dani",
-  "dani - dj queen dani": "dj queen dani",
-  "steve d": "steve d j smith",
-  "steve smith": "steve d j smith",
-  "dj james": "james stephen",
-  "dj james stephen": "james stephen",
-  "dani queen": "dj queen dani",
-  "reese": "reece",
-  "reece": "reece"
-};
+// 3️⃣ Normalize name for comparison
+const currentDJ = artist.toLowerCase().trim();
 
-    const mappedDJ = djMap[currentDJ] || currentDJ;
+// 4️⃣ Mapping (keep your full djMap here)
+const mappedDJ = djMap[currentDJ] || currentDJ;
 
-    // 4️⃣ Find matching show from schedule
-const allShows = document.querySelectorAll(".show");
-let matchedShow = null;
-allShows.forEach(show => {
-  const dj = show.dataset.dj?.toLowerCase() || "";
-  const showName = show.dataset.show?.toLowerCase() || "";
-  if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matchedShow = show;
+// 5️⃣ Try to find a schedule match
+const shows = document.querySelectorAll(".show");
+let matched = null;
+shows.forEach(li => {
+  const dj = li.dataset.dj?.toLowerCase() || "";
+  if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matched = li;
 });
 
+// 6️⃣ Update DOM
+section.className = "onair";
+status.innerHTML = "🔴 Now On Air";
 
-    // 5️⃣ Update DOM
-    if (matchedShow) {
-      const showTitle = matchedShow.dataset.show;
-      const timeSlot  = matchedShow.dataset.time;
-      section.className = "onair";
-      status.innerHTML = "🔴 Now On Air";
-      details.innerHTML = `
-        <strong>${artist}</strong><br>
-        ${showTitle} <br>
-        <span style="font-size:0.9rem;opacity:0.9;">${timeSlot}</span>
-      `;
-    } else {
-      // default fallback if nothing matched
-      section.className = "onair";
-      status.innerHTML = "🔴 Now On Air";
-      details.innerHTML = `<strong>${artist}</strong><br>${title}`;
-    }
-  } catch (err) {
-    console.error("On-air check error:", err);
-    section.className = "offair";
-    status.textContent = "Error checking stream.";
-    details.textContent = "";
-  }
+if (matched) {
+  details.innerHTML = `
+    <strong>${artist}</strong><br>
+    ${matched.dataset.show}<br>
+    <span style="font-size:0.9rem;opacity:0.9;">${matched.dataset.time}</span>
+  `;
+} else {
+  details.innerHTML = `<strong>${artist}</strong><br>${title}`;
 }
+
 
 // Run immediately + refresh every 90 seconds
 updateNowOnAir();
