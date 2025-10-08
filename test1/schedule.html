@@ -163,9 +163,13 @@ async function updateNowOnAir() {
 
   try {
   // --- Get Live365 data (new endpoint + proxy for CORS) ---
-  const res = await fetch(
-    "https://thingproxy.freeboard.io/fetch/https://public.api.live365.com/v1/nowplaying/a50378"
-  );
+  const res = await fetch
+  console.log("Status:", res.status);
+const data = await res.json();
+console.log("Live365 data:", data);(
+  "https://api.allorigins.garudalinux.org/raw?url=https://public.api.live365.com/v1/nowplaying/a50378"
+);
+
 
   if (!res.ok) throw new Error("Live365 fetch failed");
 
