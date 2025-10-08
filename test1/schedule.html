@@ -156,75 +156,95 @@
 
 </main>
 <script>
-// --- Wildstyle "Now On-Air" + Schedule Sync ---
 async function updateNowOnAir() {
   const section = document.getElementById("now-on");
   const status = document.getElementById("onair-status");
   const details = document.getElementById("onair-details");
 
   try {
-   // 1️⃣ Get Live365 data (new endpoint + CORS safe)
-let data;
-try {
-  const res = await fetch(
-    "https://api.allorigins.win/raw?url=" +
-    encodeURIComponent("https://public.api.live365.com/v1/nowplaying/a50378")
-  );
-  if (!res.ok) throw new Error("Live365 fetch failed");
-  data = await res.json();
- } catch (err) {
+    // --- Get Live365 data (new endpoint + proxy for CORS) ---
+    const res = await fetch(
+      "https://api.allorigins.win/raw?url=" +
+      encodeURIComponent("https://public.api.live365.com/v1/nowplaying/a50378")
+    );
+
+    if (!res.ok) throw new Error("Live365 fetch failed");
+
+    const data = await res.json();
+    const artist = (data.artist || "").trim();
+    const title  = (data.title || "").trim();
+
+    if (!artist && !title) {
+      section.className = "offair";
+      status.textContent = "🕓 Off Air";
+      details.textContent = "No current broadcast.";
+      return;
+    }
+
+    // --- Normalize + mapping ---
+    const currentDJ = artist.toLowerCase().trim();
+
+    const djMap = {
+      "dj echofalls": "dj echofalls",
+      "echofalls": "dj echofalls",
+      "dj dezzy mac": "dj dezzy mac",
+      "dezzy mac": "dj dezzy mac",
+      "dj lewis": "dj lewis",
+      "lewis": "dj lewis",
+      "hotshot": "hotshot",
+      "dj hotshot": "dj hotshot",
+      "dj queen dani": "dj queen dani",
+      "queen dani": "dj queen dani",
+      "lil devil": "lil devil",
+      "dj nero": "dj nero",
+      "danplayzbangers": "danplayzbangers",
+      "popped radio": "popped radio",
+      "steve g": "steve g",
+      "steve d j smith": "steve d j smith",
+      "mottmuzik": "mottmuzik",
+      "vish": "vish",
+      "wendell": "wendell",
+      "babyjayne": "babyjayne",
+      "james stephen": "james stephen"
+    };
+
+    const mappedDJ = djMap[currentDJ] || currentDJ;
+
+    // --- Find matching show in schedule ---
+    const shows = document.querySelectorAll(".show");
+    let matched = null;
+    shows.forEach(li => {
+      const dj = li.dataset.dj?.toLowerCase() || "";
+      if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matched = li;
+    });
+
+    // --- Update the Now-On box ---
+    section.className = "onair";
+    status.innerHTML = "🔴 Now On Air";
+
+    if (matched) {
+      details.innerHTML = `
+        <strong>${artist}</strong><br>
+        ${matched.dataset.show}<br>
+        <span style="font-size:0.9rem;opacity:0.9;">${matched.dataset.time}</span>
+      `;
+    } else {
+      details.innerHTML = `<strong>${artist}</strong><br>${title}`;
+    }
+
+  } catch (err) {
     console.error("On-air check error:", err);
     section.className = "offair";
     status.textContent = "Error checking stream.";
     details.textContent = "";
   }
-  return;
 }
-
-// 2️⃣ Read the now-playing info
-const artist = (data.artist || "").trim();
-const title  = (data.title || "").trim();
-
-if (!artist && !title) {
-  section.className = "offair";
-  status.textContent = "🕓 Off Air";
-  details.textContent = "No current broadcast.";
-  return;
-}
-
-// 3️⃣ Normalize name for comparison
-const currentDJ = artist.toLowerCase().trim();
-
-// 4️⃣ Mapping (keep your full djMap here)
-const mappedDJ = djMap[currentDJ] || currentDJ;
-
-// 5️⃣ Try to find a schedule match
-const shows = document.querySelectorAll(".show");
-let matched = null;
-shows.forEach(li => {
-  const dj = li.dataset.dj?.toLowerCase() || "";
-  if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matched = li;
-});
-
-// 6️⃣ Update DOM
-section.className = "onair";
-status.innerHTML = "🔴 Now On Air";
-
-if (matched) {
-  details.innerHTML = `
-    <strong>${artist}</strong><br>
-    ${matched.dataset.show}<br>
-    <span style="font-size:0.9rem;opacity:0.9;">${matched.dataset.time}</span>
-  `;
-} else {
-  details.innerHTML = `<strong>${artist}</strong><br>${title}`;
-}
-
 
 // Run immediately + refresh every 90 seconds
 updateNowOnAir();
 setInterval(updateNowOnAir, 90000);
 </script>
+
 
 <footer>
   <div>© Wildstyle Radio</div>
