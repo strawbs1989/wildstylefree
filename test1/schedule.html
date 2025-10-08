@@ -172,10 +172,12 @@ try {
   );
   if (!res.ok) throw new Error("Live365 fetch failed");
   data = await res.json();
-} catch (err) {
-  console.error("Fetch error:", err);
-  section.className = "offair";
-  status.textContent = "Error checking stream (fetch).";
+ } catch (err) {
+    console.error("On-air check error:", err);
+    section.className = "offair";
+    status.textContent = "Error checking stream.";
+    details.textContent = "";
+  }
   return;
 }
 
