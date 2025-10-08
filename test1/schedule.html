@@ -162,18 +162,17 @@ async function updateNowOnAir() {
   const details = document.getElementById("onair-details");
 
   try {
-    // --- Get Live365 data (new endpoint + proxy for CORS) ---
-    const res = await fetch(
-  "https://api.codetabs.com/v1/proxy?quest=https://public.api.live365.com/v1/nowplaying/a50378"
-);
+  // --- Get Live365 data (new endpoint + proxy for CORS) ---
+  const res = await fetch(
+    "https://thingproxy.freeboard.io/fetch/https://public.api.live365.com/v1/nowplaying/a50378"
+  );
 
+  if (!res.ok) throw new Error("Live365 fetch failed");
 
+  const data = await res.json();
+  const artist = (data.artist || "").trim();
+  const title  = (data.title || "").trim();
 
-    if (!res.ok) throw new Error("Live365 fetch failed");
-
-    const data = await res.json();
-    const artist = (data.artist || "").trim();
-    const title  = (data.title || "").trim();
 
     if (!artist && !title) {
       section.className = "offair";
