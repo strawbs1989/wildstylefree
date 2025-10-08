@@ -162,17 +162,20 @@ async function updateNowOnAir() {
   const details = document.getElementById("onair-details");
 
   try {
-  // --- Get Live365 data (CORS-safe) ---
+  // --- Get Live365 data (CORS-safe via Jason API proxy) ---
   const response = await fetch(
-    "https://api.allorigins.garudalinux.org/raw?url=https://public.api.live365.com/v1/nowplaying/a50378"
+    "https://api.allorigins.win/get?url=" +
+    encodeURIComponent("https://public.api.live365.com/v1/nowplaying/a50378")
   );
 
   if (!response.ok) throw new Error("Live365 fetch failed");
 
-  console.log("Status:", response.status);
+  // Parse JSON safely
+  const wrapped = await response.json();
 
-  // ✅ parse JSON correctly
-  const data = await response.json();
+  // AllOrigins wraps your JSON inside "contents"
+  const data = JSON.parse(wrapped.contents);
+
   console.log("Live365 data:", data);
 
   const artist = (data.artist || "").trim();
@@ -184,6 +187,7 @@ async function updateNowOnAir() {
     details.textContent = "No current broadcast.";
     return;
   }
+
 
 
     // --- Normalize + mapping ---
