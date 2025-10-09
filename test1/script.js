@@ -180,7 +180,7 @@ function isLiveNow() {
   const dayName = now.toLocaleDateString("en-GB", { weekday: "long" });
   const currentTime = now.toTimeString().slice(0, 5); // HH:MM
 
-  return liveShows.some(show =>
+  //return liveShows.some(show =>//
     show.day === dayName && currentTime >= show.start && currentTime < show.end
   );
 }
