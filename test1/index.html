@@ -216,73 +216,134 @@
   </aside>
 </main>
 <script>
-// --- Wildstyle "Now On-Air" + Schedule Sync ---
-async function updateNowOnAir() {
-  const section = document.getElementById("now-on");
-  const status = document.getElementById("onair-status");
-  const details = document.getElementById("onair-details");
+(function () {
+  // CORS-safe fetch of Live365 public nowplaying
+  const NOW_URL = "https://r.jina.ai/http://public.api.live365.com/v1/nowplaying/a50378";
 
-  try {
-    // 1️⃣ Get Live365 data (new endpoint + CORS safe)
-let data;
-try {
-  const res = await fetch(
-    "https://api.allorigins.win/raw?url=" +
-    encodeURIComponent("https://public.api.live365.com/v1/nowplaying/a50378")
-  );
-  if (!res.ok) throw new Error("Live365 fetch failed");
-  data = await res.json();
-} catch (err) {
-  console.error("Fetch error:", err);
-  section.className = "offair";
-  status.textContent = "Error checking stream (fetch).";
-  return;
-}
+  const djMap = {
+    "autodj":"autodj",
+    "james - wizard of rock":"james - wizard of rock",
+    "wizard of rock":"james - wizard of rock",
+    "james stephen":"james stephen",
+    "babyjayne":"babyjayne",
+    "lewis":"dj lewis",
+    "dj lewis":"dj lewis",
+    "dj echofalls":"dj echofalls",
+    "echofalls":"dj echofalls",
+    "hotshot":"hotshot",
+    "dj hotshot":"dj hotshot",
+    "queen dani":"dj queen dani",
+    "dj queen dani":"dj queen dani",
+    "dj dezzy mac":"dj dezzy mac",
+    "dezzy mac":"dj dezzy mac",
+    "dj jaydon mac":"dj jaydon mac",
+    "jaydon mac":"dj jaydon mac",
+    "steve d j smith":"steve d j smith",
+    "steve g":"steve g",
+    "steven d":"steven d",
+    "mottmuzik":"mottmuzik",
+    "vish":"vish",
+    "wendell":"wendell",
+    "gordan":"gordan",
+    "christina":"christina",
+    "coll":"coll",
+    "j k":"jk",
+    "jk":"jk",
+    "cam":"cam",
+    "the byrdman":"the byrdman",
+    "dj european bob":"dj european bob",
+    "european bob":"dj european bob",
+    "danplayzbangers":"danplayzbangers",
+    "dan playz bangers":"danplayzbangers",
+    "daniel":"daniel",
+    "dj nero":"dj nero",
+    "nero":"dj nero",
+    "dj mary sailor":"dj mary sailor",
+    "mary sailor":"dj mary sailor",
+    "rob":"rob - trevor nannab",
+    "trevor nannab":"rob - trevor nannab",
+    "amar":"dj aj",
+    "dj aj":"dj aj",
+    "lil devil":"lil devil",
+    "rebecca":"rebecca - dj mix n match",
+    "dj mix n match":"rebecca - dj mix n match",
+    "popped radio":"popped radio",
+    "suzette":"popped radio",
+    "dani":"dj queen dani",
+    "steve d":"steve d j smith",
+    "steve smith":"steve d j smith",
+    "dj james":"james stephen",
+    "dj james stephen":"james stephen",
+    "dani queen":"dj queen dani",
+    "reese":"reece",
+    "reece":"reece"
+  };
 
-// 2️⃣ Read the now-playing info
-const artist = (data.artist || "").trim();
-const title  = (data.title || "").trim();
+  function norm(s){ return (s||"").toLowerCase().trim(); }
 
-if (!artist && !title) {
-  section.className = "offair";
-  status.textContent = "🕓 Off Air";
-  details.textContent = "No current broadcast.";
-  return;
-}
+  async function getNow() {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbzOIT89czljIgFzKwlp2uXmEbF70f_g-zcdDdLLCSI5CvAZuOJUwclC4k-veXL8MP6t/exec", { cache: "no-store" });
+    if (!res.ok) throw new Error("Fetch failed: " + res.status);
+    const txt = await res.text();          // r.jina.ai returns raw body (CORS-friendly)
+    // Try to parse JSON safely (handles both direct JSON and text)
+    try { return JSON.parse(txt); } catch {
+      // Some proxies might wrap JSON; attempt to extract JSON substring
+      const start = txt.indexOf("{"); const end = txt.lastIndexOf("}");
+      if (start !== -1 && end !== -1) return JSON.parse(txt.slice(start, end+1));
+      throw new Error("Could not parse JSON");
+    }
+  }
 
-// 3️⃣ Normalize name for comparison
-const currentDJ = artist.toLowerCase().trim();
+  async function updateNowOnAir() {
+    const section = document.getElementById("now-on");
+    const status  = document.getElementById("onair-status");
+    const details = document.getElementById("onair-details");
+    if (!section || !status || !details) return;
 
-// 4️⃣ Mapping (keep your full djMap here)
-const mappedDJ = djMap[currentDJ] || currentDJ;
+    try {
+      const data   = await getNow();
+      const artist = (data.artist || data.now_playing?.artist || "").trim();
+      const title  = (data.title  || data.now_playing?.title  || "").trim();
 
-// 5️⃣ Try to find a schedule match
-const shows = document.querySelectorAll(".show");
-let matched = null;
-shows.forEach(li => {
-  const dj = li.dataset.dj?.toLowerCase() || "";
-  if (dj.includes(mappedDJ) || mappedDJ.includes(dj)) matched = li;
-});
+      if (!artist && !title) {
+        section.className = "offair";
+        status.textContent = "🕓 Off Air";
+        details.textContent = "No current broadcast.";
+        return;
+      }
 
-// 6️⃣ Update DOM
-section.className = "onair";
-status.innerHTML = "🔴 Now On Air";
+      section.className = "onair";
+      status.textContent = "🔴 Now On Air";
 
-if (matched) {
-  details.innerHTML = `
-    <strong>${artist}</strong><br>
-    ${matched.dataset.show}<br>
-    <span style="font-size:0.9rem;opacity:0.9;">${matched.dataset.time}</span>
-  `;
-} else {
-  details.innerHTML = `<strong>${artist}</strong><br>${title}`;
-}
+      // If schedule exists on this page, try to match and show proper show/time
+      const shows = document.querySelectorAll(".show");
+      if (shows.length) {
+        const current = djMap[norm(artist)] || norm(artist);
+        let matched = null;
+        for (const li of shows) {
+          const dj = norm(li.dataset.dj);
+          if (dj && (dj.includes(current) || current.includes(dj))) { matched = li; break; }
+        }
+        if (matched) {
+          details.innerHTML = `<strong>${artist}</strong><br>${matched.dataset.show}<br><span style="font-size:.9rem;opacity:.9">${matched.dataset.time||""}</span>`;
+          return;
+        }
+      }
 
+      // Fallback (e.g., homepage without schedule)
+      details.innerHTML = `<strong>${artist}</strong><br>${title}`;
 
-// Run immediately + refresh every 90 seconds
-updateNowOnAir();
-setInterval(updateNowOnAir, 90000);
-}
+    } catch (err) {
+      console.error("On-air check error:", err);
+      section.className = "offair";
+      status.textContent = "Error checking stream.";
+      details.textContent = "";
+    }
+  }
+
+  updateNowOnAir();
+  setInterval(updateNowOnAir, 90_000);
+})();
 </script>
 
 <footer>
