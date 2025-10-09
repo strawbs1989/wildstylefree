@@ -1,3 +1,4 @@
+const liveshows = liveshows || [];
 // ========= Audio Player (HLS-first) =========
 document.addEventListener("DOMContentLoaded", () => {
   const myAudio   = document.getElementById('myAudio');
