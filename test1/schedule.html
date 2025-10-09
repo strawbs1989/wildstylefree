@@ -241,8 +241,8 @@
 
     try {
       const data   = await getNow();
-      const artist = (data.artist || data.now_playing?.artist || "").trim();
-      const title  = (data.title  || data.now_playing?.title  || "").trim();
+      const artist = (data["current-track"]?.artist || data.artist || "").trim();
+      const title  = (data["current-track"]?.title || data.title || "").trim();
 
       if (!artist && !title) {
         section.className = "offair";
