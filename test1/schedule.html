@@ -155,135 +155,158 @@
 
 </main>
 <script>
-(function () {
-  // CORS-safe fetch of Live365 public nowplaying
-  const NOW_URL = "https://r.jina.ai/http://public.api.live365.com/v1/nowplaying/a50378";
+(() => {
+  // 1) Your Apps Script relay URL (the one you deployed)
+  const PROXY_URL = "https://script.google.com/macros/s/AKfycbzKXEi6sBRgp1ZjxT8UHZZlnG23zuunIfZ8brZ7tRjLFzPrPDI3XdMp6a8RG6eIzY-3/exec";
 
+  const elSection = document.getElementById("now-on");
+  const elStatus  = document.getElementById("onair-status");
+  const elDetails = document.getElementById("onair-details");
+
+  // Map Live365 names to schedule's data-dj
   const djMap = {
-    "autodj":"autodj",
+    "echofalls":"echofalls","dj echofalls":"echofalls",
+    "dj dezzy mac":"dj dezzy mac","dezzy mac":"dj dezzy mac",
+    "dj lewis":"dj lewis","lewis":"dj lewis",
+    "hotshot":"dj hotshot","dj hotshot":"dj hotshot",
+    "queen dani":"dj queen dani","dj queen dani":"dj queen dani",
+    "lil devil":"lil devil","dj nero":"dj nero",
+    "danplayzbangers":"danplayzbangers","dj european bob":"dj european bob",
+    "steve d j smith":"steve d j smith","steve g":"steve g",
+    "mottmuzik":"mottmuzik","vish":"vish","wendell":"wendell",
+    "babyjayne":"babyjayne","james stephen":"james stephen",
     "james - wizard of rock":"james - wizard of rock",
-    "wizard of rock":"james - wizard of rock",
-    "james stephen":"james stephen",
-    "babyjayne":"babyjayne",
-    "lewis":"dj lewis",
-    "dj lewis":"dj lewis",
-    "dj echofalls":"dj echofalls",
-    "echofalls":"dj echofalls",
-    "hotshot":"hotshot",
-    "dj hotshot":"dj hotshot",
-    "queen dani":"dj queen dani",
-    "dj queen dani":"dj queen dani",
-    "dj dezzy mac":"dj dezzy mac",
-    "dezzy mac":"dj dezzy mac",
-    "dj jaydon mac":"dj jaydon mac",
-    "jaydon mac":"dj jaydon mac",
-    "steve d j smith":"steve d j smith",
-    "steve g":"steve g",
-    "steven d":"steven d",
-    "mottmuzik":"mottmuzik",
-    "vish":"vish",
-    "wendell":"wendell",
-    "gordan":"gordan",
-    "christina":"christina",
-    "coll":"coll",
-    "j k":"jk",
-    "jk":"jk",
-    "cam":"cam",
-    "the byrdman":"the byrdman",
-    "dj european bob":"dj european bob",
-    "european bob":"dj european bob",
-    "danplayzbangers":"danplayzbangers",
-    "dan playz bangers":"danplayzbangers",
-    "daniel":"daniel",
-    "dj nero":"dj nero",
-    "nero":"dj nero",
-    "dj mary sailor":"dj mary sailor",
-    "mary sailor":"dj mary sailor",
-    "rob":"rob - trevor nannab",
-    "trevor nannab":"rob - trevor nannab",
-    "amar":"dj aj",
-    "dj aj":"dj aj",
-    "lil devil":"lil devil",
-    "rebecca":"rebecca - dj mix n match",
-    "dj mix n match":"rebecca - dj mix n match",
-    "popped radio":"popped radio",
-    "suzette":"popped radio",
-    "dani":"dj queen dani",
-    "steve d":"steve d j smith",
-    "steve smith":"steve d j smith",
-    "dj james":"james stephen",
-    "dj james stephen":"james stephen",
-    "dani queen":"dj queen dani",
-    "reese":"reece",
-    "reece":"reece"
+    "popped radio":"popped radio","coll":"coll","christina":"christina",
+    "gordan":"gordan","jk":"jk","cam":"cam","daniel":"daniel",
+    "dj aj":"dj aj","rob - trevor nannab":"rob - trevor nannab",
+    "rebecca - dj mix n match":"rebecca - dj mix n match"
   };
 
-  function norm(s){ return (s||"").toLowerCase().trim(); }
+  const norm = s => (s||"").toLowerCase().replace(/^dj\s+/, "").trim();
+
+  async function fetchWithTimeout(url, ms=8000) {
+    const ctrl = new AbortController(); const t = setTimeout(()=>ctrl.abort(), ms);
+    try { return await fetch(url, { cache:"no-store", signal: ctrl.signal }); }
+    finally { clearTimeout(t); }
+  }
 
   async function getNow() {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbzOIT89czljIgFzKwlp2uXmEbF70f_g-zcdDdLLCSI5CvAZuOJUwclC4k-veXL8MP6t/exec", { cache: "no-store" });
-    if (!res.ok) throw new Error("Fetch failed: " + res.status);
-    const txt = await res.text();          // r.jina.ai returns raw body (CORS-friendly)
-    // Try to parse JSON safely (handles both direct JSON and text)
-    try { return JSON.parse(txt); } catch {
-      // Some proxies might wrap JSON; attempt to extract JSON substring
-      const start = txt.indexOf("{"); const end = txt.lastIndexOf("}");
-      if (start !== -1 && end !== -1) return JSON.parse(txt.slice(start, end+1));
-      throw new Error("Could not parse JSON");
-    }
-  }
-
-  async function updateNowOnAir() {
-    const section = document.getElementById("now-on");
-    const status  = document.getElementById("onair-status");
-    const details = document.getElementById("onair-details");
-    if (!section || !status || !details) return;
-
     try {
-      const data   = await getNow();
+      const resp = await fetchWithTimeout(PROXY_URL);
+      if (!resp.ok) throw new Error("HTTP "+resp.status);
+      const data = await resp.json();
+
+      // Support both station JSON and public JSON shapes
       const artist = (data["current-track"]?.artist || data.artist || "").trim();
-      const title  = (data["current-track"]?.title || data.title || "").trim();
+      const title  = (data["current-track"]?.title  || data.title  || "").trim();
 
-      if (!artist && !title) {
-        section.className = "offair";
-        status.textContent = "🕓 Off Air";
-        details.textContent = "No current broadcast.";
-        return;
-      }
-
-      section.className = "onair";
-      status.textContent = "🔴 Now On Air";
-
-      // If schedule exists on this page, try to match and show proper show/time
-      const shows = document.querySelectorAll(".show");
-      if (shows.length) {
-        const current = djMap[norm(artist)] || norm(artist);
-        let matched = null;
-        for (const li of shows) {
-          const dj = norm(li.dataset.dj);
-          if (dj && (dj.includes(current) || current.includes(dj))) { matched = li; break; }
-        }
-        if (matched) {
-          details.innerHTML = `<strong>${artist}</strong><br>${matched.dataset.show}<br><span style="font-size:.9rem;opacity:.9">${matched.dataset.time||""}</span>`;
-          return;
-        }
-      }
-
-      // Fallback (e.g., homepage without schedule)
-      details.innerHTML = `<strong>${artist}</strong><br>${title}`;
-
-    } catch (err) {
-      console.error("On-air check error:", err);
-      section.className = "offair";
-      status.textContent = "Error checking stream.";
-      details.textContent = "";
+      if (!artist && !title) return null;
+      return { artist, title };
+    } catch (e) {
+      console.warn("getNow() failed:", e);
+      return null;
     }
   }
 
-  updateNowOnAir();
-  setInterval(updateNowOnAir, 90_000);
+  function clearLive() {
+    document.querySelectorAll(".show.live").forEach(li => {
+      li.classList.remove("live");
+      const tag = li.querySelector(".live-tag"); if (tag) tag.remove();
+    });
+  }
+
+  function highlight(li) {
+    if (!li) return;
+    li.classList.add("live");
+    if (!li.querySelector(".live-tag")) {
+      const span = document.createElement("span");
+      span.className = "live-tag"; span.textContent = "LIVE NOW";
+      span.style.marginLeft = "6px"; li.appendChild(span);
+    }
+    // Optional scroll: comment out if you don’t want it
+    // li.scrollIntoView({ behavior:"smooth", block:"center" });
+  }
+
+  function findMatchByName(artist, title) {
+    const name = djMap[norm(artist)] || norm(artist);
+    let match = null;
+    document.querySelectorAll(".show").forEach(li => {
+      const dj = norm(li.dataset.dj);
+      const show = norm(li.dataset.show);
+      if (dj && (dj === name || dj.includes(name) || name.includes(dj))) match = li;
+      else if (!match && title && show && norm(title).includes(show)) match = li;
+    });
+    return match;
+  }
+
+  // Fallback based on current time if API fails
+  function findMatchByTime(now=new Date()) {
+    const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const day = dayNames[now.getDay()];
+    const mins = now.getHours()*60 + now.getMinutes();
+    let best = null;
+    document.querySelectorAll(`.show[data-day="${day}"]`).forEach(li => {
+      const [sh, sm=0] = (li.dataset.start||"").split(":").map(Number);
+      const [eh, em=0] = (li.dataset.end||"").split(":").map(Number);
+      if (isNaN(sh) || isNaN(eh)) return;
+      let s = sh*60 + sm, e = eh*60 + em;
+      if (e === 0) e = 24*60;       // treat 00:00 as midnight
+      if (e <= s) e += 24*60;       // crosses midnight
+      let m = mins; if (e > 24*60 && m < s) m += 24*60;
+      if (m >= s && m < e) best = li;
+    });
+    return best;
+  }
+
+  async function update() {
+    if (!elSection || !elStatus || !elDetails) return;
+
+    clearLive();
+    const now = await getNow();
+
+    if (now) {
+      const { artist, title } = now;
+      const match = findMatchByName(artist, title);
+
+      elSection.className = "onair";
+      elStatus.textContent = "🔴 Now On Air";
+
+      if (match) {
+        elDetails.innerHTML = `<strong>${artist}</strong><br>${match.dataset.show}<br><span style="opacity:.9">${match.dataset.time||""}</span>`;
+        highlight(match);
+      } else {
+        elDetails.innerHTML = `<strong>${artist}</strong><br>${title}`;
+      }
+      return;
+    }
+
+    // Fallback by schedule/time
+    const byTime = findMatchByTime();
+    if (byTime) {
+      elSection.className = "onair";
+      elStatus.textContent = "🔴 Now On Air (by schedule)";
+      elDetails.innerHTML = `<strong>${byTime.dataset.dj||"Live Show"}</strong><br>${byTime.dataset.show||""}<br><span style="opacity:.9">${byTime.dataset.time||""}</span>`;
+      highlight(byTime);
+    } else {
+      elSection.className = "offair";
+      elStatus.textContent = "🕓 Off Air";
+      elDetails.textContent = "No current broadcast.";
+    }
+  }
+
+  update();
+  setInterval(update, 90_000);
 })();
 </script>
+
+<style>
+/* minimal styles if you don’t already have them */
+.show.live { background: linear-gradient(90deg,#ff0077,#007bff); color:#fff!important; border-radius:8px; box-shadow:0 0 15px rgba(255,0,119,.6); font-weight:600; }
+.live-tag { background:#fff; color:#ff0077; font-size:.75rem; font-weight:700; padding:2px 6px; border-radius:6px; margin-left:6px; }
+#now-on.onair { background: linear-gradient(90deg,#ff0077,#007bff); color:#fff; box-shadow:0 0 15px rgba(255,0,119,.7); }
+#now-on.offair { background:#f5f5f5; color:#444; border:1px solid #ddd; }
+</style>
+
 
 
 
