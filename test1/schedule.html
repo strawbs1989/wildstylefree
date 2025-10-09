@@ -221,7 +221,7 @@
   function norm(s){ return (s||"").toLowerCase().trim(); }
 
   async function getNow() {
-    const res = await fetch(NOW_URL, { cache: "no-store" });
+    const res = await fetch(https://script.google.com/macros/s/AKfycbzKXEi6sBRgp1ZjxT8UHZZlnG23zuunIfZ8brZ7tRjLFzPrPDI3XdMp6a8RG6eIzY-3/exec, { cache: "no-store" });
     if (!res.ok) throw new Error("Fetch failed: " + res.status);
     const txt = await res.text();          // r.jina.ai returns raw body (CORS-friendly)
     // Try to parse JSON safely (handles both direct JSON and text)
