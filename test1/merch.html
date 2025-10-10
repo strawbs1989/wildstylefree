@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Wildstyle.vip — Merch</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script defer src="script.js"></script>
+
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html">
+        <div class="brand-mark">WS</div>
+        <div class="brand-text">
+          <strong>Wildstyle Radio</strong>
+          <span>wildstyle.vip</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" id="nav">
+        <a href="./index.html">Home</a>
+        <a href="./djs.html">DJs</a>
+        <a href="./schedule.html">Schedule</a>
+        <a href="./merch.html">Merch</a>
+      </nav>
+
+      <button class="burger" id="burger" aria-label="Toggle Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nowplaying" id="nowplaying">
+      <img id="np-art" src="./assets/cover_placeholder.png" alt="art">
+      <div class="np-meta">
+        <div class="np-title" id="np-title">Loading track…</div>
+        <div class="np-artist" id="np-artist">Please wait</div>
+      </div>
+      <span class="live-pill" id="live-pill">OFF AIR</span>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">Official Merch</h2>
+        <p class="section-sub">Coming soon — Hoodies, Tees, Stickers & more</p>
+      </div>
+      <div class="glass" style="padding:2rem;text-align:center;">
+        <h3 style="margin:0 0 .5rem 0;">Launching Soon</h3>
+        <p class="muted">Stay tuned for the Wildstyle store!</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> Wildstyle Radio</div>
+    </div>
+  </footer>
+</body>
+</html>

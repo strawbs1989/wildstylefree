@@ -1,326 +1,107 @@
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>Wildstyle Radio — Home</title>
- <link rel="stylesheet" href="/test1/style.css">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script defer src="/test1/script.js"></script>
-<script src="/test1/request.js"></script>
+  <title>Wildstyle.vip — Schedule</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script defer src="script.js"></script>
 
 </head>
-<body>
-<header>
-<section id="now-on" class="offair">
-<div id="onair-status">Checking Schedule...</div>
-<div id="onair-details"></div>
-</section>
-  <div class="topbar">
-    <div class="brand">
-      <img src="/test1/placeholder.png" alt="logo">
-      <div>
-        <h1>Wildstyle Radio</h1>
-        <div style="font-size:12px;color:var(--muted)">United by beats • Powered by passion</div>
+<body class="slate">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html">
+        <div class="brand-mark">WS</div>
+        <div class="brand-text">
+          <strong>Wildstyle Radio</strong>
+          <span>wildstyle.vip</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" id="nav">
+        <a href="./index.html">Home</a>
+        <a href="./djs.html">DJs</a>
+        <a href="./schedule.html">Schedule</a>
+        <a href="./merch.html">Merch</a>
+      </nav>
+
+      <button class="burger" id="burger" aria-label="Toggle Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nowplaying" id="nowplaying">
+      <img id="np-art" src="./assets/cover_placeholder.png" alt="art">
+      <div class="np-meta">
+        <div class="np-title" id="np-title">Loading track…</div>
+        <div class="np-artist" id="np-artist">Please wait</div>
+      </div>
+      <span class="live-pill" id="live-pill">OFF AIR</span>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">WILDSTYLE ON-AIR SCHEDULE</h2>
+        <p class="section-sub">Polished slate design • easy to read • fully responsive</p>
+      </div>
+
+      <div class="schedule-grid">
+        
+        <div class="schedule-day glass">
+          <h3>Monday</h3>
+          <div class="slot"><div class="time">12pm – 2pm</div><div class="show">James-Wizard Of Rock</div></div>
+          <div class="slot"><div class="time">2pm – 4pm</div><div class="show">BabyJane</div></div>
+          <div class="slot"><div class="time">7pm – 10pm</div><div class="show">DJ Dezzy – Mix Set</div></div>
+        </div>
+        <div class="schedule-day glass">
+          <h3>Tuesday</h3>
+          <div class="slot"><div class="time">12pm – 2pm</div><div class="show">James-Wizard Of Rock</div></div>
+          <div class="slot"><div class="time">2pm – 4pm</div><div class="show">BabyJane</div></div>
+          <div class="slot"><div class="time">7pm – 10pm</div><div class="show">DJ Dezzy – Mix Set</div></div>
+        </div>
+        <div class="schedule-day glass">
+          <h3>Wednesday</h3>
+          <div class="slot"><div class="time">12pm – 2pm</div><div class="show">James-Wizard Of Rock</div></div>
+          <div class="slot"><div class="time">2pm – 4pm</div><div class="show">BabyJane</div></div>
+          <div class="slot"><div class="time">7pm – 10pm</div><div class="show">DJ Dezzy – Mix Set</div></div>
+        </div>
+        <div class="schedule-day glass">
+          <h3>Thursday</h3>
+          <div class="slot"><div class="time">12pm – 2pm</div><div class="show">James-Wizard Of Rock</div></div>
+          <div class="slot"><div class="time">2pm – 4pm</div><div class="show">BabyJane</div></div>
+          <div class="slot"><div class="time">7pm – 10pm</div><div class="show">DJ Dezzy – Mix Set</div></div>
+        </div>
+        <div class="schedule-day glass">
+          <h3>Friday</h3>
+          <div class="slot"><div class="time">12pm – 2pm</div><div class="show">James-Wizard Of Rock</div></div>
+          <div class="slot"><div class="time">2pm – 4pm</div><div class="show">BabyJane</div></div>
+          <div class="slot"><div class="time">7pm – 10pm</div><div class="show">DJ Dezzy – Mix Set</div></div>
+        </div>
+        <div class="schedule-day glass">
+          <h3>Saturday</h3>
+          <div class="slot"><div class="time">12pm – 2pm</div><div class="show">James-Wizard Of Rock</div></div>
+          <div class="slot"><div class="time">2pm – 4pm</div><div class="show">BabyJane</div></div>
+          <div class="slot"><div class="time">7pm – 10pm</div><div class="show">DJ Dezzy – Mix Set</div></div>
+        </div>
+        <div class="schedule-day glass">
+          <h3>Sunday</h3>
+          <div class="slot"><div class="time">12pm – 2pm</div><div class="show">James-Wizard Of Rock</div></div>
+          <div class="slot"><div class="time">2pm – 4pm</div><div class="show">BabyJane</div></div>
+          <div class="slot"><div class="time">7pm – 10pm</div><div class="show">DJ Dezzy – Mix Set</div></div>
+        </div>
       </div>
     </div>
-    <div class="controls">
-      <button id="playPause" class="btn">Play</button>
-      <a class="request" href="mailto:requests@wildstyle.vip">Request</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> Wildstyle Radio</div>
     </div>
-  </div>
-</header>
-
-<nav class="mainnav">
-  <div class="container">
-    <a href="index.html" class="navlink active">Home</a>
-    <a href="schedule.html" class="navlink">Schedule</a>
-    <a href="djs.html" class="navlink">DJs</a>
-  </div>
-</nav>
-
-<main class="container">
-  <section class="content">
-    <div class="card now-playing">
-      <div style="font-weight:700;margin-bottom:6px">Now Playing + Last Played</div>
-      <div id="nowMeta" style="color:var(--muted);font-size:14px">Loading track info…</div>
-    </div>
-
-  <div class="card" id="schedule">
-  <h3>Schedule</h3>
-  <div class="schedule-grid">
-
-    <!-- Monday -->
-    <div class="day-card">
-      <h4>Monday</h4>
-      <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;border:2px solid #1f8feb;border-radius:8px;padding:10px;color:#000;">
-        <li><strong>12am – 2am:</strong></li>
-        <li><strong>4am:</strong></li>
-        <li class="show" data-day="Monday" data-start="12:00" data-end="14:00" data-dj="James" data-show="Wizard Of Rock" data-time="Mondays 12PM – 2PM"><strong>12pm – 2pm:</strong> James - Wizard Of Rock</li>
-        <li class="show" data-day="Monday" data-start="14:00" data-end="16:00" data-dj="BabyJane" data-show="Afternoon Session" data-time="Mondays 2PM – 4PM"><strong>2pm - 4pm:</strong> BabyJane</li>
-        <li class="show" data-day="Monday" data-start="15:00" data-end="17:00" data-dj="James Stephen" data-show="Drive Mix" data-time="Mondays 3PM – 5PM"><strong>3pm - 5pm:</strong> James Stephen</li>
-        <li class="show" data-day="Monday" data-start="17:00" data-end="19:00" data-dj="Lewis" data-show="The Mix" data-time="Mondays 5PM – 7PM"><strong>5pm – 7pm:</strong> Lewis - Mix</li>
-        <li><strong>7pm – 9pm:</strong></li>
-        <li class="show" data-day="Monday" data-start="19:00" data-end="22:00" data-dj="DJ Dezzy Mac" data-show="Mixture" data-time="Mondays 7PM – 10PM"><strong>7pm – 10pm:</strong> DJ Dezzy Mac - Mixture (taking break)</li>
-        <li class="show" data-day="Monday" data-start="22:00" data-end="24:00" data-dj="DJ Jaydon Mac" data-show="Grime" data-time="Mondays 10PM – 12AM"><strong>10pm – 12am:</strong> DJ Jaydon Mac - Grime</li>
-      </ul>
-    </div>
-
-    <!-- Tuesday -->
-    <div class="day-card">
-      <h4>Tuesday</h4>
-      <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;border:2px solid #1f8feb;border-radius:8px;padding:10px;color:#000;">
-        <li class="show" data-day="Tuesday" data-start="01:00" data-end="02:00" data-dj="James" data-show="Wizard Of Rock" data-time="Tuesdays 1AM – 2AM"><strong>1am – 2am:</strong> James - Wizard Of Rock</li>
-        <li class="show" data-day="Tuesday" data-start="03:00" data-end="06:00" data-dj="DJ Queen Dani" data-show="Early Morning Energy" data-time="Tuesdays 3AM – 6AM"><strong>3am – 6am:</strong> Dani - DJ Queen Dani</li>
-        <li><strong>6am - 8am:</strong></li>
-        <li class="show" data-day="Tuesday" data-start="10:00" data-end="12:00" data-dj="HotShot" data-show="90s & 2000s Classics" data-time="Tuesdays 10AM – 12PM"><strong>10am – 12pm:</strong> Hotshot - 90's 2000's</li>
-        <li class="show" data-day="Tuesday" data-start="15:00" data-end="17:00" data-dj="James Stephen" data-show="Afternoon Vibes" data-time="Tuesdays 3PM – 5PM"><strong>3pm - 5pm:</strong> James Stephen</li>
-        <li class="show" data-day="Tuesday" data-start="20:00" data-end="22:00" data-dj="DJ Lewis" data-show="Evening Flow" data-time="Tuesdays 8PM – 10PM"><strong>8pm - 10pm:</strong> DJ Lewis</li>
-        <li class="show" data-day="Tuesday" data-start="22:00" data-end="24:00" data-dj="DanPlayzBangers" data-show="Night Beats" data-time="Tuesdays 10PM – 12AM"><strong>10pm - 12am:</strong> DanPlayzBangers</li>
-      </ul>
-    </div>
-
-    <!-- Wednesday -->
-    <div class="day-card">
-      <h4>Wednesday</h4>
-      <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;border:2px solid #1f8feb;border-radius:8px;padding:10px;color:#000;">
-        <li class="show" data-day="Wednesday" data-start="15:00" data-end="17:00" data-dj="James Stephen" data-show="Midweek Mix" data-time="Wednesdays 3PM – 5PM"><strong>3pm - 5pm:</strong> James Stephen</li>
-        <li class="show" data-day="Wednesday" data-start="18:00" data-end="19:00" data-dj="DJ European BOB" data-show="Power Hour" data-time="Wednesdays 6PM – 7PM"><strong>6pm - 7pm:</strong> DJ European BOB</li>
-        <li class="show" data-day="Wednesday" data-start="19:00" data-end="20:00" data-dj="DanPlayzBangers" data-show="Evening Heat" data-time="Wednesdays 7PM – 8PM"><strong>7pm - 8pm:</strong> DanPlayzBangers</li>
-        <li class="show" data-day="Wednesday" data-start="20:00" data-end="22:00" data-dj="Steve D J Smith" data-show="Electric Nights" data-time="Wednesdays 8PM – 10PM"><strong>8pm - 10pm:</strong> Steve D J Smith</li>
-        <li class="show" data-day="Wednesday" data-start="22:00" data-end="24:00" data-dj="Reece" data-show="Late Lounge" data-time="Wednesdays 10PM – 12AM"><strong>10pm - 12am:</strong> Reece</li>
-      </ul>
-    </div>
-
-    <!-- Thursday -->
-    <div class="day-card">
-      <h4>Thursday</h4>
-      <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;border:2px solid #1f8feb;border-radius:8px;padding:10px;color:#000;">
-        <li class="show" data-day="Thursday" data-start="08:00" data-end="10:00" data-dj="Coll" data-show="Morning Beats" data-time="Thursdays 8AM – 10AM"><strong>8am – 10am:</strong> Coll</li>
-        <li class="show" data-day="Thursday" data-start="00:00" data-end="01:00" data-dj="DJ Mary Sailor" data-show="Midnight Mix" data-time="Thursdays 12AM – 1AM"><strong>12am – 1am:</strong> DJ Mary Sailor</li>
-        <li class="show" data-day="Thursday" data-start="10:00" data-end="12:00" data-dj="Gordan" data-show="Morning Vibes" data-time="Thursdays 10AM – 12PM"><strong>10am – 12pm:</strong> Gordan</li>
-        <li class="show" data-day="Thursday" data-start="12:00" data-end="14:00" data-dj="Christina" data-show="Lunchtime Live" data-time="Thursdays 12PM – 2PM"><strong>12pm - 2pm:</strong> Christina</li>
-        <li class="show" data-day="Thursday" data-start="15:00" data-end="16:00" data-dj="James Stephen" data-show="Drive Hour" data-time="Thursdays 3PM – 4PM"><strong>3pm - 4pm:</strong> James Stephen</li>
-        <li class="show" data-day="Thursday" data-start="19:00" data-end="20:00" data-dj="DJ EchoFalls" data-show="Frequency Shift" data-time="Thursdays 7PM – 8PM"><strong>7pm – 8pm:</strong> EchoFalls</li>
-        <li class="show" data-day="Thursday" data-start="22:00" data-end="23:00" data-dj="MottMuzik" data-show="Late Flow" data-time="Thursdays 10PM – 11PM"><strong>10pm - 11pm:</strong> MottMuzik</li>
-      </ul>
-    </div>
-
-    <!-- Friday -->
-    <div class="day-card">
-      <h4>Friday</h4>
-      <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;border:2px solid #1f8feb;border-radius:8px;padding:10px;color:#000;">
-        <li class="show" data-day="Friday" data-start="00:00" data-end="04:00" data-dj="Steve G" data-show="Late Night Grooves" data-time="Fridays 12AM – 4AM"><strong>12am – 4am:</strong> Steve G</li>
-        <li class="show" data-day="Friday" data-start="10:00" data-end="12:00" data-dj="Vish" data-show="Morning Vibes" data-time="Fridays 10AM – 12PM"><strong>10am – 12pm:</strong> Vish</li>
-        <li class="show" data-day="Friday" data-start="15:00" data-end="17:00" data-dj="James Stephen" data-show="Afternoon Chill" data-time="Fridays 3PM – 5PM"><strong>3pm - 5pm:</strong> James Stephen</li>
-        <li class="show" data-day="Friday" data-start="16:00" data-end="20:00" data-dj="Steven D" data-show="Weekend Warm-Up" data-time="Fridays 4PM – 8PM"><strong>4pm – 8pm:</strong> Steven D</li>
-        <li class="show" data-day="Friday" data-start="20:00" data-end="22:00" data-dj="Wendell" data-show="Night Grooves" data-time="Fridays 8PM – 10PM"><strong>8pm – 10pm:</strong> Wendell</li>
-        <li class="show" data-day="Friday" data-start="22:00" data-end="23:00" data-dj="Rebecca" data-show="DJ Mix N Match" data-time="Fridays 10PM – 11PM"><strong>10pm - 11pm:</strong> Rebecca - DJ Mix N Match</li>
-      </ul>
-    </div>
-
-    <!-- Saturday -->
-    <div class="day-card">
-      <h4>Saturday</h4>
-      <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;border:2px solid #1f8feb;border-radius:8px;padding:10px;color:#000;">
-        <li class="show" data-day="Saturday" data-start="00:00" data-end="02:00" data-dj="Rob" data-show="Trevor Nannab" data-time="Saturdays 12AM – 2AM"><strong>12am – 2am:</strong> Rob - Trevor Nannab</li>
-        <li class="show" data-day="Saturday" data-start="02:00" data-end="04:00" data-dj="Amar" data-show="DJ AJ" data-time="Saturdays 2AM – 4AM"><strong>2am – 4am:</strong> Amar - DJ AJ</li>
-        <li><strong>4am – 6am:</strong></li>
-        <li class="show" data-day="Saturday" data-start="06:00" data-end="10:00" data-dj="Cam" data-show="Morning Energy" data-time="Saturdays 6AM – 10AM"><strong>6am – 10am:</strong> Cam</li>
-        <li class="show" data-day="Saturday" data-start="16:00" data-end="18:00" data-dj="The Byrdman" data-show="Afternoon Beats" data-time="Saturdays 4PM – 6PM"><strong>4pm – 6pm:</strong> The Byrdman</li>
-        <li class="show" data-day="Saturday" data-start="18:00" data-end="19:00" data-dj="Lil Devil" data-show="On Air" data-time="Saturdays 6PM – 7PM"><strong>6pm – 7pm:</strong> Lil Devil</li>
-        <li class="show" data-day="Saturday" data-start="19:00" data-end="20:00" data-dj="Sonic" data-show="PreRecorded" data-time="Saturdays 7PM – 8PM"><strong>7pm – 8pm:</strong> Sonic - PreRecorded</li>
-        <li class="show" data-day="Saturday" data-start="20:00" data-end="21:00" data-dj="Daniel" data-show="Live Session" data-time="Saturdays 8PM – 9PM"><strong>8pm – 9pm:</strong> Daniel</li>
-        <li class="show" data-day="Saturday" data-start="22:00" data-end="24:00" data-dj="DJ Nero" data-show="Midnight Set" data-time="Saturdays 10PM – 12AM"><strong>10pm – 12am:</strong> DJ Nero</li>
-      </ul>
-    </div>
-
-    <!-- Sunday -->
-    <div class="day-card">
-      <h4>Sunday</h4>
-      <ul style="padding-left:0;list-style:none;margin:0;font-size:0.95rem;border:2px solid #1f8feb;border-radius:8px;padding:10px;color:#000;">
-        <li class="show" data-day="Sunday" data-start="08:00" data-end="10:00" data-dj="The Byrdman" data-show="Morning Grooves" data-time="Sundays 8AM – 10AM"><strong>8am – 10am:</strong> The Byrdman</li>
-        <li class="show" data-day="Sunday" data-start="11:00" data-end="12:00" data-dj="Hotshot" data-show="80s 90s Show" data-time="Sundays 11AM – 12PM"><strong>11am – 12pm:</strong> Hotshot - 80's 90's</li>
-        <li class="show" data-day="Sunday" data-start="13:00" data-end="15:00" data-dj="JK" data-show="Afternoon Set" data-time="Sundays 1PM – 3PM"><strong>1pm – 3pm:</strong> JK</li>
-        <li class="show" data-day="Sunday" data-start="17:00" data-end="19:00" data-dj="DJ Lewis" data-show="Evening Flow" data-time="Sundays 5PM – 7PM"><strong>5pm – 7pm:</strong> DJ Lewis</li>
-        <li class="show" data-day="Sunday" data-start="19:00" data-end="20:00" data-dj="DJ European BOB" data-show="Sunday Mix" data-time="Sundays 7PM – 8PM"><strong>7pm – 8pm:</strong> DJ European BOB</li>
-        <li class="show" data-day="Sunday" data-start="20:00" data-end="21:00" data-dj="DJ EchoFalls" data-show="Frequency Shift" data-time="Sundays 8PM – 9PM"><strong>8pm – 9pm:</strong> EchoFalls</li>
-        <li class="show" data-day="Sunday" data-start="21:00" data-end="24:00" data-dj="Popped Radio (Suzette & Co)" data-show="Late Night Show" data-time="Sundays 9PM – 12AM"><strong>9pm – 12am:</strong> Popped Radio (Suzette & Co)</li>
-      </ul>
-    </div>
-
-  </div>
-</div> 
-  </div>
-</section>
-
-</main>
-<script>
-(() => {
-  // 1) Your Apps Script relay URL (the one you deployed)
-  const PROXY_URL = "https://script.google.com/macros/s/AKfycbzKXEi6sBRgp1ZjxT8UHZZlnG23zuunIfZ8brZ7tRjLFzPrPDI3XdMp6a8RG6eIzY-3/exec";
-
-  const elSection = document.getElementById("now-on");
-  const elStatus  = document.getElementById("onair-status");
-  const elDetails = document.getElementById("onair-details");
-
-  // Map Live365 names to schedule's data-dj
-  const djMap = {
-    "echofalls":"echofalls","dj echofalls":"echofalls",
-    "dj dezzy mac":"dj dezzy mac","dezzy mac":"dj dezzy mac",
-    "dj lewis":"dj lewis","lewis":"dj lewis",
-    "hotshot":"dj hotshot","dj hotshot":"dj hotshot",
-    "queen dani":"dj queen dani","dj queen dani":"dj queen dani",
-    "lil devil":"lil devil","dj nero":"dj nero",
-    "danplayzbangers":"danplayzbangers","dj european bob":"dj european bob",
-    "steve d j smith":"steve d j smith","steve g":"steve g",
-    "mottmuzik":"mottmuzik","vish":"vish","wendell":"wendell",
-    "babyjayne":"babyjayne","james stephen":"james stephen",
-    "james - wizard of rock":"james - wizard of rock",
-    "popped radio":"popped radio","coll":"coll","christina":"christina",
-    "gordan":"gordan","jk":"jk","cam":"cam","daniel":"daniel",
-    "dj aj":"dj aj","rob - trevor nannab":"rob - trevor nannab",
-    "rebecca - dj mix n match":"rebecca - dj mix n match"
-  };
-
-  const norm = s => (s||"").toLowerCase().replace(/^dj\s+/, "").trim();
-
-  async function fetchWithTimeout(url, ms=8000) {
-    const ctrl = new AbortController(); const t = setTimeout(()=>ctrl.abort(), ms);
-    try { return await fetch(url, { cache:"no-store", signal: ctrl.signal }); }
-    finally { clearTimeout(t); }
-  }
-
-  async function getNow() {
-    try {
-      const resp = await fetchWithTimeout(PROXY_URL);
-      if (!resp.ok) throw new Error("HTTP "+resp.status);
-      const data = await resp.json();
-
-      // Support both station JSON and public JSON shapes
-      const artist = (data["current-track"]?.artist || data.artist || "").trim();
-      const title  = (data["current-track"]?.title  || data.title  || "").trim();
-
-      if (!artist && !title) return null;
-      return { artist, title };
-    } catch (e) {
-      console.warn("getNow() failed:", e);
-      return null;
-    }
-  }
-
-  function clearLive() {
-    document.querySelectorAll(".show.live").forEach(li => {
-      li.classList.remove("live");
-      const tag = li.querySelector(".live-tag"); if (tag) tag.remove();
-    });
-  }
-
-  function highlight(li) {
-    if (!li) return;
-    li.classList.add("live");
-    if (!li.querySelector(".live-tag")) {
-      const span = document.createElement("span");
-      span.className = "live-tag"; span.textContent = "LIVE NOW";
-      span.style.marginLeft = "6px"; li.appendChild(span);
-    }
-    // Optional scroll: comment out if you don’t want it
-    // li.scrollIntoView({ behavior:"smooth", block:"center" });
-  }
-
-  function findMatchByName(artist, title) {
-    const name = djMap[norm(artist)] || norm(artist);
-    let match = null;
-    document.querySelectorAll(".show").forEach(li => {
-      const dj = norm(li.dataset.dj);
-      const show = norm(li.dataset.show);
-      if (dj && (dj === name || dj.includes(name) || name.includes(dj))) match = li;
-      else if (!match && title && show && norm(title).includes(show)) match = li;
-    });
-    return match;
-  }
-
-  // Fallback based on current time if API fails
-  function findMatchByTime(now=new Date()) {
-    const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const day = dayNames[now.getDay()];
-    const mins = now.getHours()*60 + now.getMinutes();
-    let best = null;
-    document.querySelectorAll(`.show[data-day="${day}"]`).forEach(li => {
-      const [sh, sm=0] = (li.dataset.start||"").split(":").map(Number);
-      const [eh, em=0] = (li.dataset.end||"").split(":").map(Number);
-      if (isNaN(sh) || isNaN(eh)) return;
-      let s = sh*60 + sm, e = eh*60 + em;
-      if (e === 0) e = 24*60;       // treat 00:00 as midnight
-      if (e <= s) e += 24*60;       // crosses midnight
-      let m = mins; if (e > 24*60 && m < s) m += 24*60;
-      if (m >= s && m < e) best = li;
-    });
-    return best;
-  }
-
-  async function update() {
-    if (!elSection || !elStatus || !elDetails) return;
-
-    clearLive();
-    const now = await getNow();
-
-    if (now) {
-      const { artist, title } = now;
-      const match = findMatchByName(artist, title);
-
-      elSection.className = "onair";
-      elStatus.textContent = "🔴 Now On Air";
-
-      if (match) {
-        elDetails.innerHTML = `<strong>${artist}</strong><br>${match.dataset.show}<br><span style="opacity:.9">${match.dataset.time||""}</span>`;
-        highlight(match);
-      } else {
-        elDetails.innerHTML = `<strong>${artist}</strong><br>${title}`;
-      }
-      return;
-    }
-
-    // Fallback by schedule/time
-    const byTime = findMatchByTime();
-    if (byTime) {
-      elSection.className = "onair";
-      elStatus.textContent = "🔴 Now On Air (by schedule)";
-      elDetails.innerHTML = `<strong>${byTime.dataset.dj||"Live Show"}</strong><br>${byTime.dataset.show||""}<br><span style="opacity:.9">${byTime.dataset.time||""}</span>`;
-      highlight(byTime);
-    } else {
-      elSection.className = "offair";
-      elStatus.textContent = "🕓 Off Air";
-      elDetails.textContent = "No current broadcast.";
-    }
-  }
-
-  update();
-  setInterval(update, 90_000);
-})();
-</script>
-
-<style>
-/* minimal styles if you don’t already have them */
-.show.live { background: linear-gradient(90deg,#ff0077,#007bff); color:#fff!important; border-radius:8px; box-shadow:0 0 15px rgba(255,0,119,.6); font-weight:600; }
-.live-tag { background:#fff; color:#ff0077; font-size:.75rem; font-weight:700; padding:2px 6px; border-radius:6px; margin-left:6px; }
-#now-on.onair { background: linear-gradient(90deg,#ff0077,#007bff); color:#fff; box-shadow:0 0 15px rgba(255,0,119,.7); }
-#now-on.offair { background:#f5f5f5; color:#444; border:1px solid #ddd; }
-</style>
-
-
-
-
-<footer>
-  <div>© Wildstyle Radio</div>
-  <div class="social">
-    <a href="#">Facebook</a>
-    <a href="#">Twitter</a>
-    <a href="#">Instagram</a>
-    <a href="#">YouTube</a>
-  </div>
-
-
-
-</footer>
+  </footer>
 </body>
 </html>

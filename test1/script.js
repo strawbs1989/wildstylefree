@@ -1,269 +1,152 @@
-const liveshows = liveshows || [];
-// ========= Audio Player (HLS-first) =========
-document.addEventListener("DOMContentLoaded", () => {
-  const myAudio   = document.getElementById('myAudio');
-  const playdiv   = document.getElementById('playdiv');
-  const pausediv  = document.getElementById('pausediv');
-  const control   = document.getElementById('control');
-  const openBtn   = document.getElementById('openPlayer');
-  const streamUrl = 'https://streaming.live365.com/a50378/playlist.m3u8';
+// Year
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  if (!myAudio) return;
+// Burger menu
+const burger = document.getElementById("burger");
+const nav = document.getElementById("nav");
+if (burger && nav){ burger.addEventListener("click", ()=> nav.classList.toggle("open")); }
 
-  // HLS attach
-  if (window.Hls && Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(streamUrl);
-    hls.attachMedia(myAudio);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      console.log('✅ HLS manifest loaded');
-    });
-  } else if (myAudio.canPlayType('application/vnd.apple.mpegurl')) {
-    myAudio.src = streamUrl; // native HLS
+// HLS player
+const STREAM_URL = "https://streaming.live365.com/a50378";
+const audio = document.getElementById("audio");
+const playBtn = document.getElementById("playBtn");
+const muteBtn = document.getElementById("muteBtn");
+
+if (audio){
+  if (window.Hls && window.Hls.isSupported()) {
+    const hls = new Hls({lowLatencyMode:true});
+    hls.loadSource(STREAM_URL);
+    hls.attachMedia(audio);
   } else {
-    myAudio.src = 'https://streaming.live365.com/a50378'; // MP3 fallback
+    audio.src = STREAM_URL;
   }
-
-  // Toggle UI helper
-  function updateIcons() {
-    if (myAudio.paused) {
-      if (playdiv)  playdiv.style.display  = 'block';
-      if (pausediv) pausediv.style.display = 'none';
-    } else {
-      if (playdiv)  playdiv.style.display  = 'none';
-      if (pausediv) pausediv.style.display = 'block';
-    }
-  }
-
-  // Button: topbar icon
-  if (control) {
-    control.addEventListener('click', () => {
-      if (myAudio.paused) {
-        myAudio.play().then(updateIcons).catch(e => console.error('❌ Play failed:', e));
-      } else {
-        myAudio.pause();
-        updateIcons();
-      }
-    });
-  }
-
-  // Button: sidebar "Open Player" uses same audio
-  if (openBtn) {
-    openBtn.addEventListener('click', () => {
-      if (myAudio.paused) {
-        myAudio.play().then(updateIcons).catch(e => console.error('❌ Play failed:', e));
-      } else {
-        myAudio.pause();
-        updateIcons();
-      }
-    });
-  }
-
-  // Keep icons in sync with real state
-  myAudio.addEventListener('play', updateIcons);
-  myAudio.addEventListener('pause', updateIcons);
-  myAudio.addEventListener('ended', updateIcons);
-
-  // Stop audio when leaving page
-  window.addEventListener('pagehide', () => {
-    if (!myAudio.paused) myAudio.pause();
-  });
-});
-
-// ========= Desktop/Mobile nav active state =========
-document.querySelectorAll('.navlink').forEach(a => {
-  a.addEventListener('click', () => {
-    document.querySelectorAll('.navlink').forEach(x => x.classList.remove('active'));
-    a.classList.add('active');
-  });
-});
-
-// ========= Mobile nav toggle =========
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("menuToggle");
-  const menu   = document.getElementById("mobileMenu");
-  if (toggle && menu) {
-    toggle.addEventListener("click", () => menu.classList.toggle("show"));
-  }
-});
-
-// ========= Now Playing (guarded; skip if elements not present) =========
-async function fetchNowPlaying() {
-  const titleEl = document.getElementById("npTitle");
-  const artistEl = document.getElementById("npArtist");
-  const artEl = document.getElementById("npArt");
-  if (!titleEl || !artistEl || !artEl) return; // using iframe on home page
-
-  try {
-    const res = await fetch("https://api.live365.com/station/a50378");
-    const data = await res.json();
-    if (data && data.currentTrack) {
-      titleEl.textContent  = data.currentTrack.title || "Unknown Title";
-      artistEl.textContent = data.currentTrack.artist || "Unknown Artist";
-      artEl.src            = data.currentTrack.art || "/test1/placeholder.png";
-    }
-  } catch (err) {
-    console.error("Now Playing fetch error:", err);
-  }
-}
-fetchNowPlaying();
-setInterval(fetchNowPlaying, 20000);
-
-// ========= Who's Listening (guarded) =========
-async function fetchWhoListening() {
-  const totalEl = document.getElementById("listenerTotal");
-  const listEl  = document.getElementById("listenerLocations");
-  if (!totalEl || !listEl) return;
-
-  try {
-    const res = await fetch("/test1/real_time_sessions.csv");
-    const csvText = await res.text();
-
-    const rows = csvText.trim().split("\n").map(r => r.split(","));
-    const headers = rows[0];
-    const dataRows = rows.slice(1);
-
-    const countryIdx = headers.indexOf("country");
-    const cityIdx    = headers.indexOf("city");
-    const countIdx   = headers.indexOf("active_session_count");
-
-    let total = 0;
-    const locations = {};
-
-    dataRows.forEach(r => {
-      const country = r[countryIdx];
-      const city    = r[cityIdx];
-      const count   = parseInt(r[countIdx] || "0", 10);
-      total += count;
-      const key = `${country} (${city})`;
-      locations[key] = (locations[key] || 0) + count;
-    });
-
-    totalEl.textContent = total;
-
-    const top = Object.entries(locations).sort((a,b) => b[1]-a[1]).slice(0,5);
-    listEl.innerHTML = "";
-    top.forEach(([loc, count]) => {
-      const li = document.createElement("li");
-      li.textContent = `${loc} — ${count}`;
-      listEl.appendChild(li);
-    });
-  } catch (err) {
-    console.error("Error loading Who's Listening CSV:", err);
-  }
-}
-fetchWhoListening();
-setInterval(fetchWhoListening, 60000);
-
-// ========= WSR Info (placeholder until real source) =========
-function loadWSRInfo() {
-  const xrTopEl = document.getElementById('xrTop');
-  const xrStatsEl = document.getElementById('xrStats');
-  if (!xrTopEl || !xrStatsEl) return;
-
-  xrTopEl.innerHTML  = 'Top requested track: <strong>The Only Way Is Up - Yazz</strong>';
-  xrStatsEl.innerHTML = 'Worldwide listeners: <strong>114,971</strong> • Requests placed in 2025: <strong>5695</strong>';
-}
-loadWSRInfo();
-
-// ===== SONG REQUEST OPEN/CLOSE SYSTEM =====
-
-// Define live shows
-const liveShowsSchedule = [
-  { day: "Thursday", start: "19:00", end: "20:00" },
-  { day: "Sunday", start: "20:00", end: "21:00" },
-];
-
-// Check if a show is live
-function isLiveNow() {
-  const now = new Date();
-  const dayName = now.toLocaleDateString("en-GB", { weekday: "long" });
-  const currentTime = now.toTimeString().slice(0, 5); // HH:MM
-
-  //return liveShows.some(show =>//
-    show.day === dayName && currentTime >= show.start && currentTime < show.end
-  );
-}
-
-// Update request form visibility
-function updateRequestStatus() {
-  const form = document.getElementById("requestForm");
-  const status = document.getElementById("request-status");
-
-  if (!form || !status) return;
-
-  if (isLiveNow()) {
-    form.style.display = "block";
-    status.textContent = "✅ Requests are OPEN — your DJ is live!";
-  } else {
-    form.style.display = "none";
-    status.textContent = "❌ Requests are CLOSED — please come back during a live show.";
-  }
-}
-// Top10
-async function fetchTop10Played() {
-  const box = document.getElementById("top10played");
-  if (!box) return;
-
-  try {
-    const res = await fetch("/test1/top10.json", { cache: "no-store" });
-    const data = await res.json();
-
-    box.innerHTML = "";
-    data.forEach((track, i) => {
-      const li = document.createElement("li");
-      li.className = "track-item";
-      li.innerHTML = `
-        <img src="${track.art || "/test1/placeholder.png"}" class="track-art">
-        <div class="track-meta">
-          <strong>${i + 1}. ${track.artist} - ${track.title}</strong><br>
-          <span>Played ${track.count} times</span>
-        </div>`;
-      box.appendChild(li);
-    });
-  } catch (err) {
-    console.error("Top10 error:", err);
-    box.innerHTML = "<li>Error loading Top 10 Played</li>";
-  }
-}
-
-fetchTop10Played();
-
-// Refresh every 5 minutes
-setInterval(fetchTop10Played, 300000);
-
-
-// Run check every 30s
-setInterval(updateRequestStatus, 30000);
-window.addEventListener("load", updateRequestStatus);
-
-// Handle Formspree submission
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("requestForm");
-  const success = document.getElementById("success");
-
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const data = new FormData(form);
-
-      fetch(form.action, {
-        method: "POST",
-        body: data,
-        headers: { Accept: "application/json" }
-      }).then(response => {
-        if (response.ok) {
-          form.reset();
-          form.style.display = "none";
-          success.style.display = "block";
+  let playing = false;
+  if (playBtn){
+    playBtn.addEventListener("click", async () => {
+      try {
+        if (!playing) {
+          await audio.play();
+          playing = true;
+          playBtn.textContent = "⏸ Pause";
         } else {
-          alert("⚠️ There was an issue sending your request.");
+          audio.pause();
+          playing = false;
+          playBtn.textContent = "▶ Listen Live";
         }
-      }).catch(() => {
-        alert("⚠️ Network error. Try again later.");
-      });
+      } catch (e) { console.log("Playback blocked", e); }
     });
   }
-});
+  if (muteBtn){ muteBtn.addEventListener("click", () => {
+      audio.muted = !audio.muted; muteBtn.textContent = audio.muted ? "Unmute" : "Mute";
+    });
+  }
+}
 
+// Subtle animated background
+const canvas = document.getElementById("bgCanvas");
+if (canvas){
+  const ctx = canvas.getContext("2d");
+  function resize(){ canvas.width = window.innerWidth; canvas.height = 240; }
+  window.addEventListener("resize", resize); resize();
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<90;i++){
+      const y = (i/90)*canvas.height;
+      const grd = ctx.createLinearGradient(0,y,canvas.width,y);
+      grd.addColorStop(0,"rgba(42,123,255,0)");
+      grd.addColorStop(0.5,"rgba(42,123,255,0.15)");
+      grd.addColorStop(1,"rgba(255,42,109,0)");
+      ctx.fillStyle = grd;
+      ctx.fillRect(0,y,canvas.width,2);
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
 
+// UK-Time Schedule + Live Indicator
+const DH = Array.from({ length: 8 }, () => Array(24).fill(""));
+
+// MONDAY
+DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
+DH[1][14] = "2pm – 4pm<br>BabyJane";
+DH[1][15] = "3pm – 5pm<br>James Stephen";
+DH[1][17] = "5pm – 7pm<br>Lewis";
+DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
+DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
+
+// TUESDAY
+DH[2][1] = "1am – 2am<br>Wizard Of Rock";
+DH[2][3] = "3am – 6am<br>Dani - DJ Queen Dani";
+DH[2][10] = "10am – 12pm<br>HothotDJ";
+DH[2][15] = "3pm – 5pm<br>James Stephen";
+DH[2][20] = "8pm – 10pm<br>Dj Lewis";
+
+// WEDNESDAY
+DH[3][15] = "3pm – 5pm<br>James Stephen";
+DH[3][18] = "6pm – 7pm<br>Auto";
+DH[3][20] = "8pm – 10pm<br>Steve DJ Smith";
+DH[3][22] = "10pm – 12am<br>Reece";
+
+// THURSDAY
+DH[4][0]  = "12am – 4am<br>Auto";
+DH[4][8]  = "8am – 10am<br>Coll";
+DH[4][10] = "10am – 12pm<br>Gordan";
+DH[4][15] = "3pm – 4pm<br>James Stephen";
+DH[4][19] = "7pm – 8pm<br>Echofalls (DJ Strawbs)";
+DH[4][22] = "10pm – 11pm<br>MottMuzik";
+
+// FRIDAY
+DH[5][0]  = "12am – 4am<br>SteveG";
+DH[5][10] = "10am – 12pm<br>Vish";
+DH[5][15] = "3pm – 5pm<br>James Stephen";
+DH[5][16] = "4pm – 8pm<br>StevenD";
+DH[5][20] = "8pm – 10pm<br>Wendall";
+DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
+
+// SATURDAY
+DH[6][0]  = "12am – 2am<br>Auto";
+DH[6][2]  = "2am – 4am<br>DJ AJ";
+DH[6][6]  = "6am – 10am<br>Cam";
+DH[6][10] = "10am – 12pm<br>DJ Nero";
+DH[6][16] = "4pm – 6pm<br>The Byrdman";
+DH[6][18] = "6pm – 8pm<br>DJ LiL Devil";
+DH[6][19] = "7pm – 8pm<br>Sonic-Recorded";
+DH[6][20] = "8pm – 9pm<br>Daniel";
+
+// SUNDAY
+DH[7][8]  = "8am – 10am<br>The Byrdman";
+DH[7][11] = "11am – 12pm<br>HotShot - 80's 90's";
+DH[7][13] = "1pm – 3pm<br>JK";
+DH[7][17] = "5pm – 7pm<br>DJ Lewis";
+DH[7][19] = "7pm – 8pm<br>Auto";
+DH[7][20] = "8pm – 9pm<br>BIG BOSS DJ Echofalls";
+DH[7][21] = "9pm – 12am<br>Popped Radio";
+
+function NowON() {
+  const ukNow = new Date(new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }));
+  const day = ukNow.getDay() === 0 ? 7 : ukNow.getDay();
+  const hour = ukNow.getHours();
+
+  const livePill = document.getElementById("live-pill");
+  const npTitle = document.getElementById("np-title");
+  const npArtist = document.getElementById("np-artist");
+  if (!livePill || !npTitle || !npArtist) return;
+
+  const show = DH[day][hour];
+
+  if (show && show !== "") {
+    livePill.textContent = "ON AIR";
+    livePill.classList.add("onair");
+    npTitle.innerHTML = show.split("<br>")[0];
+    npArtist.innerHTML = show.split("<br>")[1];
+  } else {
+    livePill.textContent = "OFF AIR";
+    livePill.classList.remove("onair");
+    npTitle.innerHTML = "No current broadcast";
+    npArtist.innerHTML = "Schedule resumes soon";
+  }
+}
+NowON();
+setInterval(NowON, 60000);

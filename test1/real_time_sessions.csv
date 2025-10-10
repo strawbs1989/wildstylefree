@@ -1,6 +1,0 @@
-country,region,city,platform,duration,active_session_count,started_session_count,perc_total,ip
-US,South Carolina,Columbia,Chrome,3492,1,1,0.2,7544e3927fa6a5470c39025581be4a4d875e6172
-GB,West Sussex,Burgess Hill,Edge,370,1,1,0.2,d7aa5dc3e542f3d2660767c8570b925409703106
-GB,Bolton,Bolton,Other,143,1,1,0.2,30bb60902a5523038663d7364ebe7b95fc0dfc4c
-US,Florida,Sebastian,Chrome,102,1,1,0.2,7f5266046e885213d615b1b98ef994d7aa28974c
-GB,West Sussex,Burgess Hill,Other,90,1,1,0.2,d7aa5dc3e542f3d2660767c8570b925409703106

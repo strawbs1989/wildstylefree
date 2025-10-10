@@ -1,202 +1,138 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <title>Wildstyle.vip — DJs</title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Wildstyle Radio — DJs</title>
-  <link rel="stylesheet" href="/test1/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="/test1/request.js"></script>
-  <script src="/test1/listening.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script defer src="script.js"></script>
+
 </head>
 <body>
-  <header>
-    <div class="topbar">
-      <div class="brand">
-        <img src="placeholder.png" alt="logo">
-        <h1>Our DJs</h1>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html">
+        <div class="brand-mark">WS</div>
+        <div class="brand-text">
+          <strong>Wildstyle Radio</strong>
+          <span>wildstyle.vip</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" id="nav">
+        <a href="./index.html">Home</a>
+        <a href="./djs.html">DJs</a>
+        <a href="./schedule.html">Schedule</a>
+        <a href="./merch.html">Merch</a>
+      </nav>
+
+      <button class="burger" id="burger" aria-label="Toggle Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nowplaying" id="nowplaying">
+      <img id="np-art" src="./assets/cover_placeholder.png" alt="art">
+      <div class="np-meta">
+        <div class="np-title" id="np-title">Loading track…</div>
+        <div class="np-artist" id="np-artist">Please wait</div>
       </div>
+      <span class="live-pill" id="live-pill">OFF AIR</span>
     </div>
   </header>
-  
-<nav class="mainnav">
-  <div class="container">
-    <a href="index.html" class="navlink active">Home</a>
-    <a href="schedule.html" class="navlink">Schedule</a>
-    <a href="djs.html" class="navlink">DJs</a>
-  </div>
-</nav>
 
-  <main class="container">
-    <section class="content">
-      <div class="card">
-        <h2>Meet the Team</h2>
-        <div class="dj-grid">
-          <!-- Each DJ card -->
-          <div class="dj-grid">
-
-  <div class="gallery-item">
-    <a target="_blank" href="https://wildstyle.vip/test1/images/hotshot.jpg">
-      <img src="https://wildstyle.vip/test1/images/hotshot.jpg" width="600" height="400">
-    </a>
-    <div class="desc">HotShot</div>
-    <h3>Co-Owner</h3>
-	<a href="/graham.html" class="dj-link">Profile</a>
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/dawn.jpg" width="600" height="400">
-      <div class="desc">Dawn</div>
-	<a href="/dawn.html" class="dj-link">Profile</a>
-   
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/laura.jpg" width="600" height="400">
-      <div class="desc">Laura</div>
-	<a href="/laura.html" class="dj-link">Profile</a>
-	<h3>HR</h3>
-   
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/babyjayne.jpg" width="600" height="400">
-      <div class="desc">BabyJayne</div>
-	
-   
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/rebecca.jpg" width="600" height="400">
-      <div class="desc">DJ Mix N Match</div>
-	
-   
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/mary.jpg" width="600" height="400">
-      <div class="desc">Mary</div>
-	<a href="/mary.html" class="dj-link">Profile</a>
-   
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/djstrawbs.jpg" width="600" height="400">
-    </a>
-    <div class="desc">EchoFalls</div>
-    <a href="/echofalls.html" class="dj-link">Profile</a>
-	<h3>Boss</h3>
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/marka.jpg" width="600" height="400">
-	<div class="desc">Mark</div>
-	<a href="/mark.html" class="dj-link">Profile</a>
-  </div>
-
-  <div class="gallery-item">
-    <a target="_blank" href="https://wildstyle.vip/test1/images/lewis.jpg">
-      <img src="https://wildstyle.vip/test1/images/lewis.jpg" width="600" height="400">
-    </a>
-    <div class="desc">Manager/DJ</div>
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/vishal.jpg" width="600" height="400">
-      <div class="desc">Xavish</div>
-	<a href="/vish.html" class="dj-link">Profile</a>
-    
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/jk.jpg" width="600" height="400">
-      <div class="desc">JK</div>
-	<a href="/jk.html" class="dj-link">Profile</a>
-    
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/farley.jpg" width="600" height="400">
-    <div class="desc">Mark</div>
-	<a href="/mark.html" class="dj-link">Profile</a>
-    
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/dezzy.jpg" width="600" height="400">
-    <div class="desc">DJ Dezzy</div>
-	<a href="/mark.html" class="dj-link">Profile</a>
-	<h3>DJ Manager</h3>
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/aj.jpg" width="600" height="400">
-    <div class="desc">AJ</div>
-	<a href="/aj.html" class="dj-link">Profile</a>
-    
-  </div>
-
-  <div class="gallery-item">
-    
-      <img src="https://wildstyle.vip/test1/images/blacknight.jpg" width="600" height="400">
-    <div class="desc">DJBlackNight</div>
-	
-    
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/moofie.jpg" width="600" height="400">
-      <div class="desc">Moofie</div>
-	<a href="/moofie.html" class="dj-link">Profile</a>
-    
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/wendell.jpg" width="600" height="400">
-      <div class="desc">DJ Old School</div>
-	<a href="/wendell.html" class="dj-link">Profile</a>
-    
-  </div>
-
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/robb.jpg" width="600" height="400">
-      <div class="desc">Trevor Nannab</div>
-	<a href="/rob.html" class="dj-link">Profile</a>
-   
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/steve.jpg" width="600" height="400">
-      <div class="desc">Steve</div>
-	
-   
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/james.jpg" width="600" height="400">
-      <div class="desc">DJ James</div>
-	
-   
-  </div>
-  
-  <div class="gallery-item">
-      <img src="https://wildstyle.vip/test1/images/robb.jpg" width="600" height="400">
-      <div class="desc">Trevor Nannab</div>
-	<a href="/rob.html" class="dj-link">Profile</a>
-   
-  </div>
-
-</div>
-
-
-
-          <!-- Continue with all other DJs from wildstyle.vip/djs.html... -->
-        </div>
-        <p style="color:var(--muted);font-size:12px;margin-top:8px">
-          Images and roles sourced from wildstyle.vip/djs.html
-        </p>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">Meet the DJs</h2>
+        <p class="section-sub">The faces of Wildstyle — swap these later with your real crew.</p>
       </div>
-    </section>
-  </main>
+
+      <div class="dj-grid">
+        
+        <div class="dj-card glass">
+          <img src="./images/hotshot.jpg" alt="Hotshot" class="dj-photo" />
+          <h3 class="dj-name">HotShotDJ</h3>
+          <p class="dj-show">Show Title</p>
+          <a href="/graham.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">Co-Owner</h4>
+        </div>
+        <div class="dj-card glass">
+          <img src="images/dawn.jpg" alt="Dawn" class="dj-photo" />
+          <h3 class="dj-name">Dawn</h3>
+          <a href="/dawn.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">DJ</h4>
+        </div>
+        <div class="dj-card glass">
+          <img src="images/laura.jpg" alt="Laura" class="dj-photo" />
+          <h3 class="dj-name">DJ Lil Devil</h3>
+          <a href="/laura.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">Manager&DJ</h4>
+        </div>
+        <div class="dj-card glass">
+          <img src="images/babyjayne.jpg" alt="DJ Placeholder 4" class="dj-photo" />
+          <h3 class="dj-name">DJ BabyJayne</h3>
+          <h4 class="dj-role">Resident DJ</h4>
+        </div>
+        <div class="dj-card glass">
+          <img src="images/rebecca.jpg" alt="DJ Placeholder 5" class="dj-photo" />
+          <h3 class="dj-name">DJ Mix&Match</h3>
+          <h4 class="dj-role">Resident DJ</h4>
+        </div>
+        <div class="dj-card glass">
+          <img src="images/mary.jpg" alt="DJ Placeholder 6" class="dj-photo" />
+          <h3 class="dj-name">DJ Mary</h3>
+          <a href="/mary.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">Resident DJ</h4>
+        </div>
+        <div class="dj-card glass">
+          <img src="images/indigo.jpg" alt="DJ Placeholder 7" class="dj-photo" />
+          <h3 class="dj-name">Indigo Riz</h3>
+          <a href="/indigo.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">Resident DJ</h4>
+        </div>
+        <div class="dj-card glass">
+          <img src="images/dani.jpg" alt="DJ Placeholder 8" class="dj-photo" />
+          <h3 class="dj-name">DJ Queen Dani</h3>
+          <a href="/suzette.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">Resident DJ</h4>
+        </div>
+		<div class="dj-card glass">
+          <img src="images/suzette.jpg" alt="DJ Placeholder 8" class="dj-photo" />
+          <h3 class="dj-name">Popped Radio</h3>
+          <a href="/dani.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">Resident DJ</h4>
+        </div>
+		<div class="dj-card glass">
+          <img src="images/christina.jpg" alt="DJ Placeholder 8" class="dj-photo" />
+          <h3 class="dj-name">Christina</h3>
+          <a href="/christina.html" class="dj-link">Profile</a>
+          <h4 class="dj-role">Resident DJ</h4>
+        </div>
+		<div class="dj-card glass">
+          <img src="images/djstrawbs.jpg" alt="DJ Placeholder 8" class="dj-photo" />
+          <h3 class="dj-name">DJ EchoFalls</h3>
+          <a href="/echofalls.html" class="dj-link">Profile</a>
+		  <h3>BIG BOSS</h3>
+		<p><a href="https://ask.the.dj/Wildstyle">Requests</a></p>
+          
+        </div>
+		<div class="dj-card glass">
+          <img src="images/dan.jpg" alt="DJ Placeholder 8" class="dj-photo" />
+          <h3 class="dj-name">Christina</h3>
+          <a href="/dan.html" class="dj-link">Profile</a>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> Wildstyle Radio</div>
+    </div>
+  </footer>
 </body>
 </html>
