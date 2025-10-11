@@ -157,7 +157,7 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://script
   .then(data => JSON.parse(data.contents)) 
   .then(reviews => { /* render reviews */ }); 
     const box = document.querySelector(".review-grid");
-    if (!box) return;
+    if (!box)
     box.innerHTML = "";
     reviews.slice(-3).reverse().forEach(r => {
       const div = document.createElement("div");
