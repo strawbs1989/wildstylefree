@@ -152,9 +152,10 @@ NowON();
 setInterval(NowON, 60000);
 
 // === Load live listener reviews from Google Sheet ===
-fetch("https://script.google.com/macros/s/AKfycbyUM75nGrfSFqmoOQnk1mu19ZFNnJsBVdJ1OVcGTzHA5zOJgFzeDdpJqoAt43rr6xg/exec")
+fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://script.google.com/macros/s/AKfycbUM7.../exec"))
   .then(res => res.json())
-  .then(reviews => {
+  .then(data => JSON.parse(data.contents)) 
+  .then(reviews => { /* render reviews */ }); 
     const box = document.querySelector(".review-grid");
     if (!box) return;
     box.innerHTML = "";
