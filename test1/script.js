@@ -142,7 +142,7 @@ function NowON() {
   const npTitle = document.getElementById("np-title");
   const npArtist = document.getElementById("np-artist");
   if (!livePill || !npTitle || !npArtist) return;
-
+  console.log("UK Day = "+day, "UK Hour = "+hour);
   const show = DH[day][hour];
 
   if (show && show !== "") {
