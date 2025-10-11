@@ -79,23 +79,29 @@ DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
 // TUESDAY
 DH[2][1] = "1am – 2am<br>Wizard Of Rock";
 DH[2][3] = "3am – 6am<br>Dani - DJ Queen Dani";
+DH[2][6] = "6am – 8am<br>Autodj";
 DH[2][10] = "10am – 12pm<br>HothotDJ";
 DH[2][15] = "3pm – 5pm<br>James Stephen";
 DH[2][20] = "8pm – 10pm<br>Dj Lewis";
+DH[2][22] = "10pm – 12am<br>Autodj";
 
 // WEDNESDAY
 DH[3][15] = "3pm – 5pm<br>James Stephen";
 DH[3][18] = "6pm – 7pm<br>Auto";
+DH[2][19] = "7pm – 8pm<br>Auto";
 DH[3][20] = "8pm – 10pm<br>Steve DJ Smith";
 DH[3][22] = "10pm – 12am<br>Reece";
+DH[2][0] = "12am – 2am<br>Dani - DJ Queen Dani";
 
 // THURSDAY
 DH[4][0]  = "12am – 4am<br>Auto";
 DH[4][8]  = "8am – 10am<br>Coll";
 DH[4][10] = "10am – 12pm<br>Gordan";
-DH[4][15] = "3pm – 4pm<br>James Stephen";
+DH[4][15] = "3pm – 5pm<br>James Stephen";
 DH[4][19] = "7pm – 8pm<br>Echofalls (DJ Strawbs)";
-DH[4][22] = "10pm – 11pm<br>MottMuzik";
+DH[2][20] = "8pm – 10pm<br>Auto";
+DH[4][22] = "10pm – 12pm<br>Auto";
+DH[2][23] = "12pm – 3pm<br>Christina";
 
 // FRIDAY
 DH[5][0]  = "12am – 4am<br>SteveG";
@@ -117,7 +123,7 @@ DH[6][20] = "8pm – 9pm<br>Daniel";
 DH[6][22] = "10pm – 12am<br>DJ Nero";
 
 // SUNDAY
-DH[7][8]  = "8am – 10am<br>The Byrdman";
+DH[7][8]  = "8am – 10am<br>Auto";
 DH[7][11] = "11am – 12pm<br>HotShot - 80's 90's";
 DH[7][13] = "1pm – 3pm<br>JK";
 DH[7][17] = "5pm – 7pm<br>DJ Lewis";
