@@ -150,3 +150,19 @@ function NowON() {
 }
 NowON();
 setInterval(NowON, 60000);
+
+// === Load live listener reviews from Google Sheet ===
+fetch("https://script.google.com/macros/s/AKfycbyUM75nGrfSFqmoOQnk1mu19ZFNnJsBVdJ1OVcGTzHA5zOJgFzeDdpJqoAt43rr6xg/exec")
+  .then(res => res.json())
+  .then(reviews => {
+    const box = document.querySelector(".review-grid");
+    if (!box) return;
+    box.innerHTML = "";
+    reviews.slice(-3).reverse().forEach(r => {
+      const div = document.createElement("div");
+      div.className = "review glass";
+      div.innerHTML = `${"⭐".repeat(r.stars)}<br>"${r.review}" — ${r.name}`;
+      box.appendChild(div);
+    });
+  })
+  .catch(err => console.error("Reviews load error:", err)); 
