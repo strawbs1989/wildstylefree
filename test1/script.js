@@ -152,7 +152,7 @@ NowON();
 setInterval(NowON, 60000);
 
 // === Load live listener reviews from Google Sheet ===
-fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://script.google.com/macros/s/AKfycbUM7.../exec"))
+fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://script.google.com/macros/s/AKfycbwLdcwqzua8j9P1F2eaJg4SVTGSru8kaaeZytXz9CB9_09mpwUX-6iu7cVo5e5UN24/exec"))
   .then(res => res.json())
   .then(data => JSON.parse(data.contents)) 
   .then(reviews => { /* render reviews */ }); 
