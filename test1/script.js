@@ -151,19 +151,22 @@ function NowON() {
 NowON();
 setInterval(NowON, 60000);
 
-// === Load live listener reviews from Google Sheet ===
-fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://script.google.com/macros/s/AKfycbwLdcwqzua8j9P1F2eaJg4SVTGSru8kaaeZytXz9CB9_09mpwUX-6iu7cVo5e5UN24/exec"))
+// === Load live listener reviews from Google Sheet via AllOrigins ===
+const scriptURL = "https://script.google.com/macros/s/AKfycbwLdcwqzua8j9P1F2eaJg4SVTGSru8kaaeZytXz9CB9_09mpwUX-6iu7cVo5e5UN24/exec"; // your working Apps Script URL
+
+fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
   .then(res => res.json())
-  .then(data => JSON.parse(data.contents)) 
-  .then(reviews => { /* render reviews */ }); 
+  .then(data => JSON.parse(data.contents))
+  .then(reviews => {
     const box = document.querySelector(".review-grid");
-    if (!box)
+    if (!box) return;
     box.innerHTML = "";
+
     reviews.slice(-3).reverse().forEach(r => {
       const div = document.createElement("div");
       div.className = "review glass";
-      div.innerHTML = `${"⭐".repeat(r.stars)}<br>"${r.review}" — ${r.name}`;
+      div.innerHTML = `${"⭐".repeat(r.stars || 0)}<br>"${r.review}" — ${r.name}`;
       box.appendChild(div);
     });
-  })
+  }) // 
   .catch(err => console.error("Reviews load error:", err)); 
