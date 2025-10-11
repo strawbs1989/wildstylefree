@@ -65,7 +65,7 @@ if (canvas){
   draw();
 }
 
-// UK-Time Schedule + Live Indicator
+// === UK-Time Schedule + Live Indicator ===
 const DH = Array.from({ length: 8 }, () => Array(24).fill(""));
 
 // MONDAY
@@ -77,21 +77,21 @@ DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
 DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
 
 // TUESDAY
-DH[2][1] = "1am – 2am<br>Wizard Of Rock";
-DH[2][3] = "3am – 6am<br>Dani - DJ Queen Dani";
-DH[2][6] = "6am – 8am<br>Autodj";
+DH[2][1]  = "1am – 2am<br>Wizard Of Rock";
+DH[2][3]  = "3am – 6am<br>Dani - DJ Queen Dani";
+DH[2][6]  = "6am – 8am<br>Autodj";
 DH[2][10] = "10am – 12pm<br>HothotDJ";
 DH[2][15] = "3pm – 5pm<br>James Stephen";
-DH[2][20] = "8pm – 10pm<br>Dj Lewis";
+DH[2][20] = "8pm – 10pm<br>DJ Lewis";
 DH[2][22] = "10pm – 12am<br>Autodj";
 
 // WEDNESDAY
+DH[3][0]  = "12am – 2am<br>Dani - DJ Queen Dani";
 DH[3][15] = "3pm – 5pm<br>James Stephen";
 DH[3][18] = "6pm – 7pm<br>Auto";
-DH[2][19] = "7pm – 8pm<br>Auto";
+DH[3][19] = "7pm – 8pm<br>Auto";
 DH[3][20] = "8pm – 10pm<br>Steve DJ Smith";
 DH[3][22] = "10pm – 12am<br>Reece";
-DH[2][0] = "12am – 2am<br>Dani - DJ Queen Dani";
 
 // THURSDAY
 DH[4][0]  = "12am – 4am<br>Auto";
@@ -99,17 +99,16 @@ DH[4][8]  = "8am – 10am<br>Coll";
 DH[4][10] = "10am – 12pm<br>Gordan";
 DH[4][15] = "3pm – 5pm<br>James Stephen";
 DH[4][19] = "7pm – 8pm<br>Echofalls (DJ Strawbs)";
-DH[2][20] = "8pm – 10pm<br>Auto";
-DH[4][22] = "10pm – 12pm<br>Auto";
-DH[2][23] = "12pm – 3pm<br>Christina";
+DH[4][20] = "8pm – 10pm<br>Auto";
+DH[4][22] = "10pm – 12am<br>Auto";
 
 // FRIDAY
-DH[5][0]  = "12am – 4am<br>SteveG";
+DH[5][0]  = "12am – 4am<br>Steve G";
 DH[5][10] = "10am – 12pm<br>Vish";
 DH[5][15] = "3pm – 5pm<br>James Stephen";
-DH[5][16] = "4pm – 8pm<br>StevenD";
-DH[5][20] = "8pm – 10pm<br>Wendall";
-DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
+DH[5][16] = "4pm – 8pm<br>Steven D";
+DH[5][20] = "8pm – 10pm<br>Wendell";
+DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix & Match";
 
 // SATURDAY
 DH[6][0]  = "12am – 2am<br>Auto";
@@ -118,7 +117,7 @@ DH[6][6]  = "6am – 10am<br>Cam";
 DH[6][10] = "10am – 12pm<br>DJ Nero";
 DH[6][16] = "4pm – 6pm<br>The Byrdman";
 DH[6][18] = "6pm – 8pm<br>DJ LiL Devil";
-DH[6][19] = "7pm – 8pm<br>Sonic-Recorded";
+DH[6][19] = "7pm – 8pm<br>Sonic - Recorded";
 DH[6][20] = "8pm – 9pm<br>Daniel";
 DH[6][22] = "10pm – 12am<br>DJ Nero";
 
@@ -131,9 +130,12 @@ DH[7][19] = "7pm – 8pm<br>DJ Eddie";
 DH[7][20] = "8pm – 9pm<br>BIG BOSS DJ Echofalls";
 DH[7][21] = "9pm – 12am<br>Popped Radio";
 
+// === FUNCTION ===
 function NowON() {
-  const ukNow = new Date(new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }));
-  const day = ukNow.getDay() === 0 ? 7 : ukNow.getDay();
+  const ukNow = new Date(
+    new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
+  );
+  const day = ukNow.getDay() === 0 ? 7 : ukNow.getDay(); // Sunday = 7
   const hour = ukNow.getHours();
 
   const livePill = document.getElementById("live-pill");
@@ -155,8 +157,10 @@ function NowON() {
     npArtist.innerHTML = "Schedule resumes soon";
   }
 }
+
 NowON();
 setInterval(NowON, 60000);
+
 
 // === Load live listener reviews from Google Sheet via AllOrigins ===
 const scriptURL = "https://script.google.com/macros/s/AKfycbwLdcwqzua8j9P1F2eaJg4SVTGSru8kaaeZytXz9CB9_09mpwUX-6iu7cVo5e5UN24/exec"; // your working Apps Script URL
