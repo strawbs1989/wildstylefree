@@ -93,7 +93,7 @@ DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
 DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
 
 // TUESDAY (2)
-DH[2][1]  = "1am – 2am<br>James - Wizard Of Rock";
+DH[2][1]  = "1am – 3am<br>James - Wizard Of Rock";
 DH[2][3]  = "3am – 6am<br>Dani - DJ Queen Dani";
 DH[2][6]  = "6am – 8am<br>Autodj";
 DH[2][10] = "10am – 12pm<br>HothotDJ";
