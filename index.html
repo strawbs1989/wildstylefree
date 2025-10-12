@@ -13,127 +13,96 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
    <!-- Now Playing Script -->
-<?php function onAirNow() {
+<script>
+var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
 
-// James' Show On Air Script
+// MONDAY
+  DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
+  DH[1][14] = "2pm – 4pm<br>BabyJane";
+  DH[1][15] = "3pm – 5pm<br>James Stephen";
+  DH[1][17] = "5pm – 7pm<br>Lewis";
+  DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
+  DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
 
-// http://broadcastingworld.com/
+  // TUESDAY
+  DH[2][01] = "1am – 2am<br>James - Wizard Of Rock";
+  DH[2][03] = "3am – 6am<br>Dani - DJ Queen Dani";
+  DH[2][06] = "6am – 8am<br>Auto";
+  DH[2][15] = "3pm – 5pm<br>James Stephen";
+  DH[2][20] = "8pm – 10pm<br>Dj Lewis";
+  DH[2][10] = "10am – 12pm<br>HothotDJ";
+  
 
+  // WEDNESDAY
+   DH[3][15]  = "3pm – 5pm<br>James Stephen";
+   DH[3][18]  = "6pm – 7pm<br>Auto";
+   DH[3][20]  = "8pm – 10pm<br>Steve DJ Smith";
+   DH[3][22]  = "10pm – 12am<br>Reece";
+   
+  
 
+  // THURSDAY
+   DH[4][08]  = "8am – 10am<br>Coll";
+   DH[4][0]  = "12am – 4am<br>Auto";
+   DH[4][10]  = "10am – 12pm<br>Gordan";
+   DH[4][15]  = "3pm – 4pm<br>James Stephen";
+   DH[4][19]  = "7pm – 8pm<br>Echofalls(DJ Strawbs)";
+   DH[4][20]  = "8pm – 10pm<br>Rebecca - DJ MixnMatch";
+   DH[4][22]  = "10pm – 11pm<br>MottMuzik";
+ 
+  // FRIDAY
+  DH[5][0]  = "12am – 4am<br>SteveG";
+  DH[5][10]  = "10am – 12pm<br>Vish";
+  DH[5][15] = "3pm – 5pm<br>James Stephen";
+  DH[5][16] = "4pm – 8pm<br>StevenD";
+  DH[5][20] = "8pm – 10pm<br>Wendall";
+  DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
+  
 
+  // SATURDAY
+  DH[6][0] = "12am – 2am<br>Auto";
+  DH[6][02] = "2am – 4am<br>DJ AJ";
+  DH[6][16] = "4pm – 6pm<br>The Byrdman";
+  DH[6][18] = "6pm –8pm<br>DJ LiL Devil";
+  DH[6][19] = "7pm – 8pm<br>Sonic-Recorded";
+  DH[6][6] = "6am – 10am<br>Cam";
+  DH[6][10] = "10am – 12pm<br>DJ Nero";
+  DH[6][20] = "8pm – 9pm<br>Daniel";
+  
 
-// Set the timezone
-// See full list of timezones here: http://php.net/manual/en/timezones.europe.php
-date_default_timezone_set('Europe/London');
+  // SUNDAY
+  DH[7][08] = "8am – 10am<br>Auto";
+  DH[7][11] = "11am – 12pm<br>HotShot - 80's 90's";
+  DH[7][13] = "1pm – 3pm<br>JK";
+  DH[7][15] = "3pm – 5pm<br>DJ Fraser";
+  DH[7][17] = "5pm – 7pm<br>DJ Lewis";
+  DH[7][19] = "7pm - 8pm<br>Auto";
+  DH[7][20] = "8pm - 9pm<br>BIG BOSS Dj Echofalls";
+  DH[7][21] = "9pm - 12am<br>Popped Radio";
+  
+  
 
+  function NowON() {
+    const now = new Date();
+	const day = now.getDay();
+	const hour = now.getHours();
+    const show = DH[day][hour] 	|| off Air<br>No Current Broadcast.";
+    document.getElementById("NowOn").innerHTML = show;
+  }
 
-
-
-// Set default text and default image | When a show is not on air, this text and image will display
-$default_on_air = 'No DJ is on air'; // Default text
-$default_image_on_air = 'http://urban-radio.co.uk/images/jukebox.gif'; // Default image
-
-
-
-
-// Shows array, edit this information for each show
-$shows = [
-[
-'show_name' => "JukeBox", // jukebox
-'day' => "Monday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 01, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/jukebox.gif'
-],
-[
-'show_name' => "JukeBox", // jukebox
-'day' => "Tuesday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 01, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/jukebox.gif'
-],
-[
-'show_name' => "JukeBox", // jukebox
-'day' => "Wednesday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 01, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/jukebox.gif'
-],
-[
-'show_name' => "JukeBox", // JukeBox
-'day' => "Thursday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 01, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/jukebox.gif'
-],
-[
-'show_name' => "80's Request", // 80s
-'day' => "Friday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 18, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/strawbs.jpg'
-],
-[
-'show_name' => "80's Request", // 80s
-'day' => "Friday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 18, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/strawbs.jpg'
-],
-[
-'show_name' => "80's Request", // 80s
-'day' => "Saturday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 18, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/strawbs.jpg'
-],
-[
-'show_name' => "80's Request", // 80s
-'day' => "Sunday", // Day (Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday)
-'start_time' => 18, // Start Time (24 hour format)
-'end_time' => 20, // End Time (24 hour format)
-'image' => 'http://urban-radio.co.uk/images/strawbs.jpg'
-]
-];
-
-
-
-
-/////////////////////////////////////////////////////
-////////// DO NOT EDIT BELOW THIS LINE //////////////
-/////////////////////////////////////////////////////
-
-
-
-
-$now_day = date('l');
-$now_time = date('G');
-
-
-
-
-$output = array($default_on_air, $default_image_on_air);
-
-
-
-
-for($i = 0; $i if($shows[$i]['day'] == $now_day && $shows[$i]['start_time'] >= $now_time && $shows[$i]['end_time'] $output = array($shows[$i]['show_name'], $shows[$i]['image']);
+function NowON() {
+  const now = new Date();
+  const day = now.getDay();  // 0–6 (Sunday–Saturday)
+  const hour = now.getHours(); // 0–23
+  const show = DH[day][hour] || "🕓 Off Air<br>No current broadcast.";
+  document.getElementById("NowOn").innerHTML = show;
 }
-}
+</script>
+</head>
 
-
-
-
-return $output;
-
-
-
-
-} 
-?>
-DJ Now On Air: 
-
-<?php echo onAirNow()[1]; ?>
+<body onload="NowON()">
+  <div id="NowOn" style="font-weight:bold;color:#fff;text-align:center;"></div>
+</body>
 
   <!-- Header -->
   <header class="dj-card header-wrapper">
