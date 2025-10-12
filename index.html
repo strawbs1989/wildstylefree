@@ -47,7 +47,7 @@
    DH[4][10]  = "10am – 12pm<br>Gordan";
    DH[4][15]  = "3pm – 4pm<br>James Stephen";
    DH[4][19]  = "7pm – 8pm<br>Echofalls(DJ Strawbs)";
-   DH[4][20]  = "8pm – 10pm<br>";
+   DH[4][20]  = "8pm – 10pm<br>Rebecca - DJ MixnMatch";
    DH[4][22]  = "10pm – 11pm<br>MottMuzik";
  
   // FRIDAY
@@ -84,13 +84,16 @@
 
   function NowON() {
     const now = new Date();
-    const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
+	const day = now.getDay();
+	const hour = now.getHours();
+    const show = DH[day][hour] 	|| off Air<br>No Current Broadcast.";
     document.getElementById("NowOn").innerHTML = show;
   }
 </script>
 </head>
 
 <body onload="NowON()">
+<div id="NowOn" style="font-weight:bold;color:#fff,text-align:center;"></div>
 
   <!-- Header -->
   <header class="dj-card header-wrapper">

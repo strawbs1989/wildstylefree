@@ -118,7 +118,7 @@ DH[4][10] = "10am – 12pm<br>Gordan";
 DH[4][12]  = "12pm – 3pm<br>Christina";
 DH[4][15] = "3pm – 4pm<br>James Stephen";
 DH[4][19] = "7pm – 8pm<br>Echofalls (DJ Strawbs)";
-DH[4][20] = "8pm – 10pm<br>Auto";
+DH[4][20] = "8pm – 10pm<br>Rebecca - DJ MixnMatch";
 DH[4][22] = "10pm – 12am<br>Auto";
 
 
