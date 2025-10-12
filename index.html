@@ -12,7 +12,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-   <!-- Now Playing Script -->
+  
+
+
+
+  <!-- Header -->
+  <header class="dj-card header-wrapper">
+    <div class="container header-container">
+      <img src="/images/logo.png" alt="Wildstyle Radio Logo" class="logo">
+	  
+      <div class="now-playing">
+        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
+        <a class="WimpyPlayerPopup902" href="javascript:;" onclick="window.open('https://onlineradiobox.com/uk/coolvibesradio/','wimpyPlayerPopupWindow','width=527,height=280')">🎧 Listen Now</a>
+		<iframe src="//player.radioforge.com/v2/icecast.html?radiolink=https%3A%2F%2Fstreaming.live365.com%2Fa50378&radiotype=icecast&bcolor=&image=https://wildstyle.vip/images/logo.png&facebook=https://www.facebook.com/wildstyleuk&twitter=&title=WildstyleRadio&artist=" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" allow="autoplay" style="border:none;overflow:hidden;" width="100%" height="200" ></iframe>
+      </div>
+    </div>
+  </header>
+    <!-- Now Playing Script -->
 <script>
 var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
 
@@ -96,22 +112,6 @@ setInterval(NowON, 60000);
 <body onload="NowON()">
   <div id="NowOn" style="font-weight:bold;color:#fff;text-align:center;"></div>
 </body>
-
-
-
-  <!-- Header -->
-  <header class="dj-card header-wrapper">
-    <div class="container header-container">
-      <img src="/images/logo.png" alt="Wildstyle Radio Logo" class="logo">
-	  
-      <div class="now-playing">
-        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
-        <a class="WimpyPlayerPopup902" href="javascript:;" onclick="window.open('https://onlineradiobox.com/uk/coolvibesradio/','wimpyPlayerPopupWindow','width=527,height=280')">🎧 Listen Now</a>
-		<iframe src="//player.radioforge.com/v2/icecast.html?radiolink=https%3A%2F%2Fstreaming.live365.com%2Fa50378&radiotype=icecast&bcolor=&image=https://wildstyle.vip/images/logo.png&facebook=https://www.facebook.com/wildstyleuk&twitter=&title=WildstyleRadio&artist=" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" allow="autoplay" style="border:none;overflow:hidden;" width="100%" height="200" ></iframe>
-      </div>
-    </div>
-  </header>
-   
   <!-- TrustPilot -->
   <!-- TrustBox script -->
 <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
