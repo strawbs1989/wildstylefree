@@ -133,23 +133,8 @@ DH[7][21] = "9pm – 12am<br>Popped Radio";
 // === FUNCTION ===
 function NowON() {
   const ukNow = new Date(
-   // --- Reliable UK time regardless of user device ---
-const nowUTC = new Date();
-const ukOffset = 0; // GMT baseline
-const isBST = (() => {
-  const m = nowUTC.getMonth() + 1;
-  const d = nowUTC.getDate();
-  // British Summer Time roughly: last Sunday in March → last Sunday in October
-  const start = new Date(nowUTC.getFullYear(), 2, 31);
-  const end   = new Date(nowUTC.getFullYear(), 9, 31);
-  start.setDate(31 - start.getDay());
-  end.setDate(31 - end.getDay());
-  return nowUTC >= start && nowUTC < end;
-})();
-const ukNow = new Date(nowUTC.getTime() + (ukOffset + (isBST ? 1 : 0)) * 3600 * 1000);
-const day = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay();
-const hour = ukNow.getUTCHours();
-
+    new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
+  );
   const day = ukNow.getDay() === 0 ? 7 : ukNow.getDay(); // Sunday = 7
   const hour = ukNow.getHours();
 
