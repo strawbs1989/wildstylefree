@@ -65,10 +65,26 @@ if (canvas){
   draw();
 }
 
-// === UK-Time Schedule + Live Indicator ===
+// ----------------- UK CLOCK (device-proof) -----------------
+function getUKNow() {
+  const now = new Date(); // UTC baseline
+  const y = now.getUTCFullYear();
+
+  // BST: last Sunday in March -> last Sunday in October (UTC math)
+  const bstStart = new Date(Date.UTC(y, 2, 31)); // Mar 31 UTC
+  bstStart.setUTCDate(31 - bstStart.getUTCDay()); // last Sunday Mar
+  const bstEnd = new Date(Date.UTC(y, 9, 31)); // Oct 31 UTC
+  bstEnd.setUTCDate(31 - bstEnd.getUTCDay()); // last Sunday Oct
+
+  const inBST = now >= bstStart && now < bstEnd;
+  // UK time = UTC + (BST ? 1h : 0h)
+  return new Date(now.getTime() + (inBST ? 1 : 0) * 3600 * 1000);
+}
+
+// ----------------- SCHEDULE (DH[1..7][0..23]) -----------------
 const DH = Array.from({ length: 8 }, () => Array(24).fill(""));
 
-// MONDAY
+// MONDAY (1)
 DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
 DH[1][14] = "2pm – 4pm<br>BabyJane";
 DH[1][15] = "3pm – 5pm<br>James Stephen";
@@ -76,16 +92,17 @@ DH[1][17] = "5pm – 7pm<br>Lewis";
 DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
 DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
 
-// TUESDAY
-DH[2][1]  = "1am – 2am<br>Wizard Of Rock";
+// TUESDAY (2)
+DH[2][1]  = "1am – 2am<br>James - Wizard Of Rock";
 DH[2][3]  = "3am – 6am<br>Dani - DJ Queen Dani";
 DH[2][6]  = "6am – 8am<br>Autodj";
 DH[2][10] = "10am – 12pm<br>HothotDJ";
 DH[2][15] = "3pm – 5pm<br>James Stephen";
 DH[2][20] = "8pm – 10pm<br>DJ Lewis";
+DH[2][21] = "9pm – 10pm<br>Auto";
 DH[2][22] = "10pm – 12am<br>Autodj";
 
-// WEDNESDAY
+// WEDNESDAY (3)
 DH[3][0]  = "12am – 2am<br>Dani - DJ Queen Dani";
 DH[3][15] = "3pm – 5pm<br>James Stephen";
 DH[3][18] = "6pm – 7pm<br>Auto";
@@ -93,35 +110,40 @@ DH[3][19] = "7pm – 8pm<br>Auto";
 DH[3][20] = "8pm – 10pm<br>Steve DJ Smith";
 DH[3][22] = "10pm – 12am<br>Reece";
 
-// THURSDAY
+
+// THURSDAY (4)
 DH[4][0]  = "12am – 4am<br>Auto";
 DH[4][8]  = "8am – 10am<br>Coll";
 DH[4][10] = "10am – 12pm<br>Gordan";
-DH[4][15] = "3pm – 5pm<br>James Stephen";
+DH[4][12]  = "12pm – 3pm<br>Christina";
+DH[4][15] = "3pm – 4pm<br>James Stephen";
 DH[4][19] = "7pm – 8pm<br>Echofalls (DJ Strawbs)";
 DH[4][20] = "8pm – 10pm<br>Auto";
 DH[4][22] = "10pm – 12am<br>Auto";
 
-// FRIDAY
+
+
+// FRIDAY (5)
 DH[5][0]  = "12am – 4am<br>Steve G";
 DH[5][10] = "10am – 12pm<br>Vish";
 DH[5][15] = "3pm – 5pm<br>James Stephen";
 DH[5][16] = "4pm – 8pm<br>Steven D";
-DH[5][20] = "8pm – 10pm<br>Wendell";
-DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix & Match";
+DH[5][20] = "8pm – 10pm<br>Auto";
+DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
 
-// SATURDAY
+
+// SATURDAY (6)
 DH[6][0]  = "12am – 2am<br>Auto";
 DH[6][2]  = "2am – 4am<br>DJ AJ";
 DH[6][6]  = "6am – 10am<br>Cam";
 DH[6][10] = "10am – 12pm<br>DJ Nero";
 DH[6][16] = "4pm – 6pm<br>The Byrdman";
 DH[6][18] = "6pm – 8pm<br>DJ LiL Devil";
-DH[6][19] = "7pm – 8pm<br>Sonic - Recorded";
+DH[6][19] = "7pm – 8pm<br>Sonic-Recorded";
 DH[6][20] = "8pm – 9pm<br>Daniel";
-DH[6][22] = "10pm – 12am<br>DJ Nero";
 
-// SUNDAY
+
+// SUNDAY (7)
 DH[7][8]  = "8am – 10am<br>Auto";
 DH[7][11] = "11am – 12pm<br>HotShot - 80's 90's";
 DH[7][13] = "1pm – 3pm<br>JK";
@@ -130,36 +152,42 @@ DH[7][19] = "7pm – 8pm<br>DJ Eddie";
 DH[7][20] = "8pm – 9pm<br>BIG BOSS DJ Echofalls";
 DH[7][21] = "9pm – 12am<br>Popped Radio";
 
-// === FUNCTION ===
-function NowON() {
-  const ukNow = new Date(
-    new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
-  );
-  const day = ukNow.getDay() === 0 ? 7 : ukNow.getDay(); // Sunday = 7
-  const hour = ukNow.getHours();
 
-  const livePill = document.getElementById("live-pill");
-  const npTitle = document.getElementById("np-title");
-  const npArtist = document.getElementById("np-artist");
-  if (!livePill || !npTitle || !npArtist) return;
-  console.log("UK Day = "+day, "UK Hour = "+hour);
+// ----------------- NOW ON -----------------
+function NowON() {
+  const ukNow = getUKNow();
+  const day = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay(); // 1..7 (Sun=7)
+  const hour = ukNow.getUTCHours();
+
+  const pill = document.getElementById("live-pill");
+  const t = document.getElementById("np-title");
+  const a = document.getElementById("np-artist");
+  if (!pill || !t || !a) return;
+
   const show = DH[day][hour];
 
-  if (show && show !== "") {
-    livePill.textContent = "ON AIR";
-    livePill.classList.add("onair");
-    npTitle.innerHTML = show.split("<br>")[0];
-    npArtist.innerHTML = show.split("<br>")[1];
+  if (show) {
+    pill.textContent = "ON AIR";
+    pill.classList.add("onair");
+    const [slot, dj] = show.split("<br>");
+    t.textContent = slot;
+    a.textContent = dj;
   } else {
-    livePill.textContent = "OFF AIR";
-    livePill.classList.remove("onair");
-    npTitle.innerHTML = "No current broadcast";
-    npArtist.innerHTML = "Schedule resumes soon";
+    pill.textContent = "OFF AIR";
+    pill.classList.remove("onair");
+    t.textContent = "No current broadcast";
+    a.textContent = "Schedule resumes soon";
   }
+
+  // Debug line (remove later)
+  console.log("UK Day:", day, "UK Hour:", hour, "Show:", show || "(none)");
 }
 
-NowON();
-setInterval(NowON, 60000);
+document.addEventListener("DOMContentLoaded", () => {
+  NowON();
+  setInterval(NowON, 60_000);
+});
+
 
 
 // === Load live listener reviews from Google Sheet via AllOrigins ===
