@@ -147,6 +147,7 @@ DH[6][20] = "8pm – 9pm<br>Daniel";
 DH[7][8]  = "8am – 10am<br>Auto";
 DH[7][11] = "11am – 12pm<br>HotShot - 80's 90's";
 DH[7][13] = "1pm – 3pm<br>JK";
+DH[7][15] = "3pm – 5pm<br>DJ Fraser";
 DH[7][17] = "5pm – 7pm<br>DJ Lewis";
 DH[7][19] = "7pm – 8pm<br>DJ Eddie";
 DH[7][20] = "8pm – 9pm<br>BIG BOSS DJ Echofalls";
