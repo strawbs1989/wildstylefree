@@ -79,30 +79,25 @@ var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
   DH[7][19] = "7pm - 8pm<br>Auto";
   DH[7][20] = "8pm - 9pm<br>BIG BOSS Dj Echofalls";
   DH[7][21] = "9pm - 12am<br>Popped Radio";
-  
-  
-
-  function NowON() {
-    const now = new Date();
-	const day = now.getDay();
-	const hour = now.getHours();
-    const show = DH[day][hour] 	|| off Air<br>No Current Broadcast.";
-    document.getElementById("NowOn").innerHTML = show;
-  }
 
 function NowON() {
   const now = new Date();
-  const day = now.getDay();  // 0–6 (Sunday–Saturday)
+  const day = now.getDay();  // Sunday=0, Monday=1, ...
   const hour = now.getHours(); // 0–23
   const show = DH[day][hour] || "🕓 Off Air<br>No current broadcast.";
   document.getElementById("NowOn").innerHTML = show;
 }
+
+// Optional: auto-refresh every 60 seconds
+setInterval(NowON, 60000);
 </script>
 </head>
 
 <body onload="NowON()">
   <div id="NowOn" style="font-weight:bold;color:#fff;text-align:center;"></div>
 </body>
+
+
 
   <!-- Header -->
   <header class="dj-card header-wrapper">
