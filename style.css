@@ -305,15 +305,16 @@ button:hover { transform: scale(1.05); }
 .shoutout-ticker {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(90deg, #ff005d 0%, #a000ff 100%);
+  background: linear-gradient(90deg, #000000 0%, #040404 100%);
   color: white;
+  width: 70%;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   white-space: nowrap;
   padding: 8px 0;
-  border-top: 2px solid #222;
-  border-bottom: 2px solid #222;
-  box-shadow: 0 0 20px rgba(160,0,255,0.4);
+  border-top: 4px solid #ed050599;
+  border-bottom: 2px solid #f40606;
+  box-shadow: 0 0 20px rgba(255 0 0 / 62%);
 }
 
 #tickerContent {
