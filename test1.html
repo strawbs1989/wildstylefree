@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildstyle DJs & Shows</title>
+  <link rel="stylesheet" href="/test1/style.css">
+  <style>
+    .dj-section{background:#0a0a0a;color:#fff;padding:30px 10px;text-align:center;
+      box-shadow:0 0 30px rgba(160,0,255,.3);border-radius:16px;}
+    .dj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;}
+    .dj-card{background:rgba(255,255,255,.05);border-radius:16px;padding:10px;
+      text-align:center;transition:.3s;position:relative;}
+    .dj-card:hover{transform:scale(1.03);}
+    .dj-card.live{border:2px solid #0f0;box-shadow:0 0 20px rgba(0,255,0,.4);}
+    .dj-card img{width:100%;border-radius:12px;margin-bottom:10px;}
+    .live-indicator{background:#0f0;color:black;padding:3px 6px;border-radius:5px;
+      font-size:.75em;font-weight:bold;}
+  </style>
+</head>
+<body>
+<section class="dj-section">
+  <h2>🎧 Wildstyle DJs & Shows</h2>
+  <div id="djGrid" class="dj-grid"></div>
+</section>
+
+<!-- include your DH schedule array -->
+<script src="/test1/nowon.js"></script>
+<script>
+function buildDJListFromDH() {
+  const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const djMap = {}; // { name: {shows:[{day,time,show}], ...}}
+
+  for (let d = 0; d < 7; d++) {
+    for (let h = 0; h < 24; h++) {
+      const slot = DH?.[d]?.[h];
+      if (!slot || !slot.show) continue;
+      const parts = slot.show.split("<br>");
+      if (parts.length < 2) continue;
+      const [time, info] = parts;
+      // split into DJ name & show title
+      const dashIndex = info.indexOf("-");
+      let djName = info, showTitle = "";
+      if (dashIndex !== -1) {
+        djName = info.substring(0, dashIndex).trim();
+        showTitle = info.substring(dashIndex + 1).trim();
+      }
+      const key = djName.toLowerCase();
+      if (!djMap[key]) {
+        djMap[key] = { name: djName, shows: [], img:`/test1/unsigned/${key.replace(/\s+/g,"")}.png` };
+      }
+      djMap[key].shows.push({ day: days[d], time, show: showTitle });
+    }
+  }
+  return Object.values(djMap);
+}
+
+function renderDJs() {
+  const grid = document.getElementById("djGrid");
+  const allDJs = buildDJListFromDH();
+  grid.innerHTML = "";
+
+  const now = new Date();
+  const day = now.getDay();
+  const hour = now.getHours();
+
+  allDJs.forEach(dj => {
+    // check if currently live
+    let isLive = false;
+    const slot = DH?.[day]?.[hour];
+    if (slot && slot.show.toLowerCase().includes(dj.name.toLowerCase())) isLive = true;
+
+    const showsHtml = dj.shows.map(s => `<p>${s.day}: ${s.time} — ${s.show}</p>`).join("");
+    const card = document.createElement("div");
+    card.className = `dj-card ${isLive ? "live" : ""}`;
+    card.innerHTML = `
+      <img src="${dj.img}" onerror="this.src='/test1/placeholder.png';" alt="${dj.name}">
+      <h3>${dj.name}</h3>
+      ${isLive ? '<div class="live-indicator">🟢 LIVE NOW</div>' : ""}
+      ${showsHtml}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+renderDJs();
+setInterval(renderDJs, 60000); // refresh every minute
+</script>
+</body>
+</html>
