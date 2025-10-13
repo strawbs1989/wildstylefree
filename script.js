@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDtgWjFCODgajdvOacEk7c3b7Ik15iezKSenDERQJ6H1YCsM22oQojQphtE-xNcfDX/exec"; // replace with your URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1frZjzw1b6CNEHOiOzobXALQatnVRQEKZXDqZg78VTes3oZWOIjxB0aYTIFEptuAw/exec"; 
 
 async function fetchShoutouts() {
   try {
@@ -41,7 +41,7 @@ document.getElementById("shoutoutForm").addEventListener("submit", async e => {
 fetchShoutouts();
 setInterval(fetchShoutouts, 10000); // refresh every 10s
 
-const SHOUTOUTS_API = "https://script.google.com/macros/s/AKfycbzDtgWjFCODgajdvOacEk7c3b7Ik15iezKSenDERQJ6H1YCsM22oQojQphtE-xNcfDX/exec";
+const SHOUTOUTS_API = "https://script.google.com/macros/s/AKfycbz1frZjzw1b6CNEHOiOzobXALQatnVRQEKZXDqZg78VTes3oZWOIjxB0aYTIFEptuAw/exec";
 
 async function updateTicker() {
   try {
