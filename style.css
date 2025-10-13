@@ -327,3 +327,83 @@ button:hover { transform: scale(1.05); }
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
 }
+
+/* DJ Shows */
+
+dj-section {
+  background: #0a0a0a;
+  color: white;
+  padding: 30px 10px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(160,0,255,0.3);
+}
+
+.filter-bar {
+  margin-bottom: 15px;
+}
+.filter {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  margin: 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.filter.active, .filter:hover {
+  background: linear-gradient(90deg, #ff005d, #a000ff);
+}
+
+.dj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.dj-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 10px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s;
+  box-shadow: 0 0 15px rgba(255,255,255,0.05);
+}
+.dj-card.live {
+  border: 2px solid #0f0;
+  box-shadow: 0 0 20px rgba(0,255,0,0.4);
+}
+.dj-card:hover {
+  transform: scale(1.03);
+}
+
+.dj-card img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.dj-info p {
+  margin: 3px 0;
+  font-size: 0.9em;
+}
+
+.live-indicator {
+  background: #0f0;
+  color: black;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.socials a {
+  text-decoration: none;
+  margin: 0 4px;
+  color: #ff00cc;
+  font-size: 1.2em;
+  transition: color 0.3s;
+}
+.socials a:hover { color: #fff; }

@@ -63,3 +63,94 @@ async function updateTicker() {
 
 updateTicker();
 setInterval(updateTicker, 20000); // refresh every 20 seconds
+
+// DJ Shows //
+
+const DJs = [
+  {
+    name: "DJ EchoFalls",
+    show: "Frequency Shift",
+    days: [4, 0], // Thu, Sun
+    times: ["19:00–20:00", "20:00–21:00"],
+    genre: "Dance / Club",
+    img: "/images/djstrawbs.jpg",
+    socials: {
+      insta: "https://instagram.com/wildstyle_radio",
+      fb: "https://facebook.com/wildstylefreestyleradio"
+    }
+  },
+  {
+    name: "DJ Lil Devil",
+    show: "Saturday Madness",
+    days: [6],
+    times: ["17:00–18:00"],
+    genre: "House / Rave",
+    img: "/images/laura.jpg"
+  },
+  {
+    name: "DJ Dezzy",
+    show: "Mix Set",
+    days: [1],
+    times: ["19:00–22:00"],
+    genre: "Club Bangers",
+    img: "/images/dezzy.jpg"
+  }
+];
+name: "Hotshot DJ",
+    show: "Mix Set",
+    days: [1],
+    times: ["19:00–22:00"],
+    genre: "Club Bangers",
+    img: "/images/dezzy.jpg"
+  }
+];
+
+function renderDJs(filterDay = "all") {
+  const grid = document.getElementById("djGrid");
+  grid.innerHTML = "";
+
+  const now = new Date();
+  const currentDay = now.getDay();
+  const currentHour = now.getHours();
+
+  DJs.forEach(dj => {
+    if (filterDay !== "all" && !dj.days.includes(Number(filterDay))) return;
+
+    // Check if currently live
+    let isLive = false;
+    dj.times.forEach((slot, i) => {
+      const [start, end] = slot.split("–").map(t => parseInt(t));
+      if (dj.days[i] === currentDay && currentHour >= start && currentHour < end) {
+        isLive = true;
+      }
+    });
+
+    const card = document.createElement("div");
+    card.className = `dj-card ${isLive ? "live" : ""}`;
+    card.innerHTML = `
+      <img src="${dj.img}" alt="${dj.name}">
+      <div class="dj-info">
+        <h3>${dj.name}</h3>
+        <p><strong>${dj.show}</strong></p>
+        <p>⏰ ${dj.times.join(", ")} (${dj.days.map(day => ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][day]).join(", ")})</p>
+        <p>🎵 ${dj.genre}</p>
+        ${isLive ? '<span class="live-indicator">🟢 LIVE NOW</span>' : ""}
+        <div class="socials">
+          ${dj.socials?.insta ? `<a href="${dj.socials.insta}" target="_blank">📸</a>` : ""}
+          ${dj.socials?.fb ? `<a href="${dj.socials.fb}" target="_blank">📘</a>` : ""}
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll(".filter").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderDJs(btn.dataset.day);
+  });
+});
+
+renderDJs();
