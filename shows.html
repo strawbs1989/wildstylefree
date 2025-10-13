@@ -5,10 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Wildstyle Radio | Shows</title>
 
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="https://wildstyle.vip/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    .dj-section{background:#0a0a0a;color:#fff;padding:30px 10px;text-align:center;
+      box-shadow:0 0 30px rgba(160,0,255,.3);border-radius:16px;}
+    .dj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;}
+    .dj-card{background:rgba(255,255,255,.05);border-radius:16px;padding:10px;
+      text-align:center;transition:.3s;position:relative;}
+    .dj-card:hover{transform:scale(1.03);}
+    .dj-card.live{border:2px solid #0f0;box-shadow:0 0 20px rgba(0,255,0,.4);}
+    .live-indicator{background:#0f0;color:black;padding:3px 6px;border-radius:5px;
+      font-size:.75em;font-weight:bold;margin-bottom:6px;display:inline-block;}
+  </style>
 </head>
 
 <body onload="NowON()">
@@ -39,86 +52,91 @@
   </div>
 </nav>
 
-<section class="hero">
+<section class="hero text-center">
   <h2>Feel the Beat, Live the Wildstyle</h2>
 </section>
 
-<section class="dj-section text-center py-4">
+<section class="dj-section">
   <h2>🎧 Wildstyle DJs & Shows</h2>
-  <div id="djGrid" class="dj-grid container"></div>
+  <div id="djGrid" class="dj-grid"></div>
 </section>
 
+<!-- ========== WILDSTYLE OFFICIAL 2025 SCHEDULE ========== -->
 <script>
-// ========== FIXED SCHEDULE ==========
 var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
-// MONDAY
-DH[1][0] = "12am – 4am<br>Steve G";
-DH[1][12] = "12pm – 2pm<br>James-Wizard Of Rock";
+
+// ---------- MONDAY ----------
+DH[1][0]  = "12am – 2am<br>Auto";
+DH[1][4]  = "4am<br>Auto";
+DH[1][12] = "12pm – 2pm<br>James - Wizard Of Rock";
 DH[1][14] = "2pm – 4pm<br>BabyJane";
 DH[1][15] = "3pm – 5pm<br>James Stephen";
-DH[1][17] = "5pm – 7pm<br>Lewis";
-DH[1][19] = "7pm – 10pm<br>DJ Dezzy – Mix Set";
-DH[1][22] = "10pm – 12am<br>DJ Jayden Mac – Grime";
+DH[1][17] = "5pm – 7pm<br>Lewis - Mix";
+DH[1][19] = "7pm – 10pm<br>DJ Dezzy Mac - Mixture (Taking Break)";
+DH[1][22] = "10pm – 12am<br>DJ Jaydon Mac - Grime";
 
-// TUESDAY
-DH[2][1] = "1am – 2am<br>Wizard Of Rock";
-DH[2][3] = "3am – 6am<br>Dani - DJ Queen Dani";
-DH[2][6] = "6am – 8am<br>Dj Dave– 60's - 70's";
-DH[2][10] = "10am – 12pm<br>HothotDJ";
+// ---------- TUESDAY ----------
+DH[2][1]  = "1am – 2am<br>James - Wizard Of Rock";
+DH[2][3]  = "3am – 6am<br>Dani - DJ Queen Dani";
+DH[2][10] = "10am – 12pm<br>Hotshot - 90's 2000's";
 DH[2][15] = "3pm – 5pm<br>James Stephen";
-DH[2][20] = "8pm – 10pm<br>Dj Lewis";
+DH[2][20] = "8pm – 10pm<br>DJ Lewis";
+DH[2][22] = "10pm – 12am<br>DanPlayzBangers";
 
-// WEDNESDAY
+// ---------- WEDNESDAY ----------
 DH[3][15] = "3pm – 5pm<br>James Stephen";
 DH[3][18] = "6pm – 7pm<br>DJ European BOB";
+DH[3][19] = "7pm – 8pm<br>DanPlayzBangers";
 DH[3][20] = "8pm – 10pm<br>Steve DJ Smith";
 DH[3][22] = "10pm – 12am<br>Reece";
 
-// THURSDAY
-DH[4][0]  = "12am – 4am<br>Steve Gunn";
-DH[4][4]  = "4am – 6am<br>Dani - DJ Queen Dani";
+// ---------- THURSDAY ----------
+DH[4][0]  = "12am – 1am<br>DJ Mary Sailor";
 DH[4][8]  = "8am – 10am<br>Coll";
 DH[4][10] = "10am – 12pm<br>Gordan";
+DH[4][12] = "12pm – 3pm<br>Christina";
 DH[4][15] = "3pm – 4pm<br>James Stephen";
-DH[4][17] = "5pm – 7pm<br>DJ Flash";
-DH[4][19] = "7pm – 8pm<br>Echofalls (DJ Strawbs)";
-DH[4][20] = "8pm – 10pm<br>Moofie";
+DH[4][19] = "7pm – 8pm<br>EchoFalls";
+DH[4][20] = "8pm – 10pm<br>Auto";
 DH[4][22] = "10pm – 11pm<br>MottMuzik";
+DH[4][23] = "11pm – 1am<br>Auto";
 
-// FRIDAY
-DH[5][0]  = "12am – 4am<br>SteveG";
-DH[5][4]  = "4am – 6am<br>Dani - DJ Queen Dani";
+// ---------- FRIDAY ----------
+DH[5][0]  = "12am – 4am<br>Steve G";
 DH[5][10] = "10am – 12pm<br>Vish";
 DH[5][15] = "3pm – 5pm<br>James Stephen";
-DH[5][16] = "4pm – 8pm<br>StevenD";
-DH[5][20] = "8pm – 10pm<br>Wendall";
-DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix&Match";
+DH[5][16] = "4pm – 8pm<br>Steven D";
+DH[5][20] = "8pm – 10pm<br>Wendell";
+DH[5][22] = "10pm – 11pm<br>Rebecca - DJ Mix N Match";
 
-// SATURDAY
-DH[6][0]  = "12am – 2am<br>Trevor Nannab";
-DH[6][2]  = "2am – 4am<br>DJ AJ";
+// ---------- SATURDAY ----------
+DH[6][0]  = "12am – 2am<br>Rob - Trevor Nannab";
+DH[6][2]  = "2am – 4am<br>Amar - DJ AJ";
+DH[6][4]  = "4am – 6am<br>Auto";
 DH[6][6]  = "6am – 10am<br>Cam";
-DH[6][10] = "10am – 12pm<br>Kevin Lee";
 DH[6][16] = "4pm – 6pm<br>The Byrdman";
+DH[6][18] = "6pm – 7pm<br>Lil Devil";
+DH[6][19] = "7pm – 8pm<br>Sonic - PreRecorded";
 DH[6][20] = "8pm – 9pm<br>Daniel";
+DH[6][22] = "10pm – 12am<br>DJ Nero";
 
-// SUNDAY (corrected index)
-DH[0][8]  = "8am – 10am<br>The Byrdman";
-DH[0][10] = "10am – 12pm<br>HotShot - 80's 90's";
-DH[0][11] = "11am – 1pm<br>JimmyD";
+// ---------- SUNDAY ----------
+DH[0][8]  = "8am – 10am<br>Auto";
+DH[0][11] = "11am – 12pm<br>Hotshot - 80's 90's";
 DH[0][13] = "1pm – 3pm<br>JK";
+DH[0][15] = "3pm – 5pm<br>Fraser";
 DH[0][17] = "5pm – 7pm<br>DJ Lewis";
-DH[0][19] = "7pm - 8pm<br>DJ European Bob";
-DH[0][20] = "8pm - 9pm<br>BIG BOSS Dj Echofalls";
-DH[0][21] = "9pm - 12am<br>Popped Radio";
+DH[0][19] = "7pm – 8pm<br>Auto";
+DH[0][20] = "8pm – 9pm<br>EchoFalls";
+DH[0][21] = "9pm – 12am<br>Popped Radio (Suzette & Co)";
 
 function NowON() {
   const now = new Date();
-  const show = DH[now.getDay()][now.getHours()] || "No Show Scheduled";
+  const show = DH[now.getDay()][now.getHours()] || "🕓 Off Air<br>No current broadcast.";
   document.getElementById("NowOn").innerHTML = show;
 }
 
-// ========== BUILD DJ GRID FROM DH ==========
+// ======= DJ GRID BUILDER =======
 function buildDJListFromDH() {
   const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const djMap = {};
@@ -154,6 +172,7 @@ function renderDJs() {
     let isLive = false;
     const slot = DH[day][hour];
     if (slot && slot.toLowerCase().includes(dj.name.toLowerCase())) isLive = true;
+
     const showsHtml = dj.shows.map(s => `<p>${s.day}: ${s.time} — ${s.show}</p>`).join("");
     const div = document.createElement("div");
     div.className = `dj-card ${isLive ? "live" : ""}`;
@@ -166,8 +185,10 @@ function renderDJs() {
   });
 }
 
-renderDJs();
-setInterval(renderDJs, 60000);
+window.addEventListener("DOMContentLoaded", () => {
+  renderDJs();
+  setInterval(() => { NowON(); renderDJs(); }, 60000);
+});
 </script>
 </body>
 </html>
