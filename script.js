@@ -375,6 +375,13 @@ const djs = [
     genre: "Breakfast",
     img: "/images/mark.png"
   }
+  {
+    name: "DJ Dutch",
+    days: [1, 3], // Monday,
+    times: ["12:00–13:00"],
+    genre: "Unkown",
+    
+  }
 ];
 
 function renderDJs(filterDay = "all") {
