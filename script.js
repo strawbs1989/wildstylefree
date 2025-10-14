@@ -367,6 +367,14 @@ const djs = [
     genre: "Variety / Talk",
     img: "/images/poppedradio.jpg"
   }
+  {
+    name: "DJ Mark",
+    show: "Breakfast Show",
+    days: [1, 3], // Monday, Wednesday
+    times: ["10:00–12:00", "10:00-12:00"],
+    genre: "Breakfast",
+    img: "/images/mark.png"
+  }
 ];
 
 function renderDJs(filterDay = "all") {
