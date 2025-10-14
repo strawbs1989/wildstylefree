@@ -104,7 +104,7 @@ DH[2][22] = "10pm – 12am<br>Autodj";
 
 // WEDNESDAY (3)
 DH[3][0]  = "12am – 2am<br>Dani - DJ Queen Dani";
-DH[3][15] = "3pm – 5pm<br>James Stephen";
+DH[3][15] = "3pm – 5pm<br>DJ Dezza";
 DH[3][18] = "6pm – 7pm<br>Auto";
 DH[3][19] = "7pm – 8pm<br>Auto";
 DH[3][20] = "8pm – 10pm<br>Steve DJ Smith";
@@ -116,7 +116,7 @@ DH[4][0]  = "12am – 4am<br>Auto";
 DH[4][8]  = "8am – 10am<br>Coll";
 DH[4][10] = "10am – 12pm<br>Gordan";
 DH[4][12]  = "12pm – 3pm<br>Christina";
-DH[4][15] = "3pm – 4pm<br>James Stephen";
+DH[4][15] = "3pm – 4pm<br>DJ Dezza";
 DH[4][19] = "7pm – 8pm<br>Echofalls (DJ Strawbs)";
 DH[4][20] = "8pm – 10pm<br>Rebecca - DJ MixnMatch";
 DH[4][22] = "10pm – 12am<br>Auto";
