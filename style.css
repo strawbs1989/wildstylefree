@@ -40,7 +40,13 @@ a:hover {
   flex-wrap: wrap;
 }
 
-
+.logo {
+  height: 80px;
+  border: 2px solid red;
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+}
 
 /* Now Playing */
 .now-playing {
