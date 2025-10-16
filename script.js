@@ -396,6 +396,13 @@ const djs = [
     genre: "Unkown",
     
   }
+  {
+    name: "Bobby",
+    days: [0], // Sunday,
+    times: ["19:00–20:00"],
+    genre: "Unkown",
+    
+  }
 ];
 
 function renderDJs(filterDay = "all") {
