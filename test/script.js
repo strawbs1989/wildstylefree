@@ -12,7 +12,7 @@ Form.addEventListener(‘submit’, async (e)=>{
   const data = Object.fromEntries(new FormData(form).entries());
 
   try {
-    await fetch(“YOUR_GOOGLE_SCRIPT_URL”, {
+    await fetch(“https://script.google.com/macros/s/AKfycbyoAZ_BA9pmiPycdiI1xfrOTf7UG5lYaw7P50Y_E5TJ_2uxFd7H6_5GnRADTDPieVg/exec”, {
       method:”POST”,
       body:JSON.stringify(data),
       headers:{“Content-Type”:”application/json”}
