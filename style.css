@@ -282,7 +282,7 @@ form {
   margin-top: 15px;
 }
 input, textarea {
-  background: rgba(255,255,255,0.08);
+  background: rgb(0,0,0);
   border: none;
   padding: 10px;
   color: white;
@@ -423,7 +423,7 @@ dj-section {
   Font-size: 26px;
   Border: none;
   Background: var(--accent);
-  Color: white;
+  Color: black;
   Cursor: pointer;
   Box-shadow: 0 0 15px rgba(255,42,42,0.5);
   Transition: all .2s ease;
@@ -436,7 +436,7 @@ dj-section {
   Bottom: 70px;
   Right: 0;
   Background: var(--panel);
-  Border: 1px solid rgba(255,255,255,.1);
+  Border: 1px solid rgba(0,0,0);
   Border-radius: 16px;
   Width: 260px;
   Padding: 14px;
@@ -451,7 +451,7 @@ dj-section {
 #requestPopup input, #requestPopup textarea {
   Background:#1a1b29;
   Border:1px solid rgba(255,255,255,.1);
-  Color:#fff;
+  Color:#000;
   Border-radius:8px;
   Padding:6px 8px;
   Font-family:inherit;
@@ -460,7 +460,7 @@ dj-section {
   Background:var(--accent);
   Border:none;
   Border-radius:8px;
-  Color:#fff;
+  Color:#000;
   Padding:8px;
   Cursor:pointer;
 }
