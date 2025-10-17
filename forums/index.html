@@ -609,6 +609,16 @@ setInterval(NowON, 60000);</script>
         const name = el('#authName').value.trim();
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
         if(name){ await updateProfile(cred.user, { displayName: name }); }
+		
+		// ✉️ Send verification email
+    await sendEmailVerification(cred.user);
+    alert("Verification email sent! Please check your inbox before logging in.");
+
+    el('#authModal').close();
+  } catch(e) {
+    alert(e.message);
+  }
+}); 
         // default role: member; grant DJ/admin via roles collection (manual)
         el('#authModal').close();
       }catch(e){ alert(e.message); }
