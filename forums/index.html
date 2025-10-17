@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wildstyle Community Forums</title>
+  <meta name="description" content="Wildstyle.vip Community Forums — Unsigned Artists, Music Chat, Tech Help" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://wildstyle.vip/forums/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://wildstyle.vip/forums/script.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="brand">
+        <img src="/test1/placeholder.png" alt="Wildstyle logo">
+        <div>
+          <h1>Wildstyle Forums</h1>
+          <small>United by Beats • Powered by Passion</small>
+        </div>
+      </div>
+      <div class="grow"></div>
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="Search threads…" aria-label="Search threads" />
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#9aa0a6" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="11" r="6.5" stroke="#9aa0a6" stroke-width="1.5"/></svg>
+      </div>
+      <button id="loginBtn" class="btn">Log in / Sign up</button>
+      <button id="logoutBtn" class="btn ghost" style="display:none">Log out</button>
+    </nav>
+  </header>
+
+  <main>
+    <aside>
+      <div class="aside-head">
+        <div class="pill">🎧 <strong>Now On-Air</strong> <span id="nowOnAir" style="margin-left:6px; color:#fff">Off Air</span></div>
+      </div>
+      <div class="cats" id="cats">
+        <!-- Categories injected here -->
+      </div>
+    </aside>
+
+    <section>
+      <div class="toolbar">
+        <div id="activeCatLabel"><strong>All</strong> threads</div>
+        <div class="grow"></div>
+        <button id="newThreadBtn" class="btn">➕ New Thread</button>
+      </div>
+      <div id="threads" class="threads"></div>
+      <div id="empty" class="empty" style="display:none">No threads yet in this category. Be the first to post! 👇</div>
+    </section>
+  </main>
+
+  <!-- New Thread Modal -->
+  <dialog id="threadModal" class="modal">
+    <header>
+      <strong>Create a new thread</strong>
+      <div class="grow"></div>
+      <button class="action" onclick="document.getElementById('threadModal').close()">✖</button>
+    </header>
+    <div class="content">
+      <div>
+        <label>Category</label>
+        <select id="threadCat">
+          <option value="unsigned">Unsigned Artists</option>
+          <option value="music">Music Chat</option>
+          <option value="tech">Tech Help</option>
+        </select>
+      </div>
+      <div>
+        <label>Title</label>
+        <input id="threadTitle" placeholder="Make it descriptive" maxlength="120" />
+      </div>
+      <div>
+        <label>Image URL (required, images only)</label>
+        <input id="threadImage" placeholder="https://… .jpg .png .gif (no video)" />
+      </div>
+      <div>
+        <label>Body (text only — images are embedded via the Image URL field)</label>
+        <textarea id="threadBody" placeholder="Say something about your image… (no links/scripts)"></textarea>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end">
+        <button class="btn ghost" onclick="document.getElementById('threadModal').close()">Cancel</button>
+        <button id="createThread" class="btn">Create Thread</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Login Modal -->
+  <dialog id="authModal" class="modal">
+    <header>
+      <strong>Welcome to Wildstyle Forums</strong>
+      <div class="grow"></div>
+      <button class="action" onclick="document.getElementById('authModal').close()">✖</button>
+    </header>
+    <div class="content">
+      <p style="color:var(--muted); margin:0">Log in or create an account to post, reply, and like.</p>
+      <div style="display:grid; gap:10px; grid-template-columns: 1fr 1fr">
+        <div>
+          <label>Email</label>
+          <input id="authEmail" type="email" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label>Password</label>
+          <input id="authPass" type="password" placeholder="••••••••" />
+        </div>
+      </div>
+      <div>
+        <label>Display name (for new accounts)</label>
+        <input id="authName" placeholder="DJ EchoFalls" />
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end">
+        <button id="doLogin" class="btn">Log in</button>
+        <button id="doSignup" class="btn ghost">Sign up</button>
+      </div>
+    </div>
+  </dialog>
+    
+</body>
+</html>
