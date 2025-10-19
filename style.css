@@ -663,4 +663,147 @@ dj-section {
   }
 }
 
+/* ===== Request Section ===== */
+#requests {
+  padding: 60px 0;
+  background: linear-gradient(to top right, #6699ff 0%, #ffccff 100%);
+  color: #111;
+  text-align: center;
+  border-top: 3px solid #ff2a2a;
+  box-shadow: inset 0 0 20px rgba(255, 42, 42, 0.25);
+  border-radius: 20px;
+  margin: 40px auto;
+  width: 95%;
+  max-width: 900px;
+}
+
+#requests .section-title {
+  margin-bottom: 25px;
+}
+
+#requests .section-title h2 {
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(90deg, #ff2a2a, #ff66cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  margin-bottom: 10px;
+}
+
+#requests .section-title p {
+  color: #222;
+  font-weight: 500;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== Request Widget ===== */
+#requestWidget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#requestBtn {
+  background: linear-gradient(90deg, #ff2a2a, #ff66cc);
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(255, 42, 42, 0.4);
+}
+#requestBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 18px rgba(255, 42, 42, 0.7);
+}
+
+/* ===== Popup Form ===== */
+#requestPopup {
+  display: none; /* default hidden */
+  margin-top: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 30px 25px;
+  box-shadow: 0 0 25px rgba(255, 42, 42, 0.25);
+  width: 100%;
+  max-width: 450px;
+  animation: fadeIn 0.5s ease;
+}
+
+#requestPopup.active {
+  display: block;
+}
+
+#requestPopup h4 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #ff2a2a;
+  text-transform: uppercase;
+}
+
+/* ===== Form Inputs ===== */
+#requestForm input,
+#requestForm textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+#requestForm input:focus,
+#requestForm textarea:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(255, 42, 42, 0.6);
+}
+
+#requestForm button {
+  width: 100%;
+  background: linear-gradient(90deg, #ff2a2a, #ff66cc);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+#requestForm button:hover {
+  background: linear-gradient(90deg, #ff66cc, #ff2a2a);
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.6);
+}
+
+/* ===== Status Text ===== */
+#reqStatus {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #222;
+  font-weight: 500;
+}
+
+/* ===== Animation ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  #requests {
+    padding: 40px 20px;
+  }
+  #requestPopup {
+    max-width: 100%;
+  }
+}
+
+
 
