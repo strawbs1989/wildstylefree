@@ -275,20 +275,21 @@ text-align: center;
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-form {
+#requesForm {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 15px;
 }
-input, textarea {
+#requesForm input, 
+#requesForm textarea {
   background: rgb(0,0,0);
   border: none;
   padding: 10px;
   color: white;
   border-radius: 8px;
 }
-button {
+#requesForm button {
   background: linear-gradient(90deg, #ff005d, #a000ff);
   color: white;
   padding: 10px;
@@ -298,7 +299,7 @@ button {
   cursor: pointer;
   transition: transform 0.2s;
 }
-button:hover { transform: scale(1.05); }
+#requesForm button:hover { transform: scale(1.05); }
 
 /* Listener Ticker */
 .shoutout-ticker {
