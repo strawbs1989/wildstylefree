@@ -473,8 +473,7 @@ dj-section {
 /* === UNSIGNED ARTIST SPOTLIGHT === */
 #unsigned {
   padding: 60px 0;
-  background: radial-gradient(circle at 20% 10%, rgba(255,42,42,0.08), transparent 70%),
-              radial-gradient(circle at 80% 80%, rgba(169,75,255,0.08), transparent 70%);
+  background: linear-gradient(to top right, #6699ff 0%, #ffccff 100%); 
   border-top: 1px solid rgba(255,255,255,0.06);
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
@@ -613,7 +612,7 @@ dj-section {
 #events .section-desc {
   max-width: 750px;
   margin: 0 auto 40px;
-  color: var(--muted, #000);
+  background: linear-gradient(to top right, #6699ff 0%, #ffccff 100%); 
   font-size: 1rem;
   line-height: 1.6;
   text-shadow: 0 0 8px rgba(255, 42, 42, 0.25);
