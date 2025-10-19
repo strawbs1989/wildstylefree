@@ -613,7 +613,7 @@ dj-section {
 #events .section-desc {
   max-width: 750px;
   margin: 0 auto 40px;
-  color: var(--muted, #ccc);
+  color: var(--muted, #000);
   font-size: 1rem;
   line-height: 1.6;
   text-shadow: 0 0 8px rgba(255, 42, 42, 0.25);
