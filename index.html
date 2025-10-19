@@ -301,33 +301,32 @@ setInterval(NowON, 60000);</script>
 <!-- End FOWR -->
   </section></center>
   
-<center>
-<section id="requests" class="request-section">
-  <div class="container">
-    <div class="section-title">
-      <h2>Request a Song</h2>
-      <p>Want to request a tune? Pop it in — your DJ will play it 🎶</p>
-    </div>
+  <center><section class="container py-5" id="djs">
+    <h2 class="text-danger text-center mb-4">Requests</h2>
+    <div class="container my-4">
+  <div class="row g-3">
+  
+    <!-- Request Section -->
+  
+<p>Want To Request A Tune? Pop It In You're DJ Will Play It.</p>
+    <!—Request Widget ->
+<div id=”requestWidget”>
+  <button id=”requestBtn” title=”Request a Song”>🎵</button>
 
-    <div id="requestWidget">
-      <button id="requestBtn" title="Request a Song">🎵 Request</button>
-
-      <div id="requestPopup">
-        <h4>Send Your Request</h4>
-        <form id="requestForm">
-          <input type="text" name="name" placeholder="Your Name" required>
-          <input type="text" name="song" placeholder="Song Title" required>
-          <input type="text" name="artist" placeholder="Artist Name" required>
-          <textarea name="message" placeholder="Dedication / Shout-out (optional)"></textarea>
-          <button type="submit">Send Request</button>
-        </form>
-        <div id="reqStatus"></div>
-      </div>
-    </div>
+  <div id=”requestPopup”>
+    <h4>Request a Song</h4>
+    <center><form id=”requestForm”>
+      <input type=”text” name=”name” placeholder=”Yourname” required">
+      <input type=”text” name=”song” placeholder=”Songtitle” required>
+      <input type=”text” name=”artist” placeholder=”Artistname” required>
+      <textarea name=”message” placeholder=”Dedication/Shout-out (optional)”></textarea>
+      <button type=”submit”>Send Request</button>
+    </form></center>
+    <div id=”reqStatus”></div>
   </div>
-</section>
-</center>
-
+</div>
+<!-- End Requests -->
+  </section></center>
   
   
   <center><section class="container py-5" id="djs">
