@@ -566,3 +566,103 @@ dj-section {
   }
 }
 
+/* ===== Wildstyle Events Section ===== */
+#events {
+  padding: 60px 0;
+  text-align: center;
+  background: radial-gradient(circle at center, #0d0d0d 0%, #000 100%);
+  color: #fff;
+  border-top: 2px solid var(--accent, #ff2a2a);
+  box-shadow: inset 0 0 20px rgba(255, 42, 42, 0.3);
+}
+
+#events .section-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+#events .section-title h2 {
+  font-size: 2.2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #ff2a2a;
+  text-shadow: 0 0 15px rgba(255, 42, 42, 0.7);
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+#events .section-title .btn {
+  background: linear-gradient(90deg, #ff2a2a, #ff5959);
+  border: none;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 42, 42, 0.4);
+}
+#events .section-title .btn:hover {
+  background: linear-gradient(90deg, #ff5959, #ff2a2a);
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.8);
+  transform: scale(1.05);
+}
+
+#events .section-desc {
+  max-width: 750px;
+  margin: 0 auto 40px;
+  color: var(--muted, #ccc);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-shadow: 0 0 8px rgba(255, 42, 42, 0.25);
+}
+
+/* ===== Gallery Layout ===== */
+.event-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.event-card {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.2);
+}
+
+.event-card img {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  transition: all 0.4s ease;
+  filter: brightness(85%) contrast(110%);
+}
+
+/* Hover Effects */
+.event-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 42, 42, 0.6);
+}
+.event-card:hover img {
+  filter: brightness(100%) contrast(120%) saturate(120%);
+  transform: scale(1.05);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  #events .section-title h2 {
+    font-size: 1.8rem;
+  }
+  #events .section-desc {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+  }
+}
+
+
