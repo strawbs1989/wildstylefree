@@ -698,112 +698,112 @@ dj-section {
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
 }
 
-/* ===== Request Widget ===== */
-#requestWidget {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ===== Request Section ===== */
+#requests {
+  padding: 60px 0;
+  background: linear-gradient(to top right, #6699ff 0%, #ffccff 100%);
+  border-top: 3px solid #ff2a2a;
+  box-shadow: inset 0 0 25px rgba(255, 42, 42, 0.3);
+  text-align: center;
+  border-radius: 25px;
+  color: #fff;
+  width: 95%;
+  max-width: 900px;
+  margin: 50px auto;
 }
 
-#requestBtn {
+/* Title */
+#requests h2 {
+  font-size: 2.2rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #ff2a2a;
+  text-shadow: 0 0 10px rgba(255, 42, 42, 0.6);
+  margin-bottom: 15px;
+}
+
+#requests p {
+  color: #222;
+  font-weight: 500;
+  margin-bottom: 25px;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== Form Styling ===== */
+#requestForm {
+  background: rgba(0, 0, 0, 0.85);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 42, 42, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+#requestForm input,
+#requestForm textarea {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 8px rgba(255, 42, 42, 0.25);
+}
+
+#requestForm input::placeholder,
+#requestForm textarea::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+#requestForm input:focus,
+#requestForm textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(255, 42, 42, 0.7);
+}
+
+/* ===== Submit Button ===== */
+#requestForm button {
   background: linear-gradient(90deg, #ff2a2a, #ff66cc);
   color: #fff;
   border: none;
-  padding: 12px 25px;
+  border-radius: 8px;
+  padding: 14px;
   font-size: 1rem;
-  border-radius: 50px;
+  font-weight: 700;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 12px rgba(255, 42, 42, 0.4);
 }
-#requestBtn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 18px rgba(255, 42, 42, 0.7);
-}
 
-/* ===== Popup Form ===== */
-#requestPopup {
-  display: none; /* default hidden */
-  margin-top: 25px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  padding: 30px 25px;
-  box-shadow: 0 0 25px rgba(255, 42, 42, 0.25);
-  width: 100%;
-  max-width: 450px;
-  animation: fadeIn 0.5s ease;
-}
-
-#requestPopup.active {
-  display: block;
-}
-
-#requestPopup h4 {
-  margin-bottom: 15px;
-  font-size: 1.3rem;
-  color: #ff2a2a;
-  text-transform: uppercase;
-}
-
-/* ===== Form Inputs ===== */
-#requestForm input,
-#requestForm textarea {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  background: #f7f7f7;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.3s ease;
-}
-#requestForm input:focus,
-#requestForm textarea:focus {
-  outline: none;
-  box-shadow: 0 0 8px rgba(255, 42, 42, 0.6);
-}
-
-#requestForm button {
-  width: 100%;
-  background: linear-gradient(90deg, #ff2a2a, #ff66cc);
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  padding: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-}
 #requestForm button:hover {
-  background: linear-gradient(90deg, #ff66cc, #ff2a2a);
-  box-shadow: 0 0 15px rgba(255, 42, 42, 0.6);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 42, 42, 0.7);
 }
 
-/* ===== Status Text ===== */
+/* Status message */
 #reqStatus {
   margin-top: 10px;
-  font-size: 0.95rem;
   color: #222;
-  font-weight: 500;
-}
-
-/* ===== Animation ===== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  font-weight: 600;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
-  #requests {
-    padding: 40px 20px;
+  #requestForm {
+    padding: 20px;
   }
-  #requestPopup {
-    max-width: 100%;
+  #requests h2 {
+    font-size: 1.8rem;
   }
 }
+
 
 
 
