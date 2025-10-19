@@ -570,9 +570,8 @@ dj-section {
 #events {
   padding: 60px 0;
   text-align: center;
-  background: radial-gradient(circle at center, #0d0d0d 0%, #000 100%);
-  color: #fff;
-  border-top: 2px solid var(--accent, #ff2a2a);
+  background: radial-gradient(circle at 20% 10%, rgba(255,42,42,0.08), transparent 70%); color: #fff;
+ border-top: 1px solid rgba(255,255,255,0.06);
   box-shadow: inset 0 0 20px rgba(255, 42, 42, 0.3);
 }
 
