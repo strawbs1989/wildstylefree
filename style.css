@@ -168,112 +168,24 @@ form.grid {
   margin: 0 auto;
 }
 
-/* ===== Birthday Section ===== */
-#birthdays {
-  background: linear-gradient(to top right, #ffccff 0%, #99ccff 100%);
-  padding: 60px 0;
-  border-top: 3px solid #ff2a2a;
-  box-shadow: inset 0 0 25px rgba(255, 42, 42, 0.3);
-  border-radius: 25px;
-  text-align: center;
-  width: 95%;
-  max-width: 900px;
-  margin: 50px auto;
-  color: #222;
+/* Birthday Styling */
+birthday {
+padding: 60px 0;
+text-align: center;
 }
-
-/* ===== Heading & Text ===== */
-#birthdays h2 {
-  font-size: 2.2rem;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #ff2a9b;
-  text-shadow: 0 0 10px rgba(255, 102, 204, 0.5);
-  margin-bottom: 10px;
-}
-
-#birthdays p {
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 25px;
-  font-weight: 500;
-}
-
-/* ===== Form Styling ===== */
-#birthdays form {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 30px 40px;
-  border-radius: 20px;
-  box-shadow: 0 0 25px rgba(255, 42, 42, 0.25);
+.birthday form {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  max-width: 480px;
+  gap: 15px;
+  max-width: 400px;
   margin: 0 auto;
 }
 
-/* ===== Input Fields ===== */
-#birthdays input[type="text"],
-#birthdays input[type="email"] {
-  background: #111;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
+.birthday input, .birthday button {
   padding: 12px;
-  margin-bottom: 20px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 0 6px rgba(255, 42, 42, 0.25);
+  font-size: 16px;
+  
 }
-
-#birthdays input[type="text"]:focus,
-#birthdays input[type="email"]:focus {
-  outline: none;
-  box-shadow: 0 0 10px rgba(255, 42, 42, 0.7);
-}
-
-/* ===== Labels (p tags in your form) ===== */
-#birthdays form p {
-  text-align: left;
-  color: #fff;
-  font-weight: 600;
-  margin-bottom: 5px;
-  text-shadow: 0 0 5px rgba(255, 42, 42, 0.4);
-}
-
-/* ===== Submit Button ===== */
-#birthdays input[type="submit"] {
-  background: linear-gradient(90deg, #ff2a2a, #ff66cc);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(255, 42, 42, 0.5);
-}
-
-#birthdays input[type="submit"]:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255, 42, 42, 0.8);
-}
-
-/* ===== Responsive tweaks ===== */
-@media (max-width: 600px) {
-  #birthdays {
-    padding: 40px 20px;
-  }
-  #birthdays h2 {
-    font-size: 1.8rem;
-  }
-  #birthdays form {
-    padding: 20px;
-  }
-}
-
 
 /* Gallery */
 
@@ -754,7 +666,7 @@ dj-section {
 
 /* ===== Request Section ===== */
 #requests {
-  padding: 60px; 80px;
+  padding: 60px; ;
   background: linear-gradient(to top right, #6699ff 0%, #ffccff 100%);
   color: #111;
   text-align: center;
@@ -786,103 +698,6 @@ dj-section {
   font-weight: 500;
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
 }
-
-/* ===== Request Section ===== */
-#requests {
-  padding: 60px 0;
-  background: linear-gradient(to top right, #6699ff 0%, #ffccff 100%);
-  border-top: 3px solid #ff2a2a;
-  box-shadow: inset 0 0 25px rgba(255, 42, 42, 0.3);
-  text-align: center;
-  border-radius: 25px;
-  color: #fff;
-  width: 95%;
-  max-width: 900px;
-  margin: 50px auto;
-}
-
-/* Title */
-#requests h2 {
-  font-size: 2.2rem;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #ff2a2a;
-  text-shadow: 0 0 10px rgba(255, 42, 42, 0.6);
-  margin-bottom: 15px;
-}
-
-#requests p {
-  color: #222;
-  font-weight: 500;
-  margin-bottom: 25px;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
-}
-
-/* ===== Form Styling ===== */
-#requestForm {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(255, 42, 42, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-#requestForm input,
-#requestForm textarea {
-  background: #111;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 0 8px rgba(255, 42, 42, 0.25);
-}
-
-#requestForm input::placeholder,
-#requestForm textarea::placeholder {
-  color: #aaa;
-  font-style: italic;
-}
-
-#requestForm input:focus,
-#requestForm textarea:focus {
-  outline: none;
-  box-shadow: 0 0 10px rgba(255, 42, 42, 0.7);
-}
-
-/* ===== Submit Button ===== */
-#requestForm button {
-  background: linear-gradient(90deg, #ff2a2a, #ff66cc);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 14px;
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 12px rgba(255, 42, 42, 0.4);
-}
-
-#requestForm button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(255, 42, 42, 0.7);
-}
-
-/* Status message */
-#reqStatus {
-  margin-top: 10px;
-  color: #222;
-  font-weight: 600;
-}
-
 /* Responsive */
 @media (max-width: 600px) {
   #requestForm {
@@ -892,6 +707,7 @@ dj-section {
     font-size: 1.8rem;
   }
 }
+
 
 
 
