@@ -38,25 +38,20 @@ body.slate{ background: var(--slate); }
 .burger{display:none;background:transparent;border:none;cursor:pointer}
 .burger span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;border-radius:2px}
 
-/* Now Playing */
-.now-playing {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
+/* Nowplaying Box */
+.nowplaying{display:flex;align-items:center;gap:.8rem;padding:.5rem 1rem;margin:.5rem auto;border-radius:12px;background:rgba(255,255,255,0.05);width:fit-content}
+.nowplaying img{width:42px;height:42px;border-radius:8px;object-fit:cover}
+.np-meta{display:flex;flex-direction:column}
+.np-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
+.np-artist{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
+.live-pill{margin-left:.5rem;padding:.25rem .6rem;border-radius:999px;background:#333;color:#bbb;font-size:.75rem;border:1px solid #444;transition:all .3s}
 
-#NowOn {
-  padding: 0.4rem 1rem;
-  border: 1px dashed #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  font-size: 14px;
-  max-width: 300px;
-  text-align: right;
+/* ON AIR glow */
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 6px rgba(255,59,59,.3); }
+  50% { box-shadow: 0 0 18px rgba(255,59,59,.8); }
 }
+.live-pill.onair { background:#ff3b3b!important; color:#fff!important; animation:pulseGlow 1.6s infinite; }
 
 .WimpyPlayerPopup902 {
   background-color: red;
