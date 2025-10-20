@@ -276,30 +276,96 @@ form.grid {
 }
 
 /* Gallery */
-div.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+.shop-section {
+  background: rgba(10, 0, 20, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 60px 20px;
+  color: #fff;
+  border-top: 2px solid rgba(255, 0, 100, 0.5);
+  border-bottom: 2px solid rgba(160, 0, 255, 0.5);
+  box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.2);
 }
 
-div.gallery-item {
-  margin: 5px;
-  border: 1px solid #ccc;
-  width: 180px;
+.shop-section h3 {
+  font-size: 2.2rem;
+  color: #ff004c;
+  text-shadow: 0 0 12px #a000ff;
+  margin-bottom: 10px;
 }
 
-div.gallery-item:hover {
-  border: 1px solid #777;
+.btn-shop {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff004c, #a000ff);
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
+}
+.btn-shop:hover { transform: scale(1.05); }
+
+.shop-intro {
+  color: #ccc;
+  margin: 20px 0 40px;
+  font-size: 1.1rem;
 }
 
-div.gallery-item img {
-  width: 100%;
-  height: auto;
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
 }
 
-div.gallery-item div.desc {
+.shop-item {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 0, 150, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(255, 0, 150, 0.3);
+  transition: all 0.3s ease;
   padding: 15px;
-  text-align: center;
+}
+.shop-item:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 0, 255, 0.6);
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
+}
+
+.shop-item img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.shop-item h4 {
+  color: #ff3bff;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+.price {
+  color: #00ffff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.buy-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff004c, #a000ff);
+  color: white;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(255, 0, 150, 0.4);
+  transition: all 0.3s ease;
+}
+.buy-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 18px rgba(255, 0, 255, 0.8);
 }
 
 
