@@ -803,11 +803,31 @@ dj-section {
 .section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:1rem;gap:1rem;flex-wrap:wrap}
 .section-title{margin:0;font-family:Oswald,Inter,sans-serif;letter-spacing:.06em}
 .section-sub{margin:0;color:var(--muted)}
+
 /* Dj Week */
 .dj-week{display:flex;flex-wrap:wrap;align-items:center;gap:1.2rem;padding:1rem}
 .dj-week-info{flex:1;min-width:220px}
 .review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
 .review{text-align:center;padding:1rem;font-size:.95rem;color:var(--text)}
+
+/* DJ Grid */
+.dj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.dj-card{padding:1rem;text-align:center}
+.dj-photo{width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:.6rem}
+.dj-name{margin:.2rem 0}
+.dj-show{color:var(--muted);margin:.2rem 0}
+.dj-role{color:var(--muted);margin:.4rem 0 0 0}
+.dj-link{display:inline-block;margin-top:.2rem;color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.3)}
+.dj-link:hover{color:#2a7bff}
+
+/* Hero */
+.hero{position:relative;padding:3rem 0;text-align:center}
+.hero-inner{display:grid;place-items:center}
+.headline{font-family:Oswald,Inter,sans-serif;letter-spacing:.06em;font-size:clamp(2rem,5vw,3rem);margin:0}
+.tagline{color:var(--muted);margin:.5rem 0 1.5rem}
+.cta{display:flex;gap:.75rem;align-items:center}
+.btn{border-radius:14px;border:var(--glass-border);background:transparent;color:var(--text);padding:.8rem 1rem;cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;font-weight:700}
 
 
 
