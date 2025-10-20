@@ -1,0 +1,228 @@
+/* === WILDSTYLE HOMEPAGE ENHANCEMENTS === */
+
+/* General Page Glow */
+body.wildstyle-theme {
+  background: radial-gradient(circle at 20% 10%, rgba(255,42,109,0.08), transparent 70%),
+              radial-gradient(circle at 80% 0%, rgba(42,123,255,0.08), transparent 60%),
+              #0a0b0f;
+  animation: bgPulse 12s ease-in-out infinite alternate;
+}
+@keyframes bgPulse {
+  0% { background-position: 0 0; filter: brightness(1); }
+  100% { background-position: 20px 30px; filter: brightness(1.05); }
+}
+
+/* Glass Sections */
+.glass-section {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255,42,109,0.2);
+  padding: 60px 30px;
+  margin: 40px auto;
+  width: 95%;
+  max-width: 1100px;
+  transition: transform .4s ease, box-shadow .4s ease;
+}
+.glass-section:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 40px rgba(255,42,109,0.35);
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(120deg, rgba(255,42,109,0.25), rgba(42,123,255,0.15));
+  padding: 60px 20px;
+  border-radius: 20px;
+  box-shadow: inset 0 0 30px rgba(255,42,109,0.25);
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0% { box-shadow: inset 0 0 20px rgba(42,123,255,0.3); }
+  100% { box-shadow: inset 0 0 40px rgba(255,42,109,0.5); }
+}
+.hero-logo {
+  border: 3px solid rgba(255,42,109,0.5);
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255,42,109,0.3);
+  transition: transform .3s ease;
+}
+.hero-logo:hover {
+  transform: scale(1.05);
+}
+
+/* Now Playing Glow */
+.nowon-glow {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff005d, #a000ff);
+  border-radius: 12px;
+  color: #fff;
+  padding: 10px 16px;
+  font-weight: bold;
+  font-size: 1rem;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  box-shadow: 0 0 25px rgba(255,42,109,0.6);
+  transition: all .3s ease;
+  cursor: pointer;
+}
+.nowon-glow:hover {
+  background: linear-gradient(90deg, #a000ff, #ff005d);
+  transform: scale(1.05);
+}
+
+/* Section Titles */
+.section-title h2 {
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  font-size: 2rem;
+  color: #fff;
+  background: linear-gradient(90deg, #ff2a6d, #2a7bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+}
+
+/* Primary Buttons */
+.btn.primary {
+  background: linear-gradient(90deg, #ff2a6d, #2a7bff);
+  border: none;
+  color: #fff;
+  padding: 10px 22px;
+  font-weight: 700;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(255,42,109,0.4);
+  text-transform: uppercase;
+}
+.btn.primary:hover {
+  background: linear-gradient(90deg, #2a7bff, #ff2a6d);
+  transform: scale(1.07);
+  box-shadow: 0 0 25px rgba(255,255,255,0.5);
+}
+
+/* Request Form Glow */
+#requestForm {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#requestForm input,
+#requestForm textarea {
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+#requestForm input:focus,
+#requestForm textarea:focus {
+  outline: none;
+  box-shadow: 0 0 15px rgba(255,42,109,0.5);
+}
+#requestForm button {
+  background: linear-gradient(90deg, #ff2a6d, #2a7bff);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 25px rgba(255,42,109,0.5);
+}
+#requestForm button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 35px rgba(255,255,255,0.6);
+}
+
+/* DJ Week Card */
+.dj-week {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  background: rgba(255,255,255,0.05);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(42,123,255,0.3);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.dj-week:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 40px rgba(255,42,109,0.4);
+}
+.dj-week img {
+  width: 160px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,42,109,0.5);
+  box-shadow: 0 0 20px rgba(255,42,109,0.3);
+}
+.dj-week-info h3 {
+  color: #fff;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* Ticker Scroll Animation */
+.shoutout-ticker {
+  background: linear-gradient(90deg, #000, #1a1a1a);
+  color: #fff;
+  border-top: 3px solid #ff2a6d;
+  border-bottom: 2px solid #2a7bff;
+  box-shadow: 0 0 20px rgba(255,42,109,0.4);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-family: "Poppins", sans-serif;
+}
+#tickerContent {
+  display: inline-block;
+  padding-left: 100%;
+  animation: tickerScroll 25s linear infinite;
+}
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Event Cards */
+.event-gallery img {
+  border-radius: 16px;
+  transition: all .3s ease;
+  box-shadow: 0 0 15px rgba(255,42,109,0.25);
+}
+.event-gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255,42,109,0.4);
+}
+
+/* Birthday Section */
+#birthdays form input,
+#birthdays form textarea {
+  background: #000;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  padding: 10px;
+}
+#birthdays input[type="submit"] {
+  background: linear-gradient(90deg, #ff2a6d, #2a7bff);
+  color: white;
+  border: none;
+  padding: 12px;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: all .3s ease;
+}
+#birthdays input[type="submit"]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255,42,109,0.6);
+}

@@ -1,344 +1,178 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wildstyle Radio — United by Beats • Powered by Passion</title>
-  <meta name="description" content="Wildstyle Radio — 24/7 signed & unsigned music, live shows, events, requests, and more.">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0b0b0d;
-      --panel:#121218;
-      --muted:#b8b8c9;
-      --text:#f5f7ff;
-      --accent:#ff2a2a;
-      --accent2:#ff66cc;
-      --accent3:#6699ff;
-      --radius:18px;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --glow:0 0 24px rgba(255,42,42,.55);
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wildstyle Radio | Home</title>
 
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
-
-    .container{width:min(1200px,92%);margin-inline:auto}
-
-    /* Header */
-    header{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:saturate(140%) blur(8px);
-      background:linear-gradient(180deg,rgba(11,11,13,.9),rgba(11,11,13,.55) 60%,transparent);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand img{width:44px;height:44px;border-radius:10px;object-fit:cover;box-shadow:var(--shadow)}
-    .brand h1{font-size:18px;margin:0;font-weight:800;letter-spacing:.6px}
-    .brand small{display:block;color:var(--muted);font-weight:600;letter-spacing:.4px}
-
-    .nav-links{display:flex;gap:18px;align-items:center}
-    .nav-links a{opacity:.9}
-    .nav-links a:hover{opacity:1;text-shadow:0 0 18px rgba(255,42,42,.6)}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;font-weight:700;letter-spacing:.35px;box-shadow:var(--shadow);transition:transform .25s ease, box-shadow .25s ease}
-    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));}
-    .btn-primary:hover{transform:translateY(-1px);box-shadow:var(--glow)}
-    .btn-ghost{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
-
-    /* Hero */
-    .hero{position:relative;padding:80px 0 60px;background:
-      radial-gradient(1000px 600px at 10% 10%, rgba(255,42,42,.18), transparent 60%),
-      radial-gradient(1000px 600px at 90% 0%, rgba(102,153,255,.15), transparent 60%),
-      linear-gradient(180deg, rgba(255,255,255,.03), transparent 45%),
-      var(--bg);
-    }
-    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
-    .hero h2{font-size:clamp(28px,4vw,46px);line-height:1.12;margin:0 0 12px;font-weight:800;letter-spacing:.4px;text-shadow:0 0 18px rgba(255,42,42,.35)}
-    .hero p{color:var(--muted);margin:0 0 22px}
-    .cta-row{display:flex;gap:12px;flex-wrap:wrap}
-
-    .nowon{background:linear-gradient(135deg, rgba(255,42,42,.18), rgba(102,153,255,.18));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-    .nowon h3{margin:0 0 6px;font-size:15px;color:#ffd1d1;letter-spacing:.35px;text-transform:uppercase}
-    .nowon .track{display:flex;gap:14px;align-items:center}
-    .track img{width:64px;height:64px;border-radius:12px;object-fit:cover}
-    .track strong{display:block;font-size:16px}
-    .track span{display:block;color:var(--muted);font-size:14px}
-
-    /* Spotlight */
-    section{padding:56px 0}
-    .section-title{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;margin-bottom:22px}
-    .section-title h3{margin:0;font-size:clamp(20px,2.7vw,28px);text-transform:uppercase;letter-spacing:.6px;color:#fff;text-shadow:0 0 14px rgba(255,42,42,.45)}
-    .section-title p{margin:6px 0 0;color:var(--muted)}
-
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    .card{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .3s ease, box-shadow .3s ease}
-    .card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(255,42,42,.25)}
-    .card img.thumb{aspect-ratio:16/10;object-fit:cover}
-    .card .inner{padding:14px}
-    .badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700}
-
-    /* Events */
-    .events{background:linear-gradient(to top right, var(--accent3) 0%, #ffccff 100%);border-top:2px solid var(--accent);box-shadow:inset 0 0 26px rgba(255,42,42,.3)}
-    .event-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-    .event img{border-radius:14px;filter:brightness(.92) contrast(1.05);transition:transform .35s ease, filter .35s}
-    .event img:hover{transform:scale(1.05);filter:brightness(1) contrast(1.1) saturate(1.1)}
-
-    /* Requests + Birthdays */
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    .panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-    .panel h4{margin:0 0 8px;font-size:18px;text-transform:uppercase;letter-spacing:.4px;color:#fff}
-
-    form{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-    .req input,.req textarea{background:#0f0f14;border:none;padding:12px 14px;color:#fff;border-radius:10px}
-    .req textarea{min-height:110px;resize:vertical}
-    .req button{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none;padding:12px 14px;border-radius:10px;font-weight:800;letter-spacing:.4px;cursor:pointer;transition:transform .25s ease, box-shadow .25s}
-    .req button:hover{transform:translateY(-1px);box-shadow:var(--glow)}
-
-    /* Birthday has its own vibe */
-    .bday{background:linear-gradient(to bottom right,#fff3b0,#ffd6e0);color:#222}
-    .bday h4{color:#b3006b}
-    .bday form input,.bday form textarea{background:#fff;color:#222;box-shadow:inset 0 0 6px rgba(179,0,107,.18)}
-    .bday form button{background:linear-gradient(90deg,#ff66cc,#ffcc66);color:#fff}
-
-    /* Tune-in + Footer */
-    .tune{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-    .tune .tile{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px;text-align:center}
-
-    footer{padding:28px 0;border-top:1px solid rgba(255,255,255,.06);color:var(--muted)}
-
-    /* Responsive */
-    @media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
-    @media (max-width:800px){.split{grid-template-columns:1fr}}
-  </style>
+  <!-- Core Styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/script.js"></script>
 </head>
-<body>
-  <!-- Header -->
-  <header>
-    <div class="container nav">
-      <div class="brand">
-        <img src="/test1/placeholder.png" alt="Wildstyle logo">
-        <div>
-          <h1>Wildstyle Radio</h1>
-          <small>United by Beats • Powered by Passion</small>
-        </div>
+
+<body class="wildstyle-theme" onload="NowON()">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 shadow-lg">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-danger fs-3" href="/">
+        <i class="fa-solid fa-bolt text-primary"></i> Wildstyle Radio
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav text-uppercase">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/shoutout.html">Shoutouts</a></li>
+          <li class="nav-item"><a class="nav-link" href="/chat.html">Chat</a></li>
+          <li class="nav-item"><a class="nav-link" href="/djs.html">DJs</a></li>
+          <li class="nav-item"><a class="nav-link" href="/schedule.html">Schedule</a></li>
+          <li class="nav-item"><a class="nav-link" href="/merch.html">Merch</a></li>
+          <li class="nav-item"><a class="nav-link" href="/shows.html">Shows</a></li>
+          <li class="nav-item"><a class="nav-link" href="/aboutus.html">About</a></li>
+        </ul>
       </div>
-      <nav class="nav-links">
-        <a href="#listen">Listen</a>
-        <a href="#unsigned">Unsigned</a>
-        <a href="#events">Events</a>
-        <a href="#requests">Requests</a>
-        <a href="#djs">DJs & Schedule</a>
-        <a class="btn btn-primary" href="https://wildstyle.vip/test1/" target="_blank">Open Player</a>
-      </nav>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="header glass text-center py-4 my-4">
+    <h1 class="fw-bold text-uppercase" style="color:#ff2a6d;">Wildstyle Radio</h1>
+    <p class="text-light">United by beats • Powered by passion</p>
+    <div id="NowOn" class="nowon-glow mt-3" onclick="NowON()">Loading schedule…</div>
+
+    <iframe src="//player.radioforge.com/v2/icecast.html?radiolink=https%3A%2F%2Fstreaming.live365.com%2Fa50378&radiotype=icecast&bcolor=&image=https://wildstyle.vip/images/logo.png&facebook=https://facebook.com/wildstyleuk&title=WildstyleRadio"
+      frameborder="0" scrolling="no" allow="autoplay"
+      style="width:100%;max-width:750px;height:200px;border:none;border-radius:16px;margin-top:15px;"></iframe>
+
+    <div class="shoutout-ticker mt-3">
+      <div id="tickerContent">Loading shoutouts...</div>
     </div>
   </header>
 
-  <!-- Hero / Now On -->
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <h2>Where Signed & Unsigned Music Shines</h2>
-        <p>Live shows, fresh talent, and the energy of our community — on air and at real-world events. Dive in and discover your next favourite artist.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#listen">▶ Listen Live</a>
-          <a class="btn btn-ghost" href="#unsigned">Submit Your Demo</a>
-        </div>
-      </div>
-      <aside class="nowon">
-        <h3>Now On Air</h3>
-        <div class="track">
-          <img src="/test1/placeholder.png" alt="artwork">
-          <div>
-            <strong id="np-title">Loading…</strong>
-            <span id="np-artist">Please wait</span>
-          </div>
-        </div>
-      </aside>
-    </div>
+  <!-- HERO -->
+  <section class="hero-section text-center">
+    <img src="/images/logo.jpg" alt="Wildstyle Logo" class="img-fluid hero-logo">
+    <p class="lead mt-4 text-light">Welcome to <span class="text-danger fw-bold">Wildstyle Radio</span> — where signed & unsigned talent shines!</p>
   </section>
 
-  <!-- Unsigned Spotlight -->
-  <section id="unsigned">
-    <div class="container">
+  <!-- UNSIGNED ARTIST SPOTLIGHT -->
+  <section id="unsigned" class="glass-section">
+    <div class="container text-center">
       <div class="section-title">
-        <h3>Unsigned Artist Spotlight</h3>
-        <p>Got beats that deserve airtime? Send your demo and get featured on the site and on air.</p>
+        <h2>Unsigned Artist Spotlight</h2>
+        <a href="https://forms.gle/YOURFORMID" target="_blank" class="btn primary">Submit your demo →</a>
       </div>
+      <p class="section-desc">
+        Got beats that deserve airtime? 🔥 Whether you’re a producer, rapper, or vocalist — Wildstyle gives unsigned talent a real platform.
+      </p>
+
       <div class="cards">
-        <article class="card">
-          <img class="thumb" src="/test1/unsigned/nova_k_glass_city.jpg" alt="Nova K – Glass City">
-          <div class="inner">
-            <span class="badge">Future Bass</span>
-            <h4>Nova K — Glass City</h4>
-          </div>
-        </article>
-        <article class="card">
-          <img class="thumb" src="/test1/unsigned/placeholder.jpg" alt="Unsigned Artist">
-          <div class="inner">
-            <span class="badge">Hip‑Hop</span>
-            <h4>MC Flux — Skyline</h4>
-          </div>
-        </article>
-        <article class="card">
-          <img class="thumb" src="/test1/unsigned/placeholder.jpg" alt="Unsigned Artist">
-          <div class="inner">
-            <span class="badge">EDM</span>
-            <h4>Aero — Night Runner</h4>
-          </div>
-        </article>
+        <article class="card"><img src="https://wildstyle.vip/unsigned/VictoriaTyler.jpg"><h4>Victoria Tyler</h4><p>Pop</p></article>
+        <article class="card"><img src="https://wildstyle.vip/unsigned/theword66.jpg"><h4>The Word66</h4><p>Rock / Pop</p></article>
+        <article class="card"><img src="https://wildstyle.vip/unsigned/long.jpg"><h4>Long</h4><p>Country</p></article>
+        <article class="card"><img src="https://wildstyle.vip/unsigned/wayne.jpg"><h4>Wayne</h4><p>Pop</p></article>
+        <article class="card"><img src="https://wildstyle.vip/unsigned/mj.png"><h4>Christina</h4><p>JukeBox Mix</p></article>
       </div>
     </div>
   </section>
 
-  <!-- Events We Attend -->
-  <section id="events" class="events">
+  <!-- DJ OF THE WEEK -->
+  <section class="section text-center py-5">
     <div class="container">
-      <div class="section-title">
-        <h3>Events We Attend</h3>
-        <a class="btn btn-primary" href="https://wildstyle.vip/events/about.html" target="_blank">About Our Events →</a>
-      </div>
-      <div class="event-grid">
-        <a class="event" href="#">
-          <img src="https://wildstyle.vip/events/images/deloran.jpg" alt="Deloran event">
-        </a>
-        <a class="event" href="#">
-          <img src="https://wildstyle.vip/events/images/band.jpg" alt="Live band">
-        </a>
-        <a class="event" href="#">
-          <img src="https://wildstyle.vip/events/images/elvis.jpg" alt="Elvis tribute">
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Requests + Birthdays -->
-  <section id="requests">
-    <div class="container">
-      <div class="section-title">
-        <h3>Shout‑outs & Requests</h3>
-        <p>Make a request for the current show or queue a birthday shout‑out for later.</p>
-      </div>
-      <div class="split">
-        <div class="panel req">
-          <h4>Request a Song</h4>
-          <form id="requestForm">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="text" name="song" placeholder="Song Title" required>
-            <input type="text" name="artist" placeholder="Artist Name" required>
-            <textarea name="message" placeholder="Dedication / Shout‑out (optional)"></textarea>
-            <button type="submit">Send Request</button>
-          </form>
-          <div id="reqStatus"></div>
-        </div>
-        <div class="panel bday">
-          <h4>Birthday Shout‑out</h4>
-          <form id="birthdayForm">
-            <input type="text" name="name" placeholder="Name" required>
-            <input type="date" name="birthday" placeholder="Birthday" required>
-            <textarea name="message" placeholder="Add a special message (optional)"></textarea>
-            <button type="submit">Send Birthday</button>
-          </form>
-          <div id="bdayStatus"></div>
+      <h2 class="section-title text-danger mb-4">DJ of the Week</h2>
+      <div class="dj-week glass mx-auto">
+        <img src="/images/logo.png" alt="DJ EchoFalls" class="dj-photo">
+        <div class="dj-week-info">
+          <h3>DJ EchoFalls</h3>
+          <p><strong>Show:</strong> Frequency Shift</p>
+          <p><strong>Times:</strong> Thurs 7–8 PM / Sun 8–9 PM</p>
+          <a href="/djs.html" class="btn primary">View Profile</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- DJs & Schedule (teaser) -->
-  <section id="djs">
+  <!-- EVENTS -->
+  <section id="events" class="glass-section text-center">
     <div class="container">
-      <div class="section-title">
-        <h3>Our DJs & Weekly Schedule</h3>
-        <a class="btn btn-ghost" href="/schedule.html">View Full Schedule →</a>
+      <h2>Events We Attend</h2>
+      <p>From retro gigs to festivals, Wildstyle brings the energy and vibes everywhere we go.</p>
+      <div class="event-gallery mt-4">
+        <img src="/events/images/deloran.jpg" alt="Deloran Event" class="event-card">
+        <img src="/events/images/band.jpg" alt="Live Band Event" class="event-card">
+        <img src="/events/images/elvis.jpg" alt="Elvis Tribute Event" class="event-card">
       </div>
-      <div class="cards">
-        <article class="card">
-          <img class="thumb" src="/test1/djs/echofalls.jpg" alt="DJ EchoFalls">
-          <div class="inner">
-            <span class="badge">Thu 7‑8pm • Sun 8‑9pm</span>
-            <h4>DJ EchoFalls — Frequency Shift</h4>
-          </div>
-        </article>
-        <article class="card">
-          <img class="thumb" src="/test1/djs/wizard.jpg" alt="Wizard of Rock">
-          <div class="inner">
-            <span class="badge">Mon 12‑2pm</span>
-            <h4>James — Wizard of Rock</h4>
-          </div>
-        </article>
-        <article class="card">
-          <img class="thumb" src="/test1/djs/babyjane.jpg" alt="BabyJane">
-          <div class="inner">
-            <span class="badge">Mon 2‑4pm</span>
-            <h4>BabyJane — Selects</h4>
-          </div>
-        </article>
-      </div>
+      <a href="/events/about.html" target="_blank" class="btn primary mt-4">About Our Events →</a>
     </div>
   </section>
 
-  <!-- Ways to tune in -->
-  <section id="listen">
+  <!-- REQUESTS -->
+  <section id="requests" class="glass-section text-center">
     <div class="container">
-      <div class="section-title">
-        <h3>Listen Anywhere</h3>
-        <p>Hit play in the web player, or tune in through your favourite device.</p>
-      </div>
-      <div class="tune">
-        <div class="tile"><strong>Web Player</strong><br><a class="btn btn-primary" href="https://wildstyle.vip/test1/" target="_blank">Open Player</a></div>
-        <div class="tile"><strong>Discord</strong><br><a class="btn btn-ghost" href="/discord" target="_blank">Join Community</a></div>
-        <div class="tile"><strong>Submit Music</strong><br><a class="btn btn-ghost" href="https://forms.gle/YOURFORMID" target="_blank">Send Demo</a></div>
-      </div>
+      <h2>Request a Tune</h2>
+      <p>Pop it in — your DJ will play it 🎶</p>
+      <form id="requestForm">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="text" name="song" placeholder="Song Title" required>
+        <input type="text" name="artist" placeholder="Artist" required>
+        <textarea name="message" placeholder="Dedication / Shout-out (optional)"></textarea>
+        <button type="submit">Send Request</button>
+      </form>
+      <div id="reqStatus" class="mt-3"></div>
     </div>
   </section>
 
-  <footer>
-    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
-      <div>© <span id="year"></span> Wildstyle Radio — All rights reserved.</div>
-      <div style="opacity:.8">Made with ❤️ for the Wildstyle community.</div>
+  <!-- BIRTHDAYS -->
+  <section id="birthdays" class="glass-section text-center">
+    <div class="container">
+      <h2>🎂 Birthday Shoutouts</h2>
+      <p>Want a birthday request or shoutout? Submit below!</p>
+      <form action="mailto:wildstyleradioo@gmail.com" method="post" enctype="text/plain">
+        <input type="text" name="name" placeholder="Your Name">
+        <input type="text" name="shoutout" placeholder="Your Shoutout / Request">
+        <input type="email" name="mail" placeholder="Your Email">
+        <input type="submit" value="Send">
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer text-center text-md-start mt-5 py-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5>Ways to Tune In</h5>
+          <p><a href="https://channelstore.roku.com/en-gb/details/b97490a8fb5758527be0396e43422e42/get-me-radio" target="_blank">Roku App</a></p>
+          <p><a href="https://play.google.com/store/apps/details?id=com.getmeradio.gmr" target="_blank">Android App</a></p>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact Us</h5>
+          <p><i class="fa-brands fa-discord"></i> <a href="https://discord.gg/86kUtUTSXQ" target="_blank">Join Discord</a></p>
+          <p><i class="fas fa-envelope text-danger"></i> wildstyleradio1@gmail.com</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Follow Us</h5>
+          <div class="d-flex justify-content-center gap-3 fs-4">
+            <a href="https://facebook.com/wildstyleuk" class="text-light"><i class="fab fa-facebook"></i></a>
+            <a href="https://instagram.com/wildstyle_radio" class="text-light"><i class="fab fa-instagram"></i></a>
+            <a href="https://discord.gg/86kUtUTSXQ" class="text-light"><i class="fa-brands fa-discord"></i></a>
+          </div>
+          <div class="mt-3">
+            <img src="/images/logo.png" alt="Wildstyle Logo" style="height:60px;">
+            <img src="/images/license.png" alt="License" style="height:60px;margin-left:10px;">
+          </div>
+          <p class="mt-3 text-muted">&copy; Wildstyle Radio 2025 – 2029</p>
+        </div>
+      </div>
     </div>
   </footer>
 
-<script>
-  // Year
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // Demo: Now Playing placeholder (replace with your Live365 fetch if desired)
-  // You can wire this to your Apps Script proxy later
-  const demoTitles = [
-    {t:'Frequency Shift', a:'DJ EchoFalls'},
-    {t:'Wizard of Rock', a:'James'},
-    {t:'Future Nights', a:'Nova K'},
-  ];
-  let i=0; setInterval(()=>{
-    const {t,a}=demoTitles[i%demoTitles.length];
-    document.getElementById('np-title').textContent=t;
-    document.getElementById('np-artist').textContent=a;
-    i++;
-  }, 4000);
-
-  // Lightweight handlers for the two forms (prevent page reload + show status)
-  function wireForm(formId,statusId,successMsg){
-    const form=document.getElementById(formId);
-    const status=document.getElementById(statusId);
-    if(!form) return;
-    form.addEventListener('submit', e=>{
-      e.preventDefault();
-      const data=new FormData(form);
-      // TODO: POST to your endpoint here
-      status.textContent='Sending…';
-      setTimeout(()=>{
-        status.textContent=successMsg;
-        form.reset();
-      }, 700);
-    });
-  }
-  wireForm('requestForm','reqStatus','✅ Request sent! Your DJ will see it.');
-  wireForm('birthdayForm','bdayStatus','🎂 Birthday shout‑out queued!');
-</script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/test1/nowon.js"></script>
 </body>
 </html>
