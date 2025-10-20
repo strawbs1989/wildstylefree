@@ -23,35 +23,50 @@ body.slate{ background: var(--slate); }
 .container{width:min(1200px,92%);margin:0 auto}
 .glass{background:var(--glass);backdrop-filter:blur(10px);border:var(--glass-border);border-radius:var(--radius)}
 
-/* Header / Nav */
-.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(to bottom, rgba(12,15,20,.9), rgba(12,15,20,.6), transparent)}
-.header-inner{display:flex;align-items:center;gap:1rem;justify-content:space-between;padding:.8rem 1rem;margin-top:.4rem}
-.brand{display:flex;gap:.75rem;align-items:center;text-decoration:none;color:var(--text)}
-.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:grid;place-items:center;font-weight:800}
-.brand-text{display:flex;flex-direction:column;line-height:1}
-.brand-text strong{font-family:Oswald, Inter, sans-serif;letter-spacing:.06em}
-.brand-text span{color:var(--muted);font-size:.8rem}
-
-.main-nav{display:flex;gap:1rem;align-items:center}
-.main-nav a{color:var(--text);text-decoration:none;padding:.4rem .6rem;border-radius:10px}
-.main-nav a:hover{background:rgba(255,255,255,.06)}
-.burger{display:none;background:transparent;border:none;cursor:pointer}
-.burger span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;border-radius:2px}
-
-/* Nowplaying Box */
-.nowplaying{display:flex;align-items:center;gap:.8rem;padding:.5rem 1rem;margin:.5rem auto;border-radius:12px;background:rgba(255,255,255,0.05);width:fit-content}
-.nowplaying img{width:42px;height:42px;border-radius:8px;object-fit:cover}
-.np-meta{display:flex;flex-direction:column}
-.np-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
-.np-artist{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
-.live-pill{margin-left:.5rem;padding:.25rem .6rem;border-radius:999px;background:#333;color:#bbb;font-size:.75rem;border:1px solid #444;transition:all .3s}
-
-/* ON AIR glow */
-@keyframes pulseGlow {
-  0%,100% { box-shadow: 0 0 6px rgba(255,59,59,.3); }
-  50% { box-shadow: 0 0 18px rgba(255,59,59,.8); }
+/* Header */
+.header-wrapper {
+  background-color: #1c1c1c;
+  border: 3px solid red;
+  border-radius: 12px;
+  color: #ccc;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
 }
-.live-pill.onair { background:#ff3b3b!important; color:#fff!important; animation:pulseGlow 1.6s infinite; }
+
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.h1 {
+  border: 0px;
+  padding: 5px;
+  width: 500px;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+}
+
+/* Now Playing */
+.now-playing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+#NowOn {
+  padding: 0.4rem 1rem;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  max-width: 300px;
+  text-align: right;
+}
 
 .WimpyPlayerPopup902 {
   background-color: red;
