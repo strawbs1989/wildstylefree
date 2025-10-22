@@ -789,7 +789,7 @@ dj-section {
 #unsigned .card p {
   margin: 0;
   font-size: 13px;
-  color: var(--muted);
+  color: #ffffff;
   line-height: 1.4;
 }
 
