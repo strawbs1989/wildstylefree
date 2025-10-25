@@ -10,7 +10,9 @@
 <body>
   <main class="container">
     <article class="card glass">
-      <h1>Admin Dashboard</h1>
+      <h1>Admin / DJ Panel</h1>
+
+      <!-- Login -->
       <form id="loginForm" class="row" autocomplete="off">
         <input name="user" placeholder="Username" required>
         <input name="pass" type="password" placeholder="Password" required>
@@ -18,22 +20,36 @@
         <span id="loginMsg" class="tiny muted"></span>
       </form>
 
+      <!-- Who's logged in -->
+      <div id="whoBar" class="row hidden" style="justify-content:space-between;margin-top:8px;">
+        <div class="small muted">Signed in as <strong id="whoName"></strong> · Role: <strong id="whoRole"></strong></div>
+        <div class="row">
+          <button id="lockBtn" class="btn ghost">Lock</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
       <section id="adminBody" class="hidden">
-        <div class="tabs">
+        <div class="tabs" id="tabs">
           <button data-tab="brand" class="tab active">Brand</button>
           <button data-tab="stream" class="tab">Stream</button>
           <button data-tab="schedule" class="tab">Schedule</button>
           <button data-tab="djs" class="tab">DJs</button>
           <button data-tab="integrations" class="tab">Integrations</button>
           <button data-tab="backup" class="tab">Backup</button>
+          <!-- new -->
+          <button data-tab="djrequests" class="tab">DJ Requests</button>
+          <button data-tab="users" class="tab admin-only">Users</button>
         </div>
 
+        <!-- Brand -->
         <div class="panel" id="tab-brand">
           <label>Station Name <input id="cfg-brandName"></label>
           <label>Logo (emoji/URL) <input id="cfg-logo"></label>
           <button class="btn" data-save="brand">Save Brand</button>
         </div>
 
+        <!-- Stream -->
         <div class="panel hidden" id="tab-stream">
           <label>Stream URL <input id="cfg-streamUrl"></label>
           <label>Timezone <input id="cfg-timezone" placeholder="Europe/London"></label>
@@ -41,29 +57,63 @@
           <button class="btn" data-save="stream">Save Stream</button>
         </div>
 
+        <!-- Schedule -->
         <div class="panel hidden" id="tab-schedule">
           <textarea id="cfg-schedule" class="code" rows="12" placeholder='{"Mon":[{"start":"19:00","end":"20:00","show":"Frequency Shift","dj":"DJ EchoFalls"}]}'></textarea>
-          <div class="tiny muted">JSON, by day. Example: {"Mon":[{"start":"19:00","end":"20:00","show":"Frequency Shift","dj":"DJ EchoFalls"}], ...}</div>
+          <div class="tiny muted">JSON by day, e.g. {"Thu":[{"start":"19:00","end":"20:00","show":"Frequency Shift","dj":"DJ EchoFalls"}]}</div>
           <button class="btn" data-save="schedule">Save Schedule</button>
         </div>
 
+        <!-- DJs list (display only content for site cards) -->
         <div class="panel hidden" id="tab-djs">
           <textarea id="cfg-djs" class="code" rows="8" placeholder='[{"name":"DJ EchoFalls"},{"name":"DJ Lewis"}]'></textarea>
           <button class="btn" data-save="djs">Save DJs</button>
         </div>
 
+        <!-- Integrations -->
         <div class="panel hidden" id="tab-integrations">
           <label>Request Webhook (POST) <input id="cfg-requestWebhook" placeholder="https://script.google.com/.../exec"></label>
+          <label>Requests Feed JSON URL (read) <input id="cfg-requestsFeed" placeholder="https://script.google.com/.../exec"></label>
           <button class="btn" data-save="integrations">Save Integrations</button>
         </div>
 
+        <!-- Backup -->
         <div class="panel hidden" id="tab-backup">
           <div class="row">
             <button class="btn" id="exportBtn">Export Config JSON</button>
             <label class="btn ghost" for="importFile">Import Config JSON</label>
             <input id="importFile" type="file" accept="application/json" hidden>
           </div>
-          <div class="tiny muted">Tip: commit the exported JSON to your repo under <code>/data/config.json</code> to keep a portable copy.
+          <div class="tiny muted">Tip: commit the exported JSON to your repo under <code>/data/config.json</code>.</div>
+        </div>
+
+        <!-- NEW: DJ Requests -->
+        <div class="panel hidden" id="tab-djrequests">
+          <div class="row" style="justify-content:space-between;align-items:center">
+            <div class="small muted">Auto-refreshes every 30 seconds.</div>
+            <button id="reqRefresh" class="btn ghost">Refresh now</button>
+          </div>
+          <ul id="reqList" class="list" style="margin-top:10px"></ul>
+          <div class="tiny muted" id="reqUpdated" style="margin-top:8px">Last updated: —</div>
+        </div>
+
+        <!-- NEW: Users (admins only) -->
+        <div class="panel hidden" id="tab-users">
+          <h3>DJ Users</h3>
+          <div id="userList" class="list" style="margin-bottom:12px"></div>
+
+          <div class="row">
+            <input id="newUser" placeholder="Username (e.g. EchoFalls)">
+            <select id="newRole">
+              <option value="dj">dj</option>
+              <option value="admin">admin</option>
+            </select>
+            <button id="addUserBtn" class="btn">Add User</button>
+          </div>
+
+          <div class="tiny muted" style="margin-top:10px">
+            Set/Reset a password by clicking “Set Password” next to a user.
+            Admin backup from the installer remains active.
           </div>
         </div>
       </section>
