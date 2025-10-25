@@ -24,10 +24,25 @@
     schedule: {}
   };
 
-  function getConfig() {
-    const raw = localStorage.getItem(SKEY);
-    try { return raw ? JSON.parse(raw) : null; } catch { return null; }
+  async function getConfig() {
+  const raw = localStorage.getItem(SKEY);
+  if (raw) {
+    try { return JSON.parse(raw); } catch { /* ignore */ }
   }
+
+  // 🔄 No local config?  Auto-load the shared one from your server
+  try {
+    const res = await fetch('https://wildstyle.vip/radiopanel/data/config.json', {cache:'no-store'});
+    if (!res.ok) throw new Error(res.statusText);
+    const cfg = await res.json();
+    localStorage.setItem(SKEY, JSON.stringify(cfg));
+    console.log('Auto-loaded shared config from Wildstyle.vip');
+    return cfg;
+  } catch (e) {
+    console.warn('Auto-load failed:', e);
+    return structuredClone(defaultConfig);
+  }
+} 
   function setConfig(cfg) { localStorage.setItem(SKEY, JSON.stringify(cfg)); }
   function getPlayed() {
     const raw = localStorage.getItem(PKEY);
