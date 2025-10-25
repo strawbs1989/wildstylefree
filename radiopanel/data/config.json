@@ -1,19 +1,446 @@
 {
-  "brandName": "Wildstyle Radio",
-  "logo": "🌀",
+  "brandName": "WildStyleRadio",
+  "logo": "",
   "streamUrl": "https://streaming.live365.com/a50378",
   "timezone": "Europe/London",
-  "nowPlayingUrl": "https://script.google.com/macros/s/REPLACE_WITH_YOURS/exec",
-  "requestWebhook": "https://script.google.com/macros/s/REPLACE_WITH_YOURS/exec",
+  "nowPlayingUrl": "",
+  "requestWebhook": "",
+  "requestsFeed": "https://script.google.com/macros/s/AKfycbyoAZ_BA9pmiPycdiI1xfrOTf7UG5lYaw7P50Y_E5TJ_2uxFd7H6_5GnRADTDPieVg/exec",
   "adminUser": "admin",
-  "adminPassHash": "",
+  "adminPassHash": "93588cabd99cc789c2a133d09d01fe1ff90ebb911a42a831b709b182ec61b1e8",
+  "users": [
+    {
+      "user": "EchoFalls",
+      "role": "dj",
+      "passHash": "f7af19a05847acc5733e6b614fdea1e64809bc58b22a70ed4bce3d0ef5ef7b00"
+    },
+    {
+      "user": "Lewis",
+      "role": "dj",
+      "passHash": "73576a58045f4731a623a08c89927baa82fa3ec95e1ed1f4c3c6032527fc07aa"
+    },
+    {
+      "user": "Graham",
+      "role": "dj",
+      "passHash": "c600f046dfd34aec7dbdac5765526b5086ab0939f4d713794fdab2eebf4d120e"
+    },
+    {
+      "user": "Christina",
+      "role": "dj",
+      "passHash": "73576a58045f4731a623a08c89927baa82fa3ec95e1ed1f4c3c6032527fc07aa"
+    },
+    {
+      "user": "sugar",
+      "role": "dj",
+      "passHash": "c600f046dfd34aec7dbdac5765526b5086ab0939f4d713794fdab2eebf4d120e"
+    }
+  ],
   "djs": [
-    {"name":"DJ EchoFalls"},
-    {"name":"DJ Lewis"},
-    {"name":"DJ Queen Dani"}
+    {
+      "name": "HotShot DJ"
+    },
+    {
+      "name": "DJ Squeek"
+    },
+    {
+      "name": "DJ Mark"
+    },
+    {
+      "name": "Dawn"
+    },
+    {
+      "name": "Laura"
+    },
+    {
+      "name": "HR"
+    },
+    {
+      "name": "BabyJayne"
+    },
+    {
+      "name": "DJ Mix N Match"
+    },
+    {
+      "name": "DJ keeks"
+    },
+    {
+      "name": "Mary"
+    },
+    {
+      "name": "indigo riz"
+    },
+    {
+      "name": "DJ Queen Dani"
+    },
+    {
+      "name": "@queencitypopped"
+    },
+    {
+      "name": "Suzette"
+    },
+    {
+      "name": "Christina"
+    },
+    {
+      "name": "DJ EchoFalls"
+    },
+    {
+      "name": "BIG BOSS"
+    },
+    {
+      "name": "Dan"
+    },
+    {
+      "name": "Ben"
+    },
+    {
+      "name": "The Byrdman"
+    },
+    {
+      "name": "Daniel"
+    },
+    {
+      "name": "Wizard"
+    },
+    {
+      "name": "Sonic J"
+    },
+    {
+      "name": "Lewis"
+    },
+    {
+      "name": "Vish"
+    },
+    {
+      "name": "JK"
+    },
+    {
+      "name": "Farley"
+    },
+    {
+      "name": "DJ Dezzy"
+    },
+    {
+      "name": "AJ"
+    },
+    {
+      "name": "Blacknight"
+    },
+    {
+      "name": "Wendell"
+    },
+    {
+      "name": "Rob"
+    },
+    {
+      "name": "Steve D J Smith"
+    },
+    {
+      "name": "Jacob"
+    },
+    {
+      "name": "Seb"
+    },
+    {
+      "name": "Simon"
+    },
+    {
+      "name": "Josh"
+    },
+    {
+      "name": "Gordon"
+    },
+    {
+      "name": "DJ Nocturnlx"
+    },
+    {
+      "name": "Cam"
+    },
+    {
+      "name": "Ricky"
+    },
+    {
+      "name": "New DJ"
+    }
   ],
   "schedule": {
-    "Thu": [{ "start":"19:00","end":"20:00","show":"Frequency Shift","dj":"DJ EchoFalls" }],
-    "Sun": [{ "start":"20:00","end":"21:00","show":"Frequency Shift","dj":"DJ EchoFalls" }]
+    "Mon": [
+      {
+        "start": "12:00",
+        "end": "14:00",
+        "show": "James - Wizard Of Rock",
+        "dj": "James"
+      },
+      {
+        "start": "14:00",
+        "end": "16:00",
+        "show": "BabyJane",
+        "dj": "BabyJane"
+      },
+      {
+        "start": "17:00",
+        "end": "19:00",
+        "show": "Lewis - Mix",
+        "dj": "Lewis"
+      },
+      {
+        "start": "19:00",
+        "end": "21:00",
+        "show": "DJ Dezzy Mac - Mixture",
+        "dj": "DJ Dezzy Mac"
+      },
+      {
+        "start": "22:00",
+        "end": "00:00",
+        "show": "DJ Jaydon Mac - Grime",
+        "dj": "DJ Jaydon Mac"
+      }
+    ],
+    "Tue": [
+      {
+        "start": "01:00",
+        "end": "02:00",
+        "show": "James - Wizard of Rock",
+        "dj": "James"
+      },
+      {
+        "start": "03:00",
+        "end": "06:00",
+        "show": "Dani - DJ Queen Dani",
+        "dj": "DJ Queen Dani"
+      },
+      {
+        "start": "10:00",
+        "end": "12:00",
+        "show": "Hotshot - 90's 2000's",
+        "dj": "Hotshot"
+      },
+      {
+        "start": "15:00",
+        "end": "17:00",
+        "show": "James Stephen",
+        "dj": "James Stephen"
+      },
+      {
+        "start": "20:00",
+        "end": "22:00",
+        "show": "DJ Lewis",
+        "dj": "DJ Lewis"
+      },
+      {
+        "start": "22:00",
+        "end": "00:00",
+        "show": "DanPlayzBangers",
+        "dj": "DanPlayzBangers"
+      }
+    ],
+    "Wed": [
+      {
+        "start": "15:00",
+        "end": "17:00",
+        "show": "James Stephen",
+        "dj": "James Stephen"
+      },
+      {
+        "start": "18:00",
+        "end": "19:00",
+        "show": "DJ European BOB",
+        "dj": "DJ European BOB"
+      },
+      {
+        "start": "19:00",
+        "end": "20:00",
+        "show": "DanPlayzBangers",
+        "dj": "DanPlayzBangers"
+      },
+      {
+        "start": "20:00",
+        "end": "22:00",
+        "show": "Steve D J Smith",
+        "dj": "Steve D J Smith"
+      },
+      {
+        "start": "22:00",
+        "end": "00:00",
+        "show": "Reece",
+        "dj": "Reece"
+      }
+    ],
+    "Thu": [
+      {
+        "start": "08:00",
+        "end": "10:00",
+        "show": "Coll",
+        "dj": "Coll"
+      },
+      {
+        "start": "12:00",
+        "end": "13:00",
+        "show": "DJ Mary Sailor",
+        "dj": "DJ Mary Sailor"
+      },
+      {
+        "start": "10:00",
+        "end": "12:00",
+        "show": "Gordan",
+        "dj": "Gordan"
+      },
+      {
+        "start": "12:00",
+        "end": "14:00",
+        "show": "Christina",
+        "dj": "Christina"
+      },
+      {
+        "start": "15:00",
+        "end": "16:00",
+        "show": "James Stephen",
+        "dj": "James Stephen"
+      },
+      {
+        "start": "19:00",
+        "end": "20:00",
+        "show": "EchoFalls",
+        "dj": "DJ EchoFalls"
+      },
+      {
+        "start": "22:00",
+        "end": "23:00",
+        "show": "MottMuzik",
+        "dj": "MottMuzik"
+      }
+    ],
+    "Fri": [
+      {
+        "start": "00:00",
+        "end": "04:00",
+        "show": "Steve G",
+        "dj": "Steve G"
+      },
+      {
+        "start": "10:00",
+        "end": "12:00",
+        "show": "Vish",
+        "dj": "Vish"
+      },
+      {
+        "start": "15:00",
+        "end": "17:00",
+        "show": "James Stephen",
+        "dj": "James Stephen"
+      },
+      {
+        "start": "16:00",
+        "end": "20:00",
+        "show": "Steven D",
+        "dj": "Steven D"
+      },
+      {
+        "start": "20:00",
+        "end": "22:00",
+        "show": "Wendell",
+        "dj": "Wendell"
+      },
+      {
+        "start": "22:00",
+        "end": "23:00",
+        "show": "Rebecca - DJ Mix N Match",
+        "dj": "DJ Mix N Match"
+      }
+    ],
+    "Sat": [
+      {
+        "start": "00:00",
+        "end": "02:00",
+        "show": "Rob - Trevor Nannab",
+        "dj": "Rob Trevor Nannab"
+      },
+      {
+        "start": "02:00",
+        "end": "04:00",
+        "show": "Amar - DJ AJ",
+        "dj": "DJ AJ"
+      },
+      {
+        "start": "06:00",
+        "end": "10:00",
+        "show": "Cam",
+        "dj": "Cam"
+      },
+      {
+        "start": "16:00",
+        "end": "18:00",
+        "show": "The Byrdman",
+        "dj": "The Byrdman"
+      },
+      {
+        "start": "18:00",
+        "end": "19:00",
+        "show": "Lil Devil",
+        "dj": "Lil Devil"
+      },
+      {
+        "start": "19:00",
+        "end": "20:00",
+        "show": "Sonic - PreRecorded",
+        "dj": "Sonic"
+      },
+      {
+        "start": "20:00",
+        "end": "21:00",
+        "show": "Daniel",
+        "dj": "Daniel"
+      },
+      {
+        "start": "22:00",
+        "end": "00:00",
+        "show": "DJ Nero",
+        "dj": "DJ Nero"
+      }
+    ],
+    "Sun": [
+      {
+        "start": "08:00",
+        "end": "10:00",
+        "show": "The Byrdman",
+        "dj": "The Byrdman"
+      },
+      {
+        "start": "11:00",
+        "end": "12:00",
+        "show": "Hotshot - 80's 90's",
+        "dj": "Hotshot"
+      },
+      {
+        "start": "13:00",
+        "end": "15:00",
+        "show": "JK",
+        "dj": "JK"
+      },
+      {
+        "start": "17:00",
+        "end": "19:00",
+        "show": "DJ Lewis",
+        "dj": "DJ Lewis"
+      },
+      {
+        "start": "19:00",
+        "end": "20:00",
+        "show": "DJ European BOB",
+        "dj": "DJ European BOB"
+      },
+      {
+        "start": "20:00",
+        "end": "21:00",
+        "show": "EchoFalls",
+        "dj": "EchoFalls"
+      },
+      {
+        "start": "21:00",
+        "end": "00:00",
+        "show": "Popped Radio (Suzette & Co)",
+        "dj": "Popped Radio"
+      }
+    ]
   }
 }
