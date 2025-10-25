@@ -18,7 +18,7 @@
     adminPassHash: '',
     // NEW: multi-user logins
     users: [
-      { user: 'EchoFalls', role: 'dj', passHash: 'Laurajay1998' },
+      { user: 'EchoFalls', role: 'dj', passHash: '' },
       { user: 'Lewis',     role: 'dj', passHash: '' },
       { user: 'Graham',    role: 'dj', passHash: '' },
       { user: 'Christina', role: 'dj', passHash: '' }
