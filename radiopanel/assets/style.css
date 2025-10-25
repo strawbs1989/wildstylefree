@@ -1,0 +1,32 @@
+:root{
+  --bg:#0b0d12; --card:#10131a; --glass:rgba(255,255,255,.06); --border:rgba(255,255,255,.08);
+  --text:#e9eef8; --muted:#a9b2c3; --brand:#ff2a6d; --brand2:#8a7cff;
+}
+*{box-sizing:border-box} html,body{margin:0;height:100%;font-family:Outfit,system-ui,sans-serif;color:var(--text);background:radial-gradient(1200px 600px at 10% -10%,rgba(138,124,255,.08),transparent),linear-gradient(180deg,#0a0c10,#0b0d12)}
+.container{max-width:1100px;margin:auto;padding:24px}
+.container.narrow{max-width:720px}
+.center{text-align:center}
+.tiny{font-size:.8rem}.small{font-size:.9rem}.muted{color:var(--muted)}.hidden{display:none}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.brand{display:flex;gap:10px;align-items:center}
+.btn{background:linear-gradient(90deg,var(--brand),var(--brand2));color:white;border:none;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid var(--border)}
+.glass{background:var(--glass);border:1px solid var(--border);border-radius:18px}
+.grid.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:900px){.grid.two{grid-template-columns:1fr}}
+.card{padding:18px}
+.now #np-art{width:100%;aspect-ratio:1.9/1;border-radius:14px;background:linear-gradient(180deg,#1a1f2b,#0f1320);display:flex;align-items:center;justify-content:center}
+.np-meta{margin-top:10px}.np-small{margin-top:6px}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:10px;border-bottom:1px dashed var(--border)}
+.stack{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.chips li{padding:8px 10px;border:1px solid var(--border);border-radius:999px}
+.tabs{display:flex;gap:8px;margin:8px 0 16px}
+.tab{border:1px solid var(--border);background:transparent;color:var(--text);padding:8px 12px;border-radius:999px;cursor:pointer}
+.tab.active{background:var(--glass)}
+.panel{padding:8px 0;display:block}
+label{display:block;margin:10px 0}
+input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:#0f1220;color:var(--text)}
+.code{font-family:ui-monospace,Consolas,monospace;background:#0b0f19}

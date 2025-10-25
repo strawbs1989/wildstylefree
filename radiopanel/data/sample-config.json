@@ -1,0 +1,19 @@
+{
+  "brandName": "Wildstyle Radio",
+  "logo": "🌀",
+  "streamUrl": "https://streaming.live365.com/a50378",
+  "timezone": "Europe/London",
+  "nowPlayingUrl": "https://script.google.com/macros/s/REPLACE_WITH_YOURS/exec",
+  "requestWebhook": "https://script.google.com/macros/s/REPLACE_WITH_YOURS/exec",
+  "adminUser": "admin",
+  "adminPassHash": "",
+  "djs": [
+    {"name":"DJ EchoFalls"},
+    {"name":"DJ Lewis"},
+    {"name":"DJ Queen Dani"}
+  ],
+  "schedule": {
+    "Thu": [{ "start":"19:00","end":"20:00","show":"Frequency Shift","dj":"DJ EchoFalls" }],
+    "Sun": [{ "start":"20:00","end":"21:00","show":"Frequency Shift","dj":"DJ EchoFalls" }]
+  }
+}

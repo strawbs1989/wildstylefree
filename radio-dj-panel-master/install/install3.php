@@ -59,10 +59,10 @@ Please check that all the variables in the below fields are set according to the
 
 <?php
 if($_POST['save']){
-	$host = $_POST['host'];
-	$username = $_POST['username'];
-	$password = $_POST['password'];
-	$name = $_POST['name'];
+	$host = $_POST['sql108.byethost13.com'];
+	$username = $_POST['b13_40243584'];
+	$password = $_POST['Laurajay1998'];
+	$name = $_POST['b13_40243584_radiodj'];
 	if($host && $username && $password && $name){
 		$con = @mysql_connect($host,$username,$password); 
 		$db = @mysql_select_db($name, $con);
@@ -72,7 +72,7 @@ $file="<?php
 "."$"."dbs"." = mysql_select_db('$name', "."$"."con".");
 ?>";
 			// Write connection info
-			$fp = fopen('../connect.php', 'w');
+			$fp = fopen('http://djpanel.byethost13.com/connect.php', 'w');
 			$fp1 = fwrite($fp, $file);
 			$fp2 = fclose($fp);
 			if($fp && $fp1 && $fp2){

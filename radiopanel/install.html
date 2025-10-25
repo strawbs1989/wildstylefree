@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Install · Radio DJ Panel</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <main class="container narrow">
+    <article class="card glass">
+      <h1>Installation Wizard</h1>
+      <p class="muted">No database required. Your settings are stored locally in this browser.
+        You can export/import a JSON file to move between devices or commit it to your repo.</p>
+
+      <form id="installForm" class="stack">
+        <h3>Brand</h3>
+        <input name="brandName" placeholder="Station Name (e.g., Wildstyle Radio)" required>
+        <input name="logo" placeholder="Logo emoji or URL (optional)" />
+
+        <h3>Stream</h3>
+        <input name="streamUrl" placeholder="HLS/MP3 URL (e.g., https://.../stream.m3u8)" required>
+
+        <h3>Timezone</h3>
+        <input name="timezone" placeholder="Europe/London" required>
+
+        <h3>Now Playing Source</h3>
+        <input name="nowPlayingUrl" placeholder="Live365 proxy / Apps Script URL (returns {title,artist,art?})" />
+
+        <h3>Requests Webhook (optional)</h3>
+        <input name="requestWebhook" placeholder="Google Apps Script URL or any POST endpoint" />
+
+        <h3>Admin</h3>
+        <input name="adminUser" placeholder="Admin username" required>
+        <input name="adminPass" type="password" placeholder="Admin password (stored locally, hashed)" required>
+
+        <button class="btn" type="submit">Finish Setup</button>
+      </form>
+
+      <div class="center small muted" style="margin-top:1rem">
+        Already configured? <a href="admin.html">Open Admin</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
