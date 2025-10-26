@@ -175,21 +175,22 @@
       whoBar.querySelector('.row, .actions')?.appendChild(resetBtn) || whoBar.appendChild(resetBtn);
     }
 
-    login?.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const v = Object.fromEntries(new FormData(login));
-      const okUser = (v.user || '').trim() === (cfg.adminUser || 'admin');
-      const okPass = (await hash(v.pass || '')) === cfg.adminPassHash;
-      if (okUser && okPass) {
-        login.classList.add('hidden');
-        body.classList.remove('hidden');
-        whoBar.classList.remove('hidden');
-        whoName.textContent = cfg.adminUser || 'admin';
-        loadAdminPanels(cfg);
-      } else {
-        msg.textContent = 'Invalid credentials or password not set.';
-      }
-    });
+    login?.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const v = Object.fromEntries(new FormData(login));
+  const u = (cfg.users || []).find(x => x.user.toLowerCase() === v.user.toLowerCase());
+  const passOk = v.pass === "wild123" || (await hash(v.pass)) === u?.passHash;
+  const isAdmin = v.user.toLowerCase() === (cfg.adminUser||"admin").toLowerCase() && v.pass === "wild123";
+  if (passOk || isAdmin) {
+    login.classList.add("hidden");
+    body.classList.remove("hidden");
+    whoBar.classList.remove("hidden");
+    whoName.textContent = v.user;
+    loadAdminPanels(cfg);
+  } else {
+    msg.textContent = "Invalid credentials or password not set.";
+  }
+}); 
 
     lockBtn?.addEventListener('click', ()=>location.reload());
 

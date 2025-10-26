@@ -4,36 +4,17 @@
   "streamUrl": "https://streaming.live365.com/a50378",
   "timezone": "Europe/London",
   "nowPlayingUrl": "",
-  "requestWebhook": "",
+  "requestWebhook": "https://script.google.com/macros/s/AKfycbyoAZ_BA9pmiPycdiI1xfrOTf7UG5lYaw7P50Y_E5TJ_2uxFd7H6_5GnRADTDPieVg/exec",
   "requestsFeed": "https://script.google.com/macros/s/AKfycbyoAZ_BA9pmiPycdiI1xfrOTf7UG5lYaw7P50Y_E5TJ_2uxFd7H6_5GnRADTDPieVg/exec",
   "adminUser": "admin",
-  "adminPassHash": "93588cabd99cc789c2a133d09d01fe1ff90ebb911a42a831b709b182ec61b1e8",
   "users": [
-    {
-      "user": "EchoFalls",
-      "role": "dj",
-      "passHash": "f7af19a05847acc5733e6b614fdea1e64809bc58b22a70ed4bce3d0ef5ef7b00"
-    },
-    {
-      "user": "Lewis",
-      "role": "dj",
-      "passHash": "73576a58045f4731a623a08c89927baa82fa3ec95e1ed1f4c3c6032527fc07aa"
-    },
-    {
-      "user": "Graham",
-      "role": "dj",
-      "passHash": "c600f046dfd34aec7dbdac5765526b5086ab0939f4d713794fdab2eebf4d120e"
-    },
-    {
-      "user": "Christina",
-      "role": "dj",
-      "passHash": "73576a58045f4731a623a08c89927baa82fa3ec95e1ed1f4c3c6032527fc07aa"
-    },
-    {
-      "user": "sugar",
-      "role": "dj",
-      "passHash": "c600f046dfd34aec7dbdac5765526b5086ab0939f4d713794fdab2eebf4d120e"
-    }
+    { "user": "EchoFalls",  "role": "dj", "pass": "wild123" },
+    { "user": "Lewis",      "role": "dj", "pass": "wild123" },
+    { "user": "Graham",     "role": "dj", "pass": "wild123" },
+    { "user": "Christina",  "role": "dj", "pass": "wild123" },
+    { "user": "Laura",      "role": "dj", "pass": "wild123" }
+  ]
+} 
   ],
   "djs": [
     {
