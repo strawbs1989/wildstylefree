@@ -603,15 +603,19 @@ setInterval(NowON, 60000);</script>
         el('#authModal').close();
       }catch(e){ alert(e.message); }
     });
-    el('#doSignup').addEventListener('click', async ()=>{
-      try{
-        const email = el('#authEmail').value.trim();
-        const pass = el('#authPass').value;
-        const name = el('#authName').value.trim();
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-        if(name){ await updateProfile(cred.user, { displayName: name }); }
-		
-		// ✉️ Send verification email
+    el('#doSignup').addEventListener('click', async ()=> {
+  try {
+    const email = el('#authEmail').value.trim();
+    const pass = el('#authPass').value;
+    const name = el('#authName').value.trim();
+
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+    if (name) {
+      await updateProfile(cred.user, { displayName: name });
+    }
+
+    // ✉️ Send verification email
     await sendEmailVerification(cred.user);
     alert("Verification email sent! Please check your inbox before logging in.");
 
@@ -620,10 +624,7 @@ setInterval(NowON, 60000);</script>
     alert(e.message);
   }
 }); 
-        // default role: member; grant DJ/admin via roles collection (manual)
-        el('#authModal').close();
-      }catch(e){ alert(e.message); }
-    });
+        
 
     onAuthStateChanged(auth, async (user)=>{
       state.user = user || null;
