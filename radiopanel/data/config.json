@@ -13,6 +13,8 @@
     { "user": "Graham",     "role": "dj", "pass": "wild123" },
     { "user": "Christina",  "role": "dj", "pass": "wild123" },
     { "user": "Laura",      "role": "dj", "pass": "wild123" }
+	{ "user": "Mary",      "role": "dj", "pass": "wild123" }
+	{ "user": "Gordon",      "role": "dj", "pass": "wild123" }
   ]
 } 
   ],
