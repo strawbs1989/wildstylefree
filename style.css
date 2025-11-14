@@ -265,7 +265,7 @@ body.slate{
 }
 
 .dj-card {
-  background: var(--glass);
+  background: rgb(0,0,0);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 18px;
