@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wildstyle Radio | Shows</title>
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body { font-family: 'Oswald', sans-serif; background:#000; color:#fff; }
+    .dj-section { background:#0a0a0a; color:#fff; padding:30px 10px; text-align:center;
+      box-shadow:0 0 30px rgba(160,0,255,.3); border-radius:16px; }
+    .dj-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:15px; }
+    .dj-card { background:rgba(255,255,255,.05); border-radius:16px; padding:10px;
+      text-align:center; transition:.3s; position:relative; }
+    .dj-card:hover { transform:scale(1.03); }
+    .dj-card.live { border:2px solid #0f0; box-shadow:0 0 20px rgba(0,255,0,.4); }
+    .live-indicator { background:#0f0; color:black; padding:3px 6px; border-radius:5px;
+      font-size:.75em; font-weight:bold; margin-bottom:6px; display:inline-block; }
+    .shows-list p { margin:4px 0; font-size:0.9em; }
+  </style>
+</head>
+
+<!-- Now Playing Script -->
+<script>
+const DH = Array.from({ length: 7 }, () => Array(24).fill(null))
+
+// MONDAY
+DH[1][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
+DH[1][12] = { show: "7am – 8am<br>DJ Keeks", duration: 2 }
+DH[1][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[1][12] = { show: "12pm – 2pm<br>James-Wizard Of Rock", duration: 2 }
+DH[1][14] = { show: "2pm – 4pm<br>Auto", duration: 2 }
+DH[1][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[1][17] = { show: "5pm – 7pm<br>Lewis", duration: 2 }
+DH[1][19] = { show: "7pm – 10pm<br>Auto", duration: 3 }
+DH[1][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+// TUESDAY
+DH[2][1] = { show: "1am – 2am<br>James - Wizard Of Rock", duration: 1 }
+DH[2][3] = { show: "3am – 6am<br>Dani - DJ Queen Dani", duration: 3 }
+DH[2][6] = { show: "6am – 8am<br>Auto", duration: 2 }
+DH[2][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[2][15] = { show: "6pm – 8pm<br>DJ Squeek", duration: 2 }
+DH[2][20] = { show: "8pm – 10pm<br>Dj Lewis", duration: 2 }
+DH[2][10] = { show: "10am – 12pm<br>HothotDJ", duration: 2 }
+
+// WEDNESDAY
+DH[3][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[3][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
+DH[3][15] = { show: "3pm – 5pm<br>Jon Fisk", duration: 2 }
+DH[3][18] = { show: "6pm – 7pm<br>Auto", duration: 1 }
+DH[3][20] = { show: "8pm – 10pm<br>Steve DJ Smith", duration: 2 }
+DH[3][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+// THURSDAY
+DH[4][8] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[4][0] = { show: "12am – 4am<br>Auto", duration: 4 }
+DH[4][10] = { show: "10am – 12pm<br>Gordan", duration: 2 }
+DH[4][03] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[4][15] = { show: "3pm – 4pm<br>Auto", duration: 1 }
+DH[4][19] = { show: "7pm – 8pm<br>Echofalls(DJ Strawbs)", duration: 1 }
+DH[4][20] = { show: "8pm – 10pm<br>Russ", duration: 2 }
+DH[4][22] = { show: "10pm – 11pm<br>MottMuzik", duration: 1 }
+
+// FRIDAY
+DH[5][0] = { show: "12am – 4am<br>SteveG", duration: 4 }
+DH[5][10] = { show: "10am – 12pm<br>Dani - DJ Queen Dani", duration: 2 }
+DH[5][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[5][16] = { show: "4pm – 8pm<br>StevenD", duration: 4 }
+DH[5][20] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[5][22] = { show: "10pm – 11pm<br>Rebecca - DJ Mix&Match", duration: 1 }
+
+// SATURDAY
+DH[6][0] = { show: "12am – 2am<br>Auto", duration: 2 }
+DH[6][2] = { show: "2am – 4am<br>DJ AJ", duration: 2 }
+DH[6][2] = { show: "4am – 6am<br>Wendell", duration: 2 }
+DH[6][16] = { show: "4pm – 6pm<br>The Byrdman", duration: 2 }
+DH[6][18] = { show: "6pm –8pm<br>DJ LiL Devil", duration: 2 }
+DH[6][19] = { show: "7pm – 8pm<br>Sonic-Recorded", duration: 1 }
+DH[6][19] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[6][6] = { show: "6am – 10am<br>Cam", duration: 4 }
+DH[6][10] = { show: "10am – 12pm<br>DJ Nitro", duration: 2 }
+DH[6][20] = { show: "8pm – 9pm<br>Daniel", duration: 1 }
+
+// SUNDAY
+DH[0][8] = { show: "8am – 10am<br>Dani - DJ Queen Dani", duration: 2 }
+DH[0][11] = { show: "11am – 12pm<br>HotShot - 80's 90's", duration: 1 }
+DH[0][12] = { show: "12pm – 1pm<br>Dutch", duration: 1 }
+DH[0][13] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[0][15] = { show: "3pm – 5pm<br>DJ Fraser", duration: 2 }
+DH[0][17] = { show: "5pm – 7pm<br>DJ Lewis", duration: 2 }
+DH[0][19] = { show: "7pm - 8pm<br>Auto", duration: 1 }
+DH[0][20] = { show: "8pm - 9pm<br>BIG BOSS Dj Echofalls", duration: 1 }
+DH[0][21] = { show: "9pm - 12am<br>Popped Radio", duration: 3 }
+
+function NowON() {
+  const now = new Date()
+  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }))
+  const localHour = ukTime.getHours()
+  const day = ukTime.getDay()
+  const prevDay = (day - 1 + 7) % 7
+ 
+  const isInShow = (startHour, slot, hour) => {
+    const start = parseInt(startHour)
+    const end = (start + slot.duration) % 24
+    return start <= hour && hour < end || (end < start && (hour >= start || hour < end))
+  }
+ 
+  // Check current day's shows
+  const currentShow = Object.entries(DH[day])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => isInShow(startHour, slot, localHour))
+ 
+  // If no show found, check if a show from previous day is still running
+  const prevDayShow = !currentShow ? Object.entries(DH[prevDay])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => {
+      const start = parseInt(startHour)
+      const end = start + slot.duration
+      return end >= 24 && localHour < end - 24
+    }) : null
+ 
+  const show = (currentShow?.[1] || prevDayShow?.[1])?.show || "🕓 Off Air<br>No current broadcast."
+  document.getElementById("NowOn").innerHTML = show
+}
+
+// Optional: auto-refresh every 60 seconds
+setInterval(NowON, 60000);</script>
+</head>
+
+<body onload="NowON()">
+  <div id="NowOn" style="font-weight:bold;color:#fff;text-align:center;"></div>
+</body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg neon-nav glass px-4">
+    <a class="navbar-brand" href="#">Wildstyle Radio</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/djs.html">DJs</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/shows.html">Shows</a></li>
+        <li class="nav-item"><a class="nav-link" href="/schedule.html">Schedule</a></li>
+        <li class="nav-item"><a class="nav-link" href="/merch.html">Merch</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shows.html">Shows</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero text-center">
+    <h2>Feel the Beat, Live the Wildstyle</h2>
+  </section>
+
+  <section class="dj-section">
+    <h2>🎧 Wildstyle DJs & Shows</h2>
+    <div id="djGrid" class="dj-grid"></div>
+  </section>
+
+  <!-- ========== WILDSTYLE OFFICIAL 2025 SCHEDULE ========== -->
+  <script>
+  var DH = Array.from({ length: 7 }, () => Array(24).fill(""));
+
+  // ---------- MONDAY ----------
+  DH[1][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
+DH[1][12] = { show: "7am – 8am<br>DJ Keeks", duration: 2 }
+DH[1][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[1][12] = { show: "12pm – 2pm<br>James-Wizard Of Rock", duration: 2 }
+DH[1][14] = { show: "2pm – 4pm<br>Auto", duration: 2 }
+DH[1][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[1][17] = { show: "5pm – 7pm<br>Lewis", duration: 2 }
+DH[1][19] = { show: "7pm – 10pm<br>Auto", duration: 3 }
+DH[1][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+  // ---------- TUESDAY ----------
+  DH[2][1] = { show: "1am – 2am<br>James - Wizard Of Rock", duration: 1 }
+DH[2][3] = { show: "3am – 6am<br>Dani - DJ Queen Dani", duration: 3 }
+DH[2][6] = { show: "6am – 8am<br>Auto", duration: 2 }
+DH[2][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[2][15] = { show: "6pm – 8pm<br>DJ Squeek", duration: 2 }
+DH[2][20] = { show: "8pm – 10pm<br>Dj Lewis", duration: 2 }
+DH[2][10] = { show: "10am – 12pm<br>HothotDJ", duration: 2 }
+
+  // ---------- WEDNESDAY ----------
+  DH[3][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[3][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
+DH[3][15] = { show: "3pm – 5pm<br>Jon Fisk", duration: 2 }
+DH[3][18] = { show: "6pm – 7pm<br>Auto", duration: 1 }
+DH[3][20] = { show: "8pm – 10pm<br>Steve DJ Smith", duration: 2 }
+DH[3][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+  // ---------- THURSDAY ----------
+  DH[4][8] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[4][0] = { show: "12am – 4am<br>Auto", duration: 4 }
+DH[4][10] = { show: "10am – 12pm<br>Gordan", duration: 2 }
+DH[4][03] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[4][15] = { show: "3pm – 4pm<br>Auto", duration: 1 }
+DH[4][19] = { show: "7pm – 8pm<br>Echofalls(DJ Strawbs) - Frequency Shift", duration: 1 }
+DH[4][20] = { show: "8pm – 10pm<br>Russ", duration: 2 }
+DH[4][22] = { show: "10pm – 11pm<br>MottMuzik", duration: 1 }
+
+  // ---------- FRIDAY ----------
+  DH[5][0] = { show: "12am – 4am<br>SteveG", duration: 4 }
+DH[5][10] = { show: "10am – 12pm<br>Dani - DJ Queen Dani", duration: 2 }
+DH[5][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[5][16] = { show: "4pm – 8pm<br>StevenD", duration: 4 }
+DH[5][20] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[5][22] = { show: "10pm – 11pm<br>Rebecca - DJ Mix&Match", duration: 1 }
+
+  // ---------- SATURDAY ----------
+  DH[6][0] = { show: "12am – 2am<br>Auto", duration: 2 }
+DH[6][2] = { show: "2am – 4am<br>DJ AJ", duration: 2 }
+DH[6][2] = { show: "4am – 6am<br>Wendell", duration: 2 }
+DH[6][16] = { show: "4pm – 6pm<br>The Byrdman", duration: 2 }
+DH[6][18] = { show: "6pm –8pm<br>DJ LiL Devil", duration: 2 }
+DH[6][19] = { show: "7pm – 8pm<br>Sonic-Recorded", duration: 1 }
+DH[6][19] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[6][6] = { show: "6am – 10am<br>Cam", duration: 4 }
+DH[6][10] = { show: "10am – 12pm<br>DJ Nitro", duration: 2 }
+DH[6][20] = { show: "8pm – 9pm<br>Daniel", duration: 1 }
+
+  // ---------- SUNDAY ----------
+  DH[0][8] = { show: "8am – 10am<br>Dani - DJ Queen Dani", duration: 2 }
+DH[0][11] = { show: "11am – 12pm<br>HotShot - 80's 90's", duration: 1 }
+DH[0][12] = { show: "12pm – 1pm<br>Dutch", duration: 1 }
+DH[0][13] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[0][15] = { show: "3pm – 5pm<br>DJ Fraser", duration: 2 }
+DH[0][17] = { show: "5pm – 7pm<br>DJ Lewis", duration: 2 }
+DH[0][19] = { show: "7pm - 8pm<br>Auto", duration: 1 }
+DH[0][20] = { show: "8pm - 9pm<br>BIG BOSS Dj Echofalls - Frequency Shift", duration: 1 }
+DH[0][21] = { show: "9pm - 12am<br>Popped Radio", duration: 3 }
+
+  function NowON() {
+    const now = new Date()
+    const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }))
+    const localHour = ukTime.getHours()
+    const day = ukTime.getDay()
+    const prevDay = (day - 1 + 7) % 7
+
+    const isInShow = (startHour, slot, hour) => {
+      const start = parseInt(startHour)
+      const end = (start + slot.duration) % 24
+      return start <= hour && hour < end || (end < start && (hour >= start || hour < end))
+    }
+
+    const currentShow = Object.entries(DH[day])
+      .filter(([, slot]) => slot !== null)
+      .find(([startHour, slot]) => isInShow(startHour, slot, localHour))
+
+    const prevDayShow = !currentShow ? Object.entries(DH[prevDay])
+      .filter(([, slot]) => slot !== null)
+      .find(([startHour, slot]) => {
+        const start = parseInt(startHour)
+        const end = start + slot.duration
+        return end >= 24 && localHour < end - 24
+      }) : null
+
+    const activeShow = currentShow || prevDayShow
+    const showText = activeShow ? activeShow[1].show : "🕓 Off Air<br>No current broadcast."
+    document.getElementById("NowOn").innerHTML = showText
+  }
+
+  // ======= DJ GRID BUILDER =======
+  function buildDJListFromDH() {
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const djMap = {};
+    for (let d = 0; d < 7; d++) {
+      for (let h = 0; h < 24; h++) {
+        const slot = DH[d][h];
+        if (!slot) continue;
+        const [time, info] = slot.show.split("<br>");
+        if (!info) continue;
+        const dashIndex = info.indexOf("-");
+        let djName = info, showTitle = "";
+        if (dashIndex !== -1) {
+          djName = info.substring(0, dashIndex).trim();
+          showTitle = info.substring(dashIndex + 1).trim();
+        }
+        const key = djName.toLowerCase();
+        if (!djMap[key]) djMap[key] = { name: djName, shows: [] };
+        djMap[key].shows.push({ day: days[d], time, show: showTitle });
+      }
+    }
+    return Object.values(djMap);
+  }
+
+  function renderDJs() {
+    const grid = document.getElementById("djGrid");
+    const DJs = buildDJListFromDH();
+    grid.innerHTML = "";
+    const now = new Date();
+    const ukNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }));
+    const day = ukNow.getDay();
+    const hour = ukNow.getHours();
+
+    DJs.forEach(dj => {
+      let isLive = false;
+      const slot = DH[day][hour];
+      if (slot && slot.show.toLowerCase().includes(dj.name.toLowerCase())) isLive = true;
+
+      const showsHtml = dj.shows.map(s => `<p>${s.day}: ${s.time} — ${s.show}</p>`).join("");
+      const div = document.createElement("div");
+      div.className = `dj-card ${isLive ? "live" : ""}`;
+      div.innerHTML = `
+        <h3>${dj.name}</h3>
+        ${isLive ? '<div class="live-indicator">🟢 LIVE NOW</div>' : ""}
+        ${showsHtml}
+      `;
+      grid.appendChild(div);
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    renderDJs();
+    setInterval(() => { NowON(); renderDJs(); }, 60000);
+  });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

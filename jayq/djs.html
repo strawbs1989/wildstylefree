@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wildstyle Radio | Home</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Now Playing Script -->
+<script>
+const DH = Array.from({ length: 7 }, () => Array(24).fill(null))
+
+// MONDAY
+DH[1][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
+DH[1][12] = { show: "7am – 8am<br>DJ Keeks", duration: 2 }
+DH[1][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[1][12] = { show: "12pm – 2pm<br>James-Wizard Of Rock", duration: 2 }
+DH[1][14] = { show: "2pm – 4pm<br>Auto", duration: 2 }
+DH[1][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[1][17] = { show: "5pm – 7pm<br>Lewis", duration: 2 }
+DH[1][19] = { show: "7pm – 10pm<br>Auto", duration: 3 }
+DH[1][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+// TUESDAY
+DH[2][1] = { show: "1am – 2am<br>James - Wizard Of Rock", duration: 1 }
+DH[2][3] = { show: "3am – 6am<br>Dani - DJ Queen Dani", duration: 3 }
+DH[2][6] = { show: "6am – 8am<br>Auto", duration: 2 }
+DH[2][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[2][15] = { show: "6pm – 8pm<br>DJ Squeek", duration: 2 }
+DH[2][20] = { show: "8pm – 10pm<br>Dj Lewis", duration: 2 }
+DH[2][10] = { show: "10am – 12pm<br>HothotDJ", duration: 2 }
+
+// WEDNESDAY
+DH[3][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[3][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
+DH[3][15] = { show: "3pm – 5pm<br>Jon Fisk", duration: 2 }
+DH[3][18] = { show: "6pm – 7pm<br>Auto", duration: 1 }
+DH[3][20] = { show: "8pm – 10pm<br>Steve DJ Smith", duration: 2 }
+DH[3][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+// THURSDAY
+DH[4][8] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[4][0] = { show: "12am – 4am<br>Auto", duration: 4 }
+DH[4][10] = { show: "10am – 12pm<br>Gordan", duration: 2 }
+DH[4][03] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[4][15] = { show: "3pm – 4pm<br>Auto", duration: 1 }
+DH[4][19] = { show: "7pm – 8pm<br>Echofalls(DJ Strawbs)", duration: 1 }
+DH[4][20] = { show: "8pm – 10pm<br>Russ", duration: 2 }
+DH[4][22] = { show: "10pm – 11pm<br>MottMuzik", duration: 1 }
+
+// FRIDAY
+DH[5][0] = { show: "12am – 4am<br>SteveG", duration: 4 }
+DH[5][10] = { show: "10am – 12pm<br>Dani - DJ Queen Dani", duration: 2 }
+DH[5][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[5][16] = { show: "4pm – 8pm<br>StevenD", duration: 4 }
+DH[5][20] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[5][22] = { show: "10pm – 11pm<br>Rebecca - DJ Mix&Match", duration: 1 }
+
+// SATURDAY
+DH[6][0] = { show: "12am – 2am<br>Auto", duration: 2 }
+DH[6][2] = { show: "2am – 4am<br>DJ AJ", duration: 2 }
+DH[6][2] = { show: "4am – 6am<br>Wendell", duration: 2 }
+DH[6][16] = { show: "4pm – 6pm<br>The Byrdman", duration: 2 }
+DH[6][18] = { show: "6pm –8pm<br>DJ LiL Devil", duration: 2 }
+DH[6][19] = { show: "7pm – 8pm<br>Sonic-Recorded", duration: 1 }
+DH[6][19] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[6][6] = { show: "6am – 10am<br>Cam", duration: 4 }
+DH[6][10] = { show: "10am – 12pm<br>DJ Nitro", duration: 2 }
+DH[6][20] = { show: "8pm – 9pm<br>Daniel", duration: 1 }
+
+// SUNDAY
+DH[0][8] = { show: "8am – 10am<br>Dani - DJ Queen Dani", duration: 2 }
+DH[0][11] = { show: "11am – 12pm<br>HotShot - 80's 90's", duration: 1 }
+DH[0][12] = { show: "12pm – 1pm<br>Dutch", duration: 1 }
+DH[0][13] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[0][15] = { show: "3pm – 5pm<br>DJ Fraser", duration: 2 }
+DH[0][17] = { show: "5pm – 7pm<br>DJ Lewis", duration: 2 }
+DH[0][19] = { show: "7pm - 8pm<br>Auto", duration: 1 }
+DH[0][20] = { show: "8pm - 9pm<br>BIG BOSS Dj Echofalls", duration: 1 }
+DH[0][21] = { show: "9pm - 12am<br>Popped Radio", duration: 3 }
+
+function NowON() {
+  const now = new Date()
+  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }))
+  const localHour = ukTime.getHours()
+  const day = ukTime.getDay()
+  const prevDay = (day - 1 + 7) % 7
+ 
+  const isInShow = (startHour, slot, hour) => {
+    const start = parseInt(startHour)
+    const end = (start + slot.duration) % 24
+    return start <= hour && hour < end || (end < start && (hour >= start || hour < end))
+  }
+ 
+  // Check current day's shows
+  const currentShow = Object.entries(DH[day])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => isInShow(startHour, slot, localHour))
+ 
+  // If no show found, check if a show from previous day is still running
+  const prevDayShow = !currentShow ? Object.entries(DH[prevDay])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => {
+      const start = parseInt(startHour)
+      const end = start + slot.duration
+      return end >= 24 && localHour < end - 24
+    }) : null
+ 
+  const show = (currentShow?.[1] || prevDayShow?.[1])?.show || "🕓 Off Air<br>No current broadcast."
+  document.getElementById("NowOn").innerHTML = show
+}
+
+// Optional: auto-refresh every 60 seconds
+setInterval(NowON, 60000);</script>
+</head>
+
+<body onload="NowON()">
+  <div id="NowOn" style="font-weight:bold;color:#fff;text-align:center;"></div>
+</body>
+
+
+  <!-- Header -->
+  <header class="dj-card header-wrapper">
+    <div class="container header-container">
+      <h1>WildStyle Radio</h1>
+      <div class="now-playing">
+        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
+        
+      </div>
+    </div>
+  </header>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg neon-nav glass px-4">
+    <a class="navbar-brand" href="#">Wildstyle Radio</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+		<li class="nav-item"><a class="nav-link" href="/shoutout.html">ListenerShoutout</a></li>
+		<li class="nav-item"><a class="nav-link" href="/chat.html">Chat</a></li>
+        <li class="nav-item"><a class="nav-link" href="/djs.html">DJs</a></li>
+        <li class="nav-item"><a class="nav-link" href="/schedule.html">Schedule</a></li>
+        <li class="nav-item"><a class="nav-link" href="/merch.html">Merch</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shows.html">Shows</a></li>
+		<li class="nav-item"><a class="nav-link" href="/aboutus.html">Aboutus</a></li>   
+      </ul>
+    </div>
+  </nav>
+  
+  <main class="djs-page">
+  <center><h1 style="color:white;">Our DJ'S</h1></center>
+  <br>
+ 
+  
+  
+    <section class="dj-grid">
+	
+      <!-- DJ Profile Card -->
+      <div class="dj-card">
+        <img src="images/hotshot.jpg" alt="HotShot DJ" class="dj-photo" />
+        <h3>HotShot DJ</h3>
+        <a href="/graham.html" class="dj-link">Profile</a>
+		<h3>Co-Owner</h3>
+		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/squeek.png" alt="HotShot DJ" class="dj-photo" />
+        <h3>DJ Squeek</h3>
+        <a href="/lee.html" class="dj-link">Profile</a>
+		<h3>DJ</h3>
+		
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/mark.png" alt="HotShot DJ" class="dj-photo" />
+        <h3>DJ Mark</h3>
+        
+		<h3>DJ</h3>
+		
+      </div>
+
+      <!-- Repeat similar blocks for other DJs -->
+	  <!-- Female DJ's -->
+	  <div class="dj-card">
+        <img src="images/dawn.jpg" alt="dawn" class="dj-photo" />
+        <h3>Dawn</h3>
+        <a href="/dawn.html" class="dj-link">Profile</a>
+      </div>
+	  
+	 
+	  <div class="dj-card">
+        <img src="images/laura.jpg" alt="Laura" class="dj-photo" />
+        <h3>Laura</h3>
+        <a href="/laura.html" class="dj-link">Profile</a>
+		<h3>HR</h3>
+      </div>
+	  
+	  
+	  
+	  <div class="dj-card">
+        <img src="images/logo.jpg" alt="Babyjayne" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/rebecca.jpg" alt="Rebecca" class="dj-photo" />
+        <h3>DJ Mix N Match</h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/kiky.jpg" alt="Rebecca" class="dj-photo" />
+        <h3>DJ keeks</h3>
+        <a href="/kiky.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/mary.jpg" alt="Mary" class="dj-photo" />
+        <h3>Mary</h3>
+        <a href="/mary.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/indigo.jpg" alt="Indigo" class="dj-photo" />
+        <h3>indigo riz</h3>
+        <a href="/indigo.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/dani.jpg" alt="Dani" class="dj-photo" />
+        <h3>DJ Queen Dani</h3>
+        <a href="/dani.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/suzette.jpg" alt="Suzette" class="dj-photo" />
+		<h3>@queencitypopped</h3>
+        <h3>Popped Radio</h3>
+        <a href="/suzette.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/christina.jpg" alt="Suzette" class="dj-photo" />
+        <h3>Christina</h3>
+        <a href="/christina.html" class="dj-link">Profile</a>
+      </div>
+	  
+      <div class="dj-card">
+        <img src="images/djstrawbs.jpg" alt="DJ EchoFalls" class="dj-photo" />
+        <h3>DJ EchoFalls</h3>
+        <a href="/echofalls.html" class="dj-link">Profile</a>
+		<h3>BIG BOSS</h3>
+		<p><a href="https://ask.the.dj/Wildstyle">Requests</a></p>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/dan.jpg" alt="Dan" class="dj-photo" />
+        <h3>Dan</h3>
+        <a href="/dan.html" class="dj-link">Profile</a>
+		
+
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/ben.jpg" alt="ben" class="dj-photo" />
+        <h3>Ben</h3>
+        <a href="/ben.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/byrdman.jpg" alt="byrdman" class="dj-photo" />
+        <h3>The Byrdman</h3>
+        <a href="/byrd.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/daniel.jpg" alt="daniel" class="dj-photo" />
+        <h3>Daniel</h3>
+        <a href="/daniel.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  
+	  
+	  <div class="dj-card">
+        <img src="images/wizard.jpg" alt="wizard" class="dj-photo" />
+        <h3>Wizard</h3>
+        <a href="/wizard.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/jon.jpg" alt="alex" class="dj-photo" />
+		<h3>Jon Fisk</h3>
+        <a href="/jon.html" class="dj-link">Profile</a>
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/sonic.jpg" alt="sonic" class="dj-photo" />
+        <h3>Sonic J</h3>
+        <a href="/sonic.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/lewis.jpg" alt="lewis" class="dj-photo" />
+        <h3>Lewis</h3>
+		<h3>Manager</h3>
+		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="vish" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/jk.jpg" alt="jk" class="dj-photo" />
+        <h3>JK</h3>
+        <a href="/jk.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="farley" class="dj-photo" />
+        <h3></h3>
+     
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/aj.jpg" alt="AJ" class="dj-photo" />
+        <h3>AJ</h3>
+        <a href="/aj.html" class="dj-link">Profile</a>
+		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="blacknight" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  
+	  <div class="dj-card">
+        <img src="images/wendell.jpg" alt="wendell" class="dj-photo" />
+        <h3>DJ Old School</h3>
+        <a href="/wendall.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="rob" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/steve.jpg" alt="steve" class="dj-photo" />
+        <h3>Steve</h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/james.jpg" alt="DJ James" class="dj-photo" />
+        <h3>DJ James</h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/djsteve.jpg" alt="djsteve" class="dj-photo" />
+        <h3>DJ Steve Smith</h3>
+        <a href="/djsteve.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="Jacob" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="Seb" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/simon.jpg" alt="simon" class="dj-photo" />
+        <h3>Simon</h3>
+        <a href="/simon.html" class="dj-link">Profile</a>
+		<p><a href="mailto:requests@wildstyle.com">Requests</a></p>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="Josh" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/gordan.jpg" alt="gordan" class="dj-photo" />
+        <h3>Gordon</h3>
+        <p><a href="mailto:requests@wildstyle.com">Requests</a></p>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/djnocturnlx.jpg" alt="djnocturnlx" class="dj-photo" />
+        <h3>DJ Nocturnlx</h3>
+        <a href="/djnocturnlx.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="djnocturnlx" class="dj-photo" />
+        <h3></h3>
+        
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/cam.jpg" alt="cam" class="dj-photo" />
+        <h3>Cam</h3>
+        <a href="/dawn.html" class="dj-link">Profile</a>
+      </div>
+	  
+	  <div class="dj-card">
+        <img src="images/marka.jpg" alt="ricky" class="dj-photo" />
+        <h3>Mark</h3>
+        <p><a href="mailto:requests@wildstyle.com">Requests</a></p>
+      </div>
+	  
+	  
+	  
+	  
+	  <div class="dj-card">
+        <img src="images/logo.png" alt="New DJ" class="dj-photo" />
+        <h3>New DJ</h3>
+        
+      </div>
+      <!-- Add more DJ cards as needed -->
+    </section>
+  </main>
+
+  <footer class="wildstyle-footer">
+    <footer class="footer py-5 mt-5">
+    <div class="container">
+      <div class="row text-center text-md-start">
+        <div class="col-md-4 mb-4">
+          <h5 class="text-danger">Ways of Tuning In</h5>
+          <p>Download the Get Me Radio! Roku TV App <a href="https://channelstore.roku.com/en-gb/details/b97490a8fb5758527be0396e43422e42/get-me-radio" target="_blank">here</a> and search for Wildstyle Radio.</p>
+          <p>Download the Get Me Radio! Android App <a href="https://play.google.com/store/apps/details?id=com.getmeradio.gmr" target="_blank">from here</a> and search for Wildstyle Radio on our Mobile App.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5 class="text-danger">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Our DJs</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+          </ul>
+          <p class="mt-3">&copy; Wildstyle 2025 | 2029</p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5 class="text-danger">Follow Us</h5>
+          <div class="d-flex justify-content-center justify-content-md-start gap-3">
+            <a href="#"><i class="fab fa-facebook fa-lg"></i></a>
+            <a href="#"><i class="fab fa-instagram fa-lg"></i></a>
+            <a href="#"><i class="fab fa-twitter fa-lg"></i></a>
+          </div>
+          <div class="mt-3">
+            <a href="#"><img src="/images/logo.png" alt="Wildstyle Logo" style="height: 60px;"></a>
+            <a href="#"><img src="/images/license.jpg" alt="License" style="height: 60px; margin-left: 10px;"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+  </footer>
+</body>
+</html>
