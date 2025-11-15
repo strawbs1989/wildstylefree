@@ -64,7 +64,7 @@ body.slate{
   -webkit-backdrop-filter: blur(18px);
   border-radius: 24px;
   border: 1px solid rgba(255,255,255,0.12);
-  color: 1px solid rgba(255,255,255,1);
+  color: var(--text);
   text-align: center;
   padding: 1rem 1.6rem;
   box-shadow:
@@ -106,7 +106,7 @@ body.slate{
   padding: 0.45rem 1.1rem;
   border-radius: 999px;
   cursor: pointer;
-  color: rgba(255,255,255,1;
+  color: var(--text);
   font-size: 0.85rem;
   max-width: 320px;
   text-align: right;
