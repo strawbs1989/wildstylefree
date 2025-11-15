@@ -6,35 +6,29 @@
    CORE THEME & VARIABLES
    ========================= */
 :root{
-  --bg:#0c0f14;
-  --bg-alt:#10141f;
-  --slate:#0e1116;
-  --glass:rgba(255,255,255,0.04);
-  --glass-strong:rgba(255,255,255,0.08);
-  --glass-border:1px solid rgba(255,255,255,0.14);
-  --text:#e9eef5;
-  --muted:#9fb0c3;
-  --accent1:#ff2a6d;
-  --accent2:#2a7bff;
-  --accent:#ff2a6d;
-  --radius:18px;
+  --bg:#ffffff;
+  --bg-alt:#f9fbff;
+  --slate:#f3f6ff;
+  --glass:rgba(255,255,255,0.92);
+  --glass-strong:rgba(255,255,255,1);
+  --glass-border:1px solid rgba(190,205,255,0.9);
+  --text:#071128;
+  --muted:#7b86a2;
+  --accent1:#ff2ac4;
+  --accent2:#1ea5ff;
+  --accent:#ff2ac4;
 
   /* Extra panel vars used later */
-  --panel:rgba(16,20,31,0.96);
-  --ring:0 0 18px rgba(42,123,255,0.35);
+  --panel:#ffffff;
+  --ring:0 0 18px rgba(30,165,255,0.35);
 }
 
 html,body{
-  height:100%;
-}
-
-body{
   margin:0;
   background:
-    radial-gradient(1200px 600px at 10% 0%, rgba(42,123,255,0.18), transparent 45%),
-    radial-gradient(1200px 600px at 90% 10%, rgba(255,42,109,0.18), transparent 45%),
-    radial-gradient(900px 500px at 50% 100%, rgba(20,40,80,0.7), transparent 55%),
-    var(--bg);
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.9), transparent 60%),
+    radial-gradient(circle at 100% 0%, rgba(255,255,255,0.9), transparent 60%),
+    linear-gradient(180deg,#ffffff,#f7f8ff);
   color:var(--text);
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
@@ -1236,25 +1230,217 @@ form.grid {
   color:var(--text);
 }
 
-/* Added neon nav and hero styles */
-.neon-nav {
-  margin: 1.8rem auto 0;
-  max-width: 1040px;
+
+/* =========================
+   RAVE-UNIVERSE BRIGHT THEME
+   ========================= */
+
+/* Top navbar styled as light neon pill */
+.navbar.bg-black {
+  margin: 1.5rem auto 0;
+  max-width: 1080px;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(42,123,255,0.55), transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(255,42,109,0.55), transparent 60%),
-    rgba(8,10,20,0.96);
-  border: 1px solid rgba(255,255,255,0.22);
+    radial-gradient(circle at 0% 0%, rgba(30,165,255,0.25), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(255,42,196,0.25), transparent 60%),
+    #ffffff;
+  border: 1px solid rgba(192,210,255,0.9);
   box-shadow:
-    0 18px 40px rgba(0,0,0,0.85),
-    0 0 24px rgba(42,123,255,0.45),
-    0 0 24px rgba(255,42,109,0.35);
+    0 18px 40px rgba(0,0,0,0.08),
+    0 0 18px rgba(30,165,255,0.28),
+    0 0 18px rgba(255,42,196,0.24);
 }
-.neon-nav .navbar-brand { font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:1rem; color:#e9eef5;}
-.neon-nav .nav-link { font-weight:500; font-size:.95rem; color:#d4e0ff !important; padding-inline:.9rem;}
-.hero-home { padding:4rem 0 3rem; text-align:center;}
-.hero-home-inner { max-width:720px; margin:0 auto;}
-.hero-tag { text-transform:uppercase; letter-spacing:.18em; font-size:.8rem; color:#c2d4ff; margin-bottom:.75rem;}
-.hero-title { font-family:Oswald,Inter,sans-serif; font-size:clamp(2.2rem,5vw,3rem); margin:0 0 .75rem; color:#fff;}
-.hero-text { color:var(--muted); max-width:540px; margin:0 auto 1.8rem; font-size:.98rem;}
+
+.navbar.bg-black .navbar-brand {
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  background: linear-gradient(90deg,var(--accent1),var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navbar.bg-black .nav-link {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #3b4670 !important;
+  padding-inline: 0.9rem;
+}
+.navbar.bg-black .nav-link:hover,
+.navbar.bg-black .nav-link:focus {
+  color: #000000 !important;
+}
+
+/* Homepage hero like RAVE UNIVERSE */
+.hero-home {
+  padding: 3.5rem 0 2.5rem;
+  text-align: center;
+}
+
+.hero-home-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.hero-title-main {
+  font-family: Oswald, Inter, sans-serif;
+  font-size: clamp(2.6rem,6vw,3.4rem);
+  margin: 0 0 0.6rem;
+  text-transform: uppercase;
+  background: linear-gradient(90deg,var(--accent1),var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 22px rgba(109,190,255,0.45);
+}
+
+.hero-sub {
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--accent1);
+  margin-bottom: 1.5rem;
+}
+
+.hero-text {
+  color: var(--muted);
+  max-width: 540px;
+  margin: 0 auto 2rem;
+}
+
+.btn-cta {
+  display: inline-block;
+  padding: 0.8rem 2.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(109,190,255,0.8);
+  background: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #2c3670;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.08),
+    0 0 16px rgba(109,190,255,0.45);
+}
+
+/* Featured DJs row */
+.rave-featured {
+  padding: 0 0 3rem;
+  text-align: center;
+}
+.rave-featured h2 {
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: 0.9rem;
+  color: var(--accent1);
+  margin-bottom: 1.5rem;
+}
+.rave-dj-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.rave-dj-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+.rave-dj-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 4px;
+  background: linear-gradient(135deg,var(--accent1),var(--accent2));
+  box-shadow: 0 18px 35px rgba(0,0,0,0.14);
+}
+.rave-dj-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.rave-dj-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #2c3670;
+}
+
+/* Big neon outline boxes for Shop / Merch / Forums */
+.rave-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  gap: 1.5rem;
+  max-width: 820px;
+  margin: 0 auto 3rem;
+}
+.rave-link-box {
+  border-radius: 26px;
+  padding: 2rem 1rem;
+  text-align: center;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#ffffff,#ffffff) padding-box,
+    linear-gradient(135deg,var(--accent1),var(--accent2)) border-box;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+.rave-link-label {
+  margin-top: 0.8rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #29336b;
+}
+
+/* Generic page backgrounds */
+.djs-page,
+.shop-section,
+.glass-schedule,
+#birthdays,
+#requests,
+#unsigned,
+#events {
+  background: #f8f9ff;
+  color: #071128;
+}
+
+.djs-page h1,
+.glass-schedule .schedule-title {
+  color: #29336b;
+}
+
+/* DJ cards white + neon border */
+.djs-page .dj-card,
+.dj-grid .dj-card {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(#ffffff,#ffffff),
+    linear-gradient(135deg,var(--accent1),var(--accent2));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  color: #071128;
+}
+.djs-page .dj-name,
+.dj-grid .dj-name {
+  color: #071128;
+}
+.djs-page .dj-show,
+.dj-grid .dj-show {
+  color: var(--muted);
+}
+
+/* Footer on white theme */
+.footer {
+  background: #ffffff;
+  color: #7b86a2;
+  border-top: 1px solid rgba(192,210,255,0.9);
+  box-shadow: 0 -8px 26px rgba(0,0,0,0.04);
+}
+.footer h5 { color:#29336b; }
+.footer a { color:#3b4a8e; }
+
