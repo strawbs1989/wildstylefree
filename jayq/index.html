@@ -224,7 +224,7 @@ setInterval(NowON, 60000);</script>
     </div>
 
     <div class="unsigned-card">
-      <img src="https://wildstyle.vip/unsigned/word66.jpg" alt="The Word66">
+      <img src="https://wildstyle.vip/unsigned/theword66.jpg" alt="The Word66">
       <h4>The Word66</h4>
       <p>Pop</p>
     </div>
@@ -316,32 +316,24 @@ setInterval(NowON, 60000);</script>
 <!-- End FOWR -->
   </section></center>
   
-  <center><section class="container py-5" id="requests">
-    <h2 class="text-danger text-center mb-4">Requests</h2>
-    <div class="container my-4">
-  <div class="row g-3">
-  
-    <!-- Request Section -->
-  
-<p>Want To Request A Tune? Pop It In You're DJ Will Play It.</p>
-    <!— Request Widget ->
-<div id=”requestWidget”>
-  <button id=”requestBtn” title=”Request a Song”>🎵</button>
+  <center><section class="request-section" id="requests">
+  <h2>Requests</h2>
+  <p>Want to request a tune? Pop it in — your DJ will play it!</p>
 
-  <div id=”requestPopup”>
-    <h4>Request a Song</h4>
-    <center><form id=”requestForm”>
-      <input type=”text” name=”name” placeholder=”Yourname” required">
-      <input type=”text” name=”song” placeholder=”Songtitle” required>
-      <input type=”text” name=”artist” placeholder=”Artistname” required>
-      <textarea name=”message” placeholder=”Dedication/Shout-out (optional)”></textarea>
-      <button type=”submit”>Send Request</button>
-    </form></center>
-    <div id=”reqStatus”></div>
-  </div>
-</div>
-<!-- End Requests -->
-  </section></center>
+  <h3 style="color:#2a2a2a; margin-bottom:10px;">
+    🎵 Request a Song
+  </h3>
+
+  <form action="https://script.google.com/macros/s/AKfycbz_DpOgEO3Wcid-7MTv22arYiLZh5wLDNlwlPHjJxfUYo6nhqZnXsAU0xLXofogMyg/exec" method="post" class="request-form">
+
+    <input type="text" name="yourname" placeholder="Your Name">
+    <input type="text" name="songtitle" placeholder="Song Title">
+    <input type="text" name="artistname" placeholder="Artist Name">
+    <input type="text" name="shoutout" placeholder="Dedication / Shout-out">
+
+    <button type="submit" class="send-btn">Send Request</button>
+  </form>
+</section></center>
   
   
   <center><section class="container py-5" id="djs">
