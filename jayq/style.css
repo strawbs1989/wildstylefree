@@ -609,110 +609,58 @@ html, body {
   }
 }
 
-/* =========================================
-   UNSIGNED ARTIST SPOTLIGHT – FIXED
-   Works with:
-   <section id="unsigned">
-     <div class="cards">
-       <article class="card">...</article>
-   ========================================= */
-
-#unsigned {
-  padding: 60px 20px;
-  background: #ffffff;
-  border-radius: 24px;
-  margin: 40px auto;
-  max-width: 1100px;
-  box-shadow:
-    0 10px 25px rgba(0,0,0,0.08),
-    0 0 22px rgba(0,200,255,0.18),
-    0 0 22px rgba(255,0,180,0.18);
-}
-
-#unsigned .section-title {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-#unsigned .section-title h3 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  background: linear-gradient(90deg, #ff2a6d, #2a7bff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-#unsigned .section-title .btn {
-  margin-top: 8px;
-}
-
-/* description text */
-#unsigned p {
-  max-width: 700px;
-  margin: 0 auto 30px auto;
-  text-align: center;
-  color: #333;
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-/* GRID OF CARDS */
-#unsigned .cards {
+/* UNSIGNED ARTIST SPOTLIGHT – NEW NEON STYLE */
+.unsigned-grid {
   display: flex;
   flex-wrap: wrap;
+  gap: 30px;
   justify-content: center;
-  gap: 22px;
+  margin-top: 40px;
 }
 
-/* each artist card */
-#unsigned .card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 14px 14px 18px;
+.unsigned-card {
+  width: 200px;
+  background: linear-gradient(135deg, #141414, #0d0d1a);
+  border-radius: 22px;
+  padding: 12px;
   text-align: center;
-  max-width: 220px;
-  flex: 0 1 220px;
-
+  position: relative;
   box-shadow:
-    0 8px 18px rgba(0,0,0,0.08),
-    0 0 18px rgba(0,200,255,0.25),
-    0 0 18px rgba(255,0,180,0.25);
-  border: none;               /* override Bootstrap card border */
+    0 0 25px rgba(0,0,0,0.65),
+    0 0 18px rgba(0, 255, 255, 0.25),
+    0 0 18px rgba(255, 0, 204, 0.25);
+  border: 2px solid rgba(255,255,255,0.12);
   transition: transform .25s ease, box-shadow .25s ease;
 }
 
-#unsigned .card:hover {
-  transform: translateY(-4px);
+.unsigned-card:hover {
+  transform: translateY(-6px);
   box-shadow:
-    0 14px 30px rgba(0,0,0,0.15),
-    0 0 26px rgba(0,200,255,0.32),
-    0 0 26px rgba(255,0,180,0.32);
+    0 0 35px rgba(0,0,0,0.8),
+    0 0 28px rgba(0, 255, 255, 0.45),
+    0 0 28px rgba(255, 0, 204, 0.45);
 }
 
-/* the artist image – THIS is what stops it being huge */
-#unsigned .card img,
-#unsigned .card .thumb {
+.unsigned-card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-radius: 14px;
-  display: block;
+  border-radius: 16px;
+  margin-bottom: 12px;
 }
 
-/* name + genre */
-#unsigned .card h4 {
-  margin-top: 10px;
-  margin-bottom: 4px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #222;
+.unsigned-card h4 {
+  margin: 5px 0;
+  font-size: 1.05rem;
+  color: #ffffff;
 }
 
-#unsigned .card p {
+.unsigned-card p {
+  color: #bcd1ff;
   margin: 0;
   font-size: 0.9rem;
-  color: #666;
-}
+} 
+
 
 /* mobile tweak */
 @media (max-width: 600px) {
