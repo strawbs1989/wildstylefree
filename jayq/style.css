@@ -301,3 +301,375 @@ html, body {
     height: 130px;
   }
 }
+
+/* ==========================================================
+   UNSIGNED ARTIST CARDS — BRIGHT NEON RAVE
+   ========================================================== */
+
+#unsigned {
+  margin-top: 40px;
+  margin-bottom: 50px;
+}
+
+#unsigned .section-title h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 15px;
+}
+
+#unsigned .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 30px;
+  padding-top: 15px;
+}
+
+#unsigned .card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+#unsigned .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+/* FIX HUGE IMAGES */
+#unsigned .card .thumb {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+
+  /* Neon glow */
+  box-shadow:
+    0 0 10px rgba(255,0,255,0.25),
+    0 0 12px rgba(0,200,255,0.25);
+}
+
+#unsigned .card h4 {
+  margin-top: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: "Oswald";
+}
+
+#unsigned .card p {
+  font-size: 0.9rem;
+  margin-top: 4px;
+  color: #444;
+}
+
+/* ==========================================================
+   EVENTS SECTION — RAVE UNIVERSE BRIGHT
+   ========================================================== */
+
+.events-section {
+  margin: 60px 0;
+  padding: 20px;
+}
+
+.events-section .section-title h2 {
+  font-size: 2.3rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.events-section .section-title .btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+  transition: 0.3s;
+}
+
+.events-section .section-title .btn:hover {
+  opacity: 0.85;
+}
+
+/* Section description */
+.events-section .section-desc {
+  max-width: 900px;
+  margin: 20px auto;
+  font-size: 1.05rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* IMAGE GRID */
+.event-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 35px;
+  margin-top: 35px;
+}
+
+/* EVENT CARD */
+.event-card {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 20px;
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.1),
+    0 0 18px rgba(0,200,255,0.15),
+    0 0 18px rgba(255,0,255,0.15);
+  transition: 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 14px 45px rgba(0,0,0,0.15),
+    0 0 22px rgba(0,200,255,0.25),
+    0 0 22px rgba(255,0,255,0.25);
+}
+
+/* EVENT IMAGES */
+.event-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* ==========================================================
+   DJ OF THE WEEK — RAVE UNIVERSE THEME
+   ========================================================== */
+
+.section {
+  margin: 60px 0;
+}
+
+.section-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 25px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dj-week {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+
+  background: #ffffff;
+  border-radius: 25px;
+  padding: 30px 40px;
+  box-shadow:
+    0 15px 45px rgba(0,0,0,0.12),
+    0 0 30px rgba(0,200,255,0.25),
+    0 0 30px rgba(255,0,255,0.25);
+  transition: 0.3s ease;
+}
+
+.dj-week:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 55px rgba(0,0,0,0.18),
+    0 0 40px rgba(0,200,255,0.35),
+    0 0 40px rgba(255,0,255,0.35);
+}
+
+/* DJ of the Week Circular Neon Photo */
+.dj-week img.dj-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  border: 5px solid #fff;
+  padding: 5px;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+  box-shadow:
+    0 0 20px rgba(255,0,255,0.35),
+    0 0 20px rgba(0,200,255,0.35);
+}
+
+/* Info text */
+.dj-week-info h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dj-week-info p {
+  margin: 6px 0;
+  font-size: 1rem;
+  color: #444;
+  font-weight: 500;
+}
+
+/* Neon button inside card */
+.dj-week .btn.primary {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+  transition: 0.3s;
+}
+
+.dj-week .btn.primary:hover {
+  opacity: 0.85;
+}
+
+/* MOBILE FRIENDLY */
+@media (max-width: 768px) {
+  .dj-week {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px;
+  }
+}
+
+/* ==========================================================
+   🔥 SHOP SPOTLIGHT — RAVE UNIVERSE THEME
+   ========================================================== */
+
+.shop-section {
+  padding: 70px 20px;
+  border-radius: 18px;
+  text-align: center;
+
+  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(240,240,255,1));
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08),
+    0 0 25px rgba(0,200,255,0.25),
+    0 0 25px rgba(255,0,200,0.25);
+}
+
+.shop-section h3 {
+  font-size: 2.3rem;
+  font-weight: 900;
+  margin-bottom: 5px;
+
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.shop-intro {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 15px 0 40px;
+}
+
+/* Shop Grid */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+/* SHOP ITEM CARD */
+.shop-item {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+
+  border: 2px solid rgba(0,0,0,0.08);
+
+  box-shadow:
+    0 10px 20px rgba(0,0,0,0.08),
+    0 0 20px rgba(0,200,255,0.2),
+    0 0 20px rgba(255,0,200,0.2);
+
+  transition: 0.3s ease;
+}
+
+.shop-item:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 14px 30px rgba(0,0,0,0.12),
+    0 0 28px rgba(0,200,255,0.3),
+    0 0 28px rgba(255,0,200,0.3);
+}
+
+/* PRODUCT IMAGES (FIXED SIZE!) */
+.shop-item img {
+  width: 100%;
+  height: 230px;
+  object-fit: contain;
+  border-radius: 14px;
+
+  background: #f8f8f8;
+  padding: 10px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Product title */
+.shop-item h4 {
+  margin-top: 12px;
+  margin-bottom: 5px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* Price */
+.price,
+.shop-item .desc {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Buy Button */
+.buy-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+  color: #fff;
+
+  box-shadow:
+    0 10px 20px rgba(0,0,0,0.15),
+    0 0 20px rgba(0,200,255,0.35),
+    0 0 20px rgba(255,0,200,0.35);
+
+  transition: 0.25s ease-in-out;
+}
+
+.buy-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+/* MOBILE FIX */
+@media (max-width: 600px) {
+  .shop-item img {
+    height: 180px;
+  }
+}
+
+
