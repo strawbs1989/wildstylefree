@@ -302,70 +302,7 @@ html, body {
   }
 }
 
-/* ==========================================================
-   UNSIGNED ARTIST CARDS — BRIGHT NEON RAVE
-   ========================================================== */
 
-#unsigned {
-  margin-top: 40px;
-  margin-bottom: 50px;
-}
-
-#unsigned .section-title h3 {
-  font-size: 2rem;
-  font-weight: 800;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 15px;
-}
-
-#unsigned .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 30px;
-  padding-top: 15px;
-}
-
-#unsigned .card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  transition: 0.3s ease;
-}
-
-#unsigned .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-}
-
-/* FIX HUGE IMAGES */
-#unsigned .card .thumb {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 14px;
-
-  /* Neon glow */
-  box-shadow:
-    0 0 10px rgba(255,0,255,0.25),
-    0 0 12px rgba(0,200,255,0.25);
-}
-
-#unsigned .card h4 {
-  margin-top: 12px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  font-family: "Oswald";
-}
-
-#unsigned .card p {
-  font-size: 0.9rem;
-  margin-top: 4px;
-  color: #444;
-}
 
 /* ==========================================================
    EVENTS SECTION — RAVE UNIVERSE BRIGHT
@@ -670,6 +607,71 @@ html, body {
   .shop-item img {
     height: 180px;
   }
+}
+
+/* ==========================================================
+   UNSIGNED ARTIST CARDS — BRIGHT NEON RAVE
+   ========================================================== */
+
+#unsigned {
+  margin-top: 40px;
+  margin-bottom: 50px;
+}
+
+#unsigned .section-title h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 15px;
+}
+
+#unsigned .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 30px;
+  padding-top: 15px;
+}
+
+#unsigned .card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+#unsigned .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+/* FIX HUGE IMAGES */
+#unsigned .card .thumb {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+
+  /* Neon glow */
+  box-shadow:
+    0 0 10px rgba(255,0,255,0.25),
+    0 0 12px rgba(0,200,255,0.25);
+}
+
+#unsigned .card h4 {
+  margin-top: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: "Oswald";
+}
+
+#unsigned .card p {
+  font-size: 0.9rem;
+  margin-top: 4px;
+  color: #444;
 }
 
 
