@@ -661,25 +661,6 @@ html, body {
   font-size: 0.9rem;
 } 
 
-
-/* mobile tweak */
-@media (max-width: 600px) {
-  #unsigned {
-    margin: 30px 10px;
-    padding: 40px 16px;
-  }
-
-  #unsigned .card {
-    max-width: 180px;
-    flex: 0 1 45%;
-  }
-
-  #unsigned .card img,
-  #unsigned .card .thumb {
-    height: 170px;
-  }
-}
-
 /* =========================
    REQUEST FORM – NEON GLASS STYLE
    ========================= */
@@ -766,6 +747,52 @@ html, body {
   box-shadow:
     0 14px 30px rgba(0,0,0,0.35),
     0 0 28px rgba(255, 0, 180, 0.6);
+} 
+
+
+/* mobile tweak */
+@media (max-width: 600px) {
+  #unsigned {
+    margin: 30px 10px;
+    padding: 40px 16px;
+  }
+
+  #unsigned .card {
+    max-width: 180px;
+    flex: 0 1 45%;
+  }
+
+  #unsigned .card img,
+  #unsigned .card .thumb {
+    height: 170px;
+  }
+}
+
+
+
+/* MOBILE FIX FOR REQUEST FORM */
+@media (max-width: 600px) {
+  .request-form {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  .send-btn {
+    grid-column: span 1 !important;
+    width: 100%;
+  }
+
+  .request-section {
+    padding: 28px;
+  }
+
+  .request-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .request-section p {
+    font-size: 0.95rem;
+  }
 } 
 
 
