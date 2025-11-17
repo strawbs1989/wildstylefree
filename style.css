@@ -795,4 +795,90 @@ html, body {
   }
 } 
 
+/* =========================
+   Profile Header
+   ========================= */
+.profile-header {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.profile-title {
+  font-size: 42px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff3ec9, #6a5bff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.profile-subtitle {
+  font-size: 18px;
+  color: #555;
+  margin-top: -10px;
+}
+
+/* Profile Card */
+.profile-card {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 25px;
+
+  background: #ffffff;
+  box-shadow: 0 0 30px rgba(150, 80, 255, 0.25);
+
+  text-align: center;
+}
+
+.profile-photo {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 15px;
+
+  border: 6px solid transparent;
+  background: linear-gradient(135deg, #ff3ec9, #6a5bff) border-box;
+  box-shadow: 0px 0px 25px rgba(110, 60, 255, 0.3);
+}
+
+.profile-name {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.profile-text {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 12px 0;
+}
+
+/* Neon Buttons */
+.profile-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.neon-button {
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+
+  background: linear-gradient(90deg, #ff3ec9, #6a5bff);
+  box-shadow: 0 8px 25px rgba(120, 60, 255, 0.4);
+  transition: 0.2s;
+}
+
+.neon-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(120, 60, 255, 0.6);
+}
+
 
