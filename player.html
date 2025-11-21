@@ -6,40 +6,110 @@
 <title>Wildstyle Player Full Width</title>
 
 <style>
-  /* WILDSTYLE RADIO – WIDE GLASS PLAYER */
+  body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: system-ui, sans-serif;
+  }
 
-.player-wrapper {
-    width: 95%;
-    max-width: 720px;   /* wider layout */
-    margin: 60px auto;
-    padding: 28px;
-    background: rgba(255, 255, 255, 0.22);
-    border-radius: 25px;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 10px 45px rgba(0, 0, 0, 0.28);
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.3);
-}
-
-/* iframe player */
-.player-wrapper iframe {
+  /* MAIN PLAYER */
+  .player-wrap {
     width: 100%;
-    height: 145px;   /* slightly taller for widescreen look */
-    border: none;
-    border-radius: 20px;
-}
+    max-width: 100%;
+    height: 200px; /* YOUR REQUEST */
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 233, 255, 0.4);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
-/* Optional: title above player */
-.player-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 18px;
-    background: linear-gradient(90deg, #ff3ec9, #6a5bff);
+  .brand {
+    font-size: 1rem;
+    background: linear-gradient(90deg, #ff00ff, #00eaff);
     -webkit-background-clip: text;
     color: transparent;
-} 
+    margin-bottom: 4px;
+  }
 
+  .now-playing-text {
+    font-size: 0.85rem;
+    min-height: 1rem;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  /* CIRCLE */
+  .circle-shell {
+    width: 110px;
+    height: 110px;
+    position: relative;
+  }
+
+  .circle-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(#ff007a, #ff8a00, #ffe600, #00ffea, #007bff, #ff00ff);
+    animation: spin 9s linear infinite;
+    filter: blur(1.2px);
+  }
+
+  .circle-inner {
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #111229, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .play-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00eaff, #007bff);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00eaff;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Bottom Controls */
+  .controls-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 8px;
+  }
+
+  .ctrl-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0,255,255,0.4);
+  }
 </style>
 </head>
 
@@ -66,11 +136,9 @@
 
 </div>
 
- <iframe
-        src="https://streaming.live365.com/a50378"
-        allow="autoplay"
-        scrolling="no">
-    </iframe>
+<audio id="radioAudio">
+  <source src="https://streaming.live365.com/a50378" type="audio/mpeg">
+</audio>
 
 <script>
   const audio = document.getElementById("radioAudio");
