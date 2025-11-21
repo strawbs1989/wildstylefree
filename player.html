@@ -3,113 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wildstyle Player Full Width</title>
+<title>Wildstyle Radio | Player</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://wildstyle.vip/playercss/player.css">
 
-<style>
-  /* WILDSTYLE RADIO – WIDE GLASS PLAYER */
+<!-- Now On Script -->
+<script src="https://wildstyle.vip/nowplaying/nowon.js"></script>
 
-.player-wrapper {
-    width: 95%;
-    max-width: 720px;   /* wider layout */
-    margin: 60px auto;
-    padding: 28px;
-    background: rgba(255, 255, 255, 0.22);
-    border-radius: 25px;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 10px 45px rgba(0, 0, 0, 0.28);
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.3);
-}
-
-/* iframe player */
-.player-wrapper iframe {
-    width: 100%;
-    height: 145px;   /* slightly taller for widescreen look */
-    border: none;
-    border-radius: 20px;
-}
-
-/* Optional: title above player */
-.player-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 18px;
-    background: linear-gradient(90deg, #ff3ec9, #6a5bff);
-    -webkit-background-clip: text;
-    color: transparent;
-} 
-
-</style>
 </head>
+<body onload="NowON()">
 
-<body>
+<header class="player-header">
+  <h1>🎧 Wildstyle Radio</h1>
+  <p class="subtitle">Online • Mobile • Smart Devices</p>
+</header>
 
-<div class="player-wrap">
+<section class="now-on-container">
+  <span id="LiveIndicator" class="live-indicator">⚪ Off Air</span>
+  <div id="NowOn" class="nowon-text">Loading…</div>
+</section>
 
-  <div class="brand">Wildstyle Radio</div>
+<section class="player-card">
+  <img src="/images/logo.png" class="player-logo" alt="Wildstyle Radio">
 
-  <div class="now-playing-text" id="nowPlayingText">Loading…</div>
+  <iframe
+    src="https://CP5.serverse.com/cp/widgets/player/button/?p=a50378&c=17E1EA&l=ffffff&r=E1E9F1&v=ffffff"
+    width="100%" height="160" style="border:0;">
+  </iframe>
+</section>
 
-  <div class="circle-shell">
-    <div class="circle-outer"></div>
-    <div class="circle-inner">
-      <button class="play-btn" id="playButton">▶</button>
-    </div>
-  </div>
-
-  <div class="controls-row">
-    <div class="ctrl-btn" id="volDown">🔉</div>
-    <div class="ctrl-btn" id="muteBtn">🔇</div>
-    <div class="ctrl-btn" id="volUp">🔊</div>
-  </div>
-
+<div class="socials">
+  <a href="https://facebook.com/wildstyleuk" class="social-btn fb">Facebook</a>
+  <a href="https://instagram.com/wildstyle_radio" class="social-btn ig">Instagram</a>
+  <a href="https://tiktok.com/@wildstyle_radio" class="social-btn tk">TikTok</a>
 </div>
 
- <iframe
-        src="https://streaming.live365.com/a50378"
-        allow="autoplay"
-        scrolling="no">
-    </iframe>
-
 <script>
-  const audio = document.getElementById("radioAudio");
-  const playBtn = document.getElementById("playButton");
-  const nowPlayingText = document.getElementById("nowPlayingText");
+function NowON() {
+  const now = window.getNowOn?.() || "Off Air";
+  const indicator = document.getElementById("LiveIndicator");
+  const text = document.getElementById("NowOn");
 
-  playBtn.addEventListener("click", () => {
-    if (audio.paused) {
-      audio.play();
-      playBtn.textContent = "⏸";
-    } else {
-      audio.pause();
-      playBtn.textContent = "▶";
-    }
-  });
+  text.innerHTML = now;
 
-  document.getElementById("volUp").onclick = () => audio.volume = Math.min(1, audio.volume + 0.1);
-  document.getElementById("volDown").onclick = () => audio.volume = Math.max(0, audio.volume - 0.1);
-  document.getElementById("muteBtn").onclick = () => audio.muted = !audio.muted;
-
-  async function fetchNowPlaying() {
-    try {
-      const api = "https://public.api.live365.com/station/a50378";
-      const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(api);
-      const res = await fetch(proxy);
-      const data = await res.json();
-      const json = JSON.parse(data.contents);
-
-      const title = json?.now_playing?.title || "Unknown";
-      const artist = json?.now_playing?.artist || "";
-
-      nowPlayingText.innerHTML = `<b>${title}</b> <br><small>${artist}</small>`;
-    } catch {
-      nowPlayingText.textContent = "Track unavailable";
-    }
+  if (now.includes("Auto") || now.includes("Off")) {
+    indicator.innerHTML = "⚪ Off Air";
+    indicator.classList.remove("live");
+  } else {
+    indicator.innerHTML = "🔴 LIVE NOW";
+    indicator.classList.add("live");
   }
-
-  fetchNowPlaying();
-  setInterval(fetchNowPlaying, 15000);
+}
 </script>
 
 </body>
