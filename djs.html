@@ -10,7 +10,22 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<!-- Header -->
+  <header class="dj-card header-wrapper">
+    <div class="container header-container">
+      <h1>WildStyle Radio</h1>
+	  <p>Online & Mobile</p>
+	  
+      <div class="now-playing">
+        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
+		<iframe src="https://wildstyle.vip/player.html" height="240" width="400" title="Iframe Example"></iframe>
+        <!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
+        <div class="shoutout-ticker">
+        <div id="tickerContent">Loading shout-outs…</div>
+       </div>
+	  </div>
+    </div>
+  </header>
 <!-- Now Playing Script -->
 <script>
 const DH = Array.from({ length: 7 }, () => Array(24).fill(null))
@@ -21,10 +36,10 @@ DH[1][10] = { show: "10am – 12pm<br>", duration: 2 }
 DH[1][12] = { show: "7am – 8am<br>DJ Keeks", duration: 2 }
 DH[1][10] = { show: "8am – 10am<br>Coll", duration: 2 }
 DH[1][12] = { show: "12pm – 2pm<br>James-Wizard Of Rock", duration: 2 }
-DH[1][14] = { show: "2pm – 4pm<br>Auto", duration: 2 }
+DH[1][14] = { show: "2pm – 4pm<br>DJ Achess Sound", duration: 2 }
 DH[1][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
 DH[1][17] = { show: "5pm – 7pm<br>Lewis", duration: 2 }
-DH[1][19] = { show: "8pm – 10pm<br>DJ ACHESS", duration: 2 }
+DH[1][19] = { show: "7pm – 10pm<br>Auto", duration: 3 }
 DH[1][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
 
 // TUESDAY
