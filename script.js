@@ -186,3 +186,37 @@ if (btn && popup && form && statusBox) {
     }
   });
 }
+// =========================
+// DJ LIVE MODE - Bass Pulse Glow
+// =========================
+
+// Attach LIVE badge to popup
+const requestLiveBox = document.getElementById("requestPopup");
+const liveBadge = document.createElement("div");
+liveBadge.className = "live-badge";
+liveBadge.textContent = "LIVE";
+requestLiveBox.appendChild(liveBadge);
+
+// Check which DJ is live
+function checkDJLiveMode() {
+  fetch("https://wildstyle.vip/nowplaying/nowon.js")
+    .then(res => res.text())
+    .then(text => {
+      // nowon.js returns something like: currentDJ = "DJ Sonic Circuit"
+      const match = text.match(/currentDJ\s*=\s*"([^"]+)"/);
+      const dj = match ? match[1] : "No DJ";
+
+      if (dj && dj !== "No DJ") {
+        requestLiveBox.classList.add("dj-live");
+        liveBadge.classList.add("active");
+      } else {
+        requestLiveBox.classList.remove("dj-live");
+        liveBadge.classList.remove("active");
+      }
+    })
+    .catch(err => console.error("Live Mode Error:", err));
+}
+
+// Run immediately + every 15 seconds
+checkDJLiveMode();
+setInterval(checkDJLiveMode, 15000);

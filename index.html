@@ -313,24 +313,32 @@ setInterval(NowON, 60000);</script>
 <!-- End FOWR -->
   </section></center>
   
-  <center><section class="request-section" id="requests">
+  <center>
+<section class="request-section" id="requests">
   <h2>Requests</h2>
-  <p>Want to request a tune? Pop it in — your DJ will play it!</p>
+  <p>Want to request a tune? Pop it in – your DJ will play it!</p>
 
   <h3 style="color:#2a2a2a; margin-bottom:10px;">
-    🎵 Request a Song
+    🎶 Request a Song
   </h3>
 
-  <form action="https://script.google.com/macros/s/AKfycbx9eVZV1AvgrPfFMDoVNr_tQN2vdSFcXQnkx4cIaqnGdGk69wKLfDMfnC64hL0ohQ/exec" method="post" class="request-form">
+  <!-- 🔥 WRAPPED REQUEST FORM IN LIVE GLOW BOX -->
+  <div id="requestPopup" style="position:relative; padding:15px; border-radius:12px;">
 
-    <input type="text" name="yourname" placeholder="Your Name">
-    <input type="text" name="songtitle" placeholder="Song Title">
-    <input type="text" name="artistname" placeholder="Artist Name">
-    <input type="text" name="shoutout" placeholder="Dedication / Shout-out">
+    <form action="https://script.google.com/macros/s/AKfycbx9eVZV1AvgrPfFMDoVNr_tQN2vdSFcXQnkx4cIaqnGdGk69wKLfDMfnC64hL0ohQ/exec" method="post" class="request-form">
 
-    <button type="submit" class="send-btn">Send Request</button>
-  </form>
-</section></center>
+      <input type="text" name="yourname" placeholder="Your Name">
+      <input type="text" name="songtitle" placeholder="Song Title">
+      <input type="text" name="artistname" placeholder="Artist Name">
+      <input type="text" name="shoutout" placeholder="Dedication / Shout-out">
+
+      <button type="submit" class="send-btn">Send Request</button>
+    </form>
+
+  </div> <!-- end requestPopup -->
+
+</section>
+</center> 
   
   
   <center><section class="container py-5" id="djs">
