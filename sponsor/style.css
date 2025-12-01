@@ -1,0 +1,112 @@
+/* ===== Sponsor Page Layout ===== */
+
+.sponsor-page {
+  max-width: 900px;
+  margin: 80px auto 40px;
+  padding: 0 15px;
+  color: #fff;
+  font-family: 'Oswald', sans-serif;
+}
+
+/* ===== Hero Section ===== */
+
+.sponsor-hero {
+  text-align: center;
+  padding: 35px 20px;
+  border-radius: 18px;
+  background: radial-gradient(circle at top, rgba(0,170,255,0.35), rgba(255,0,124,0.35));
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+  margin-bottom: 35px;
+}
+
+.sponsor-hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.sponsor-hero p {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.price-tag {
+  font-size: 1.3rem;
+  margin: 15px 0;
+  font-weight: bold;
+  color: #00eaff;
+  text-shadow: 0 0 8px #00aaff;
+}
+
+/* ===== Call-to-Action Buttons ===== */
+
+.btn-main {
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #00aaff, #ff007c);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  box-shadow: 0 0 12px rgba(0,170,255,0.7);
+  transition: 0.2s ease;
+}
+
+.btn-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(255,0,124,0.9);
+}
+
+/* ===== Section Boxes (How it works, Why, Testimonials) ===== */
+
+.sponsor-how,
+.sponsor-why,
+.sponsor-testimonials {
+  background: rgba(0,0,0,0.65);
+  padding: 25px 20px;
+  border-radius: 16px;
+  margin: 30px 0;
+  box-shadow: 0 0 12px rgba(0,0,0,0.8);
+}
+
+.sponsor-how h2,
+.sponsor-why h2,
+.sponsor-testimonials h2 {
+  font-size: 1.7rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.sponsor-how ol {
+  padding-left: 20px;
+}
+
+.sponsor-how li,
+.sponsor-why ul li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* Testimonials */
+.sponsor-testimonials .testimonial {
+  margin-bottom: 15px;
+  padding: 12px 15px;
+  border-left: 4px solid #00aaff;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
+
+.sponsor-testimonials span {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Center CTA padding */
+.center-cta {
+  text-align: center;
+  margin: 40px 0 30px;
+}

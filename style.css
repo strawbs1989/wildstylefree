@@ -905,6 +905,32 @@ html, body {
   100% { opacity: 1; }
 }
 
+/* Sponsor */
+.sponsor-banner {
+  display: block;
+  background: linear-gradient(90deg, #00aaff, #ff007c);
+  padding: 15px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 12px;
+  margin: 20px auto;
+  width: min(900px, 95%);
+  box-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+.sponsor-banner:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(255, 0, 124, 0.8);
+}
+/* DJ Button */
+.small-btn {
+  font-size: 0.85rem;
+  padding: 8px 16px;
+}
+
 /* DJ LIVE MODE Bass Pulse Glow */
 #requestPopup.dj-live {
   border: 2px solid rgba(255,0,76,0.9) !important;
@@ -943,5 +969,7 @@ html, body {
       inset 0 0 14px rgba(255,0,76,0.3);
   }
 }
+
+
 
 
