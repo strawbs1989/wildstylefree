@@ -128,7 +128,7 @@
   width: 100%;
   padding: 10px;
   border-radius: 6px;
-  border: none;
-  outline: none;
+  border: ridge;
+  outline: #000;
   font-size: 1rem;
 }
