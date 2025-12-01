@@ -9,11 +9,186 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script defer src="https://wildstyle.vip/script.js"></script>
-  <link rel="stylesheet" href="https://wildstyle.vip/sponsor/sponsor.css">
+  <link rel="stylesheet" href="https://wildstyle.vip/sponsor/style.css">
 </head>
 <body>
 
-  <main class="sponsor-page">
+<!-- Header -->
+  <header class="dj-card header-wrapper">
+    <div class="container header-container">
+      <h1>WildStyle Radio</h1>
+	  <p>Online & Mobile</p>
+	  
+      <div class="now-playing">
+        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
+		<iframe src="https://wildstyle.vip/player.html" height="240" width="400" title="Iframe Example"></iframe>
+        <!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
+        <div class="shoutout-ticker">
+        <div id="tickerContent">Loading shout-outs…</div>
+       </div>
+	  </div>
+    </div>
+  </header>
+    <!-- Now Playing Script -->
+<script>
+const DH = Array.from({ length: 7 }, () => Array(24).fill(null))
+
+// MONDAY
+DH[1][10] = { show: "1am – 3am<br>DJ Carrillo", duration: 3 }
+DH[1][10] = { show: "10am – 12pm<br>", duration: 2 }
+DH[1][12] = { show: "7am – 8am<br>DJ Keeks", duration: 2 }
+DH[1][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[1][12] = { show: "12pm – 2pm<br>James-Wizard Of Rock", duration: 2 }
+DH[1][14] = { show: "2pm – 4pm<br>DJ Achess Sound", duration: 2 }
+DH[1][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[1][17] = { show: "5pm – 7pm<br>Lewis", duration: 2 }
+DH[1][19] = { show: "7pm – 10pm<br>Auto", duration: 3 }
+DH[1][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+// TUESDAY
+DH[2][1] = { show: "1am – 2am<br>James - Wizard Of Rock", duration: 1 }
+DH[2][3] = { show: "3am – 6am<br>Dani - DJ Queen Dani", duration: 3 }
+DH[2][6] = { show: "6am – 8am<br>Auto", duration: 2 }
+DH[2][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[2][15] = { show: "6pm – 8pm<br>DJ Squeek", duration: 2 }
+DH[2][20] = { show: "8pm – 10pm<br>Dj Lewis", duration: 2 }
+DH[2][10] = { show: "10am – 12pm<br>HothotDJ", duration: 2 }
+
+// WEDNESDAY
+DH[3][10] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[3][10] = { show: "10am – 12pm<br>DJ Nala", duration: 2 }
+DH[3][15] = { show: "3pm – 5pm<br>Ian", duration: 2 }
+DH[3][18] = { show: "6pm – 7pm<br>DJ European BOB", duration: 1 }
+DH[3][18] = { show: "7pm – 8pm<br>", duration: 1 }
+DH[3][20] = { show: "8pm – 10pm<br>Ivy Posion", duration: 2 }
+DH[3][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
+
+// THURSDAY
+DH[4][8] = { show: "8am – 10am<br>Coll", duration: 2 }
+DH[4][0] = { show: "12am – 4am<br>Auto", duration: 4 }
+DH[4][10] = { show: "10am – 12pm<br>DJ Barred", duration: 2 }
+DH[4][03] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[4][15] = { show: "3pm – 4pm<br>Auto", duration: 1 }
+DH[4][19] = { show: "7pm – 8pm<br>Echofalls(DJ Strawbs)", duration: 1 }
+DH[4][20] = { show: "8pm – 10pm<br>Russ", duration: 2 }
+DH[4][22] = { show: "10pm – 11pm<br>MottMuzik", duration: 1 }
+DH[4][22] = { show: "12pm – 2am<br>DJ Frog", duration: 3 }
+
+// FRIDAY
+DH[5][0] = { show: "12am – 4am<br>SteveG", duration: 4 }
+DH[5][10] = { show: "10am – 12pm<br>Dani - DJ Queen Dani", duration: 2 }
+DH[5][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
+DH[5][16] = { show: "4pm – 8pm<br>StevenD", duration: 4 }
+DH[5][20] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[5][22] = { show: "10pm – 11pm<br>Rebecca - DJ Mix&Match", duration: 1 }
+DH[5][00] = { show: "12pm – 3pm<br>DJ Nala", duration: 3 }
+// SATURDAY
+DH[6][0] = { show: "12am – 2am<br>Auto", duration: 2 }
+DH[6][2] = { show: "2am – 4am<br>DJ AJ", duration: 2 }
+DH[6][2] = { show: "4am – 6am<br>Wendell", duration: 2 }
+DH[6][16] = { show: "4pm – 6pm<br>The Byrdman", duration: 2 }
+DH[6][18] = { show: "6pm –8pm<br>DJ LiL Devil", duration: 2 }
+DH[6][19] = { show: "7pm – 8pm<br>Sonic-Recorded", duration: 1 }
+DH[6][19] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
+DH[6][6] = { show: "6am – 10am<br>Cam", duration: 4 }
+DH[6][10] = { show: "10am – 12pm<br>DJ Nitro", duration: 2 }
+DH[6][20] = { show: "8pm – 9pm<br>Daniel", duration: 1 }
+
+
+// SUNDAY
+DH[0][8] = { show: "8am – 10am<br>Dani - DJ Queen Dani", duration: 2 }
+DH[0][11] = { show: "11am – 12pm<br>HotShot - 80's 90's", duration: 1 }
+DH[0][12] = { show: "12pm – 1pm<br>DJ Shadow Circuit", duration: 1 }
+DH[0][13] = { show: "1pm – 3pm<br>Christina", duration: 2 }
+DH[0][15] = { show: "3pm – 5pm<br>DJ Fraser", duration: 2 }
+DH[0][17] = { show: "5pm – 7pm<br>DJ Lewis", duration: 2 }
+DH[0][19] = { show: "7pm - 8pm<br>Auto", duration: 1 }
+DH[0][20] = { show: "8pm - 9pm<br>BIG BOSS Dj Echofalls", duration: 1 }
+DH[0][21] = { show: "9pm - 12am<br>Popped Radio", duration: 3 }
+
+function NowON() {
+  const now = new Date()
+  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }))
+  const localHour = ukTime.getHours()
+  const day = ukTime.getDay()
+  const prevDay = (day - 1 + 7) % 7
+ 
+  const isInShow = (startHour, slot, hour) => {
+    const start = parseInt(startHour)
+    const end = (start + slot.duration) % 24
+    return start <= hour && hour < end || (end < start && (hour >= start || hour < end))
+  }
+ 
+  // Check current day's shows
+  const currentShow = Object.entries(DH[day])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => isInShow(startHour, slot, localHour))
+ 
+  // If no show found, check if a show from previous day is still running
+  const prevDayShow = !currentShow ? Object.entries(DH[prevDay])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => {
+      const start = parseInt(startHour)
+      const end = start + slot.duration
+      return end >= 24 && localHour < end - 24
+    }) : null
+ 
+  const show = (currentShow?.[1] || prevDayShow?.[1])?.show || "🕓 Off Air<br>No current broadcast."
+  document.getElementById("NowOn").innerHTML = show
+}
+
+// Optional: auto-refresh every 60 seconds
+setInterval(NowON, 60000);</script>
+</head>
+
+<body onload="NowON()">
+  <div id="NowOn" style="font-weight:bold;color:#fff;text-align:center;"></div>
+</body>
+  <!-- TrustPilot -->
+  <!-- TrustBox script -->
+<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+<!-- End TrustBox script -->
+<!-- TrustPilot -->
+
+  
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg neon-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="navbar-brand neon-logo" href="/index.html">WILDSTYLE RADIO</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/djs.html">DJs</a></li>
+          <li class="nav-item"><a class="nav-link" href="/schedule.html">Schedule</a></li>
+          <li class="nav-item"><a class="nav-link" href="/shoutout.html">Shoutouts</a></li>
+          <li class="nav-item"><a class="nav-link" href="/chat.html">Chat</a></li>
+          <li class="nav-item"><a class="nav-link" href="/merch.html">Merch</a></li>
+          <li class="nav-item"><a class="nav-link" href="/shows.html">Shows</a></li>
+          <li class="nav-item"><a class="nav-link" href="/aboutus.html">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <!-- Hero Section -->
+  <section id="banner" class="banner">
+    <div class="container text-center">
+      <img src="https://wildstyle.vip/images/banner.png" width="303" height="140" alt="Banner Image">
+    </div>
+  </section>
+
+  <center><p style="color:DodgerBlue;"><b>Welcome To Wildstyle Radio</p></b></center>
+  <center><p>Welcome To WildstyleRadio, Where</p>
+  <p>Signed And Unsigned Music Shines!</p>
+  <p>Our Mission Is To Spotlight Talent and Bring Top-Notch Music</p>
+  <p>Round The Clock.</p></center>
+
+  <center><main class="sponsor-page">
     <section class="sponsor-form-section">
       <h1>Sponsor a Track</h1>
       <p>Fill out the form below and complete payment to have your track and message aired live.</p>
@@ -70,7 +245,7 @@
         <div id="paypal-button-container"></div>
       </form>
     </section>
-  </main>
+  </main></center>
 
   <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=AaLTrDBFsPpBiuyksKpwyZ3eabah0FtCOjL4GNYeU7igcRVOwjEbHBWT1JmUcpVhGdPwY73eHCNq4ONQ&currency=GBP"></script>
