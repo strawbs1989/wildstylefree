@@ -1,0 +1,25 @@
+body {
+  background:black;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+  padding:20px;
+}
+#preview {
+  width:90%;
+  max-width:300px;
+  border-radius:10px;
+  margin:20px auto;
+  display:none;
+}
+button {
+  width:90%;
+  padding:15px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:700;
+  background:linear-gradient(90deg,#ff004c,#00e1ff);
+  color:white;
+}
