@@ -970,6 +970,20 @@ html, body {
   }
 }
 
+/* --- DJ badges under schedule items --- */
+.ws-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ws-badge{
+  padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.06);
+  color:inherit;
+  box-shadow:0 6px 14px rgba(14,40,92,.08);
+}
+.ws-badge.ws-live{
+  border:none;color:#fff;
+  background:linear-gradient(135deg,#ff2e74,#ff7aa8);
+}
+
 
 
 
