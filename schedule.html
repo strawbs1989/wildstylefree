@@ -33,6 +33,7 @@ DH[1][22] = { show: "10pm – 12am<br>Lady Elvis", duration: 2 }
 // TUESDAY
 DH[2][02] = { show: "2am – 5am<br>James - Wizard Of Rock", duration: 3 }
 DH[2][3] = { show: "3am – 6am<br>Dani - DJ Queen Dani", duration: 3 }
+DH[2][3] = { show: "6am – 10am<br>Dani - Steve", duration: 3 }
 DH[2][10] = { show: "10am – 12pm<br>Auto", duration: 2 }
 DH[2][15] = { show: "3pm – 5pm<br>", duration: 2 }
 DH[2][15] = { show: "6pm – 8pm<br>", duration: 2 }
@@ -45,6 +46,7 @@ DH[3][10] = { show: "10am – 12pm<br>DJ Nala", duration: 2 }
 DH[3][10] = { show: "12am – 2am<br>Froggy-G", duration: 2 }
 DH[3][14] = { show: "2pm – 3pm<br>San Brett", duration: 1 }
 DH[3][15] = { show: "3pm – 5pm<br>Ian Lennord", duration: 2 }
+DH[3][16] = { show: "4pm – 6pm<br>Steve", duration: 3 }
 DH[3][18] = { show: "6pm – 7pm<br>DJ European BOB", duration: 1 }
 DH[3][18] = { show: "7pm – 8pm<br>", duration: 1 }
 DH[3][20] = { show: "8pm – 10pm<br>Ivy Posion", duration: 2 }
@@ -182,7 +184,7 @@ setInterval(NowON, 60000);</script>
       <h3>Monday</h3>
       <ul>
 	    <li><strong>1am – 3am:</strong> DJ Carrillo</li>
-        <li><strong>7am – 8am:</strong> </li>
+        <li><strong>6am – 10am:</strong> Steve</li>
 		<li><strong>8am – 10am:</strong> Coll</li>
         <li><strong>10am – 12pm:</strong> </li>
         <li><strong>12pm – 2pm:</strong> DJ Design</li>
@@ -202,6 +204,7 @@ setInterval(NowON, 60000);</script>
       <ul>
         <li><strong>2am – 5am:</strong> James - Wizard of Rock</li>
         <li><strong>3am – 6am:</strong> Dani - DJ Queen Dani</li>
+		<li><strong>6am – 10am:</strong> Steve</li>
         <li><strong>10am – 12pm:</strong> </li>
         <li><strong>3pm – 5pm:</strong> </li>
         <li><strong>6pm – 8pm:</strong> Andrew</li>
@@ -218,7 +221,7 @@ setInterval(NowON, 60000);</script>
         <li><strong>10am – 12pm:</strong> DJ Nala</li>
 		<li><strong>12am - 2am:</strong> Froggy -G</li>
 		<li><strong>2pm - 3pm:</strong> San Brett</li>
-        <li><strong>3pm – 5pm:</strong> Ian Lennord</li>
+        <li><strong>4pm – 6pm:</strong> Steve</li>
         <li><strong>6pm – 7pm:</strong> DJ European BOB</li>
         <li><strong>7pm – 8pm:</strong> Anthony</li>
         <li><strong>8pm – 10pm:</strong> DJ Ivy Posion</li>
@@ -341,5 +344,201 @@ setInterval(NowON, 60000);</script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
           crossorigin="anonymous"></script>
+		  
+		  <script>
+/* =========================================================
+   WILDSTYLE SCHEDULE – DJ BADGES (2026 READY)
+   - Manual DJ badges
+   - Auto "🔴 TAKEOVER LIVE" when currently on-air
+   - Seasonal badges (auto every year)
+   - Preview mode for building/testing
+   ========================================================= */
+
+/* ========= PREVIEW MODE =========
+   Set to: "christmas" | "halloween" | "summer"
+   Leave empty ("") for normal behaviour
+*/
+const FORCE_SEASON = "";   // e.g. "christmas"
+
+/* ========= MANUAL DJ BADGES ========= */
+const DJ_BADGES = {
+  "DJ EchoFalls": ["🏆 Listener Favourite", "🔥 50 Shows Club"],
+  "DJ ECHOFALLS": ["🏆 Listener Favourite", "🔥 50 Shows Club"],
+
+  "HotShotDJ": ["🎧 Weekend Regular"],
+  "HotShot DJ": ["🎧 Weekend Regular"],
+
+  "Lewis": ["🔥 50 Shows Club"],
+  "DJ Lewis": ["🔥 50 Shows Club"],
+
+  "Lady Elvis": ["👑 Icon Set"],
+
+  "Indigo Riz": ["🌙 Late Night Legend"],
+  "DJ Indigo Riz": ["🌙 Late Night Legend"]
+};
+
+/* DJs eligible for AUTO TAKEOVER LIVE */
+const TAKEOVER_LIVE_DJS = [
+  "dj echofalls",
+  "hotshotdj",
+  "hotshot dj",
+  "lewis",
+  "dj lewis",
+  "lady elvis",
+  "indigo riz",
+  "dj indigo riz"
+];
+
+/* ================= HELPERS ================= */
+
+function norm(t){
+  return (t||"")
+    .toLowerCase()
+    .replace(/[–—]/g,"-")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function isIgnoredShow(t){
+  const s = norm(t);
+  return s === "free" || s === "auto";
+}
+
+/* Match show text to badge key */
+function findBadgeKey(showText){
+  const t = norm(showText);
+  if(isIgnoredShow(t)) return null;
+
+  for(const k in DJ_BADGES){
+    if(norm(k) === t) return k;
+  }
+
+  if(t.includes(" - ")){
+    const left = t.split(" - ")[0].trim();
+    for(const k in DJ_BADGES){
+      if(norm(k) === left) return k;
+    }
+  }
+
+  for(const k in DJ_BADGES){
+    if(t.includes(norm(k))) return k;
+  }
+
+  return null;
+}
+
+/* Convert "7pm" → minutes */
+function timeToMin(str){
+  const m = norm(str).match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/);
+  if(!m) return null;
+
+  let h = parseInt(m[1],10);
+  const min = m[2] ? parseInt(m[2],10) : 0;
+  const ap = m[3];
+
+  if(h === 12) h = 0;
+  if(ap === "pm") h += 12;
+
+  return h * 60 + min;
+}
+
+/* Parse "7pm – 10pm" */
+function parseRange(str){
+  const p = str.replace(/[–—]/g,"-").split("-").map(s=>s.trim());
+  if(p.length < 2) return null;
+  const s = timeToMin(p[0]);
+  const e = timeToMin(p[1]);
+  if(s == null || e == null) return null;
+  return {s,e};
+}
+
+function dayIndex(d){
+  return {
+    sunday:0, monday:1, tuesday:2, wednesday:3,
+    thursday:4, friday:5, saturday:6
+  }[norm(d)];
+}
+
+/* Check if slot is live now */
+function isLiveNow(dayName, timeText){
+  const idx = dayIndex(dayName);
+  const r = parseRange(timeText);
+  if(idx == null || !r) return false;
+
+  const now = new Date();
+  const nowDay = now.getDay();
+  const nowMin = now.getHours()*60 + now.getMinutes();
+
+  if(r.e > r.s){
+    return nowDay === idx && nowMin >= r.s && nowMin < r.e;
+  }
+
+  const next = (idx + 1) % 7;
+  return (nowDay === idx && nowMin >= r.s) ||
+         (nowDay === next && nowMin < r.e);
+}
+
+/* Seasonal badges (auto every year incl 2026) */
+function getSeasonalBadges(){
+  const forced = FORCE_SEASON.toLowerCase();
+  if(forced === "christmas") return ["🎄 Christmas Takeover"];
+  if(forced === "halloween") return ["🎃 Halloween Takeover"];
+  if(forced === "summer") return ["☀️ Summer Sessions"];
+
+  const d = new Date();
+  const m = d.getMonth();
+  const day = d.getDate();
+
+  const out = [];
+  if(m >= 5 && m <= 7) out.push("☀️ Summer Sessions");
+  if(m === 9 && day >= 24) out.push("🎃 Halloween Takeover");
+  if(m === 11 && day <= 26) out.push("🎄 Christmas Takeover");
+  return out;
+}
+
+/* ================= MAIN ================= */
+
+const seasonal = getSeasonalBadges();
+
+document.querySelectorAll(".schedule-day").forEach(dayCard=>{
+  const dayName = dayCard.querySelector("h3")?.textContent || "";
+
+  dayCard.querySelectorAll(".slot").forEach(slot=>{
+    if(slot.querySelector(".badges")) return;
+
+    const timeEl = slot.querySelector(".time");
+    const showEl = slot.querySelector(".show");
+    if(!timeEl || !showEl) return;
+
+    const showText = showEl.textContent.trim();
+    if(isIgnoredShow(showText)) return;
+
+    const key = findBadgeKey(showText);
+    let badges = key ? [...DJ_BADGES[key]] : [];
+
+    if(seasonal.length) badges.push(...seasonal);
+
+    const djNorm = norm(key || showText);
+    if(
+      TAKEOVER_LIVE_DJS.includes(djNorm) &&
+      isLiveNow(dayName, timeEl.textContent)
+    ){
+      badges.unshift("🔴 TAKEOVER LIVE");
+    }
+
+    if(!badges.length) return;
+
+    const wrap = document.createElement("div");
+    wrap.className = "badges";
+    wrap.innerHTML = badges.map(b=>{
+      const live = /live|takeover/i.test(b);
+      return `<span class="badge ${live?"badge-live":""}">${b}</span>`;
+    }).join("");
+
+    showEl.insertAdjacentElement("afterend", wrap);
+  });
+});
+</script>
+
 </body>
 </html>
