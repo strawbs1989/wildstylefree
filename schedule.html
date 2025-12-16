@@ -177,6 +177,12 @@ setInterval(NowON, 60000);</script>
 
 <section id="schedule" class="glass-schedule">
   <h2 class="schedule-title">🎧 Wildstyle Radio Weekly Schedule</h2>
+  
+  <!-- NEXT UP BAR -->
+<div id="nextUpBar" class="next-up glass" style="display:none;">
+  <div class="next-up-title">🔜 NEXT UP</div>
+  <div class="next-up-info" id="nextUpInfo"></div>
+</div>
 
   <div class="schedule-grid">
     <!-- Monday -->
@@ -274,7 +280,7 @@ setInterval(NowON, 60000);</script>
         <li><strong>4pm – 6pm:</strong> The Byrdman</li>
         <li><strong>6pm – 7pm:</strong> DJ Lil Devil</li>
         <li><strong>7pm – 9pm:</strong> DJ Bes Wolf</li>
-        <li><strong>9pm – 10pm:</strong> </li>
+        <li><strong>9pm – 10pm:</strong> Ksm</li>
         <li><strong>10pm – 12am:</strong> DJ Nitro</li>
       </ul>
     </div>
@@ -338,207 +344,108 @@ setInterval(NowON, 60000);</script>
     </div>
   </footer>
 
+<script>
+(function(){
 
+  function norm(s){
+    return (s||"").toLowerCase().replace(/[–—]/g,"-").replace(/\s+/g," ").trim();
+  }
+
+  function timeToMin(str){
+    const m = norm(str).match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/);
+    if(!m) return null;
+    let h = parseInt(m[1],10);
+    const min = m[2] ? parseInt(m[2],10) : 0;
+    if(h === 12) h = 0;
+    if(m[3] === "pm") h += 12;
+    return h*60 + min;
+  }
+
+  function parseRange(range){
+    const p = range.replace(/[–—]/g,"-").split("-").map(x=>x.trim());
+    if(p.length < 2) return null;
+    return {
+      start: timeToMin(p[0]),
+      end: timeToMin(p[1])
+    };
+  }
+
+  function dayIndex(d){
+    return {sunday:0,monday:1,tuesday:2,wednesday:3,thursday:4,friday:5,saturday:6}[norm(d)];
+  }
+
+  const now = new Date();
+  const nowDay = now.getDay();
+  const nowMin = now.getHours()*60 + now.getMinutes();
+
+  let nextShow = null;
+
+  document.querySelectorAll(".schedule-day").forEach(day=>{
+    const dayName = day.querySelector("h3")?.textContent;
+    const dIdx = dayIndex(dayName);
+    if(dIdx == null) return;
+
+    day.querySelectorAll(".slot").forEach(slot=>{
+      const timeEl = slot.querySelector(".time");
+      const showEl = slot.querySelector(".show");
+      if(!timeEl || !showEl) return;
+
+      const show = showEl.textContent.trim();
+      if(norm(show) === "free" || norm(show) === "auto") return;
+
+      const range = parseRange(timeEl.textContent);
+      if(!range || range.start == null) return;
+
+      let showDay = dIdx;
+      let showStart = range.start;
+
+      // if today and already started, skip
+      if(showDay === nowDay && showStart <= nowMin) return;
+
+      // if earlier in week, skip
+      if(showDay < nowDay) return;
+
+      const diff =
+        (showDay === nowDay)
+          ? showStart - nowMin
+          : (showDay - nowDay) * 1440 + showStart;
+
+      if(diff < 0) return;
+
+      if(!nextShow || diff < nextShow.diff){
+        nextShow = {
+          dj: show,
+          time: timeEl.textContent.trim(),
+          diff
+        };
+      }
+    });
+  });
+
+  if(!nextShow) return;
+
+  const bar = document.getElementById("nextUpBar");
+  const info = document.getElementById("nextUpInfo");
+
+  const mins = nextShow.diff;
+  let when = mins < 60 ? `${mins} minutes` : `${Math.floor(mins/60)}h ${mins%60}m`;
+
+  info.innerHTML = `
+    <strong>${nextShow.dj}</strong> — ${nextShow.time}<br>
+    ⏱ Starts in <strong>${when}</strong>
+  `;
+
+  bar.style.display = "block";
+
+})();
+</script>
 <!-- ✅ Scripts at the end -->
   <script src="https://wildstyle.vip/script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
           crossorigin="anonymous"></script>
 		  
-		  <script>
-/* =========================================================
-   WILDSTYLE SCHEDULE – DJ BADGES (2026 READY)
-   - Manual DJ badges
-   - Auto "🔴 TAKEOVER LIVE" when currently on-air
-   - Seasonal badges (auto every year)
-   - Preview mode for building/testing
-   ========================================================= */
-
-/* ========= PREVIEW MODE =========
-   Set to: "christmas" | "halloween" | "summer"
-   Leave empty ("") for normal behaviour
-*/
-const FORCE_SEASON = "";   // e.g. "christmas"
-
-/* ========= MANUAL DJ BADGES ========= */
-const DJ_BADGES = {
-  "DJ EchoFalls": ["🏆 Listener Favourite", "🔥 50 Shows Club"],
-  "DJ ECHOFALLS": ["🏆 Listener Favourite", "🔥 50 Shows Club"],
-
-  "HotShotDJ": ["🎧 Weekend Regular"],
-  "HotShot DJ": ["🎧 Weekend Regular"],
-
-  "Lewis": ["🔥 50 Shows Club"],
-  "DJ Lewis": ["🔥 50 Shows Club"],
-
-  "Lady Elvis": ["👑 Icon Set"],
-
-  "Indigo Riz": ["🌙 Late Night Legend"],
-  "DJ Indigo Riz": ["🌙 Late Night Legend"]
-};
-
-/* DJs eligible for AUTO TAKEOVER LIVE */
-const TAKEOVER_LIVE_DJS = [
-  "dj echofalls",
-  "hotshotdj",
-  "hotshot dj",
-  "lewis",
-  "dj lewis",
-  "lady elvis",
-  "indigo riz",
-  "dj indigo riz"
-];
-
-/* ================= HELPERS ================= */
-
-function norm(t){
-  return (t||"")
-    .toLowerCase()
-    .replace(/[–—]/g,"-")
-    .replace(/\s+/g," ")
-    .trim();
-}
-
-function isIgnoredShow(t){
-  const s = norm(t);
-  return s === "free" || s === "auto";
-}
-
-/* Match show text to badge key */
-function findBadgeKey(showText){
-  const t = norm(showText);
-  if(isIgnoredShow(t)) return null;
-
-  for(const k in DJ_BADGES){
-    if(norm(k) === t) return k;
-  }
-
-  if(t.includes(" - ")){
-    const left = t.split(" - ")[0].trim();
-    for(const k in DJ_BADGES){
-      if(norm(k) === left) return k;
-    }
-  }
-
-  for(const k in DJ_BADGES){
-    if(t.includes(norm(k))) return k;
-  }
-
-  return null;
-}
-
-/* Convert "7pm" → minutes */
-function timeToMin(str){
-  const m = norm(str).match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/);
-  if(!m) return null;
-
-  let h = parseInt(m[1],10);
-  const min = m[2] ? parseInt(m[2],10) : 0;
-  const ap = m[3];
-
-  if(h === 12) h = 0;
-  if(ap === "pm") h += 12;
-
-  return h * 60 + min;
-}
-
-/* Parse "7pm – 10pm" */
-function parseRange(str){
-  const p = str.replace(/[–—]/g,"-").split("-").map(s=>s.trim());
-  if(p.length < 2) return null;
-  const s = timeToMin(p[0]);
-  const e = timeToMin(p[1]);
-  if(s == null || e == null) return null;
-  return {s,e};
-}
-
-function dayIndex(d){
-  return {
-    sunday:0, monday:1, tuesday:2, wednesday:3,
-    thursday:4, friday:5, saturday:6
-  }[norm(d)];
-}
-
-/* Check if slot is live now */
-function isLiveNow(dayName, timeText){
-  const idx = dayIndex(dayName);
-  const r = parseRange(timeText);
-  if(idx == null || !r) return false;
-
-  const now = new Date();
-  const nowDay = now.getDay();
-  const nowMin = now.getHours()*60 + now.getMinutes();
-
-  if(r.e > r.s){
-    return nowDay === idx && nowMin >= r.s && nowMin < r.e;
-  }
-
-  const next = (idx + 1) % 7;
-  return (nowDay === idx && nowMin >= r.s) ||
-         (nowDay === next && nowMin < r.e);
-}
-
-/* Seasonal badges (auto every year incl 2026) */
-function getSeasonalBadges(){
-  const forced = FORCE_SEASON.toLowerCase();
-  if(forced === "christmas") return ["🎄 Christmas Takeover"];
-  if(forced === "halloween") return ["🎃 Halloween Takeover"];
-  if(forced === "summer") return ["☀️ Summer Sessions"];
-
-  const d = new Date();
-  const m = d.getMonth();
-  const day = d.getDate();
-
-  const out = [];
-  if(m >= 5 && m <= 7) out.push("☀️ Summer Sessions");
-  if(m === 9 && day >= 24) out.push("🎃 Halloween Takeover");
-  if(m === 11 && day <= 26) out.push("🎄 Christmas Takeover");
-  return out;
-}
-
-/* ================= MAIN ================= */
-
-const seasonal = getSeasonalBadges();
-
-document.querySelectorAll(".schedule-day").forEach(dayCard=>{
-  const dayName = dayCard.querySelector("h3")?.textContent || "";
-
-  dayCard.querySelectorAll(".slot").forEach(slot=>{
-    if(slot.querySelector(".badges")) return;
-
-    const timeEl = slot.querySelector(".time");
-    const showEl = slot.querySelector(".show");
-    if(!timeEl || !showEl) return;
-
-    const showText = showEl.textContent.trim();
-    if(isIgnoredShow(showText)) return;
-
-    const key = findBadgeKey(showText);
-    let badges = key ? [...DJ_BADGES[key]] : [];
-
-    if(seasonal.length) badges.push(...seasonal);
-
-    const djNorm = norm(key || showText);
-    if(
-      TAKEOVER_LIVE_DJS.includes(djNorm) &&
-      isLiveNow(dayName, timeEl.textContent)
-    ){
-      badges.unshift("🔴 TAKEOVER LIVE");
-    }
-
-    if(!badges.length) return;
-
-    const wrap = document.createElement("div");
-    wrap.className = "badges";
-    wrap.innerHTML = badges.map(b=>{
-      const live = /live|takeover/i.test(b);
-      return `<span class="badge ${live?"badge-live":""}">${b}</span>`;
-    }).join("");
-
-    showEl.insertAdjacentElement("afterend", wrap);
-  });
-});
-</script>
+		  
 
 </body>
 </html>
