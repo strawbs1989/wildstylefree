@@ -1158,6 +1158,33 @@ html, body {
   }
 }
 
+/* ================================
+   ON AIR
+================================ */
+
+.onair{
+  width:100%;
+  max-width:520px;
+  padding:14px 16px;
+  border-radius:16px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(10px);
+}
+
+.onair__top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.onair__badge{
+  padding:6px 10px;border-radius:999px;
+  font-weight:800;font-size:12px;letter-spacing:.08em;
+  background: rgba(0,255,180,.18);
+  border: 1px solid rgba(0,255,180,.35);
+}
+.onair__now{font-weight:800;font-size:16px}
+.onair__meta{opacity:.9;font-size:13px;margin-bottom:10px}
+.onair__nexttitle{font-weight:800;font-size:12px;opacity:.9;margin-bottom:4px}
+.onair__next{font-size:13px;line-height:1.35}
+.onair__next div{margin:2px 0}
+
 
 
 
