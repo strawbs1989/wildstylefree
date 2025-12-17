@@ -30,9 +30,6 @@
 	  </div>
     </div>
   </header>
-  <div id="onAirTime"></div>
-<div id="onAirNow"></div>
-<div id="onAirNext"></div>
     <!-- Now Playing Script -->
 <script>
 const DH = Array.from({ length: 7 }, () => Array(24).fill(null))
@@ -117,134 +114,39 @@ DH[0][21] = { show: "9pm – 12am<br>Leslie", duration: 3 };
 DH[0][22] = { show: "10pm – 11pm<br>Marc", duration: 1 };
 
 
-/* =========================
-   Wildstyle "On Air" Engine (CLEAN REPLACEMENT)
-   - Reads DH[day][startHour] = { show, duration }
-   - UK time (Europe/London)
-   - Returns { now, next, next2, ukTime }
-   - Optionally updates DOM if IDs exist
-   ========================= */
-
-(function () {
-  const TZ = "Europe/London";
-
-  function getUKNow() {
-    // Reliable-enough UK local time without external libs
-    return new Date(new Date().toLocaleString("en-GB", { timeZone: TZ }));
+function NowON() {
+  const now = new Date()
+  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }))
+  const localHour = ukTime.getHours()
+  const day = ukTime.getDay()
+  const prevDay = (day - 1 + 7) % 7
+ 
+  const isInShow = (startHour, slot, hour) => {
+    const start = parseInt(startHour)
+    const end = (start + slot.duration) % 24
+    return start <= hour && hour < end || (end < start && (hour >= start || hour < end))
   }
+ 
+  // Check current day's shows
+  const currentShow = Object.entries(DH[day])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => isInShow(startHour, slot, localHour))
+ 
+  // If no show found, check if a show from previous day is still running
+  const prevDayShow = !currentShow ? Object.entries(DH[prevDay])
+    .filter(([, slot]) => slot !== null)
+    .find(([startHour, slot]) => {
+      const start = parseInt(startHour)
+      const end = start + slot.duration
+      return end >= 24 && localHour < end - 24
+    }) : null
+ 
+  const show = (currentShow?.[1] || prevDayShow?.[1])?.show || "🕓 Off Air<br>No current broadcast."
+  document.getElementById("NowOn").innerHTML = show
+}
 
-  function dayIndex(d) {
-    return (d + 7) % 7;
-  }
-
-  function parseSlot(day, startHourKey, slot) {
-    const start = Number(startHourKey);
-    const dur = Number(slot.duration) || 0;
-    const end = (start + dur) % 24;
-    const wraps = end < start;
-    const priority = dur > 0 ? (1000 - dur) : 0; // shorter duration wins if overlap
-    return { day, start, dur, end, wraps, priority, raw: slot.show };
-  }
-
-  function inShow(start, dur, hour) {
-    const end = (start + dur) % 24;
-    if (dur <= 0) return false;
-    if (end > start) return hour >= start && hour < end; // same day
-    return hour >= start || hour < end; // wraps midnight
-  }
-
-  function getDaySlots(day) {
-    if (typeof DH === "undefined" || !DH[day]) return [];
-    return Object.entries(DH[day])
-      .filter(([, slot]) => slot && slot.show && slot.duration != null)
-      .map(([h, slot]) => parseSlot(day, h, slot))
-      .sort((a, b) => a.start - b.start);
-  }
-
-  function formatShow(raw) {
-    // raw: "time<br>name"
-    const parts = String(raw).split("<br>");
-    const time = (parts[0] || "").trim();
-    const name = (parts[1] || "").trim();
-
-    return {
-      time,
-      name: name || "Auto / Free",
-      html: `<strong>${name || "Auto / Free"}</strong><span style="opacity:.9"> • ${time}</span>`
-    };
-  }
-
-  function pickCurrent(day, hour) {
-    const today = getDaySlots(day).filter(s => inShow(s.start, s.dur, hour));
-
-    const prevDay = dayIndex(day - 1);
-    const prevWrap = getDaySlots(prevDay).filter(s => s.wraps && inShow(s.start, s.dur, hour));
-
-    const candidates = [...today, ...prevWrap].sort((a, b) => b.priority - a.priority);
-    return candidates[0] || null;
-  }
-
-  function nextSlots(day, hour, count = 2) {
-    const today = getDaySlots(day).map(s => ({ ...s, offset: 0, index: s.start }));
-    const tomorrow = getDaySlots(dayIndex(day + 1)).map(s => ({ ...s, offset: 1, index: s.start + 24 }));
-
-    const all = [...today, ...tomorrow].sort((a, b) => a.index - b.index);
-
-    // "next" means start strictly after current hour
-    return all.filter(s => s.index > hour).slice(0, count);
-  }
-
-  // MAIN function you can call anywhere
-  window.NowON = function NowON() {
-    const uk = getUKNow();
-    const day = uk.getDay();        // 0=Sun
-    const hour = uk.getHours();
-    const minute = uk.getMinutes();
-
-    const cur = pickCurrent(day, hour);
-    const nxt = nextSlots(day, hour, 2);
-
-    const now = cur ? formatShow(cur.raw) : { time: "", name: "Auto / Free", html: "<strong>Auto / Free</strong>" };
-    const next = nxt[0] ? formatShow(nxt[0].raw) : null;
-    const next2 = nxt[1] ? formatShow(nxt[1].raw) : null;
-
-    return {
-      ukTime: {
-        day,
-        hour,
-        minute,
-        hhmm: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
-      },
-      now,
-      next,
-      next2
-    };
-  };
-
-  // OPTIONAL: auto-render if these IDs exist on the page
-  function render() {
-    const data = window.NowON();
-
-    const nowEl = document.getElementById("onAirNow");
-    const nextEl = document.getElementById("onAirNext");
-    const timeEl = document.getElementById("onAirTime");
-
-    if (nowEl) nowEl.innerHTML = data.now.html;
-
-    if (nextEl) {
-      const lines = [];
-      if (data.next) lines.push(`<div>${data.next.html}</div>`);
-      if (data.next2) lines.push(`<div>${data.next2.html}</div>`);
-      nextEl.innerHTML = lines.length ? lines.join("") : `<div><strong>Auto / Free</strong></div>`;
-    }
-
-    if (timeEl) timeEl.textContent = `UK ${data.ukTime.hhmm}`;
-  }
-
-  // Auto-refresh (safe)
-  render();
-  setInterval(render, 15000);
-})();</script>
+// Optional: auto-refresh every 60 seconds
+setInterval(NowON, 60000);</script>
 </head>
 
 <body onload="NowON()">
