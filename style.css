@@ -234,12 +234,6 @@ html, body {
   margin: 40px 0;
 }
 
-.schedule-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 25px;
-}
-
 .day-card {
   background: #ffffff;
   border-radius: var(--radius);
@@ -256,13 +250,7 @@ html, body {
 }
 
 /* --- NEXT UP BAR --- */
-.next-up{
-  padding:1rem;
-  margin-bottom:1rem;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.12);
-  background:rgba(255,255,255,0.06);
-}
+
 
 .next-up-title{
   font-size:.85rem;
@@ -993,7 +981,6 @@ html, body {
 }
 
 /* --- DJ badges under schedule items --- */
-.ws-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .ws-badge{
   padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;
   border:1px solid rgba(255,255,255,0.14);
