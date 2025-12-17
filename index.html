@@ -117,35 +117,51 @@ DH[0][21] = { show: "9pm - 10pm<br>", duration: 1 }
 DH[0][22] = { show: "10pm – 11pm<br>Marc", duration: 1 }
 
 function NowON() {
-  const now = new Date()
-  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }))
+  const ukTime = new Date(new Date().toLocaleString('en-GB', {
+    timeZone: 'Europe/London'
+  }))
+
   const localHour = ukTime.getHours()
   const day = ukTime.getDay()
   const prevDay = (day - 1 + 7) % 7
- 
+
   const isInShow = (startHour, slot, hour) => {
-    const start = parseInt(startHour)
+    const start = Number(startHour)
     const end = (start + slot.duration) % 24
-    return start <= hour && hour < end || (end < start && (hour >= start || hour < end))
+
+    return (
+      (start <= hour && hour < end) ||
+      (end < start && (hour >= start || hour < end)) // crosses midnight
+    )
   }
- 
-  // Check current day's shows
-  const currentShow = Object.entries(DH[day])
-    .filter(([, slot]) => slot !== null)
-    .find(([startHour, slot]) => isInShow(startHour, slot, localHour))
- 
-  // If no show found, check if a show from previous day is still running
-  const prevDayShow = !currentShow ? Object.entries(DH[prevDay])
-    .filter(([, slot]) => slot !== null)
-    .find(([startHour, slot]) => {
-      const start = parseInt(startHour)
-      const end = start + slot.duration
-      return end >= 24 && localHour < end - 24
-    }) : null
- 
-  const show = (currentShow?.[1] || prevDayShow?.[1])?.show || "🕓 Off Air<br>No current broadcast."
-  document.getElementById("NowOn").innerHTML = show
+
+  let activeSlot = null
+
+  // ✅ Check TODAY – pick the most recent matching show
+  for (let h = 0; h < 24; h++) {
+    const slot = DH[day][h]
+    if (slot && isInShow(h, slot, localHour)) {
+      activeSlot = slot
+    }
+  }
+
+  // ✅ If nothing today, check YESTERDAY spilling past midnight
+  if (!activeSlot) {
+    for (let h = 0; h < 24; h++) {
+      const slot = DH[prevDay][h]
+      if (!slot) continue
+
+      const end = h + slot.duration
+      if (end >= 24 && localHour < (end - 24)) {
+        activeSlot = slot
+      }
+    }
+  }
+
+  document.getElementById("NowOn").innerHTML =
+    activeSlot?.show || "🕓 Off Air<br>No current broadcast."
 }
+
 
 // Optional: auto-refresh every 60 seconds
 setInterval(NowON, 60000);</script>
