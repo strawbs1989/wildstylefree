@@ -1006,6 +1006,172 @@ html, body {
   background:linear-gradient(135deg,#ff2e74,#ff7aa8);
 }
 
+/* ================================
+   WILDSTYLE 2026 SCHEDULE
+   Bright • Glass • Responsive
+================================ */
+
+/* Schedule wrapper */
+.glass-schedule {
+  margin: 60px auto;
+  padding: 20px;
+}
+
+/* Grid layout */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* Day card */
+.schedule-day {
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow:
+    0 12px 35px rgba(0,0,0,0.08),
+    0 0 20px rgba(0,195,255,0.15),
+    0 0 20px rgba(255,0,195,0.15);
+  border-top: 4px solid var(--neon-blue);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.schedule-day:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 45px rgba(0,0,0,0.12),
+    0 0 28px rgba(0,195,255,0.25),
+    0 0 28px rgba(255,0,195,0.25);
+}
+
+/* Day title */
+.schedule-day h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Slot card */
+.slot {
+  background: rgba(255,255,255,0.55);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  border-left: 4px solid rgba(0,195,255,0.7);
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.6);
+  transition: background .2s ease, transform .2s ease;
+}
+
+.slot:hover {
+  background: rgba(255,255,255,0.75);
+  transform: translateX(3px);
+}
+
+/* Time */
+.slot .time {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 2px;
+}
+
+/* DJ / Show */
+.slot .show {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111;
+}
+
+/* ================================
+   NEXT UP BAR
+================================ */
+
+.next-up {
+  margin: 0 auto 28px;
+  padding: 16px 20px;
+  max-width: 600px;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(0,195,255,0.25),
+    rgba(255,0,195,0.25)
+  );
+  backdrop-filter: blur(14px);
+  border: 2px solid rgba(255,255,255,0.7);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.12),
+    0 0 30px rgba(0,195,255,0.35),
+    0 0 30px rgba(255,0,195,0.35);
+  text-align: center;
+}
+
+.next-up-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #333;
+}
+
+.next-up-info {
+  margin-top: 6px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #000;
+}
+
+/* ================================
+   BADGES (LIVE / TAKEOVER)
+================================ */
+
+.ws-badges {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ws-badge {
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.8);
+  color: #111;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* LIVE badge */
+.ws-badge.ws-live {
+  color: #fff;
+  border: none;
+  background: linear-gradient(90deg, #ff003c, #ff8a00);
+  animation: livePulse 1s infinite alternate;
+}
+
+@keyframes livePulse {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+  .schedule-day {
+    padding: 16px;
+  }
+  .slot {
+    padding: 10px 12px;
+  }
+}
+
+
 
 
 
