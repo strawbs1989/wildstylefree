@@ -1185,6 +1185,69 @@ html, body {
 .onair__next{font-size:13px;line-height:1.35}
 .onair__next div{margin:2px 0}
 
+/* ================================
+   Christmas
+================================ */
+
+body.theme-christmas {
+  --neon-blue: #00eaff;
+  --neon-pink: #ff3b3b;
+}
+
+body.theme-christmas .hero {
+  background: linear-gradient(135deg, #fff5f5, #eaffff);
+}
+
+body.theme-christmas .schedule-day,
+body.theme-christmas .day-card {
+  border-top-color: #ff3b3b;
+}
+
+body.theme-christmas .next-up {
+  background: linear-gradient(
+    135deg,
+    rgba(255,0,0,0.25),
+    rgba(0,255,255,0.25)
+  );
+}
+
+/* ================================
+   Halloween
+================================ */
+
+body.theme-halloween {
+  --neon-blue: #ff7a00;
+  --neon-pink: #8a00ff;
+}
+
+body.theme-halloween .hero {
+  background: linear-gradient(135deg, #1a001f, #000000);
+  color: #fff;
+}
+
+body.theme-halloween .schedule-day {
+  border-top-color: #ff7a00;
+}
+
+/* ================================
+   Summer
+================================ */
+
+body.theme-summer {
+  --neon-blue: #00ffcc;
+  --neon-pink: #ffcc00;
+}
+
+body.theme-summer .hero {
+  background: linear-gradient(135deg, #f7ffea, #eafff7);
+}
+
+body.theme-summer .schedule-day {
+  border-top-color: #00ffcc;
+}
+
+
+
 
 
 

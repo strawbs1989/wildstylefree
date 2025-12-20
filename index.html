@@ -550,6 +550,36 @@ setInterval(NowON, 60000);</script>
 
 })();
 </script>
+
+<script>
+(function(){
+  const now = new Date();
+  const month = now.getMonth() + 1; // 1–12
+  const day = now.getDate();
+  const body = document.body;
+
+  // 🎄 Christmas: Dec 1–26
+  if (month === 12 && day <= 26) {
+    body.classList.add("theme-christmas");
+  }
+
+  // 🎃 Halloween: Oct 25–31
+  else if (month === 10 && day >= 25) {
+    body.classList.add("theme-halloween");
+  }
+
+  // ☀️ Summer: June–August
+  else if (month >= 6 && month <= 8) {
+    body.classList.add("theme-summer");
+  }
+
+  // 🎉 Anniversary example (change dates)
+  else if (month === 4 && day === 1) {
+    body.classList.add("theme-anniversary");
+  }
+
+})();
+</script>
 <!-- ✅ Scripts at the end -->
   <script src="https://wildstyle.vip/script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
