@@ -3,8 +3,7 @@
   // localStorage.setItem("wsTheme", "theme-xmas");
   // localStorage.removeItem("wsTheme");
 
-  const saved = localStorage.setItem("wsTheme", "theme-xmas");
-location.reload(); 
+  const saved = localStorage.getItem("wsTheme");
   const html = document.documentElement;
 
   const apply = (cls) => {
