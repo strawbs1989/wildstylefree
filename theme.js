@@ -7,9 +7,15 @@
   const html = document.documentElement;
 
   const apply = (cls) => {
-    html.classList.remove("theme-xmas","theme-halloween","theme-summer","theme-newyear");
-    if (cls) html.classList.add(cls);
-  };
+  html.classList.remove(
+    "theme-xmas",
+    "theme-halloween",
+    "theme-summer",
+    "theme-newyear",
+    "theme-easter"
+  );
+  if (cls) html.classList.add(cls);
+}; 
 
   if (saved) {
     apply(saved);
