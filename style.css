@@ -1192,6 +1192,7 @@ html, body {
 body.theme-christmas {
   --neon-blue: #00eaff;
   --neon-pink: #ff3b3b;
+  outline: 6px solid red;
 }
 
 body.theme-christmas .hero {
