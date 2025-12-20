@@ -39,6 +39,21 @@ html, body {
   --radius: 20px;
 }
 
+/* Use the theme background variables */
+body{
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+}
+
+/* Make accents always follow theme */
+.neon-logo,
+.schedule-title,
+.section-title,
+.neon-title{
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+} 
+
 /* GLASS CARD UNIVERSAL */
 .glass {
   background: var(--glass-bg);
@@ -1185,69 +1200,62 @@ html, body {
 .onair__next{font-size:13px;line-height:1.35}
 .onair__next div{margin:2px 0}
 
-/* ================================
-   Christmas
-================================ */
-
-body.theme-christmas {
-  --neon-blue: #00eaff;
-  --neon-pink: #ff3b3b;
-  outline: 6px solid red;
+/* 🎄 Christmas */
+html.theme-xmas{
+  --theme-name: "Wildstyle Christmas";
+  --bg-1: #081a12;
+  --bg-2: #3a0b0b;
+  --accent-1: #00ffb3;
+  --accent-2: #ff2d2d;
+  --glass-bg: rgba(255,255,255,0.14);
+  --glass-border: rgba(255,255,255,0.22);
 }
 
-body.theme-christmas .hero {
-  background: linear-gradient(135deg, #fff5f5, #eaffff);
+/* 🎃 Halloween */
+html.theme-halloween{
+  --theme-name: "Spooky Bounce";
+  --bg-1: #0b0714;
+  --bg-2: #1b0b05;
+  --accent-1: #ff7a00;
+  --accent-2: #b000ff;
+  --glass-bg: rgba(255,255,255,0.12);
+  --glass-border: rgba(255,255,255,0.20);
 }
 
-body.theme-christmas .schedule-day,
-body.theme-christmas .day-card {
-  border-top-color: #ff3b3b;
+/* 🎆 Summer Festival */
+html.theme-summer{
+  --theme-name: "Festival Heat";
+  --bg-1: #fff3cc;
+  --bg-2: #ffd6f3;
+  --accent-1: #00b3ff;
+  --accent-2: #ff4fd8;
+  --glass-bg: rgba(255,255,255,0.72);
+  --glass-border: rgba(255,255,255,0.86);
 }
 
-body.theme-christmas .next-up {
-  background: linear-gradient(
-    135deg,
-    rgba(255,0,0,0.25),
-    rgba(0,255,255,0.25)
-  );
-}
+/* 🎇 New Year */
+html.theme-newyear{
+  --theme-name: "Midnight Fireworks";
+  --bg-1: #050510;
+  --bg-2: #0b1533;
+  --accent-1: #00e5ff;
+  --accent-2: #ffd000;
+  --glass-bg: rgba(255,255,255,0.10);
+  --glass-border: rgba(255,255,255,0.18);
+} 
 
-/* ================================
-   Halloween
-================================ */
+/* 🐣 EASTER */
+html.theme-easter{
+  --theme-name: "Easter Bounce";
+  --bg-1: #f6fff2;              /* soft spring green */
+  --bg-2: #fff1fa;              /* pastel pink */
+  --accent-1: #6ad6ff;          /* sky blue */
+  --accent-2: #ff8fd4;          /* pastel pink */
+  --glass-bg: rgba(255,255,255,0.75);
+  --glass-border: rgba(255,255,255,0.9);
+} 
 
-body.theme-halloween {
-  --neon-blue: #ff7a00;
-  --neon-pink: #8a00ff;
-}
 
-body.theme-halloween .hero {
-  background: linear-gradient(135deg, #1a001f, #000000);
-  color: #fff;
-}
-
-body.theme-halloween .schedule-day
-body.theme-halloween .day-card {
-  border-top-color: #ff7a00;
-}
-
-/* ================================
-   Summer
-================================ */
-
-body.theme-summer {
-  --neon-blue: #00ffcc;
-  --neon-pink: #ffcc00;
-}
-
-body.theme-summer .hero {
-  background: linear-gradient(135deg, #f7ffea, #eafff7);
-}
-
-body.theme-summer .schedule-day
-body.theme-summer .day-card {
-  border-top-color: #00ffcc;
-}
 
 
 
