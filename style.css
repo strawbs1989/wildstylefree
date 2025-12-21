@@ -1240,14 +1240,14 @@ body{
    Theme -> image mapping
    ========================= */
 
-html.theme-xmas     { --season-banner: url("/images/themes/xmas.webp"); }
+html.theme-xmas     { --season-banner: url("/images/themes/christmas.png"); }
 html.theme-halloween{ --season-banner: url("/images/themes/halloween.webp"); }
-html.theme-summer   { --season-banner: url("/images/themes/summer.webp"); }
-html.theme-newyear  { --season-banner: url("/images/themes/newyear.webp"); }
+html.theme-summer   { --season-banner: url("/images/themes/summer.png"); }
+html.theme-newyear  { --season-banner: url("/images/themes/newyear.png"); }
 html.theme-easter   { --season-banner: url("/images/themes/easter.webp"); }
 
 /* Optional extras */
-html.theme-valentines { --season-banner: url("/images/themes/valentines.webp"); }
+html.theme-valentines { --season-banner: url("/images/themes/valentines.png"); }
 
 /* Make the banner auto-load the correct image */
 .season-banner img{
