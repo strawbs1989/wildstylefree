@@ -1241,10 +1241,10 @@ body{
    ========================= */
 
 html.theme-xmas     { --season-banner: url("/images/themes/christmas.png"); }
-html.theme-halloween{ --season-banner: url("/images/themes/halloween.webp"); }
+html.theme-halloween{ --season-banner: url("/images/themes/halloween.png"); }
 html.theme-summer   { --season-banner: url("/images/themes/summer.png"); }
 html.theme-newyear  { --season-banner: url("/images/themes/newyear.png"); }
-html.theme-easter   { --season-banner: url("/images/themes/easter.webp"); }
+html.theme-easter   { --season-banner: url("/images/themes/easter.png"); }
 
 /* Optional extras */
 html.theme-valentines { --season-banner: url("/images/themes/valentines.png"); }
