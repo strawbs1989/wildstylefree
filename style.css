@@ -1,4 +1,8 @@
 *{box-sizing:border-box}
+
+/* (optional but helpful) prevent huge images anywhere */
+img{max-width:100%;height:auto}
+
 :root{
   --bg:#0c0f14;
   --slate:#0e1116;
@@ -10,12 +14,14 @@
   --accent2:#2a7bff;
   --radius:18px;
 }
+
 html,body{height:100%}
 body{
   margin:0;
-  background: radial-gradient(1200px 600px at 10% 0%, rgba(42,123,255,0.12), transparent 40%),
-              radial-gradient(1200px 600px at 90% 10%, rgba(255,42,109,0.12), transparent 40%),
-              var(--bg);
+  background:
+    radial-gradient(1200px 600px at 10% 0%, rgba(42,123,255,0.12), transparent 40%),
+    radial-gradient(1200px 600px at 90% 10%, rgba(255,42,109,0.12), transparent 40%),
+    var(--bg);
   color:var(--text);
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
@@ -121,7 +127,6 @@ body.slate{ background: var(--slate); }
 /* =========================
    REQUEST FORM – NEON GLASS STYLE
    ========================= */
-
 .request-section {
   margin: 60px auto;
   padding: 40px;
@@ -204,8 +209,43 @@ body.slate{ background: var(--slate); }
   box-shadow:
     0 14px 30px rgba(0,0,0,0.35),
     0 0 28px rgba(255, 0, 180, 0.6);
-} 
+}
 
+/* =========================
+   EVENTS WE ATTEND (adds missing styles + stops huge images)
+   ========================= */
+#events.events-section{
+  padding: 60px 0;
+  text-align: center;
+  background: linear-gradient(to top right, #000 0%, #000 100%);
+  
+  box-shadow: inset 0 0 20px rgba(255, 42, 42, 0.18);
+}
+
+#events .event-gallery{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+  gap: 18px;
+  justify-content: center;
+  align-items: stretch;
+  padding: 0 10px;
+}
+
+#events .event-card{
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+
+#events .event-card img{
+  width: 100%;
+  height: 170px;        /* change to 200px if you want taller */
+  object-fit: cover;
+  display: block;
+}
 
 /* mobile tweak */
 @media (max-width: 600px) {
@@ -213,28 +253,56 @@ body.slate{ background: var(--slate); }
     margin: 30px 10px;
     padding: 40px 16px;
   }
-  
+
   /* Sponsor */
-.sponsor-banner {
-  display: block;
-  background: linear-gradient(90deg, #00aaff, #ff007c);
-  padding: 15px;
+  .sponsor-banner {
+    display: block;
+    background: linear-gradient(90deg, #00aaff, #ff007c);
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 12px;
+    margin: 20px auto;
+    width: min(900px, 95%);
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+
+  .sponsor-banner:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(255, 0, 124, 0.8);
+  }
+}
+
+/* ===== FIX: Request form squished on mobile ===== */
+@media (max-width: 600px){
+  .request-section{
+    padding: 22px 16px;
+    margin: 35px auto;
+  }
+
+  .request-form{
+    grid-template-columns: 1fr;   /* stack inputs */
+    gap: 12px;
+  }
+
+  .send-btn{
+    grid-column: 1 / -1;         /* full width button */
+    width: 100%;
+  }
+
+  .request-form textarea{
+    min-height: 110px;
+  }
+}
+
+/* Style the footer */
+footer {
+  background-color: #0c0f14;
+  padding: 10px;
   text-align: center;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 12px;
-  margin: 20px auto;
-  width: min(900px, 95%);
-  box-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
-  text-decoration: none;
-  letter-spacing: 0.5px;
+  color: white;
 }
-.sponsor-banner:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 20px rgba(255, 0, 124, 0.8);
-}
-
-
-
-
