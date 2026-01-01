@@ -1,0 +1,47 @@
+form {
+    max-width: 400px;
+    padding: 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-family: Arial, sans-serif;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  input[type="submit"], input[type="reset"] {
+    margin-top: 12px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  input[type="submit"] {
+    background: #1f8feb;
+    color: #fff;
+  }
+  input[type="reset"] {
+    background: #ccc;
+    color: #000;
+    margin-left: 6px;
+  }
+  #success {
+    display: none;
+    margin-top: 12px;
+    padding: 10px;
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    border-radius: 6px;
+    font-size: 14px;
+  }

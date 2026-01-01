@@ -5,6 +5,7 @@
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
@@ -25,12 +26,9 @@
 
       <nav class="main-nav" id="nav">
         <a href="/index.html">Home</a>
-		<a href="/shoutout.html">ListenerShoutout</a>
 		<a href="/chat.html">Chat</a>
         <a href="/djs.html">DJs</a>
         <a href="/merch.html">Merch</a>
-        <a href="/shows.html">Shows</a>
-		<a href="/aboutus.html">Aboutus</a>
       </nav>
 
       <button class="burger" id="burger" aria-label="Toggle Menu">
@@ -54,7 +52,13 @@
       <div class="hero-copy">
         <h1 class="headline">WILDSTYLE RADIO</h1>
         <p class="tagline">United by Beats • Powered by Volunteer Passion</p>
-        <iframe src="//player.radioforge.com/v2/icecast.html?radiolink=https%3A%2F%2Fstreaming.live365.com%2Fa50378&radiotype=icecast&bcolor=&image=https://wildstyle.vip/images/logo.png&facebook=https://www.facebook.com/wildstyleuk&twitter=&title=WildstyleRadio&artist=" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" allow="autoplay" style="border:none;overflow:hidden;" width="100%" height="200" ></iframe>
+        <div class="now-playing">
+		<iframe src="https://wildstyle.vip/player.html" height="240" width="400" title="Iframe Example"></iframe>
+        <!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
+        <div class="shoutout-ticker">
+        <div id="tickerContent">Loading shout-outs…</div>
+       </div>
+	  </div>
       </div>
     </div>
     <canvas id="bgCanvas"></canvas>
@@ -69,7 +73,7 @@
     </div>
     <div class="card-grid">
       <article class="card glass">
-        <img src="./unsigned/TLND1200.jpg" alt="Unsigned Artist">
+        <img src="https://wildstyle.vip/unsigned/beau.png" alt="Unsigned Artist">
         <div class="card-body">
           <h3>TLND</h3>
           <p>True Love</p>
@@ -77,7 +81,7 @@
         </div>
       </article>
       <article class="card glass">
-        <img src="./unsigned/Evelyn.jpg" alt="Unsigned Artist">
+        <img src="https://wildstyle.vip/unsigned/mwh.jpg" alt="Unsigned Artist">
         <div class="card-body">
           <h3>Evelyn</h3>
           <p>Melodic</p>
@@ -85,7 +89,7 @@
         </div>
       </article>
       <article class="card glass">
-        <img src="./assets/cover_placeholder.png" alt="Unsigned Artist">
+        <img src="https://wildstyle.vip/unsigned/kele.jpg" alt="Unsigned Artist">
         <div class="card-body">
           <h3>Crimson Pulse</h3>
           <p>House / Tech</p>
@@ -95,6 +99,75 @@
     </div>
   </div>
 </section>
+<center><section>
+<h1>Forums</h1>
+<img src="https://wildstyle.vip/images/sticker.png" width="212" height="200">
+<a class="btn" href="https://wildstyle.vip/forums/index.html" target="_blank">Our Community Forums →</a>
+</section></center>
+<center><section class="container py-5" id="djs">
+    <h2 class="text-danger text-center mb-4">Give us A Review</h2>
+    <div class="container my-4">
+  <div class="row g-3">
+  
+    <!-- TrustPilot Section -->
+  <!-- TrustBox widget - Review Collector -->
+<center><div class="trustpilot-widget" data-locale="en-GB" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="642774c3d7de1fa1a2d81306" data-style-height="52px" data-style-width="100%">
+  <a href="https://uk.trustpilot.com/review/coolvibes-reloaded.com" target="_blank" rel="noopener">Trustpilot</a>
+</div></center>
+<!-- End TrustBox widget -->
+  </section></center>
+  
+  
+
+ <center>
+<section class="request-section" id="requests">
+  <h2>Requests</h2>
+  <p>Want to request a tune? Pop it in – your DJ will play it!</p>
+
+  <h3 style="color:#2a2a2a; margin-bottom:10px;">
+    🎶 Request a Song
+  </h3>
+
+  <!-- 🔥 WRAPPED REQUEST FORM IN LIVE GLOW BOX -->
+  <div id="requestPopup" style="position:relative; padding:15px; border-radius:12px;">
+
+    <form action="https://script.google.com/macros/s/AKfycbx9eVZV1AvgrPfFMDoVNr_tQN2vdSFcXQnkx4cIaqnGdGk69wKLfDMfnC64hL0ohQ/exec" method="post" class="request-form">
+
+      <input type="text" name="yourname" placeholder="Your Name">
+      <input type="text" name="songtitle" placeholder="Song Title">
+      <input type="text" name="artistname" placeholder="Artist Name">
+      <input type="text" name="shoutout" placeholder="Dedication / Shout-out">
+
+      <button type="submit" class="send-btn">Send Request</button>
+    </form>
+
+  </div> <!-- end requestPopup -->
+
+</section>
+</center>
+
+<center><section id="birthdays" class="birthdays">
+<div class="container">
+
+<center><section id="birthday" class="birthday">
+    <div class="container">
+	</div>
+	</section></center>
+	  <center><h2>Birthdays& Shoutouts</h2>
+	  <p>Want A Shoutout And a Request? Enter Youre Birthday Below!</p></center>
+      <form action="mailto:wildstyleradioo@gmail.com" method="post" enctype="text/plain">
+<p style="color:black;">Name:<br></p>
+<input type="text" name="name"><br>
+<p style="color:black;">Shoutout&Request:<br></p>
+<input type="text" name="shoutout&request"><br>
+<p style="color:black;">Email:<br></p>
+<input type="text" name="mail"><br>
+
+<input type="submit" value="Send">
+
+</form>
+    </div>
+  </section></center>
 
 <!-- DJ of the Week -->
 <section class="section">
@@ -132,5 +205,9 @@
   </footer>
 
   <audio id="audio" preload="none" crossorigin="anonymous"></audio>
+  <!-- ✅ Scripts at the end -->
+  <script src="https://wildstyle.vip/script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://wildstyle.vip/theme.js"></script>
 </body>
 </html>

@@ -1,693 +1,122 @@
-
-/* ==========================================================
-   RAVE UNIVERSE THEME — FULL WEBSITE STYLING
-   Bright • Neon • Futuristic • Glass • Blue/Pink Gradient
-   ========================================================== */
-
-/* GLOBAL RESET */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  background: #ffffff;
-  font-family: "Inter", sans-serif;
-  color: #0b0b0b;
-  scroll-behavior: smooth;
-}
-
-/* GLOBAL CONTAINER */
-.container {
-  width: min(1200px, 90%);
-  margin: auto;
-}
-
-/* ==========================================================
-   COLOR VARIABLES
-   ========================================================== */
+*{box-sizing:border-box}
 :root{
-  --neon-pink:#ff00e6;
-  --neon-blue:#00c3ff;
-
-  /* DEFAULT THEME VALUES (IMPORTANT) */
-  --bg-1: #eaf7ff;
-  --bg-2: #ffe7ff;
-  --accent-1: #00c3ff;
-  --accent-2: #ff00e6;
-
-  --glass-bg: rgba(255,255,255,0.65);
-  --glass-border: rgba(255,255,255,0.8);
-  --radius: 20px;
-} 
-
-/* Use the theme background variables */
+  --bg:#0c0f14;
+  --slate:#0e1116;
+  --glass:rgba(255,255,255,0.06);
+  --glass-border:1px solid rgba(255,255,255,0.12);
+  --text:#e9eef5;
+  --muted:#9fb0c3;
+  --accent1:#ff2a6d;
+  --accent2:#2a7bff;
+  --radius:18px;
+}
+html,body{height:100%}
 body{
-  background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
-}
-
-/* Make accents always follow theme */
-.neon-logo,
-.schedule-title,
-.section-title,
-.neon-title{
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-} 
-
-/* GLASS CARD UNIVERSAL */
-.glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-}
-
-/* ==========================================================
-   NAVBAR — BRIGHT NEON RAVE
-   ========================================================== */
-
-.neon-nav {
-  background: #ffffff;
-  padding: 15px 30px;
-  border-bottom: 2px solid rgba(0,0,0,0.05);
-  box-shadow: 0 10px 35px rgba(0,0,0,0.08);
-}
-
-.neon-logo {
-  font-size: 1.6rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.nav-link {
-  color: #000 !important;
-  font-weight: 700;
-  margin-left: 22px;
-  transition: 0.3s;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transform: translateY(-2px);
-}
-
-/* Mobile toggler */
-.navbar-toggler {
-  border: none;
-}
-.navbar-toggler-icon {
-  filter: brightness(0);
-}
-
-/* ==========================================================
-   HERO SECTION — BRIGHT RAINBOW NEON
-   ========================================================== */
-.hero {
-  margin-top: 30px;
-  padding: 80px 20px;
-  text-align: center;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--soft-blue), var(--soft-pink));
-  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-}
-
-.hero h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hero p {
-  margin-top: 15px;
-  font-size: 1.2rem;
-  color: #5a5a5a;
-}
-
-/* CTA BUTTON */
-.btn-primary {
-  margin-top: 20px;
-  padding: 12px 28px;
-  border-radius: 40px;
-  border: none;
-  font-weight: 700;
-  color: var(--text-light);
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-  transition: 0.3s;
-}
-
-.btn-primary:hover {
-  transform: scale(1.05);
-  box-shadow: 0 14px 35px rgba(0,0,0,0.2);
-}
-
-/* ==========================================================
-   DJ PAGE — NEW RAVE CARDS
-   ========================================================== */
-
-.djs-page {
-  margin-top: 40px;
-  padding-bottom: 60px;
-}
-
-.neon-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* DJ GRID */
-.dj-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 45px;
-  margin-top: 50px;
-}
-
-/* DJ CARD */
-.dj-card {
-  text-align: center;
-  padding: 22px;
-  background: #ffffff;
-  border-radius: var(--radius);
-  box-shadow: 0 10px 35px rgba(0,0,0,0.08);
-  transition: 0.3s ease;
-}
-
-.dj-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 45px rgba(0,0,0,0.12);
-}
-
-/* ROUND NEON DJ PHOTO */
-.dj-photo {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  padding: 6px;
-  border: 5px solid #fff;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
-  box-shadow:
-    0 0 15px rgba(255,0,255,0.4),
-    0 0 15px rgba(0,200,255,0.4);
-}
-
-/* DJ CARD TEXT */
-.dj-card h3 {
-  margin-top: 18px;
-  font-family: "Oswald", sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-}
-
-.dj-card h4 {
-  font-size: 1rem;
-  color: #555;
-  margin-top: 5px;
-}
-
-/* Profile button */
-.dj-link {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 8px 22px;
-  border-radius: 30px;
-  font-weight: 700;
-  text-decoration: none;
-  color: #fff;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
-  transition: 0.3s;
-}
-
-.dj-link:hover {
-  opacity: 0.85;
-}
-
-/* ==========================================================
-   SCHEDULE PAGE — BRIGHT GLASS CARDS
-   ========================================================== */
-
-.schedule-title {
-  text-align: center;
-  font-size: 2.2rem;
-  font-weight: 800;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 40px 0;
-}
-
-.day-card {
-  background: #ffffff;
-  border-radius: var(--radius);
-  padding: 20px;
-  text-align: left;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  border-left: 5px solid var(--neon-blue);
-  transition: 0.3s ease;
-}
-
-.day-card:hover {
-  transform: scale(1.03);
-  border-left: 5px solid var(--neon-pink);
-}
-
-/* --- NEXT UP BAR --- */
-
-
-.next-up-title{
-  font-size:.85rem;
-  font-weight:700;
-  letter-spacing:.04em;
-  color:rgba(238, 130, 238);
-}
-
-.next-up-info{
-  margin-top:.25rem;
-  font-size:1.1rem;
-  font-weight:600;
-}
-
-/* ==========================================================
-   FOOTER — CLEAN WHITE NEON
-   ========================================================== */
-
-.footer {
-  background: #ffffff;
-  padding: 60px 20px;
-  margin-top: 50px;
-  border-top: 2px solid rgba(0,0,0,0.08);
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.06);
-}
-
-.footer h5 {
-  font-weight: 700;
-  color: #000;
-}
-
-.footer a {
-  color: var(--neon-blue);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.footer a:hover {
-  color: var(--neon-pink);
-}
-
-/* ==========================================================
-   MOBILE FIXES
-   ========================================================== */
-@media (max-width: 768px) {
-  .neon-logo {
-    font-size: 1.3rem;
-  }
-  .nav-link {
-    margin-left: 0;
-    padding: 10px 0;
-  }
-  .hero h1 {
-    font-size: 2rem;
-  }
-  .dj-photo {
-    width: 130px;
-    height: 130px;
-  }
-}
-
-
-
-/* ==========================================================
-   EVENTS SECTION — RAVE UNIVERSE BRIGHT
-   ========================================================== */
-
-.events-section {
-  margin: 60px 0;
-  padding: 20px;
-}
-
-.events-section .section-title h2 {
-  font-size: 2.3rem;
-  font-weight: 800;
-  margin-bottom: 10px;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.events-section .section-title .btn {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 24px;
-  border-radius: 30px;
-  font-weight: 700;
-  color: white;
-  text-decoration: none;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
-  transition: 0.3s;
-}
-
-.events-section .section-title .btn:hover {
-  opacity: 0.85;
-}
-
-/* Section description */
-.events-section .section-desc {
-  max-width: 900px;
-  margin: 20px auto;
-  font-size: 1.05rem;
-  color: #444;
-  line-height: 1.6;
-}
-
-/* IMAGE GRID */
-.event-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 35px;
-  margin-top: 35px;
-}
-
-/* EVENT CARD */
-.event-card {
-  background: #ffffff;
-  padding: 12px;
-  border-radius: 20px;
-  box-shadow:
-    0 10px 35px rgba(0,0,0,0.1),
-    0 0 18px rgba(0,200,255,0.15),
-    0 0 18px rgba(255,0,255,0.15);
-  transition: 0.3s ease;
-}
-
-.event-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 14px 45px rgba(0,0,0,0.15),
-    0 0 22px rgba(0,200,255,0.25),
-    0 0 22px rgba(255,0,255,0.25);
-}
-
-/* EVENT IMAGES */
-.event-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 16px;
-}
-
-/* ==========================================================
-   DJ OF THE WEEK — RAVE UNIVERSE THEME
-   ========================================================== */
-
-.section {
-  margin: 60px 0;
-}
-
-.section-title {
-  font-size: 2.3rem;
-  font-weight: 800;
-  text-align: center;
-  margin-bottom: 25px;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.dj-week {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
-
-  background: #ffffff;
-  border-radius: 25px;
-  padding: 30px 40px;
-  box-shadow:
-    0 15px 45px rgba(0,0,0,0.12),
-    0 0 30px rgba(0,200,255,0.25),
-    0 0 30px rgba(255,0,255,0.25);
-  transition: 0.3s ease;
-}
-
-.dj-week:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 20px 55px rgba(0,0,0,0.18),
-    0 0 40px rgba(0,200,255,0.35),
-    0 0 40px rgba(255,0,255,0.35);
-}
-
-/* DJ of the Week Circular Neon Photo */
-.dj-week img.dj-photo {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  object-fit: cover;
-
-  border: 5px solid #fff;
-  padding: 5px;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
-  box-shadow:
-    0 0 20px rgba(255,0,255,0.35),
-    0 0 20px rgba(0,200,255,0.35);
-}
-
-/* Info text */
-.dj-week-info h3 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: 5px;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.dj-week-info p {
-  margin: 6px 0;
-  font-size: 1rem;
-  color: #444;
-  font-weight: 500;
-}
-
-/* Neon button inside card */
-.dj-week .btn.primary {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 24px;
-  border-radius: 30px;
-  font-weight: 700;
-  color: white;
-  text-decoration: none;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
-  transition: 0.3s;
-}
-
-.dj-week .btn.primary:hover {
-  opacity: 0.85;
-}
-
-/* MOBILE FRIENDLY */
-@media (max-width: 768px) {
-  .dj-week {
-    flex-direction: column;
-    text-align: center;
-    padding: 25px;
-  }
-}
-
-/* ==========================================================
-   🔥 SHOP SPOTLIGHT — RAVE UNIVERSE THEME
-   ========================================================== */
-
-.shop-section {
-  padding: 70px 20px;
-  border-radius: 18px;
-  text-align: center;
-
-  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(240,240,255,1));
-
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.08),
-    0 0 25px rgba(0,200,255,0.25),
-    0 0 25px rgba(255,0,200,0.25);
-}
-
-.shop-section h3 {
-  font-size: 2.3rem;
-  font-weight: 900;
-  margin-bottom: 5px;
-
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.shop-intro {
-  font-size: 1.1rem;
-  color: #333;
-  margin: 15px 0 40px;
-}
-
-/* Shop Grid */
-.shop-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 22px;
-}
-
-/* SHOP ITEM CARD */
-.shop-item {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 20px;
-  text-align: center;
-
-  border: 2px solid rgba(0,0,0,0.08);
-
-  box-shadow:
-    0 10px 20px rgba(0,0,0,0.08),
-    0 0 20px rgba(0,200,255,0.2),
-    0 0 20px rgba(255,0,200,0.2);
-
-  transition: 0.3s ease;
-}
-
-.shop-item:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 14px 30px rgba(0,0,0,0.12),
-    0 0 28px rgba(0,200,255,0.3),
-    0 0 28px rgba(255,0,200,0.3);
-}
-
-/* PRODUCT IMAGES (FIXED SIZE!) */
-.shop-item img {
-  width: 100%;
-  height: 230px;
-  object-fit: contain;
-  border-radius: 14px;
-
-  background: #f8f8f8;
-  padding: 10px;
-  border: 1px solid rgba(0,0,0,0.05);
-}
-
-/* Product title */
-.shop-item h4 {
-  margin-top: 12px;
-  margin-bottom: 5px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #333;
-}
-
-/* Price */
-.price,
-.shop-item .desc {
-  font-size: 1rem;
-  color: #000;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-/* Buy Button */
-.buy-btn {
-  display: inline-block;
-  padding: 10px 22px;
-  border-radius: 30px;
-  font-weight: 700;
-  text-decoration: none;
-
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
-  color: #fff;
-
-  box-shadow:
-    0 10px 20px rgba(0,0,0,0.15),
-    0 0 20px rgba(0,200,255,0.35),
-    0 0 20px rgba(255,0,200,0.35);
-
-  transition: 0.25s ease-in-out;
-}
-
-.buy-btn:hover {
-  opacity: 0.85;
-  transform: translateY(-2px);
-}
-
-/* MOBILE FIX */
-@media (max-width: 600px) {
-  .shop-item img {
-    height: 180px;
-  }
-}
-
-/* UNSIGNED ARTIST SPOTLIGHT – NEW NEON STYLE */
-.unsigned-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
-  margin-top: 40px;
-}
-
-.unsigned-card {
-  width: 200px;
-  background: linear-gradient(135deg, #141414, #0d0d1a);
-  border-radius: 22px;
-  padding: 12px;
-  text-align: center;
-  position: relative;
-  box-shadow:
-    0 0 25px rgba(0,0,0,0.65),
-    0 0 18px rgba(0, 255, 255, 0.25),
-    0 0 18px rgba(255, 0, 204, 0.25);
-  border: 2px solid rgba(255,255,255,0.12);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-.unsigned-card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 0 35px rgba(0,0,0,0.8),
-    0 0 28px rgba(0, 255, 255, 0.45),
-    0 0 28px rgba(255, 0, 204, 0.45);
-}
-
-.unsigned-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 16px;
-  margin-bottom: 12px;
-}
-
-.unsigned-card h4 {
-  margin: 5px 0;
-  font-size: 1.05rem;
-  color: #ffffff;
-}
-
-.unsigned-card p {
-  color: #bcd1ff;
-  margin: 0;
-  font-size: 0.9rem;
-} 
+  margin:0;
+  background: radial-gradient(1200px 600px at 10% 0%, rgba(42,123,255,0.12), transparent 40%),
+              radial-gradient(1200px 600px at 90% 10%, rgba(255,42,109,0.12), transparent 40%),
+              var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+body.slate{ background: var(--slate); }
+.container{width:min(1200px,92%);margin:0 auto}
+.glass{background:var(--glass);backdrop-filter:blur(10px);border:var(--glass-border);border-radius:var(--radius)}
+
+/* Header / Nav */
+.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(to bottom, rgba(12,15,20,.9), rgba(12,15,20,.6), transparent)}
+.header-inner{display:flex;align-items:center;gap:1rem;justify-content:space-between;padding:.8rem 1rem;margin-top:.4rem}
+.brand{display:flex;gap:.75rem;align-items:center;text-decoration:none;color:var(--text)}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:grid;place-items:center;font-weight:800}
+.brand-text{display:flex;flex-direction:column;line-height:1}
+.brand-text strong{font-family:Oswald, Inter, sans-serif;letter-spacing:.06em}
+.brand-text span{color:var(--muted);font-size:.8rem}
+
+.main-nav{display:flex;gap:1rem;align-items:center}
+.main-nav a{color:var(--text);text-decoration:none;padding:.4rem .6rem;border-radius:10px}
+.main-nav a:hover{background:rgba(255,255,255,.06)}
+.burger{display:none;background:transparent;border:none;cursor:pointer}
+.burger span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;border-radius:2px}
+
+/* Nowplaying Box */
+.nowplaying{display:flex;align-items:center;gap:.8rem;padding:.5rem 1rem;margin:.5rem auto;border-radius:12px;background:rgba(255,255,255,0.05);width:fit-content}
+.nowplaying img{width:42px;height:42px;border-radius:8px;object-fit:cover}
+.np-meta{display:flex;flex-direction:column}
+.np-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
+.np-artist{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
+.live-pill{margin-left:.5rem;padding:.25rem .6rem;border-radius:999px;background:#333;color:#bbb;font-size:.75rem;border:1px solid #444;transition:all .3s}
+
+/* ON AIR glow */
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 6px rgba(255,59,59,.3); }
+  50% { box-shadow: 0 0 18px rgba(255,59,59,.8); }
+}
+.live-pill.onair { background:#ff3b3b!important; color:#fff!important; animation:pulseGlow 1.6s infinite; }
+
+/* Hero */
+.hero{position:relative;padding:3rem 0;text-align:center}
+.hero-inner{display:grid;place-items:center}
+.headline{font-family:Oswald,Inter,sans-serif;letter-spacing:.06em;font-size:clamp(2rem,5vw,3rem);margin:0}
+.tagline{color:var(--muted);margin:.5rem 0 1.5rem}
+.cta{display:flex;gap:.75rem;align-items:center}
+.btn{border-radius:14px;border:var(--glass-border);background:transparent;color:var(--text);padding:.8rem 1rem;cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;font-weight:700}
+
+/* Sections */
+.section{padding:2.2rem 0}
+.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:1rem;gap:1rem;flex-wrap:wrap}
+.section-title{margin:0;font-family:Oswald,Inter,sans-serif;letter-spacing:.06em}
+.section-sub{margin:0;color:var(--muted)}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.card{overflow:hidden}
+.card img{width:100%;height:180px;object-fit:cover;display:block}
+.card-body{padding:1rem}
+.card-body h3{margin:.25rem 0 .25rem 0}
+.card-body p{margin:.1rem 0 .6rem 0;color:var(--muted)}
+.link{display:inline-block;text-decoration:none;color:#fff;border-bottom:1px dashed rgba(255,255,255,.3)}
+
+/* DJ Grid */
+.dj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.dj-card{padding:1rem;text-align:center}
+.dj-photo{width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:.6rem}
+.dj-name{margin:.2rem 0}
+.dj-show{color:var(--muted);margin:.2rem 0}
+.dj-role{color:var(--muted);margin:.4rem 0 0 0}
+.dj-link{display:inline-block;margin-top:.2rem;color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.3)}
+.dj-link:hover{color:#2a7bff}
+
+/* Schedule */
+.schedule-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+.schedule-day{padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03)}
+.schedule-day h3{margin:.2rem 0 .6rem 0;font-size:1.05rem}
+.slot{padding:.6rem .7rem;margin:.55rem 0;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.slot .time{color:var(--muted);font-size:.9rem}
+.slot .show{font-weight:600}
+
+/* Footer */
+.site-footer{padding:1.2rem 0;border-top:1px solid rgba(255,255,255,0.08);background:linear-gradient(to top, rgba(0,0,0,.25), transparent)}
+.footer-inner{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:center;color:var(--muted)}
+
+/* Responsive breakpoints */
+@media (max-width: 960px){
+  .main-nav{display:none;position:absolute;top:64px;right:10px;flex-direction:column;background:rgba(0,0,0,.75);padding:.6rem;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
+  .main-nav.open{display:flex}
+  .burger{display:block}
+}
+@media (max-width: 1080px){
+  .schedule-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width: 640px){
+  .schedule-grid{grid-template-columns:1fr}
+  .nowplaying{flex-wrap:wrap;justify-content:center}
+  .np-title,.np-artist{max-width:80vw}
+}
+
+.dj-week{display:flex;flex-wrap:wrap;align-items:center;gap:1.2rem;padding:1rem}
+.dj-week-info{flex:1;min-width:220px}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.review{text-align:center;padding:1rem;font-size:.95rem;color:var(--text)}
 
 /* =========================
    REQUEST FORM – NEON GLASS STYLE
@@ -784,156 +213,8 @@ body{
     margin: 30px 10px;
     padding: 40px 16px;
   }
-
-  #unsigned .card {
-    max-width: 180px;
-    flex: 0 1 45%;
-  }
-
-  #unsigned .card img,
-  #unsigned .card .thumb {
-    height: 170px;
-  }
-}
-
-
-
-/* MOBILE FIX FOR REQUEST FORM */
-@media (max-width: 600px) {
-  .request-form {
-    grid-template-columns: 1fr !important;
-    gap: 12px;
-  }
-
-  .send-btn {
-    grid-column: span 1 !important;
-    width: 100%;
-  }
-
-  .request-section {
-    padding: 28px;
-  }
-
-  .request-section h2 {
-    font-size: 1.8rem;
-  }
-
-  .request-section p {
-    font-size: 0.95rem;
-  }
-} 
-
-/* =========================
-   Profile Header
-   ========================= */
-.profile-header {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.profile-title {
-  font-size: 42px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #ff3ec9, #6a5bff);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.profile-subtitle {
-  font-size: 18px;
-  color: #555;
-  margin-top: -10px;
-}
-
-/* Profile Card */
-.profile-card {
-  max-width: 600px;
-  margin: 30px auto;
-  padding: 30px;
-  border-radius: 25px;
-
-  background: #ffffff;
-  box-shadow: 0 0 30px rgba(150, 80, 255, 0.25);
-
-  text-align: center;
-}
-
-.profile-photo {
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 15px;
-
-  border: 6px solid transparent;
-  background: linear-gradient(135deg, #ff3ec9, #6a5bff) border-box;
-  box-shadow: 0px 0px 25px rgba(110, 60, 255, 0.3);
-}
-
-.profile-name {
-  font-size: 28px;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.profile-text {
-  font-size: 18px;
-  line-height: 1.6;
-  margin: 12px 0;
-}
-
-/* Neon Buttons */
-.profile-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.neon-button {
-  padding: 12px 25px;
-  border-radius: 50px;
-  font-size: 18px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-
-  background: linear-gradient(90deg, #ff3ec9, #6a5bff);
-  box-shadow: 0 8px 25px rgba(120, 60, 255, 0.4);
-  transition: 0.2s;
-}
-
-.neon-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 30px rgba(120, 60, 255, 0.6);
-}
-/* LIVE badge */
-.live-badge {
-  display: none;
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  padding: 5px 12px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(90deg, #ff004c, #ff7a00);
-  border-radius: 50px;
-  animation: badgeFlash 1s infinite alternate;
-  z-index: 9999;
-}
-
-.live-badge.active {
-  display: block;
-}
-
-@keyframes badgeFlash {
-  0% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-
-/* Sponsor */
+  
+  /* Sponsor */
 .sponsor-banner {
   display: block;
   background: linear-gradient(90deg, #00aaff, #ff007c);
@@ -953,311 +234,6 @@ body{
   transform: translateY(-1px);
   box-shadow: 0 0 20px rgba(255, 0, 124, 0.8);
 }
-/* DJ Button */
-.small-btn {
-  font-size: 0.85rem;
-  padding: 8px 16px;
-}
-
-/* DJ LIVE MODE Bass Pulse Glow */
-#requestPopup.dj-live {
-  border: 2px solid rgba(255,0,76,0.9) !important;
-  box-shadow:
-    0 0 20px rgba(255,0,76,0.7),
-    0 0 60px rgba(255,0,76,0.6),
-    0 0 100px rgba(0,225,255,0.4),
-    inset 0 0 20px rgba(255,0,76,0.5);
-  animation: bassPulse 1.4s infinite ease-in-out;
-  transform: translateY(-2px);
-}
-
-@keyframes bassPulse {
-  0% {
-    transform: translateY(-1px) scale(1.01);
-    box-shadow:
-      0 0 14px rgba(255,0,76,0.6),
-      0 0 32px rgba(255,0,76,0.45),
-      0 0 70px rgba(0,225,255,0.3),
-      inset 0 0 14px rgba(255,0,76,0.3);
-  }
-  50% {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow:
-      0 0 28px rgba(255,0,76,0.9),
-      0 0 80px rgba(255,0,76,0.7),
-      0 0 140px rgba(0,225,255,0.5),
-      inset 0 0 25px rgba(255,0,76,0.5);
-  }
-  100% {
-    transform: translateY(-1px) scale(1.01);
-    box-shadow:
-      0 0 14px rgba(255,0,76,0.6),
-      0 0 32px rgba(255,0,76,0.45),
-      0 0 70px rgba(0,225,255,0.3),
-      inset 0 0 14px rgba(255,0,76,0.3);
-  }
-}
-
-/* --- DJ badges under schedule items --- */
-.ws-badge{
-  padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;
-  border:1px solid rgba(255,255,255,0.14);
-  background:rgba(255,255,255,0.06);
-  color:inherit;
-  box-shadow:0 6px 14px rgba(14,40,92,.08);
-}
-.ws-badge.ws-live{
-  border:none;color:#fff;
-  background:linear-gradient(135deg,#ff2e74,#ff7aa8);
-}
-
-/* ================================
-   WILDSTYLE 2026 SCHEDULE
-   Bright • Glass • Responsive
-================================ */
-
-/* Schedule wrapper */
-.glass-schedule {
-  margin: 60px auto;
-  padding: 20px;
-}
-
-/* Grid layout */
-.schedule-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 22px;
-}
-
-/* Day card */
-.schedule-day {
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(14px);
-  border-radius: 22px;
-  padding: 18px;
-  box-shadow:
-    0 12px 35px rgba(0,0,0,0.08),
-    0 0 20px rgba(0,195,255,0.15),
-    0 0 20px rgba(255,0,195,0.15);
-  border-top: 4px solid var(--neon-blue);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-.schedule-day:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 18px 45px rgba(0,0,0,0.12),
-    0 0 28px rgba(0,195,255,0.25),
-    0 0 28px rgba(255,0,195,0.25);
-}
-
-/* Day title */
-.schedule-day h3 {
-  font-size: 1.3rem;
-  font-weight: 800;
-  margin-bottom: 14px;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Slot card */
-.slot {
-  background: rgba(255,255,255,0.55);
-  border-radius: 14px;
-  padding: 10px 14px;
-  margin-bottom: 10px;
-  border-left: 4px solid rgba(0,195,255,0.7);
-  box-shadow: inset 0 0 10px rgba(255,255,255,0.6);
-  transition: background .2s ease, transform .2s ease;
-}
-
-.slot:hover {
-  background: rgba(255,255,255,0.75);
-  transform: translateX(3px);
-}
-
-/* Time */
-.slot .time {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #555;
-  margin-bottom: 2px;
-}
-
-/* DJ / Show */
-.slot .show {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #111;
-}
-
-/* ================================
-   NEXT UP BAR
-================================ */
-
-.next-up {
-  margin: 0 auto 28px;
-  padding: 16px 20px;
-  max-width: 600px;
-  border-radius: 18px;
-  background: linear-gradient(
-    135deg,
-    rgba(0,195,255,0.25),
-    rgba(255,0,195,0.25)
-  );
-  backdrop-filter: blur(14px);
-  border: 2px solid rgba(255,255,255,0.7);
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.12),
-    0 0 30px rgba(0,195,255,0.35),
-    0 0 30px rgba(255,0,195,0.35);
-  text-align: center;
-}
-
-.next-up-title {
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #333;
-}
-
-.next-up-info {
-  margin-top: 6px;
-  font-size: 1.1rem;
-  font-weight: 900;
-  color: #000;
-}
-
-/* ================================
-   BADGES (LIVE / TAKEOVER)
-================================ */
-
-.ws-badges {
-  margin-top: 6px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.ws-badge {
-  font-size: 0.7rem;
-  font-weight: 900;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.8);
-  color: #111;
-  border: 1px solid rgba(0,0,0,0.1);
-}
-
-/* LIVE badge */
-.ws-badge.ws-live {
-  color: #fff;
-  border: none;
-  background: linear-gradient(90deg, #ff003c, #ff8a00);
-  animation: livePulse 1s infinite alternate;
-}
-
-@keyframes livePulse {
-  from { opacity: 0.6; }
-  to { opacity: 1; }
-}
-
-/* ================================
-   MOBILE
-================================ */
-
-@media (max-width: 600px) {
-  .schedule-day {
-    padding: 16px;
-  }
-  .slot {
-    padding: 10px 12px;
-  }
-}
-
-/* ================================
-   ON AIR
-================================ */
-
-.onair{
-  width:100%;
-  max-width:520px;
-  padding:14px 16px;
-  border-radius:16px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.18);
-  backdrop-filter: blur(10px);
-}
-
-.onair__top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.onair__badge{
-  padding:6px 10px;border-radius:999px;
-  font-weight:800;font-size:12px;letter-spacing:.08em;
-  background: rgba(0,255,180,.18);
-  border: 1px solid rgba(0,255,180,.35);
-}
-.onair__now{font-weight:800;font-size:16px}
-.onair__meta{opacity:.9;font-size:13px;margin-bottom:10px}
-.onair__nexttitle{font-weight:800;font-size:12px;opacity:.9;margin-bottom:4px}
-.onair__next{font-size:13px;line-height:1.35}
-.onair__next div{margin:2px 0}
-
-/* =========================
-   Seasonal header image system
-   ========================= */
-
-/* Default (fallback) */
-:root{
-  --season-banner: none;
-}
-
-/* Show banner at top of page (nice + clean) */
-.season-banner{
-  width: min(1200px, 92%);
-  margin: 18px auto 0;
-  border-radius: 22px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.18);
-  box-shadow: 0 16px 50px rgba(0,0,0,.12);
-  background: rgba(255,255,255,.35);
-  backdrop-filter: blur(12px);
-}
-
-.season-banner img{
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-  display: block;
-}
-
-/* Mobile height */
-@media (max-width: 600px){
-  .season-banner img{ height: 170px; }
-}
-
-/* =========================
-   Theme -> image mapping
-   ========================= */
-
-html.theme-xmas     { --season-banner: url("/images/themes/christmas.png"); }
-html.theme-halloween{ --season-banner: url("/images/themes/halloween.png"); }
-html.theme-summer   { --season-banner: url("/images/themes/summer.png"); }
-html.theme-newyear  { --season-banner: url("/images/themes/newyear.png"); }
-html.theme-easter   { --season-banner: url("/images/themes/easter.png"); }
-
-/* Optional extras */
-html.theme-valentines { --season-banner: url("/images/themes/valentines.png"); }
-
-/* Make the banner auto-load the correct image */
-.season-banner img{
-  content: var(--season-banner);
-} 
-
-
-
-
-
 
 
 

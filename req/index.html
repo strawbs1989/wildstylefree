@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="/test1/req/style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script defer src="/test1/req/script.js"></script>
+<title>Request Form</title>
+
+</head>
+<body>
+
+<form id="requestForm" action="https://formspree.io/f/xzzjblby" method="POST">
+  <label for="dj_name">DJ Name You Wish The Request To Go To:</label>
+  <input type="text" id="dj_name" name="dj_name" required>
+
+  <label for="your_name">Your Name:</label>
+  <input type="text" id="your_name" name="your_name" required>
+
+  <label for="shoutout">Your Shout-Out Request:</label>
+  <input type="text" id="shoutout" name="shoutout" size="50" required>
+
+  <input type="submit" value="Send">
+  <input type="reset" value="Reset">
+</form>
+
+<div id="success">✅ Request sent! Thank you for your shout-out.</div>
+
+
+</body>
+</html>
