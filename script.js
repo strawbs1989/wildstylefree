@@ -213,37 +213,42 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
   .catch(err => console.error("Reviews load error:", err)); 
   
   // === function up next ===
-  function updateNextUp() {
-  const bar = document.getElementById("nextUpBar");
-  const info = document.getElementById("nextUpInfo");
-  if (!bar || !info || typeof DH === "undefined") return;
+  function updateUpNext() {
+  const now = new Date()
+  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }))
+  const hour = ukTime.getHours()
+  const day = ukTime.getDay()
 
-  const now = new Date();
-  const uk = new Date(now.toLocaleString("en-GB", { timeZone: "Europe/London" }));
-  const day = uk.getDay();
-  const hour = uk.getHours();
+  const today = DH[day]
+  const times = Object.keys(today)
+    .map(Number)
+    .sort((a, b) => a - b)
 
-  const today = DH[day];
-  if (!today) return;
+  let next = null
 
-  const upcoming = Object.entries(today)
-    .map(([start, slot]) => ({ start: parseInt(start), slot }))
-    .filter(e => e.slot && e.start > hour)
-    .sort((a, b) => a.start - b.start)[0];
-
-  if (!upcoming) {
-    bar.style.display = "none";
-    return;
+  for (const t of times) {
+    if (t > hour && today[t]) {
+      next = today[t].show
+      break
+    }
   }
 
-  info.innerHTML = `
-    <strong>${upcoming.start}:00</strong> –
-    ${upcoming.slot.show.replace("<br>", " ")}
-  `;
+  // If no more shows today → first show tomorrow
+  if (!next) {
+    const nextDay = (day + 1) % 7
+    const tomorrow = DH[nextDay]
+    const tKeys = Object.keys(tomorrow)
+      .map(Number)
+      .sort((a, b) => a - b)
 
-  bar.style.display = "flex";
+    if (tKeys.length && tomorrow[tKeys[0]]) {
+      next = `Tomorrow — ${tomorrow[tKeys[0]].show}`
+    }
+  }
+
+  document.getElementById('upNextShow').innerHTML =
+    next || 'Auto / Free Rotation'
 }
 
-/* Run on load + update every minute */
-updateNextUp();
-setInterval(updateNextUp, 60000);
+updateUpNext()
+setInterval(updateUpNext, 60 * 1000)
