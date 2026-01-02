@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=2026">
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script defer src="script.js"></script>
 
@@ -55,6 +55,101 @@
     <div class="next-up-title">🔜 NEXT UP</div>
     <div class="next-up-info" id="nextUpInfo"></div>
   </div>
+  <script>
+(function(){
+
+  function norm(s){
+    return (s||"").toLowerCase().replace(/[–—]/g,"-").replace(/\s+/g," ").trim();
+  }
+
+  function timeToMin(str){
+    const m = norm(str).match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/);
+    if(!m) return null;
+    let h = parseInt(m[1],10);
+    const min = m[2] ? parseInt(m[2],10) : 0;
+    if(h === 12) h = 0;
+    if(m[3] === "pm") h += 12;
+    return h*60 + min;
+  }
+
+  function parseRange(range){
+    const p = range.replace(/[–—]/g,"-").split("-").map(x=>x.trim());
+    if(p.length < 2) return null;
+    return {
+      start: timeToMin(p[0]),
+      end: timeToMin(p[1])
+    };
+  }
+
+  function dayIndex(d){
+    return {sunday:0,monday:1,tuesday:2,wednesday:3,thursday:4,friday:5,saturday:6}[norm(d)];
+  }
+
+  const now = new Date();
+  const nowDay = now.getDay();
+  const nowMin = now.getHours()*60 + now.getMinutes();
+
+  let nextShow = null;
+
+  document.querySelectorAll(".schedule-day").forEach(day=>{
+    const dayName = day.querySelector("h3")?.textContent;
+    const dIdx = dayIndex(dayName);
+    if(dIdx == null) return;
+
+    day.querySelectorAll(".slot").forEach(slot=>{
+      const timeEl = slot.querySelector(".time");
+      const showEl = slot.querySelector(".show");
+      if(!timeEl || !showEl) return;
+
+      const show = showEl.textContent.trim();
+      if(norm(show) === "free" || norm(show) === "auto") return;
+
+      const range = parseRange(timeEl.textContent);
+      if(!range || range.start == null) return;
+
+      let showDay = dIdx;
+      let showStart = range.start;
+
+      // if today and already started, skip
+      if(showDay === nowDay && showStart <= nowMin) return;
+
+      // if earlier in week, skip
+      if(showDay < nowDay) return;
+
+      const diff =
+        (showDay === nowDay)
+          ? showStart - nowMin
+          : (showDay - nowDay) * 1440 + showStart;
+
+      if(diff < 0) return;
+
+      if(!nextShow || diff < nextShow.diff){
+        nextShow = {
+          dj: show,
+          time: timeEl.textContent.trim(),
+          diff
+        };
+      }
+    });
+  });
+
+  if(!nextShow) return;
+
+  const bar = document.getElementById("nextUpBar");
+  const info = document.getElementById("nextUpInfo");
+
+  const mins = nextShow.diff;
+  let when = mins < 60 ? `${mins} minutes` : `${Math.floor(mins/60)}h ${mins%60}m`;
+
+  info.innerHTML = `
+    <strong>${nextShow.dj}</strong> — ${nextShow.time}<br>
+    ⏱ Starts in <strong>${when}</strong>
+  `;
+
+  bar.style.display = "block";
+
+})();
+</script>
   </section>
       <div class="schedule-grid">
         
