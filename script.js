@@ -210,3 +210,39 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
     });
   }) // 
   .catch(err => console.error("Reviews load error:", err)); 
+  
+  // === function up next ===
+  function updateNextUp() {
+  const bar = document.getElementById("nextUpBar");
+  const info = document.getElementById("nextUpInfo");
+  if (!bar || !info || typeof DH === "undefined") return;
+
+  const now = new Date();
+  const uk = new Date(now.toLocaleString("en-GB", { timeZone: "Europe/London" }));
+  const day = uk.getDay();
+  const hour = uk.getHours();
+
+  const today = DH[day];
+  if (!today) return;
+
+  const upcoming = Object.entries(today)
+    .map(([start, slot]) => ({ start: parseInt(start), slot }))
+    .filter(e => e.slot && e.start > hour)
+    .sort((a, b) => a.start - b.start)[0];
+
+  if (!upcoming) {
+    bar.style.display = "none";
+    return;
+  }
+
+  info.innerHTML = `
+    <strong>${upcoming.start}:00</strong> –
+    ${upcoming.slot.show.replace("<br>", " ")}
+  `;
+
+  bar.style.display = "flex";
+}
+
+/* Run on load + update every minute */
+updateNextUp();
+setInterval(updateNextUp, 60000);
