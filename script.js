@@ -263,7 +263,7 @@ setInterval(updateUpNext, 60 * 1000);
    🎉 SHOUT-OUT TICKER
    ========================= */
 
-const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbzDtgWjFCODgajdvOacEk7c3b7Ik15iezKSenDERQJ6H1YCsM22oQojQphtE-xNcfDX/exec";
+const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbz1frZjzw1b6CNEHOiOzobXALQatnVRQEKZXDqZg78VTes3oZWOIjxB0aYTIFEptuAw/exec";
 
 async function loadShoutouts() {
   const el = document.getElementById("tickerContent");
