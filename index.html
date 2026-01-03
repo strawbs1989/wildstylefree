@@ -57,9 +57,12 @@
         <div class="now-playing">
 		<iframe src="https://wildstyle.vip/player.html" height="240" width="400" title="Iframe Example"></iframe>
         <!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
-        <div class="shoutout-ticker">
-        <div id="tickerContent">Loading shout-outs…</div>
-       </div>
+        <div class="shoutout-ticker" aria-label="Shout-outs">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-text" id="tickerText">Loading shout-outs…</span>
+    <span class="ticker-text" id="tickerTextClone" aria-hidden="true"></span>
+  </div>
+</div>
 	  </div>
       </div>
     </div>

@@ -266,29 +266,57 @@ setInterval(updateUpNext, 60 * 1000);
 const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbz1frZjzw1b6CNEHOiOzobXALQatnVRQEKZXDqZg78VTes3oZWOIjxB0aYTIFEptuAw/exec";
 
 async function loadShoutouts() {
-  const el = document.getElementById("tickerContent");
-  if (!el) return;
+  const track = document.getElementById("tickerTrack");
+  const textA = document.getElementById("tickerText");
+  const textB = document.getElementById("tickerTextClone");
+  if (!track || !textA || !textB) return;
 
   try {
-    const res = await fetch(SHOUTOUT_URL);
+    const res = await fetch(SHOUTOUT_URL, { cache: "no-store" });
     const data = await res.json();
 
-    if (!Array.isArray(data) || data.length === 0) {
-      el.textContent = "🎶 Send us a shout-out at wildstyle.vip";
-      return;
+    let items = [];
+    if (Array.isArray(data)) {
+      // supports [{message:".."}] OR [".."]
+      items = data.map(x => (typeof x === "string" ? x : x.message)).filter(Boolean);
     }
 
-    // Join messages with separators
-    el.innerHTML = data
-      .map(s => `🎉 ${s.message}`)
-      .join(" &nbsp; 🔊 &nbsp; ");
+    if (!items.length) items = ["Send us a shout-out at wildstyle.vip"];
 
-  } catch (err) {
-    el.textContent = "🎶 Wildstyle Radio — United by Beats";
-    console.error("Shoutout ticker error:", err);
+    const joined = items.map(m => `🎉 ${m}`).join("  🔊  ");
+    textA.textContent = joined;
+
+    // Clone for seamless loop
+    textB.textContent = joined;
+
+    // Speed control: longer text = slower (more readable)
+    const length = joined.length;
+    const seconds = Math.min(35, Math.max(14, Math.round(length / 6)));
+    track.style.setProperty("--tickerSpeed", `${seconds}s`);
+
+    // If the text is too short to scroll nicely, stop animation and center it
+    requestAnimationFrame(() => {
+      const contentWidth = textA.offsetWidth;
+      const boxWidth = track.parentElement.offsetWidth;
+
+      if (contentWidth < boxWidth * 0.9) {
+        track.style.animation = "none";
+        track.style.transform = "none";
+        track.style.justifyContent = "center";
+        textB.style.display = "none";
+      } else {
+        track.style.animation = "";
+        track.style.justifyContent = "";
+        textB.style.display = "";
+      }
+    });
+
+  } catch (e) {
+    textA.textContent = "Wildstyle Radio — United by Beats";
+    textB.textContent = "Wildstyle Radio — United by Beats";
+    console.error("Ticker fetch failed:", e);
   }
 }
 
-// Load + refresh every 60 seconds
 loadShoutouts();
 setInterval(loadShoutouts, 60000);
