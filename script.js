@@ -142,7 +142,7 @@ DH[6][16] = "4pm – 6pm<br>DJ Keyes";
 DH[6][18] = "6pm – 7pm<br>Laura - DJ LilDevil";
 DH[6][19] = "7pm – 9pm<br>DJ Bes Wolf";
 DH[6][21] = "9pm – 10pm<br>KSM";
-DH[6][22] = "10pm – 12am<br>DJ Nitro";
+DH[6][22] = "10pm – 12am<br>Free/Auto";
 
 // SUNDAY (7)
 DH[7][8]  = "8am - 10am<br>DJ Queen Dani";
@@ -258,3 +258,37 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
 
 updateUpNext();
 setInterval(updateUpNext, 60 * 1000); 
+
+/* =========================
+   🎉 SHOUT-OUT TICKER
+   ========================= */
+
+const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbzDtgWjFCODgajdvOacEk7c3b7Ik15iezKSenDERQJ6H1YCsM22oQojQphtE-xNcfDX/exec";
+
+async function loadShoutouts() {
+  const el = document.getElementById("tickerContent");
+  if (!el) return;
+
+  try {
+    const res = await fetch(SHOUTOUT_URL);
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      el.textContent = "🎶 Send us a shout-out at wildstyle.vip";
+      return;
+    }
+
+    // Join messages with separators
+    el.innerHTML = data
+      .map(s => `🎉 ${s.message}`)
+      .join(" &nbsp; 🔊 &nbsp; ");
+
+  } catch (err) {
+    el.textContent = "🎶 Wildstyle Radio — United by Beats";
+    console.error("Shoutout ticker error:", err);
+  }
+}
+
+// Load + refresh every 60 seconds
+loadShoutouts();
+setInterval(loadShoutouts, 60000);
