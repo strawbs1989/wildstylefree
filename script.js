@@ -146,7 +146,7 @@ DH[6][22] = "10pm – 12am<br>DJ Nitro";
 // SUNDAY (7)
 DH[7][8]  = "8am - 10am<br>DJ Queen Dani";
 DH[7][11] = "11am – 12pm<br>HotShot DJ";
-DH[7][11] = "12pm – 1pm<br>Auto";
+DH[7][12] = "12pm – 1pm<br>Auto";
 DH[7][13] = "1pm – 3pm<br>JK";           
 DH[7][17] = "5pm – 7pm<br>DJ Keyes";
 DH[7][20] = "8pm - 9pm<br>DJ EchoFalls";
@@ -214,58 +214,46 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
   
   // === function up next ===
  function updateUpNext() {
-  const now = new Date();
-  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
-  const hour = ukTime.getHours();
-  const day = ukTime.getDay();
+  const ukNow = getUKNow();               
+  const hour = ukNow.getUTCHours();
+  const jsDay = ukNow.getUTCDay();        
 
-  const dayData = (d) => (typeof DH !== "undefined" && DH[d]) ? DH[d] : null;
-
-  const slotText = (slot) => {
-    if (!slot) return null;
-    if (typeof slot === "string") return slot;
-    if (typeof slot.show === "string" && slot.show.trim()) return slot.show;
-    if (typeof slot.title === "string" && slot.title.trim()) return slot.title; // fallback if your object uses title
-    return null;
-  };
-
-  const findNextInDay = (d, afterHour) => {
-    const data = dayData(d);
-    if (!data) return null;
-
-    const keys = Object.keys(data).map(Number).sort((a, b) => a - b);
-
-    for (const k of keys) {
-      if (k > afterHour) {
-        const text = slotText(data[k]);
-        if (text) return text;
-      }
-    }
-    return null;
-  };
-
-  // 1) try later today
-  let next = findNextInDay(day, hour);
-
-  // 2) else try tomorrow (first valid show)
-  if (!next) {
-    const nextDay = (day + 1) % 7;
-    const data = dayData(nextDay);
-    if (data) {
-      const keys = Object.keys(data).map(Number).sort((a, b) => a - b);
-      for (const k of keys) {
-        const text = slotText(data[k]);
-        if (text) {
-          next = `Tomorrow — ${text}`;
-          break;
-        }
-      }
-    }
-  }
+  // DH is 1..7 (Mon..Sun)
+  const day = (jsDay === 0) ? 7 : jsDay;
 
   const el = document.getElementById("upNextShow");
-  if (el) el.innerHTML = next || "Auto / Free Rotation";
+  if (!el) return;
+
+  const today = DH[day];
+  if (!today) {
+    el.textContent = "Auto / Free Rotation";
+    return;
+  }
+
+  const hasCurrent = !!today[hour];
+  const startFrom = hasCurrent ? hour + 1 : hour;
+
+  const findNextIn = (d, fromHour) => {
+    const data = DH[d];
+    if (!data) return null;
+    for (let h = fromHour; h <= 23; h++) {
+      if (data[h]) return data[h];
+    }
+    return null;
+  };
+
+  // Later today
+  let next = findNextIn(day, startFrom);
+
+  // Tomorrow
+  if (!next) {
+    const tomorrow = (day === 7) ? 1 : day + 1;
+    const t = findNextIn(tomorrow, 0);
+    if (t) next = `Tomorrow — ${t}`;
+  }
+
+  el.innerHTML = next || "Auto / Free Rotation";
 }
 
 updateUpNext();
-setInterval(updateUpNext, 60 * 1000);
+setInterval(updateUpNext, 60 * 1000); 
