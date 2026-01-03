@@ -97,7 +97,7 @@ DH[1][0]  = "12am – 2pm<br>James-Wizard";
 
 // TUESDAY (2) 
 DH[2][2]  = "2am - 5am<br>James-Wizard Of Rock";
-DH[2][3]  = "3am – 6am<br>Dani - DJ Dezzy – Mix Set";
+DH[2][3]  = "3am – 6am<br>DJ Queen Dani";
 DH[2][6]  = "6am - 10am<br>Steve";
 DH[2][10] = "10am - 12pm<br>John";
 DH[2][18] = "6pm – 8pm<br>Andrew";
@@ -109,7 +109,7 @@ DH[3][10] = "10am – 12pm<br>DJ Nala";
 DH[3][12] = "12pm - 2pm<br>Froggy -G";
 DH[3][16] = "4pm - 6pm<br>Steve";
 DH[3][18] = "6pm - 7pm<br>DJ Dezza";
-DH[3][19] = "7pm - 8pm<br>Anthony";
+DH[3][19] = "7pm - 8pm<br>Strange";
 DH[3][22] = "10pm – 12am<br>DJ Nitro";
 
 // THURSDAY (4) 
@@ -118,7 +118,7 @@ DH[4][10] = "10am – 12pm<br>AUTO";
 DH[4][13] = "1pm - 3pm<br>Christina";
 DH[4][15] = "3pm – 4pm<br>Charlotte";
 DH[4][19] = "7pm – 8pm<br>DJ EchoFalls";
-DH[4][20] = "8pm – 10pm<br>Anthony";
+DH[4][20] = "8pm – 10pm<br>Strange";
 DH[4][22] = "10pm – 12pm<br>DJ Indigo Riz";
 DH[4][23] = "11pm – 1am<br>Auto";
 
@@ -213,42 +213,59 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
   .catch(err => console.error("Reviews load error:", err)); 
   
   // === function up next ===
-  function updateUpNext() {
-  const now = new Date()
-  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }))
-  const hour = ukTime.getHours()
-  const day = ukTime.getDay()
+ function updateUpNext() {
+  const now = new Date();
+  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
+  const hour = ukTime.getHours();
+  const day = ukTime.getDay();
 
-  const today = DH[day]
-  const times = Object.keys(today)
-    .map(Number)
-    .sort((a, b) => a - b)
+  const dayData = (d) => (typeof DH !== "undefined" && DH[d]) ? DH[d] : null;
 
-  let next = null
+  const slotText = (slot) => {
+    if (!slot) return null;
+    if (typeof slot === "string") return slot;
+    if (typeof slot.show === "string" && slot.show.trim()) return slot.show;
+    if (typeof slot.title === "string" && slot.title.trim()) return slot.title; // fallback if your object uses title
+    return null;
+  };
 
-  for (const t of times) {
-    if (t > hour && today[t]) {
-      next = today[t].show
-      break
+  const findNextInDay = (d, afterHour) => {
+    const data = dayData(d);
+    if (!data) return null;
+
+    const keys = Object.keys(data).map(Number).sort((a, b) => a - b);
+
+    for (const k of keys) {
+      if (k > afterHour) {
+        const text = slotText(data[k]);
+        if (text) return text;
+      }
     }
-  }
+    return null;
+  };
 
-  // If no more shows today → first show tomorrow
+  // 1) try later today
+  let next = findNextInDay(day, hour);
+
+  // 2) else try tomorrow (first valid show)
   if (!next) {
-    const nextDay = (day + 1) % 7
-    const tomorrow = DH[nextDay]
-    const tKeys = Object.keys(tomorrow)
-      .map(Number)
-      .sort((a, b) => a - b)
-
-    if (tKeys.length && tomorrow[tKeys[0]]) {
-      next = `Tomorrow — ${tomorrow[tKeys[0]].show}`
+    const nextDay = (day + 1) % 7;
+    const data = dayData(nextDay);
+    if (data) {
+      const keys = Object.keys(data).map(Number).sort((a, b) => a - b);
+      for (const k of keys) {
+        const text = slotText(data[k]);
+        if (text) {
+          next = `Tomorrow — ${text}`;
+          break;
+        }
+      }
     }
   }
 
-  document.getElementById('upNextShow').innerHTML =
-    next || 'Auto / Free Rotation'
+  const el = document.getElementById("upNextShow");
+  if (el) el.innerHTML = next || "Auto / Free Rotation";
 }
 
-updateUpNext()
-setInterval(updateUpNext, 60 * 1000)
+updateUpNext();
+setInterval(updateUpNext, 60 * 1000);
