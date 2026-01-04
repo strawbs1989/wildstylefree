@@ -366,3 +366,63 @@ footer {
 
 /* Nice: pause on hover (desktop) */
 .shoutout-ticker:hover .ticker-track{ animation-play-state: paused; }
+
+/* =========================
+   🎉 SHOUT-OUT FORM
+   ========================= */
+
+.shoutout-box {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(20, 20, 30, 0.65);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(0, 170, 255, 0.25);
+}
+
+#shoutoutForm {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#shoutoutForm input {
+  flex: 1 1 200px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  background: #0f172a;
+  color: #fff;
+  outline: none;
+}
+
+#shoutoutForm input::placeholder {
+  color: #9ca3af;
+}
+
+#shoutoutForm button {
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(90deg, #00aaff, #ff007c);
+  box-shadow: 0 0 15px rgba(255, 0, 124, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#shoutoutForm button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 0, 124, 0.9);
+}
+
+#shoutoutStatus {
+  width: 100%;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #a7f3d0;
+}
