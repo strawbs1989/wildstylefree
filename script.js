@@ -263,58 +263,57 @@ setInterval(updateUpNext, 60 * 1000);
    🎉 SHOUT-OUT TICKER
    ========================= */
 
-const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbz1frZjzw1b6CNEHOiOzobXALQatnVRQEKZXDqZg78VTes3oZWOIjxB0aYTIFEptuAw/exec";
+const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbzflo7iLuZX0LEvw0MH7_2c2bf87WNrBmM89v_00KXsZORZBMjNT2VqEchZUi_R_49a1Q/exec";
 
+// submit (creates PENDING)
+const shoutForm = document.getElementById("shoutoutForm");
+if (shoutForm) {
+  shoutForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const status = document.getElementById("shoutoutStatus");
+    if (status) status.textContent = "Sending…";
+
+    const data = Object.fromEntries(new FormData(shoutForm).entries());
+
+    try {
+      const res = await fetch(SHOUTOUT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const out = await res.json().catch(() => ({}));
+
+      if (out.ok) {
+        if (status) status.textContent = "✅ Sent for approval! Once LIVE it will show in the ticker.";
+        shoutForm.reset();
+      } else {
+        if (status) status.textContent = "❌ " + (out.error || "Failed");
+      }
+    } catch (err) {
+      if (status) status.textContent = "❌ Network error";
+    }
+  });
+}
+
+// ticker pull (shows only LIVE)
 async function loadShoutouts() {
-  const track = document.getElementById("tickerTrack");
-  const textA = document.getElementById("tickerText");
-  const textB = document.getElementById("tickerTextClone");
-  if (!track || !textA || !textB) return;
+  const el = document.getElementById("tickerContent");
+  if (!el) return;
 
   try {
     const res = await fetch(SHOUTOUT_URL, { cache: "no-store" });
     const data = await res.json();
 
-    let items = [];
-    if (Array.isArray(data)) {
-      // supports [{message:".."}] OR [".."]
-      items = data.map(x => (typeof x === "string" ? x : x.message)).filter(Boolean);
-    }
+    const msgs = Array.isArray(data)
+      ? data.map(x => (typeof x === "string" ? x : x.message)).filter(Boolean)
+      : [];
 
-    if (!items.length) items = ["Send us a shout-out at wildstyle.vip"];
-
-    const joined = items.map(m => `🎉 ${m}`).join("  🔊  ");
-    textA.textContent = joined;
-
-    // Clone for seamless loop
-    textB.textContent = joined;
-
-    // Speed control: longer text = slower (more readable)
-    const length = joined.length;
-    const seconds = Math.min(35, Math.max(14, Math.round(length / 6)));
-    track.style.setProperty("--tickerSpeed", `${seconds}s`);
-
-    // If the text is too short to scroll nicely, stop animation and center it
-    requestAnimationFrame(() => {
-      const contentWidth = textA.offsetWidth;
-      const boxWidth = track.parentElement.offsetWidth;
-
-      if (contentWidth < boxWidth * 0.9) {
-        track.style.animation = "none";
-        track.style.transform = "none";
-        track.style.justifyContent = "center";
-        textB.style.display = "none";
-      } else {
-        track.style.animation = "";
-        track.style.justifyContent = "";
-        textB.style.display = "";
-      }
-    });
-
+    el.textContent = msgs.length
+      ? msgs.join(" 🔊 ")
+      : "Send a shout-out on wildstyle.vip 🎉";
   } catch (e) {
-    textA.textContent = "Wildstyle Radio — United by Beats";
-    textB.textContent = "Wildstyle Radio — United by Beats";
-    console.error("Ticker fetch failed:", e);
+    el.textContent = "Wildstyle Radio — United by Beats";
   }
 }
 
