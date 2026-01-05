@@ -115,7 +115,7 @@ DH[3][22] = "10pm – 12am<br>DJ Nitro";
 
 // THURSDAY (4) 
 DH[4][0]  = "12am - 1am<br>DJ Mary";
-DH[4][10] = "10am – 12pm<br>AUTO";
+DH[4][10] = "10am – 12pm<br>DJ Salty";
 DH[4][13] = "1pm - 3pm<br>Christina";
 DH[4][15] = "3pm – 4pm<br>Charlotte";
 DH[4][19] = "7pm – 8pm<br>DJ EchoFalls";
