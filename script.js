@@ -90,7 +90,7 @@ DH[1][6]  = "6am – 10am<br>Steve";
 DH[1][10] = "10am – 12pm<br>John";
 DH[1][12] = "12pm – 2pm<br>Free";
 DH[1][15] = "3pm – 5pm<br>James Stephen";
-DH[1][18] = "6pm – 9pm<br>Liam";   
+DH[1][18] = "6pm – 9pm<br>Auto";   
 DH[1][17] = "5pm – 7pm<br>Lewis";
 DH[1][20] = "8pm – 10pm<br>DJ Dezzy Mac";
 DH[1][22] = "10pm – 12am<br>Lady Elvis";
@@ -129,7 +129,7 @@ DH[5][0]  = "12am – 4am<br>Auto/Free";
 DH[5][10] = "10am – 12pm<br>DJ Queen Dani";
 DH[5][12] = "12pm – 3pm<br>DJ Nala";
 DH[5][15] = "3pm - 5pm<br>DJ Sparky";
-DH[5][18] = "6pm - 8pm<br>Liam";
+DH[5][18] = "6pm - 8pm<br>Auto";
 DH[5][20] = "8pm - 9pm<br>DJ Mix N Match";
 DH[5][22] = "10pm - 12am<br>DJ Songbird";
 
