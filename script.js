@@ -87,7 +87,7 @@ const DH = Array.from({ length: 8 }, () => Array(24).fill(""));
 // MONDAY (1) 
 DH[1][1]  = "1am - 3am<br>DJ Carrillo";
 DH[1][6]  = "6am – 10am<br>Steve";
-DH[1][10] = "10am – 12pm<br>John";
+DH[1][10] = "10am – 12pm<br>Free";
 DH[1][12] = "12pm – 2pm<br>DJ Dezzy Mac";
 DH[1][15] = "3pm – 5pm<br>James Stephen";
 DH[1][18] = "6pm – 9pm<br>Auto";   
@@ -100,7 +100,7 @@ DH[1][22] = "10pm – 12am<br>Lady Elvis";
 DH[2][2]  = "2am - 5am<br>James-Wizard Of Rock";
 DH[2][3]  = "3am – 6am<br>DJ Queen Dani";
 DH[2][6]  = "6am - 10am<br>Steve";
-DH[2][10] = "10am - 12pm<br>John";
+DH[2][10] = "10am - 12pm<br>Free";
 DH[2][18] = "6pm – 8pm<br>Andrew";
 DH[2][20] = "8pm – 10pm<br>Christina";
 DH[2][22] = "10pm - 12am<br>DJ Jay Jason";
@@ -128,7 +128,7 @@ DH[5][8]  = "8am - 10am<br>";
 DH[5][0]  = "12am – 4am<br>Auto/Free";
 DH[5][10] = "10am – 12pm<br>DJ Queen Dani";
 DH[5][12] = "12pm – 3pm<br>DJ Nala";
-DH[5][15] = "3pm - 5pm<br>DJ Sparky";
+DH[5][15] = "3pm - 5pm<br>Free";
 DH[5][18] = "6pm - 8pm<br>Baby Jayne";
 DH[5][20] = "8pm - 9pm<br>DJ Mix N Match";
 DH[5][22] = "10pm - 12am<br>DJ Songbird";
@@ -142,7 +142,7 @@ DH[6][6]  = "6am – 10am<br>Free";
 DH[6][16] = "4pm – 6pm<br>DJ Keyes";
 DH[6][18] = "6pm – 7pm<br>Laura - DJ LilDevil";
 DH[6][19] = "7pm – 9pm<br>DJ Bes Wolf";
-DH[6][21] = "9pm – 10pm<br>KSM";
+DH[6][21] = "9pm – 10pm<br>Free";
 DH[6][22] = "10pm – 12am<br>Baby Jayne";
 
 // SUNDAY (7)
