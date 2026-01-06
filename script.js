@@ -88,7 +88,7 @@ const DH = Array.from({ length: 8 }, () => Array(24).fill(""));
 DH[1][1]  = "1am - 3am<br>DJ Carrillo";
 DH[1][6]  = "6am – 10am<br>Steve";
 DH[1][10] = "10am – 12pm<br>John";
-DH[1][12] = "12pm – 2pm<br>Free";
+DH[1][12] = "12pm – 2pm<br>DJ Dezzy Mac";
 DH[1][15] = "3pm – 5pm<br>James Stephen";
 DH[1][18] = "6pm – 9pm<br>Auto";   
 DH[1][17] = "5pm – 7pm<br>Lewis";
@@ -129,7 +129,7 @@ DH[5][0]  = "12am – 4am<br>Auto/Free";
 DH[5][10] = "10am – 12pm<br>DJ Queen Dani";
 DH[5][12] = "12pm – 3pm<br>DJ Nala";
 DH[5][15] = "3pm - 5pm<br>DJ Sparky";
-DH[5][18] = "6pm - 8pm<br>Auto";
+DH[5][18] = "6pm - 8pm<br>Baby Jayne";
 DH[5][20] = "8pm - 9pm<br>DJ Mix N Match";
 DH[5][22] = "10pm - 12am<br>DJ Songbird";
 
@@ -143,7 +143,7 @@ DH[6][16] = "4pm – 6pm<br>DJ Keyes";
 DH[6][18] = "6pm – 7pm<br>Laura - DJ LilDevil";
 DH[6][19] = "7pm – 9pm<br>DJ Bes Wolf";
 DH[6][21] = "9pm – 10pm<br>KSM";
-DH[6][22] = "10pm – 12am<br>Free/Auto";
+DH[6][22] = "10pm – 12am<br>Baby Jayne";
 
 // SUNDAY (7)
 DH[7][8]  = "8am - 10am<br>DJ Queen Dani";
@@ -265,7 +265,7 @@ setInterval(updateUpNext, 60 * 1000);
    🎉 SHOUT-OUT TICKER
    ========================= */
 
-const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbzflo7iLuZX0LEvw0MH7_2c2bf87WNrBmM89v_00KXsZORZBMjNT2VqEchZUi_R_49a1Q/exec";
+const SHOUTOUT_URL = "https://script.google.com/macros/s/AKfycbzqlI7Up1fPZpXM_yngVsdDrWOGZthFyKvMJgTgs7faJuC6XoUrvZ1gAKHhfxDJCUjgRw/exec";
 
 // submit (creates PENDING)
 const shoutForm = document.getElementById("shoutoutForm");
@@ -280,17 +280,21 @@ if (shoutForm) {
     try {
       const res = await fetch(SHOUTOUT_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(data),
       });
 
-      const out = await res.json().catch(() => ({}));
+      let out = {};
+	  
+	  try {
+		  out = await res.json();
+	  } catch (e) {}
 
-      if (out.ok) {
-        if (status) status.textContent = "✅ Sent for approval! Once LIVE it will show in the ticker.";
+      if (res.ok && (out.ok || out.pending)) {
+        status.textContent = "✅ Sent for approval! Once LIVE it will show in the ticker.";
         shoutForm.reset();
       } else {
-        if (status) status.textContent = "❌ " + (out.error || "Failed");
+        status.textContent = "❌ " + (out.error || "Failed");
       }
     } catch (err) {
       if (status) status.textContent = "❌ Network error";
