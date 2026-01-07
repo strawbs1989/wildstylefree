@@ -148,10 +148,10 @@ DH[6][22] = "10pm – 12am<br>Baby Jayne";
 // SUNDAY (7)
 DH[7][8]  = "8am - 10am<br>DJ Queen Dani";
 DH[7][11] = "11am – 12pm<br>HotShot DJ";
-DH[7][12] = "12pm – 1pm<br>Auto";
-DH[7][13] = "1pm – 3pm<br>Christina";           
-DH[7][17] = "5pm – 7pm<br>Free/Auto";
-DH[7][18] = "6pm – 8pm<br>Liam";
+DH[7][12] = "12pm – 1pm<br>Paradice With DJ LUX";
+DH[7][13] = "1pm – 3pm<br>Paradice With DJ LUX";           
+DH[7][17] = "5pm – 6pm<br>Sound-Invader";
+DH[7][18] = "6pm – 8pm<br>Free/Auto";
 DH[7][20] = "8pm - 9pm<br>DJ EchoFalls";
 DH[7][21] = "10pm – 12am<br>Leslie";
 
