@@ -86,14 +86,14 @@ const DH = Array.from({ length: 8 }, () => Array(24).fill(""));
 
 // MONDAY (1) 
 DH[1][1]  = "1am - 3am<br>DJ Carrillo";
-DH[1][6]  = "6am – 10am<br>Steve";
+DH[1][6]  = "6am – 10am<br>Free";
 DH[1][10] = "10am – 12pm<br>Free";
 DH[1][12] = "12pm – 2pm<br>DJ Dezzy Mac";
 DH[1][15] = "3pm – 5pm<br>James Stephen";
 DH[1][18] = "6pm – 9pm<br>FireDancer";   
 DH[1][17] = "5pm – 7pm<br>Lewis";
 DH[1][20] = "8pm – 10pm<br>DJ Dezzy Mac";
-DH[1][22] = "10pm – 12am<br>Lady Elvis";
+DH[1][22] = "10pm – 12am<br>Tee";
            
 
 // TUESDAY (2) 
