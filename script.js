@@ -121,9 +121,10 @@ DH[4][15] = "3pm – 4pm<br>Charlotte";
 DH[4][19] = "7pm – 8pm<br>DJ EchoFalls";
 DH[4][20] = "8pm – 10pm<br>Strange";
 DH[4][22] = "10pm – 12pm<br>DJ Indigo Riz";
-DH[4][23] = "12pm – 1am<br>Auto";
+DH[4][23] = "12pm –3am<br>Ejay Hill";
 
 // FRIDAY (5) 
+DH[5][8]  = "3am - 5am<br>Free";
 DH[5][8]  = "8am - 10am<br>Paradice With DJ LUX";                         
 DH[5][10] = "10am – 12pm<br>DJ Queen Dani";
 DH[5][12] = "12pm – 3pm<br>DJ Nala";
