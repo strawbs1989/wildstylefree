@@ -111,6 +111,7 @@ DH[3][12] = "12pm - 2pm<br>Froggy -G";
 DH[3][16] = "4pm - 6pm<br>Tee";
 DH[3][18] = "6pm - 7pm<br>DJ Dezza";
 DH[3][19] = "7pm - 8pm<br>Strange";
+DH[3][19] = "8pm - 9pm<br>DJ Eliseo";
 DH[3][22] = "10pm – 12am<br>DJ Nitro";
 
 // THURSDAY (4) 
