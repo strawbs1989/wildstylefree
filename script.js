@@ -93,7 +93,7 @@ DH[1][15] = "3pm – 5pm<br>James Stephen";
 DH[1][18] = "6pm – 9pm<br>FireDancer";   
 DH[1][17] = "5pm – 7pm<br>Lewis";
 DH[1][20] = "8pm – 10pm<br>DJ Dezzy Mac";
-DH[1][22] = "10pm – 12am<br>Tee";
+DH[1][22] = "10pm – 12am<br>Free";
            
 
 // TUESDAY (2) 
@@ -108,7 +108,7 @@ DH[2][22] = "10pm - 12am<br>DJ Jay Jason";
 // WEDNESDAY (3) 
 DH[3][10] = "10am – 12pm<br>DJ Nala";
 DH[3][12] = "12pm - 2pm<br>Froggy -G";
-DH[3][16] = "4pm - 6pm<br>Steve";
+DH[3][16] = "4pm - 6pm<br>Tee";
 DH[3][18] = "6pm - 7pm<br>DJ Dezza";
 DH[3][19] = "7pm - 8pm<br>Strange";
 DH[3][22] = "10pm – 12am<br>DJ Nitro";
