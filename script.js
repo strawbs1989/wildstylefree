@@ -101,13 +101,13 @@ DH[2][2]  = "2am - 5am<br>James-Wizard Of Rock";
 DH[2][3]  = "3am – 6am<br>DJ Queen Dani";
 DH[2][6]  = "6am - 10am<br>Steve";
 DH[2][10] = "10am - 12pm<br>Free";
-DH[2][18] = "6pm – 8pm<br>Andrew";
+DH[2][18] = "6pm – 8pm<br>Free";
 DH[2][20] = "8pm – 10pm<br>Christina";
-DH[2][22] = "10pm - 12am<br>DJ Jay Jason";
+DH[2][22] = "10pm - 12am<br>Free";
 
 // WEDNESDAY (3) 
 DH[3][10] = "10am – 12pm<br>DJ Nala";
-DH[3][12] = "12pm - 2pm<br>Froggy -G";
+DH[3][12] = "12pm - 2pm<br>Free";
 DH[3][16] = "4pm - 6pm<br>Tee";
 DH[3][18] = "6pm - 7pm<br>DJ Dezza";
 DH[3][19] = "7pm - 8pm<br>Strange";
@@ -144,7 +144,7 @@ DH[6][6]  = "6am – 10am<br>Free";
 DH[6][10]  = "10am – 12pm<br>DJ Queen Dani";
 DH[6][16] = "4pm – 6pm<br>DJ Keyes";
 DH[6][18] = "6pm – 7pm<br>Laura - DJ LilDevil";
-DH[6][19] = "7pm – 9pm<br>DJ Bes Wolf";
+DH[6][19] = "8pm – 9pm<br>DJ Golds";
 DH[6][21] = "9pm – 10pm<br>Free";
 DH[6][22] = "10pm – 12am<br>Baby Jayne";
 
@@ -156,7 +156,7 @@ DH[7][13] = "1pm – 3pm<br>Christina";
 DH[7][17] = "5pm – 6pm<br>Sound-Invader";
 DH[7][18] = "6pm – 8pm<br>Jim";
 DH[7][20] = "8pm - 9pm<br>DJ EchoFalls";
-DH[7][21] = "10pm – 12am<br>Leslie";
+DH[7][21] = "10pm – 12am<br>Free";
 
 
 
