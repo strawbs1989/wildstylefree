@@ -93,7 +93,7 @@ DH[1][15] = "3pm – 5pm<br>James Stephen";
 DH[1][18] = "6pm – 9pm<br>FireDancer";   
 DH[1][17] = "5pm – 7pm<br>Lewis";
 DH[1][20] = "8pm – 10pm<br>DJ Dezzy Mac";
-DH[1][22] = "10pm – 12am<br>Free";
+DH[1][22] = "10pm – 12am<br>Jayden";
            
 
 // TUESDAY (2) 
