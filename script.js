@@ -146,7 +146,7 @@ DH[6][16] = "4pm – 6pm<br>DJ Keyes";
 DH[6][18] = "6pm – 7pm<br>Laura - DJ LilDevil";
 DH[6][18] = "7pm – 8pm<br>Laura - DJ Sonic J";
 DH[6][19] = "8pm – 9pm<br>DJ Golds";
-DH[6][21] = "9pm – 10pm<br>Free";
+DH[6][21] = "9pm – 10pm<br>Loan Woolf";
 DH[6][22] = "10pm – 12am<br>Baby Jayne";
 
 // SUNDAY (7)
