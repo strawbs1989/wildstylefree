@@ -131,6 +131,7 @@ DH[5][8]  = "8am - 10am<br>Paradice With DJ LUX";
 DH[5][10] = "10am – 12pm<br>DJ Queen Dani";
 DH[5][12] = "12pm – 3pm<br>DJ Nala";
 DH[5][15] = "3pm - 5pm<br>Free";
+DH[5][15] = "5pm - 6pm<br>Free";
 DH[5][18] = "6pm - 8pm<br>Baby Jayne";
 DH[5][20] = "8pm - 9pm<br>DJ Mix N Match";
 DH[5][20] = "9pm - 10pm<br>DJ Mix N Match";
