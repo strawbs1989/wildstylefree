@@ -134,14 +134,14 @@ DH[5][15] = "3pm - 5pm<br>Free";
 DH[5][18] = "6pm - 8pm<br>Baby Jayne";
 DH[5][20] = "8pm - 9pm<br>DJ Mix N Match";
 DH[5][20] = "9pm - 10pm<br>DJ Mix N Match";
-DH[5][22] = "10pm - 12am<br>DJ Songbird";
+DH[5][22] = "10pm - 12am<br>Tom";
 DH[5][22] = "12am - 3am<br>FireDancer";
 
 // SATURDAY (6)
 DH[6][0]  = "12am – 2am<br>DJ Songbird";
 DH[6][2]  = "2am – 4am<br>Amar - AJ";
 DH[6][4]  = "4am – 6am<br>DJ OldSkool";
-DH[6][6]  = "6am – 10am<br>Free";
+DH[6][6]  = "6am – 10am<br>Leo";
 DH[6][10]  = "10am – 12pm<br>DJ Queen Dani";
 DH[6][16] = "4pm – 6pm<br>DJ Keyes";
 DH[6][18] = "6pm – 7pm<br>Laura - DJ LilDevil";
