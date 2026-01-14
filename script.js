@@ -102,7 +102,7 @@ DH[2][3]  = "3am – 6am<br>DJ Queen Dani";
 DH[2][6]  = "6am - 10am<br>Steve";
 DH[2][10] = "10am - 12pm<br>DJ Paul";
 DH[2][18] = "6pm – 8pm<br>Free";
-DH[2][20] = "8pm – 10pm<br>Christina";
+DH[2][20] = "8pm – 10pm<br>Free";
 DH[2][22] = "10pm - 12am<br>Andrew";
 
 // WEDNESDAY (3) 
@@ -118,7 +118,7 @@ DH[3][22] = "10pm – 12am<br>DJ Nitro";
 // THURSDAY (4) 
 DH[4][0]  = "12am - 1am<br>DJ Mary";
 DH[4][10] = "10am – 12pm<br>DJ Salty";
-DH[4][13] = "1pm - 3pm<br>Christina";
+DH[4][13] = "1pm - 3pm<br>Free";
 DH[4][15] = "3pm – 4pm<br>Charlotte";
 DH[4][15] = "4pm – 7pm<br>DJ JohnT";
 DH[4][19] = "7pm – 8pm<br>DJ EchoFalls";
@@ -146,7 +146,7 @@ DH[6][6]  = "6am – 10am<br>Leo";
 DH[6][10]  = "10am – 12pm<br>DJ Queen Dani";
 DH[6][16] = "4pm – 6pm<br>DJ Keyes";
 DH[6][18] = "6pm – 7pm<br>Laura - DJ LilDevil";
-DH[6][18] = "7pm – 8pm<br>Laura - DJ Sonic J";
+DH[6][18] = "7pm – 8pm<br>DJ Sonic J";
 DH[6][19] = "8pm – 9pm<br>DJ Golds";
 DH[6][21] = "9pm – 10pm<br>Loan Woolf";
 DH[6][22] = "10pm – 12am<br>Baby Jayne";
@@ -155,7 +155,7 @@ DH[6][22] = "10pm – 12am<br>Baby Jayne";
 DH[7][8]  = "8am - 10am<br>DJ Queen Dani";
 DH[7][11] = "11am – 12pm<br>HotShot DJ";
 DH[7][12] = "12pm – 1pm<br>Paradice With DJ LUX";
-DH[7][13] = "1pm – 3pm<br>Christina";           
+DH[7][13] = "1pm – 3pm<br>Free";           
 DH[7][17] = "5pm – 6pm<br>Sound-Invader";
 DH[7][18] = "6pm – 8pm<br>Jim";
 DH[7][20] = "8pm - 9pm<br>DJ EchoFalls";
