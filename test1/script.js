@@ -242,8 +242,14 @@ function renderSchedule(slots) {
   DAY_ORDER.forEach(d => days[d] = []);
 
   slots.forEach(s => {
-    if (days[s.day]) days[s.day].push(s);
+  const day = String(s.day || "").trim();
+  if (days[day]) days[day].push({
+    day,
+    start: String(s.start || "").trim(),
+    end: String(s.end || "").trim(),
+    dj: String(s.dj || "").trim()
   });
+}); 
 
   DAY_ORDER.forEach(d => {
     days[d].sort((a,b) =>
@@ -273,7 +279,20 @@ function renderSchedule(slots) {
   `).join("");
 }
 
-fetch(SCHEDULE_API, { cache: "no-store" })
-  .then(r => r.json())
+// ✅ Use AllOrigins to avoid CORS blocking
+fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(SCHEDULE_API + "?v=" + Date.now()))
+  .then(res => res.json())
+  .then(wrap => JSON.parse(wrap.contents))
   .then(d => renderSchedule(d.slots || []))
-  .catch(err => console.error("Schedule load failed", err)); 
+  .catch(err => {
+    console.error("Schedule load failed", err);
+    const grid = document.getElementById("scheduleGrid");
+    if (grid) {
+      grid.innerHTML = `
+        <div class="slot">
+          <div class="time">Schedule error</div>
+          <div class="show">Check console / Apps Script access</div>
+        </div>
+      `;
+    }
+  });
