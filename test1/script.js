@@ -223,7 +223,7 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
 // 📅 Spreadsheet Schedule Loader
 // ===============================
 
-const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbyBMOotRABH_TjBwWFnZuDLy5XGUCuSr53exZX1SRukfLz62-el_jUNonFdUpniVUM/exec";
+const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbxNJ1QMIiCP7Q1eICeBbwCnA8J0errW_oSUIiJ27b_sLyMpsfA9fn9j4sctU2Xm6Ng/exec";
 
 const DAY_ORDER = [
   "Monday","Tuesday","Wednesday",
