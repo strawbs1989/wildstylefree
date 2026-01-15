@@ -210,3 +210,70 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
     });
   }) // 
   .catch(err => console.error("Reviews load error:", err)); 
+  
+  // ===============================
+// 📅 Spreadsheet Schedule Loader
+// ===============================
+
+const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbwHAtWqWaaSUm8tnkn1veJrEEww1CHhjorfeGhZlD-qb4ni0rZLxoI95JinCTVPkV0/exec";
+
+const DAY_ORDER = [
+  "Monday","Tuesday","Wednesday",
+  "Thursday","Friday","Saturday","Sunday"
+];
+
+function ampmToMinutes(t) {
+  const s = String(t).toLowerCase().replace(/\s+/g, "");
+  const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
+  if (!m) return 9999;
+
+  let h = parseInt(m[1], 10);
+  const mins = m[2] ? parseInt(m[2], 10) : 0;
+  if (h === 12) h = 0;
+  if (m[3] === "pm") h += 12;
+  return h * 60 + mins;
+}
+
+function renderSchedule(slots) {
+  const grid = document.getElementById("scheduleGrid");
+  if (!grid) return;
+
+  const days = {};
+  DAY_ORDER.forEach(d => days[d] = []);
+
+  slots.forEach(s => {
+    if (days[s.day]) days[s.day].push(s);
+  });
+
+  DAY_ORDER.forEach(d => {
+    days[d].sort((a,b) =>
+      ampmToMinutes(a.start) - ampmToMinutes(b.start)
+    );
+  });
+
+  grid.innerHTML = DAY_ORDER.map(day => `
+    <div class="schedule-day glass">
+      <h3>${day}</h3>
+      ${
+        days[day].length
+        ? days[day].map(s => `
+            <div class="slot">
+              <div class="time">${s.start} - ${s.end}</div>
+              <div class="show">${s.dj}</div>
+            </div>
+          `).join("")
+        : `
+            <div class="slot">
+              <div class="time">—</div>
+              <div class="show">Free</div>
+            </div>
+          `
+      }
+    </div>
+  `).join("");
+}
+
+fetch(SCHEDULE_API, { cache: "no-store" })
+  .then(r => r.json())
+  .then(d => renderSchedule(d.slots || []))
+  .catch(err => console.error("Schedule load failed", err)); 
