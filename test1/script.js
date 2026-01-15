@@ -219,79 +219,35 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(scriptURL))
   }) // 
   .catch(err => console.error("Reviews load error:", err)); 
   
-  // ===============================
+// ===============================
 // 📅 Spreadsheet Schedule Loader
 // ===============================
-
 const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbxNJ1QMIiCP7Q1eICeBbwCnA8J0errW_oSUIiJ27b_sLyMpsfA9fn9j4sctU2Xm6Ng/exec";
 
-const DAY_ORDER = [
-  "Monday","Tuesday","Wednesday",
-  "Thursday","Friday","Saturday","Sunday"
-];
+fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(SCHEDULE_API + "?v=" + Date.now()))
+  .then(r => r.text())
+  .then(txt => {
+    const data = JSON.parse(txt);
+	function cleanTime(v) {
+  // Convert "Sat Dec 30 1899 01:00:00 GMT..." into "1am"
+  const s = String(v || "").trim();
 
-function ampmToMinutes(t) {
-  const s = String(t).toLowerCase().replace(/\s+/g, "");
-  const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
-  if (!m) return 9999;
+  // If it's already like "1am" or "10pm", keep it
+  if (/^\d{1,2}(:\d{2})?(am|pm)$/i.test(s.replace(/\s+/g, ""))) return s;
 
-  let h = parseInt(m[1], 10);
-  const mins = m[2] ? parseInt(m[2], 10) : 0;
-  if (h === 12) h = 0;
-  if (m[3] === "pm") h += 12;
-  return h * 60 + mins;
-}
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    let h = d.getHours();
+    const ampm = h >= 12 ? "pm" : "am";
+    h = h % 12; if (h === 0) h = 12;
+    const m = d.getMinutes();
+    return m ? `${h}:${String(m).padStart(2, "0")}${ampm}` : `${h}${ampm}`;
+  }
 
-function renderSchedule(slots) {
-  const grid = document.getElementById("scheduleGrid");
-  if (!grid) return;
-
-  const days = {};
-  DAY_ORDER.forEach(d => days[d] = []);
-
-  slots.forEach(s => {
-  const day = String(s.day || "").trim();
-  if (days[day]) days[day].push({
-    day,
-    start: String(s.start || "").trim(),
-    end: String(s.end || "").trim(),
-    dj: String(s.dj || "").trim()
-  });
-}); 
-
-  DAY_ORDER.forEach(d => {
-    days[d].sort((a,b) =>
-      ampmToMinutes(a.start) - ampmToMinutes(b.start)
-    );
-  });
-
-  grid.innerHTML = DAY_ORDER.map(day => `
-    <div class="schedule-day glass">
-      <h3>${day}</h3>
-      ${
-        days[day].length
-        ? days[day].map(s => `
-            <div class="slot">
-              <div class="time">${s.start} - ${s.end}</div>
-              <div class="show">${s.dj}</div>
-            </div>
-          `).join("")
-        : `
-            <div class="slot">
-              <div class="time">—</div>
-              <div class="show">Free</div>
-            </div>
-          `
-      }
-    </div>
-  `).join("");
-}
-
-// ✅ Use AllOrigins to avoid CORS blocking
-fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(SCHEDULE_API + "?v=" + Date.now()))
-  .then(res => res.json())
-  .then(wrap => JSON.parse(wrap.contents))
-  .then(d => renderSchedule(d.slots || []))
+  return s;
+} 
+    renderSchedule(data.slots || []);
+  })
   .catch(err => {
     console.error("Schedule load failed", err);
     const grid = document.getElementById("scheduleGrid");
@@ -299,8 +255,7 @@ fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(SCHEDULE_API + 
       grid.innerHTML = `
         <div class="slot">
           <div class="time">Schedule error</div>
-          <div class="show">Check console / Apps Script access</div>
-        </div>
-      `;
+          <div class="show">Could not load schedule</div>
+        </div>`;
     }
   });
