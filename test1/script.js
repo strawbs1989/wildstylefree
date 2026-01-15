@@ -254,7 +254,7 @@ fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(SCHEDULE_API + 
     if (grid) {
       grid.innerHTML = `
         <div class="slot">
-          <div class="time">Schedule error</div>
+          <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div> 
           <div class="show">Could not load schedule</div>
         </div>`;
     }
