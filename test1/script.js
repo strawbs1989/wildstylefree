@@ -74,6 +74,26 @@ function slotStartEndMinutes(slot) {
 /* -------------------------
    Render schedule grid
 ------------------------- */
+function cleanTime(v) {
+  const s = String(v || "").trim();
+
+  // Already good? e.g. "1am" or "1:30pm"
+  const compact = s.toLowerCase().replace(/\s+/g, "");
+  if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(compact)) return compact;
+
+  // If it looks like a Date string, convert it to am/pm
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    let h = d.getHours();
+    const ampm = h >= 12 ? "pm" : "am";
+    h = h % 12; if (h === 0) h = 12;
+    const m = d.getMinutes();
+    return m ? `${h}:${String(m).padStart(2, "0")}${ampm}` : `${h}${ampm}`;
+  }
+
+  // Fallback: return original
+  return s;
+} 
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
@@ -108,7 +128,7 @@ function renderSchedule(slots) {
         days[day].length
           ? days[day].map(s => `
               <div class="slot">
-                <div class="time">${s.start} - ${s.end}</div>
+                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div> 
                 <div class="show">${s.dj}</div>
               </div>
             `).join("")
