@@ -172,6 +172,19 @@ function findCurrentSlot(slots, ukNow) {
 
     return false;
   };
+  
+  // refresh
+  function refreshNowOn(slots) {
+  const now = getUKNow();
+  const current = findCurrentSlot(slots, now);
+  const next = findUpNextSlot(slots, now);
+
+  updateNowOnUI(current);
+  updateUpNextUI(next);
+}
+
+setInterval(() => refreshNowOn(scheduleSlots), 60000);
+refreshNowOn(scheduleSlots); 
 
   // normalize
   const clean = slots.map(s => ({
@@ -201,7 +214,7 @@ function findUpNextSlot(slots, ukNow) {
     start: String(s.start || "").trim(),
     end: String(s.end || "").trim(),
     dj: String(s.dj || "").trim()
-  })).filter(s => s.day && s.start && s.end && s.dj);
+  })).filter(s => s.day && s.start && s.end); 
 
   // Build a list of candidate "next start times" over the next 7 days
   const candidates = [];
@@ -237,10 +250,14 @@ function updateNowOnUI(current) {
   if (!pill || !t || !a) return;
 
   if (current) {
-    pill.textContent = "ON AIR";
-    pill.classList.add("onair");
-    t.textContent = `${current.start} – ${current.end}`;
-    a.textContent = current.dj;
+  pill.textContent = current.dj.toLowerCase() === "free" ? "AUTO" : "ON AIR";
+  pill.classList.toggle("onair", current.dj.toLowerCase() !== "free");
+
+  t.textContent = `${current.start} – ${current.end}`;
+  a.textContent = current.dj === "Free"
+    ? "Auto / Free Rotation"
+    : current.dj;
+} 
   } else {
     pill.textContent = "OFF AIR";
     pill.classList.remove("onair");
