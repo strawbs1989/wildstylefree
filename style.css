@@ -566,7 +566,27 @@ footer {
 body.nav-open{ overflow: hidden; }
 
 /* responsive: show burger + hide desktop nav */
-@media (max-width: 960px){
-  .main-nav{ display: none !important; }
-  .burger{ display: inline-block; }
+@media (max-width: 900px) {
+  .burger { display: block; }
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #0b0b0b;
+    flex-direction: column;
+    text-align: center;
+    z-index: 1000;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .main-nav a {
+    padding: 15px;
+    font-size: 1.2rem;
+  }
 } 
