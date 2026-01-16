@@ -44,6 +44,26 @@ body.slate{ background: var(--slate); }
 .burger{display:none;background:transparent;border:none;cursor:pointer}
 .burger span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;border-radius:2px}
 
+#burger{
+  position: relative;
+  z-index: 99999;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.site-header,
+.header-inner{
+  position: relative;
+  z-index: 1000;
+}
+
+/* If you have canvas/visualizer overlays */
+#bgCanvas{
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+} 
+
 /* Nowplaying Box */
 .nowplaying{display:flex;align-items:center;gap:.8rem;padding:.5rem 1rem;margin:.5rem auto;border-radius:12px;background:rgba(255,255,255,0.05);width:fit-content}
 .nowplaying img{width:42px;height:42px;border-radius:8px;object-fit:cover}
@@ -452,3 +472,60 @@ footer {
   display: block;
   margin: 0 auto 10px;
 }
+
+/* =========================
+   ✅ MOBILE NAV FIX (CSS ONLY)
+   Add this at the VERY END of your CSS
+   ========================= */
+@media (max-width: 960px){
+
+  /* Make sure header stays above everything */
+  .site-header{
+    z-index: 9999;
+  }
+
+  /* Burger must always be tappable */
+  .burger{
+    display: block;
+    position: relative;
+    z-index: 10001;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+
+  /* Prevent any header effects/overlays from stealing taps */
+  #bgCanvas,
+  canvas{
+    pointer-events: none !important;
+  }
+
+  /* Mobile dropdown menu: fixed so it can’t be clipped */
+  .main-nav{
+    display: none;
+    position: fixed;           /* was absolute */
+    top: 72px;                 /* adjust if needed */
+    right: 10px;
+    left: auto;
+
+    flex-direction: column;
+    gap: .25rem;
+
+    padding: .7rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.85);
+
+    z-index: 10000;            /* above header layers */
+    max-width: calc(100vw - 20px);
+  }
+
+  .main-nav.open{
+    display: flex;
+  }
+
+  /* Bigger tap targets for mobile */
+  .main-nav a{
+    display: block;
+    padding: .75rem .9rem;
+  }
+} 
