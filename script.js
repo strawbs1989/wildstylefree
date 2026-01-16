@@ -9,54 +9,83 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
-/* ---------- Mobile Nav (Burger) ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  const burger = document.getElementById("burger");
-  const nav = document.getElementById("nav");
+/* =========================
+   ✅ Mobile Nav (Burger) — WORKING + DUPLICATE-SAFE
+   Drop this into script.js (and remove any other burger/nav code)
+   Requires: <button id="burger" class="burger"> ... </button>
+             <nav id="nav" class="main-nav"> ... </nav>
+   ========================= */
 
-  if (!burger || !nav) return;
+(function () {
+  function initMobileNav() {
+    const burger = document.getElementById("burger");
+    const nav = document.getElementById("nav");
+    if (!burger || !nav) return;
 
-  const openNav = () => {
-    nav.classList.add("open");
-    burger.setAttribute("aria-expanded", "true");
-  };
+    // --- Accessibility defaults
+    burger.setAttribute("type", "button");
+    burger.setAttribute("aria-controls", "nav");
+    if (!burger.hasAttribute("aria-expanded")) burger.setAttribute("aria-expanded", "false");
 
-  const closeNav = () => {
-    nav.classList.remove("open");
-    burger.setAttribute("aria-expanded", "false");
-  };
+    // --- Helpers
+    const openNav = () => {
+      nav.classList.add("open");
+      burger.setAttribute("aria-expanded", "true");
+    };
 
-  const toggleNav = () => {
-    nav.classList.contains("open") ? closeNav() : openNav();
-  };
+    const closeNav = () => {
+      nav.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    };
 
-  burger.addEventListener("click", (e) => {
-    e.preventDefault();
-    toggleNav();
-  });
+    const toggleNav = () => {
+      nav.classList.contains("open") ? closeNav() : openNav();
+    };
 
-  // Close when clicking a nav link
-  nav.addEventListener("click", (e) => {
-    const a = e.target.closest("a");
-    if (a) closeNav();
-  });
+    // ✅ CRITICAL: make it duplicate-safe (overwrites prior handlers)
+    burger.onclick = null;
+    burger.ontouchend = null;
 
-  // Close when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!nav.classList.contains("open")) return;
-    if (e.target.closest("#nav") || e.target.closest("#burger")) return;
-    closeNav();
-  });
+    // Click (all browsers)
+    burger.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleNav();
+    };
 
-  // Close on escape
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeNav();
-  });
+    // Touch (iOS Safari can be fussy)
+    burger.ontouchend = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleNav();
+      return false;
+    };
 
-  // Good accessibility defaults
-  if (!burger.hasAttribute("aria-expanded")) burger.setAttribute("aria-expanded", "false");
-  if (!burger.hasAttribute("aria-controls")) burger.setAttribute("aria-controls", "nav");
-});
+    // Close when tapping a link
+    nav.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if (a) closeNav();
+    });
+
+    // Close when tapping outside
+    document.addEventListener("click", (e) => {
+      if (!nav.classList.contains("open")) return;
+      if (e.target.closest("#nav") || e.target.closest("#burger")) return;
+      closeNav();
+    });
+
+    // Close on Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeNav();
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMobileNav);
+  } else {
+    initMobileNav();
+  }
+})(); 
 
 /* ---------- HLS Player ---------- */
 document.addEventListener("DOMContentLoaded", () => {
