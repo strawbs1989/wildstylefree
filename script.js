@@ -143,53 +143,57 @@ function renderSchedule(slots) {
   `).join("");
 }
 
-/* =========================
-   NOW ON + UP NEXT (FIXED)
-   ========================= */
-
+/* -------------------------
+   NOW ON + UP NEXT from slots
+------------------------- */
 function findCurrentSlot(slots, ukNow) {
   const dayNum = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay(); // Mon=1..Sun=7
   const minsNow = ukNow.getUTCHours() * 60 + ukNow.getUTCMinutes();
 
+  // Check today's slots + previous day slots that cross midnight
   const todayName = DAY_ORDER[dayNum - 1];
   const prevName = DAY_ORDER[(dayNum + 5) % 7];
 
+  // Helper to test if now is inside a slot
   const isInSlot = (slotDayName, slot) => {
     const r = slotStartEndMinutes(slot);
     if (!r) return false;
 
     if (slotDayName === todayName) {
       if (!r.crossesMidnight) return minsNow >= r.start && minsNow < r.end;
+      // crosses midnight: active if now >= start OR now < end
       return minsNow >= r.start || minsNow < r.end;
     }
 
+    // previous day crossing midnight can still be active after midnight today
     if (slotDayName === prevName && r.crossesMidnight) {
-      return minsNow < r.end;
+      return minsNow < r.end; // after midnight part
     }
 
     return false;
   };
 
+  // normalize
   const clean = slots.map(s => ({
     day: normDay(s.day),
     start: String(s.start || "").trim(),
     end: String(s.end || "").trim(),
     dj: String(s.dj || "").trim()
-  })).filter(s => s.day && s.start && s.end); // ✅ FREE allowed
+  })).filter(s => s.day && s.start && s.end && s.dj);
 
-  for (const s of clean.filter(s => s.day === todayName)) {
-    if (isInSlot(todayName, s)) return s;
-  }
+  // Check today first
+  const todaySlots = clean.filter(s => s.day === todayName);
+  for (const s of todaySlots) if (isInSlot(todayName, s)) return { ...s };
 
-  for (const s of clean.filter(s => s.day === prevName)) {
-    if (isInSlot(prevName, s)) return s;
-  }
+  // Then prev-day cross-midnight
+  const prevSlots = clean.filter(s => s.day === prevName);
+  for (const s of prevSlots) if (isInSlot(prevName, s)) return { ...s };
 
   return null;
 }
 
 function findUpNextSlot(slots, ukNow) {
-  const dayNum = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay();
+  const dayNum = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay(); // 1..7
   const minsNow = ukNow.getUTCHours() * 60 + ukNow.getUTCMinutes();
 
   const clean = slots.map(s => ({
@@ -197,28 +201,33 @@ function findUpNextSlot(slots, ukNow) {
     start: String(s.start || "").trim(),
     end: String(s.end || "").trim(),
     dj: String(s.dj || "").trim()
-  })).filter(s => s.day && s.start && s.end);
+  })).filter(s => s.day && s.start && s.end && s.dj);
 
+  // Build a list of candidate "next start times" over the next 7 days
   const candidates = [];
 
   for (let offset = 0; offset < 7; offset++) {
     const dIndex = (dayNum - 1 + offset) % 7;
     const dayName = DAY_ORDER[dIndex];
+    const daySlots = clean.filter(s => s.day === dayName);
 
-    for (const s of clean.filter(x => x.day === dayName)) {
+    for (const s of daySlots) {
       const startM = timeToMinutes(s.start);
       if (startM === null) continue;
+
+      // Same day: only consider starts after now
       if (offset === 0 && startM <= minsNow) continue;
 
-      candidates.push({ offset, startM, slot: s });
+      candidates.push({
+        offset,
+        startM,
+        slot: s
+      });
     }
   }
 
   candidates.sort((a, b) => (a.offset - b.offset) || (a.startM - b.startM));
-
-  // ✅ Prefer DJ shows over Free
-  const djNext = candidates.find(c => c.slot.dj.toLowerCase() !== "free");
-  return djNext ? djNext.slot : candidates[0]?.slot || null;
+  return candidates.length ? candidates[0].slot : null;
 }
 
 function updateNowOnUI(current) {
@@ -228,13 +237,10 @@ function updateNowOnUI(current) {
   if (!pill || !t || !a) return;
 
   if (current) {
-    const isFree = current.dj.toLowerCase() === "free";
-
-    pill.textContent = isFree ? "AUTO" : "ON AIR";
-    pill.classList.toggle("onair", !isFree);
-
+    pill.textContent = "ON AIR";
+    pill.classList.add("onair");
     t.textContent = `${current.start} – ${current.end}`;
-    a.textContent = isFree ? "Auto / Free Rotation" : current.dj;
+    a.textContent = current.dj;
   } else {
     pill.textContent = "OFF AIR";
     pill.classList.remove("onair");
@@ -246,24 +252,12 @@ function updateNowOnUI(current) {
 function updateUpNextUI(next) {
   const el = document.getElementById("upNextShow");
   if (!el) return;
-
   if (!next) {
     el.textContent = "Auto / Free Rotation";
     return;
   }
-
-  el.innerHTML = `${next.day} • ${next.start} – ${next.end} • <strong>${next.dj === "Free" ? "Auto / Free Rotation" : next.dj}</strong>`;
-} 
-
-function refreshNowOn(slots) {
-  const now = getUKNow();
-  updateNowOnUI(findCurrentSlot(slots, now));
-  updateUpNextUI(findUpNextSlot(slots, now));
+  el.innerHTML = `${next.day} • ${next.start} – ${next.end} • <strong>${next.dj}</strong>`;
 }
-
-refreshNowOn(scheduleSlots);
-setInterval(() => refreshNowOn(scheduleSlots), 60000); 
-
 
 /* -------------------------
    Fetch schedule (robust)
