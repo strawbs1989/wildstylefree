@@ -5,56 +5,34 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=2026">
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=2026">
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="/script.js" defer></script>
+  <script src="https://wildstyle.vip/script.js" defer></script>
 
 </head>
 <body class="slate">
   <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="/index.html">
-      <div class="brand-mark">WS</div>
-      <div class="brand-text">
-        <strong>Wildstyle Radio</strong>
-        <span>wildstyle.vip</span>
-      </div>
-    </a>
+    <div class="container header-inner">
+      <a class="brand" href="./index.html">
+        <div class="brand-mark">WS</div>
+        <div class="brand-text">
+          <strong>Wildstyle Radio</strong>
+          <span>wildstyle.vip</span>
+        </div>
+      </a>
 
-    <!-- Desktop nav -->
-    <nav class="main-nav" aria-label="Main navigation">
-      <a href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a>
-      <a href="/schedule.html">Schedule</a>
-      <a href="/merch.html">Merch</a>
-      <a href="/shoutout.html">ShoutOut</a>
-    </nav>
+      <nav class="main-nav" id="nav">
+        <a href="./index.html">Home</a>
+        <a href="./djs.html">DJs</a>
+        <a href="./schedule.html">Schedule</a>
+        <a href="./merch.html">Merch</a>
+		<a href="./shoutout.html">ShoutOut</a>
+      </nav>
 
-    <!-- Burger -->
-    <button class="burger" id="burger" type="button"
-      aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
-
-<!-- Mobile drawer + backdrop -->
-<div class="nav-backdrop" id="navBackdrop" hidden></div>
-
-<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" hidden>
-  <div class="mobile-nav-top">
-    <div class="mobile-nav-title">Menu</div>
-    <button class="mobile-nav-close" id="navClose" type="button" aria-label="Close menu">✕</button>
-  </div>
-
-  <a href="/index.html">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/merch.html">Merch</a>
-  <a href="/shoutout.html">ShoutOut</a>
-</nav> 
-
-      
+      <button class="burger" id="burger" aria-label="Toggle Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
 
     <div class="nowplaying" id="nowplaying">
       <img id="np-art" src="./assets/cover_placeholder.png" alt="art">
