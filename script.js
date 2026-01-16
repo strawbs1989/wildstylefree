@@ -106,78 +106,131 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(loadShoutouts, 60000);
 
   /* ---------- SCHEDULE (APPS SCRIPT) ---------- */
-  const SCHEDULE_API =
-    "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
 
-  const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
-  function getUKNow() {
-    return new Date(
-      new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
-    );
-  }
+// ✅ Put your NEW /exec URL here
+const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
 
-  function timeToMins(t) {
-    const m = t.match(/(\d+)(?::(\d+))?(am|pm)/i);
-    if (!m) return null;
-    let h = +m[1] % 12 + (m[3].toLowerCase() === "pm" ? 12 : 0);
-    return h * 60 + (+m[2] || 0);
-  }
+/* ---------- UK Time (BST aware, device-proof) ---------- */
+function getUKNow() {
+  const now = new Date(); // UTC baseline
+  const y = now.getUTCFullYear();
 
-  function inRange(now, start, end) {
-    return end <= start
-      ? now >= start || now < end
-      : now >= start && now < end;
-  }
+  // BST: last Sunday in March -> last Sunday in October (UTC math)
+  const bstStart = new Date(Date.UTC(y, 2, 31));
+  bstStart.setUTCDate(31 - bstStart.getUTCDay());
 
-  async function loadSchedule() {
-    try {
-      const res = await fetch(SCHEDULE_API);
-      const data = await res.json();
-      return data.slots || [];
-    } catch {
-      return [];
-    }
-  }
+  const bstEnd = new Date(Date.UTC(y, 9, 31));
+  bstEnd.setUTCDate(31 - bstEnd.getUTCDay());
 
-  function updateNowAndNext(slots) {
-    const now = getUKNow();
-    const day = now.getDay();
-    const mins = now.getHours() * 60 + now.getMinutes();
+  const inBST = now >= bstStart && now < bstEnd;
+  return new Date(now.getTime() + (inBST ? 1 : 0) * 3600 * 1000);
+}
 
-    const today = slots.filter(s => DAY_NAMES.indexOf(s.day) === day);
-    let current = null;
+/* ---------- Schedule as slots (THIS fixes your On Air) ---------- */
+/*
+  Day numbers: Mon=1 ... Sun=7
+  Keep your DJs the same — just list the actual time ranges.
+*/
+const SLOTS = [
+  // MONDAY (1)
+  { day: 1, start: "1am",  end: "3am",  dj: "DJ Carrillo" },
+  { day: 1, start: "6am",  end: "10am", dj: "Free" },
+  { day: 1, start: "10am", end: "12pm", dj: "Free" },
+  { day: 1, start: "12pm", end: "2pm",  dj: "DJ Dezzy Mac" },
+  { day: 1, start: "3pm",  end: "5pm",  dj: "James Stephen" },
+  { day: 1, start: "5pm",  end: "7pm",  dj: "Lewis" },
+  { day: 1, start: "6pm",  end: "9pm",  dj: "FireDancer" },   // NOTE: overlaps 5–7
+  { day: 1, start: "8pm",  end: "10pm", dj: "DJ Dezzy Mac" },
+  { day: 1, start: "10pm", end: "12am", dj: "Jayden" },
 
-    for (const s of today) {
-      if (inRange(mins, timeToMins(s.start), timeToMins(s.end))) {
-        current = s;
-        break;
-      }
-    }
+  // TUESDAY (2)
+  { day: 2, start: "2am",  end: "5am",  dj: "James - Wizard Of Rock" },
+  { day: 2, start: "3am",  end: "6am",  dj: "DJ Queen Dani" }, // NOTE: overlaps 2–5
+  { day: 2, start: "6am",  end: "10am", dj: "Steve" },
+  { day: 2, start: "10am", end: "12pm", dj: "DJ Paul" },
+  { day: 2, start: "6pm",  end: "8pm",  dj: "Free" },
+  { day: 2, start: "8pm",  end: "10pm", dj: "Free" },
+  { day: 2, start: "10pm", end: "12am", dj: "Andrew" },
 
-    const pill = document.getElementById("live-pill");
-    const title = document.getElementById("np-title");
-    const artist = document.getElementById("np-artist");
+  // WEDNESDAY (3)
+  { day: 3, start: "10am", end: "12pm", dj: "DJ Nala" },
+  { day: 3, start: "12pm", end: "2pm",  dj: "Free" },
+  { day: 3, start: "2pm",  end: "4pm",  dj: "Free" },
+  { day: 3, start: "4pm",  end: "6pm",  dj: "Tee" },
+  { day: 3, start: "6pm",  end: "7pm",  dj: "Daniel Parker" },
+  { day: 3, start: "7pm",  end: "8pm",  dj: "Strange" },
+  { day: 3, start: "8pm",  end: "9pm",  dj: "DJ Eliseo" },
+  { day: 3, start: "10pm", end: "12am", dj: "DJ Nitro" },
 
-    if (current) {
-      pill.textContent = "ON AIR";
-      pill.classList.add("onair");
-      title.textContent = `${current.start} – ${current.end}`;
-      artist.textContent = current.dj;
-    } else {
-      pill.textContent = "OFF AIR";
-      pill.classList.remove("onair");
-      title.textContent = "No current broadcast";
-      artist.textContent = "Schedule resumes soon";
-    }
-  }
+  // THURSDAY (4)
+  { day: 4, start: "12am", end: "1am",  dj: "DJ Mary" },
+  { day: 4, start: "10am", end: "12pm", dj: "DJ Salty" },
+  { day: 4, start: "1pm",  end: "3pm",  dj: "Free" },
+  { day: 4, start: "3pm",  end: "4pm",  dj: "Charlotte" },
+  { day: 4, start: "4pm",  end: "7pm",  dj: "DJ JohnT" },
+  { day: 4, start: "7pm",  end: "8pm",  dj: "DJ EchoFalls" },
+  { day: 4, start: "8pm",  end: "10pm", dj: "Strange" },
+  { day: 4, start: "10pm", end: "12am", dj: "DJ Indigo Riz" },
+  { day: 4, start: "12am", end: "3am",  dj: "Ejay Hill" }, // NOTE: this is actually Friday 12–3 unless you mean Thurs night
 
-  loadSchedule().then(slots => {
-    updateNowAndNext(slots);
-    setInterval(() => updateNowAndNext(slots), 60000);
-  });
+  // FRIDAY (5)
+  { day: 5, start: "8am",  end: "10am", dj: "Paradice With DJ LUX" },
+  { day: 5, start: "10am", end: "12pm", dj: "DJ Queen Dani" },
+  { day: 5, start: "12pm", end: "3pm",  dj: "DJ Nala" },
+  { day: 5, start: "3pm",  end: "5pm",  dj: "Free" },
+  { day: 5, start: "5pm",  end: "6pm",  dj: "Monet" },
+  { day: 5, start: "6pm",  end: "8pm",  dj: "Baby Jayne" },
+  { day: 5, start: "8pm",  end: "10pm", dj: "DJ Mix N Match" }, // combined
+  { day: 5, start: "10pm", end: "12am", dj: "Tom" },
+  { day: 5, start: "12am", end: "3am",  dj: "FireDancer" }, // NOTE: this is actually Saturday 12–3 unless you mean Fri night
 
-}); 
+  // SATURDAY (6)
+  { day: 6, start: "12am", end: "2am",  dj: "DJ Songbird" },
+  { day: 6, start: "2am",  end: "4am",  dj: "Amar - AJ" },
+  { day: 6, start: "4am",  end: "6am",  dj: "DJ OldSkool" },
+  { day: 6, start: "6am",  end: "10am", dj: "Leo" },
+  { day: 6, start: "10am", end: "12pm", dj: "DJ Queen Dani" },
+  { day: 6, start: "4pm",  end: "6pm",  dj: "DJ Keyes" },
+  { day: 6, start: "6pm",  end: "7pm",  dj: "Laura - DJ LilDevil" },
+  { day: 6, start: "7pm",  end: "8pm",  dj: "DJ Sonic J" },
+  { day: 6, start: "8pm",  end: "9pm",  dj: "DJ Golds" },
+  { day: 6, start: "9pm",  end: "10pm", dj: "Loan Woolf" },
+  { day: 6, start: "10pm", end: "12am", dj: "Baby Jayne" },
+
+  // SUNDAY (7)
+  { day: 7, start: "8am",  end: "10am", dj: "DJ Queen Dani" },
+  { day: 7, start: "11am", end: "12pm", dj: "HotShot DJ" },
+  { day: 7, start: "12pm", end: "1pm",  dj: "Paradice With DJ LUX" },
+  { day: 7, start: "1pm",  end: "3pm",  dj: "Free" },
+  { day: 7, start: "5pm",  end: "6pm",  dj: "Sound-Invader" },
+  { day: 7, start: "6pm",  end: "8pm",  dj: "Jim" },
+  { day: 7, start: "8pm",  end: "9pm",  dj: "DJ EchoFalls" },
+  { day: 7, start: "10pm", end: "12am", dj: "Andrew" },
+];
+
+/* ---------- Time helpers ---------- */
+function timeToMinutes(t) {
+  const s = String(t || "").trim().toLowerCase().replace(/\s+/g, "");
+  const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
+  if (!m) return null;
+
+  let h = parseInt(m[1], 10);
+  const mins = m[2] ? parseInt(m[2], 10) : 0;
+  const ap = m[3];
+
+  if (h === 12) h = 0;
+  if (ap === "pm") h += 12;
+
+  return h * 60 + mins;
+}
+
+function inSlot(nowMins, startMins, endMins) {
+  if (startMins === null || endMins === null) return false;
+  // cross-midnight
+  if (endMins <= startMins) return nowMins >= startMins || nowMins < endMins;
+  return nowMins >= startMins && nowMins < endMins;
+} 
 
 /* -------------------------
    NOW ON + UP NEXT from slots
