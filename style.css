@@ -474,94 +474,99 @@ footer {
 }
 
 /* =========================
-   ✅ MOBILE NAV FIX (CSS ONLY)
-   Add this at the VERY END of your CSS
+   ✅ ROOT Burger Menu System
    ========================= */
-@media (max-width: 960px){
 
-  /* Make sure header stays above everything */
-  .site-header{
-    z-index: 9999;
-  }
+/* keep header above content */
+.site-header{ position: sticky; top: 0; z-index: 5000; }
 
-  /* Burger must always be tappable */
-  .burger{
-    display: block;
-    position: relative;
-    z-index: 10001;
-    pointer-events: auto;
-    touch-action: manipulation;
-  }
-
-  /* Prevent any header effects/overlays from stealing taps */
-  #bgCanvas,
-  canvas{
-    pointer-events: none !important;
-  }
-
-  /* Mobile dropdown menu: fixed so it can’t be clipped */
-  .main-nav{
-    display: none;
-    position: fixed;           /* was absolute */
-    top: 72px;                 /* adjust if needed */
-    right: 10px;
-    left: auto;
-
-    flex-direction: column;
-    gap: .25rem;
-
-    padding: .7rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: rgba(0,0,0,.85);
-
-    z-index: 10000;            /* above header layers */
-    max-width: calc(100vw - 20px);
-  }
-
-  .main-nav.open{
-    display: flex;
-  }
-
-  /* Bigger tap targets for mobile */
-  .main-nav a{
-    display: block;
-    padding: .75rem .9rem;
-  }
-} 
-
-/* =========================
-   ✅ MOBILE NAV FIX (for your header)
-   ========================= */
-@media (max-width: 960px){
-  .burger{
-    position: relative;
-    z-index: 100000 !important;
-    pointer-events: auto;
-  }
-
-  #nav{
-    display: none;
-    position: fixed; /* not absolute (prevents clipping/behind issues) */
-    top: 72px; /* below the top bar */
-    right: 10px;
-
-    flex-direction: column;
-    gap: .25rem;
-
-    padding: .7rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: rgba(0,0,0,.88);
-
-    z-index: 99999 !important; /* above header + nowplaying */
-    max-width: calc(100vw - 20px);
-  }
-
-  #nav.open{ display: flex; }
-
-  #nav a{
-    display: block;
-    padding: .75rem .9rem;
-  }
+/* burger button */
+.burger{
+  display: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: .5rem;
+  border-radius: 12px;
 }
+.burger span{
+  display:block;
+  width:22px;
+  height:2px;
+  background:#fff;
+  margin:4px 0;
+  border-radius:2px;
+}
+
+/* mobile drawer (hidden on desktop) */
+.nav-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 5999;
+}
+
+.mobile-nav{
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(320px, 86vw);
+  padding: 14px;
+  background: rgba(0,0,0,.88);
+  border-left: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+  z-index: 6000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  transform: translateX(100%);
+  transition: transform .22s ease;
+}
+.mobile-nav.open{
+  transform: translateX(0);
+}
+
+.mobile-nav-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 6px 2px 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.mobile-nav-title{
+  font-weight: 800;
+  letter-spacing: .06em;
+  font-family: Oswald, Inter, sans-serif;
+}
+.mobile-nav-close{
+  background: transparent;
+  border: 0;
+  color: #fff;
+  font-size: 20px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.mobile-nav a{
+  color:#fff;
+  text-decoration:none;
+  padding: 12px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.mobile-nav a:active{ transform: scale(.99); }
+
+/* lock scroll when menu open */
+body.nav-open{ overflow: hidden; }
+
+/* responsive: show burger + hide desktop nav */
+@media (max-width: 960px){
+  .main-nav{ display: none !important; }
+  .burger{ display: inline-block; }
+} 

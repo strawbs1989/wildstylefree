@@ -10,40 +10,55 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =========================
-   ✅ Mobile Nav (works with your exact header)
+   ✅ ROOT Burger Menu System (mobile drawer)
    ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const burger = document.getElementById("burger");
-  const nav = document.getElementById("nav");
-  if (!burger || !nav) return;
+  const mobileNav = document.getElementById("mobileNav");
+  const backdrop = document.getElementById("navBackdrop");
+  const closeBtn = document.getElementById("navClose");
 
-  // Start closed
-  nav.classList.remove("open");
-  burger.setAttribute("aria-expanded", "false");
-  burger.setAttribute("aria-controls", "nav");
+  if (!burger || !mobileNav || !backdrop || !closeBtn) return;
 
-  // Use onclick so you can't accidentally stack duplicate handlers
-  burger.onclick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    nav.classList.toggle("open");
-    burger.setAttribute("aria-expanded", nav.classList.contains("open") ? "true" : "false");
+  const openMenu = () => {
+    document.body.classList.add("nav-open");
+    burger.setAttribute("aria-expanded", "true");
+    backdrop.hidden = false;
+    mobileNav.hidden = false;
+
+    // allow transition to run
+    requestAnimationFrame(() => mobileNav.classList.add("open"));
   };
 
-  // Close when clicking a link
-  nav.addEventListener("click", (e) => {
-    if (e.target.closest("a")) {
-      nav.classList.remove("open");
-      burger.setAttribute("aria-expanded", "false");
-    }
+  const closeMenu = () => {
+    document.body.classList.remove("nav-open");
+    burger.setAttribute("aria-expanded", "false");
+    mobileNav.classList.remove("open");
+
+    // wait for slide-out then hide
+    setTimeout(() => {
+      mobileNav.hidden = true;
+      backdrop.hidden = true;
+    }, 230);
+  };
+
+  const toggleMenu = () => {
+    const isOpen = mobileNav.classList.contains("open");
+    isOpen ? closeMenu() : openMenu();
+  };
+
+  burger.onclick = (e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); };
+  closeBtn.onclick = (e) => { e.preventDefault(); closeMenu(); };
+  backdrop.onclick = () => closeMenu();
+
+  // close when clicking a link in drawer
+  mobileNav.addEventListener("click", (e) => {
+    if (e.target.closest("a")) closeMenu();
   });
 
-  // Close when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!nav.classList.contains("open")) return;
-    if (e.target.closest("#nav") || e.target.closest("#burger")) return;
-    nav.classList.remove("open");
-    burger.setAttribute("aria-expanded", "false");
+  // escape to close
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && mobileNav.classList.contains("open")) closeMenu();
   });
 }); 
 
