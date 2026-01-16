@@ -529,3 +529,39 @@ footer {
     padding: .75rem .9rem;
   }
 } 
+
+/* =========================
+   ✅ MOBILE NAV FIX (for your header)
+   ========================= */
+@media (max-width: 960px){
+  .burger{
+    position: relative;
+    z-index: 100000 !important;
+    pointer-events: auto;
+  }
+
+  #nav{
+    display: none;
+    position: fixed; /* not absolute (prevents clipping/behind issues) */
+    top: 72px; /* below the top bar */
+    right: 10px;
+
+    flex-direction: column;
+    gap: .25rem;
+
+    padding: .7rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.88);
+
+    z-index: 99999 !important; /* above header + nowplaying */
+    max-width: calc(100vw - 20px);
+  }
+
+  #nav.open{ display: flex; }
+
+  #nav a{
+    display: block;
+    padding: .75rem .9rem;
+  }
+}

@@ -9,10 +9,44 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
-// Burger menu
-const burger = document.getElementById("burger");
-const nav = document.getElementById("nav");
-if (burger && nav) burger.addEventListener("click", () => nav.classList.toggle("open"));
+/* =========================
+   ✅ Mobile Nav (works with your exact header)
+   ========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const nav = document.getElementById("nav");
+  if (!burger || !nav) return;
+
+  // Start closed
+  nav.classList.remove("open");
+  burger.setAttribute("aria-expanded", "false");
+  burger.setAttribute("aria-controls", "nav");
+
+  // Use onclick so you can't accidentally stack duplicate handlers
+  burger.onclick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    nav.classList.toggle("open");
+    burger.setAttribute("aria-expanded", nav.classList.contains("open") ? "true" : "false");
+  };
+
+  // Close when clicking a link
+  nav.addEventListener("click", (e) => {
+    if (e.target.closest("a")) {
+      nav.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!nav.classList.contains("open")) return;
+    if (e.target.closest("#nav") || e.target.closest("#burger")) return;
+    nav.classList.remove("open");
+    burger.setAttribute("aria-expanded", "false");
+  });
+}); 
+
 
 /* ---------- HLS Player ---------- */
 document.addEventListener("DOMContentLoaded", () => {
