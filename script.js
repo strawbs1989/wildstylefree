@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function initMobileNav() {
     const burger = document.getElementById("burger");
     const nav = document.getElementById("nav");
-    if (!burger || !nav) return;
+    if (burger && nav) burger.addEventListener("click", () => nav.classList.toggle("open"));
 
     // --- Accessibility defaults
     burger.setAttribute("type", "button");
