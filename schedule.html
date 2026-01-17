@@ -10,7 +10,7 @@
   <script src="https://wildstyle.vip/script.js" defer></script>
 
 </head>
-<body class="slate">
+
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="./index.html">
@@ -22,17 +22,17 @@
       </a>
 
       <nav class="main-nav" id="nav">
-        <a href="./index.html">Home</a>
-        <a href="./djs.html">DJs</a>
-        <a href="./schedule.html">Schedule</a>
-        <a href="./merch.html">Merch</a>
-		<a href="./shoutout.html">ShoutOut</a>
+        <a href="/index.html">Home</a>
+		<a href="/chat.html">Chat</a>
+        <a href="/djs.html">DJs</a>
+        <a href="/merch.html">Merch</a>
       </nav>
 
       <button class="burger" id="burger" aria-label="Toggle Menu">
         <span></span><span></span><span></span>
       </button>
     </div>
+    
 
     <div class="nowplaying" id="nowplaying">
       <img id="np-art" src="./assets/cover_placeholder.png" alt="art">
@@ -43,6 +43,22 @@
       <span class="live-pill" id="live-pill">OFF AIR</span>
     </div>
   </header>
+  
+  <!-- Mobile drawer + backdrop -->
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" hidden>
+  <div class="mobile-nav-top">
+    <div class="mobile-nav-title">Menu</div>
+    <button class="mobile-nav-close" id="navClose" type="button" aria-label="Close menu">✕</button>
+  </div>
+
+  <a href="/index.html">Home</a>
+  <a href="/djs.html">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/merch.html">Merch</a>
+  <a href="/shoutout.html">ShoutOut</a>
+</nav> 
 
   <section class="section">
   <div class="container">
