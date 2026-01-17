@@ -11,14 +11,66 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
-/* ---------- Burger Menu ---------- */
-document.addEventListener("DOMContentLoaded", () => {
+/* ===============================
+   FORCE MOBILE BURGER MENU FIX
+   =============================== */
+
+(function () {
   const burger = document.getElementById("burger");
   const nav = document.getElementById("nav");
-  if (burger && nav) {
-    burger.addEventListener("click", () => nav.classList.toggle("open"));
+
+  if (!burger || !nav) {
+    console.warn("Burger or nav missing");
+    return;
   }
-});
+
+  // Kill any previous listeners fighting this
+  burger.replaceWith(burger.cloneNode(true));
+  nav.replaceWith(nav.cloneNode(true));
+
+  const freshBurger = document.getElementById("burger");
+  const freshNav = document.getElementById("nav");
+
+  freshBurger.setAttribute("aria-expanded", "false");
+
+  freshBurger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const isOpen = freshNav.classList.contains("open");
+
+    freshNav.classList.toggle("open", !isOpen);
+    freshBurger.setAttribute("aria-expanded", String(!isOpen));
+  });
+
+  // Close when clicking a link
+  freshNav.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function (e) {
+    if (
+      freshNav.classList.contains("open") &&
+      !e.target.closest("#nav") &&
+      !e.target.closest("#burger")
+    ) {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+})(); 
 
 /* -------------------------
    UK Time (BST aware)
