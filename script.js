@@ -184,70 +184,149 @@ function renderSchedule(slots) {
 /* -------------------------
    NOW ON + UP NEXT
 ------------------------- */
+
+// Utility: Convert HH:MM string to total minutes (UTC assumed)
+function timeToMinutes(timeStr) {
+  if (!timeStr || !/^\d{2}:\d{2}$/.test(timeStr)) return null;
+  const [hours, mins] = timeStr.split(":").map(Number);
+  return hours * 60 + mins;
+}
+
+// Utility: Get start/end minutes + check if slot crosses midnight
+function slotStartEndMinutes(slot) {
+  if (!slot?.day || !slot?.start || !slot?.end) return null;
+ 
+  const start = timeToMinutes(slot.start);
+  const end = timeToMinutes(slot.end);
+  if (start === null || end === null) return null;
+
+  return {
+    start,
+    end,
+    crossesMidnight: end < start // Crosses midnight if end time is earlier than start
+  };
+}
+
+// Assume DAY_ORDER is defined (e.g., ["Monday", "Tuesday", ..., "Sunday"])
+// Validate DAY_ORDER to prevent index errors
+if (typeof DAY_ORDER === "undefined" || DAY_ORDER.length !== 7) {
+  console.error("DAY_ORDER must be an array of 7 day names (e.g., ['Monday', 'Tuesday', ..., 'Sunday'])");
+}
+
 function findCurrentSlot(slots, now) {
-  const dayNum = now.getUTCDay() === 0 ? 7 : now.getUTCDay();
+  if (!Array.isArray(slots) || !(now instanceof Date)) return null;
+
+  const dayNum = now.getUTCDay() === 0 ? 7 : now.getUTCDay(); // 1=Mon, 7=Sun
   const minsNow = now.getUTCHours() * 60 + now.getUTCMinutes();
-  const today = DAY_ORDER[dayNum - 1];
-  const prev = DAY_ORDER[(dayNum + 5) % 7];
+  const today = DAY_ORDER?.[dayNum - 1];
+  const prevDay = DAY_ORDER?.[(dayNum + 5) % 7]; // Previous day (e.g., Sun → Sat)
 
-  for (const s of slots) {
-    const r = slotStartEndMinutes(s);
-    if (!r) continue;
+  if (!today || !prevDay) return null;
 
-    if (s.day === today) {
-      if (!r.crossesMidnight && minsNow >= r.start && minsNow < r.end) return s;
-      if (r.crossesMidnight && (minsNow >= r.start || minsNow < r.end)) return s;
+  for (const slot of slots) {
+    const timeData = slotStartEndMinutes(slot);
+    if (!timeData) continue;
+
+    // Check today's slots
+    if (slot.day === today) {
+      if (!timeData.crossesMidnight && minsNow >= timeData.start && minsNow < timeData.end) {
+        return slot;
+      }
+      if (timeData.crossesMidnight && (minsNow >= timeData.start || minsNow < timeData.end)) {
+        return slot;
+      }
     }
 
-    if (s.day === prev && r.crossesMidnight && minsNow < r.end) return s;
+    // Check previous day's slots that cross into today
+    if (slot.day === prevDay && timeData.crossesMidnight && minsNow < timeData.end) {
+      return slot;
+    }
   }
   return null;
 }
 
 function findUpNextSlot(slots, now) {
+  if (!Array.isArray(slots) || !(now instanceof Date)) return null;
+
   const minsNow = now.getUTCHours() * 60 + now.getUTCMinutes();
   const dayNum = now.getUTCDay() === 0 ? 7 : now.getUTCDay();
   const candidates = [];
 
-  for (let o = 0; o < 7; o++) {
-    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
-    for (const s of slots.filter(x => x.day === day)) {
-      const m = timeToMinutes(s.start);
-      if (m === null || (o === 0 && m <= minsNow)) continue;
-      candidates.push({ o, m, s });
+  // Check next 7 days (including today)
+  for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+    const dayIndex = (dayNum - 1 + dayOffset) % 7;
+    const targetDay = DAY_ORDER?.[dayIndex];
+    if (!targetDay) continue;
+
+    for (const slot of slots.filter(s => s.day === targetDay)) {
+      const timeData = slotStartEndMinutes(slot);
+      if (!timeData) continue;
+
+      let isUpNext = false;
+      if (dayOffset === 0) {
+        // Today: slot starts after now, OR crosses midnight (starts before now but ends tomorrow)
+        isUpNext = timeData.start > minsNow || timeData.crossesMidnight;
+      } else {
+        // Future days: all valid slots are candidates
+        isUpNext = true;
+      }
+
+      if (isUpNext) {
+        candidates.push({
+          dayOffset,
+          startMins: timeData.start,
+          endMins: timeData.end,
+          slot
+        });
+      }
     }
   }
 
-  candidates.sort((a,b)=>a.o-b.o||a.m-b.m);
-  return candidates.find(c => c.s.dj.toLowerCase() !== "free")?.s || candidates[0]?.s || null;
+  // Sort by day offset → start time → end time (stable sort)
+  candidates.sort((a, b) => {
+    if (a.dayOffset !== b.dayOffset) return a.dayOffset - b.dayOffset;
+    if (a.startMins !== b.startMins) return a.startMins - b.startMins;
+    return a.endMins - b.endMins;
+  });
+
+  // Prioritize non-"free" slots first
+  return candidates.find(c => c.slot.dj?.toLowerCase() !== "free")?.slot || candidates[0]?.slot || null;
 }
 
-function updateNowOnUI(c) {
+function updateNowOnUI(currentSlot) {
   const pill = document.getElementById("live-pill");
-  const t = document.getElementById("np-title");
-  const a = document.getElementById("np-artist");
-  if (!pill || !t || !a) return;
-
-  if (!c) {
-    pill.textContent = "OFF AIR";
-    pill.classList.remove("onair");
-    t.textContent = "No current broadcast";
-    a.textContent = "Schedule resumes soon";
+  const titleEl = document.getElementById("np-title");
+  const artistEl = document.getElementById("np-artist");
+  if (!pill || !titleEl || !artistEl) {
+    console.warn("NOW ON UI elements not found");
     return;
   }
 
-  const free = c.dj.toLowerCase() === "free";
-  pill.textContent = free ? "AUTO" : "ON AIR";
-  pill.classList.toggle("onair", !free);
-  t.textContent = `${c.start} – ${c.end}`;
-  a.textContent = free ? "Auto / Free Rotation" : c.dj;
+  if (!currentSlot) {
+    pill.textContent = "OFF AIR";
+    pill.classList.remove("onair");
+    titleEl.textContent = "No current broadcast";
+    artistEl.textContent = "Schedule resumes soon";
+    return;
+  }
+
+  const isFree = currentSlot.dj?.toLowerCase() === "free";
+  pill.textContent = isFree ? "AUTO" : "ON AIR";
+  pill.classList.toggle("onair", !isFree);
+  // Add UTC label for clarity (or replace with local time if needed)
+  titleEl.textContent = `${currentSlot.start} – ${currentSlot.end} (UTC)`;
+  artistEl.textContent = isFree ? "Auto / Free Rotation" : currentSlot.dj;
 }
 
-function updateUpNextUI(n) {
+function updateUpNextUI(nextSlot) {
   const el = document.getElementById("upNextShow");
-  if (!el) return;
-  el.textContent = n
-    ? `${n.day} • ${n.start} – ${n.end} • ${n.dj}`
+  if (!el) {
+    console.warn("UP NEXT UI element not found");
+    return;
+  }
+
+  el.textContent = nextSlot
+    ? `${nextSlot.day} • ${nextSlot.start} – ${nextSlot.end} (UTC) • ${nextSlot.dj}`
     : "Auto / Free Rotation";
 }
 
