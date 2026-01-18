@@ -1,125 +1,95 @@
 /* =========================
-   Wildstyle - script.js
-   Spreadsheet schedule + Now On + Up Next
-   ========================= */
+   Wildstyle — FINAL FIX
+========================= */
 
-// ✅ Put your NEW /exec URL here
-const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbxooN4MlvSJiBR4t9Ldm5AY0hvg4zCBCKpJGbLXfeFIiE94F_4mw_EK0MqHPu5cypA/exec";
+const SCHEDULE_URL =
+  "https://script.google.com/macros/s/AKfycbz_DpOgEO3Wcid-7MTv22arYiLZh5wLDNlwlPHjJxfUYo6nhqZnXsAU0xLXofogMyg/exec";
 
-// Year
-const yearEl = document.getElementById("year");
-if (yearEl) yearEl.textContent = new Date().getFullYear();
+const DAY_ORDER = [
+  "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+];
 
-// Burger menu
-const burger = document.getElementById("burger");
-const nav = document.getElementById("nav");
-if (burger && nav) burger.addEventListener("click", () => nav.classList.toggle("open"));
-
-/* -------------------------
-   UK time (BST aware)
-------------------------- */
+/* =========================
+   UK Time (BST aware)
+========================= */
 function getUKNow() {
-  const now = new Date(); // UTC baseline
+  const now = new Date();
   const y = now.getUTCFullYear();
 
-  // BST: last Sunday in March -> last Sunday in October
   const bstStart = new Date(Date.UTC(y, 2, 31));
-  bstStart.setUTCDate(31 - bstStart.getUTCDay()); // last Sunday in March
+  bstStart.setUTCDate(31 - bstStart.getUTCDay());
 
   const bstEnd = new Date(Date.UTC(y, 9, 31));
-  bstEnd.setUTCDate(31 - bstEnd.getUTCDay()); // last Sunday in October
+  bstEnd.setUTCDate(31 - bstEnd.getUTCDay());
 
   const inBST = now >= bstStart && now < bstEnd;
-  return new Date(now.getTime() + (inBST ? 1 : 0) * 3600 * 1000);
+  return new Date(now.getTime() + (inBST ? 3600000 : 0));
 }
 
-/* -------------------------
+/* =========================
    Helpers
-------------------------- */
-const DAY_ORDER = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const DAY_TO_NUM = { Monday:1, Tuesday:2, Wednesday:3, Thursday:4, Friday:5, Saturday:6, Sunday:7 };
-
+========================= */
 function normDay(d) {
   const s = String(d || "").trim().toLowerCase();
   const cap = s.charAt(0).toUpperCase() + s.slice(1);
-  return DAY_ORDER.includes(cap) ? cap : "";
+  return DAY_ORDER.includes(cap) ? cap : null;
 }
 
 function timeToMinutes(t) {
   const s = String(t || "").trim().toLowerCase().replace(/\s+/g, "");
-  // matches "1am", "10pm", "1:30pm"
   const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
   if (!m) return null;
 
   let h = parseInt(m[1], 10);
   const mins = m[2] ? parseInt(m[2], 10) : 0;
-  const ap = m[3];
-
   if (h === 12) h = 0;
-  if (ap === "pm") h += 12;
-
+  if (m[3] === "pm") h += 12;
   return h * 60 + mins;
 }
 
-function slotStartEndMinutes(slot) {
+function slotRange(slot) {
   const start = timeToMinutes(slot.start);
   const end = timeToMinutes(slot.end);
   if (start === null || end === null) return null;
-
-  // If end <= start, it crosses midnight (e.g., 10pm-12am or 10pm-2am)
-  const crossesMidnight = end <= start;
-  return { start, end, crossesMidnight };
+  return { start, end, crosses: end <= start };
 }
 
-/* -------------------------
-   Render schedule grid
-------------------------- */
-function cleanTime(v) {
-  const s = String(v || "").trim();
+function cleanTime(t) {
+  return String(t || "").toLowerCase().replace(/\s+/g, "");
+}
 
-  // Already good? e.g. "1am" or "1:30pm"
-  const compact = s.toLowerCase().replace(/\s+/g, "");
-  if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(compact)) return compact;
+/* =========================
+   Fetch + Normalise
+========================= */
+async function fetchSlots() {
+  const res = await fetch(SCHEDULE_URL + "?v=" + Date.now(), { cache: "no-store" });
+  const raw = await res.json();
 
-  // If it looks like a Date string, convert it to am/pm
-  const d = new Date(s);
-  if (!isNaN(d.getTime())) {
-    let h = d.getHours();
-    const ampm = h >= 12 ? "pm" : "am";
-    h = h % 12; if (h === 0) h = 12;
-    const m = d.getMinutes();
-    return m ? `${h}:${String(m).padStart(2, "0")}${ampm}` : `${h}${ampm}`;
-  }
+  return raw.map(r => ({
+    day: normDay(r.day ?? r.Day),
+    start: cleanTime(r.start ?? r.Start),
+    end: cleanTime(r.end ?? r.End),
+    dj: (r.dj ?? r.DJ ?? "Free").trim()
+  })).filter(s => s.day && s.start && s.end);
+}
 
-  // Fallback: return original
-  return s;
-} 
+/* =========================
+   Render Schedule
+========================= */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
 
   const days = {};
-  DAY_ORDER.forEach(d => (days[d] = []));
+  DAY_ORDER.forEach(d => days[d] = []);
 
-  slots.forEach(s => {
-    const day = normDay(s.day);
-    if (!day) return;
-    days[day].push({
-      day,
-      start: String(s.start || "").trim(),
-      end: String(s.end || "").trim(),
-      dj: String(s.dj || "").trim()
-    });
-  });
+  slots.forEach(s => days[s.day].push(s));
 
-  // Sort by start time
-  DAY_ORDER.forEach(d => {
-    days[d].sort((a, b) => {
-      const am = timeToMinutes(a.start) ?? 9999;
-      const bm = timeToMinutes(b.start) ?? 9999;
-      return am - bm;
-    });
-  });
+  DAY_ORDER.forEach(d =>
+    days[d].sort((a,b) =>
+      timeToMinutes(a.start) - timeToMinutes(b.start)
+    )
+  );
 
   grid.innerHTML = DAY_ORDER.map(day => `
     <div class="schedule-day glass">
@@ -128,7 +98,7 @@ function renderSchedule(slots) {
         days[day].length
           ? days[day].map(s => `
               <div class="slot">
-                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div> 
+                <div class="time">${s.start} – ${s.end}</div>
                 <div class="show">${s.dj}</div>
               </div>
             `).join("")
@@ -143,184 +113,114 @@ function renderSchedule(slots) {
   `).join("");
 }
 
-/* -------------------------
-   NOW ON + UP NEXT from slots
-------------------------- */
-function findCurrentSlot(slots, ukNow) {
-  const dayNum = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay(); // Mon=1..Sun=7
-  const minsNow = ukNow.getUTCHours() * 60 + ukNow.getUTCMinutes();
+/* =========================
+   NOW ON
+========================= */
+function findNowOn(slots) {
+  const now = getUKNow();
+  const dayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
+  const mins = now.getHours() * 60 + now.getMinutes();
 
-  // Check today's slots + previous day slots that cross midnight
-  const todayName = DAY_ORDER[dayNum - 1];
-  const prevName = DAY_ORDER[(dayNum + 5) % 7];
+  const today = DAY_ORDER[dayIdx];
+  const prev = DAY_ORDER[(dayIdx + 6) % 7];
 
-  // Helper to test if now is inside a slot
-  const isInSlot = (slotDayName, slot) => {
-    const r = slotStartEndMinutes(slot);
-    if (!r) return false;
+  for (const s of slots) {
+    const r = slotRange(s);
+    if (!r) continue;
 
-    if (slotDayName === todayName) {
-      if (!r.crossesMidnight) return minsNow >= r.start && minsNow < r.end;
-      // crosses midnight: active if now >= start OR now < end
-      return minsNow >= r.start || minsNow < r.end;
+    if (s.day === today) {
+      if (!r.crosses && mins >= r.start && mins < r.end) return s;
+      if (r.crosses && (mins >= r.start || mins < r.end)) return s;
     }
 
-    // previous day crossing midnight can still be active after midnight today
-    if (slotDayName === prevName && r.crossesMidnight) {
-      return minsNow < r.end; // after midnight part
-    }
-
-    return false;
-  };
-
-  // normalize
-  const clean = slots.map(s => ({
-    day: normDay(s.day),
-    start: String(s.start || "").trim(),
-    end: String(s.end || "").trim(),
-    dj: String(s.dj || "").trim()
-  })).filter(s => s.day && s.start && s.end && s.dj);
-
-  // Check today first
-  const todaySlots = clean.filter(s => s.day === todayName);
-  for (const s of todaySlots) if (isInSlot(todayName, s)) return { ...s };
-
-  // Then prev-day cross-midnight
-  const prevSlots = clean.filter(s => s.day === prevName);
-  for (const s of prevSlots) if (isInSlot(prevName, s)) return { ...s };
+    if (s.day === prev && r.crosses && mins < r.end) return s;
+  }
 
   return null;
 }
 
-function findUpNextSlot(slots, ukNow) {
-  const dayNum = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay(); // 1..7
-  const minsNow = ukNow.getUTCHours() * 60 + ukNow.getUTCMinutes();
+/* =========================
+   UP NEXT (ignore Free)
+========================= */
+function findUpNext(slots) {
+  const now = getUKNow();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const dayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
 
-  const clean = slots.map(s => ({
-    day: normDay(s.day),
-    start: String(s.start || "").trim(),
-    end: String(s.end || "").trim(),
-    dj: String(s.dj || "").trim()
-  })).filter(s => s.day && s.start && s.end && s.dj);
+  const list = [];
 
-  // Build a list of candidate "next start times" over the next 7 days
-  const candidates = [];
-
-  for (let offset = 0; offset < 7; offset++) {
-    const dIndex = (dayNum - 1 + offset) % 7;
-    const dayName = DAY_ORDER[dIndex];
-    const daySlots = clean.filter(s => s.day === dayName);
-
-    for (const s of daySlots) {
-      const startM = timeToMinutes(s.start);
-      if (startM === null) continue;
-
-      // Same day: only consider starts after now
-      if (offset === 0 && startM <= minsNow) continue;
-
-      candidates.push({
-        offset,
-        startM,
-        slot: s
-      });
+  for (let o = 0; o < 7; o++) {
+    const day = DAY_ORDER[(dayIdx + o) % 7];
+    for (const s of slots.filter(x => x.day === day)) {
+      if (s.dj.toLowerCase() === "free") continue;
+      const start = timeToMinutes(s.start);
+      if (o === 0 && start <= mins) continue;
+      list.push({ o, start, s });
     }
   }
 
-  candidates.sort((a, b) => (a.offset - b.offset) || (a.startM - b.startM));
-  return candidates.length ? candidates[0].slot : null;
+  list.sort((a,b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
 }
 
-function updateNowOnUI(current) {
+/* =========================
+   UI
+========================= */
+function updateNowOnUI(s) {
   const pill = document.getElementById("live-pill");
-  const t = document.getElementById("np-title");
-  const a = document.getElementById("np-artist");
-  if (!pill || !t || !a) return;
+  const title = document.getElementById("np-title");
+  const artist = document.getElementById("np-artist");
 
-  if (current) {
-    pill.textContent = "ON AIR";
-    pill.classList.add("onair");
-    t.textContent = `${current.start} – ${current.end}`;
-    a.textContent = current.dj;
-  } else {
+  if (!pill || !title || !artist) return;
+
+  if (!s) {
     pill.textContent = "OFF AIR";
     pill.classList.remove("onair");
-    t.textContent = "No current broadcast";
-    a.textContent = "Schedule resumes soon";
-  }
-}
-
-function updateUpNextUI(next) {
-  const el = document.getElementById("upNextShow");
-  if (!el) return;
-  if (!next) {
-    el.textContent = "Auto / Free Rotation";
+    title.textContent = "No current broadcast";
+    artist.textContent = "Schedule resumes soon";
     return;
   }
-  el.innerHTML = `${next.day} • ${next.start} – ${next.end} • <strong>${next.dj}</strong>`;
+
+  pill.textContent = s.dj.toLowerCase() === "free" ? "AUTO" : "ON AIR";
+  pill.classList.toggle("onair", s.dj.toLowerCase() !== "free");
+  title.textContent = `${s.start} – ${s.end}`;
+  artist.textContent = s.dj;
 }
 
-/* -------------------------
-   Fetch schedule (robust)
-   - tries direct fetch first
-   - falls back to AllOrigins RAW if CORS blocks
-------------------------- */
-async function fetchSchedule() {
-  // Try direct first
-  try {
-    const r = await fetch(SCHEDULE_API + "?v=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    return await r.json();
-  } catch (e) {
-    // Fallback: proxy (avoids CORS issues)
-    const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(SCHEDULE_API + "?v=" + Date.now());
-    const r2 = await fetch(proxy, { cache: "no-store" });
-    const txt = await r2.text();
-    return JSON.parse(txt);
-  }
+function updateUpNextUI(s) {
+  const el = document.getElementById("upNextShow");
+  if (!el) return;
+  el.textContent = s
+    ? `${s.day} • ${s.start} – ${s.end} • ${s.dj}`
+    : "Auto / Free Rotation";
 }
 
-/* -------------------------
-   Init schedule page
-------------------------- */
-async function initSchedule() {
-  const grid = document.getElementById("scheduleGrid");
-  const upNextEl = document.getElementById("upNextShow");
+/* =========================
+   INIT
+========================= */
+async function init() {
+  const slots = await fetchSlots();
+  renderSchedule(slots);
 
-  if (grid) {
-    grid.innerHTML = `<div class="slot"><div class="time">Loading…</div><div class="show">Fetching schedule</div></div>`;
-  }
-  if (upNextEl) upNextEl.textContent = "Loading next show…";
+  const tick = () => {
+    updateNowOnUI(findNowOn(slots));
+    updateUpNextUI(findUpNext(slots));
+  };
 
-  try {
-    const data = await fetchSchedule();
-    const slots = Array.isArray(data.slots) ? data.slots : [];
-
-    renderSchedule(slots);
-
-    const tick = () => {
-      const ukNow = getUKNow();
-      const current = findCurrentSlot(slots, ukNow);
-      const next = findUpNextSlot(slots, ukNow);
-      updateNowOnUI(current);
-      updateUpNextUI(next);
-    };
-
-    tick();
-    setInterval(tick, 60_000);
-  } catch (err) {
-    console.error("Schedule load failed:", err);
-    if (grid) {
-      grid.innerHTML = `
-        <div class="slot">
-          <div class="time">Schedule error</div>
-          <div class="show">Apps Script not returning JSON / blocked</div>
-        </div>`;
-    }
-    if (upNextEl) upNextEl.textContent = "Schedule unavailable";
-  }
+  tick();
+  setInterval(tick, 60000);
 }
 
+/* =========================
+   DOM Ready
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
-  // Only run schedule init if container exists (safe on other pages)
-  if (document.getElementById("scheduleGrid")) initSchedule();
-}); 
+  init();
+
+  const burger = document.getElementById("burger");
+  const nav = document.getElementById("nav");
+  if (burger && nav) burger.addEventListener("click", () => nav.classList.toggle("open"));
+
+  const year = document.getElementById("year");
+  if (year) year.textContent = new Date().getFullYear();
+});
