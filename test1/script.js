@@ -10,10 +10,6 @@ const DAY_ORDER = [
   "Thursday","Friday","Saturday","Sunday"
 ];
 
-/* ---------- Year ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 /* ===============================
    FORCE MOBILE BURGER MENU FIX
