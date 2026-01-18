@@ -6,7 +6,7 @@
 
 /* ================= CONFIG ================= */
 
-const SCHEDULE_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
 
 const DAY_ORDER = [
   "Monday","Tuesday","Wednesday",
