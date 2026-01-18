@@ -1,15 +1,20 @@
 /* =========================
-   Wildstyle — FIXED FINAL
+   Wildstyle — script.js
+   Schedule + NOW ON + UP NEXT (FIXED)
 ========================= */
 
 const SCHEDULE_API =
   "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
 
-const DAY_ORDER = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
-/* =========================
-   UK Time (BST aware)
-========================= */
+/* ---------- Year ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+});
+
+/* ---------- UK Time ---------- */
 function getUKNow() {
   const now = new Date();
   const y = now.getUTCFullYear();
@@ -24,130 +29,111 @@ function getUKNow() {
   return new Date(now.getTime() + (inBST ? 3600000 : 0));
 }
 
-/* =========================
-   Helpers
-========================= */
-function normDay(d) {
-  const s = String(d || "").trim().toLowerCase();
-  const cap = s.charAt(0).toUpperCase() + s.slice(1);
-  return DAY_ORDER.includes(cap) ? cap : null;
-}
-
-function timeToMinutes(t) {
-  const s = String(t || "").toLowerCase().replace(/\s+/g, "");
+/* ---------- Time helpers ---------- */
+function toMinutes(t) {
+  if (!t) return null;
+  const s = t.toLowerCase().replace(/\s+/g, "");
   const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
   if (!m) return null;
 
-  let h = parseInt(m[1], 10);
-  const mins = m[2] ? parseInt(m[2], 10) : 0;
+  let h = +m[1];
+  const min = m[2] ? +m[2] : 0;
   if (h === 12) h = 0;
   if (m[3] === "pm") h += 12;
-  return h * 60 + mins;
+  return h * 60 + min;
 }
 
-function slotRange(s) {
-  const start = timeToMinutes(s.start);
-  const end = timeToMinutes(s.end);
-  if (start === null || end === null) return null;
-  return { start, end, crosses: end <= start };
+function normDay(d) {
+  if (!d) return "";
+  const x = d.trim().toLowerCase();
+  return DAYS.find(v => v.toLowerCase() === x) || "";
 }
 
-/* =========================
-   Fetch Schedule
-========================= */
+/* ---------- Fetch ---------- */
 async function fetchSchedule() {
   const r = await fetch(SCHEDULE_API + "?v=" + Date.now(), { cache: "no-store" });
-  return await r.json();
+  const j = await r.json();
+  return (j.slots || []).map(s => ({
+    day: normDay(s.day),
+    start: s.start,
+    end: s.end,
+    dj: s.dj && s.dj.trim() ? s.dj : "Free"
+  }));
 }
 
-/* =========================
-   Render Schedule
-========================= */
+/* ---------- Schedule Render ---------- */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
 
-  const days = {};
-  DAY_ORDER.forEach(d => days[d] = []);
+  const map = {};
+  DAYS.forEach(d => (map[d] = []));
 
-  slots.forEach(s => days[s.day].push(s));
+  slots.forEach(s => {
+    if (s.day) map[s.day].push(s);
+  });
 
-  grid.innerHTML = DAY_ORDER.map(day => `
+  grid.innerHTML = DAYS.map(d => `
     <div class="schedule-day glass">
-      <h3>${day}</h3>
+      <h3>${d}</h3>
       ${
-        days[day].length
-          ? days[day].map(s => `
-              <div class="slot">
-                <div class="time">${s.start} – ${s.end}</div>
-                <div class="show">${s.dj}</div>
-              </div>
-            `).join("")
-          : `
-              <div class="slot">
-                <div class="time">—</div>
-                <div class="show">Free</div>
-              </div>
-            `
+        map[d].length
+          ? map[d].map(s => `
+            <div class="slot">
+              <div class="time">${s.start} – ${s.end}</div>
+              <div class="show">${s.dj}</div>
+            </div>
+          `).join("")
+          : `<div class="slot"><div class="show">Free</div></div>`
       }
     </div>
   `).join("");
 }
 
-/* =========================
-   NOW ON
-========================= */
+/* ---------- NOW ON ---------- */
 function getNowOn(slots) {
   const now = getUKNow();
   const mins = now.getHours() * 60 + now.getMinutes();
-  const dayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
+  const day = DAYS[now.getDay() === 0 ? 6 : now.getDay() - 1];
 
-  const today = DAY_ORDER[dayIdx];
-  const prev = DAY_ORDER[(dayIdx + 6) % 7];
+  return slots.find(s => {
+    if (s.day !== day) return false;
+    const st = toMinutes(s.start);
+    const en = toMinutes(s.end);
+    if (st === null || en === null) return false;
 
-  for (const s of slots) {
-    const r = slotRange(s);
-    if (!r) continue;
-
-    if (s.day === today) {
-      if (!r.crosses && mins >= r.start && mins < r.end) return s;
-      if (r.crosses && (mins >= r.start || mins < r.end)) return s;
-    }
-
-    if (s.day === prev && r.crosses && mins < r.end) return s;
-  }
-
-  return null;
+    return en > st
+      ? mins >= st && mins < en
+      : mins >= st || mins < en;
+  }) || null;
 }
 
-/* =========================
-   UP NEXT (ignore Free)
-========================= */
+/* ---------- UP NEXT ---------- */
 function getUpNext(slots) {
   const now = getUKNow();
   const mins = now.getHours() * 60 + now.getMinutes();
-  const dayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
+  const todayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
 
   const list = [];
 
   for (let o = 0; o < 7; o++) {
-    const day = DAY_ORDER[(dayIdx + o) % 7];
+    const d = DAYS[(todayIdx + o) % 7];
 
-    for (const s of slots.filter(x => x.day === day)) {
-      if (s.dj.toLowerCase() === "free") continue;
-      const start = timeToMinutes(s.start);
-      if (o === 0 && start <= mins) continue;
-      list.push({ o, start, s });
-    }
+    slots
+      .filter(s => s.day === d && s.dj.toLowerCase() !== "free")
+      .forEach(s => {
+        const st = toMinutes(s.start);
+        if (st === null) return;
+        if (o === 0 && st <= mins) return;
+        list.push({ o, st, s });
+      });
   }
 
-  list.sort((a,b) => a.o - b.o || a.start - b.start);
+  list.sort((a,b) => a.o - b.o || a.st - b.st);
   return list[0]?.s || null;
 }
 
-/* =========================
-   UI
-========================= */
+/* ---------- UI ---------- */
 function updateUI(slots) {
   const nowOn = getNowOn(slots);
   const upNext = getUpNext(slots);
@@ -155,46 +141,29 @@ function updateUI(slots) {
   const pill = document.getElementById("live-pill");
   const title = document.getElementById("np-title");
   const artist = document.getElementById("np-artist");
-  const upNextEl = document.getElementById("upNextShow");
+  const up = document.getElementById("upNextShow");
 
   if (nowOn) {
     pill.textContent = nowOn.dj.toLowerCase() === "free" ? "AUTO" : "ON AIR";
-    pill.classList.toggle("onair", nowOn.dj.toLowerCase() !== "free");
     title.textContent = `${nowOn.start} – ${nowOn.end}`;
     artist.textContent = nowOn.dj;
   } else {
-    pill.textContent = "OFF AIR";
-    pill.classList.remove("onair");
-    title.textContent = "No current broadcast";
+    pill.textContent = "AUTO";
+    title.textContent = "No live show";
     artist.textContent = "Auto / Free Rotation";
   }
 
-  upNextEl.textContent = upNext
-    ? `${upNext.day} • ${upNext.start} – ${upNext.end} • ${upNext.dj}`
+  up.textContent = upNext
+    ? `${upNext.day} ${upNext.start} – ${upNext.end} • ${upNext.dj}`
     : "Auto / Free Rotation";
 }
 
-/* =========================
-   INIT
-========================= */
-document.addEventListener("DOMContentLoaded", async () => {
-  const raw = await fetchSchedule();
+/* ---------- Init ---------- */
+async function initSchedule() {
+  window.ALL_SLOTS = await fetchSchedule();
+  renderSchedule(window.ALL_SLOTS);
+  updateUI(window.ALL_SLOTS);
+  setInterval(() => updateUI(window.ALL_SLOTS), 60000);
+}
 
-  const slots = raw.map(s => ({
-    day: normDay(s.day),
-    start: s.start,
-    end: s.end,
-    dj: s.dj || "Free"
-  })).filter(s => s.day);
-
-  renderSchedule(slots);
-  updateUI(slots);
-  setInterval(() => updateUI(slots), 60000);
-
-  const burger = document.getElementById("burger");
-  const nav = document.getElementById("nav");
-  if (burger && nav) burger.addEventListener("click", () => nav.classList.toggle("open"));
-
-  const year = document.getElementById("year");
-  if (year) year.textContent = new Date().getFullYear();
-});
+document.addEventListener("DOMContentLoaded", initSchedule);
