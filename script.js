@@ -271,3 +271,21 @@ async function initSchedule() {
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("scheduleGrid")) initSchedule();
 }); 
+
+function refreshScheduleUI() {
+  if (!window.ALL_SLOTS || !window.ALL_SLOTS.length) return;
+
+  const nowOn = findCurrentSlot(window.ALL_SLOTS);
+  const upNext = findUpNextSlot(window.ALL_SLOTS);
+
+  updateNowOnUI(nowOn);
+  updateUpNextUI(upNext);
+}
+
+// run once when page loads
+document.addEventListener("DOMContentLoaded", () => {
+  refreshScheduleUI();
+});
+
+// update every minute
+setInterval(refreshScheduleUI, 60000);
