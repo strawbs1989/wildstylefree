@@ -1,20 +1,46 @@
 /* =========================
-   Wildstyle — script.js
-   Schedule + NOW ON + UP NEXT (FIXED)
-========================= */
+   Wildstyle - script.js
+   FIXED & STABLE
+   Schedule + Now On + Up Next
+   ========================= */
 
 const SCHEDULE_API =
   "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
 
-const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-
 /* ---------- Year ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
 });
 
-/* ---------- UK Time ---------- */
+/* ===============================
+   MOBILE BURGER MENU (STABLE)
+   =============================== */
+(function () {
+  const burger = document.getElementById("burger");
+  const nav = document.getElementById("nav");
+  if (!burger || !nav) return;
+
+  burger.addEventListener("click", e => {
+    e.preventDefault();
+    nav.classList.toggle("open");
+    burger.setAttribute(
+      "aria-expanded",
+      nav.classList.contains("open") ? "true" : "false"
+    );
+  });
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest("#nav") && !e.target.closest("#burger")) {
+      nav.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    }
+  });
+})();
+
+/* -------------------------
+   UK TIME (BST SAFE)
+------------------------- */
 function getUKNow() {
   const now = new Date();
   const y = now.getUTCFullYear();
@@ -29,141 +55,202 @@ function getUKNow() {
   return new Date(now.getTime() + (inBST ? 3600000 : 0));
 }
 
-/* ---------- Time helpers ---------- */
-function toMinutes(t) {
-  if (!t) return null;
-  const s = t.toLowerCase().replace(/\s+/g, "");
+/* -------------------------
+   HELPERS
+------------------------- */
+const DAY_ORDER = [
+  "Monday","Tuesday","Wednesday",
+  "Thursday","Friday","Saturday","Sunday"
+];
+
+function normDay(d) {
+  const s = String(d || "").trim().toLowerCase();
+  const cap = s.charAt(0).toUpperCase() + s.slice(1);
+  return DAY_ORDER.includes(cap) ? cap : "";
+}
+
+function timeToMinutes(t) {
+  const s = String(t || "").trim().toLowerCase().replace(/\s+/g, "");
   const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
   if (!m) return null;
 
-  let h = +m[1];
-  const min = m[2] ? +m[2] : 0;
+  let h = parseInt(m[1], 10);
+  const mins = m[2] ? parseInt(m[2], 10) : 0;
   if (h === 12) h = 0;
   if (m[3] === "pm") h += 12;
-  return h * 60 + min;
+  return h * 60 + mins;
 }
 
-function normDay(d) {
-  if (!d) return "";
-  const x = d.trim().toLowerCase();
-  return DAYS.find(v => v.toLowerCase() === x) || "";
+function slotStartEndMinutes(slot) {
+  const start = timeToMinutes(slot.start);
+  const end = timeToMinutes(slot.end);
+  if (start === null || end === null) return null;
+  return { start, end, crossesMidnight: end <= start };
 }
 
-/* ---------- Fetch ---------- */
-async function fetchSchedule() {
-  const r = await fetch(SCHEDULE_API + "?v=" + Date.now(), { cache: "no-store" });
-  const j = await r.json();
-  return (j.slots || []).map(s => ({
-    day: normDay(s.day),
-    start: s.start,
-    end: s.end,
-    dj: s.dj && s.dj.trim() ? s.dj : "Free"
-  }));
+function getNowMinutes() {
+  const now = getUKNow();
+  return {
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
+  };
 }
 
-/* ---------- Schedule Render ---------- */
+/* -------------------------
+   SCHEDULE RENDER (UNCHANGED)
+------------------------- */
+function cleanTime(v) {
+  const s = String(v || "").trim().toLowerCase().replace(/\s+/g, "");
+  if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(s)) return s;
+  return v;
+}
+
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
 
-  const map = {};
-  DAYS.forEach(d => (map[d] = []));
+  const days = {};
+  DAY_ORDER.forEach(d => (days[d] = []));
 
   slots.forEach(s => {
-    if (s.day) map[s.day].push(s);
+    const d = normDay(s.day);
+    if (!d) return;
+    days[d].push(s);
   });
 
-  grid.innerHTML = DAYS.map(d => `
+  DAY_ORDER.forEach(d =>
+    days[d].sort((a, b) =>
+      (timeToMinutes(a.start) ?? 9999) -
+      (timeToMinutes(b.start) ?? 9999)
+    )
+  );
+
+  grid.innerHTML = DAY_ORDER.map(day => `
     <div class="schedule-day glass">
-      <h3>${d}</h3>
+      <h3>${day}</h3>
       ${
-        map[d].length
-          ? map[d].map(s => `
-            <div class="slot">
-              <div class="time">${s.start} – ${s.end}</div>
-              <div class="show">${s.dj}</div>
-            </div>
-          `).join("")
-          : `<div class="slot"><div class="show">Free</div></div>`
+        days[day].length
+          ? days[day].map(s => `
+              <div class="slot">
+                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div>
+                <div class="show">${s.dj}</div>
+              </div>
+            `).join("")
+          : `
+              <div class="slot">
+                <div class="time">—</div>
+                <div class="show">Free</div>
+              </div>
+            `
       }
     </div>
   `).join("");
 }
 
-/* ---------- NOW ON ---------- */
-function getNowOn(slots) {
-  const now = getUKNow();
-  const mins = now.getHours() * 60 + now.getMinutes();
-  const day = DAYS[now.getDay() === 0 ? 6 : now.getDay() - 1];
+/* -------------------------
+   NOW ON (FIXED)
+------------------------- */
+function findCurrentSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const today = DAY_ORDER[dayNum - 1];
+  const prev = DAY_ORDER[(dayNum + 5) % 7];
 
-  return slots.find(s => {
-    if (s.day !== day) return false;
-    const st = toMinutes(s.start);
-    const en = toMinutes(s.end);
-    if (st === null || en === null) return false;
+  for (const s of slots) {
+    const r = slotStartEndMinutes(s);
+    if (!r) continue;
 
-    return en > st
-      ? mins >= st && mins < en
-      : mins >= st || mins < en;
-  }) || null;
+    if (s.day === today) {
+      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
+      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
+    }
+
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
+  }
+  return null;
 }
 
-/* ---------- UP NEXT ---------- */
-function getUpNext(slots) {
-  const now = getUKNow();
-  const mins = now.getHours() * 60 + now.getMinutes();
-  const todayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
-
+/* -------------------------
+   UP NEXT (IGNORE FREE)
+------------------------- */
+function findUpNextSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
   const list = [];
 
   for (let o = 0; o < 7; o++) {
-    const d = DAYS[(todayIdx + o) % 7];
+    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
-    slots
-      .filter(s => s.day === d && s.dj.toLowerCase() !== "free")
-      .forEach(s => {
-        const st = toMinutes(s.start);
-        if (st === null) return;
-        if (o === 0 && st <= mins) return;
-        list.push({ o, st, s });
-      });
+    for (const s of slots.filter(x => x.day === day)) {
+      if (s.dj.toLowerCase() === "free") continue;
+
+      const start = timeToMinutes(s.start);
+      if (start === null) continue;
+      if (o === 0 && start <= mins) continue;
+
+      list.push({ o, start, s });
+    }
   }
 
-  list.sort((a,b) => a.o - b.o || a.st - b.st);
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
   return list[0]?.s || null;
 }
 
-/* ---------- UI ---------- */
-function updateUI(slots) {
-  const nowOn = getNowOn(slots);
-  const upNext = getUpNext(slots);
-
+/* -------------------------
+   UI
+------------------------- */
+function updateNowOnUI(slot) {
   const pill = document.getElementById("live-pill");
   const title = document.getElementById("np-title");
   const artist = document.getElementById("np-artist");
-  const up = document.getElementById("upNextShow");
+  if (!pill || !title || !artist) return;
 
-  if (nowOn) {
-    pill.textContent = nowOn.dj.toLowerCase() === "free" ? "AUTO" : "ON AIR";
-    title.textContent = `${nowOn.start} – ${nowOn.end}`;
-    artist.textContent = nowOn.dj;
+  if (slot && slot.dj.toLowerCase() !== "free") {
+    pill.textContent = "ON AIR";
+    title.textContent = `${slot.start} – ${slot.end}`;
+    artist.textContent = slot.dj;
   } else {
     pill.textContent = "AUTO";
     title.textContent = "No live show";
     artist.textContent = "Auto / Free Rotation";
   }
+}
 
-  up.textContent = upNext
-    ? `${upNext.day} ${upNext.start} – ${upNext.end} • ${upNext.dj}`
+function updateUpNextUI(slot) {
+  const el = document.getElementById("upNextShow");
+  if (!el) return;
+  el.textContent = slot
+    ? `${slot.day} ${slot.start} – ${slot.end} • ${slot.dj}`
     : "Auto / Free Rotation";
 }
 
-/* ---------- Init ---------- */
-async function initSchedule() {
-  window.ALL_SLOTS = await fetchSchedule();
-  renderSchedule(window.ALL_SLOTS);
-  updateUI(window.ALL_SLOTS);
-  setInterval(() => updateUI(window.ALL_SLOTS), 60000);
+/* -------------------------
+   FETCH + INIT (SINGLE SOURCE)
+------------------------- */
+async function fetchSchedule() {
+  const r = await fetch(SCHEDULE_API + "?v=" + Date.now(), { cache: "no-store" });
+  return await r.json(); // array
 }
 
-document.addEventListener("DOMContentLoaded", initSchedule);
+async function initSchedule() {
+  const slots = (await fetchSchedule()).map(s => ({
+    day: normDay(s.day),
+    start: s.start,
+    end: s.end,
+    dj: s.dj || "Free"
+  }));
+
+  window.ALL_SLOTS = slots;
+
+  renderSchedule(slots);
+
+  const tick = () => {
+    updateNowOnUI(findCurrentSlot(slots));
+    updateUpNextUI(findUpNextSlot(slots));
+  };
+
+  tick();
+  setInterval(tick, 60000);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("scheduleGrid")) initSchedule();
+});
