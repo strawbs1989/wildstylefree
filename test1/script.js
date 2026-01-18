@@ -4,7 +4,7 @@
    ========================= */
 
 // ✅ Put your NEW /exec URL here
-const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
+const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbxooN4MlvSJiBR4t9Ldm5AY0hvg4zCBCKpJGbLXfeFIiE94F_4mw_EK0MqHPu5cypA/exec";
 
 // Year
 const yearEl = document.getElementById("year");
