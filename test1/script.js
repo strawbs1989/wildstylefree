@@ -45,6 +45,68 @@ function slotRange(s) {
   return { start, end, crosses: end <= start };
 }
 
+/* -------------------------
+   Render Schedule
+------------------------- */
+function cleanTime(v) {
+  const s = String(v || "").trim().toLowerCase().replace(/\s+/g, "");
+  if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(s)) return s;
+  const d = new Date(v);
+  if (!isNaN(d)) {
+    let h = d.getHours();
+    const ampm = h >= 12 ? "pm" : "am";
+    h = h % 12 || 12;
+    const m = d.getMinutes();
+    return m ? `${h}:${String(m).padStart(2,"0")}${ampm}` : `${h}${ampm}`;
+  }
+  return v;
+}
+
+function renderSchedule(slots) {
+  const grid = document.getElementById("scheduleGrid");
+  if (!grid) return;
+
+  const days = {};
+  DAY_ORDER.forEach(d => (days[d] = []));
+
+  slots.forEach(s => {
+    const day = normDay(s.day);
+    if (!day) return;
+    days[day].push({
+      start: s.start,
+      end: s.end,
+      dj: s.dj || "Free"
+    });
+  });
+
+  DAY_ORDER.forEach(d => {
+    days[d].sort((a, b) =>
+      (timeToMinutes(a.start) ?? 9999) - (timeToMinutes(b.start) ?? 9999)
+    );
+  });
+
+  grid.innerHTML = DAY_ORDER.map(day => `
+    <div class="schedule-day glass">
+      <h3>${day}</h3>
+      ${
+        days[day].length
+          ? days[day].map(s => `
+              <div class="slot">
+                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div>
+                <div class="show">${s.dj}</div>
+              </div>
+            `).join("")
+          : `
+              <div class="slot">
+                <div class="time">—</div>
+                <div class="show">Free</div>
+              </div>
+            `
+      }
+    </div>
+  `).join("");
+}
+
 /* =========================
    Fetch + Normalise
 ========================= */
