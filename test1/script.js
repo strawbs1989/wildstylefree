@@ -1,207 +1,326 @@
-/* =========================================================
-   Wildstyle Radio — MASTER script.js (FIXED PROPERLY)
-   Burger menu + Schedule + NOW ON + UP NEXT
-   Spreadsheet / Apps Script compatible
-   ========================================================= */
+/* =========================
+   Wildstyle - script.js
+   Spreadsheet schedule + Now On + Up Next
+   ========================= */
 
-/* ================= CONFIG ================= */
+// ✅ Put your NEW /exec URL here
+const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
 
-const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
+// Year
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-const DAY_ORDER = [
-  "Monday","Tuesday","Wednesday",
-  "Thursday","Friday","Saturday","Sunday"
-];
+// Burger menu
+const burger = document.getElementById("burger");
+const nav = document.getElementById("nav");
+if (burger && nav) burger.addEventListener("click", () => nav.classList.toggle("open"));
 
-/* ================= UTILITIES ================= */
+/* -------------------------
+   UK time (BST aware)
+------------------------- */
+function getUKNow() {
+  const now = new Date(); // UTC baseline
+  const y = now.getUTCFullYear();
+
+  // BST: last Sunday in March -> last Sunday in October
+  const bstStart = new Date(Date.UTC(y, 2, 31));
+  bstStart.setUTCDate(31 - bstStart.getUTCDay()); // last Sunday in March
+
+  const bstEnd = new Date(Date.UTC(y, 9, 31));
+  bstEnd.setUTCDate(31 - bstEnd.getUTCDay()); // last Sunday in October
+
+  const inBST = now >= bstStart && now < bstEnd;
+  return new Date(now.getTime() + (inBST ? 1 : 0) * 3600 * 1000);
+}
+
+/* -------------------------
+   Helpers
+------------------------- */
+const DAY_ORDER = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const DAY_TO_NUM = { Monday:1, Tuesday:2, Wednesday:3, Thursday:4, Friday:5, Saturday:6, Sunday:7 };
+
+function normDay(d) {
+  const s = String(d || "").trim().toLowerCase();
+  const cap = s.charAt(0).toUpperCase() + s.slice(1);
+  return DAY_ORDER.includes(cap) ? cap : "";
+}
 
 function timeToMinutes(t) {
-  if (!t) return null;
-  t = t.toLowerCase().replace(/\s/g, "");
+  const s = String(t || "").trim().toLowerCase().replace(/\s+/g, "");
+  // matches "1am", "10pm", "1:30pm"
+  const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
+  if (!m) return null;
 
-  let h, m = 0;
-  const pm = t.includes("pm");
-  t = t.replace("am","").replace("pm","");
+  let h = parseInt(m[1], 10);
+  const mins = m[2] ? parseInt(m[2], 10) : 0;
+  const ap = m[3];
 
-  if (t.includes(":")) {
-    [h, m] = t.split(":").map(Number);
-  } else {
-    h = Number(t);
-  }
+  if (h === 12) h = 0;
+  if (ap === "pm") h += 12;
 
-  if (pm && h < 12) h += 12;
-  if (!pm && h === 12) h = 0;
-
-  return h * 60 + m;
+  return h * 60 + mins;
 }
 
-function slotRange(slot) {
+function slotStartEndMinutes(slot) {
   const start = timeToMinutes(slot.start);
-  const end   = timeToMinutes(slot.end);
+  const end = timeToMinutes(slot.end);
   if (start === null || end === null) return null;
 
-  return {
-    start,
-    end,
-    crossesMidnight: end <= start
-  };
+  // If end <= start, it crosses midnight (e.g., 10pm-12am or 10pm-2am)
+  const crossesMidnight = end <= start;
+  return { start, end, crossesMidnight };
 }
 
-function ukNow() {
-  const now = new Date();
-  return new Date(now.toLocaleString("en-GB", { timeZone: "Europe/London" }));
-}
+/* -------------------------
+   Render schedule grid
+------------------------- */
+function cleanTime(v) {
+  const s = String(v || "").trim();
 
-/* ================= BURGER MENU ================= */
+  // Already good? e.g. "1am" or "1:30pm"
+  const compact = s.toLowerCase().replace(/\s+/g, "");
+  if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(compact)) return compact;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const burger = document.getElementById("burger");
-  const nav = document.getElementById("nav");
+  // If it looks like a Date string, convert it to am/pm
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    let h = d.getHours();
+    const ampm = h >= 12 ? "pm" : "am";
+    h = h % 12; if (h === 0) h = 12;
+    const m = d.getMinutes();
+    return m ? `${h}:${String(m).padStart(2, "0")}${ampm}` : `${h}${ampm}`;
+  }
 
-  if (!burger || !nav) return;
-
-  burger.addEventListener("click", () => {
-    nav.classList.toggle("open");
-    burger.classList.toggle("open");
-    burger.setAttribute(
-      "aria-expanded",
-      nav.classList.contains("open") ? "true" : "false"
-    );
-  });
-});
-
-/* ================= FETCH SCHEDULE ================= */
-
-async function fetchSchedule() {
-  const res = await fetch(SCHEDULE_URL);
-  const data = await res.json();
-
-  return data.map(r => ({
-    day: r.Day,
-    start: r.Start,
-    end: r.End,
-    dj: r.DJ && r.DJ.trim() !== "" ? r.DJ.trim() : "Free"
-  }));
-}
-
-/* ================= RENDER GRID ================= */
-
+  // Fallback: return original
+  return s;
+} 
 function renderSchedule(slots) {
-  DAY_ORDER.forEach(day => {
-    const col = document.querySelector(`.schedule-day[data-day="${day}"]`);
-    if (!col) return;
+  const grid = document.getElementById("scheduleGrid");
+  if (!grid) return;
 
-    col.innerHTML = `<h3>${day}</h3>`;
+  const days = {};
+  DAY_ORDER.forEach(d => (days[d] = []));
 
-    const daySlots = slots.filter(s => s.day === day);
-
-    if (!daySlots.length) {
-      col.innerHTML += `
-        <div class="slot">
-          <div class="time">—</div>
-          <div class="show">Free</div>
-        </div>`;
-      return;
-    }
-
-    daySlots.forEach(s => {
-      col.innerHTML += `
-        <div class="slot">
-          <div class="time">${s.start} – ${s.end}</div>
-          <div class="show">${s.dj}</div>
-        </div>`;
+  slots.forEach(s => {
+    const day = normDay(s.day);
+    if (!day) return;
+    days[day].push({
+      day,
+      start: String(s.start || "").trim(),
+      end: String(s.end || "").trim(),
+      dj: String(s.dj || "").trim()
     });
   });
+
+  // Sort by start time
+  DAY_ORDER.forEach(d => {
+    days[d].sort((a, b) => {
+      const am = timeToMinutes(a.start) ?? 9999;
+      const bm = timeToMinutes(b.start) ?? 9999;
+      return am - bm;
+    });
+  });
+
+  grid.innerHTML = DAY_ORDER.map(day => `
+    <div class="schedule-day glass">
+      <h3>${day}</h3>
+      ${
+        days[day].length
+          ? days[day].map(s => `
+              <div class="slot">
+                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div> 
+                <div class="show">${s.dj}</div>
+              </div>
+            `).join("")
+          : `
+              <div class="slot">
+                <div class="time">—</div>
+                <div class="show">Free</div>
+              </div>
+            `
+      }
+    </div>
+  `).join("");
 }
 
-/* ================= NOW ON ================= */
+/* -------------------------
+   NOW ON + UP NEXT from slots
+------------------------- */
+function findCurrentSlot(slots, ukNow) {
+  const dayNum = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay(); // Mon=1..Sun=7
+  const minsNow = ukNow.getUTCHours() * 60 + ukNow.getUTCMinutes();
 
-function findCurrentSlot(slots, now) {
-  const dayNum = now.getDay() === 0 ? 7 : now.getDay();
-  const minsNow = now.getHours() * 60 + now.getMinutes();
-  const today = DAY_ORDER[dayNum - 1];
-  const prev = DAY_ORDER[(dayNum + 5) % 7];
+  // Check today's slots + previous day slots that cross midnight
+  const todayName = DAY_ORDER[dayNum - 1];
+  const prevName = DAY_ORDER[(dayNum + 5) % 7];
 
-  for (const s of slots) {
-    const r = slotRange(s);
-    if (!r) continue;
+  // Helper to test if now is inside a slot
+  const isInSlot = (slotDayName, slot) => {
+    const r = slotStartEndMinutes(slot);
+    if (!r) return false;
 
-    if (s.day === today) {
-      if (!r.crossesMidnight && minsNow >= r.start && minsNow < r.end) return s;
-      if (r.crossesMidnight && (minsNow >= r.start || minsNow < r.end)) return s;
+    if (slotDayName === todayName) {
+      if (!r.crossesMidnight) return minsNow >= r.start && minsNow < r.end;
+      // crosses midnight: active if now >= start OR now < end
+      return minsNow >= r.start || minsNow < r.end;
     }
 
-    if (s.day === prev && r.crossesMidnight && minsNow < r.end) return s;
-  }
+    // previous day crossing midnight can still be active after midnight today
+    if (slotDayName === prevName && r.crossesMidnight) {
+      return minsNow < r.end; // after midnight part
+    }
+
+    return false;
+  };
+
+  // normalize
+  const clean = slots.map(s => ({
+    day: normDay(s.day),
+    start: String(s.start || "").trim(),
+    end: String(s.end || "").trim(),
+    dj: String(s.dj || "").trim()
+  })).filter(s => s.day && s.start && s.end && s.dj);
+
+  // Check today first
+  const todaySlots = clean.filter(s => s.day === todayName);
+  for (const s of todaySlots) if (isInSlot(todayName, s)) return { ...s };
+
+  // Then prev-day cross-midnight
+  const prevSlots = clean.filter(s => s.day === prevName);
+  for (const s of prevSlots) if (isInSlot(prevName, s)) return { ...s };
+
   return null;
 }
 
-function updateNowOnUI(slot) {
-  const pill = document.getElementById("live-pill");
-  const title = document.getElementById("np-title");
-  const artist = document.getElementById("np-artist");
+function findUpNextSlot(slots, ukNow) {
+  const dayNum = ukNow.getUTCDay() === 0 ? 7 : ukNow.getUTCDay(); // 1..7
+  const minsNow = ukNow.getUTCHours() * 60 + ukNow.getUTCMinutes();
 
-  if (!pill || !title || !artist) return;
+  const clean = slots.map(s => ({
+    day: normDay(s.day),
+    start: String(s.start || "").trim(),
+    end: String(s.end || "").trim(),
+    dj: String(s.dj || "").trim()
+  })).filter(s => s.day && s.start && s.end && s.dj);
 
-  if (!slot) {
-    pill.textContent = "OFF AIR";
-    pill.classList.remove("onair");
-    title.textContent = "No current broadcast";
-    artist.textContent = "Schedule resumes soon";
-    return;
-  }
-
-  const free = slot.dj.toLowerCase() === "free";
-  pill.textContent = free ? "AUTO" : "ON AIR";
-  pill.classList.toggle("onair", !free);
-  title.textContent = `${slot.start} – ${slot.end}`;
-  artist.textContent = free ? "Auto / Free Rotation" : slot.dj;
-}
-
-/* ================= UP NEXT ================= */
-
-function findUpNextSlot(slots, now) {
-  const minsNow = now.getHours() * 60 + now.getMinutes();
-  const dayNum = now.getDay() === 0 ? 7 : now.getDay();
+  // Build a list of candidate "next start times" over the next 7 days
   const candidates = [];
 
-  for (let o = 0; o < 7; o++) {
-    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
-    slots.filter(s => s.day === day).forEach(s => {
-      const m = timeToMinutes(s.start);
-      if (m === null) return;
-      if (o === 0 && m <= minsNow) return;
-      candidates.push({ o, m, s });
-    });
+  for (let offset = 0; offset < 7; offset++) {
+    const dIndex = (dayNum - 1 + offset) % 7;
+    const dayName = DAY_ORDER[dIndex];
+    const daySlots = clean.filter(s => s.day === dayName);
+
+    for (const s of daySlots) {
+      const startM = timeToMinutes(s.start);
+      if (startM === null) continue;
+
+      // Same day: only consider starts after now
+      if (offset === 0 && startM <= minsNow) continue;
+
+      candidates.push({
+        offset,
+        startM,
+        slot: s
+      });
+    }
   }
 
-  candidates.sort((a,b)=>a.o-b.o||a.m-b.m);
-  return candidates[0]?.s || null;
+  candidates.sort((a, b) => (a.offset - b.offset) || (a.startM - b.startM));
+  return candidates.length ? candidates[0].slot : null;
 }
 
-function updateUpNextUI(slot) {
+function updateNowOnUI(current) {
+  const pill = document.getElementById("live-pill");
+  const t = document.getElementById("np-title");
+  const a = document.getElementById("np-artist");
+  if (!pill || !t || !a) return;
+
+  if (current) {
+    pill.textContent = "ON AIR";
+    pill.classList.add("onair");
+    t.textContent = `${current.start} – ${current.end}`;
+    a.textContent = current.dj;
+  } else {
+    pill.textContent = "OFF AIR";
+    pill.classList.remove("onair");
+    t.textContent = "No current broadcast";
+    a.textContent = "Schedule resumes soon";
+  }
+}
+
+function updateUpNextUI(next) {
   const el = document.getElementById("upNextShow");
   if (!el) return;
-
-  el.textContent = slot
-    ? `${slot.day} • ${slot.start} – ${slot.end} • ${slot.dj}`
-    : "Auto / Free Rotation";
+  if (!next) {
+    el.textContent = "Auto / Free Rotation";
+    return;
+  }
+  el.innerHTML = `${next.day} • ${next.start} – ${next.end} • <strong>${next.dj}</strong>`;
 }
 
-/* ================= INIT ================= */
-
-async function initSchedule() {
+/* -------------------------
+   Fetch schedule (robust)
+   - tries direct fetch first
+   - falls back to AllOrigins RAW if CORS blocks
+------------------------- */
+async function fetchSchedule() {
+  // Try direct first
   try {
-    const slots = await fetchSchedule();
-    const now = ukNow();
-
-    renderSchedule(slots);
-    updateNowOnUI(findCurrentSlot(slots, now));
-    updateUpNextUI(findUpNextSlot(slots, now));
+    const r = await fetch(SCHEDULE_API + "?v=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return await r.json();
   } catch (e) {
-    console.error("Schedule failed:", e);
+    // Fallback: proxy (avoids CORS issues)
+    const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(SCHEDULE_API + "?v=" + Date.now());
+    const r2 = await fetch(proxy, { cache: "no-store" });
+    const txt = await r2.text();
+    return JSON.parse(txt);
   }
 }
 
-document.addEventListener("DOMContentLoaded", initSchedule);
-setInterval(initSchedule, 60000);
+/* -------------------------
+   Init schedule page
+------------------------- */
+async function initSchedule() {
+  const grid = document.getElementById("scheduleGrid");
+  const upNextEl = document.getElementById("upNextShow");
+
+  if (grid) {
+    grid.innerHTML = `<div class="slot"><div class="time">Loading…</div><div class="show">Fetching schedule</div></div>`;
+  }
+  if (upNextEl) upNextEl.textContent = "Loading next show…";
+
+  try {
+    const data = await fetchSchedule();
+    const slots = Array.isArray(data.slots) ? data.slots : [];
+
+    renderSchedule(slots);
+
+    const tick = () => {
+      const ukNow = getUKNow();
+      const current = findCurrentSlot(slots, ukNow);
+      const next = findUpNextSlot(slots, ukNow);
+      updateNowOnUI(current);
+      updateUpNextUI(next);
+    };
+
+    tick();
+    setInterval(tick, 60_000);
+  } catch (err) {
+    console.error("Schedule load failed:", err);
+    if (grid) {
+      grid.innerHTML = `
+        <div class="slot">
+          <div class="time">Schedule error</div>
+          <div class="show">Apps Script not returning JSON / blocked</div>
+        </div>`;
+    }
+    if (upNextEl) upNextEl.textContent = "Schedule unavailable";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Only run schedule init if container exists (safe on other pages)
+  if (document.getElementById("scheduleGrid")) initSchedule();
+}); 
