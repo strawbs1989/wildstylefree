@@ -1,56 +1,28 @@
-// URL for your Apps Script endpoint that fetches the schedule
-const SCHEDULE_URL = 'https://script.google.com/macros/s/AKfycbz_DpOgEO3Wcid-7MTv22arYiLZh5wLDNlwlPHjJxfUYo6nhqZnXsAU0xLXofogMyg/exec';
+/* =========================
+   Wildstyle — script.js (FINAL CLEAN)
+   Schedule (Apps Script) + Now On + Up Next
+========================= */
 
-// Fetch schedule data and update UI
-function fetchScheduleData() {
-  fetch(SCHEDULE_URL)
-    .then(response => response.json())
-    .then(slots => {
-      // Save slots to a global variable
-      window.ALL_SLOTS = slots;
-      // Call the UI update function
-      updateScheduleUI(slots);
-    })
-    .catch(err => console.error('Error fetching schedule:', err));
-}
+/* ---------- CONFIG ---------- */
+const SCHEDULE_URL =
+  "https://script.google.com/macros/s/AKfycbz_DpOgEO3Wcid-7MTv22arYiLZh5wLDNlwlPHjJxfUYo6nhqZnXsAU0xLXofogMyg/exec";
 
-// Function to update Now On and Up Next UI
-function updateScheduleUI(slots) {
-  const nowOn = findCurrentSlot(slots);
-  const upNext = findUpNextSlot(slots);
-
-  updateNowOnUI(nowOn);
-  updateUpNextUI(upNext);
-}
-
-// Call fetchScheduleData on page load
+/* ---------- YEAR ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  fetchScheduleData();
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
 });
 
-// Refresh the schedule every 60 seconds
-setInterval(() => {
-  fetchScheduleData();
-}, 60000);
-
-
-/* ---------- Year ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-});
-
-/* ---------- Burger Menu ---------- */
+/* ---------- BURGER MENU ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   const burger = document.getElementById("burger");
   const nav = document.getElementById("nav");
-  if (burger && nav) {
-    burger.addEventListener("click", () => nav.classList.toggle("open"));
-  }
+  if (!burger || !nav) return;
+  burger.addEventListener("click", () => nav.classList.toggle("open"));
 });
 
 /* -------------------------
-   UK Time (BST aware)
+   UK TIME (BST AWARE)
 ------------------------- */
 function getUKNow() {
   const now = new Date();
@@ -66,10 +38,21 @@ function getUKNow() {
   return new Date(now.getTime() + (inBST ? 3600000 : 0));
 }
 
+function getNowMinutes() {
+  const now = getUKNow();
+  return {
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(), // Mon=1..Sun=7
+    mins: now.getHours() * 60 + now.getMinutes()
+  };
+}
+
 /* -------------------------
-   Helpers
+   HELPERS
 ------------------------- */
-const DAY_ORDER = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const DAY_ORDER = [
+  "Monday","Tuesday","Wednesday","Thursday",
+  "Friday","Saturday","Sunday"
+];
 
 function normDay(d) {
   const s = String(d || "").trim().toLowerCase();
@@ -96,23 +79,15 @@ function slotStartEndMinutes(slot) {
   return { start, end, crossesMidnight: end <= start };
 }
 
-/* -------------------------
-   Render Schedule
-------------------------- */
 function cleanTime(v) {
   const s = String(v || "").trim().toLowerCase().replace(/\s+/g, "");
   if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(s)) return s;
-  const d = new Date(v);
-  if (!isNaN(d)) {
-    let h = d.getHours();
-    const ampm = h >= 12 ? "pm" : "am";
-    h = h % 12 || 12;
-    const m = d.getMinutes();
-    return m ? `${h}:${String(m).padStart(2,"0")}${ampm}` : `${h}${ampm}`;
-  }
   return v;
 }
 
+/* -------------------------
+   RENDER SCHEDULE GRID
+------------------------- */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
@@ -131,8 +106,10 @@ function renderSchedule(slots) {
   });
 
   DAY_ORDER.forEach(d => {
-    days[d].sort((a, b) =>
-      (timeToMinutes(a.start) ?? 9999) - (timeToMinutes(b.start) ?? 9999)
+    days[d].sort(
+      (a,b) =>
+        (timeToMinutes(a.start) ?? 9999) -
+        (timeToMinutes(b.start) ?? 9999)
     );
   });
 
@@ -143,7 +120,7 @@ function renderSchedule(slots) {
         days[day].length
           ? days[day].map(s => `
               <div class="slot">
-                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div>
+                <div class="time">${cleanTime(s.start)} – ${cleanTime(s.end)}</div>
                 <div class="show">${s.dj}</div>
               </div>
             `).join("")
@@ -159,9 +136,8 @@ function renderSchedule(slots) {
 }
 
 /* -------------------------
-   NOW ON + UP NEXT
+   NOW ON
 ------------------------- */
-// Function to get current slot
 function findCurrentSlot(slots) {
   const { dayNum, mins } = getNowMinutes();
   const today = DAY_ORDER[dayNum - 1];
@@ -176,35 +152,37 @@ function findCurrentSlot(slots) {
       if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
     }
 
-    if (s.day === prev && r.crossesMidnight && mins < r.end) {
-      return s;
-    }
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
   }
   return null;
 }
 
-// Function to get "Up Next" show
+/* -------------------------
+   UP NEXT
+------------------------- */
 function findUpNextSlot(slots) {
   const { dayNum, mins } = getNowMinutes();
-  const candidates = [];
+  const list = [];
 
   for (let o = 0; o < 7; o++) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
-    for (const s of slots.filter(x => x.day === day)) {
-      const start = timeToMinutes(s.start);
-      if (start === null) continue;
-
-      if (o === 0 && start <= mins) continue;
-      candidates.push({ o, start, s });
-    }
+    slots
+      .filter(s => s.day === day)
+      .forEach(s => {
+        const start = timeToMinutes(s.start);
+        if (start === null) return;
+        if (o === 0 && start <= mins) return;
+        list.push({ o, start, s });
+      });
   }
 
-  candidates.sort((a, b) => a.o - b.o || a.start - b.start);
-
-  return candidates[0]?.s || null;
+  list.sort((a,b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
 }
 
-// Update the "Now On" UI
+/* -------------------------
+   UI UPDATES
+------------------------- */
 function updateNowOnUI(c) {
   const pill = document.getElementById("live-pill");
   const t = document.getElementById("np-title");
@@ -219,14 +197,13 @@ function updateNowOnUI(c) {
     return;
   }
 
-  const free = c.dj.toLowerCase() === "free";
+  const free = String(c.dj).toLowerCase() === "free";
   pill.textContent = free ? "AUTO" : "ON AIR";
   pill.classList.toggle("onair", !free);
   t.textContent = `${c.start} – ${c.end}`;
   a.textContent = free ? "Auto / Free Rotation" : c.dj;
 }
 
-// Update the "Up Next" UI
 function updateUpNextUI(n) {
   const el = document.getElementById("upNextShow");
   if (!el) return;
@@ -235,65 +212,26 @@ function updateUpNextUI(n) {
     : "Auto / Free Rotation";
 }
 
-// Fetch the schedule from the Apps Script API and update UI
-function fetchScheduleData() {
-  fetch(SCHEDULE_URL)
-    .then(response => response.json())
+/* -------------------------
+   FETCH + REFRESH
+------------------------- */
+function refreshUI(slots) {
+  renderSchedule(slots);
+  updateNowOnUI(findCurrentSlot(slots));
+  updateUpNextUI(findUpNextSlot(slots));
+}
+
+function fetchSchedule() {
+  fetch(SCHEDULE_URL + "?v=" + Date.now(), { cache: "no-store" })
+    .then(r => r.json())
     .then(slots => {
       window.ALL_SLOTS = slots;
-      updateScheduleUI(slots);
+      refreshUI(slots);
     })
-    .catch(err => console.error('Error fetching schedule:', err));
+    .catch(err => console.error("Schedule fetch failed:", err));
 }
 
-// Update the schedule UI
-function updateScheduleUI(slots) {
-  const nowOn = findCurrentSlot(slots);
-  const upNext = findUpNextSlot(slots);
-
-  updateNowOnUI(nowOn);
-  updateUpNextUI(upNext);
-}
-
-// Call fetchScheduleData when the page is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  fetchScheduleData();
+  fetchSchedule();
+  setInterval(fetchSchedule, 60000);
 });
-
-// Refresh the schedule every 60 seconds
-setInterval(() => {
-  fetchScheduleData();
-}, 60000);
-
-
-/* -------------------------
-   Fetch + Init
-------------------------- */
-async function fetchSchedule() {
-  const r = await fetch(SCHEDULE_API + "?v=" + Date.now(), { cache: "no-store" });
-  return (await r.json()).slots || [];
-}
-
-async function initSchedule() {
-  const slots = (await fetchSchedule()).map(s => ({
-    day: normDay(s.day),
-    start: s.start,
-    end: s.end,
-    dj: s.dj || "Free"
-  }));
-
-  renderSchedule(slots);
-
-  const tick = () => {
-    const now = getUKNow();
-    updateNowOnUI(findCurrentSlot(slots, now));
-    updateUpNextUI(findUpNextSlot(slots, now));
-  };
-
-  tick();
-  setInterval(tick, 60000);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("scheduleGrid")) initSchedule();
-}); 
