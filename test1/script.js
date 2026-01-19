@@ -3,7 +3,7 @@
    Spreadsheet schedule + Now On + Up Next
    ========================= */
 
-const SCHEDULE_API = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+const url = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 /* ---------- Year ---------- */
 document.addEventListener("DOMContentLoaded", () => {
