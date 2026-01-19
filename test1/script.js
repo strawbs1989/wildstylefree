@@ -182,17 +182,33 @@ function findUpNextSlot(slots) {
     for (const s of slots.filter(x => x.day === day)) {
       if (s.dj.toLowerCase() === "free") continue;
 
-      const start = timeToMinutes(s.start);
-      if (start === null) continue;
-      if (o === 0 && start <= mins) continue;
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
 
-      list.push({ o, start, s });
+      // TODAY
+      if (o === 0) {
+        // Normal slot: start must be in the future
+        if (!r.crossesMidnight && r.start > mins) {
+          list.push({ o, start: r.start, s });
+        }
+
+        // Midnight slot: treat as "up next" if we are before its end
+        if (r.crossesMidnight && mins < r.start) {
+          list.push({ o, start: r.start, s });
+        }
+      }
+
+      // FUTURE DAYS
+      else {
+        list.push({ o, start: r.start, s });
+      }
     }
   }
 
   list.sort((a, b) => a.o - b.o || a.start - b.start);
   return list[0]?.s || null;
 }
+
 
 /* -------------------------
    UI
