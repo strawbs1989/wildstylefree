@@ -1,9 +1,17 @@
 /* =========================
    Wildstyle - script.js
-   Spreadsheet schedule + Now On + Up Next
+   Schedule Grid + Now On + Up Next + Burger Menu
    ========================= */
 
-const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
+/* -------------------------
+   CONFIG
+------------------------- */
+const SCHEDULE_URL =
+  "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+
+const DAY_ORDER = [
+  "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+];
 
 /* ---------- Year ---------- */
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,19 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===============================
-   FORCE MOBILE BURGER MENU FIX
+   BURGER MENU FIX
    =============================== */
-
 (function () {
   const burger = document.getElementById("burger");
   const nav = document.getElementById("nav");
 
-  if (!burger || !nav) {
-    console.warn("Burger or nav missing");
-    return;
-  }
+  if (!burger || !nav) return;
 
-  // Kill any previous listeners fighting this
   burger.replaceWith(burger.cloneNode(true));
   nav.replaceWith(nav.cloneNode(true));
 
@@ -36,14 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
   freshBurger.addEventListener("click", function (e) {
     e.stopPropagation();
     e.preventDefault();
-
     const isOpen = freshNav.classList.contains("open");
-
     freshNav.classList.toggle("open", !isOpen);
     freshBurger.setAttribute("aria-expanded", String(!isOpen));
   });
 
-  // Close when clicking a link
   freshNav.addEventListener("click", function (e) {
     if (e.target.tagName === "A") {
       freshNav.classList.remove("open");
@@ -51,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Close when clicking outside
   document.addEventListener("click", function (e) {
     if (
       freshNav.classList.contains("open") &&
@@ -63,14 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Escape key
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       freshNav.classList.remove("open");
       freshBurger.setAttribute("aria-expanded", "false");
     }
   });
-})(); 
+})();
 
 /* -------------------------
    UK Time (BST aware)
@@ -92,39 +90,46 @@ function getUKNow() {
 /* -------------------------
    Helpers
 ------------------------- */
-const DAY_ORDER = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-
 function normDay(d) {
   const s = String(d || "").trim().toLowerCase();
   const cap = s.charAt(0).toUpperCase() + s.slice(1);
   return DAY_ORDER.includes(cap) ? cap : "";
 }
 
-function timeToMinutes(t) {
-  const s = String(t || "").trim().toLowerCase().replace(/\s+/g, "");
-  const m = s.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
+function parseTime(t) {
+  t = String(t || "").trim().toLowerCase();
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
   if (!m) return null;
 
   let h = parseInt(m[1], 10);
-  const mins = m[2] ? parseInt(m[2], 10) : 0;
-  if (h === 12) h = 0;
-  if (m[3] === "pm") h += 12;
+  const mins = parseInt(m[2] || "0", 10);
+  const ampm = m[3];
+
+  if (ampm === "pm" && h !== 12) h += 12;
+  if (ampm === "am" && h === 12) h = 0;
+
   return h * 60 + mins;
 }
 
 function slotStartEndMinutes(slot) {
-  const start = timeToMinutes(slot.start);
-  const end = timeToMinutes(slot.end);
-  if (start === null || end === null) return null;
-  return { start, end, crossesMidnight: end <= start };
+  const start = parseTime(slot.start);
+  const end = parseTime(slot.end);
+  if (start == null || end == null) return null;
+
+  return {
+    start,
+    end,
+    crossesMidnight: end <= start
+  };
 }
 
 /* -------------------------
-   Render Schedule
+   Render Schedule Grid
 ------------------------- */
 function cleanTime(v) {
-  const s = String(v || "").trim().toLowerCase().replace(/\s+/g, "");
+  const s = String(v || "").trim().toLowerCase();
   if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(s)) return s;
+
   const d = new Date(v);
   if (!isNaN(d)) {
     let h = d.getHours();
@@ -155,7 +160,7 @@ function renderSchedule(slots) {
 
   DAY_ORDER.forEach(d => {
     days[d].sort((a, b) =>
-      (timeToMinutes(a.start) ?? 9999) - (timeToMinutes(b.start) ?? 9999)
+      (parseTime(a.start) ?? 9999) - (parseTime(b.start) ?? 9999)
     );
   });
 
@@ -182,13 +187,13 @@ function renderSchedule(slots) {
 }
 
 /* -------------------------
-   NOW ON + UP NEXT (FIXED)
+   NOW ON + UP NEXT (FINAL FIXED)
 ------------------------- */
 
 function getNowMinutes() {
-  const now = new Date();
+  const now = getUKNow();
   return {
-    dayNum: now.getDay() === 0 ? 7 : now.getDay(), // Mon=1..Sun=7
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
     mins: now.getHours() * 60 + now.getMinutes()
   };
 }
@@ -202,16 +207,12 @@ function findCurrentSlot(slots) {
     const r = slotStartEndMinutes(s);
     if (!r) continue;
 
-    // Today
     if (s.day === today) {
       if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
       if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
     }
 
-    // Yesterday crossing midnight
-    if (s.day === prev && r.crossesMidnight && mins < r.end) {
-      return s;
-    }
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
   }
 
   return null;
@@ -219,73 +220,120 @@ function findCurrentSlot(slots) {
 
 function findUpNextSlot(slots) {
   const { dayNum, mins } = getNowMinutes();
-  const candidates = [];
+  const list = [];
 
   for (let o = 0; o < 7; o++) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
     for (const s of slots.filter(x => x.day === day)) {
-      const start = timeToMinutes(s.start);
-      if (start === null) continue;
+      if (s.dj.toLowerCase() === "free") continue;
 
-      // Same day → must be later than now
-      if (o === 0 && start <= mins) continue;
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
 
-      candidates.push({ o, start, s });
+      if (o === 0) {
+        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
+        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
+      } else {
+        list.push({ o, start: r.start, s });
+      }
     }
   }
 
-  candidates.sort((a, b) => a.o - b.o || a.start - b.start);
-
-  return candidates[0]?.s || null;
-} 
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
+}
 
 /* -------------------------
-   Fetch + Init
+   FETCH + INIT
 ------------------------- */
-async function fetchSchedule() {
-  const r = await fetch(SCHEDULE_API + "?v=" + Date.now(), { cache: "no-store" });
-  return (await r.json()).slots || [];
+async function loadSchedule() {
+  try {
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
+    const data = await res.json();
+    return data.slots || [];
+  } catch (e) {
+    console.error("Schedule load error:", e);
+    return [];
+  }
 }
 
 async function initSchedule() {
-  const slots = (await fetchSchedule()).map(s => ({
+  const slots = (await loadSchedule()).map(s => ({
     day: normDay(s.day),
     start: s.start,
     end: s.end,
     dj: s.dj || "Free"
   }));
 
+  window.ALL_SLOTS = slots;
+
   renderSchedule(slots);
+  updateNowNext();
 
-  const tick = () => {
-    const now = getUKNow();
-    updateNowOnUI(findCurrentSlot(slots, now));
-    updateUpNextUI(findUpNextSlot(slots, now));
-  };
-
-  tick();
-  setInterval(tick, 60000);
+  setInterval(updateNowNext, 60000);
 }
 
+function updateNowNext() {
+  if (!window.ALL_SLOTS) return;
+
+  const now = findCurrentSlot(window.ALL_SLOTS);
+  const next = findUpNextSlot(window.ALL_SLOTS);
+
+  const nowEl = document.getElementById("nowon");
+  const nextEl = document.getElementById("upnext");
+
+  if (nowEl) {
+    nowEl.innerHTML = now
+      ? `${now.dj} <span>${now.start}–${now.end}</span>`
+      : "Off Air";
+  }
+
+  if (nextEl) {
+    nextEl.innerHTML = next
+      ? `${next.dj} <span>${next.start}–${next.end}</span>`
+      : "No upcoming shows";
+  }
+}
+
+/* -------------------------
+   START
+------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("scheduleGrid")) initSchedule();
+  initSchedule();
 }); 
 
-function refreshScheduleUI() {
-  if (!window.ALL_SLOTS || !window.ALL_SLOTS.length) return;
+/* -------------------------
+   NOW PLAYING UI UPDATE
+------------------------- */
 
-  const nowOn = findCurrentSlot(window.ALL_SLOTS);
-  const upNext = findUpNextSlot(window.ALL_SLOTS);
+function updateNowPlayingUI(track) {
+  const artEl = document.getElementById("np-art");
+  const titleEl = document.getElementById("np-title");
+  const artistEl = document.getElementById("np-artist");
+  const liveEl = document.getElementById("live-pill");
 
-  updateNowOnUI(nowOn);
-  updateUpNextUI(upNext);
-}
+  if (!track) {
+    // No track playing
+    titleEl.textContent = "Loading track…";
+    artistEl.textContent = "Please wait";
+    artEl.src = "./assets/cover_placeholder.png";
+    liveEl.textContent = "OFF AIR";
+    liveEl.classList.remove("live");
+    return;
+  }
 
-// run once when page loads
-document.addEventListener("DOMContentLoaded", () => {
-  refreshScheduleUI();
-});
+  // Update UI
+  titleEl.textContent = track.title || "Unknown Track";
+  artistEl.textContent = track.artist || "Unknown Artist";
+  artEl.src = track.art || "./assets/cover_placeholder.png";
 
-// update every minute
-setInterval(refreshScheduleUI, 60000);
+  // Live pill
+  if (track.isLive) {
+    liveEl.textContent = "LIVE";
+    liveEl.classList.add("live");
+  } else {
+    liveEl.textContent = "OFF AIR";
+    liveEl.classList.remove("live");
+  }
+} 
