@@ -302,3 +302,38 @@ function updateNowNext() {
 document.addEventListener("DOMContentLoaded", () => {
   initSchedule();
 }); 
+
+/* -------------------------
+   NOW PLAYING UI UPDATE
+------------------------- */
+
+function updateNowPlayingUI(track) {
+  const artEl = document.getElementById("np-art");
+  const titleEl = document.getElementById("np-title");
+  const artistEl = document.getElementById("np-artist");
+  const liveEl = document.getElementById("live-pill");
+
+  if (!track) {
+    // No track playing
+    titleEl.textContent = "Loading track…";
+    artistEl.textContent = "Please wait";
+    artEl.src = "./assets/cover_placeholder.png";
+    liveEl.textContent = "OFF AIR";
+    liveEl.classList.remove("live");
+    return;
+  }
+
+  // Update UI
+  titleEl.textContent = track.title || "Unknown Track";
+  artistEl.textContent = track.artist || "Unknown Artist";
+  artEl.src = track.art || "./assets/cover_placeholder.png";
+
+  // Live pill
+  if (track.isLive) {
+    liveEl.textContent = "LIVE";
+    liveEl.classList.add("live");
+  } else {
+    liveEl.textContent = "OFF AIR";
+    liveEl.classList.remove("live");
+  }
+} 
