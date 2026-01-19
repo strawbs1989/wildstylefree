@@ -3,7 +3,7 @@
    Spreadsheet schedule + Now On + Up Next
    ========================= */
 
-const SCHEDULE_API = "https://script.google.com/macros/s/AKfycbzCOKSJ-PkTa_1unRKMrlhtE5v1MZPvctKrqBgWJ9bcjsfaSgxUoGYJ8vt8ut96U5Y/exec";
+const SCHEDULE_API = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 /* ---------- Year ---------- */
 document.addEventListener("DOMContentLoaded", () => {
@@ -219,26 +219,41 @@ function findCurrentSlot(slots) {
 
 function findUpNextSlot(slots) {
   const { dayNum, mins } = getNowMinutes();
-  const candidates = [];
+  const list = [];
 
   for (let o = 0; o < 7; o++) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
     for (const s of slots.filter(x => x.day === day)) {
-      const start = timeToMinutes(s.start);
-      if (start === null) continue;
+      if (s.dj.toLowerCase() === "free") continue;
 
-      // Same day → must be later than now
-      if (o === 0 && start <= mins) continue;
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
 
-      candidates.push({ o, start, s });
+      // TODAY
+      if (o === 0) {
+        // Normal slot: start must be in the future
+        if (!r.crossesMidnight && r.start > mins) {
+          list.push({ o, start: r.start, s });
+        }
+
+        // Midnight slot: treat as "up next" if we are before its end
+        if (r.crossesMidnight && mins < r.start) {
+          list.push({ o, start: r.start, s });
+        }
+      }
+
+      // FUTURE DAYS
+      else {
+        list.push({ o, start: r.start, s });
+      }
     }
   }
 
-  candidates.sort((a, b) => a.o - b.o || a.start - b.start);
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
+}
 
-  return candidates[0]?.s || null;
-} 
 
 /* -------------------------
    Fetch + Init
