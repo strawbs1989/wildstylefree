@@ -128,28 +128,25 @@ function findUpNextSlot(slots) {
    UPDATE UI
 ------------------------- */
 
-async function updateNowNext() {
-  const slots = await loadSchedule();
-  const now = findCurrentSlot(slots);
-  const next = findUpNextSlot(slots);
+function updateNowNext() {
+  if (!window.ALL_SLOTS) return;
 
-  const nowEl = document.getElementById("nowon");
-  const nextEl = document.getElementById("upnext");
+  const now = findCurrentSlot(window.ALL_SLOTS);
+  const next = findUpNextSlot(window.ALL_SLOTS);
 
-  nowEl.innerHTML = now
-    ? `${now.dj} <span>${now.start}–${now.end}</span>`
-    : "Off Air";
+  const nowEl = document.getElementById("nowon");      // if you add this later
+  const nextEl = document.getElementById("upNextShow"); // <-- FIXED
 
-  nextEl.innerHTML = next
-    ? `${next.dj} <span>${next.start}–${next.end}</span>`
-    : "No upcoming shows";
-}
+  if (nowEl) {
+    nowEl.innerHTML = now
+      ? `${now.dj} <span>${now.start}–${now.end}</span>`
+      : "Off Air";
+  }
 
-updateNowNext();
-setInterval(updateNowNext, 60000);
-</script>
-
-<div id="nowon"></div>
-<div id="upnext"></div> 
-
+  if (nextEl) {
+    nextEl.innerHTML = next
+      ? `${next.dj} <span>${next.start}–${next.end}</span>`
+      : "No upcoming shows";
+  }
+} 
 
