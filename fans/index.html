@@ -1,23 +1,12 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>WildstyleRadio | The Wild Ones</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/fans/style.css">
+  <link rel="stylesheet" href="https://wildstyle.vip/fans/style.css">
 </head>
-
 <body>
-
-  <!-- FACEBOOK SDK -->
-  <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous"
-    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v24.0&appId=2301093033279315">
-  </script>
-
   <div class="page">
-
-    <!-- HEADER -->
     <header>
       <div class="logo">
         <div class="logo-mark"></div>
@@ -26,56 +15,269 @@
           <span>Fans Frequency</span>
         </div>
       </div>
-
       <div class="header-cta">
         <button class="btn btn-outline">
           <span class="icon">📡</span>
           <span>Back to Live Stream</span>
         </button>
-
-        <a href="https://wildstyle.vip/fanclub" class="btn btn-primary">
+        <button class="btn btn-primary">
           <span class="icon">⚡</span>
           <span>Join the Fan Club</span>
-        </a>
+        </button>
       </div>
     </header>
 
-    <!-- HERO SECTION -->
     <section class="hero">
       <div class="hero-copy">
         <div class="hero-tag"><span>Welcome, Wild Ones</span></div>
-
         <h1 class="hero-title">The Wild Ones <span>Live Here</span></h1>
-
         <p class="hero-subtitle">
           This is the loud corner of the internet where WildstyleRadio listeners turn into legends—shoutouts, chaos clips,
           and fan stories all tuned to one frequency: yours.
         </p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary">
+            <span class="icon">🎙️</span>
+            <span>Submit a Shoutout</span>
+          </button>
+          <button class="btn btn-outline">
+            <span class="icon">📸</span>
+            <span>Upload Your Wildstyle Moment</span>
+          </button>
+        </div>
+        <div class="hero-meta">
+          <span>Over 3,000+ wild ones tuned in</span>
+          <span>Weekly fan challenges & on‑air features</span>
+        </div>
+      </div>
 
-        <div class="hero-ctas"></div>
+      <aside class="hero-visual">
+        <div class="hero-visual-header">
+          <span class="label">Live Interaction Panel</span>
+          <span>Now Playing · Up Next · Reactions</span>
+        </div>
+        <div class="hero-visual-main">
+          <div class="now-playing">
+            <div class="now-playing-art"></div>
+            <div class="now-playing-meta">
+              <div class="now-playing-label">Now Playing</div>
+              <div class="now-playing-title">“Neon Static”</div>
+              <div class="now-playing-artist">DJ ECHOFALLS</div>
+            </div>
+            <div class="now-playing-count">1,284 listening live</div>
+          </div>
+          <div class="hero-visual-footer">
+            <div class="reaction-pills">
+              <div class="reaction-pill"><span>🔥</span><span>Hype</span></div>
+              <div class="reaction-pill"><span>😂</span><span>LOL</span></div>
+              <div class="reaction-pill"><span>💜</span><span>Love</span></div>
+            </div>
+            <button class="chaos-toggle">
+              <span>🌀</span>
+              <span>Chaos Mode</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <div>
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Fan Shoutouts Wall</h2>
+            <span class="panel-tag">Signal Boost</span>
+          </div>
+          <p class="panel-subtitle">
+            Drop your voice into the mix—text, audio, or pure chaos. The wildest ones get on‑air love.
+          </p>
+          <div class="shoutouts-list">
+            <article class="shoutout">
+              <div class="shoutout-avatar"></div>
+              <div class="shoutout-body">
+                <div class="shoutout-user">@NightBusRaver</div>
+                <div class="shoutout-text">
+                  “Listening on the 12:40 to Brighton—driver’s getting a free rave tonight. Big up Wildstyle!”
+                </div>
+                <div class="shoutout-meta">Text · 2 min ago</div>
+              </div>
+              <div class="shoutout-reactions">
+                <span>🔥 32</span>
+                <span>😂 11</span>
+              </div>
+            </article>
+
+            <article class="shoutout">
+              <div class="shoutout-avatar"></div>
+              <div class="shoutout-body">
+                <div class="shoutout-user">@EchoCult</div>
+                <div class="shoutout-text">
+                  “If EchoPrime ever drops a meditation tape, I’m transcending on the spot.”
+                </div>
+                <div class="shoutout-meta">Audio · 9 min ago</div>
+              </div>
+              <div class="shoutout-reactions">
+                <span class="shoutout-audio">▶ 0:18 voice</span>
+                <span>💜 54</span>
+              </div>
+            </article>
+
+            <article class="shoutout">
+              <div class="shoutout-avatar"></div>
+              <div class="shoutout-body">
+                <div class="shoutout-user">@ChaosClubCrew</div>
+                <div class="shoutout-text">
+                  “Can we get a ‘you’re late but still sexy’ jingle for my mate turning up at 2am?”
+                </div>
+                <div class="shoutout-meta">Text · 21 min ago</div>
+              </div>
+              <div class="shoutout-reactions">
+                <span>😂 73</span>
+                <span>💀 19</span>
+              </div>
+            </article>
+          </div>
+          <div class="shoutouts-footer">
+            <span>Want your chaos on the wall? <span class="link-inline">Submit a shoutout</span>.</span>
+            <span>Rotating every 30 seconds · Live feed</span>
+          </div>
+        </section>
+
+        <section class="panel" style="margin-top: 18px;">
+          <div class="panel-header">
+            <h2 class="panel-title">Caught in the Wild</h2>
+            <span class="panel-tag">Fan Gallery</span>
+          </div>
+          <p class="panel-subtitle">
+            Screenshots, club pics, bedroom raves, mascot sightings—this is the visual scrapbook of the Wildstyle universe.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item" data-label="Events"></div>
+            <div class="gallery-item" data-label="Merch Drip"></div>
+            <div class="gallery-item" data-label="DJ Encounters"></div>
+            <div class="gallery-item" data-label="Mascot Sightings"></div>
+            <div class="gallery-item" data-label="Chaos Moments"></div>
+            <div class="gallery-item" data-label="Studio Vibes"></div>
+          </div>
+          <div class="gallery-row-label">
+            Tap to open full‑screen. Tag your posts with <strong>#WildstyleRadio</strong> for a chance to appear here.
+          </div>
+        </section>
+
+        <!-- DISQUS PANEL: WILDSTYLE FAN COMMENTS -->
+        <section class="panel" style="margin-top: 18px;">
+          <div class="panel-header">
+            <h2 class="panel-title">Wildstyle Fan Comments</h2>
+            <span class="panel-tag">Community</span>
+          </div>
+          <p class="panel-subtitle">
+            Join the conversation — drop your thoughts, chaos, love, and wild energy below. This is your thread.
+          </p>
+
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = window.location.href;
+              this.page.identifier = "wildstyle-fans-page";
+            };
+
+            (function() {
+              var d = document, s = d.createElement('script');
+              s.src = 'https://wildstyle-radio.disqus.com/embed.js';
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Fan Challenges & Contests</h2>
+            <span class="panel-tag">Earn Your Badges</span>
+          </div>
+          <p class="panel-subtitle">
+            Weekly missions for the truly unhinged. Win on‑air shoutouts, exclusive drops, and cult‑level bragging rights.
+          </p>
+          <div class="challenge-list">
+            <article class="challenge">
+              <div class="challenge-title">Design the Next Wildstyle Poster</div>
+              <div class="challenge-meta">Deadline: Sunday · Prize: On‑air feature + merch pack</div>
+              <div class="challenge-prize">
+                Brief: “Neon storm over Eastbourne seafront, mascots in full chaos mode.”
+              </div>
+            </article>
+            <article class="challenge">
+              <div class="challenge-title">Record Your Funniest Station ID</div>
+              <div class="challenge-meta">Rolling · Prize: Played between shows</div>
+              <div class="challenge-prize">
+                5–10 seconds. Make it weird, make it memorable, make it Wildstyle.
+              </div>
+            </article>
+            <article class="challenge">
+              <div class="challenge-title">30‑Second Chaos Mix</div>
+              <div class="challenge-meta">Monthly · Prize: Featured on socials</div>
+              <div class="challenge-prize">
+                Stitch your favourite drops into one ridiculous, high‑energy blast.
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Fan Spotlights</h2>
+            <span class="panel-tag">Wild Ones of the Week</span>
+          </div>
+          <p class="panel-subtitle">
+            The listeners who go above and beyond—repping the brand, spreading the chaos, and keeping the frequency alive.
+          </p>
+          <div class="spotlight-list">
+            <article class="spotlight">
+              <div class="spotlight-avatar"></div>
+              <div>
+                <div class="spotlight-name">Lena “LoopQueen” M.</div>
+                <div class="spotlight-show">Favourite show: Midnight Echoes with DJ ECHOFALLS</div>
+                <div class="spotlight-quote">
+                  “Wildstyle is the only station that makes my insomnia feel like a festival.”
+                </div>
+                <div class="spotlight-audio">▶ 0:10 “Why I’m Wildstyle for life”</div>
+              </div>
+            </article>
+            <article class="spotlight">
+              <div class="spotlight-avatar"></div>
+              <div>
+                <div class="spotlight-name">Chaos Club Brighton</div>
+                <div class="spotlight-show">Favourite show: Friday Night Frequency</div>
+                <div class="spotlight-quote">
+                  “We run the pre‑drinks, Wildstyle runs the atmosphere. Non‑negotiable.”
+                </div>
+                <div class="spotlight-audio">▶ 0:07 “Shoutout from the crew”</div>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
 
-    <!-- FACEBOOK COMMENTS SECTION -->
-    <section class="comments-section">
-      <h2>Listener Comments</h2>
-
-      <div class="fb-comments"
-     data-href="https://wildstyle.vip/fans/"
-     data-width="100%"
-     data-numposts="60">
-</div>
-
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <div>© <span id="year"></span> Wildstyle Radio</div>
+    <footer class="footer-cta">
+      <div>
+        <strong>Ready to go full Wildstyle?</strong><br />
+        Join the fan club, earn secret badges, and maybe—just maybe—become canon in the Wildstyle universe.
+      </div>
+      <div class="footer-links">
+        <button class="btn btn-primary">
+          <span class="icon">💿</span>
+          <span>Join the Fan Club</span>
+        </button>
+        <button class="btn btn-outline">
+          <span class="icon">📨</span>
+          <span>Pitch a Jingle Idea</span>
+        </button>
+        <div class="badge-secret">🗝 Unlock Secret Fan Badge</div>
       </div>
     </footer>
-
   </div>
-
 </body>
-</html>
+</html> 

@@ -1,7 +1,4 @@
-/* ——————————————————————————————————————————
-       WILDSTYLE BRANDING VARIABLES
-       —————————————————————————————————————————— */
-    :root {
+:root {
       --bg-dark: #05030a;
       --bg-panel: #0b0715;
       --accent-purple: #b026ff;
@@ -38,9 +35,6 @@
       padding: 24px 16px 64px;
     }
 
-    /* ——————————————————————————————————————————
-       HEADER
-       —————————————————————————————————————————— */
     header {
       display: flex;
       align-items: center;
@@ -124,9 +118,6 @@
 
     .btn span.icon { font-size: 1rem; }
 
-    /* ——————————————————————————————————————————
-       HERO SECTION
-       —————————————————————————————————————————— */
     .hero {
       display: grid;
       grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
@@ -211,9 +202,6 @@
       box-shadow: 0 0 8px rgba(0, 245, 255, 0.8);
     }
 
-    /* ——————————————————————————————————————————
-       LIVE INTERACTION PANEL
-       —————————————————————————————————————————— */
     .hero-visual {
       border-radius: var(--radius-lg);
       background: radial-gradient(circle at 20% 0, rgba(255, 228, 94, 0.18), transparent 55%),
@@ -352,9 +340,6 @@
       transform: translateY(-1px);
     }
 
-    /* ——————————————————————————————————————————
-       GRID LAYOUT
-       —————————————————————————————————————————— */
     .grid {
       display: grid;
       grid-template-columns: 2.2fr 1.8fr;
@@ -401,20 +386,221 @@
       margin-bottom: 12px;
     }
 
-    /* ——————————————————————————————————————————
-       FACEBOOK COMMENTS WRAPPER
-       —————————————————————————————————————————— */
-    .fb-comments {
-      border-radius: 18px;
-      padding: 12px;
-      background: rgba(11, 7, 21, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 18px rgba(176, 38, 255, 0.4);
+    .shoutouts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    /* ——————————————————————————————————————————
-       FOOTER CTA
-       —————————————————————————————————————————— */
+    .shoutout {
+      border-radius: var(--radius-md);
+      background: rgba(5, 3, 10, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 10px 8px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .shoutout-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0, var(--accent-cyan), var(--accent-purple));
+      box-shadow: 0 0 10px rgba(0, 245, 255, 0.7);
+    }
+
+    .shoutout-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .shoutout-user {
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+
+    .shoutout-text {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .shoutout-meta {
+      font-size: 0.7rem;
+      color: var(--accent-yellow);
+    }
+
+    .shoutout-reactions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .shoutout-reactions span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .shoutout-audio {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 245, 255, 0.4);
+      color: var(--accent-cyan);
+    }
+
+    .shoutouts-footer {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .link-inline {
+      color: var(--accent-cyan);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      cursor: pointer;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: radial-gradient(circle at 0 0, rgba(255, 47, 146, 0.3), rgba(5, 3, 10, 1));
+      min-height: 70px;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .gallery-item::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 6px;
+      bottom: 4px;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(5, 3, 10, 0.7);
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 14px rgba(0, 245, 255, 0.5);
+      filter: saturate(1.3);
+    }
+
+    .gallery-row-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .challenge {
+      border-radius: var(--radius-md);
+      background: rgba(5, 3, 10, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .challenge-title {
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .challenge-meta {
+      font-size: 0.7rem;
+      color: var(--accent-yellow);
+    }
+
+    .challenge-prize {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .spotlight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .spotlight {
+      border-radius: var(--radius-md);
+      background: rgba(5, 3, 10, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .spotlight-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0, var(--accent-yellow), var(--accent-magenta));
+      box-shadow: 0 0 10px rgba(255, 228, 94, 0.7);
+    }
+
+    .spotlight-name {
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .spotlight-show {
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+    }
+
+    .spotlight-quote {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .spotlight-audio {
+      font-size: 0.7rem;
+      margin-top: 4px;
+      color: var(--accent-yellow);
+    }
+
     .footer-cta {
       margin-top: 28px;
       padding-top: 18px;
@@ -450,3 +636,5 @@
       color: #ffffff;
       box-shadow: 0 0 12px rgba(255, 47, 146, 0.7);
     }
+
+    /* Disqus wrapper inherits .panel styling; no extra needed */
