@@ -9,9 +9,7 @@
 
 <body>
 
-  <!-- ——————————————————————————————————————————
-       FACEBOOK SDK (placeholder App ID)
-       —————————————————————————————————————————— -->
+  <!-- FACEBOOK SDK -->
   <div id="fb-root"></div>
   <script async defer crossorigin="anonymous"
     src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v24.0&appId=2301093033279315">
@@ -19,9 +17,7 @@
 
   <div class="page">
 
-    <!-- ——————————————————————————————————————————
-         HEADER
-         —————————————————————————————————————————— -->
+    <!-- HEADER -->
     <header>
       <div class="logo">
         <div class="logo-mark"></div>
@@ -30,34 +26,58 @@
           <span>Fans Frequency</span>
         </div>
       </div>
+
       <div class="header-cta">
         <button class="btn btn-outline">
           <span class="icon">📡</span>
           <span>Back to Live Stream</span>
         </button>
-        <button class="btn btn-primary">
+
+        <!-- MAKE THIS A REAL LINK -->
+        <a href="https://wildstyle.vip/fanclub" class="btn btn-primary">
           <span class="icon">⚡</span>
           <span>Join the Fan Club</span>
-        </button>
+        </a>
       </div>
     </header>
 
-    <!-- ——————————————————————————————————————————
-         HERO SECTION
-         —————————————————————————————————————————— -->
+    <!-- HERO SECTION -->
     <section class="hero">
       <div class="hero-copy">
         <div class="hero-tag"><span>Welcome, Wild Ones</span></div>
+
         <h1 class="hero-title">The Wild Ones <span>Live Here</span></h1>
+
         <p class="hero-subtitle">
           This is the loud corner of the internet where WildstyleRadio listeners turn into legends—shoutouts, chaos clips,
           and fan stories all tuned to one frequency: yours.
         </p>
-        <div class="hero-ctas"> 
-		<footer class="site-footer">
-    <div class="container footer-inner">
-      <div>© <span id="year"></span> Wildstyle Radio</div>
-    </div>
-  </footer>
-        </body>
-		</html>
+
+        <div class="hero-ctas">
+          <!-- Add your hero buttons here if needed -->
+        </div>
+      </div>
+    </section>
+
+    <!-- FACEBOOK COMMENTS SECTION -->
+    <section class="comments-section">
+      <h2>Listener Comments</h2>
+
+      <div class="fb-comments"
+        data-href="https://wildstyle.vip/fans"
+        data-width="100%"
+        data-numposts="5">
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>© <span id="year"></span> Wildstyle Radio</div>
+      </div>
+    </footer>
+
+  </div> <!-- END .page -->
+
+</body>
+</html>
