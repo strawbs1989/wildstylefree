@@ -5,6 +5,7 @@
   <title>Submit a Shout‑Out | WildstyleRadio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="/fans/style.css">
+  <script src="https://wildstyle.vip/fans/script.js" defer></script>
 
 
 </head>
@@ -30,19 +31,9 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById("shoutoutForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      // Show success message
-      document.getElementById("successMessage").style.display = "block";
-
-      // Clear form
-      this.reset();
-
-      // TODO: Send shout-out to email, Discord, or database
-    });
-  </script>
+ 
+  
+  
 
 </body>
 </html>
