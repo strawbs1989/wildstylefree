@@ -706,3 +706,12 @@
       border-left: 4px solid #00ff88;
       border-radius: 8px;
     }
+	
+	/* Force CSS */ 
+	
+	.shoutout-page,
+.shoutout-form,
+.shoutout-form * {
+  position: relative;
+  z-index: 9999;
+}
