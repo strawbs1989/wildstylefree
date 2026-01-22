@@ -1,5 +1,22 @@
 console.log("SCRIPT.JS IS RUNNING");
 
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("shoutoutForm");
+  if (!form) {
+    console.log("Form not found");
+    return;
+  }
+
+  console.log("Form found, attaching listener");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    console.log("Form submitted");
+    ...
+  });
+});
+
+
 
 /* Load Shoutouts */
 async function loadShoutouts() {
