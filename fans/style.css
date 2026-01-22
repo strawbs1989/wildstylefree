@@ -707,11 +707,25 @@
       border-radius: 8px;
     }
 	
-	/* Force CSS */ 
+	/* Lower hero and panel layers so they don't block clicks */
+.hero,
+.hero-copy,
+.hero-visual,
+.panel,
+.grid {
+  z-index: 1 !important;
+  position: relative;
+}
+
 	
-	.shoutout-page,
+	/* Fix shout-out form being unclickable */
+.shoutout-page {
+  position: relative;
+  z-index: 999999 !important;
+}
+
 .shoutout-form,
 .shoutout-form * {
   position: relative;
-  z-index: 9999;
+  z-index: 999999 !important;
 }
