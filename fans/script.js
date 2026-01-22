@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const payload = { name, message };
 
-    await fetch("https://script.google.com/macros/s/AKfycbwO15TIza-lK3exx9Yxc-loBajpq81mJtqeaIYk-B1jJVlB2ieLagIUqHvgd4mVGpM/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbwTlgIiV2gaEqnGTkj4j-iYVMYHdrR8gqVAwKLgeXAMzGPWjmBVdxnLkq_-f54-VGc/exec", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "application/json" }
