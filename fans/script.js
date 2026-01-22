@@ -1,3 +1,5 @@
+console.log("✅ script.js is running");
+
 console.log("SCRIPT.JS IS RUNNING");
 
 document.addEventListener("DOMContentLoaded", function () {
