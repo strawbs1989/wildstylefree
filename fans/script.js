@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const payload = { name, message };
 
-    await fetch("https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjpoQCAr-Z_iNriYNklR7QD3N0AxH4NQx1chzpbTM4uS0_nLp72CXpW7tz8JFMDlZYZe7rYgWK8_lP4L9Gdt6BXQKPWd32PwF4VGuzIf046u2wnwqjtzGlrIEHOR1N8PQJD1hhnxQgDukC9miTylefF2c1bWcjflezeGnX3LBduCFla9tT2R8sDRW0UF1ykWDcmYgve-p_hPS1-nTr_w0eiVHoFeNrmty5gFOivHJANQHOnDUIw9KaLifpXJfBrLDQLE-mgmG4dYEsWFDgKazv4VyTVgQ&lib=MBAZJIjA9__nHr0MQ5yrqTuaMJ5Q-zlzu", {
+    await fetch("https://script.google.com/macros/s/AKfycbw6_N7VJFsOJAuzlTKgpuHLCsR2aJ1iAZAOghP09UeGMepvCyE6G0STLCNQbHzrAQE/exec", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "application/json" }
