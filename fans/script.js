@@ -57,13 +57,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const name = document.getElementById("name").value.trim();
     const message = document.getElementById("message").value.trim();
 
-    const payload = { name, message };
+    const formData = new URLSearchParams();
+formData.append("name", name);
+formData.append("message", message);
 
-    await fetch("https://script.google.com/macros/s/AKfycbwTlgIiV2gaEqnGTkj4j-iYVMYHdrR8gqVAwKLgeXAMzGPWjmBVdxnLkq_-f54-VGc/exec", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" }
-    });
+await fetch("https://script.google.com/macros/s/AKfycbxmecjaERyDs41eEpk39m4LemMSu3KIWohiasENGidQ30XjFPeyU9Uxm33exHInreU/exec", {
+  method: "POST",
+  body: formData
+});
+
 
     document.getElementById("successMessage").style.display = "block";
     form.reset();
