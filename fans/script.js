@@ -2,7 +2,7 @@
 
 async function loadShoutouts() {
   const sheetId = "1wib6kC8WqtqQ4x8VhEYMNSMR5ArbB_HMG4ac9nM4hbQ";
-  const url = `https://opensheet.elk.sh/${sheetId}/Sheet1`;
+  const url = `https://opensheet.elk.sh/${sheetId}/shoutouts`;
 
   const shoutouts = await fetch(url).then(r => r.json());
   const wall = document.querySelector(".shoutout-wall");
