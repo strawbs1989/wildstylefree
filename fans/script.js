@@ -7,6 +7,8 @@ async function loadShoutouts() {
   const shoutouts = await fetch(url).then(r => r.json());
   const wall = document.querySelector(".shoutout-wall");
 
+  if (!wall) return; // prevent crash
+
   wall.innerHTML = "";
 
   shoutouts.reverse().forEach(s => {
@@ -20,7 +22,9 @@ async function loadShoutouts() {
   });
 }
 
-loadShoutouts();
+if (document.querySelector(".shoutout-wall")) {
+  loadShoutouts();
+}
 
 /* Shoutout Form */
 
