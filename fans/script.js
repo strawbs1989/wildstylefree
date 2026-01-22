@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
     console.log("Form submitted");
-    // ... (whatever was here)
   });
 });
 
