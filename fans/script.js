@@ -71,3 +71,35 @@ await fetch("https://script.google.com/macros/s/AKfycbxmecjaERyDs41eEpk39m4LemMS
     form.reset();
   });
 });
+
+/* Feed */
+
+async function loadShoutouts() {
+  const res = await fetch("https://wildstyle.vip/fans/");
+  const shoutouts = await res.json();
+
+  const list = document.getElementById("shoutoutsList");
+  list.innerHTML = "";
+
+  shoutouts.reverse().forEach(s => {
+    const item = document.createElement("article");
+    item.className = "shoutout";
+
+    item.innerHTML = `
+      <div class="shoutout-avatar"></div>
+      <div class="shoutout-body">
+        <div class="shoutout-user">@${s.name}</div>
+        <div class="shoutout-text">${s.message}</div>
+        <div class="shoutout-meta">Text · just now</div>
+      </div>
+      <div class="shoutout-reactions">
+        <span>🔥 0</span>
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", loadShoutouts);
+
