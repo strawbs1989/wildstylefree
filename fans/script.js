@@ -1,3 +1,6 @@
+console.log("SCRIPT.JS IS RUNNING");
+
+
 /* Load Shoutouts */
 async function loadShoutouts() {
   const sheetId = "1wib6kC8WqtqQ4x8VhEYMNSMR5ArbB_HMG4ac9nM4hbQ";
