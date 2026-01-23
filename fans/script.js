@@ -103,3 +103,36 @@ async function loadShoutouts() {
 
 document.addEventListener("DOMContentLoaded", loadShoutouts);
 
+
+/* Upload Moments */ 
+
+document.getElementById("uploadBtn").addEventListener("click", () => {
+  document.getElementById("imageUpload").click();
+});
+
+/* AppScript */
+
+document.getElementById("imageUpload").addEventListener("change", function () {
+  const file = this.files[0];
+  const reader = new FileReader();
+
+  reader.onload = async function () {
+    const base64 = reader.result.split(",")[1];
+
+    const formData = new URLSearchParams();
+    formData.append("file", base64);
+    formData.append("filename", file.name);
+
+    const res = await fetch("https://script.google.com/macros/s/AKfycbz58u8ZQSASTlS4i-KSQzCnXOYz9084hSqhv-vqk152lGmD2AvyOwDhz1gl-8ghBwkW/exec", {
+      method: "POST",
+      body: formData
+    });
+
+    const imageUrl = await res.text();
+    addImageToGallery(imageUrl);
+  };
+
+  reader.readAsDataURL(file);
+});
+
+
