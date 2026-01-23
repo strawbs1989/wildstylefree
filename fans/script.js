@@ -135,4 +135,35 @@ document.getElementById("imageUpload").addEventListener("change", function () {
   reader.readAsDataURL(file);
 });
 
+/* SpotLight */
+
+
+async function loadSpotlights() {
+  const res = await fetch("https://script.google.com/macros/s/AKfycbx1I79uFfDiBMLok0o3hmW6wzw0wD-5en-aYjnnSkIopbyLlvLsCqjdFcX7Os5TFWU/exec?type=spotlights");
+  const spotlights = await res.json();
+
+  const list = document.getElementById("spotlightList");
+  list.innerHTML = "";
+
+  spotlights.forEach(s => {
+    const item = document.createElement("article");
+    item.className = "spotlight";
+
+    item.innerHTML = `
+      <div class="spotlight-avatar" style="background-image:url('${s.avatar_url || ''}')"></div>
+      <div>
+        <div class="spotlight-name">${s.name}</div>
+        <div class="spotlight-show">Favourite show: ${s.favourite_show}</div>
+        <div class="spotlight-quote">“${s.quote}”</div>
+        ${s.audio_url ? `<div class="spotlight-audio">▶ Listen</div>` : ""}
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", loadSpotlights);
+
+
 
