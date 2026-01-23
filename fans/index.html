@@ -4,6 +4,8 @@
   <title>WildstyleRadio | The Wild Ones</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="https://wildstyle.vip/fans/style.css">
+  <script src="https://wildstyle.vip/fans/script.js" defer></script>
+  <script src="https://wildstyle.vip/fans/nextup.js" defer></script>
 </head>
 <body>
   <div class="page">
@@ -61,9 +63,13 @@
           <div class="now-playing">
             <div class="now-playing-art"></div>
             <div class="now-playing-meta">
-              <div class="now-playing-label">Now Playing</div>
-              <div class="now-playing-title">“Neon Static”</div>
-              <div class="now-playing-artist">DJ ECHOFALLS</div>
+              <!-- UP NEXT BAR -->
+             <center>
+             <section class="now-on-bar">
+             <span class="nowOn">Now On:</span>
+             <span class="nowOnShow" id="nowon">Loading…</span>
+             </section> 
+             </center>
             </div>
             <div class="now-playing-count">1,284 listening live</div>
           </div>
@@ -125,7 +131,9 @@
             Screenshots, club pics, bedroom raves, mascot sightings—this is the visual scrapbook of the Wildstyle universe.
           </p>
           <div class="gallery-grid">
-            <div class="gallery-item" data-label="Events"></div>
+          <article class="event-card">
+          <img src="https://wildstyle.vip/fans/gallery/test.jpg" alt="Deloran Event">
+          </article>
             <div class="gallery-item" data-label="Merch Drip"></div>
             <div class="gallery-item" data-label="DJ Encounters"></div>
             <div class="gallery-item" data-label="Mascot Sightings"></div>
