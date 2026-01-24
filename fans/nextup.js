@@ -150,3 +150,10 @@ function updateNowNext() {
   }
 } 
 
+document.addEventListener("DOMContentLoaded", async () => {
+  window.ALL_SLOTS = await loadSchedule();
+  updateNowNext();
+  setInterval(updateNowNext, 30000); // update every 30s
+});
+
+

@@ -165,5 +165,16 @@ async function loadSpotlights() {
 
 document.addEventListener("DOMContentLoaded", loadSpotlights);
 
+/* Join Fan Club */
+
+document.getElementById("fanClubBtn").addEventListener("click", () => {
+  window.open(
+    "https://forms.gle/TYSs2zNHYMc3vx1D7",   // 
+    "fanclub",
+    "width=600,height=800,top=100,left=100"
+  );
+});
+
+
 
 
