@@ -1,15 +1,15 @@
 /* jshint esversion: 8 */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
-  authDomain: "wildstyle-chat.firebaseapp.com",
-  databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
-  projectId: "wildstyle-chat",
-  storageBucket: "wildstyle-chat.firebasestorage.app",
-  messagingSenderId: "259584470846",
-  appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
-  measurementId: "G-M7MVE2CY8B"
-};
+    apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
+    authDomain: "wildstyle-chat.firebaseapp.com",
+    databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
+    projectId: "wildstyle-chat",
+    storageBucket: "wildstyle-chat.firebasestorage.app",
+    messagingSenderId: "259584470846",
+    appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
+    measurementId: "G-M7MVE2CY8B"
+  };
 
 firebase.initializeApp(firebaseConfig);
 
@@ -38,8 +38,8 @@ const sendBtn       = document.getElementById("send-btn");
 const typingIndicator = document.getElementById("typing-indicator");
 const onlineUsersDiv  = document.getElementById("online-users");
 
-const adminBox     = document.getElementById("adminbox");   // matches HTML
-const adminUsersDiv = document.getElementById("user-list"); // matches HTML
+const adminBox      = document.getElementById("adminbox");   // matches HTML
+const adminUsersDiv = document.getElementById("user-list");  // matches HTML
 
 // 3. State flags
 let messagesListenerAttached    = false;
@@ -135,38 +135,53 @@ function loadMessages() {
   });
 }
 
-db.ref("users/" + user.uid).once("value").then(snap => {
-  const data = snap.val() || {};
-  const banExpires = data.banExpires;
+// 6. Ban enforcement + sending
 
-  // Permanent ban
-  if (banExpires === "perm") {
-    alert("You are permanently banned from sending messages.");
-    return;
-  }
+function sendMessage() {
+  const user = auth.currentUser;
+  if (!user) return;
 
-  // Temporary ban
-  if (typeof banExpires === "number" && banExpires > Date.now()) {
-    const mins = Math.ceil((banExpires - Date.now()) / 60000);
-    alert("You are banned for another " + mins + " minutes.");
-    return;
-  }
+  const text = msgInput.value.trim();
+  if (!text) return;
 
-  // Auto‑unban if expired
-  if (typeof banExpires === "number" && banExpires <= Date.now()) {
-    db.ref("users/" + user.uid + "/banExpires").remove();
-  }
+  db.ref("users/" + user.uid).once("value").then(snap => {
+    const data = snap.val() || {};
+    const banExpires = data.banExpires;
 
-  // Send message
-  const newMsgRef = db.ref("messages").push();
-  return newMsgRef.set({
-    userId: user.uid,
-    userEmail: user.email,
-    text: text.slice(0, 500),
-    timestamp: Date.now()
-  });
+    // Permanent ban
+    if (banExpires === "perm") {
+      alert("You are permanently banned from sending messages.");
+      return;
+    }
+
+    // Temporary ban
+    if (typeof banExpires === "number" && banExpires > Date.now()) {
+      const mins = Math.ceil((banExpires - Date.now()) / 60000);
+      alert("You are banned for another " + mins + " minutes.");
+      return;
+    }
+
+    // Auto-unban if expired
+    if (typeof banExpires === "number" && banExpires <= Date.now()) {
+      db.ref("users/" + user.uid + "/banExpires").remove();
+    }
+
+    const newMsgRef = db.ref("messages").push();
+    return newMsgRef.set({
+      userId: user.uid,
+      userEmail: user.email,
+      text: text.slice(0, 500),
+      timestamp: Date.now()
+    });
+  }).then(() => {
+    msgInput.value = "";
+  }).catch(console.error);
+}
+
+sendBtn.onclick = sendMessage;
+msgInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") sendMessage();
 });
-
 
 // 7. Typing indicator
 
@@ -304,14 +319,12 @@ function loadUsersForAdmin() {
         alert("Warning sent.");
       };
 
-      // Add buttons to actions
       actions.appendChild(permBanBtn);
       actions.appendChild(ban24Btn);
       actions.appendChild(ban6Btn);
       actions.appendChild(unbanBtn);
       actions.appendChild(warnBtn);
 
-      // Build row
       row.appendChild(badge);
       row.appendChild(label);
       row.appendChild(actions);
@@ -320,8 +333,6 @@ function loadUsersForAdmin() {
     });
   });
 }
-
-
 
 // 10. Auth buttons (login / register / logout)
 
