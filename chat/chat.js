@@ -1,5 +1,6 @@
 /* jshint esversion: 8 */
 
+const firebaseConfig = {
   apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
   authDomain: "wildstyle-chat.firebaseapp.com",
   databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
@@ -8,27 +9,37 @@
   messagingSenderId: "259584470846",
   appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
   measurementId: "G-M7MVE2CY8B"
+};
 
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db   = firebase.database();
 
-// 2. DOM elements
-const authBox      = document.getElementById("auth-box");
-const chatWrapper  = document.getElementById("chat-wrapper");
-const userInfoSpan = document.getElementById("user-info");
-const userRoleSpan = document.getElementById("user-role");
+// 2. DOM elements (matching your HTML)
+const authBox       = document.getElementById("auth-box");
+const chatWrapper   = document.getElementById("chat-wrapper");
 
-const messagesDiv  = document.getElementById("messages");
-const msgInput     = document.getElementById("msg-input");
-const sendBtn      = document.getElementById("send-btn");
+const emailInput    = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const loginBtn      = document.getElementById("login-btn");
+const registerBtn   = document.getElementById("register-btn");
+const authError     = document.getElementById("auth-error");
+
+const logoutBtn     = document.getElementById("logout-btn");
+
+const userEmailSpan = document.getElementById("user-email");
+const userRoleSpan  = document.getElementById("user-role");
+
+const messagesDiv   = document.getElementById("messages");
+const msgInput      = document.getElementById("msg-input");
+const sendBtn       = document.getElementById("send-btn");
 
 const typingIndicator = document.getElementById("typing-indicator");
 const onlineUsersDiv  = document.getElementById("online-users");
 
-const adminBox    = document.getElementById("admin-box");
-const adminUsersDiv = document.getElementById("adminUsers");
+const adminBox     = document.getElementById("adminbox");   // matches HTML
+const adminUsersDiv = document.getElementById("user-list"); // matches HTML
 
 // 3. State flags
 let messagesListenerAttached    = false;
@@ -133,7 +144,6 @@ function sendMessage() {
   const text = msgInput.value.trim();
   if (!text) return;
 
-  // Ban check
   db.ref("users/" + user.uid + "/banned").once("value").then(snap => {
     if (snap.val() === true) {
       alert("You are banned from sending messages.");
@@ -170,15 +180,10 @@ function setupTyping(user) {
     typingRef.set(isTyping).catch(console.error);
   });
 
-  // Listen to others typing
   db.ref("typing").on("value", snap => {
     const typingData = snap.val() || {};
     const othersTyping = Object.keys(typingData).filter(uid => uid !== user.uid && typingData[uid]);
-    if (othersTyping.length > 0) {
-      typingIndicator.textContent = "Someone is typing...";
-    } else {
-      typingIndicator.textContent = "";
-    }
+    typingIndicator.textContent = othersTyping.length > 0 ? "Someone is typing..." : "";
   });
 }
 
@@ -237,7 +242,6 @@ function loadUsersForAdmin() {
       const row = document.createElement("div");
       row.className = "admin-user";
 
-      // Role badge
       const badge = document.createElement("span");
       badge.className = "role-badge " +
         (user.role === "admin" ? "role-admin" : "role-mod");
@@ -249,35 +253,30 @@ function loadUsersForAdmin() {
       const actions = document.createElement("div");
       actions.className = "admin-actions";
 
-      // Promote
       const promoteBtn = document.createElement("button");
       promoteBtn.textContent = "Make Admin";
       promoteBtn.onclick = () => {
         db.ref("users/" + uid + "/role").set("admin").catch(console.error);
       };
 
-      // Demote
       const demoteBtn = document.createElement("button");
       demoteBtn.textContent = "Make Mod";
       demoteBtn.onclick = () => {
         db.ref("users/" + uid + "/role").set("mod").catch(console.error);
       };
 
-      // Ban
       const banBtn = document.createElement("button");
       banBtn.textContent = "Ban";
       banBtn.onclick = () => {
         db.ref("users/" + uid + "/banned").set(true).catch(console.error);
       };
 
-      // Unban
       const unbanBtn = document.createElement("button");
       unbanBtn.textContent = "Unban";
       unbanBtn.onclick = () => {
         db.ref("users/" + uid + "/banned").set(false).catch(console.error);
       };
 
-      // Warn
       const warnBtn = document.createElement("button");
       warnBtn.textContent = "Warn";
       warnBtn.onclick = () => {
@@ -304,7 +303,52 @@ function loadUsersForAdmin() {
   });
 }
 
-// 10. Auth + role + warnings + wiring
+// 10. Auth buttons (login / register / logout)
+
+if (registerBtn) {
+  registerBtn.onclick = () => {
+    authError.textContent = "";
+    const email = (emailInput.value || "").trim();
+    const pass  = (passwordInput.value || "").trim();
+    if (!email || !pass) {
+      authError.textContent = "Please enter email and password.";
+      return;
+    }
+    auth.createUserWithEmailAndPassword(email, pass)
+      .catch(err => {
+        console.error(err);
+        authError.textContent = err.message || "Registration failed.";
+      });
+  };
+}
+
+if (loginBtn) {
+  loginBtn.onclick = () => {
+    authError.textContent = "";
+    const email = (emailInput.value || "").trim();
+    const pass  = (passwordInput.value || "").trim();
+    if (!email || !pass) {
+      authError.textContent = "Please enter email and password.";
+      return;
+    }
+    auth.signInWithEmailAndPassword(email, pass)
+      .catch(err => {
+        console.error(err);
+        authError.textContent = err.message || "Login failed.";
+      });
+  };
+}
+
+if (logoutBtn) {
+  logoutBtn.onclick = () => {
+    auth.signOut().catch(err => {
+      console.error(err);
+      alert("Logout failed.");
+    });
+  };
+}
+
+// 11. Auth state + role + warnings + wiring
 
 auth.onAuthStateChanged(user => {
   if (!user) {
@@ -316,20 +360,20 @@ auth.onAuthStateChanged(user => {
   authBox.classList.add("hidden");
   chatWrapper.classList.remove("hidden");
 
-  userInfoSpan.textContent = user.email;
+  userEmailSpan.textContent = user.email;
 
   // Ensure user record exists
   db.ref("users/" + user.uid).once("value").then(snap => {
     if (!snap.exists()) {
       return db.ref("users/" + user.uid).set({
         email: user.email,
-        role: "mod",   // default role
+        role: "mod",
         banned: false
       });
     }
   }).catch(console.error);
 
-  // Show role
+  // Show role + admin panel
   db.ref("users/" + user.uid + "/role").on("value", snap => {
     const role = snap.val() || "mod";
     userRoleSpan.textContent = role;
