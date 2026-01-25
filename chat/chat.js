@@ -317,18 +317,94 @@ function sendMessage() {
 
 // 7. Admin logic (ban, unban, mute, unmute)
 
-function checkAdmin(uid) {
-  db.ref("users/" + uid + "/role").once("value").then(snap => {
-    const role = snap.val();
-    userRoleSpan.textContent = role ? `(${role})` : "";
-    if (role === "admin") {
-      adminBox.classList.remove("hidden");
-      loadUsersForAdmin();
-    } else {
-      adminBox.classList.add("hidden");
+function loadUsersForAdmin() {
+  const adminUsersDiv = document.getElementById("adminUsers");
+  adminUsersDiv.innerHTML = "Loading users...";
+
+  db.ref("users").once("value").then(snap => {
+    const users = snap.val();
+    adminUsersDiv.innerHTML = "";
+
+    if (!users) {
+      adminUsersDiv.innerHTML = "<p>No users found.</p>";
+      return;
     }
+
+    Object.keys(users).forEach(uid => {
+      const user = users[uid];
+
+      const row = document.createElement("div");
+      row.className = "admin-user";
+
+      // Role badge
+      const badge = document.createElement("span");
+      badge.className = "role-badge " + 
+        (user.role === "admin" ? "role-admin" : "role-mod");
+
+      const label = document.createElement("span");
+      label.textContent = `${user.email} (${user.role})`;
+
+      const actions = document.createElement("div");
+      actions.className = "admin-actions";
+
+      // Promote
+      const promoteBtn = document.createElement("button");
+      promoteBtn.textContent = "Make Admin";
+      promoteBtn.onclick = () => {
+        db.ref("users/" + uid + "/role").set("admin");
+        loadUsersForAdmin();
+      };
+
+      // Demote
+      const demoteBtn = document.createElement("button");
+      demoteBtn.textContent = "Make Mod";
+      demoteBtn.onclick = () => {
+        db.ref("users/" + uid + "/role").set("mod");
+        loadUsersForAdmin();
+      };
+
+      // Ban
+      const banBtn = document.createElement("button");
+      banBtn.textContent = "Ban";
+      banBtn.onclick = () => {
+        db.ref("users/" + uid + "/banned").set(true);
+        loadUsersForAdmin();
+      };
+
+      // Unban
+      const unbanBtn = document.createElement("button");
+      unbanBtn.textContent = "Unban";
+      unbanBtn.onclick = () => {
+        db.ref("users/" + uid + "/banned").set(false);
+        loadUsersForAdmin();
+      };
+
+      // Warn
+      const warnBtn = document.createElement("button");
+      warnBtn.textContent = "Warn";
+      warnBtn.onclick = () => {
+        db.ref("users/" + uid + "/warning").set({
+          message: "You have been cautioned by an admin.",
+          timestamp: Date.now()
+        });
+        alert("Warning sent.");
+      };
+
+      actions.appendChild(promoteBtn);
+      actions.appendChild(demoteBtn);
+      actions.appendChild(banBtn);
+      actions.appendChild(unbanBtn);
+      actions.appendChild(warnBtn);
+
+      row.appendChild(badge);
+      row.appendChild(label);
+      row.appendChild(actions);
+
+      adminUsersDiv.appendChild(row);
+    });
   });
 }
+
 
 function loadUsersForAdmin() {
   if (adminUsersListenerAttached) return;
@@ -381,3 +457,43 @@ function loadUsersForAdmin() {
     });
   });
 }
+
+// Warning button
+const warnBtn = document.createElement("button");
+warnBtn.textContent = "Warn";
+warnBtn.onclick = () => {
+  db.ref("users/" + uid + "/warning").set({
+    message: "You have been cautioned by an admin.",
+    timestamp: Date.now()
+  });
+  alert("Warning sent.");
+};
+
+
+/* Ban Users */
+
+function sendMessage() {
+  const user = firebase.auth().currentUser;
+  if (!user) return;
+
+  db.ref("users/" + user.uid + "/banned").once("value").then(snap => {
+    if (snap.val() === true) {
+      alert("You are banned from sending messages.");
+      return;
+    }
+
+    // continue sending message
+    const text = messageInput.value.trim();
+    if (!text) return;
+
+    db.ref("messages").push({
+      text,
+      userId: user.uid,
+      userEmail: user.email,
+      timestamp: Date.now()
+    });
+
+    messageInput.value = "";
+  });
+}
+

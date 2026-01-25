@@ -291,3 +291,22 @@ button:hover {
   display: block;
 }
 
+/* Mod Badges */
+
+.role-badge {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.role-admin {
+  background: red;
+}
+
+.role-mod {
+  background: limegreen;
+}
+
+
