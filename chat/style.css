@@ -280,3 +280,14 @@ button:hover {
     height: 320px;
   }
 }
+
+.msg-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.msg-text {
+  display: block;
+}
+
