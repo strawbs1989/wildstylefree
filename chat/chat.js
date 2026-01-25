@@ -1,211 +1,42 @@
-// 1. Firebase config (replace with your own)
-const firebaseConfig = {
+/* jshint esversion: 8 */
+
   apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
-    authDomain: "wildstyle-chat.firebaseapp.com",
-    databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
-    projectId: "wildstyle-chat",
-    storageBucket: "wildstyle-chat.firebasestorage.app",
-    messagingSenderId: "259584470846",
-    appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
-    measurementId: "G-M7MVE2CY8B"
-};
+  authDomain: "wildstyle-chat.firebaseapp.com",
+  databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
+  projectId: "wildstyle-chat",
+  storageBucket: "wildstyle-chat.firebasestorage.app",
+  messagingSenderId: "259584470846",
+  appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
+  measurementId: "G-M7MVE2CY8B"
 
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-const db = firebase.database();
+const db   = firebase.database();
 
-// DOM elements
-const authBox = document.getElementById("auth-box");
-const chatWrapper = document.getElementById("chat-wrapper");
-
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const authError = document.getElementById("auth-error");
-
-const loginBtn = document.getElementById("login-btn");
-const registerBtn = document.getElementById("register-btn");
-const logoutBtn = document.getElementById("logout-btn");
-
-const userEmailSpan = document.getElementById("user-email");
+// 2. DOM elements
+const authBox      = document.getElementById("auth-box");
+const chatWrapper  = document.getElementById("chat-wrapper");
+const userInfoSpan = document.getElementById("user-info");
 const userRoleSpan = document.getElementById("user-role");
 
-const messagesDiv = document.getElementById("messages");
-const msgInput = document.getElementById("msg-input");
-const sendBtn = document.getElementById("send-btn");
+const messagesDiv  = document.getElementById("messages");
+const msgInput     = document.getElementById("msg-input");
+const sendBtn      = document.getElementById("send-btn");
 
-const onlineUsersDiv = document.getElementById("online-users");
-const adminBox = document.getElementById("admin-box");
-const userListDiv = document.getElementById("user-list");
-const typingIndicatorDiv = document.getElementById("typing-indicator");
+const typingIndicator = document.getElementById("typing-indicator");
+const onlineUsersDiv  = document.getElementById("online-users");
 
-// 2. Auth actions
+const adminBox    = document.getElementById("admin-box");
+const adminUsersDiv = document.getElementById("adminUsers");
 
-loginBtn.onclick = () => {
-  authError.textContent = "";
-  auth
-    .signInWithEmailAndPassword(emailInput.value.trim(), passwordInput.value)
-    .catch(err => {
-      authError.textContent = err.message;
-    });
-};
+// 3. State flags
+let messagesListenerAttached    = false;
+let typingListenerAttached      = false;
+let onlineUsersListenerAttached = false;
+let adminUsersListenerAttached  = false;
 
-registerBtn.onclick = () => {
-  authError.textContent = "";
-  auth
-    .createUserWithEmailAndPassword(emailInput.value.trim(), passwordInput.value)
-    .then(cred => {
-      const uid = cred.user.uid;
-      db.ref("users").once("value").then(snap => {
-        const isFirstUser = !snap.exists();
-        const role = isFirstUser ? "admin" : "user";
-
-        db.ref("users/" + uid).set({
-          email: emailInput.value.trim(),
-          role: role
-        });
-      });
-    })
-    .catch(err => {
-      authError.textContent = err.message;
-    });
-};
-
-logoutBtn.onclick = () => auth.signOut();
-
-// 3. Auth state listener
-
-let messagesListenerAttached = false;
-let typingListenerAttached = false;
-let onlineListenerAttached = false;
-let adminUsersListenerAttached = false;
-
-auth.onAuthStateChanged(user => {
-  if (user) {
-    authBox.classList.add("hidden");
-    chatWrapper.classList.remove("hidden");
-    userEmailSpan.textContent = user.email;
-
-    setupPresence(user);
-    loadMessages();
-    loadOnlineUsers();
-    setupTyping(user);
-    checkAdmin(user.uid);
-  } else {
-    chatWrapper.classList.add("hidden");
-    authBox.classList.remove("hidden");
-    messagesDiv.innerHTML = "";
-    onlineUsersDiv.innerHTML = "";
-    userListDiv.innerHTML = "";
-    typingIndicatorDiv.textContent = "";
-
-    detachAllListeners();
-  }
-});
-
-function detachAllListeners() {
-  if (messagesListenerAttached) {
-    db.ref("messages").off();
-    messagesListenerAttached = false;
-  }
-  if (onlineListenerAttached) {
-    db.ref("onlineUsers").off();
-    onlineListenerAttached = false;
-  }
-  if (typingListenerAttached) {
-    db.ref("typing").off();
-    typingListenerAttached = false;
-  }
-  if (adminUsersListenerAttached) {
-    db.ref("users").off();
-    adminUsersListenerAttached = false;
-  }
-}
-
-// 4. Presence (online user list)
-
-function setupPresence(user) {
-  const userStatusRef = db.ref("onlineUsers/" + user.uid);
-
-  db.ref(".info/connected").on("value", snap => {
-    if (snap.val() === false) return;
-
-    userStatusRef
-      .onDisconnect()
-      .remove()
-      .then(() => {
-        userStatusRef.set({
-          email: user.email,
-          timestamp: Date.now()
-        });
-      });
-  });
-}
-
-function loadOnlineUsers() {
-  if (onlineListenerAttached) return;
-  onlineListenerAttached = true;
-
-  db.ref("onlineUsers").on("value", snap => {
-    const users = snap.val() || {};
-    onlineUsersDiv.innerHTML = "";
-
-    Object.keys(users).forEach(uid => {
-      const u = users[uid];
-      const row = document.createElement("div");
-      row.className = "online-user";
-
-      const avatar = createAvatar(u.email);
-      const label = document.createElement("span");
-      label.textContent = u.email;
-
-      row.appendChild(avatar);
-      row.appendChild(label);
-      onlineUsersDiv.appendChild(row);
-    });
-  });
-}
-
-// 5. Typing indicator
-
-let typingTimeout = null;
-
-function setupTyping(user) {
-  if (typingListenerAttached) return;
-  typingListenerAttached = true;
-
-  const myTypingRef = db.ref("typing/" + user.uid);
-
-  msgInput.addEventListener("input", () => {
-    myTypingRef.set({
-      email: user.email,
-      timestamp: Date.now()
-    });
-
-    if (typingTimeout) clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => {
-      myTypingRef.remove();
-    }, 3000);
-  });
-
-  db.ref("typing").on("value", snap => {
-    const data = snap.val() || {};
-    const currentUid = user.uid;
-    const others = Object.keys(data)
-      .filter(uid => uid !== currentUid)
-      .map(uid => data[uid].email);
-
-    if (others.length === 0) {
-      typingIndicatorDiv.textContent = "";
-    } else if (others.length === 1) {
-      typingIndicatorDiv.textContent = `${others[0]} is typing...`;
-    } else {
-      typingIndicatorDiv.textContent = `${others.length} people are typing...`;
-    }
-  });
-}
-
-// 6. Messages
+// 4. Helpers
 
 function createAvatar(email) {
   const div = document.createElement("div");
@@ -244,7 +75,7 @@ function appendChatMessage(key, msg, currentUser) {
     const delBtn = document.createElement("button");
     delBtn.textContent = "Delete";
     delBtn.onclick = () => {
-      db.ref("messages/" + key).remove();
+      db.ref("messages/" + key).remove().catch(console.error);
     };
 
     actions.appendChild(delBtn);
@@ -257,6 +88,8 @@ function appendChatMessage(key, msg, currentUser) {
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
+// 5. Messages
+
 function loadMessages() {
   if (messagesListenerAttached) return;
   messagesListenerAttached = true;
@@ -267,35 +100,31 @@ function loadMessages() {
     const msg = snap.val();
     const key = snap.key;
     const user = auth.currentUser;
-
     if (!user) return;
 
     db.ref("users/" + user.uid + "/role").once("value").then(roleSnap => {
       const isAdmin = roleSnap.val() === "admin";
       appendChatMessage(key, msg, { uid: user.uid, isAdmin });
-    });
+    }).catch(console.error);
   });
 
-  db.ref("messages").on("child_removed", snap => {
-    // Simple approach: reload list
+  db.ref("messages").on("child_removed", () => {
     messagesDiv.innerHTML = "";
-    db.ref("messages").limitToLast(200).once("value").then(snap2 => {
-      const user = auth.currentUser;
-      if (!user) return;
-      db.ref("users/" + user.uid + "/role").once("value").then(roleSnap => {
-        const isAdmin = roleSnap.val() === "admin";
+    const user = auth.currentUser;
+    if (!user) return;
+
+    db.ref("users/" + user.uid + "/role").once("value").then(roleSnap => {
+      const isAdmin = roleSnap.val() === "admin";
+      db.ref("messages").limitToLast(200).once("value").then(snap2 => {
         snap2.forEach(child => {
           appendChatMessage(child.key, child.val(), { uid: user.uid, isAdmin });
         });
       });
-    });
+    }).catch(console.error);
   });
 }
 
-sendBtn.onclick = sendMessage;
-msgInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMessage();
-});
+// 6. Ban enforcement + sending
 
 function sendMessage() {
   const user = auth.currentUser;
@@ -304,28 +133,100 @@ function sendMessage() {
   const text = msgInput.value.trim();
   if (!text) return;
 
-  const newMsgRef = db.ref("messages").push();
-  newMsgRef.set({
-    userId: user.uid,
-    userEmail: user.email,
-    text: text.slice(0, 500),
-    timestamp: Date.now()
-  });
+  // Ban check
+  db.ref("users/" + user.uid + "/banned").once("value").then(snap => {
+    if (snap.val() === true) {
+      alert("You are banned from sending messages.");
+      return;
+    }
 
-  msgInput.value = "";
+    const newMsgRef = db.ref("messages").push();
+    return newMsgRef.set({
+      userId: user.uid,
+      userEmail: user.email,
+      text: text.slice(0, 500),
+      timestamp: Date.now()
+    });
+  }).then(() => {
+    msgInput.value = "";
+  }).catch(console.error);
 }
 
-// 7. Admin logic (ban, unban, mute, unmute)
+sendBtn.onclick = sendMessage;
+msgInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") sendMessage();
+});
+
+// 7. Typing indicator
+
+function setupTyping(user) {
+  if (typingListenerAttached) return;
+  typingListenerAttached = true;
+
+  const typingRef = db.ref("typing/" + user.uid);
+
+  msgInput.addEventListener("input", () => {
+    const isTyping = msgInput.value.trim().length > 0;
+    typingRef.set(isTyping).catch(console.error);
+  });
+
+  // Listen to others typing
+  db.ref("typing").on("value", snap => {
+    const typingData = snap.val() || {};
+    const othersTyping = Object.keys(typingData).filter(uid => uid !== user.uid && typingData[uid]);
+    if (othersTyping.length > 0) {
+      typingIndicator.textContent = "Someone is typing...";
+    } else {
+      typingIndicator.textContent = "";
+    }
+  });
+}
+
+// 8. Online users
+
+function setupOnlineUsers(user) {
+  if (onlineUsersListenerAttached) return;
+  onlineUsersListenerAttached = true;
+
+  const userRef = db.ref("onlineUsers/" + user.uid);
+  userRef.set({
+    email: user.email,
+    timestamp: Date.now()
+  }).catch(console.error);
+
+  userRef.onDisconnect().remove();
+
+  db.ref("onlineUsers").on("value", snap => {
+    const users = snap.val() || {};
+    onlineUsersDiv.innerHTML = "";
+
+    Object.keys(users).forEach(uid => {
+      const u = users[uid];
+      const row = document.createElement("div");
+      row.className = "online-user";
+
+      const avatar = createAvatar(u.email);
+      const span = document.createElement("span");
+      span.textContent = u.email;
+
+      row.appendChild(avatar);
+      row.appendChild(span);
+      onlineUsersDiv.appendChild(row);
+    });
+  });
+}
+
+// 9. Admin panel (roles, bans, warnings, badges)
 
 function loadUsersForAdmin() {
-  const adminUsersDiv = document.getElementById("adminUsers");
-  adminUsersDiv.innerHTML = "Loading users...";
+  if (adminUsersListenerAttached) return;
+  adminUsersListenerAttached = true;
 
-  db.ref("users").once("value").then(snap => {
-    const users = snap.val();
+  db.ref("users").on("value", snap => {
+    const users = snap.val() || {};
     adminUsersDiv.innerHTML = "";
 
-    if (!users) {
+    if (!Object.keys(users).length) {
       adminUsersDiv.innerHTML = "<p>No users found.</p>";
       return;
     }
@@ -338,11 +239,12 @@ function loadUsersForAdmin() {
 
       // Role badge
       const badge = document.createElement("span");
-      badge.className = "role-badge " + 
+      badge.className = "role-badge " +
         (user.role === "admin" ? "role-admin" : "role-mod");
 
       const label = document.createElement("span");
-      label.textContent = `${user.email} (${user.role})`;
+      label.textContent = `${user.email} (${user.role || "user"})` +
+        (user.banned ? " [BANNED]" : "");
 
       const actions = document.createElement("div");
       actions.className = "admin-actions";
@@ -351,32 +253,28 @@ function loadUsersForAdmin() {
       const promoteBtn = document.createElement("button");
       promoteBtn.textContent = "Make Admin";
       promoteBtn.onclick = () => {
-        db.ref("users/" + uid + "/role").set("admin");
-        loadUsersForAdmin();
+        db.ref("users/" + uid + "/role").set("admin").catch(console.error);
       };
 
       // Demote
       const demoteBtn = document.createElement("button");
       demoteBtn.textContent = "Make Mod";
       demoteBtn.onclick = () => {
-        db.ref("users/" + uid + "/role").set("mod");
-        loadUsersForAdmin();
+        db.ref("users/" + uid + "/role").set("mod").catch(console.error);
       };
 
       // Ban
       const banBtn = document.createElement("button");
       banBtn.textContent = "Ban";
       banBtn.onclick = () => {
-        db.ref("users/" + uid + "/banned").set(true);
-        loadUsersForAdmin();
+        db.ref("users/" + uid + "/banned").set(true).catch(console.error);
       };
 
       // Unban
       const unbanBtn = document.createElement("button");
       unbanBtn.textContent = "Unban";
       unbanBtn.onclick = () => {
-        db.ref("users/" + uid + "/banned").set(false);
-        loadUsersForAdmin();
+        db.ref("users/" + uid + "/banned").set(false).catch(console.error);
       };
 
       // Warn
@@ -386,8 +284,9 @@ function loadUsersForAdmin() {
         db.ref("users/" + uid + "/warning").set({
           message: "You have been cautioned by an admin.",
           timestamp: Date.now()
-        });
-        alert("Warning sent.");
+        }).then(() => {
+          alert("Warning sent.");
+        }).catch(console.error);
       };
 
       actions.appendChild(promoteBtn);
@@ -405,95 +304,54 @@ function loadUsersForAdmin() {
   });
 }
 
+// 10. Auth + role + warnings + wiring
 
-function loadUsersForAdmin() {
-  if (adminUsersListenerAttached) return;
-  adminUsersListenerAttached = true;
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    authBox.classList.remove("hidden");
+    chatWrapper.classList.add("hidden");
+    return;
+  }
 
-  db.ref("users").on("value", async snap => {
-    const users = snap.val() || {};
-    userListDiv.innerHTML = "";
+  authBox.classList.add("hidden");
+  chatWrapper.classList.remove("hidden");
 
-    const bansSnap = await db.ref("bans").once("value");
-    const mutesSnap = await db.ref("mutes").once("value");
-    const bans = bansSnap.val() || {};
-    const mutes = mutesSnap.val() || {};
+  userInfoSpan.textContent = user.email;
 
-    Object.keys(users).forEach(uid => {
-      const u = users[uid];
-      const row = document.createElement("div");
-      row.className = "user-row";
-
-      const infoSpan = document.createElement("span");
-      const banned = !!bans[uid];
-      const muted = !!mutes[uid];
-      infoSpan.textContent = `${u.email} (${u.role})${banned ? " [BANNED]" : ""}${muted ? " [MUTED]" : ""}`;
-
-      const banBtn = document.createElement("button");
-      banBtn.textContent = banned ? "Unban" : "Ban";
-      banBtn.onclick = () => {
-        if (banned) {
-          db.ref("bans/" + uid).remove();
-        } else {
-          db.ref("bans/" + uid).set(true);
-        }
-      };
-
-      const muteBtn = document.createElement("button");
-      muteBtn.textContent = muted ? "Unmute" : "Mute";
-      muteBtn.onclick = () => {
-        if (muted) {
-          db.ref("mutes/" + uid).remove();
-        } else {
-          db.ref("mutes/" + uid).set(true);
-        }
-      };
-
-      row.appendChild(infoSpan);
-      row.appendChild(banBtn);
-      row.appendChild(muteBtn);
-
-      userListDiv.appendChild(row);
-    });
-  });
-}
-
-// Warning button
-const warnBtn = document.createElement("button");
-warnBtn.textContent = "Warn";
-warnBtn.onclick = () => {
-  db.ref("users/" + uid + "/warning").set({
-    message: "You have been cautioned by an admin.",
-    timestamp: Date.now()
-  });
-  alert("Warning sent.");
-};
-
-
-/* Ban Users */
-
-function sendMessage() {
-  const user = firebase.auth().currentUser;
-  if (!user) return;
-
-  db.ref("users/" + user.uid + "/banned").once("value").then(snap => {
-    if (snap.val() === true) {
-      alert("You are banned from sending messages.");
-      return;
+  // Ensure user record exists
+  db.ref("users/" + user.uid).once("value").then(snap => {
+    if (!snap.exists()) {
+      return db.ref("users/" + user.uid).set({
+        email: user.email,
+        role: "mod",   // default role
+        banned: false
+      });
     }
+  }).catch(console.error);
 
-    // continue sending message
-    const text = messageInput.value.trim();
-    if (!text) return;
-
-    db.ref("messages").push({
-      text,
-      userId: user.uid,
-      userEmail: user.email,
-      timestamp: Date.now()
-    });
-
-    messageInput.value = "";
+  // Show role
+  db.ref("users/" + user.uid + "/role").on("value", snap => {
+    const role = snap.val() || "mod";
+    userRoleSpan.textContent = role;
+    if (role === "admin") {
+      adminBox.classList.remove("hidden");
+      loadUsersForAdmin();
+    } else {
+      adminBox.classList.add("hidden");
+    }
   });
-}
 
+  // Show warning once
+  db.ref("users/" + user.uid + "/warning").once("value").then(snap => {
+    if (snap.exists()) {
+      const data = snap.val();
+      alert(data.message || "You have been cautioned by an admin.");
+      db.ref("users/" + user.uid + "/warning").remove();
+    }
+  }).catch(console.error);
+
+  // Setup features
+  loadMessages();
+  setupTyping(user);
+  setupOnlineUsers(user);
+});
