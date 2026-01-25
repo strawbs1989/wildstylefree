@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Wildstyle Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/chat/style.css">
 
   <!-- Firebase v8 compat SDKs -->
@@ -25,11 +26,11 @@
       <p id="auth-error" class="error"></p>
     </div>
 
-    <!-- Chat + presence -->
+    <!-- Chat wrapper -->
     <div id="chat-wrapper" class="hidden">
       <div id="top-bar">
         <div id="user-info">
-          Logged in as: <span id="user-email"></span>
+          <span id="user-email"></span>
           <span id="user-role"></span>
         </div>
         <button id="logout-btn">Logout</button>
@@ -50,7 +51,10 @@
 
         <div id="right-column">
           <h2>Wildstyle Chat</h2>
+
           <div id="messages"></div>
+          <div id="typing-indicator"></div>
+
           <div class="input-row">
             <input id="msg-input" placeholder="Type a message...">
             <button id="send-btn">Send</button>

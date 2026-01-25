@@ -37,6 +37,7 @@ const sendBtn = document.getElementById("send-btn");
 const onlineUsersDiv = document.getElementById("online-users");
 const adminBox = document.getElementById("admin-box");
 const userListDiv = document.getElementById("user-list");
+const typingIndicatorDiv = document.getElementById("typing-indicator");
 
 // 2. Auth actions
 
@@ -54,7 +55,6 @@ registerBtn.onclick = () => {
   auth
     .createUserWithEmailAndPassword(emailInput.value.trim(), passwordInput.value)
     .then(cred => {
-      // First user becomes admin
       const uid = cred.user.uid;
       db.ref("users").once("value").then(snap => {
         const isFirstUser = !snap.exists();
@@ -75,6 +75,11 @@ logoutBtn.onclick = () => auth.signOut();
 
 // 3. Auth state listener
 
+let messagesListenerAttached = false;
+let typingListenerAttached = false;
+let onlineListenerAttached = false;
+let adminUsersListenerAttached = false;
+
 auth.onAuthStateChanged(user => {
   if (user) {
     authBox.classList.add("hidden");
@@ -84,6 +89,7 @@ auth.onAuthStateChanged(user => {
     setupPresence(user);
     loadMessages();
     loadOnlineUsers();
+    setupTyping(user);
     checkAdmin(user.uid);
   } else {
     chatWrapper.classList.add("hidden");
@@ -91,8 +97,30 @@ auth.onAuthStateChanged(user => {
     messagesDiv.innerHTML = "";
     onlineUsersDiv.innerHTML = "";
     userListDiv.innerHTML = "";
+    typingIndicatorDiv.textContent = "";
+
+    detachAllListeners();
   }
 });
+
+function detachAllListeners() {
+  if (messagesListenerAttached) {
+    db.ref("messages").off();
+    messagesListenerAttached = false;
+  }
+  if (onlineListenerAttached) {
+    db.ref("onlineUsers").off();
+    onlineListenerAttached = false;
+  }
+  if (typingListenerAttached) {
+    db.ref("typing").off();
+    typingListenerAttached = false;
+  }
+  if (adminUsersListenerAttached) {
+    db.ref("users").off();
+    adminUsersListenerAttached = false;
+  }
+}
 
 // 4. Presence (online user list)
 
@@ -115,33 +143,86 @@ function setupPresence(user) {
 }
 
 function loadOnlineUsers() {
+  if (onlineListenerAttached) return;
+  onlineListenerAttached = true;
+
   db.ref("onlineUsers").on("value", snap => {
     const users = snap.val() || {};
     onlineUsersDiv.innerHTML = "";
 
     Object.keys(users).forEach(uid => {
       const u = users[uid];
-      const div = document.createElement("div");
-      div.className = "online-user";
-      div.textContent = u.email;
-      onlineUsersDiv.appendChild(div);
+      const row = document.createElement("div");
+      row.className = "online-user";
+
+      const avatar = createAvatar(u.email);
+      const label = document.createElement("span");
+      label.textContent = u.email;
+
+      row.appendChild(avatar);
+      row.appendChild(label);
+      onlineUsersDiv.appendChild(row);
     });
   });
 }
 
-// 5. Messages
+// 5. Typing indicator
 
-function appendSystemMessage(text) {
-  const div = document.createElement("div");
-  div.className = "msg system";
-  div.textContent = text;
-  messagesDiv.appendChild(div);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+let typingTimeout = null;
+
+function setupTyping(user) {
+  if (typingListenerAttached) return;
+  typingListenerAttached = true;
+
+  const myTypingRef = db.ref("typing/" + user.uid);
+
+  msgInput.addEventListener("input", () => {
+    myTypingRef.set({
+      email: user.email,
+      timestamp: Date.now()
+    });
+
+    if (typingTimeout) clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      myTypingRef.remove();
+    }, 3000);
+  });
+
+  db.ref("typing").on("value", snap => {
+    const data = snap.val() || {};
+    const currentUid = user.uid;
+    const others = Object.keys(data)
+      .filter(uid => uid !== currentUid)
+      .map(uid => data[uid].email);
+
+    if (others.length === 0) {
+      typingIndicatorDiv.textContent = "";
+    } else if (others.length === 1) {
+      typingIndicatorDiv.textContent = `${others[0]} is typing...`;
+    } else {
+      typingIndicatorDiv.textContent = `${others.length} people are typing...`;
+    }
+  });
 }
 
-function appendChatMessage(msg) {
+// 6. Messages
+
+function createAvatar(email) {
+  const div = document.createElement("div");
+  div.className = "avatar";
+  const letter = (email || "?").charAt(0).toUpperCase();
+  div.textContent = letter;
+  return div;
+}
+
+function appendChatMessage(key, msg, currentUser) {
   const wrapper = document.createElement("div");
   wrapper.className = "msg";
+
+  const avatar = createAvatar(msg.userEmail);
+
+  const body = document.createElement("div");
+  body.className = "msg-body";
 
   const meta = document.createElement("div");
   meta.className = "msg-meta";
@@ -152,19 +233,62 @@ function appendChatMessage(msg) {
   text.className = "msg-text";
   text.textContent = msg.text;
 
-  wrapper.appendChild(meta);
-  wrapper.appendChild(text);
+  body.appendChild(meta);
+  body.appendChild(text);
+
+  // Delete button (owner or admin)
+  if (currentUser && (msg.userId === currentUser.uid || currentUser.isAdmin)) {
+    const actions = document.createElement("div");
+    actions.className = "msg-actions";
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+    delBtn.onclick = () => {
+      db.ref("messages/" + key).remove();
+    };
+
+    actions.appendChild(delBtn);
+    body.appendChild(actions);
+  }
+
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(body);
   messagesDiv.appendChild(wrapper);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 function loadMessages() {
+  if (messagesListenerAttached) return;
+  messagesListenerAttached = true;
+
   messagesDiv.innerHTML = "";
-  db.ref("messages").off(); // avoid duplicates
 
   db.ref("messages").limitToLast(200).on("child_added", snap => {
     const msg = snap.val();
-    appendChatMessage(msg);
+    const key = snap.key;
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    db.ref("users/" + user.uid + "/role").once("value").then(roleSnap => {
+      const isAdmin = roleSnap.val() === "admin";
+      appendChatMessage(key, msg, { uid: user.uid, isAdmin });
+    });
+  });
+
+  db.ref("messages").on("child_removed", snap => {
+    // Simple approach: reload list
+    messagesDiv.innerHTML = "";
+    db.ref("messages").limitToLast(200).once("value").then(snap2 => {
+      const user = auth.currentUser;
+      if (!user) return;
+      db.ref("users/" + user.uid + "/role").once("value").then(roleSnap => {
+        const isAdmin = roleSnap.val() === "admin";
+        snap2.forEach(child => {
+          appendChatMessage(child.key, child.val(), { uid: user.uid, isAdmin });
+        });
+      });
+    });
   });
 }
 
@@ -191,7 +315,7 @@ function sendMessage() {
   msgInput.value = "";
 }
 
-// 6. Admin logic
+// 7. Admin logic (ban, unban, mute, unmute)
 
 function checkAdmin(uid) {
   db.ref("users/" + uid + "/role").once("value").then(snap => {
@@ -207,26 +331,47 @@ function checkAdmin(uid) {
 }
 
 function loadUsersForAdmin() {
-  db.ref("users").on("value", snap => {
+  if (adminUsersListenerAttached) return;
+  adminUsersListenerAttached = true;
+
+  db.ref("users").on("value", async snap => {
     const users = snap.val() || {};
     userListDiv.innerHTML = "";
 
+    const bansSnap = await db.ref("bans").once("value");
+    const mutesSnap = await db.ref("mutes").once("value");
+    const bans = bansSnap.val() || {};
+    const mutes = mutesSnap.val() || {};
+
     Object.keys(users).forEach(uid => {
       const u = users[uid];
-
       const row = document.createElement("div");
       row.className = "user-row";
 
       const infoSpan = document.createElement("span");
-      infoSpan.textContent = `${u.email} (${u.role})`;
+      const banned = !!bans[uid];
+      const muted = !!mutes[uid];
+      infoSpan.textContent = `${u.email} (${u.role})${banned ? " [BANNED]" : ""}${muted ? " [MUTED]" : ""}`;
 
       const banBtn = document.createElement("button");
-      banBtn.textContent = "Ban";
-      banBtn.onclick = () => db.ref("bans/" + uid).set(true);
+      banBtn.textContent = banned ? "Unban" : "Ban";
+      banBtn.onclick = () => {
+        if (banned) {
+          db.ref("bans/" + uid).remove();
+        } else {
+          db.ref("bans/" + uid).set(true);
+        }
+      };
 
       const muteBtn = document.createElement("button");
-      muteBtn.textContent = "Mute";
-      muteBtn.onclick = () => db.ref("mutes/" + uid).set(true);
+      muteBtn.textContent = muted ? "Unmute" : "Mute";
+      muteBtn.onclick = () => {
+        if (muted) {
+          db.ref("mutes/" + uid).remove();
+        } else {
+          db.ref("mutes/" + uid).set(true);
+        }
+      };
 
       row.appendChild(infoSpan);
       row.appendChild(banBtn);
