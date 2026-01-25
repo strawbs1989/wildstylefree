@@ -11,8 +11,9 @@ body {
   padding: 16px;
 }
 
+/* FIXED */
 .hidden {
-  display: block;
+  display: none !important;
 }
 
 .error {
@@ -170,13 +171,14 @@ button:hover {
   font-size: 1rem;
 }
 
-#user-list {
+/* FIXED: renamed to match JS */
+#adminUsers {
   margin-top: 8px;
   max-height: 260px;
   overflow-y: auto;
 }
 
-.user-row {
+.admin-user {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -185,11 +187,11 @@ button:hover {
   font-size: 0.8rem;
 }
 
-.user-row span {
+.admin-user span {
   flex: 1;
 }
 
-.user-row button {
+.admin-user button {
   padding: 4px 6px;
   font-size: 0.7rem;
 }
@@ -213,6 +215,8 @@ button:hover {
 }
 
 .msg-body {
+  display: flex;
+  flex-direction: column;
   flex: 1;
 }
 
@@ -223,6 +227,7 @@ button:hover {
 
 .msg-text {
   font-size: 0.95rem;
+  display: block;
 }
 
 .system {
@@ -281,16 +286,6 @@ button:hover {
   }
 }
 
-.msg-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.msg-text {
-  display: block;
-}
-
 /* Mod Badges */
 
 .role-badge {
@@ -308,5 +303,3 @@ button:hover {
 .role-mod {
   background: limegreen;
 }
-
-
