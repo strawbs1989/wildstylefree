@@ -135,37 +135,38 @@ function loadMessages() {
   });
 }
 
-// 6. Ban enforcement + sending
+db.ref("users/" + user.uid).once("value").then(snap => {
+  const data = snap.val() || {};
+  const banExpires = data.banExpires;
 
-function sendMessage() {
-  const user = auth.currentUser;
-  if (!user) return;
+  // Permanent ban
+  if (banExpires === "perm") {
+    alert("You are permanently banned from sending messages.");
+    return;
+  }
 
-  const text = msgInput.value.trim();
-  if (!text) return;
+  // Temporary ban
+  if (typeof banExpires === "number" && banExpires > Date.now()) {
+    const mins = Math.ceil((banExpires - Date.now()) / 60000);
+    alert("You are banned for another " + mins + " minutes.");
+    return;
+  }
 
-  db.ref("users/" + user.uid + "/banned").once("value").then(snap => {
-    if (snap.val() === true) {
-      alert("You are banned from sending messages.");
-      return;
-    }
+  // Auto‑unban if expired
+  if (typeof banExpires === "number" && banExpires <= Date.now()) {
+    db.ref("users/" + user.uid + "/banExpires").remove();
+  }
 
-    const newMsgRef = db.ref("messages").push();
-    return newMsgRef.set({
-      userId: user.uid,
-      userEmail: user.email,
-      text: text.slice(0, 500),
-      timestamp: Date.now()
-    });
-  }).then(() => {
-    msgInput.value = "";
-  }).catch(console.error);
-}
-
-sendBtn.onclick = sendMessage;
-msgInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMessage();
+  // Send message
+  const newMsgRef = db.ref("messages").push();
+  return newMsgRef.set({
+    userId: user.uid,
+    userEmail: user.email,
+    text: text.slice(0, 500),
+    timestamp: Date.now()
+  });
 });
+
 
 // 7. Typing indicator
 
@@ -242,58 +243,75 @@ function loadUsersForAdmin() {
       const row = document.createElement("div");
       row.className = "admin-user";
 
+      // Role badge
       const badge = document.createElement("span");
       badge.className = "role-badge " +
         (user.role === "admin" ? "role-admin" : "role-mod");
 
+      // Ban status text
+      let banStatus = "";
+      if (user.banExpires === "perm") {
+        banStatus = " [PERM BANNED]";
+      } else if (typeof user.banExpires === "number" && user.banExpires > Date.now()) {
+        const mins = Math.ceil((user.banExpires - Date.now()) / 60000);
+        banStatus = ` [BANNED ${mins}m left]`;
+      }
+
       const label = document.createElement("span");
-      label.textContent = `${user.email} (${user.role || "user"})` +
-        (user.banned ? " [BANNED]" : "");
+      label.textContent = `${user.email} (${user.role || "user"})${banStatus}`;
 
       const actions = document.createElement("div");
       actions.className = "admin-actions";
 
-      const promoteBtn = document.createElement("button");
-      promoteBtn.textContent = "Make Admin";
-      promoteBtn.onclick = () => {
-        db.ref("users/" + uid + "/role").set("admin").catch(console.error);
+      // Permanent ban
+      const permBanBtn = document.createElement("button");
+      permBanBtn.textContent = "Ban Perm";
+      permBanBtn.onclick = () => {
+        db.ref("users/" + uid + "/banExpires").set("perm");
       };
 
-      const demoteBtn = document.createElement("button");
-      demoteBtn.textContent = "Make Mod";
-      demoteBtn.onclick = () => {
-        db.ref("users/" + uid + "/role").set("mod").catch(console.error);
+      // 24‑hour ban
+      const ban24Btn = document.createElement("button");
+      ban24Btn.textContent = "Ban 24h";
+      ban24Btn.onclick = () => {
+        const expires = Date.now() + 24 * 60 * 60 * 1000;
+        db.ref("users/" + uid + "/banExpires").set(expires);
       };
 
-      const banBtn = document.createElement("button");
-      banBtn.textContent = "Ban";
-      banBtn.onclick = () => {
-        db.ref("users/" + uid + "/banned").set(true).catch(console.error);
+      // 6‑hour ban
+      const ban6Btn = document.createElement("button");
+      ban6Btn.textContent = "Ban 6h";
+      ban6Btn.onclick = () => {
+        const expires = Date.now() + 6 * 60 * 60 * 1000;
+        db.ref("users/" + uid + "/banExpires").set(expires);
       };
 
+      // Unban
       const unbanBtn = document.createElement("button");
       unbanBtn.textContent = "Unban";
       unbanBtn.onclick = () => {
-        db.ref("users/" + uid + "/banned").set(false).catch(console.error);
+        db.ref("users/" + uid + "/banExpires").remove();
       };
 
+      // Warn
       const warnBtn = document.createElement("button");
       warnBtn.textContent = "Warn";
       warnBtn.onclick = () => {
         db.ref("users/" + uid + "/warning").set({
           message: "You have been cautioned by an admin.",
           timestamp: Date.now()
-        }).then(() => {
-          alert("Warning sent.");
-        }).catch(console.error);
+        });
+        alert("Warning sent.");
       };
 
-      actions.appendChild(promoteBtn);
-      actions.appendChild(demoteBtn);
-      actions.appendChild(banBtn);
+      // Add buttons to actions
+      actions.appendChild(permBanBtn);
+      actions.appendChild(ban24Btn);
+      actions.appendChild(ban6Btn);
       actions.appendChild(unbanBtn);
       actions.appendChild(warnBtn);
 
+      // Build row
       row.appendChild(badge);
       row.appendChild(label);
       row.appendChild(actions);
@@ -302,6 +320,8 @@ function loadUsersForAdmin() {
     });
   });
 }
+
+
 
 // 10. Auth buttons (login / register / logout)
 
