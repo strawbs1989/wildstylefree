@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wildstyle Chat</title>
+  <link rel="stylesheet" href="/chat/style.css">
+
+  <!-- Firebase v8 compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Auth box -->
+    <div id="auth-box">
+      <h2>Login / Register</h2>
+      <input id="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+      <div class="auth-buttons">
+        <button id="login-btn">Login</button>
+        <button id="register-btn">Register</button>
+      </div>
+      <p id="auth-error" class="error"></p>
+    </div>
+
+    <!-- Chat + presence -->
+    <div id="chat-wrapper" class="hidden">
+      <div id="top-bar">
+        <div id="user-info">
+          Logged in as: <span id="user-email"></span>
+          <span id="user-role"></span>
+        </div>
+        <button id="logout-btn">Logout</button>
+      </div>
+
+      <div id="layout">
+        <div id="left-column">
+          <div id="online-box">
+            <h3>Online Users</h3>
+            <div id="online-users"></div>
+          </div>
+
+          <div id="admin-box" class="hidden">
+            <h3>Admin Panel</h3>
+            <div id="user-list"></div>
+          </div>
+        </div>
+
+        <div id="right-column">
+          <h2>Wildstyle Chat</h2>
+          <div id="messages"></div>
+          <div class="input-row">
+            <input id="msg-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/chat/chat.js"></script>
+</body>
+</html>
