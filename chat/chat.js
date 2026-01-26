@@ -1,24 +1,22 @@
 /* jshint esversion: 8 */
 let cachedIsAdmin = false;
-function loadUsersForAdmin() {
-  if (!cachedIsAdmin) return; // 🔐 HARD ADMIN CHECK
-  if (adminUsersListenerAttached) return;
-  adminUsersListenerAttached = true;
+
 const firebaseConfig = {
-    apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
-    authDomain: "wildstyle-chat.firebaseapp.com",
-    databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
-    projectId: "wildstyle-chat",
-    storageBucket: "wildstyle-chat.firebasestorage.app",
-    messagingSenderId: "259584470846",
-    appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
-    measurementId: "G-M7MVE2CY8B"
-  };
+  apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
+  authDomain: "wildstyle-chat.firebaseapp.com",
+  databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
+  projectId: "wildstyle-chat",
+  storageBucket: "wildstyle-chat.firebasestorage.app",
+  messagingSenderId: "259584470846",
+  appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
+  measurementId: "G-M7MVE2CY8B"
+};
 
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db   = firebase.database();
+
 
 // 2. DOM elements (matching your HTML)
 const authBox       = document.getElementById("auth-box");
@@ -246,9 +244,7 @@ function setupOnlineUsers(user) {
 
 // 9. Admin panel (roles, bans, warnings, badges)
 
-function loadUsersForAdmin() {
-  if (adminUsersListenerAttached) return;
-  adminUsersListenerAttached = true;
+
 
   db.ref("users").on("value", snap => {
     const users = snap.val() || {};
@@ -266,9 +262,17 @@ function loadUsersForAdmin() {
       row.className = "admin-user";
 
       // Role badge
-      const badge = document.createElement("span");
-      badge.className = "role-badge " +
-        const role = user.role || "user";
+      const role = user.role || "user";
+
+const badge = document.createElement("span");
+badge.className =
+  "role-badge " +
+  (role === "admin"
+    ? "role-admin"
+    : role === "mod"
+    ? "role-mod"
+    : "role-user");
+
 
 badge.className = "role-badge " +
   (role === "admin" ? "role-admin" : role === "mod" ? "role-mod" : "role-user");
