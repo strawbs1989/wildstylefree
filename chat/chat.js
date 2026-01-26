@@ -392,9 +392,7 @@ auth.onAuthStateChanged(user => {
     return;
   }
   
-  db.ref("users/" + user.uid + "/role").once("value").then(snap => {
-  cachedIsAdmin = snap.val() === "admin";
-});
+ 
 
   authBox.classList.add("hidden");
   chatWrapper.classList.remove("hidden");
@@ -404,12 +402,14 @@ auth.onAuthStateChanged(user => {
   // Ensure user record exists
   db.ref("users/" + user.uid).once("value").then(snap => {
     if (!snap.exists()) {
-      return db.ref("users/" + user.uid).set({
-        email: user.email,
-        role: "mod",
-        banned: false
-      });
-    }
+  return db.ref("users/" + user.uid).set({
+    email: user.email,
+    role: "mod"
+  });
+} else if (!snap.child("role").exists()) {
+  return db.ref("users/" + user.uid + "/role").set("mod");
+}
+
   }).catch(console.error);
 
   // Show role + admin panel
