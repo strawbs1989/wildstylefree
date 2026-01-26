@@ -1,5 +1,4 @@
 /* jshint esversion: 8 */
-
 let cachedIsAdmin = false;
 
 const firebaseConfig = {
@@ -145,6 +144,12 @@ function sendMessage() {
   db.ref("users/" + user.uid).once("value").then(snap => {
     const data = snap.val() || {};
     const banExpires = data.banExpires;
+    const role = data.role || "pending";
+
+    if (role === "pending") {
+      alert("Your account is pending approval. You cannot chat yet.");
+      return;
+    }
 
     if (banExpires === "perm") {
       alert("You are permanently banned from sending messages.");
@@ -259,15 +264,27 @@ function loadUsersForAdmin() {
       if (user.banExpires === "perm") {
         banStatus = " [PERM BANNED]";
       } else if (typeof user.banExpires === "number" && user.banExpires > Date.now()) {
-        const mins = Math.ceil((user.banExpires - Date.now()) / 60000);
+        const mins = Math.ceil((banExpires - Date.now()) / 60000);
         banStatus = ` [BANNED ${mins}m left]`;
       }
 
       const label = document.createElement("span");
-      label.textContent = `${user.email} (${user.role || "user"})${banStatus}`;
+      label.textContent = `${user.email} (${user.role || "pending"})${banStatus}`;
 
       const actions = document.createElement("div");
       actions.className = "admin-actions";
+
+      const approveBtn = document.createElement("button");
+      approveBtn.textContent = "Approve";
+      approveBtn.onclick = () => {
+        db.ref("users/" + uid + "/role").set("mod");
+      };
+
+      const rejectBtn = document.createElement("button");
+      rejectBtn.textContent = "Reject";
+      rejectBtn.onclick = () => {
+        db.ref("users/" + uid).remove();
+      };
 
       const permBanBtn = document.createElement("button");
       permBanBtn.textContent = "Ban Perm";
@@ -295,21 +312,12 @@ function loadUsersForAdmin() {
         db.ref("users/" + uid + "/banExpires").remove();
       };
 
-      const warnBtn = document.createElement("button");
-      warnBtn.textContent = "Warn";
-      warnBtn.onclick = () => {
-        db.ref("users/" + uid + "/warning").set({
-          message: "You have been cautioned by an admin.",
-          timestamp: Date.now()
-        });
-        alert("Warning sent.");
-      };
-
+      actions.appendChild(approveBtn);
+      actions.appendChild(rejectBtn);
       actions.appendChild(permBanBtn);
       actions.appendChild(ban24Btn);
       actions.appendChild(ban6Btn);
       actions.appendChild(unbanBtn);
-      actions.appendChild(warnBtn);
 
       row.appendChild(badge);
       row.appendChild(label);
@@ -382,14 +390,14 @@ auth.onAuthStateChanged(user => {
     if (!snap.exists()) {
       return db.ref("users/" + user.uid).set({
         email: user.email,
-        role: "mod"
+        role: "pending"
       });
     }
   }).catch(console.error);
 
   // Role listener
   db.ref("users/" + user.uid + "/role").on("value", snap => {
-    const role = snap.val() || "mod";
+    const role = snap.val() || "pending";
     cachedIsAdmin = role === "admin";
     userRoleSpan.textContent = role;
 
