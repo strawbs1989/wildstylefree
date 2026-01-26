@@ -1,6 +1,9 @@
 /* jshint esversion: 8 */
 let cachedIsAdmin = false;
-
+function loadUsersForAdmin() {
+  if (!cachedIsAdmin) return; // 🔐 HARD ADMIN CHECK
+  if (adminUsersListenerAttached) return;
+  adminUsersListenerAttached = true;
 const firebaseConfig = {
     apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
     authDomain: "wildstyle-chat.firebaseapp.com",
@@ -265,7 +268,11 @@ function loadUsersForAdmin() {
       // Role badge
       const badge = document.createElement("span");
       badge.className = "role-badge " +
-        (user.role === "admin" ? "role-admin" : "role-mod");
+        const role = user.role || "user";
+
+badge.className = "role-badge " +
+  (role === "admin" ? "role-admin" : role === "mod" ? "role-mod" : "role-user");
+
 
       // Ban status text
       let banStatus = "";
@@ -277,7 +284,7 @@ function loadUsersForAdmin() {
       }
 
       const label = document.createElement("span");
-      label.textContent = `${user.email} (${user.role || "user"})${banStatus}`;
+      label.textContent = `${user.email} (${role})${banStatus}`;
 
       const actions = document.createElement("div");
       actions.className = "admin-actions";
@@ -413,16 +420,24 @@ auth.onAuthStateChanged(user => {
   }).catch(console.error);
 
   // Show role + admin panel
-  db.ref("users/" + user.uid + "/role").on("value", snap => {
-    const role = snap.val() || "mod";
-    userRoleSpan.textContent = role;
-    if (role === "admin") {
-      adminBox.classList.remove("hidden");
-      loadUsersForAdmin();
-    } else {
-      adminBox.classList.add("hidden");
-    }
-  });
+ const roleRef = db.ref("users/" + user.uid + "/role");
+
+roleRef.on("value", snap => {
+  const role = snap.val();
+
+  console.log("ROLE DETECTED:", role); // DEBUG
+
+  userRoleSpan.textContent = role || "mod";
+  cachedIsAdmin = role === "admin";
+
+  if (cachedIsAdmin) {
+    adminBox.classList.remove("hidden");
+    loadUsersForAdmin();
+  } else {
+    adminBox.classList.add("hidden");
+  }
+});
+
 
   // Show warning once
   db.ref("users/" + user.uid + "/warning").once("value").then(snap => {
