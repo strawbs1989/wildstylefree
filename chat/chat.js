@@ -1,4 +1,5 @@
 /* jshint esversion: 8 */
+let cachedIsAdmin = false;
 
 const firebaseConfig = {
     apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
@@ -113,10 +114,10 @@ function loadMessages() {
     const user = auth.currentUser;
     if (!user) return;
 
-    db.ref("users/" + user.uid + "/role").once("value").then(roleSnap => {
-      const isAdmin = roleSnap.val() === "admin";
-      appendChatMessage(key, msg, { uid: user.uid, isAdmin });
-    }).catch(console.error);
+    appendChatMessage(key, msg, {
+      uid: user.uid,
+      isAdmin: cachedIsAdmin
+    });
   });
 
   db.ref("messages").on("child_removed", () => {
@@ -124,16 +125,17 @@ function loadMessages() {
     const user = auth.currentUser;
     if (!user) return;
 
-    db.ref("users/" + user.uid + "/role").once("value").then(roleSnap => {
-      const isAdmin = roleSnap.val() === "admin";
-      db.ref("messages").limitToLast(200).once("value").then(snap2 => {
-        snap2.forEach(child => {
-          appendChatMessage(child.key, child.val(), { uid: user.uid, isAdmin });
+    db.ref("messages").limitToLast(200).once("value").then(snap2 => {
+      snap2.forEach(child => {
+        appendChatMessage(child.key, child.val(), {
+          uid: user.uid,
+          isAdmin: cachedIsAdmin
         });
       });
-    }).catch(console.error);
+    });
   });
 }
+
 
 // 6. Ban enforcement + sending
 
@@ -210,6 +212,7 @@ function setupOnlineUsers(user) {
   onlineUsersListenerAttached = true;
 
   const userRef = db.ref("onlineUsers/" + user.uid);
+
   userRef.set({
     email: user.email,
     timestamp: Date.now()
@@ -236,6 +239,7 @@ function setupOnlineUsers(user) {
     });
   });
 }
+
 
 // 9. Admin panel (roles, bans, warnings, badges)
 
@@ -387,6 +391,10 @@ auth.onAuthStateChanged(user => {
     chatWrapper.classList.add("hidden");
     return;
   }
+  
+  db.ref("users/" + user.uid + "/role").once("value").then(snap => {
+  cachedIsAdmin = snap.val() === "admin";
+});
 
   authBox.classList.add("hidden");
   chatWrapper.classList.remove("hidden");
