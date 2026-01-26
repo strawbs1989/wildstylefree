@@ -74,36 +74,59 @@ function loadMessages() {
 
   db.ref("messages").limitToLast(200).on("child_added", snap => {
     const msg = snap.val();
+    const key = snap.key;
     const user = auth.currentUser;
     if (!user) return;
 
-    const div = document.createElement("div");
-    div.textContent = msg.userEmail + ": " + msg.text;
-    messagesDiv.appendChild(div);
+    const wrapper = document.createElement("div");
+    wrapper.className = "msg";
+
+    const avatar = createAvatar(msg.userEmail);
+
+    const body = document.createElement("div");
+    body.className = "msg-body";
+
+    const meta = document.createElement("div");
+    meta.className = "msg-meta";
+    const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString();
+    meta.textContent = `[${time}] ${msg.userEmail}`;
+
+    const text = document.createElement("div");
+    text.className = "msg-text";
+    text.textContent = msg.text;
+
+    body.appendChild(meta);
+    body.appendChild(text);
+
+    // Delete button (owner or admin)
+    if (msg.userId === user.uid || cachedIsAdmin) {
+      const actions = document.createElement("div");
+      actions.className = "msg-actions";
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Delete";
+      delBtn.onclick = () => {
+        db.ref("messages/" + key).remove();
+      };
+
+      actions.appendChild(delBtn);
+      body.appendChild(actions);
+    }
+
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(body);
+    messagesDiv.appendChild(wrapper);
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+
+  // keep deleted messages in sync
+  db.ref("messages").on("child_removed", () => {
+    messagesDiv.innerHTML = "";
+    messagesListenerAttached = false;
+    loadMessages();
   });
 }
-
-function sendMessage() {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  const text = msgInput.value.trim();
-  if (!text) return;
-
-  db.ref("messages").push({
-    userId: user.uid,
-    userEmail: user.email,
-    text,
-    timestamp: Date.now()
-  });
-
-  msgInput.value = "";
-}
-
-sendBtn.onclick = sendMessage;
-msgInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMessage();
-});
 
 /* =========================
    6. Online users
