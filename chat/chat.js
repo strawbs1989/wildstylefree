@@ -366,3 +366,53 @@ function loadAdmin() {
     });
   });
 }
+/* =========================
+   RADIO PLAYER
+========================= */
+const RADIO_STREAM = "https://streaming.live365.com/a50378";
+
+const radioAudio  = document.getElementById("radio-audio");
+const playRadio   = document.getElementById("play-radio");
+const stopRadio   = document.getElementById("stop-radio");
+const radioStatus = document.getElementById("radio-status");
+
+let hls;
+
+function startRadio() {
+  radioStatus.textContent = "Loading…";
+
+  if (radioAudio.canPlayType("application/vnd.apple.mpegurl")) {
+    radioAudio.src = RADIO_STREAM;
+    radioAudio.play();
+  } else if (window.Hls) {
+    hls = new Hls();
+    hls.loadSource(RADIO_STREAM);
+    hls.attachMedia(radioAudio);
+    radioAudio.play();
+  } else {
+    alert("Your browser does not support live radio.");
+    return;
+  }
+
+  playRadio.classList.add("hidden");
+  stopRadio.classList.remove("hidden");
+  radioStatus.textContent = "Live 🔴";
+}
+
+function stopRadioPlayer() {
+  radioAudio.pause();
+  radioAudio.src = "";
+  if (hls) hls.destroy();
+
+  playRadio.classList.remove("hidden");
+  stopRadio.classList.add("hidden);
+  radioStatus.textContent = "Stopped";
+}
+
+playRadio.onclick = startRadio;
+stopRadio.onclick = stopRadioPlayer;
+
+/* Stop radio when user logs out */
+auth.onAuthStateChanged(user => {
+  if (!user) stopRadioPlayer();
+});
