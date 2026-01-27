@@ -1,418 +1,315 @@
-/* jshint esversion: 8 */
+// ==============================
+// Wildstyle Chat - FULL FIXED JS
+// ==============================
 
-/* =========================
-   Firebase Init
-========================= */
-firebase.initializeApp({
+// Firebase v8 compat
+const firebaseConfig = {
   apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
   authDomain: "wildstyle-chat.firebaseapp.com",
   databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
   projectId: "wildstyle-chat",
   storageBucket: "wildstyle-chat.firebasestorage.app",
   messagingSenderId: "259584470846",
-  appId: "1:259584470846:web:81d005c0c68c6c2a1f466f"
-});
+  appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
+  measurementId: "G-M7MVE2CY8B"
+};
+firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-const db   = firebase.database();
+const db = firebase.database();
 
-/* =========================
-   DOM
-========================= */
-const authBox     = document.getElementById("auth-box");
+// DOM
+const authBox = document.getElementById("auth-box");
 const chatWrapper = document.getElementById("chat-wrapper");
-
-const emailInput    = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const loginBtn      = document.getElementById("login-btn");
-const registerBtn   = document.getElementById("register-btn");
-const logoutBtn     = document.getElementById("logout-btn");
-const authError     = document.getElementById("auth-error");
-
 const userEmailSpan = document.getElementById("user-email");
-const userRoleSpan  = document.getElementById("user-role");
-
+const userRoleSpan = document.getElementById("user-role");
+const adminBox = document.getElementById("adminbox");
+const userList = document.getElementById("user-list");
 const messagesDiv = document.getElementById("messages");
-const msgInput    = document.getElementById("msg-input");
-const sendBtn     = document.getElementById("send-btn");
+const msgInput = document.getElementById("msg-input");
+const sendBtn = document.getElementById("send-btn");
+const loginBtn = document.getElementById("login-btn");
+const registerBtn = document.getElementById("register-btn");
+const googleBtn = document.getElementById("google-btn");
+const forgotBtn = document.getElementById("forgot-btn");
+const authError = document.getElementById("auth-error");
 
-const onlineUsersDiv = document.getElementById("online-users");
+const playRadioBtn = document.getElementById("play-radio");
+const radioPlayer = document.getElementById("radio-player");
 
-const adminBox  = document.getElementById("adminbox");
-const adminList = document.getElementById("user-list");
+// Spam protection
+let lastMessageTime = 0;
+const MESSAGE_COOLDOWN_MS = 3000; // 3 seconds
 
-/* =========================
-   State
-========================= */
-let cachedIsAdmin = false;
-let lastMsgTime = 0;
-let messagesLoaded = false;
+// -------------------------------
+// AUTH LISTENERS
+// -------------------------------
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    showAuth();
+    return;
+  }
 
-/* =========================
-   Helpers
-========================= */
-function avatar(email) {
-  const d = document.createElement("div");
-  d.className = "avatar";
-  d.textContent = (email || "?")[0].toUpperCase();
-  return d;
+  // require verified email
+  if (!user.emailVerified) {
+    auth.signOut();
+    alert("Please verify your email before logging in.");
+    return;
+  }
+
+  // load user role & approval
+  const userRef = db.ref("users/" + user.uid);
+  const snapshot = await userRef.once("value");
+  const data = snapshot.val() || {};
+
+  const role = data.role || "pending"; // default pending
+  const approved = data.approved || false;
+
+  userEmailSpan.textContent = user.email;
+  userRoleSpan.textContent = role;
+
+  if (!approved) {
+    auth.signOut();
+    alert("Your account is pending approval. Please wait for an admin to approve you.");
+    return;
+  }
+
+  if (role === "admin") {
+    adminBox.classList.remove("hidden");
+    loadUsersForAdmin();
+  } else {
+    adminBox.classList.add("hidden");
+  }
+
+  showChat();
+  listenMessages();
+  setupOnlineUsers(user);
+});
+
+// -------------------------------
+// SHOW UI
+// -------------------------------
+function showAuth() {
+  authBox.classList.remove("hidden");
+  chatWrapper.classList.add("hidden");
 }
 
-function canSend() {
-  const now = Date.now();
-  if (now - lastMsgTime < 3000) return false;
-  lastMsgTime = now;
-  return true;
+function showChat() {
+  authBox.classList.add("hidden");
+  chatWrapper.classList.remove("hidden");
 }
 
-/* =========================
-   REGISTER
-========================= */
-registerBtn.onclick = async () => {
+// -------------------------------
+// LOGIN / REGISTER / GOOGLE
+// -------------------------------
+loginBtn.addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
+
   try {
-    authError.textContent = "";
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch (err) {
+    authError.textContent = err.message;
+  }
+});
 
-    const email = emailInput.value.trim();
-    const pass  = passwordInput.value.trim();
-    if (!email || !pass) throw "Fill in all fields";
+registerBtn.addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
 
+  try {
     const cred = await auth.createUserWithEmailAndPassword(email, pass);
-
-    // Send verification email
     await cred.user.sendEmailVerification();
 
-    // Create pending user record
+    // save user
     await db.ref("users/" + cred.user.uid).set({
       email: email,
       role: "pending",
-      bannedUntil: 0
+      approved: false
     });
 
     alert("Verification email sent. Check your inbox.");
     auth.signOut();
-  } catch (e) {
-    authError.textContent = e.message || e;
+  } catch (err) {
+    authError.textContent = err.message;
   }
-};
-
-/* =========================
-   LOGIN
-========================= */
-loginBtn.onclick = async () => {
-  try {
-    authError.textContent = "";
-
-    const email = emailInput.value.trim();
-    const pass  = passwordInput.value.trim();
-    if (!email || !pass) throw "Fill in all fields";
-
-    await auth.signInWithEmailAndPassword(email, pass);
-  } catch (e) {
-    authError.textContent = e.message || e;
-  }
-};
-
-/* =========================
-   LOGOUT
-========================= */
-logoutBtn.onclick = () => auth.signOut();
-
-/* =========================
-   AUTH STATE
-========================= */
-auth.onAuthStateChanged(async user => {
-  if (!user) {
-    authBox.classList.remove("hidden");
-    chatWrapper.classList.add("hidden");
-    return;
-  }
-
-  // Email verification check
-  if (!user.emailVerified) {
-    alert("Please verify your email before logging in.");
-    auth.signOut();
-    return;
-  }
-
-  authBox.classList.add("hidden");
-  chatWrapper.classList.remove("hidden");
-  userEmailSpan.textContent = user.email;
-
-  const userRef = db.ref("users/" + user.uid);
-  const snap = await userRef.once("value");
-
-  if (!snap.exists()) {
-    await userRef.set({
-      email: user.email,
-      role: "pending",
-      bannedUntil: 0
-    });
-  }
-
-  userRef.child("role").on("value", snap => {
-    const role = snap.val() || "pending";
-    cachedIsAdmin = role === "admin";
-    userRoleSpan.textContent = role;
-
-    if (role === "pending") {
-      alert("Your account is awaiting admin approval.");
-      return;
-    }
-
-    // Only approved users reach here
-    loadMessages();
-    setupTyping(user);
-    setupOnline(user);
-
-    if (cachedIsAdmin) {
-      adminBox.classList.remove("hidden");
-      loadAdmin();
-    } else {
-      adminBox.classList.add("hidden");
-    }
-  });
 });
 
-/* =========================
-   SEND MESSAGE
-========================= */
+googleBtn.addEventListener("click", async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    const cred = await auth.signInWithPopup(provider);
+
+    // if new user create pending record
+    const userRef = db.ref("users/" + cred.user.uid);
+    const snapshot = await userRef.once("value");
+    if (!snapshot.exists()) {
+      await userRef.set({
+        email: cred.user.email,
+        role: "pending",
+        approved: false
+      });
+    }
+  } catch (err) {
+    authError.textContent = err.message;
+  }
+});
+
+forgotBtn.addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  if (!email) return alert("Enter your email first.");
+
+  try {
+    await auth.sendPasswordResetEmail(email);
+    alert("Password reset email sent.");
+  } catch (err) {
+    authError.textContent = err.message;
+  }
+});
+
+// -------------------------------
+// SEND MESSAGE
+// -------------------------------
+sendBtn.addEventListener("click", sendMessage);
+
 function sendMessage() {
   const user = auth.currentUser;
   if (!user) return;
 
+  const now = Date.now();
+  if (now - lastMessageTime < MESSAGE_COOLDOWN_MS) {
+    alert("Slow down, no spamming!");
+    return;
+  }
+
   const text = msgInput.value.trim();
   if (!text) return;
 
-  if (!canSend()) {
-    alert("Slow down! Please wait 3 seconds between messages.");
-    return;
-  }
+  lastMessageTime = now;
 
-  db.ref("users/" + user.uid).once("value").then(snap => {
-    const data = snap.val();
-
-    if (!data || data.role === "pending") {
-      alert("You are not approved to chat yet.");
-      return;
-    }
-
-    if (data.bannedUntil && data.bannedUntil > Date.now()) {
-      const mins = Math.ceil((data.bannedUntil - Date.now()) / 60000);
-      alert(`You are banned for ${mins} more minutes.`);
-      return;
-    }
-
-    db.ref("messages").push({
-      userId: user.uid,
-      userEmail: user.email,
-      text: text.slice(0, 500),
-      timestamp: Date.now()
-    });
-
-    msgInput.value = "";
-  }).catch(console.error);
-}
-
-sendBtn.onclick = sendMessage;
-msgInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMessage();
-});
-
-/* =========================
-   LOAD MESSAGES
-========================= */
-function appendChatMessage(key, msg, currentUser) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "msg";
-
-  const avatarEl = avatar(msg.userEmail);
-
-  const body = document.createElement("div");
-  body.className = "msg-body";
-
-  const meta = document.createElement("div");
-  meta.className = "msg-meta";
-  const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString();
-  meta.textContent = `[${time}] ${msg.userEmail}`;
-
-  const text = document.createElement("div");
-  text.className = "msg-text";
-  text.textContent = msg.text;
-
-  body.appendChild(meta);
-  body.appendChild(text);
-
-  if (currentUser && (msg.userId === currentUser.uid || currentUser.isAdmin)) {
-    const actions = document.createElement("div");
-    actions.className = "msg-actions";
-
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "Delete";
-    delBtn.onclick = () => db.ref("messages/" + key).remove();
-
-    actions.appendChild(delBtn);
-    body.appendChild(actions);
-  }
-
-  wrapper.appendChild(avatarEl);
-  wrapper.appendChild(body);
-  messagesDiv.appendChild(wrapper);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
-
-function loadMessages() {
-  if (messagesLoaded) return;
-  messagesLoaded = true;
-
-  messagesDiv.innerHTML = "";
-
-  db.ref("messages").limitToLast(200).on("child_added", snap => {
-    const msg = snap.val();
-    const key = snap.key;
-    const user = auth.currentUser;
-    if (!user) return;
-
-    appendChatMessage(key, msg, { uid: user.uid, isAdmin: cachedIsAdmin });
+  db.ref("messages").push({
+    uid: user.uid,
+    email: user.email,
+    text: text,
+    timestamp: now
   });
 
-  db.ref("messages").on("child_removed", () => {
+  msgInput.value = "";
+}
+
+// -------------------------------
+// LISTEN MESSAGES
+// -------------------------------
+function listenMessages() {
+  db.ref("messages").off();
+  db.ref("messages").on("value", (snap) => {
+    const msgs = snap.val() || {};
     messagesDiv.innerHTML = "";
-    db.ref("messages").limitToLast(200).once("value").then(snap2 => {
-      snap2.forEach(child => {
-        appendChatMessage(child.key, child.val(), { uid: auth.currentUser.uid, isAdmin: cachedIsAdmin });
-      });
-    });
-  });
-}
 
-/* =========================
-   TYPING
-========================= */
-function setupTyping(user) {
-  const typingRef = db.ref("typing/" + user.uid);
-
-  msgInput.addEventListener("input", () => {
-    const isTyping = msgInput.value.trim().length > 0;
-    typingRef.set(isTyping);
-  });
-
-  db.ref("typing").on("value", snap => {
-    const typingData = snap.val() || {};
-    const othersTyping = Object.keys(typingData).filter(uid => uid !== user.uid && typingData[uid]);
-    document.getElementById("typing-indicator").textContent = othersTyping.length ? "Someone is typing..." : "";
-  });
-}
-
-/* =========================
-   ONLINE USERS
-========================= */
-function setupOnline(user) {
-  const ref = db.ref("onlineUsers/" + user.uid);
-  ref.set({ email: user.email });
-  ref.onDisconnect().remove();
-
-  db.ref("onlineUsers").on("value", snap => {
-    onlineUsersDiv.innerHTML = "";
-    snap.forEach(c => {
-      const d = document.createElement("div");
-      d.textContent = c.val().email;
-      onlineUsersDiv.appendChild(d);
-    });
-  });
-}
-
-/* =========================
-   ADMIN PANEL
-========================= */
-function loadAdmin() {
-  db.ref("users").on("value", snap => {
-    adminList.innerHTML = "";
-    snap.forEach(c => {
-      const u = c.val();
-
+    Object.keys(msgs).forEach(key => {
+      const m = msgs[key];
       const row = document.createElement("div");
-      row.className = "admin-user";
+      row.className = "msg-row";
+      row.innerHTML = `
+        <b>${m.email}</b>: ${m.text}
+        <span class="time">${new Date(m.timestamp).toLocaleTimeString()}</span>
+      `;
 
-      const label = document.createElement("span");
-      label.textContent = `${u.email} (${u.role})`;
+      // admin delete
+      const role = userRoleSpan.textContent;
+      if (role === "admin") {
+        const del = document.createElement("button");
+        del.textContent = "Delete";
+        del.onclick = () => db.ref("messages/" + key).remove();
+        row.appendChild(del);
+      }
 
-      const approveBtn = document.createElement("button");
-      approveBtn.textContent = "Approve";
-      approveBtn.onclick = () => db.ref("users/" + c.key).update({ role: "user" });
-
-      const makeAdminBtn = document.createElement("button");
-      makeAdminBtn.textContent = "Make Admin";
-      makeAdminBtn.onclick = () => {
-        if (confirm("Promote to admin?")) {
-          db.ref("users/" + c.key + "/role").set("admin");
-        }
-      };
-
-      const ban24Btn = document.createElement("button");
-      ban24Btn.textContent = "Ban 24h";
-      ban24Btn.onclick = () => db.ref("users/" + c.key + "/bannedUntil").set(Date.now() + 24 * 60 * 60 * 1000);
-
-      const unbanBtn = document.createElement("button");
-      unbanBtn.textContent = "Unban";
-      unbanBtn.onclick = () => db.ref("users/" + c.key + "/bannedUntil").remove();
-
-      row.appendChild(label);
-      row.appendChild(approveBtn);
-      row.appendChild(makeAdminBtn);
-      row.appendChild(ban24Btn);
-      row.appendChild(unbanBtn);
-
-      adminList.appendChild(row);
+      messagesDiv.appendChild(row);
     });
   });
 }
-/* =========================
-   RADIO PLAYER
-========================= */
-const RADIO_STREAM = "https://streaming.live365.com/a50378";
 
-const radioAudio  = document.getElementById("radio-audio");
-const playRadio   = document.getElementById("play-radio");
-const stopRadio   = document.getElementById("stop-radio");
-const radioStatus = document.getElementById("radio-status");
+// -------------------------------
+// ONLINE USERS
+// -------------------------------
+function setupOnlineUsers(user) {
+  const userRef = db.ref("onlineUsers/" + user.uid);
 
-let hls;
+  userRef.set({
+    email: user.email,
+    timestamp: Date.now()
+  });
 
-function startRadio() {
-  radioStatus.textContent = "Loading…";
+  userRef.onDisconnect().remove();
+}
 
-  if (radioAudio.canPlayType("application/vnd.apple.mpegurl")) {
-    radioAudio.src = RADIO_STREAM;
-    radioAudio.play();
-  } else if (window.Hls) {
-    hls = new Hls();
-    hls.loadSource(RADIO_STREAM);
-    hls.attachMedia(radioAudio);
-    radioAudio.play();
+// -------------------------------
+// ADMIN PANEL
+// -------------------------------
+async function loadUsersForAdmin() {
+  const snap = await db.ref("users").once("value");
+  const users = snap.val() || {};
+
+  userList.innerHTML = "";
+
+  Object.keys(users).forEach(uid => {
+    const u = users[uid];
+
+    const row = document.createElement("div");
+    row.className = "admin-user";
+
+    row.innerHTML = `
+      <span>${u.email}</span>
+      <span>${u.role}</span>
+      <span>${u.approved ? "Approved" : "Pending"}</span>
+    `;
+
+    // approve button
+    const approve = document.createElement("button");
+    approve.textContent = "Approve";
+    approve.onclick = () => {
+      db.ref("users/" + uid).update({
+        approved: true,
+        role: "mod"
+      });
+    };
+
+    // promote to admin
+    const promote = document.createElement("button");
+    promote.textContent = "Promote Admin";
+    promote.onclick = () => {
+      db.ref("users/" + uid).update({
+        role: "admin"
+      });
+    };
+
+    // ban user
+    const ban = document.createElement("button");
+    ban.textContent = "Ban";
+    ban.onclick = () => {
+      db.ref("users/" + uid).update({
+        role: "banned",
+        approved: false
+      });
+    };
+
+    row.appendChild(approve);
+    row.appendChild(promote);
+    row.appendChild(ban);
+
+    userList.appendChild(row);
+  });
+}
+
+// -------------------------------
+// RADIO PLAYER
+// -------------------------------
+playRadioBtn.addEventListener("click", () => {
+  if (radioPlayer.paused) {
+    radioPlayer.play();
+    playRadioBtn.textContent = "Pause Radio";
   } else {
-    alert("Your browser does not support live radio.");
-    return;
+    radioPlayer.pause();
+    playRadioBtn.textContent = "Play Radio";
   }
-
-  playRadio.classList.add("hidden");
-  stopRadio.classList.remove("hidden");
-  radioStatus.textContent = "Live 🔴";
-}
-
-function stopRadioPlayer() {
-  radioAudio.pause();
-  radioAudio.src = "";
-  if (hls) hls.destroy();
-
-  playRadio.classList.remove("hidden");
-  stopRadio.classList.add("hidden);
-  radioStatus.textContent = "Stopped";
-}
-
-playRadio.onclick = startRadio;
-stopRadio.onclick = stopRadioPlayer;
-
-/* Stop radio when user logs out */
-auth.onAuthStateChanged(user => {
-  if (!user) stopRadioPlayer();
 });
