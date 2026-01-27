@@ -112,89 +112,93 @@ auth.onAuthStateChanged(async user => {
     return;
   }
 
+  // Email verification
   if (!user.emailVerified) {
-    alert("Please verify your email.");
+    alert("Please verify your email before logging in.");
     auth.signOut();
     return;
   }
 
-  const snap = await db.ref("users/" + user.uid).once("value");
-  if (!snap.exists()) return auth.signOut();
-
-  const data = snap.val();
-  cachedRole = data.role || "pending";
-
   authBox.classList.add("hidden");
   chatWrapper.classList.remove("hidden");
-
   userEmailSpan.textContent = user.email;
-  userRoleSpan.textContent  = cachedRole;
 
-  adminBox.classList.toggle("hidden", cachedRole !== "admin");
+  const userRef = db.ref("users/" + user.uid);
+  const snap = await userRef.once("value");
 
-  loadMessages();
-  setupOnline(user);
-  if (cachedRole === "admin") loadAdmin();
+  // Create user record if missing
+  if (!snap.exists()) {
+    await userRef.set({
+      email: user.email,
+      role: "pending"
+    });
+  }
+
+  // Role listener (THIS NOW GATES EVERYTHING)
+  userRef.child("role").on("value", snap => {
+    const role = snap.val() || "pending";
+    cachedIsAdmin = role === "admin";
+    userRoleSpan.textContent = role;
+
+    if (role === "pending") {
+      alert("Your account is awaiting admin approval.");
+      return;
+    }
+
+    // Only approved users reach here
+    loadMessages();
+    setupTyping(user);
+    setupOnlineUsers(user);
+
+    if (cachedIsAdmin) {
+      adminBox.classList.remove("hidden");
+      loadUsersForAdmin();
+    } else {
+      adminBox.classList.add("hidden");
+    }
+  });
 });
+
 
 /* =========================
    MESSAGES
 ========================= */
-function loadMessages() {
-  messagesDiv.innerHTML = "";
-  db.ref("messages").limitToLast(200).on("child_added", snap => {
-    const m = snap.val();
-    const row = document.createElement("div");
-    row.className = "msg";
-
-    const body = document.createElement("div");
-    body.className = "msg-body";
-
-    body.innerHTML = `
-      <div class="msg-meta">${m.email}</div>
-      <div class="msg-text">${m.text}</div>
-    `;
-
-    if (cachedRole === "admin") {
-      const del = document.createElement("button");
-      del.textContent = "Delete";
-      del.onclick = () => db.ref("messages/" + snap.key).remove();
-      body.appendChild(del);
-    }
-
-    row.appendChild(avatar(m.email));
-    row.appendChild(body);
-    messagesDiv.appendChild(row);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  });
-}
-
-sendBtn.onclick = async () => {
-  if (!canSend()) return alert("Slow down!");
-
+function sendMessage() {
   const user = auth.currentUser;
+  if (!user) return;
+
   const text = msgInput.value.trim();
   if (!text) return;
 
-  const snap = await db.ref("users/" + user.uid).once("value");
-  const u = snap.val();
+  db.ref("users/" + user.uid).once("value").then(snap => {
+    const data = snap.val();
+    if (!data || data.role === "pending") {
+      alert("You are not approved to chat yet.");
+      return;
+    }
 
-  if (u.role === "pending") return alert("Awaiting admin approval.");
-  if (u.bannedUntil && u.bannedUntil > Date.now()) return alert("You are banned.");
+    if (data.banExpires === "perm") {
+      alert("You are permanently banned.");
+      return;
+    }
 
-  await db.ref("messages").push({
-    uid: user.uid,
-    email: user.email,
-    text: text.slice(0, 500),
-    timestamp: Date.now()
-  });
+    if (typeof data.banExpires === "number" && data.banExpires > Date.now()) {
+      const mins = Math.ceil((data.banExpires - Date.now()) / 60000);
+      alert(`You are banned for ${mins} more minutes.`);
+      return;
+    }
 
-  msgInput.value = "";
-};
+    return db.ref("messages").push({
+      userId: user.uid,
+      userEmail: user.email,
+      text: text.slice(0, 500),
+      timestamp: Date.now()
+    });
+  }).then(() => {
+    msgInput.value = "";
+  }).catch(console.error);
+}
 
-msgInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendBtn.click();
-});
 
 /* =========================
    ONLINE USERS
@@ -223,11 +227,13 @@ function loadAdmin() {
     snap.forEach(c => {
       const u = c.val();
       const row = document.createElement("div");
+	  const mins = Math.ceil((user.banExpires - Date.now()) / 60000);
       row.innerHTML = `
         ${u.email} (${u.role})
         <button onclick="approve('${c.key}')">Approve</button>
         <button onclick="makeAdmin('${c.key}')">Admin</button>
         <button onclick="ban('${c.key}',86400000)">Ban 24h</button>
+		
       `;
       adminList.appendChild(row);
     });
