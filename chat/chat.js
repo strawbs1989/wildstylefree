@@ -46,6 +46,7 @@ const adminList = document.getElementById("user-list");
 ========================= */
 let cachedIsAdmin = false;
 let lastMsgTime = 0;
+let messagesLoaded = false;
 
 /* =========================
    Helpers
@@ -69,6 +70,8 @@ function canSend() {
 ========================= */
 registerBtn.onclick = async () => {
   try {
+    authError.textContent = "";
+
     const email = emailInput.value.trim();
     const pass  = passwordInput.value.trim();
     if (!email || !pass) throw "Fill in all fields";
@@ -78,11 +81,10 @@ registerBtn.onclick = async () => {
     // Send verification email
     await cred.user.sendEmailVerification();
 
-    // Create pending user
+    // Create pending user record
     await db.ref("users/" + cred.user.uid).set({
-      email,
+      email: email,
       role: "pending",
-      approved: false,
       bannedUntil: 0
     });
 
@@ -99,6 +101,7 @@ registerBtn.onclick = async () => {
 loginBtn.onclick = async () => {
   try {
     authError.textContent = "";
+
     const email = emailInput.value.trim();
     const pass  = passwordInput.value.trim();
     if (!email || !pass) throw "Fill in all fields";
@@ -142,22 +145,21 @@ auth.onAuthStateChanged(async user => {
     await userRef.set({
       email: user.email,
       role: "pending",
-      approved: false,
       bannedUntil: 0
     });
   }
 
-  // Role listener
   userRef.child("role").on("value", snap => {
     const role = snap.val() || "pending";
     cachedIsAdmin = role === "admin";
     userRoleSpan.textContent = role;
 
     if (role === "pending") {
-      alert("Your account is awaiting approval.");
+      alert("Your account is awaiting admin approval.");
       return;
     }
 
+    // Only approved users reach here
     loadMessages();
     setupTyping(user);
     setupOnline(user);
@@ -258,8 +260,6 @@ function appendChatMessage(key, msg, currentUser) {
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
-let messagesLoaded = false;
-
 function loadMessages() {
   if (messagesLoaded) return;
   messagesLoaded = true;
@@ -286,7 +286,7 @@ function loadMessages() {
 }
 
 /* =========================
-   TYPING INDICATOR
+   TYPING
 ========================= */
 function setupTyping(user) {
   const typingRef = db.ref("typing/" + user.uid);
@@ -366,54 +366,3 @@ function loadAdmin() {
     });
   });
 }
-
-/* =========================
-   RADIO PLAYER
-========================= */
-const RADIO_STREAM = "https://streaming.live365.com/a50378";
-
-const radioAudio  = document.getElementById("radio-audio");
-const playRadio   = document.getElementById("play-radio");
-const stopRadio   = document.getElementById("stop-radio");
-const radioStatus = document.getElementById("radio-status");
-
-let hls;
-
-function startRadio() {
-  radioStatus.textContent = "Loading…";
-
-  if (radioAudio.canPlayType("application/vnd.apple.mpegurl")) {
-    radioAudio.src = RADIO_STREAM;
-    radioAudio.play();
-  } else if (window.Hls) {
-    hls = new Hls();
-    hls.loadSource(RADIO_STREAM);
-    hls.attachMedia(radioAudio);
-    radioAudio.play();
-  } else {
-    alert("Your browser does not support live radio.");
-    return;
-  }
-
-  playRadio.classList.add("hidden");
-  stopRadio.classList.remove("hidden");
-  radioStatus.textContent = "Live 🔴";
-}
-
-function stopRadioPlayer() {
-  radioAudio.pause();
-  radioAudio.src = "";
-  if (hls) hls.destroy();
-
-  playRadio.classList.remove("hidden");
-  stopRadio.classList.add("hidden);
-  radioStatus.textContent = "Stopped";
-}
-
-playRadio.onclick = startRadio;
-stopRadio.onclick = stopRadioPlayer;
-
-/* Stop radio when user logs out */
-auth.onAuthStateChanged(user => {
-  if (!user) stopRadioPlayer();
-});
