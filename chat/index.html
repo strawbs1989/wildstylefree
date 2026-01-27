@@ -53,6 +53,12 @@
 
           <div id="messages"></div>
           <div id="typing-indicator"></div>
+          <div id="radio-player">
+          <button id="play-radio">▶ Play</button>
+          <button id="stop-radio" class="hidden">⏹ Stop</button>
+          <span id="radio-status">Offline</span>
+          <audio id="radio-audio" playsinline></audio>
+           </div>
 
           <div class="input-row">
             <input id="msg-input" placeholder="Type a message...">
@@ -63,7 +69,7 @@
     </div>
 
   </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="/chat/chat.js"></script>
 </body>
 </html>

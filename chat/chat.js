@@ -1,425 +1,302 @@
 /* jshint esversion: 8 */
-let cachedIsAdmin = false;
 
-const firebaseConfig = {
+/* =========================
+   Firebase Init
+========================= */
+firebase.initializeApp({
   apiKey: "AIzaSyADr8JTwvtlIgXG04JxeP8Q2LjQznyWwms",
   authDomain: "wildstyle-chat.firebaseapp.com",
   databaseURL: "https://wildstyle-chat-default-rtdb.firebaseio.com",
   projectId: "wildstyle-chat",
   storageBucket: "wildstyle-chat.firebasestorage.app",
   messagingSenderId: "259584470846",
-  appId: "1:259584470846:web:81d005c0c68c6c2a1f466f",
-  measurementId: "G-M7MVE2CY8B"
-};
-
-firebase.initializeApp(firebaseConfig);
+  appId: "1:259584470846:web:81d005c0c68c6c2a1f466f"
+});
 
 const auth = firebase.auth();
-const db = firebase.database();
+const db   = firebase.database();
 
-// DOM
-const authBox       = document.getElementById("auth-box");
-const chatWrapper   = document.getElementById("chat-wrapper");
+/* =========================
+   DOM
+========================= */
+const authBox     = document.getElementById("auth-box");
+const chatWrapper = document.getElementById("chat-wrapper");
 
 const emailInput    = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const loginBtn      = document.getElementById("login-btn");
 const registerBtn   = document.getElementById("register-btn");
-const authError     = document.getElementById("auth-error");
-
 const logoutBtn     = document.getElementById("logout-btn");
+const authError     = document.getElementById("auth-error");
 
 const userEmailSpan = document.getElementById("user-email");
 const userRoleSpan  = document.getElementById("user-role");
 
-const messagesDiv   = document.getElementById("messages");
-const msgInput      = document.getElementById("msg-input");
-const sendBtn       = document.getElementById("send-btn");
+const messagesDiv = document.getElementById("messages");
+const msgInput    = document.getElementById("msg-input");
+const sendBtn     = document.getElementById("send-btn");
 
-const typingIndicator = document.getElementById("typing-indicator");
-const onlineUsersDiv  = document.getElementById("online-users");
+const onlineUsersDiv = document.getElementById("online-users");
 
-const adminBox      = document.getElementById("adminbox");
-const adminUsersDiv = document.getElementById("user-list");
+const adminBox  = document.getElementById("adminbox");
+const adminList = document.getElementById("user-list");
 
-// State
-let messagesListenerAttached    = false;
-let typingListenerAttached      = false;
-let onlineUsersListenerAttached = false;
-let adminUsersListenerAttached  = false;
+/* =========================
+   State
+========================= */
+let cachedRole = "pending";
+let lastMsgTime = 0;
 
-// Helpers
-function createAvatar(email) {
-  const div = document.createElement("div");
-  div.className = "avatar";
-  const letter = (email || "?").charAt(0).toUpperCase();
-  div.textContent = letter;
-  return div;
+/* =========================
+   Helpers
+========================= */
+function avatar(email) {
+  const d = document.createElement("div");
+  d.className = "avatar";
+  d.textContent = (email || "?")[0].toUpperCase();
+  return d;
 }
 
-function appendChatMessage(key, msg, currentUser) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "msg";
+function canSend() {
+  const now = Date.now();
+  if (now - lastMsgTime < 3000) return false;
+  lastMsgTime = now;
+  return true;
+}
 
-  const avatar = createAvatar(msg.userEmail);
+/* =========================
+   AUTH
+========================= */
+registerBtn.onclick = async () => {
+  try {
+    const email = emailInput.value.trim();
+    const pass  = passwordInput.value.trim();
+    if (!email || !pass) throw "Fill in all fields";
 
-  const body = document.createElement("div");
-  body.className = "msg-body";
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    await cred.user.sendEmailVerification();
 
-  const meta = document.createElement("div");
-  meta.className = "msg-meta";
-  const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString();
-  meta.textContent = `[${time}] ${msg.userEmail}`;
+    await db.ref("users/" + cred.user.uid).set({
+      email,
+      role: "pending",
+      verified: false,
+      bannedUntil: 0
+    });
 
-  const text = document.createElement("div");
-  text.className = "msg-text";
-  text.textContent = msg.text;
-
-  body.appendChild(meta);
-  body.appendChild(text);
-
-  if (currentUser && (msg.userId === currentUser.uid || currentUser.isAdmin)) {
-    const actions = document.createElement("div");
-    actions.className = "msg-actions";
-
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "Delete";
-    delBtn.onclick = () => {
-      db.ref("messages/" + key).remove().catch(console.error);
-    };
-
-    actions.appendChild(delBtn);
-    body.appendChild(actions);
+    alert("Check your email to verify your account.");
+    auth.signOut();
+  } catch (e) {
+    authError.textContent = e.message || e;
   }
+};
 
-  wrapper.appendChild(avatar);
-  wrapper.appendChild(body);
-  messagesDiv.appendChild(wrapper);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
+loginBtn.onclick = async () => {
+  try {
+    const email = emailInput.value.trim();
+    const pass  = passwordInput.value.trim();
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch (e) {
+    authError.textContent = e.message;
+  }
+};
 
-// Messages
-function loadMessages() {
-  if (messagesListenerAttached) return;
-  messagesListenerAttached = true;
+logoutBtn.onclick = () => auth.signOut();
 
-  messagesDiv.innerHTML = "";
-
-  db.ref("messages").limitToLast(200).on("child_added", snap => {
-    const msg = snap.val();
-    const key = snap.key;
-    const user = auth.currentUser;
-    if (!user) return;
-
-    appendChatMessage(key, msg, {
-      uid: user.uid,
-      isAdmin: cachedIsAdmin
-    });
-  });
-
-  db.ref("messages").on("child_removed", () => {
-    messagesDiv.innerHTML = "";
-    const user = auth.currentUser;
-    if (!user) return;
-
-    db.ref("messages").limitToLast(200).once("value").then(snap2 => {
-      snap2.forEach(child => {
-        appendChatMessage(child.key, child.val(), {
-          uid: user.uid,
-          isAdmin: cachedIsAdmin
-        });
-      });
-    });
-  });
-}
-
-// Ban + send
-function sendMessage() {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  const text = msgInput.value.trim();
-  if (!text) return;
-
-  db.ref("users/" + user.uid).once("value").then(snap => {
-    const data = snap.val() || {};
-    const banExpires = data.banExpires;
-    const role = data.role || "pending";
-
-    if (role === "pending") {
-      alert("Your account is pending approval. You cannot chat yet.");
-      return;
-    }
-
-    if (banExpires === "perm") {
-      alert("You are permanently banned from sending messages.");
-      return;
-    }
-
-    if (typeof banExpires === "number" && banExpires > Date.now()) {
-      const mins = Math.ceil((banExpires - Date.now()) / 60000);
-      alert("You are banned for another " + mins + " minutes.");
-      return;
-    }
-
-    if (typeof banExpires === "number" && banExpires <= Date.now()) {
-      db.ref("users/" + user.uid + "/banExpires").remove();
-    }
-
-    const newMsgRef = db.ref("messages").push();
-    return newMsgRef.set({
-      userId: user.uid,
-      userEmail: user.email,
-      text: text.slice(0, 500),
-      timestamp: Date.now()
-    });
-  }).then(() => {
-    msgInput.value = "";
-  }).catch(console.error);
-}
-
-sendBtn.onclick = sendMessage;
-msgInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMessage();
-});
-
-// Typing
-function setupTyping(user) {
-  if (typingListenerAttached) return;
-  typingListenerAttached = true;
-
-  const typingRef = db.ref("typing/" + user.uid);
-
-  msgInput.addEventListener("input", () => {
-    const isTyping = msgInput.value.trim().length > 0;
-    typingRef.set(isTyping).catch(console.error);
-  });
-
-  db.ref("typing").on("value", snap => {
-    const typingData = snap.val() || {};
-    const othersTyping = Object.keys(typingData).filter(uid => uid !== user.uid && typingData[uid]);
-    typingIndicator.textContent = othersTyping.length > 0 ? "Someone is typing..." : "";
-  });
-}
-
-// Online users
-function setupOnlineUsers(user) {
-  if (onlineUsersListenerAttached) return;
-  onlineUsersListenerAttached = true;
-
-  const userRef = db.ref("onlineUsers/" + user.uid);
-
-  userRef.set({
-    email: user.email,
-    timestamp: Date.now()
-  }).catch(console.error);
-
-  userRef.onDisconnect().remove();
-
-  db.ref("onlineUsers").on("value", snap => {
-    const users = snap.val() || {};
-    onlineUsersDiv.innerHTML = "";
-
-    Object.keys(users).forEach(uid => {
-      const u = users[uid];
-      const row = document.createElement("div");
-      row.className = "online-user";
-
-      const avatar = createAvatar(u.email);
-      const span = document.createElement("span");
-      span.textContent = u.email;
-
-      row.appendChild(avatar);
-      row.appendChild(span);
-      onlineUsersDiv.appendChild(row);
-    });
-  });
-}
-
-// Admin panel
-function loadUsersForAdmin() {
-  if (adminUsersListenerAttached) return;
-  adminUsersListenerAttached = true;
-
-  db.ref("users").on("value", snap => {
-    const users = snap.val() || {};
-    adminUsersDiv.innerHTML = "";
-
-    if (!Object.keys(users).length) {
-      adminUsersDiv.innerHTML = "<p>No users found.</p>";
-      return;
-    }
-
-    Object.keys(users).forEach(uid => {
-      const user = users[uid];
-
-      const row = document.createElement("div");
-      row.className = "admin-user";
-
-      const badge = document.createElement("span");
-      badge.className = "role-badge " +
-        (user.role === "admin" ? "role-admin" : "role-mod");
-
-      let banStatus = "";
-      if (user.banExpires === "perm") {
-        banStatus = " [PERM BANNED]";
-      } else if (typeof user.banExpires === "number" && user.banExpires > Date.now()) {
-        const mins = Math.ceil((banExpires - Date.now()) / 60000);
-        banStatus = ` [BANNED ${mins}m left]`;
-      }
-
-      const label = document.createElement("span");
-      label.textContent = `${user.email} (${user.role || "pending"})${banStatus}`;
-
-      const actions = document.createElement("div");
-      actions.className = "admin-actions";
-
-      const approveBtn = document.createElement("button");
-      approveBtn.textContent = "Approve";
-      approveBtn.onclick = () => {
-        db.ref("users/" + uid + "/role").set("mod");
-      };
-
-      const rejectBtn = document.createElement("button");
-      rejectBtn.textContent = "Reject";
-      rejectBtn.onclick = () => {
-        db.ref("users/" + uid).remove();
-      };
-
-      const permBanBtn = document.createElement("button");
-      permBanBtn.textContent = "Ban Perm";
-      permBanBtn.onclick = () => {
-        db.ref("users/" + uid + "/banExpires").set("perm");
-      };
-
-      const ban24Btn = document.createElement("button");
-      ban24Btn.textContent = "Ban 24h";
-      ban24Btn.onclick = () => {
-        const expires = Date.now() + 24 * 60 * 60 * 1000;
-        db.ref("users/" + uid + "/banExpires").set(expires);
-      };
-
-      const ban6Btn = document.createElement("button");
-      ban6Btn.textContent = "Ban 6h";
-      ban6Btn.onclick = () => {
-        const expires = Date.now() + 6 * 60 * 60 * 1000;
-        db.ref("users/" + uid + "/banExpires").set(expires);
-      };
-
-      const unbanBtn = document.createElement("button");
-      unbanBtn.textContent = "Unban";
-      unbanBtn.onclick = () => {
-        db.ref("users/" + uid + "/banExpires").remove();
-      };
-
-      actions.appendChild(approveBtn);
-      actions.appendChild(rejectBtn);
-      actions.appendChild(permBanBtn);
-      actions.appendChild(ban24Btn);
-      actions.appendChild(ban6Btn);
-      actions.appendChild(unbanBtn);
-
-      row.appendChild(badge);
-      row.appendChild(label);
-      row.appendChild(actions);
-
-      adminUsersDiv.appendChild(row);
-    });
-  });
-}
-
-// Auth buttons
-if (registerBtn) {
-  registerBtn.onclick = () => {
-    authError.textContent = "";
-    const email = (emailInput.value || "").trim();
-    const pass = (passwordInput.value || "").trim();
-    if (!email || !pass) {
-      authError.textContent = "Please enter email and password.";
-      return;
-    }
-    auth.createUserWithEmailAndPassword(email, pass)
-      .catch(err => {
-        console.error(err);
-        authError.textContent = err.message || "Registration failed.";
-      });
-  };
-}
-
-if (loginBtn) {
-  loginBtn.onclick = () => {
-    authError.textContent = "";
-    const email = (emailInput.value || "").trim();
-    const pass = (passwordInput.value || "").trim();
-    if (!email || !pass) {
-      authError.textContent = "Please enter email and password.";
-      return;
-    }
-    auth.signInWithEmailAndPassword(email, pass)
-      .catch(err => {
-        console.error(err);
-        authError.textContent = err.message || "Login failed.";
-      });
-  };
-}
-
-if (logoutBtn) {
-  logoutBtn.onclick = () => {
-    auth.signOut().catch(err => {
-      console.error(err);
-      alert("Logout failed.");
-    });
-  };
-}
-
-// Auth state
-auth.onAuthStateChanged(user => {
+/* =========================
+   AUTH STATE
+========================= */
+auth.onAuthStateChanged(async user => {
   if (!user) {
     authBox.classList.remove("hidden");
     chatWrapper.classList.add("hidden");
     return;
   }
 
+  if (!user.emailVerified) {
+    alert("Please verify your email.");
+    auth.signOut();
+    return;
+  }
+
+  const snap = await db.ref("users/" + user.uid).once("value");
+  if (!snap.exists()) return auth.signOut();
+
+  const data = snap.val();
+  cachedRole = data.role || "pending";
+
   authBox.classList.add("hidden");
   chatWrapper.classList.remove("hidden");
 
   userEmailSpan.textContent = user.email;
+  userRoleSpan.textContent  = cachedRole;
 
-  // Ensure user record exists
-  db.ref("users/" + user.uid).once("value").then(snap => {
-    if (!snap.exists()) {
-      return db.ref("users/" + user.uid).set({
-        email: user.email,
-        role: "pending"
-      });
+  adminBox.classList.toggle("hidden", cachedRole !== "admin");
+
+  loadMessages();
+  setupOnline(user);
+  if (cachedRole === "admin") loadAdmin();
+});
+
+/* =========================
+   MESSAGES
+========================= */
+function loadMessages() {
+  messagesDiv.innerHTML = "";
+  db.ref("messages").limitToLast(200).on("child_added", snap => {
+    const m = snap.val();
+    const row = document.createElement("div");
+    row.className = "msg";
+
+    const body = document.createElement("div");
+    body.className = "msg-body";
+
+    body.innerHTML = `
+      <div class="msg-meta">${m.email}</div>
+      <div class="msg-text">${m.text}</div>
+    `;
+
+    if (cachedRole === "admin") {
+      const del = document.createElement("button");
+      del.textContent = "Delete";
+      del.onclick = () => db.ref("messages/" + snap.key).remove();
+      body.appendChild(del);
     }
-  }).catch(console.error);
 
-  // Role listener
-  db.ref("users/" + user.uid + "/role").on("value", snap => {
-    const role = snap.val() || "pending";
-    cachedIsAdmin = role === "admin";
-    userRoleSpan.textContent = role;
+    row.appendChild(avatar(m.email));
+    row.appendChild(body);
+    messagesDiv.appendChild(row);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+}
 
-    if (cachedIsAdmin) {
-      adminBox.classList.remove("hidden");
-      loadUsersForAdmin();
-    } else {
-      adminBox.classList.add("hidden");
-    }
+sendBtn.onclick = async () => {
+  if (!canSend()) return alert("Slow down!");
+
+  const user = auth.currentUser;
+  const text = msgInput.value.trim();
+  if (!text) return;
+
+  const snap = await db.ref("users/" + user.uid).once("value");
+  const u = snap.val();
+
+  if (u.role === "pending") return alert("Awaiting admin approval.");
+  if (u.bannedUntil && u.bannedUntil > Date.now()) return alert("You are banned.");
+
+  await db.ref("messages").push({
+    uid: user.uid,
+    email: user.email,
+    text: text.slice(0, 500),
+    timestamp: Date.now()
   });
 
-  // Warning
-  db.ref("users/" + user.uid + "/warning").once("value").then(snap => {
-    if (snap.exists()) {
-      const data = snap.val();
-      alert(data.message || "You have been cautioned by an admin.");
-      db.ref("users/" + user.uid + "/warning").remove();
-    }
-  }).catch(console.error);
+  msgInput.value = "";
+};
 
-  // Setup features
-  loadMessages();
-  setupTyping(user);
-  setupOnlineUsers(user);
+msgInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") sendBtn.click();
+});
+
+/* =========================
+   ONLINE USERS
+========================= */
+function setupOnline(user) {
+  const ref = db.ref("onlineUsers/" + user.uid);
+  ref.set({ email: user.email });
+  ref.onDisconnect().remove();
+
+  db.ref("onlineUsers").on("value", snap => {
+    onlineUsersDiv.innerHTML = "";
+    snap.forEach(c => {
+      const d = document.createElement("div");
+      d.textContent = c.val().email;
+      onlineUsersDiv.appendChild(d);
+    });
+  });
+}
+
+/* =========================
+   ADMIN PANEL
+========================= */
+function loadAdmin() {
+  db.ref("users").on("value", snap => {
+    adminList.innerHTML = "";
+    snap.forEach(c => {
+      const u = c.val();
+      const row = document.createElement("div");
+      row.innerHTML = `
+        ${u.email} (${u.role})
+        <button onclick="approve('${c.key}')">Approve</button>
+        <button onclick="makeAdmin('${c.key}')">Admin</button>
+        <button onclick="ban('${c.key}',86400000)">Ban 24h</button>
+      `;
+      adminList.appendChild(row);
+    });
+  });
+}
+
+window.approve = uid =>
+  db.ref("users/" + uid).update({ role: "user", verified: true });
+
+window.makeAdmin = uid =>
+  confirm("Promote to admin?") &&
+  db.ref("users/" + uid + "/role").set("admin");
+
+window.ban = (uid, time) =>
+  db.ref("users/" + uid + "/bannedUntil").set(Date.now() + time);
+
+/* radio tuner */
+
+/* =========================
+   RADIO PLAYER
+========================= */
+
+// CHANGE THIS TO YOUR REAL STREAM
+const RADIO_STREAM = "https://streaming.live365.com/a50378";
+
+const radioAudio  = document.getElementById("radio-audio");
+const playRadio   = document.getElementById("play-radio");
+const stopRadio   = document.getElementById("stop-radio");
+const radioStatus = document.getElementById("radio-status");
+
+let hls;
+
+function startRadio() {
+  radioStatus.textContent = "Loading…";
+
+  if (radioAudio.canPlayType("application/vnd.apple.mpegurl")) {
+    // Safari / iOS
+    radioAudio.src = RADIO_STREAM;
+    radioAudio.play();
+  } else if (window.Hls) {
+    // Chrome / Firefox / Android
+    hls = new Hls();
+    hls.loadSource(RADIO_STREAM);
+    hls.attachMedia(radioAudio);
+    radioAudio.play();
+  } else {
+    alert("Your browser does not support live radio.");
+    return;
+  }
+
+  playRadio.classList.add("hidden");
+  stopRadio.classList.remove("hidden");
+  radioStatus.textContent = "Live 🔴";
+}
+
+function stopRadioPlayer() {
+  radioAudio.pause();
+  radioAudio.src = "";
+  if (hls) hls.destroy();
+
+  playRadio.classList.remove("hidden");
+  stopRadio.classList.add("hidden");
+  radioStatus.textContent = "Stopped";
+}
+
+playRadio.onclick = startRadio;
+stopRadio.onclick = stopRadioPlayer;
+
+// Stop stream on logout
+auth.onAuthStateChanged(user => {
+  if (!user) stopRadioPlayer();
 });
