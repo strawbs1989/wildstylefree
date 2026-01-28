@@ -1,7 +1,7 @@
 /* jshint esversion: 8 */
 
 // ==============================
-// Wildstyle Chat - FINAL CLEAN JS
+// Wildstyle Chat - FINAL CLEAN JS (Option C)
 // ==============================
 
 // Firebase config
@@ -76,26 +76,16 @@ auth.onAuthStateChanged(async (user) => {
   if (!snap.exists()) {
     await userRef.set({
       email: user.email,
-      role: "mod",     // default role
+      role: "user",     // Option C default
       created: Date.now()
     });
   }
 
   const data = snap.val() || {};
-  const role = data.role || "mod";
+  const role = data.role || "user";
 
   userEmailSpan.textContent = user.email;
   userRoleSpan.textContent = role;
-  
-  // Show warning once
-db.ref("users/" + user.uid + "/warning").once("value").then(snap => {
-  if (snap.exists()) {
-    const data = snap.val();
-    alert(data.message || "You have been cautioned by an admin.");
-    db.ref("users/" + user.uid + "/warning").remove();
-  }
-});
-
 
   // Show admin panel for mods + admins
   if (role === "admin" || role === "mod") {
@@ -104,6 +94,14 @@ db.ref("users/" + user.uid + "/warning").once("value").then(snap => {
   } else {
     adminBox.classList.add("hidden");
   }
+
+  // Show warnings once
+  db.ref("users/" + user.uid + "/warning").once("value").then(snap => {
+    if (snap.exists()) {
+      alert(snap.val().message || "You have been cautioned by an admin.");
+      db.ref("users/" + user.uid + "/warning").remove();
+    }
+  });
 
   showChat();
   listenMessages();
@@ -149,7 +147,7 @@ registerBtn.addEventListener("click", async () => {
 
     await db.ref("users/" + cred.user.uid).set({
       email: email,
-      role: "mod",
+      role: "user",
       created: Date.now()
     });
 
@@ -174,7 +172,7 @@ if (googleBtn) {
       if (!snap.exists()) {
         await userRef.set({
           email: cred.user.email,
-          role: "mod",
+          role: "user",
           created: Date.now()
         });
       }
@@ -207,7 +205,7 @@ if (forgotBtn) {
 logoutBtn.addEventListener("click", () => auth.signOut());
 
 // ==============================
-// SEND MESSAGE
+// SEND MESSAGE (with perm-ban enforcement)
 // ==============================
 sendBtn.addEventListener("click", sendMessage);
 
@@ -245,7 +243,6 @@ function sendMessage() {
     msgInput.value = "";
   });
 }
-
 
 // ==============================
 // LISTEN FOR MESSAGES
@@ -306,7 +303,7 @@ function setupOnlineUsers(user) {
 }
 
 // ==============================
-// ADMIN PANEL
+// ADMIN PANEL (warnings + perm bans)
 // ==============================
 async function loadUsersForAdmin() {
   const snap = await db.ref("users").once("value");
@@ -314,84 +311,61 @@ async function loadUsersForAdmin() {
 
   userList.innerHTML = "";
 
-Object.keys(users).forEach(uid => {
-  const u = users[uid];
+  Object.keys(users).forEach(uid => {
+    const u = users[uid];
 
-  const row = document.createElement("div");
-  row.className = "admin-user";
+    const row = document.createElement("div");
+    row.className = "admin-user";
 
-  row.innerHTML = `
-    <span>${u.email}</span>
-    <span>${u.role}</span>
-  `;
+    row.innerHTML = `
+      <span>${u.email}</span>
+      <span>${u.role}</span>
+    `;
 
-  // Warn user
-  const warn = document.createElement("button");
-  warn.textContent = "Warn";
-  warn.onclick = () => {
-    db.ref("users/" + uid + "/warning").set({
-      message: "You have been cautioned by an admin.",
-      timestamp: Date.now()
-    });
-    alert("Warning sent.");
-  };
+    // Warn user
+    const warn = document.createElement("button");
+    warn.textContent = "Warn";
+    warn.onclick = () => {
+      db.ref("users/" + uid + "/warning").set({
+        message: "You have been cautioned by an admin.",
+        timestamp: Date.now()
+      });
+      alert("Warning sent.");
+    };
 
-  // Permanent ban
-  const ban = document.createElement("button");
-  ban.textContent = "Ban Perm";
-  ban.onclick = () => {
-    db.ref("users/" + uid).update({
-      role: "banned"
-    });
-  };
-
-  // Unban
-  const unban = document.createElement("button");
-  unban.textContent = "Unban";
-  unban.onclick = () => {
-    db.ref("users/" + uid).update({
-      role: "mod"
-    });
-  };
-
-  // Promote to admin
-  const promote = document.createElement("button");
-  promote.textContent = "Make Admin";
-  promote.onclick = () => {
-    db.ref("users/" + uid).update({
-      role: "admin"
-    });
-  };
-
-  // Demote to mod
-  const demote = document.createElement("button");
-  demote.textContent = "Make Mod";
-  demote.onclick = () => {
-    db.ref("users/" + uid).update({
-      role: "mod"
-    });
-  };
-
-  row.appendChild(warn);
-  row.appendChild(ban);
-  row.appendChild(unban);
-  row.appendChild(promote);
-  row.appendChild(demote);
-
-  userList.appendChild(row);
-});
-
-
-    // Ban user
+    // Permanent ban
     const ban = document.createElement("button");
-    ban.textContent = "Ban";
+    ban.textContent = "Ban Perm";
     ban.onclick = () => {
       db.ref("users/" + uid).update({ role: "banned" });
     };
 
+    // Unban
+    const unban = document.createElement("button");
+    unban.textContent = "Unban";
+    unban.onclick = () => {
+      db.ref("users/" + uid).update({ role: "user" });
+    };
+
+    // Promote to admin
+    const promote = document.createElement("button");
+    promote.textContent = "Make Admin";
+    promote.onclick = () => {
+      db.ref("users/" + uid).update({ role: "admin" });
+    };
+
+    // Demote to mod
+    const demote = document.createElement("button");
+    demote.textContent = "Make Mod";
+    demote.onclick = () => {
+      db.ref("users/" + uid).update({ role: "mod" });
+    };
+
+    row.appendChild(warn);
+    row.appendChild(ban);
+    row.appendChild(unban);
     row.appendChild(promote);
     row.appendChild(demote);
-    row.appendChild(ban);
 
     userList.appendChild(row);
   });
