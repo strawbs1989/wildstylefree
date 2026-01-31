@@ -11,16 +11,20 @@ header {
   background:#0b1225;
 }
 
+.hidden {
+  display: none !important;
+}
+
 #messages {
-  height:60vh;
-  overflow-y:auto;
-  background:#0e162f;
-  padding:10px;
-  border-radius:8px;
+  padding: 10px;
+  overflow-y: auto;
 }
 
 .message {
-  margin-bottom:10px;
+  background: rgba(255,255,255,0.08);
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border-radius: 6px;
 }
 
 .username.admin { color:#3b82f6; }

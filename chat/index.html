@@ -8,38 +8,37 @@
 </head>
 
 <body>
-<div id="app">
 
-<header>
+<header class="topbar">
   <h1>Wildstyle Chat</h1>
-  <div id="player">
-    <button id="playBtn">▶ Play</button>
-    <span id="streamStatus">Offline</span>
+  <div class="player-status">
+    <button>▶ Play</button>
+    <span>Offline</span>
   </div>
 </header>
 
-<section id="auth">
-  <input id="email" placeholder="Email">
+<!-- AUTH -->
+<div id="auth">
+  <input id="email" type="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
+
   <button id="login">Login</button>
   <button id="register">Register</button>
-</section>
+</div>
 
-<section id="chat" class="hidden">
-  <div id="users"></div>
+<!-- CHAT -->
+<div id="chat" class="hidden">
+
+  <div id="users">
+    <p>Users coming soon…</p>
+  </div>
 
   <div id="messages"></div>
 
   <div id="inputArea">
-    <input id="messageInput" placeholder="Type message…">
+    <input id="messageInput" placeholder="Type a message…">
     <button id="send">Send</button>
   </div>
-</section>
-
-<section id="adminPanel" class="hidden">
-  <h2>Admin Panel</h2>
-  <div id="userList"></div>
-</section>
 
 </div>
 
@@ -48,4 +47,5 @@
 <script type="module" src="https://wildstyle.vip/chat/admin.js"></script>
 <script type="module" src="https://wildstyle.vip/chat/player.js"></script>
 </body>
+
 </html>
