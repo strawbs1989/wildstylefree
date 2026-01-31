@@ -1,83 +1,51 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Wildstyle Chat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/chat/style.css">
-
-  <!-- Firebase v8 compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<meta charset="UTF-8">
+<title>Wildstyle Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://wildstyle.vip/chat/style.css">
 </head>
+
 <body>
-  <div class="container">
+<div id="app">
 
-    <!-- Auth box -->
-    <div id="auth-box">
-  <h2>Login / Register</h2>
+<header>
+  <h1>Wildstyle Chat</h1>
+  <div id="player">
+    <button id="playBtn">▶ Play</button>
+    <span id="streamStatus">Offline</span>
+  </div>
+</header>
 
+<section id="auth">
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
+  <button id="login">Login</button>
+  <button id="register">Register</button>
+</section>
 
-  <div class="auth-buttons">
-    <button id="login-btn">Login</button>
-    <button id="register-btn">Register</button>
+<section id="chat" class="hidden">
+  <div id="users"></div>
+
+  <div id="messages"></div>
+
+  <div id="inputArea">
+    <input id="messageInput" placeholder="Type message…">
+    <button id="send">Send</button>
   </div>
+</section>
 
-  
-  <button id="google-btn">Sign in with Google</button>
-  <button id="forgot-btn">Forgot Password</button>
+<section id="adminPanel" class="hidden">
+  <h2>Admin Panel</h2>
+  <div id="userList"></div>
+</section>
 
-  <p id="auth-error" class="error"></p>
 </div>
 
-
-    <!-- Chat wrapper -->
-    <div id="chat-wrapper" class="hidden">
-      <div id="top-bar">
-        <div id="user-info">
-          <span id="user-email"></span>
-          <span id="user-role"></span>
-        </div>
-        <button id="logout-btn">Logout</button>
-      </div>
-
-      <div id="layout">
-        <div id="left-column">
-          <div id="online-box">
-            <h3>Online Users</h3>
-            <div id="online-users"></div>
-          </div>
-
-          <div id="adminbox" class="hidden">
-            <h3>Admin Panel</h3>
-            <div id="user-list"></div>
-          </div>
-        </div>
-
-        <div id="right-column">
-          <h2>Wildstyle Chat</h2>
-
-          <div id="messages"></div>
-          <div id="typing-indicator"></div>
-          <div id="radio-player">
-          <button id="play-radio">▶ Play</button>
-          <button id="stop-radio" class="hidden">⏹ Stop</button>
-          <span id="radio-status">Offline</span>
-          <audio id="radio-audio" playsinline></audio>
-           </div>
-
-          <div class="input-row">
-            <input id="msg-input" placeholder="Type a message...">
-            <button id="send-btn">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="/chat/chat.js"></script>
+<script type="module" src="https://wildstyle.vip/chat/firebase.js"></script>
+<script type="module" src="https://wildstyle.vip/chat/chat.js"></script>
+<script type="module" src="https://wildstyle.vip/chat/admin.js"></script>
+<script type="module" src="https://wildstyle.vip/chat/player.js"></script>
 </body>
 </html>
