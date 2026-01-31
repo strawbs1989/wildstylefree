@@ -28,3 +28,26 @@ onSnapshot(collection(db, "users"), snap => {
     userList.appendChild(div);
   });
 });
+
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { doc, getDoc } from
+"https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const adminPanel = document.getElementById("adminPanel");
+
+onAuthStateChanged(auth, async user => {
+  if (!user) return;
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return;
+
+  const role = snap.data().role;
+
+  if (role === "admin" || role === "mod") {
+    adminPanel.classList.remove("hidden");
+  } else {
+    adminPanel.classList.add("hidden");
+  }
+});

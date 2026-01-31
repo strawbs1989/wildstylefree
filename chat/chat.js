@@ -55,3 +55,50 @@ function loadMessages() {
     });
   });
 }
+
+
+#chat {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 1fr auto;
+  height: calc(100vh - 70px);
+  gap: 10px;
+}
+
+#users {
+  background:#0b1225;
+  border-radius:8px;
+  padding:10px;
+}
+
+#messages {
+  grid-column: 2;
+  overflow-y: auto;
+}
+
+#inputArea {
+  grid-column: 1 / -1;
+}
+
+let lastMessageTime = 0;
+
+sendBtn.onclick = async () => {
+  const now = Date.now();
+  if (now - lastMessageTime < 3000) {
+    alert("Slow down 😅");
+    return;
+  }
+
+  lastMessageTime = now;
+
+  const text = messageInput.value.trim();
+  if (!text || text.length > 300) return;
+
+  await addDoc(collection(db, "messages"), {
+    text,
+    uid: auth.currentUser.uid,
+    createdAt: serverTimestamp()
+  });
+
+  messageInput.value = "";
+};
