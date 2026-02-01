@@ -68,3 +68,20 @@ button {
 #inputArea {
   grid-column: 1 / -1;
 }
+
+input {
+  background: #050814;
+  color: #ffffff;
+  border: 1px solid #1f2937;
+  padding: 8px;
+  border-radius: 6px;
+  outline: none;
+}
+
+input::placeholder {
+  color: #9ca3af;
+}
+
+input:focus {
+  border-color: #10b981;
+}
