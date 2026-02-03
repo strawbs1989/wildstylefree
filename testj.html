@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<div class="radio-player">
+<div class="now-playing">🔴 LIVE — Wildstyle Radio</div>
+<audio controls playsinline>
+<source src="YOUR_STREAM.m3u8" type="application/x-mpegURL">
+</audio>
+</div>
+
+
+<div class="chat">
+<div class="chat-header">Live Chat</div>
+<div id="messages"></div>
+<div class="chat-input">
+<input id="msg" placeholder="Type a message">
+<button onclick="sendMsg()">Send</button>
+</div>
+</div>
+
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

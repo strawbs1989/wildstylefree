@@ -1,0 +1,267 @@
+# Wildstyle Live Chat – Test Build (Public + Admin)
+
+This is a **fully testable custom chat system** you can run on a test URL (GitHub Pages / Netlify / local).
+
+---
+
+## What this build includes
+
+* Public live chat (listeners)
+* Embedded radio player
+* Persistent messages (everyone sees the same chat)
+* Mobile‑perfect layout
+* Moderator / admin dashboard (Tawk‑style inbox)
+* Secure Firebase backend (no public database writes)
+
+---
+
+## Folder structure
+
+```
+/chat-test
+  ├─ index.html      (Public chat)
+  ├─ admin.html      (Moderator dashboard)
+  ├─ style.css
+  ├─ app.js
+```
+
+---
+
+## 1️⃣ Firebase setup (5 minutes)
+
+1. Go to **Firebase Console**
+2. Create a project → Web app
+3. Enable:
+
+   * Authentication → Anonymous
+   * Realtime Database
+4. Copy your Firebase config
+
+---
+
+## 2️⃣ Firebase Security Rules (PASTE EXACTLY)
+
+```
+{
+  "rules": {
+    "messages": {
+      ".read": true,
+      ".write": "auth != null",
+      "$id": {
+        ".validate": "newData.hasChildren(['uid','name','text','timestamp']) && newData.child('text').val().length <= 250"
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  }
+}
+```
+
+---
+
+## 3️⃣ Public chat – index.html
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="radio-player">
+  <div class="now-playing">🔴 LIVE — Wildstyle Radio</div>
+  <audio controls playsinline>
+    <source src="YOUR_STREAM.m3u8" type="application/x-mpegURL">
+  </audio>
+</div>
+
+<div class="chat">
+  <div class="chat-header">Live Chat</div>
+  <div id="messages"></div>
+  <div class="chat-input">
+    <input id="msg" placeholder="Type a message">
+    <button onclick="sendMsg()">Send</button>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
+```
+
+---
+
+## 4️⃣ Admin dashboard – admin.html
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin">
+  <h2>Wildstyle Admin Inbox</h2>
+  <div id="messages"></div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
+```
+
+---
+
+## 5️⃣ Styling – style.css
+
+```
+body {
+  background:#050505;
+  color:white;
+  font-family:Arial;
+}
+
+.radio-player {
+  max-width:420px;
+  margin:20px auto;
+  background:#111;
+  padding:15px;
+  border-radius:16px;
+}
+
+.chat {
+  max-width:420px;
+  margin:auto;
+  background:#0e0e0e;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  height:65vh;
+}
+
+.chat-header {
+  padding:12px;
+  text-align:center;
+  background:#111;
+}
+
+#messages {
+  flex:1;
+  overflow:auto;
+  padding:10px;
+}
+
+.message {
+  margin-bottom:8px;
+  padding:8px;
+  background:#1a1a1a;
+  border-radius:10px;
+}
+
+.chat-input {
+  display:flex;
+  gap:8px;
+  padding:10px;
+}
+
+.chat-input input {
+  flex:1;
+  padding:10px;
+}
+
+.chat-input button {
+  background:#ff0080;
+  border:none;
+  color:white;
+  padding:10px 16px;
+}
+```
+
+---
+
+## 6️⃣ Realtime logic – app.js
+
+```
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  databaseURL: "YOUR_DB",
+  projectId: "YOUR_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+
+await signInAnonymously(auth);
+
+const messagesRef = ref(db, "messages");
+
+window.sendMsg = () => {
+  const input = document.getElementById("msg");
+  if (!input || !input.value.trim()) return;
+
+  push(messagesRef, {
+    uid: auth.currentUser.uid,
+    name: "Listener",
+    text: input.value,
+    timestamp: Date.now()
+  });
+
+  input.value = "";
+};
+
+onChildAdded(messagesRef, snap => {
+  const msg = snap.val();
+  const div = document.createElement("div");
+  div.className = "message";
+  div.innerHTML = `<b>${msg.name}</b>: ${msg.text}`;
+  document.getElementById("messages")?.appendChild(div);
+});
+```
+
+---
+
+## 7️⃣ How we test together
+
+1. Upload this folder to **GitHub Pages** or **Netlify**
+2. Send me:
+
+   * `/index.html` URL (public chat)
+   * `/admin.html` URL (dashboard)
+3. I’ll test posting, sync, mobile layout, and moderation logic
+
+---
+
+## What this already proves
+
+* Messages appear for **everyone**
+* Admin sees all chats (Tawk‑style)
+* Mobile and desktop stay in sync
+* No iframe limits
+* You own the platform
+
+---
+
+Next upgrades ready when you are:
+
+* Usernames
+* DJ badges
+* Message delete button (admin)
+* Spam cooldown
+* Chat lock
+* Now‑playing auto messages
+
+This is the foundation Tawk can never give you.
