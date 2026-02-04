@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WildstyleRadio DJ System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://wildstyle.vip/signup/style.css">
+</head>
+<body>
+<div class="container">
+  <!-- Auth status -->
+  <div class="card">
+    <h2>Account</h2>
+    <p id="authStatus">Checking login...</p>
+    <button id="loginBtn" class="btn-primary">Login / Register</button>
+    <button id="logoutBtn" class="btn-secondary hidden">Logout</button>
+  </div>
+
+  <!-- DJ Application Form -->
+  <div class="card hidden" id="djApplicationCard">
+    <h2>Apply as a DJ</h2>
+    <p>Fill this out to join the WildstyleRadio DJ roster. Admins will review your application.</p>
+
+    <label for="djName">DJ Name / Stage Name</label>
+    <input type="text" id="djName" placeholder="DJ Wildstyle">
+
+    <label for="djBio">Short Bio</label>
+    <textarea id="djBio" rows="3" placeholder="Tell us your style, experience, and vibe..."></textarea>
+
+    <label for="djSocials">Socials / Links</label>
+    <input type="text" id="djSocials" placeholder="@yourhandle or links">
+
+    <label for="djDemo">Demo Link</label>
+    <input type="text" id="djDemo" placeholder="SoundCloud, Mixcloud, etc.">
+
+    <button id="submitDjApplicationBtn" class="btn-primary">Submit DJ Application</button>
+    <p id="djApplicationStatus"></p>
+  </div>
+
+  <!-- DJ Status -->
+  <div class="card hidden" id="djStatusCard">
+    <h2>Your DJ Status</h2>
+    <p id="djStatusText">Loading...</p>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div class="card hidden" id="adminDashboardCard">
+    <h2>DJ Admin Dashboard <span class="badge">Admin</span></h2>
+
+    <h3>Pending DJ Applications</h3>
+    <div id="pendingDjsList">
+      <p>No pending applications.</p>
+    </div>
+
+    <h3>Approved DJs</h3>
+    <div id="approvedDjsList">
+      <p>No approved DJs yet.</p>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="https://wildstyle.vip/signup/dj-system.js"></script>
+</body>
+</html>
+
