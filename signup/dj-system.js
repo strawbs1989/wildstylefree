@@ -21,12 +21,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // TODO: replace with your config
-apiKey: "AIzaSyDPW93dgJY0MUH9FldBlHIwoIRYaGMfxhU",
-  authDomain: "dj-system-ce829.firebaseapp.com",
-  projectId: "dj-system-ce829",
-  storageBucket: "dj-system-ce829.firebasestorage.app",
-  messagingSenderId: "600971208637",
-  appId: "1:600971208637:web:a98dcfe251f91a327814d4",
+const firebaseConfig = { 
+apiKey: "AIzaSyDPW93dgJY0MUH9FldBlHIwoIRYaGMfxhU", 
+authDomain: "dj-system-ce829.firebaseapp.com", 
+projectId: "dj-system-ce829", 
+storageBucket: "dj-system-ce829.firebasestorage.app", 
+messagingSenderId: "600971208637", 
+appId: "1:600971208637:web:a98dcfe251f91a327814d4" 
 };
 
 const app = initializeApp(firebaseConfig);
