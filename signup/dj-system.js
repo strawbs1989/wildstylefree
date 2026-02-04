@@ -20,7 +20,7 @@ import {
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// TODO: replace with your config
+
 const firebaseConfig = { 
 apiKey: "AIzaSyDPW93dgJY0MUH9FldBlHIwoIRYaGMfxhU", 
 authDomain: "dj-system-ce829.firebaseapp.com", 
