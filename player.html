@@ -28,6 +28,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
+	
   }
 
   .brand {
@@ -167,6 +168,26 @@
   const playBtn = document.getElementById("playButton");
   const nowPlayingText = document.getElementById("nowPlayingText");
 
+  let hasReported = false; // ensures listener is only reported once
+
+  // REPORT WEBSITE LISTENER COUNTRY
+  async function reportListener() {
+    try {
+      const geo = await fetch("https://ipapi.co/json/");
+      const data = await geo.json();
+
+      await fetch("https://wildstyle-listeners.jayaubs89.workers.dev/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country: data.country_name })
+      });
+
+    } catch (err) {
+      console.log("Geo reporting failed:", err);
+    }
+  }
+
+  // PLAY / PAUSE BUTTON
   playBtn.addEventListener("click", () => {
     if (audio.paused) {
       audio.play();
@@ -177,10 +198,20 @@
     }
   });
 
+  // TRIGGER reportListener WHEN AUDIO ACTUALLY STARTS
+  audio.addEventListener("play", () => {
+    if (!hasReported) {
+      reportListener();
+      hasReported = true;
+    }
+  });
+
+  // VOLUME CONTROLS
   document.getElementById("volUp").onclick = () => audio.volume = Math.min(1, audio.volume + 0.1);
   document.getElementById("volDown").onclick = () => audio.volume = Math.max(0, audio.volume - 0.1);
   document.getElementById("muteBtn").onclick = () => audio.muted = !audio.muted;
 
+  // NOW PLAYING FETCH
   async function fetchNowPlaying() {
     try {
       const api = "https://public.api.live365.com/station/a50378";
