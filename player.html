@@ -157,6 +157,9 @@
 <!-- Add font awesome icons -->
 <a href="https://facebook.com/wildstyleuk" class="fa fa-facebook">facebook</a>
 <a href="https://instagram.com/wildstyle_radio" class="fa fa-instagram">Instagram</a>
+<div id="listenerCounter" style="margin-top:8px; color:#00ffff; font-weight:bold; text-align:center;">
+  🌍 Listeners from your country: 0
+</div>
 </div>
 
 <audio id="radioAudio">
@@ -164,73 +167,92 @@
 </audio>
 
 <script>
-  const audio = document.getElementById("radioAudio");
-  const playBtn = document.getElementById("playButton");
-  const nowPlayingText = document.getElementById("nowPlayingText");
+const audio = document.getElementById("radioAudio");
+const playBtn = document.getElementById("playButton");
+const nowPlayingText = document.getElementById("nowPlayingText");
+const listenerCounter = document.getElementById("listenerCounter");
 
-  let hasReported = false; // ensures listener is only reported once
+let hasReported = false; // ensures listener is only reported once
 
-  // REPORT WEBSITE LISTENER COUNTRY
-  async function reportListener() {
-    try {
-      const geo = await fetch("https://ipapi.co/json/");
-      const data = await geo.json();
+// REPORT WEBSITE LISTENER COUNTRY
+async function reportListener() {
+  try {
+    const geoRes = await fetch("https://ipapi.co/json/");
+    const geoData = await geoRes.json();
+    const country = geoData.country_name;
 
-      await fetch("https://wildstyle-listeners.jayaubs89.workers.dev/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country: data.country_name })
-      });
+    // Send to Worker
+    const res = await fetch("https://your-worker-url.workers.dev", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ country: country })
+    });
 
-    } catch (err) {
-      console.log("Geo reporting failed:", err);
-    }
+    // After reporting, fetch updated counts
+    updateListenerCounter(country);
+
+  } catch (err) {
+    console.log("Geo reporting failed:", err);
   }
+}
 
-  // PLAY / PAUSE BUTTON
-  playBtn.addEventListener("click", () => {
-    if (audio.paused) {
-      audio.play();
-      playBtn.textContent = "⏸";
-    } else {
-      audio.pause();
-      playBtn.textContent = "▶";
-    }
-  });
-
-  // TRIGGER reportListener WHEN AUDIO ACTUALLY STARTS
-  audio.addEventListener("play", () => {
-    if (!hasReported) {
-      reportListener();
-      hasReported = true;
-    }
-  });
-
-  // VOLUME CONTROLS
-  document.getElementById("volUp").onclick = () => audio.volume = Math.min(1, audio.volume + 0.1);
-  document.getElementById("volDown").onclick = () => audio.volume = Math.max(0, audio.volume - 0.1);
-  document.getElementById("muteBtn").onclick = () => audio.muted = !audio.muted;
-
-  // NOW PLAYING FETCH
-  async function fetchNowPlaying() {
-    try {
-      const api = "https://public.api.live365.com/station/a50378";
-      const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(api);
-      const res = await fetch(proxy);
-      const data = await res.json();
-      const json = JSON.parse(data.contents);
-
-      const title = json?.now_playing?.title || "Unknown";
-      const artist = json?.now_playing?.artist || "";
-
-      nowPlayingText.innerHTML = `<b>${title}</b> <br><small>${artist}</small>`;
-    } catch {
-      nowPlayingText.textContent = "Track unavailable";
-    }
+// FETCH CURRENT COUNTRY COUNT
+async function updateListenerCounter(country) {
+  try {
+    const res = await fetch("https://wildstyle-listeners.jayaubs89.workers.dev/");
+    const data = await res.json();
+    const countryData = data.find(c => c.country === country);
+    const count = countryData ? countryData.count : 1;
+    listenerCounter.textContent = `🌍 Listeners from your country: ${count}`;
+  } catch (err) {
+    console.log("Listener counter update failed:", err);
   }
+}
 
-  fetchNowPlaying();
-  setInterval(fetchNowPlaying, 15000);
+// PLAY / PAUSE BUTTON
+playBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = "⏸";
+  } else {
+    audio.pause();
+    playBtn.textContent = "▶";
+  }
+});
+
+// TRIGGER reportListener WHEN AUDIO ACTUALLY STARTS
+audio.addEventListener("play", () => {
+  if (!hasReported) {
+    reportListener();
+    hasReported = true;
+  }
+});
+
+// VOLUME CONTROLS
+document.getElementById("volUp").onclick = () => audio.volume = Math.min(1, audio.volume + 0.1);
+document.getElementById("volDown").onclick = () => audio.volume = Math.max(0, audio.volume - 0.1);
+document.getElementById("muteBtn").onclick = () => audio.muted = !audio.muted;
+
+// NOW PLAYING FETCH
+async function fetchNowPlaying() {
+  try {
+    const api = "https://public.api.live365.com/station/a50378";
+    const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(api);
+    const res = await fetch(proxy);
+    const data = await res.json();
+    const json = JSON.parse(data.contents);
+
+    const title = json?.now_playing?.title || "Unknown";
+    const artist = json?.now_playing?.artist || "";
+
+    nowPlayingText.innerHTML = `<b>${title}</b> <br><small>${artist}</small>`;
+  } catch {
+    nowPlayingText.textContent = "Track unavailable";
+  }
+}
+
+fetchNowPlaying();
+setInterval(fetchNowPlaying, 15000);
 </script>
 
 </body>
