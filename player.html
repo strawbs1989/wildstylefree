@@ -182,7 +182,7 @@ async function reportListener() {
     const country = geoData.country_name;
 
     // Send to Worker
-    const res = await fetch("https://wildstyle-listeners.jayaubs89.workers.dev/", {
+    const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ country: country })
@@ -199,7 +199,7 @@ async function reportListener() {
 // FETCH CURRENT COUNTRY COUNT
 async function updateListenerCounter(country) {
   try {
-    const res = await fetch("https://wildstyle-listeners.jayaubs89.workers.dev/");
+    const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/");
     const data = await res.json();
     const countryData = data.find(c => c.country === country);
     const count = countryData ? countryData.count : 1;
