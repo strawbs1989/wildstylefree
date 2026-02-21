@@ -182,7 +182,7 @@ async function reportListener() {
     const country = geoData.country_name;
 
     // Send to Worker
-    const res = await fetch("https://your-worker-url.workers.dev", {
+    const res = await fetch("https://wildstyle-listeners.jayaubs89.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ country: country })
