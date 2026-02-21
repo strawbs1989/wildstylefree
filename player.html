@@ -213,9 +213,6 @@ async function updateListenerCounter(country) {
 playBtn.addEventListener("click", () => {
   if (audio.paused) {
     audio.play();
-	(!hasReported) {
-    reportListener();
-    hasReported = true;
     playBtn.textContent = "⏸";
   } else {
     audio.pause();
