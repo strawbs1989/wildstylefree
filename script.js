@@ -337,3 +337,24 @@ function updateNowPlayingUI(track) {
     liveEl.classList.remove("live");
   }
 } 
+
+/* -------------------------
+   Report Listener Country
+------------------------- */
+
+// REPORT WEBSITE LISTENER COUNTRY
+async function reportListener() {
+  try {
+    const geo = await fetch("https://ipapi.co/json/");
+    const data = await geo.json();
+
+    await fetch("https://wildstyle-listeners.jayaubs89.workers.dev/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ country: data.country_name })
+    });
+
+  } catch (err) {
+    console.log("Geo reporting failed:", err);
+  }
+}
