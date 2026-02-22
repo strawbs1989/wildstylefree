@@ -1,0 +1,46 @@
+.dj-queue {
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(0,0,0,0.65);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 0 15px rgba(255,0,0,0.5);
+}
+
+.queue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(20,20,20,0.9);
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  animation: glow 0.5s ease-in-out;
+}
+
+.queue-item.new {
+  border: 2px solid #ff2d2d;
+}
+
+.queue-info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.queue-buttons button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.preview-btn { background: #00e9ff; }
+.play-btn { background: red; color:white; }
+.delete-btn { background: #555; color:white; }
+
+@keyframes glow {
+  0% { box-shadow: 0 0 10px #ff2d2d; }
+  100% { box-shadow: 0 0 0px #ff2d2d; }
+}
