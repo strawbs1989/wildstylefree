@@ -84,7 +84,14 @@ h2 {
 .delete { background: #444; color: white; }
 .send { background: red; color: white; }
 
-/* Nav */
+/* Header / Nav */
+.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(to bottom, rgba(12,15,20,.9), rgba(12,15,20,.6), transparent)}
+.header-inner{display:flex;align-items:center;gap:1rem;justify-content:space-between;padding:.8rem 1rem;margin-top:.4rem}
+.brand{display:flex;gap:.75rem;align-items:center;text-decoration:none;color:var(--text)}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:grid;place-items:center;font-weight:800}
+.brand-text{display:flex;flex-direction:column;line-height:1}
+.brand-text strong{font-family:Oswald, Inter, sans-serif;letter-spacing:.06em}
+.brand-text span{color:var(--muted);font-size:.8rem}
 
 .main-nav{display:flex;gap:1rem;align-items:center}
 .main-nav a{color:var(--text);text-decoration:none;padding:.4rem .6rem;border-radius:10px}
@@ -98,4 +105,17 @@ h2 {
   pointer-events: auto;
   touch-action: manipulation;
 }
+
+.site-header,
+.header-inner{
+  position: relative;
+  z-index: 1000;
+}
+
+/* If you have canvas/visualizer overlays */
+#bgCanvas{
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+} 
 
