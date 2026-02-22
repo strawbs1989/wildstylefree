@@ -13,17 +13,49 @@
 
 <body>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="container header-inner">
+
+    <!-- Logo -->
     <a class="brand" href="/index.html">
-      
+      <div class="brand-mark">WS</div>
+      <div class="brand-text">
+        <strong>Wildstyle Radio</strong>
+        <span>wildstyle.vip</span>
       </div>
     </a>
 
-    
+    <!-- Desktop Nav -->
+    <nav class="main-nav">
+      <a href="/index.html">Home</a>
+      <a href="/chat.html">Chat</a>
+      <a href="/djs.html">DJs</a>
+      <a href="/schedule.html">Schedule</a>
+      <a href="/merch.html">Merch</a>
+      <a href="/wildstylevoice/">Shoutout</a>
+    </nav>
+
+    <!-- Burger (Mobile Only) -->
+    <button class="burger" id="burger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
   </div>
 </header>
+
+<!-- Mobile Drawer -->
+<div class="nav-backdrop" id="navBackdrop"></div>
+
+<nav class="mobile-nav" id="mobileNav">
+  <a href="/index.html">Home</a>
+  <a href="/chat.html">Chat</a>
+  <a href="/djs.html">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/merch.html">Merch</a>
+  <a href="/wildstylevoice/">Shoutout</a>
+</nav>
 
 <!-- MAIN CONTENT -->
 <main class="main-wrapper">
@@ -49,5 +81,20 @@
 </main>
 
 <script src="https://wildstyle.vip/wildstylevoice/script.js"></script>
+<script>
+const burger = document.getElementById("burger");
+const mobileNav = document.getElementById("mobileNav");
+const backdrop = document.getElementById("navBackdrop");
+
+burger.addEventListener("click", () => {
+  mobileNav.classList.toggle("active");
+  backdrop.classList.toggle("active");
+});
+
+backdrop.addEventListener("click", () => {
+  mobileNav.classList.remove("active");
+  backdrop.classList.remove("active");
+});
+</script>
 </body>
 </html>
