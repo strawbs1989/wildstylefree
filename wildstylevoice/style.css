@@ -83,3 +83,18 @@ h2 {
 .preview { background: #00e9ff; }
 .delete { background: #444; color: white; }
 .send { background: red; color: white; }
+
+/* Nav */
+
+.main-nav{display:flex;gap:1rem;align-items:center}
+.main-nav a{color:var(--text);text-decoration:none;padding:.4rem .6rem;border-radius:10px}
+.main-nav a:hover{background:rgba(255,255,255,.06)}
+.burger{display:none;background:transparent;border:none;cursor:pointer}
+.burger span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;border-radius:2px}
+
+#burger{
+  position: relative;
+  z-index: 99999;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
