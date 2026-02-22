@@ -674,17 +674,6 @@ body.nav-open{ overflow: hidden; }
 }
 
 /* SHOUT */
-
-body {
-  background: #050814;
-  font-family: Arial, sans-serif;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 .voice-container {
   width: 420px;
   padding: 25px;
