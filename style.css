@@ -750,3 +750,40 @@ h2 {
 .delete { background: #444; color: white; }
 .send { background: red; color: white; }
 
+.chat-shoutout-card {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: rgba(0,0,0,0.75);
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(255,0,0,0.3);
+  text-align: center;
+}
+
+.shoutout-title {
+  color: #ff0000;
+  margin-bottom: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* Make buttons responsive */
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.actions button {
+  min-width: 130px;
+}
+
+/* Mobile tweak */
+@media (max-width: 768px) {
+  .chat-shoutout-card {
+    margin: 25px 15px;
+    padding: 20px;
+  }
+}
+
