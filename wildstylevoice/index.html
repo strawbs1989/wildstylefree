@@ -3,55 +3,69 @@
 <head>
   <title>Wildstyle Voice Shoutout</title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050814">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="https://wildstyle.vip/wildstylevoice/style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 
-<header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="./index.html">
-        <div class="brand-mark">WS</div>
-        <div class="brand-text">
-          <strong>Wildstyle Radio</strong>
-          <span>wildstyle.vip</span>
-        </div>
-      </a>
-
-      <nav class="main-nav" id="nav">
-        <a href="/index.html">Home</a>
-		<a href="/chat.html">Chat</a>
-        <a href="/djs.html">DJs</a>
-        <a href="/merch.html">Merch</a>
-      </nav>
-
-      <button class="burger" id="burger" aria-label="Toggle Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-	</header>
 <body>
 
-<div class="voice-container">
-  <h2>🎙 SEND A LIVE SHOUTOUT</h2>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/index.html">
+      <div class="brand-mark">WS</div>
+      <div class="brand-text">
+        <strong>Wildstyle Radio</strong>
+        <span>wildstyle.vip</span>
+      </div>
+    </a>
 
-  <button id="recordBtn" class="record-btn">🎤</button>
+    <nav class="main-nav" id="nav">
+      <a href="/index.html">Home</a>
+      <a href="/chat.html">Chat</a>
+      <a href="/djs.html">DJs</a>
+      <a href="/merch.html">Merch</a>
+    </nav>
 
-  <div id="status" class="status">
-    Tap to Record (5 seconds max)
+    <button class="burger" id="burger" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+
+<!-- MAIN CONTENT -->
+<main class="main-wrapper">
+
+  <div class="voice-container">
+    <h2>🎙 SEND A LIVE SHOUTOUT</h2>
+
+    <button id="recordBtn" class="record-btn">🎤</button>
+
+    <div id="status" class="status">
+      Tap to Record (5 seconds max)
+    </div>
+
+    <div class="wave-wrapper">
+      <div id="wave" class="wave"></div>
+    </div>
+
+    <div class="actions">
+      <button class="preview">▶ Preview</button>
+      <button class="delete">❌ Delete</button>
+      <button class="send">🚀 Send to Studio</button>
+    </div>
   </div>
 
-  <div class="wave-wrapper">
-    <div id="wave" class="wave"></div>
-  </div>
+</main>
 
-  <div class="actions">
-    <button class="preview">▶ Preview</button>
-    <button class="delete">❌ Delete</button>
-    <button class="send">🚀 Send to Studio</button>
-  </div>
-</div>
 
 <!-- Mobile drawer + backdrop -->
 <div class="nav-backdrop" id="navBackdrop" hidden></div>
@@ -63,12 +77,12 @@
   </div>
 
   <a href="/index.html">Home</a>
+  <a href="/chat.html">Chat</a>
   <a href="/djs.html">DJs</a>
   <a href="/schedule.html">Schedule</a>
   <a href="/merch.html">Merch</a>
   <a href="/shoutout.html">ShoutOut</a>
 </nav> 
-
 
 
 <script src="https://wildstyle.vip/wildstylevoice/script.js"></script>

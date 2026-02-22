@@ -84,38 +84,53 @@ h2 {
 .delete { background: #444; color: white; }
 .send { background: red; color: white; }
 
-/* Header / Nav */
-.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(to bottom, rgba(12,15,20,.9), rgba(12,15,20,.6), transparent)}
-.header-inner{display:flex;align-items:center;gap:1rem;justify-content:space-between;padding:.8rem 1rem;margin-top:.4rem}
-.brand{display:flex;gap:.75rem;align-items:center;text-decoration:none;color:var(--text)}
-.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:grid;place-items:center;font-weight:800}
-.brand-text{display:flex;flex-direction:column;line-height:1}
-.brand-text strong{font-family:Oswald, Inter, sans-serif;letter-spacing:.06em}
-.brand-text span{color:var(--muted);font-size:.8rem}
-
-.main-nav{display:flex;gap:1rem;align-items:center}
-.main-nav a{color:var(--text);text-decoration:none;padding:.4rem .6rem;border-radius:10px}
-.main-nav a:hover{background:rgba(255,255,255,.06)}
-.burger{display:none;background:transparent;border:none;cursor:pointer}
-.burger span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;border-radius:2px}
-
-#burger{
-  position: relative;
-  z-index: 99999;
-  pointer-events: auto;
-  touch-action: manipulation;
+/* MAIN WRAPPER */
+.main-wrapper {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
 }
 
-.site-header,
-.header-inner{
-  position: relative;
-  z-index: 1000;
+/* VOICE CONTAINER */
+.voice-container {
+  width: 100%;
+  max-width: 520px;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
 }
 
-/* If you have canvas/visualizer overlays */
-#bgCanvas{
-  position: relative;
-  z-index: 0;
-  pointer-events: none;
-} 
+/* ACTION BUTTONS STACK ON MOBILE */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* RESPONSIVE NAV */
+@media (max-width: 900px) {
+  .main-nav {
+    display: none;
+  }
+
+  .burger {
+    display: block;
+  }
+}
+
+/* DESKTOP NAV */
+@media (min-width: 901px) {
+  .burger {
+    display: none;
+  }
+
+  .main-nav {
+    display: flex;
+    gap: 25px;
+  }
+}
 
