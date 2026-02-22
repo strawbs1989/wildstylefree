@@ -84,53 +84,45 @@ h2 {
 .delete { background: #444; color: white; }
 .send { background: red; color: white; }
 
-/* MAIN WRAPPER */
-.main-wrapper {
-  min-height: calc(100vh - 80px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* VOICE CONTAINER */
-.voice-container {
+body {
+  font-family: 'Inter', sans-serif;
+  background: #050814;
+  color: white;
+}
+
+/* HEADER */
+.site-header {
   width: 100%;
-  max-width: 520px;
-  padding: 30px;
-  border-radius: 20px;
-  text-align: center;
+  background: #0b1225;
+  padding: 15px 0;
+  position: relative;
+  z-index: 1000;
 }
 
-/* ACTION BUTTONS STACK ON MOBILE */
-.actions {
+/* Constrain header width */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Flex layout inside header */
+.header-inner {
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-top: 20px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* RESPONSIVE NAV */
-@media (max-width: 900px) {
-  .main-nav {
-    display: none;
-  }
-
-  .burger {
-    display: block;
-  }
-}
-
-/* DESKTOP NAV */
-@media (min-width: 901px) {
-  .burger {
-    display: none;
-  }
-
-  .main-nav {
-    display: flex;
-    gap: 25px;
-  }
+/* MAIN CONTENT MUST STACK BELOW HEADER */
+.main-wrapper {
+  display: block; /* IMPORTANT FIX */
+  padding: 60px 20px;
 }
 
