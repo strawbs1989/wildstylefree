@@ -91,3 +91,20 @@ deleteBtn.addEventListener("click", () => {
   wave.style.width = "0%";
   statusText.textContent = "Recording deleted";
 });
+
+/*----------------
+Mobile navigate
+------------------*/
+const burger = document.getElementById("burger");
+const mobileNav = document.getElementById("mobileNav");
+const backdrop = document.getElementById("navBackdrop");
+
+burger.addEventListener("click", () => {
+  mobileNav.classList.toggle("active");
+  backdrop.classList.toggle("active");
+});
+
+backdrop.addEventListener("click", () => {
+  mobileNav.classList.remove("active");
+  backdrop.classList.remove("active");
+});
