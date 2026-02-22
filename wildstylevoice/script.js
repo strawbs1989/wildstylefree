@@ -92,19 +92,53 @@ deleteBtn.addEventListener("click", () => {
   statusText.textContent = "Recording deleted";
 });
 
-/*----------------
-Mobile navigate
-------------------*/
-const burger = document.getElementById("burger");
-const mobileNav = document.getElementById("mobileNav");
-const backdrop = document.getElementById("navBackdrop");
+/* ===============================
+   BURGER MENU FIX
+   =============================== */
+(function () {
+  const burger = document.getElementById("burger");
+  const nav = document.getElementById("nav");
 
-burger.addEventListener("click", () => {
-  mobileNav.classList.toggle("active");
-  backdrop.classList.toggle("active");
-});
+  if (!burger || !nav) return;
 
-backdrop.addEventListener("click", () => {
-  mobileNav.classList.remove("active");
-  backdrop.classList.remove("active");
-});
+  burger.replaceWith(burger.cloneNode(true));
+  nav.replaceWith(nav.cloneNode(true));
+
+  const freshBurger = document.getElementById("burger");
+  const freshNav = document.getElementById("nav");
+
+  freshBurger.setAttribute("aria-expanded", "false");
+
+  freshBurger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const isOpen = freshNav.classList.contains("open");
+    freshNav.classList.toggle("open", !isOpen);
+    freshBurger.setAttribute("aria-expanded", String(!isOpen));
+  });
+
+  freshNav.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (
+      freshNav.classList.contains("open") &&
+      !e.target.closest("#nav") &&
+      !e.target.closest("#burger")
+    ) {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+})();
