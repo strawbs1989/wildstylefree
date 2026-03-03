@@ -456,3 +456,46 @@ deleteBtn.addEventListener("click", () => {
   wave.style.width = "0%";
   statusText.textContent = "Recording deleted";
 });
+
+// Discord send
+// 🚀 SEND TO STUDIO (Discord via Worker)
+
+const sendBtn = document.querySelector(".send");
+
+sendBtn.addEventListener("click", async () => {
+
+  if (!recordedBlob) {
+    alert("No recording to send!");
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Sending...";
+
+  try {
+
+    const formData = new FormData();
+    formData.append("audio", recordedBlob);
+    formData.append("country", userCountry || "Unknown");
+
+    const response = await fetch("https://discord.jayaubs89.workers.dev/", {
+      method: "POST",
+      body: formData
+    });
+
+    if (response.ok) {
+      alert("🎉 Shoutout sent to studio!");
+      recordedBlob = null;
+      wave.style.width = "0%";
+      statusText.textContent = "Tap to Record (5 seconds max)";
+    } else {
+      alert("Upload failed.");
+    }
+
+  } catch (err) {
+    alert("Error sending shoutout.");
+  }
+
+  sendBtn.disabled = false;
+  sendBtn.textContent = "🚀 Send to Studio";
+}); 
