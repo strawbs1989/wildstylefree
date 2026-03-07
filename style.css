@@ -787,3 +787,12 @@ h2 {
   }
 }
 
+/* DJ PROFILE IMAGES */
+.dj-image {
+  width: 300px;
+  height: 300px;
+  object-fit: cover; /* crops image nicely */
+  border-radius: 10px;
+  display: block;
+}
+
