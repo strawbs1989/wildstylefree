@@ -796,3 +796,12 @@ h2 {
   display: block;
 }
 
+/* UNSIGNED SPOTLIGHT IMAGES */
+.unsigned-spotlight {
+  width: 300px;
+  height: 300px;
+  object-fit: cover; /* crops image nicely */
+  border-radius: 10px;
+  display: block;
+}
+
