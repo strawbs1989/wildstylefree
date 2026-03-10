@@ -1,306 +1,196 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Wildstyle.vip — Home</title>
-  
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css">
-  <link rel="stylesheet" href="/rollcall/rollcall.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
- 
-  
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wildstyle Radio</title>
+
+<link rel="stylesheet" href="/test/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 </head>
+
+
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="./index.html">
-        <div class="brand-mark">WS</div>
-        <div class="brand-text">
-          <strong>Wildstyle Radio</strong>
-          <span>wildstyle.vip</span>
-        </div>
-      </a>
 
-      <nav class="main-nav" id="nav">
-        <a href="/index.html">Home</a>
-		<a href="/chat.html">Chat</a>
-		<a href="/request.html">Request</a>
-		<a href="/shout-out.html">Record Ya Shoutout</a>
-        <a href="/djs.html">DJs</a>
-        <a href="/merch.html">Merch</a>
-		<a href="/schedule.html">Schedule</a>
-		<a href="/shoutout.html">ShoutOut</a>
-      </nav>
 
-      <button class="burger" id="burger" aria-label="Toggle Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<div class="logo">WILDSTYLE RADIO</div>
+
+<nav>
+
+<a href="index.html">Home</a>
+<a href="schedule.html">Schedule</a>
+<a href="djs.html">DJs</a>
+<a href="chat.html">Chat</a>
+<a href="request.html">Request</a>
+<a href="merch.html">Merch</a>
+
+</nav>
+
 </header>
 
-<!-- Mobile drawer + backdrop -->
-<div class="nav-backdrop" id="navBackdrop" hidden></div>
 
-<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" hidden>
-  <div class="mobile-nav-top">
-    <div class="mobile-nav-title">Menu</div>
-    <button class="mobile-nav-close" id="navClose" type="button" aria-label="Close menu">✕</button>
-  </div>
 
-  <a href="/index.html">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/request.html">Request</a>
-  <a href="/shout-out.html">Record Ya Shoutout</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/merch.html">Merch</a>
-  <a href="/shoutout.html">ShoutOut</a>
-  <a href="/fans/index.html">Our Fans</a>
-</nav> 
+<!-- HERO PLAYER -->
 
-      
-   
+<section class="hero">
 
-    <!-- UP NEXT BAR -->
-    <center>
-      <section class="now-on-bar">
-  <span class="nowOn">Now On:</span>
-  <span class="nowOnShow" id="nowon">Loading…</span>
-</section> 
-    </center>
+<h1>LIVE 24/7 MUSIC</h1>
 
-  </header>
+<p>The Sound Of Underground Radio</p>
 
-  <section class="hero">
-    <div class="container hero-inner">
-      <div class="hero-copy">
-        <h1 class="headline">WILDSTYLE RADIO</h1>
-        <p class="tagline">United by Beats • Powered by Volunteer Passion</p>
-        <div class="now-playing">
-		<iframe src="https://wildstyle.vip/player.html" height="240" width="400" title="Iframe Example"></iframe>
-        <!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
-        <div class="shoutout-ticker" aria-label="Shout-outs">
-  <div class="ticker-track" id="tickerTrack">
-    <span class="ticker-text" id="tickerText">Loading shout-outs…</span>
-    <span class="ticker-text" id="tickerTextClone" aria-hidden="true"></span>
-  </div>
+<div class="radio-player">
+
+<button id="playBtn">▶ Play</button>
+
+<div class="nowplaying">
+
+<span>Now Playing</span>
+<div id="tracktitle">Loading...</div>
+
 </div>
-	  </div>
-      </div>
-    </div>
-    <canvas id="bgCanvas"></canvas>
-  </section>
 
-  
-  <!-- Unsigned Spotlight -->
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <h2 class="section-title">Unsigned Spotlight</h2>
-      <p class="section-sub">Rising artists featured on Wildstyle</p>
-    </div>
-    <div class="card-grid">
-      <article class="card glass">
-        <img src="https://wildstyle.vip/unsigned/Kelsie.jpg" class="unsigned-spotlight" alt="Kelsie">
-        <div class="card-body">
-          <h3>Kelsie</h3>
-        </div>
-      </article>
-      <article class="card glass">
-        <img src="https://wildstyle.vip/unsigned/mor2dekai.jpg" class="unsigned-spotlight" alt="mor2dekai">
-        <div class="card-body">
-          <h3>Mor2dekai</h3>
-          
-          <a class="link" href="#">Listen</a>
-        </div>
-      </article>
-      <article class="card glass">
-        <img src="https://wildstyle.vip/unsigned/Cassandra.png" class="unsigned-spotlight" alt="Cassandra">
-        <div class="card-body">
-          <h3>Cassandra</h3>
-          
-          <a class="link" href="#">Listen</a>
-        </div>
-      </article>
-    </div>
-  </div>
+</div>
+
+<div class="listeners">
+
+🌍 Listeners From Your Country  
+<div id="listeners">Loading...</div>
+
+</div>
+
 </section>
 
-<section id="wildstyle-rollcall"></section>
-<center><section>
-<h1>Forums</h1>
-<img src="https://wildstyle.vip/images/sticker.png" width="212" height="200">
-<a class="btn" href="https://wildstyle.vip/forums/index.html" target="_blank">Our Community Forums →</a>
-</section></center>
-<center><section class="container py-5" id="djs">
-    <h2 class="text-danger text-center mb-4">Give us A Review</h2>
-    <div class="container my-4">
-  <div class="row g-3">
-  
-    <!-- TrustPilot Section -->
-  <!-- TrustBox widget - Review Collector -->
-<center><div class="trustpilot-widget" data-locale="en-GB" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="642774c3d7de1fa1a2d81306" data-style-height="52px" data-style-width="100%">
-  <a href="https://uk.trustpilot.com/review/coolvibes-reloaded.com" target="_blank" rel="noopener">Trustpilot</a>
-</div></center>
-<!-- End TrustBox widget -->
-  </section></center>
-  
-  <!-- Events Section -->
-  <center>
-<section id="events" class="events-section">
-  <div class="container">
-    <div class="section-title">
-      <h2>Events We Attend</h2>
-      <a class="btn" href="https://wildstyle.vip/events/about.html" target="_blank">
-        About Our Events →
-      </a>
-    </div>
-
-    <p class="section-desc">
-      Wildstyle Radio isn’t just online — we’re out there in the real world too!
-      From retro gigs to festival stages, we bring the beats, the vibes, and the energy.
-      Catch a glimpse of the madness below 👇
-    </p>
-
-    <div class="event-gallery">
-      <article class="event-card">
-        <img src="https://wildstyle.vip/events/images/deloran.jpg" alt="Deloran Event">
-      </article>
-
-      <article class="event-card">
-        <img src="https://wildstyle.vip/events/images/indigo.jpg" alt="Live Band Event">
-      </article>
-
-      <article class="event-card">
-        <img src="https://wildstyle.vip/events/images/sonic.jpeg" alt="Elvis Tribute Event">
-      </article>
-    </div>
-  </div>
-</section>
-</center>
-
-  <!-- Support Our Station -->
-  <center>
-<section id="support" class="support-section">
-  <div class="container">
-    <div class="section-title">
-      <h2>Support Us</h2>
-	  <p>"Are You Enjoying Youreself Here At Wildstyle?, Why Not Help Contribute"</p>
-      <a href="https://www.buymeacoffee.com/wildstylei"><img src="https://img.buymeacoffee.com/button-api/?text=Support Wildstyle&emoji=&slug=wildstylei&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
-        
-      </a>
-    </div>
-
-    
-    </div>
-  </div>
-</section>
-</center>
 
 
+<!-- SHOUTOUTS -->
 
-<center><section id="birthdays" class="birthdays">
-<div class="container">
+<section class="shoutouts">
 
-<center><section id="birthday" class="birthday">
-    <div class="container">
-	</div>
-	</section></center>
-	  <center><h2>Birthdays& Shoutouts</h2>
-	  <p>Want A Shoutout And a Request? Enter Youre Birthday Below!</p></center>
-      <form action="mailto:wildstyleradioo@gmail.com" method="post" enctype="text/plain">
-<p style="color:black;">Name:<br></p>
-<input type="text" name="name"><br>
-<p style="color:black;">Shoutout&Request:<br></p>
-<input type="text" name="shoutout&request"><br>
-<p style="color:black;">Email:<br></p>
-<input type="text" name="mail"><br>
+<h2>Listener Shoutouts</h2>
 
-<input type="submit" value="Send">
+<div id="shoutout-container">
 
-</form>
-    </div>
-  </section></center>
+<div class="shout">Happy Birthday Sarah 🎉</div>
+<div class="shout">Big love to Laura ❤️</div>
 
-<!-- DJ of the Week -->
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <h2 class="section-title">DJ of the Week</h2>
-    </div>
-    <div class="dj-week glass">
-      <img src="./images/djnala.jpg" alt="DJ EchoFalls" class="dj-photo" />
-      <div class="dj-week-info">
-        <h3>DJ Nala</h3>
-        
-      </div>
-    </div>
-  </div>
+</div>
+
 </section>
 
-<!-- Listener Reviews -->
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <h2 class="section-title">What Listeners Say</h2>
-    </div>
-    <div class="review-grid">
-      <div class="review glass">⭐ ⭐ ⭐ ⭐ ⭐<br>Loading real reviews…</div>
-    </div>
-  </div>
+
+
+<!-- DJ OF WEEK -->
+
+<section class="dj-week">
+
+<h2>DJ OF THE WEEK</h2>
+
+<div class="dj-card">
+
+<img src="images/djweek.jpg">
+
+<h3>DJ EchoFalls</h3>
+
+<p>Bringing the hottest multi-genre mixes every week.</p>
+
+</div>
+
 </section>
+
+
+
+<!-- UNSIGNED ARTIST -->
+
+<section class="unsigned">
+
+<h2>Unsigned Artist Spotlight</h2>
+
+<div class="artist">
+
+<img src="images/artist.jpg">
+
+<h3>Artist Name</h3>
+
+<p>Check out this week's underground talent.</p>
+
+</div>
+
+</section>
+
+
+
+<!-- EVENTS -->
+
+<section class="events">
+
+<h2>Upcoming Events</h2>
+
+<div class="event">
+
+<h3>Wildstyle Live Night</h3>
+
+<p>Saturday 9PM</p>
+
+</div>
+
+</section>
+
+
+
+<!-- SUPPORT -->
+
+<section class="support">
+
+<h2>Support Wildstyle</h2>
+
+<p>Help keep the station running.</p>
+
+<button>Donate</button>
+
+</section>
+
+
+
+<!-- REVIEWS -->
+
+<section class="reviews">
+
+<h2>Listener Reviews</h2>
+
+<div class="review">
+
+⭐⭐⭐⭐⭐  
+Amazing station with great DJs!
+
+</div>
+
+<div class="review">
+
+⭐⭐⭐⭐⭐  
+Best underground radio online!
+
+</div>
+
+</section>
+
+
+
 <footer>
-  <!-- Footer -->
-  <footer class="footer py-5 mt-5">
-    <div class="container">
-      <div class="row text-center text-md-start">
-        <div class="col-md-4 mb-4">
-         <h5 class="text-danger">Ways of Tuning In</h5>
-          <p>Download the Get Me Radio! Roku TV App <a href="https://channelstore.roku.com/en-gb/details/b97490a8fb5758527be0396e43422e42/get-me-radio" target="_blank">here</a></p>
-          <p>Download the Get Me Radio! Android App <a href="https://play.google.com/store/apps/details?id=com.getmeradio.gmr" target="_blank">from here</a></p>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5 class="text-danger">Contact Us</h5>
-          
-          <p><i class="fas fa-envelope me-2 text-danger"></i>wildstyleradio1@gmail.com</p>
-        </div>
-        <div class="col-md-4 mb-4">
-         <h5 class="text-danger">Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="/tsandcs.html">Ts&Cs</a></li>
-            <li><a href="/djs.html">Our DJs</a></li>
-            <li><a href="/schedule.html">Schedule</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5 class="text-danger">Follow Us</h5>
-          <div class="d-flex justify-content-center justify-content-md-start gap-3">
-         <a href="https://facebook.com/wildstyleuk" class="text-light"><i class="fab fa-facebook fa-lg"></i></a>
-            <a href="https://instagram.com/wildstyle_radio" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
-            
-          </div>
-          <div class="mt-3">
-            <img src="images/logo.png" alt="Wildstyle Logo" style="height: 60px;">
-            <img src="images/license.jpeg" alt="License" style="height: 60px; margin-left: 10px;">
-			<img src="images/license.jpg" alt="License" style="height: 60px; margin-left: 10px;">
-          </div>
-          <p class="mt-3">&copy; Wildstyle 2025 | 2029</p>
-        </div>
-      </div>
-    </div>
-  </footer>
 
-  <audio id="audio" preload="none" crossorigin="anonymous"></audio>
-  <!-- ✅ Scripts at the end -->
-  <script src="https://wildstyle.vip/script.js" defer></script>
-  <script src="https://wildstyle.vip/rollcall/rollcall.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script defer src="https://wildstyle.vip/theme.js"></script>
-</footer> 
-  
+<p>© Wildstyle Radio</p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
 </body>
 </html>
