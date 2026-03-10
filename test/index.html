@@ -46,109 +46,26 @@
 <!-- HERO PLAYER -->
 
 <section class="hero">
-
-<h1>LIVE 24/7 MUSIC</h1>
-
-<p>The Sound Of Underground Radio</p>
-
-<div class="radio-player">
-
-<button id="playBtn">▶ Play</button>
-
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h1 class="headline">WILDSTYLE RADIO</h1>
+        <p class="tagline">United by Beats • Powered by Volunteer Passion</p>
+        <div class="now-playing">
+		<iframe src="https://wildstyle.vip/player.html" height="240" width="400" title="Iframe Example"></iframe>
+        <!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
+        <div class="shoutout-ticker" aria-label="Shout-outs">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-text" id="tickerText">Loading shout-outs…</span>
+    <span class="ticker-text" id="tickerTextClone" aria-hidden="true"></span>
+  </div>
 </div>
+	  </div>
+      </div>
+    </div>
+    <canvas id="bgCanvas"></canvas>
+  </section>
 
-<audio id="radioAudio">
-  <source src="https://streaming.live365.com/a50378" type="audio/mpeg">
-</audio>
 
-<script>
-const audio = document.getElementById("radioAudio");
-const playBtn = document.getElementById("playButton");
-const nowPlayingText = document.getElementById("nowPlayingText");
-const listenerCounter = document.getElementById("listenerCounter");
-
-let hasReported = false; // ensures listener is only reported once
-
-// REPORT WEBSITE LISTENER COUNTRY
-async function reportListener() {
-  try {
-    const geoRes = await fetch("https://ipapi.co/json/");
-    const geoData = await geoRes.json();
-    const country = geoData.country_name;
-
-    // Send to Worker
-    const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ country: country })
-    });
-
-    // After reporting, fetch updated counts
-    updateListenerCounter(country);
-
-  } catch (err) {
-    console.log("Geo reporting failed:", err);
-  }
-}
-
-// FETCH CURRENT COUNTRY COUNT
-async function updateListenerCounter(country) {
-  try {
-    const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/");
-    const data = await res.json();
-    const countryData = data.find(c => c.country === country);
-    const count = countryData ? countryData.count : 1;
-    listenerCounter.textContent = `🌍 Listeners from your country: ${count}`;
-  } catch (err) {
-    console.log("Listener counter update failed:", err);
-  }
-}
-
-// PLAY / PAUSE BUTTON
-playBtn.addEventListener("click", () => {
-  if (audio.paused) {
-    audio.play();
-    playBtn.textContent = "⏸";
-  } else {
-    audio.pause();
-    playBtn.textContent = "▶";
-  }
-});
-
-// TRIGGER reportListener WHEN AUDIO ACTUALLY STARTS
-audio.addEventListener("play", () => {
-  if (!hasReported) {
-    reportListener();
-    hasReported = true;
-  }
-});
-
-// VOLUME CONTROLS
-document.getElementById("volUp").onclick = () => audio.volume = Math.min(1, audio.volume + 0.1);
-document.getElementById("volDown").onclick = () => audio.volume = Math.max(0, audio.volume - 0.1);
-document.getElementById("muteBtn").onclick = () => audio.muted = !audio.muted;
-
-// NOW PLAYING FETCH
-async function fetchNowPlaying() {
-  try {
-    const api = "https://public.api.live365.com/station/a50378";
-    const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(api);
-    const res = await fetch(proxy);
-    const data = await res.json();
-    const json = JSON.parse(data.contents);
-
-    const title = json?.now_playing?.title || "Unknown";
-    const artist = json?.now_playing?.artist || "";
-
-    nowPlayingText.innerHTML = `<b>${title}</b> <br><small>${artist}</small>`;
-  } catch {
-    nowPlayingText.textContent = "Track unavailable";
-  }
-}
-
-fetchNowPlaying();
-setInterval(fetchNowPlaying, 15000);
-</script>
 
 <div class="nowplaying">
 
@@ -167,20 +84,13 @@ setInterval(fetchNowPlaying, 15000);
 
 
 
-<!-- SHOUTOUTS -->
-
-<section class="shoutouts">
-
-<h2>Listener Shoutouts</h2>
-
-<div id="shoutout-container">
-
-<div class="shout">Happy Birthday Sarah 🎉</div>
-<div class="shout">Big love to Laura ❤️</div>
-
+<!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
+        <div class="shoutout-ticker" aria-label="Shout-outs">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-text" id="tickerText">Loading shout-outs…</span>
+    <span class="ticker-text" id="tickerTextClone" aria-hidden="true"></span>
+  </div>
 </div>
-
-</section>
 
 
 
