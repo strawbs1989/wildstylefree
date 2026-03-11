@@ -505,14 +505,11 @@ sendBtn.addEventListener("click", async () => {
 // =======================
 
 function openMenu(){
-document.getElementById("mobileNav").hidden = false;
+document.getElementById("mobileNav").classList.add("active");
 document.getElementById("navBackdrop").hidden = false;
 }
 
 function closeMenu(){
-document.getElementById("mobileNav").hidden = true;
+document.getElementById("mobileNav").classList.remove("active");
 document.getElementById("navBackdrop").hidden = true;
 }
-
-document.getElementById("navClose").onclick = closeMenu;
-document.getElementById("navBackdrop").onclick = closeMenu;

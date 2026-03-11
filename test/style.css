@@ -299,32 +299,56 @@ border-top:1px solid #333;
 margin-top:60px;
 }
 
+/* =========================
+Desktop menu
+========================= */
+
+.desktop-nav{
+display:flex;
+gap:20px;
+}
+
+.menu-toggle{
+display:none;
+}
+
+@media(max-width:768px){
+
+.desktop-nav{
+display:none;
+}
+
+.menu-toggle{
+display:block;
+font-size:26px;
+background:none;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+}
+
 
 /* =========================
 MOBILE
 ========================= */
 
-@media(max-width:768px){
-
-.navbar{
+.mobile-nav{
+position:fixed;
+top:0;
+right:-280px;
+width:280px;
+height:100%;
+background:#0a0a0a;
+padding:30px 20px;
+display:flex;
 flex-direction:column;
+z-index:2000;
+border-left:2px solid #ff0066;
+transition:0.3s ease;
 }
 
-.navbar nav{
-margin-top:10px;
-}
-
-.navbar nav a{
-margin:10px;
-display:inline-block;
-}
-
-.hero h1{
-font-size:34px;
-}
-
-section{
-padding:60px 15px;
-}
-
+.mobile-nav.active{
+right:0;
 }
