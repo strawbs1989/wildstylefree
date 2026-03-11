@@ -28,18 +28,40 @@
 
 <div class="logo">WILDSTYLE RADIO</div>
 
-<nav>
-
-<a href="index.html">Home</a>
-<a href="schedule.html">Schedule</a>
-<a href="djs.html">DJs</a>
-<a href="chat.html">Chat</a>
-<a href="request.html">Request</a>
-<a href="merch.html">Merch</a>
-
+<nav class="desktop-nav">
+<a href="/index.html">Home</a>
+<a href="/djs.html">DJs</a>
+<a href="/schedule.html">Schedule</a>
+<a href="/chat.html">Chat</a>
+<a href="/request.html">Request</a>
+<a href="/merch.html">Merch</a>
 </nav>
 
+<button class="menu-toggle" onclick="openMenu()">☰</button>
+
 </header>
+
+<!-- Mobile drawer + backdrop -->
+
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav" hidden>
+
+<div class="mobile-nav-top">
+
+<div class="mobile-nav-title">Menu</div>
+
+<button class="mobile-nav-close" id="navClose">✕</button>
+
+</div>
+
+<a href="/index.html">Home</a>
+<a href="/djs.html">DJs</a>
+<a href="/request.html">Request</a>
+<a href="/schedule.html">Schedule</a>
+<a href="/merch.html">Merch</a>
+
+</nav>
 
 
 
