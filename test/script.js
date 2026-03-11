@@ -513,3 +513,6 @@ function closeMenu(){
 document.getElementById("mobileNav").classList.remove("active");
 document.getElementById("navBackdrop").hidden = true;
 }
+
+document.getElementById("navClose").onclick = closeMenu;
+document.getElementById("navBackdrop").onclick = closeMenu;
