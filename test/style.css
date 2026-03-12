@@ -300,7 +300,23 @@ margin-top:60px;
 }
 
 /* =========================
-Desktop menu
+NAVBAR
+========================= */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px;
+background:#000;
+color:white;
+position:relative;
+z-index:1000;
+}
+
+
+/* =========================
+DESKTOP MENU
 ========================= */
 
 .desktop-nav{
@@ -308,19 +324,34 @@ display:flex;
 gap:20px;
 }
 
-.menu-toggle{
-display:none;
+.desktop-nav a{
+color:white;
+text-decoration:none;
+font-size:16px;
+transition:0.3s;
 }
 
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px;
+.desktop-nav a:hover{
+color:#ff0066;
 }
+
 
 /* =========================
-Mobile rules
+MENU BUTTON
+========================= */
+
+.menu-toggle{
+display:none;
+font-size:26px;
+background:none;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+
+/* =========================
+MOBILE BREAKPOINT
 ========================= */
 
 @media(max-width:768px){
@@ -331,17 +362,13 @@ display:none;
 
 .menu-toggle{
 display:block;
-font-size:26px;
-background:none;
-border:none;
-color:white;
-cursor:pointer;
 }
 
 }
+
 
 /* =========================
-Mobile drawer
+BACKDROP
 ========================= */
 
 .nav-backdrop{
@@ -351,24 +378,88 @@ left:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,0.7);
-z-index:1500;
+z-index:9000;
 }
+
+
+/* =========================
+MOBILE DRAWER
+========================= */
 
 .mobile-nav{
 position:fixed;
 top:0;
-right:-280px;
+right:-100%;
 width:280px;
-height:100%;
+max-width:80%;
+height:100vh;
 background:#0a0a0a;
 padding:30px 20px;
 display:flex;
 flex-direction:column;
-z-index:2000;
 border-left:2px solid #ff0066;
-transition:0.3s ease;
+transition:right 0.3s ease;
+z-index:9999;
 }
+
+
+/* WHEN MENU OPENS */
 
 .mobile-nav.active{
 right:0;
+}
+
+
+/* =========================
+MOBILE MENU TOP
+========================= */
+
+.mobile-nav-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.mobile-nav-title{
+font-size:20px;
+color:#ff0066;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+.mobile-nav-close{
+background:none;
+border:none;
+color:white;
+font-size:22px;
+cursor:pointer;
+}
+
+
+/* =========================
+MOBILE LINKS
+========================= */
+
+.mobile-nav a{
+color:white;
+text-decoration:none;
+padding:14px 0;
+border-bottom:1px solid rgba(255,255,255,0.1);
+font-size:16px;
+transition:0.3s;
+}
+
+.mobile-nav a:hover{
+color:#ff0066;
+padding-left:6px;
+}
+
+
+/* =========================
+LOCK SCROLL WHEN OPEN
+========================= */
+
+body.menu-open{
+overflow:hidden;
 }
