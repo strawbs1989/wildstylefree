@@ -1,3 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wildstyle Radio</title>
+
+<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css">
+  <link rel="stylesheet" href="/rollcall/rollcall.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<div class="logo">WILDSTYLE RADIO</div>
+
+<nav class="desktop-nav">
+<a href="/test/index.html">Home</a>
+<a href="/djs.html">DJs</a>
+<a href="/schedule.html">Schedule</a>
+<a href="/chat.html">Chat</a>
+<a href="/request.html">Request</a>
+<a href="/merch.html">Merch</a>
+</nav>
+
+<button class="menu-toggle" onclick="openMenu()">☰</button>
+
+
+<!-- UP NEXT BAR -->
+    <center>
+      <section class="now-on-bar">
+  <span class="nowOn">Now On:</span>
+  <span class="nowOnShow" id="nowon">Loading…</span>
+</section> 
+    </center>
+</header>
+
+
+
+<div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav">
+
+<div class="mobile-nav-top">
+
+<div class="mobile-nav-title">Menu</div>
+
+<button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+
+</div>
+
+<a href="/test/index.html">Home</a>
+<a href="/djs.html">DJs</a>
+<a href="/schedule.html">Schedule</a>
+<a href="/chat.html">Chat</a>
+<a href="/request.html">Request</a>
+<a href="/merch.html">Merch</a>
+
+</nav>
+
+
 <section class="section">
     <div class="container">
       <div class="section-head">
@@ -230,3 +305,19 @@
       </div>
     </div>
   </section>
+  
+  <footer>
+
+<p>© Wildstyle Radio</p>
+
+</footer>
+
+
+<!-- ✅ Scripts at the end -->
+  <script src="https://wildstyle.vip/test/script.js" defer></script>
+  <script src="https://wildstyle.vip/test/rollcall/rollcall.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://wildstyle.vip/test/theme.js"></script>
+
+</body>
+</html>
