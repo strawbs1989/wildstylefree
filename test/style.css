@@ -464,49 +464,179 @@ body.menu-open{
 overflow:hidden;
 }
 
-/* =========================
-DJ GRID
-========================= */
+/* DJs page real layout */
 
-.dj-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:30px;
-margin-top:40px;
+.wild-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
 }
 
-/* DJ CARD */
+.wild-header-inner,
+.now-on-stage-inner{
+  width:min(1200px,92%);
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+
+.brand-block{
+  display:flex;
+  align-items:center;
+  gap:.8rem;
+  text-decoration:none;
+  color:var(--text);
+}
+
+.brand-badge{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  color:#fff;
+  font-weight:800;
+  font-family:Oswald,sans-serif;
+}
+
+.brand-copy{
+  display:flex;
+  flex-direction:column;
+  line-height:1;
+}
+
+.brand-copy strong{
+  font-family:Oswald,sans-serif;
+  letter-spacing:.08em;
+}
+
+.brand-copy small{
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.active-link{
+  background:rgba(255,255,255,.08);
+}
+
+.now-on-stage{
+  padding:14px 0 0;
+}
+
+.now-on-stage-inner{
+  padding:0 0 12px;
+}
+
+.now-on-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.live-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ff3b3b;
+  box-shadow:0 0 14px rgba(255,59,59,.8);
+}
+
+.dj-page-hero{
+  padding:60px 0 30px;
+  text-align:center;
+}
+
+.dj-page-hero-inner{
+  width:min(1200px,92%);
+  margin:0 auto;
+}
+
+.page-kicker{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--muted);
+  font-size:.85rem;
+  margin-bottom:18px;
+}
+
+.dj-lineup-section{
+  padding:45px 0;
+}
+
+.alt-band{
+  background:rgba(255,255,255,.02);
+}
+
+.lineup-head{
+  margin-bottom:24px;
+}
+
+.lineup-title{
+  margin:0;
+  font-family:Oswald,sans-serif;
+  letter-spacing:.05em;
+  font-size:2rem;
+}
+
+.lineup-sub{
+  margin:8px 0 0;
+  color:var(--muted);
+}
+
+.lineup-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
 
 .dj-card{
-background:rgba(255,255,255,0.05);
-padding:20px;
-border-radius:12px;
-text-align:center;
-transition:0.3s;
+  overflow:hidden;
 }
 
-.dj-card:hover{
-transform:translateY(-6px);
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
+.dj-card-body{
+  padding:14px 16px 18px;
 }
 
-.dj-image{
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:10px;
-margin-bottom:12px;
+.featured-card{
+  box-shadow:0 0 20px rgba(255,42,109,.18);
 }
 
-.dj-name{
-font-size:18px;
-font-weight:700;
+.dj-page-cta-section{
+  padding:30px 0 60px;
 }
 
-.dj-role{
-font-size:14px;
-opacity:0.8;
+.dj-page-cta-box{
+  padding:26px;
+  text-align:center;
 }
+
+.center-cta{
+  justify-content:center;
+}
+
+.wild-footer{
+  padding:24px 0;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+@media (max-width:768px){
+  .wild-header-inner,
+  .now-on-stage-inner{
+    width:min(94%,1200px);
+  }
+
+  .lineup-title{
+    font-size:1.6rem;
+  }
+} 
 /* =========================
 Shout Ticker
 ========================= */

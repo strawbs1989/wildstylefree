@@ -1,323 +1,258 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Radio — DJs</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Wildstyle Radio</title>
-
-<meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://wildstyle.vip/test/style.css">
   <link rel="stylesheet" href="/rollcall/rollcall.css">
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
 </head>
-
-
 <body>
 
+  <!-- HEADER -->
+  <header class="navbar wild-header">
+    <div class="wild-header-inner">
 
-<!-- NAVBAR -->
+      <a href="/test/index.html" class="brand-block">
+        <span class="brand-badge">WS</span>
+        <span class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>The Wildstyle Crew</small>
+        </span>
+      </a>
 
-<header class="navbar">
+      <nav class="desktop-nav">
+        <a href="/test/index.html">Home</a>
+        <a href="/djs.html" class="active-link">DJs</a>
+        <a href="/schedule.html">Schedule</a>
+        <a href="/chat.html">Chat</a>
+        <a href="/request.html">Request</a>
+        <a href="/merch.html">Merch</a>
+      </nav>
 
-<div class="logo">WILDSTYLE RADIO</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+    </div>
+  </header>
 
-<nav class="desktop-nav">
-<a href="/test/index.html">Home</a>
-<a href="/djs.html">DJs</a>
-<a href="/schedule.html">Schedule</a>
-<a href="/chat.html">Chat</a>
-<a href="/request.html">Request</a>
-<a href="/merch.html">Merch</a>
-</nav>
+  <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
 
-<button class="menu-toggle" onclick="openMenu()">☰</button>
+  <!-- MOBILE NAV -->
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
 
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+    </div>
 
-<!-- UP NEXT BAR -->
-    <center>
-      <section class="now-on-bar">
-  <span class="nowOn">Now On:</span>
-  <span class="nowOnShow" id="nowon">Loading…</span>
-</section> 
-    </center>
-</header>
+    <a href="/test/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/request.html">Request</a>
+    <a href="/merch.html">Merch</a>
+  </nav>
 
+  <!-- HERO -->
+  <section class="dj-page-hero">
+    <div class="container dj-page-hero-inner">
+      <span class="page-kicker">MEET THE CREW</span>
+      <h1 class="headline">THE WILDSTYLE DJs</h1>
+      <p class="tagline">
+        A lineup page built to feel more like a festival roster than a basic presenter list.
+      </p>
+    </div>
+  </section>
 
-
-<div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
-
-<nav class="mobile-nav" id="mobileNav">
-
-<div class="mobile-nav-top">
-
-<div class="mobile-nav-title">Menu</div>
-
-<button class="mobile-nav-close" onclick="closeMenu()">✕</button>
-
-</div>
-
-<a href="/test/index.html">Home</a>
-<a href="/djs.html">DJs</a>
-<a href="/schedule.html">Schedule</a>
-<a href="/chat.html">Chat</a>
-<a href="/request.html">Request</a>
-<a href="/merch.html">Merch</a>
-
-</nav>
-
-
-<section class="section">
+  <!-- OWNERS -->
+  <section class="section dj-lineup-section">
     <div class="container">
-      <div class="section-head">
-        <h2 class="section-title">Meet the DJs</h2>
-        <p class="section-sub">The faces of Wildstyle</p>
+      <div class="lineup-head">
+        <h2 class="lineup-title">Station Owners</h2>
+        <p class="lineup-sub">The people leading the Wildstyle movement</p>
       </div>
 
-      <div class="dj-grid">
-        <div class="dj-card glass">
-          <img src="images/test/djstrawbs.jpg" class="dj-image" />
-          <h3 class="dj-name">DJ EchoFalls</h3>
-          <p class="dj-show">Frequency Shift</p>
-		  <span class="fi fi-gb" style="font-size: 2rem; margin-bottom: 8px;"></span>
-		  <h3>BIG BOSS</h3>
-		<p><a href="https://ask.the.dj/Wildstyle">Requests</a></p>
-          
-        </div>
-        <div class="dj-card glass">
-  <img src="./images/test/hotshot.jpg" alt="Hotshot" class="dj-image" />
-  <h3 class="dj-name">Graham - HotShotDJ</h3>
-  <h4 class="dj-role">Co-Owner</h4>
-  
-  <span class="fi fi-gb-sct" style="font-size: 2rem; margin-bottom: 8px;"></span>
-  
-  
-</div>
+      <div class="dj-grid lineup-grid">
 
+        <article class="dj-card glass featured-card">
+          <img src="/test/images/djstrawbs.jpg" class="dj-image" alt="DJ EchoFalls">
+          <div class="dj-card-body">
+            <h3 class="dj-name">DJ EchoFalls</h3>
+            <p class="dj-show">Frequency Shift</p>
+            <h4 class="dj-role">Founder / Big Boss</h4>
+            <a class="dj-link" href="https://ask.the.dj/Wildstyle">Requests</a>
+          </div>
+        </article>
 
-		
-		<div class="dj-card glass">
-          <img src="./images/test/johnt.jpeg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">John - DJ JohnT</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/rave.jpeg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">The Rave Instruktor</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/chris.jpeg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">Chris</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/alex.jpeg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">Alex - DJ AllyBee</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/kai.jpg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">Kai</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/karl.jpg" alt="Karl" class="dj-image" />
-          <h3 class="dj-name">Karl - DJ Karl Davies</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/david.png" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">David - DJ Badger</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/michael.PNG" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">Michael - Michael mAr</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/george.jpeg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">George</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/marcello.jpg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">Marcello</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/pat.jpg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">DJ Patman</h3>
-          <h4 class="dj-role">Resident DJ And Manager</h4>
-		  
-		  <span class="fi fi-gb" style="font-size: 2rem; margin-bottom: 8px;"></span>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/vandeno.jpg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">DJ Vandeno</h3>
-          <h4 class="dj-role">Resident DJ And Manager</h4>
-		  
-		  <span class="fi fi-gb" style="font-size: 2rem; margin-bottom: 8px;"></span>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/golds.jpg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">DJ Golds</h3>
-		  <span class="fi fi-gb-sct"></span>
-          <h4 class="dj-role">Scotland Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="./images/test/flincho.jpg" alt="Hotshot" class="dj-image" />
-          <h3 class="dj-name">DJ Flincho</h3>
-		  
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/sonic.png" alt="Dawn" class="dj-image" />
-          <h3 class="dj-name">Sonic J</h3>
-          <p class="dj-show">In D Vault</p>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/tee.jpg" alt="Dawn" class="dj-image" />
-          <h3 class="dj-name">Tee</h3>
-          
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/caitlin.jpg" alt="Dawn" class="dj-image" />
-          <h3 class="dj-name">DJ Caitlin</h3>
-          
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/gabby.jpg" alt="Dawn" class="dj-image" />
-          <h3 class="dj-name">Gabby</h3>
-          
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-        <div class="dj-card glass">
-          <img src="images/test/laura.jpg" alt="Laura" class="dj-image" />
-          <h3 class="dj-name">Laura</h3>
-          <h4 class="dj-role">Owner</h4>
-		  <span class="fi fi-gb" style="font-size: 2rem; margin-bottom: 8px;"></span>
-        </div>
-        <div class="dj-card glass">
-          <img src="images/test/babyjayne.jpg" alt="DJ Placeholder 4" class="dj-image" />
-          <h3 class="dj-name">DJ BabyJayne</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/tessa.jpeg" alt="DJ Placeholder 4" class="dj-image" />
-          <h3 class="dj-name">Tessa</h3>
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-        <div class="dj-card glass">
-          <img src="images/test/rebecca.jpg" alt="DJ Placeholder 5" class="dj-image" />
-          <h3 class="dj-name">DJ Mix&Match</h3>
-		  <span class="fi fi-gb" style="font-size: 2rem; margin-bottom: 8px;"></span>
-          <h4 class="dj-role">GB Resident DJ</h4>
-        </div>
-        <div class="dj-card glass">
-          <img src="images/test/indigo.jpg" alt="DJ Placeholder 7" class="dj-image" />
-          <h3 class="dj-name">Indigo Riz</h3>
-		  <span class="fi fi-us" style="font-size: 2rem; margin-bottom: 8px;"></span>
-          <h4 class="dj-role">USA Resident DJ</h4>
-        </div>
-        <div class="dj-card glass">
-          <img src="images/test/dani.jpg" alt="DJ Placeholder 8" class="dj-image" />
-          <h3 class="dj-name">DJ Queen Dani</h3>
-          
-          <h4 class="dj-role">Resident DJ And Manager</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/djnala.jpg" alt="DJ Placeholder 8" class="dj-image" />
-          <h3 class="dj-name">DJ Nala</h3>
-          <span class="fi fi-sct" style="font-size: 2rem; margin-bottom: 8px;"></span>
-          <h4 class="dj-role">Scotland Resident DJ</h4>
-        </div>
-		
-		<div class="dj-card glass">
-          <img src="images/test/djlux.jpg" class="dj-image" />
-          <h3 class="dj-name">DJ LUX</h3> 
-		  <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/paul.jpg" class="dj-image" />
-          <h3 class="dj-name">Paul</h3> 
-		  <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/jase.jpeg" class="dj-image" />
-          <h3 class="dj-name">Jase</h3> 
-		  <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/elisco.png" class="dj-image" />
-          <h3 class="dj-name">DJ Elisco N</h3>
-		  <span class="fi fi-us" style="font-size: 2rem; margin-bottom: 8px;"></span>
-		  <h4 class="dj-role">NYC Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/wendell.jpg" class="dj-image" />
-          <h3 class="dj-name">DJ OldSkool</h3> 
-		  <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/wizard.jpg"  class="dj-image" />
-          <h3 class="dj-name">wizard</h3>
-          <p class="dj-show">Wizard Of Rock Show</p>
-		  <span class="fi fi-us" style="font-size: 2rem; margin-bottom: 8px;"></span>
-          <h4 class="dj-role">USA Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/lewis.jpg"  class="dj-image" />
-          <h3 class="dj-name">Lewis</h3>
-          <span class="fi fi-gb" style="font-size: 2rem; margin-bottom: 8px;"></span>
-          <h4 class="dj-role">GB Resident DJ</h4>
-		  <h3>Manager</h3>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/jk.jpg"  class="dj-image" />
-          <h3 class="dj-name">JK</h3>
-          
-          <h4 class="dj-role">Resident DJ</h4>
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/dezzy.jpg"  class="dj-image" />
-          <h3 class="dj-name">DJ Dezzy</h3>
-          
-		  <h3>DJ Manager</h3>
-          
-        </div>
-		<div class="dj-card glass">
-          <img src="images/test/aj.jpg" alt="DJ Placeholder 8" class="dj-image" />
-          <h3 class="dj-name">AJ</h3>
-          
-          <h4 class="dj-role">Resident DJ</h4>
+        <article class="dj-card glass featured-card">
+          <img src="/test/images/laura.jpg" class="dj-image" alt="Laura">
+          <div class="dj-card-body">
+            <h3 class="dj-name">Laura</h3>
+            <h4 class="dj-role">Owner</h4>
+          </div>
+        </article>
+
+        <article class="dj-card glass featured-card">
+          <img src="/test/images/hotshot.jpg" class="dj-image" alt="HotShotDJ">
+          <div class="dj-card-body">
+            <h3 class="dj-name">Graham - HotShotDJ</h3>
+            <h4 class="dj-role">Co-Owner</h4>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MANAGEMENT -->
+  <section class="section dj-lineup-section alt-band">
+    <div class="container">
+      <div class="lineup-head">
+        <h2 class="lineup-title">Managers</h2>
+        <p class="lineup-sub">The team helping run the station behind the scenes</p>
+      </div>
+
+      <div class="dj-grid lineup-grid">
+
+        <article class="dj-card glass">
+          <img src="/test/images/pat.jpg" class="dj-image" alt="DJ Patman">
+          <div class="dj-card-body">
+            <h3 class="dj-name">DJ Patman</h3>
+            <h4 class="dj-role">Resident DJ & Manager</h4>
+          </div>
+        </article>
+
+        <article class="dj-card glass">
+          <img src="/test/images/vandeno.jpg" class="dj-image" alt="DJ Vandeno">
+          <div class="dj-card-body">
+            <h3 class="dj-name">DJ Vandeno</h3>
+            <h4 class="dj-role">Resident DJ & Manager</h4>
+          </div>
+        </article>
+
+        <article class="dj-card glass">
+          <img src="/test/images/lewis.jpg" class="dj-image" alt="Lewis">
+          <div class="dj-card-body">
+            <h3 class="dj-name">Lewis</h3>
+            <h4 class="dj-role">Manager</h4>
+          </div>
+        </article>
+
+        <article class="dj-card glass">
+          <img src="/test/images/dezzy.jpg" class="dj-image" alt="DJ Dezzy">
+          <div class="dj-card-body">
+            <h3 class="dj-name">DJ Dezzy</h3>
+            <h4 class="dj-role">DJ Manager</h4>
+          </div>
+        </article>
+
+        <article class="dj-card glass">
+          <img src="/test/images/dani.jpg" class="dj-image" alt="DJ Queen Dani">
+          <div class="dj-card-body">
+            <h3 class="dj-name">DJ Queen Dani</h3>
+            <h4 class="dj-role">Resident DJ & Manager</h4>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RESIDENT DJS -->
+  <section class="section dj-lineup-section">
+    <div class="container">
+      <div class="lineup-head">
+        <h2 class="lineup-title">Resident DJs</h2>
+        <p class="lineup-sub">The core Wildstyle lineup</p>
+      </div>
+
+      <div class="dj-grid lineup-grid">
+
+        <article class="dj-card glass"><img src="/test/images/johnt.jpeg" class="dj-image" alt="DJ JohnT"><div class="dj-card-body"><h3 class="dj-name">John - DJ JohnT</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/rave.jpeg" class="dj-image" alt="The Rave Instruktor"><div class="dj-card-body"><h3 class="dj-name">The Rave Instruktor</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/chris.jpeg" class="dj-image" alt="Chris"><div class="dj-card-body"><h3 class="dj-name">Chris</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/alex.jpeg" class="dj-image" alt="Alex"><div class="dj-card-body"><h3 class="dj-name">Alex - DJ AllyBee</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/kai.jpg" class="dj-image" alt="Kai"><div class="dj-card-body"><h3 class="dj-name">Kai</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/karl.jpg" class="dj-image" alt="Karl"><div class="dj-card-body"><h3 class="dj-name">Karl - DJ Karl Davies</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/david.png" class="dj-image" alt="DJ Badger"><div class="dj-card-body"><h3 class="dj-name">David - DJ Badger</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/michael.PNG" class="dj-image" alt="Michael mAr"><div class="dj-card-body"><h3 class="dj-name">Michael - Michael mAr</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/george.jpeg" class="dj-image" alt="George"><div class="dj-card-body"><h3 class="dj-name">George</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/marcello.jpg" class="dj-image" alt="Marcello"><div class="dj-card-body"><h3 class="dj-name">Marcello</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/flincho.jpg" class="dj-image" alt="DJ Flincho"><div class="dj-card-body"><h3 class="dj-name">DJ Flincho</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/sonic.png" class="dj-image" alt="Sonic J"><div class="dj-card-body"><h3 class="dj-name">Sonic J</h3><p class="dj-show">In D Vault</p><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/tee.jpg" class="dj-image" alt="Tee"><div class="dj-card-body"><h3 class="dj-name">Tee</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/caitlin.jpg" class="dj-image" alt="DJ Caitlin"><div class="dj-card-body"><h3 class="dj-name">DJ Caitlin</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/gabby.jpg" class="dj-image" alt="Gabby"><div class="dj-card-body"><h3 class="dj-name">Gabby</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/babyjayne.jpg" class="dj-image" alt="DJ BabyJayne"><div class="dj-card-body"><h3 class="dj-name">DJ BabyJayne</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/tessa.jpeg" class="dj-image" alt="Tessa"><div class="dj-card-body"><h3 class="dj-name">Tessa</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/rebecca.jpg" class="dj-image" alt="DJ Mix&Match"><div class="dj-card-body"><h3 class="dj-name">DJ Mix&Match</h3><h4 class="dj-role">GB Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/djnala.jpg" class="dj-image" alt="DJ Nala"><div class="dj-card-body"><h3 class="dj-name">DJ Nala</h3><h4 class="dj-role">Scotland Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/djlux.jpg" class="dj-image" alt="DJ LUX"><div class="dj-card-body"><h3 class="dj-name">DJ LUX</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/paul.jpg" class="dj-image" alt="Paul"><div class="dj-card-body"><h3 class="dj-name">Paul</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/jase.jpeg" class="dj-image" alt="Jase"><div class="dj-card-body"><h3 class="dj-name">Jase</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/wendell.jpg" class="dj-image" alt="DJ OldSkool"><div class="dj-card-body"><h3 class="dj-name">DJ OldSkool</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/jk.jpg" class="dj-image" alt="JK"><div class="dj-card-body"><h3 class="dj-name">JK</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/aj.jpg" class="dj-image" alt="AJ"><div class="dj-card-body"><h3 class="dj-name">AJ</h3><h4 class="dj-role">Resident DJ</h4></div></article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERNATIONAL / SPECIAL -->
+  <section class="section dj-lineup-section alt-band">
+    <div class="container">
+      <div class="lineup-head">
+        <h2 class="lineup-title">International & Special DJs</h2>
+        <p class="lineup-sub">Wildstyle voices from beyond the core local roster</p>
+      </div>
+
+      <div class="dj-grid lineup-grid">
+
+        <article class="dj-card glass"><img src="/test/images/indigo.jpg" class="dj-image" alt="Indigo Riz"><div class="dj-card-body"><h3 class="dj-name">Indigo Riz</h3><h4 class="dj-role">USA Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/elisco.png" class="dj-image" alt="DJ Elisco N"><div class="dj-card-body"><h3 class="dj-name">DJ Elisco N</h3><h4 class="dj-role">NYC Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/wizard.jpg" class="dj-image" alt="Wizard"><div class="dj-card-body"><h3 class="dj-name">Wizard</h3><p class="dj-show">Wizard Of Rock Show</p><h4 class="dj-role">USA Resident DJ</h4></div></article>
+        <article class="dj-card glass"><img src="/test/images/golds.jpg" class="dj-image" alt="DJ Golds"><div class="dj-card-body"><h3 class="dj-name">DJ Golds</h3><h4 class="dj-role">Scotland Resident DJ</h4></div></article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section dj-page-cta-section">
+    <div class="container">
+      <div class="dj-page-cta-box glass">
+        <h2 class="section-title">Want To Hear The Crew Live?</h2>
+        <p class="section-sub">Jump to the schedule, tune in, and catch the next Wildstyle show.</p>
+        <div class="hero-cta-row center-cta">
+          <a href="/schedule.html" class="btn">View Schedule</a>
+          <a href="/request.html" class="btn primary">Send A Request</a>
         </div>
       </div>
     </div>
   </section>
-  
-  <footer>
 
-<p>© Wildstyle Radio</p>
+  <footer class="wild-footer">
+    <div class="container">
+      <p>© Wildstyle Radio</p>
+    </div>
+  </footer>
 
-</footer>
-
-
-<!-- ✅ Scripts at the end -->
+  <!-- SCRIPTS -->
   <script src="https://wildstyle.vip/test/script.js" defer></script>
   <script src="https://wildstyle.vip/test/rollcall/rollcall.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script defer src="https://wildstyle.vip/test/theme.js"></script>
 
 </body>
-</html>
+</html> 
