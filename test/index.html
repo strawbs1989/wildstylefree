@@ -40,37 +40,33 @@
 <button class="menu-toggle" onclick="openMenu()">☰</button>
 
 
-<!-- UP NEXT BAR -->
-    <center>
-      <section class="now-on-bar">
-  <span class="nowOn">Now On:</span>
-  <span class="nowOnShow" id="nowon">Loading…</span>
-</section> 
-    </center>
-</header>
+<!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
 
+  <!-- MOBILE NAV -->
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
 
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+    </div>
 
-<div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
-
-<nav class="mobile-nav" id="mobileNav">
-
-<div class="mobile-nav-top">
-
-<div class="mobile-nav-title">Menu</div>
-
-<button class="mobile-nav-close" onclick="closeMenu()">✕</button>
-
-</div>
-
-<a href="/test/index.html">Home</a>
-<a href="/test/djs.html">DJs</a>
-<a href="/test/schedule.html">Schedule</a>
-<a href="/test/chat.html">Chat</a>
-<a href="/test/request.html">Request</a>
-<a href="/test/merch.html">Merch</a>
-
-</nav>
+    <a href="/test/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/request.html">Request</a>
+    <a href="/merch.html">Merch</a>
+  </nav>
 
 
 
