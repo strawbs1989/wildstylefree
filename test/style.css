@@ -687,3 +687,77 @@ Shout Ticker
 
 /* Nice: pause on hover (desktop) */
 .shoutout-ticker:hover .ticker-track{ animation-play-state: paused; }
+
+/* =========================
+GUESS THE TUNE
+========================= */
+
+.guess-game{
+max-width:900px;
+margin:60px auto;
+text-align:center;
+background:#0f0f14;
+padding:40px;
+border-radius:20px;
+border:1px solid #222;
+}
+
+.guess-game h2{
+font-family:'Oswald',sans-serif;
+font-size:32px;
+letter-spacing:2px;
+margin-bottom:10px;
+color:#ff0066;
+}
+
+.guess-sub{
+color:#aaa;
+margin-bottom:25px;
+}
+
+.guess-play{
+background:#ff0066;
+border:none;
+padding:14px 30px;
+font-size:18px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+margin-bottom:30px;
+}
+
+.guess-options{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.guess-btn{
+background:#111;
+border:1px solid #333;
+padding:14px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+.guess-btn:hover{
+background:#ff0066;
+}
+
+#guess-result{
+margin-top:15px;
+font-weight:bold;
+}
+
+.guess-next{
+margin-top:20px;
+background:#333;
+border:none;
+padding:10px 20px;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
