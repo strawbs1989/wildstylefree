@@ -688,3 +688,118 @@ Shout Ticker
 /* Nice: pause on hover (desktop) */
 .shoutout-ticker:hover .ticker-track{ animation-play-state: paused; }
 
+/* =========================
+GUESS THE TUNE
+========================= */
+
+.guess-game{
+max-width:900px;
+margin:60px auto;
+padding:40px 25px;
+text-align:center;
+background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.35);
+}
+
+.guess-game h2{
+margin:0 0 10px;
+font-family:Oswald, Inter, sans-serif;
+font-size:2rem;
+letter-spacing:.05em;
+color:#ff2a6d;
+}
+
+.guess-sub{
+margin:0 0 25px;
+color:#9fb0c3;
+font-size:1rem;
+}
+
+.guess-play{
+background:linear-gradient(135deg,#ff2a6d,#2a7bff);
+color:#fff;
+border:none;
+border-radius:14px;
+padding:14px 28px;
+font-size:1rem;
+font-weight:700;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+transition:transform .2s ease, box-shadow .2s ease;
+margin-bottom:25px;
+}
+
+.guess-play:hover{
+transform:translateY(-2px);
+box-shadow:0 14px 28px rgba(0,0,0,0.35);
+}
+
+.guess-options{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:14px;
+margin:0 auto 20px;
+max-width:700px;
+}
+
+.guess-btn{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.12);
+color:#fff;
+padding:14px 16px;
+border-radius:14px;
+font-size:.95rem;
+font-weight:600;
+cursor:pointer;
+transition:all .2s ease;
+}
+
+.guess-btn:hover{
+background:rgba(255,255,255,0.1);
+transform:translateY(-2px);
+}
+
+#guess-result{
+min-height:28px;
+margin-top:8px;
+font-size:1rem;
+font-weight:700;
+}
+
+.guess-next{
+margin-top:18px;
+background:#111827;
+border:1px solid rgba(255,255,255,0.12);
+color:#fff;
+padding:12px 22px;
+border-radius:12px;
+font-size:.95rem;
+font-weight:700;
+cursor:pointer;
+transition:all .2s ease;
+}
+
+.guess-next:hover{
+background:#1f2937;
+transform:translateY(-2px);
+}
+
+/* Mobile */
+@media(max-width:600px){
+.guess-game{
+margin:40px 15px;
+padding:28px 16px;
+}
+
+.guess-game h2{
+font-size:1.6rem;
+}
+
+.guess-options{
+grid-template-columns:1fr;
+}
+}
+
+ 
