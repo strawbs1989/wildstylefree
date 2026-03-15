@@ -517,3 +517,88 @@ document.getElementById("navBackdrop").hidden = true;
 document.getElementById("navClose").onclick = closeMenu;
 document.getElementById("navBackdrop").onclick = closeMenu;
 
+// =======================
+// GUESS THE TUNE
+// =======================
+(function () {
+  const playBtn = document.getElementById("playClip");
+  const result = document.getElementById("guess-result");
+  const next = document.getElementById("nextRound");
+  const optionButtons = document.querySelectorAll(".guess-btn");
+
+  if (!playBtn || !result || !next || optionButtons.length === 0) {
+    return;
+  }
+
+  const tracks = [
+    {
+      answer: "Neon Nights",
+      options: ["Midnight Rush", "Neon Nights", "Bass Signal", "After Hours"],
+      freq: 440
+    },
+    {
+      answer: "After Hours",
+      options: ["Festival Line", "After Hours", "Club Voltage", "Skyline FM"],
+      freq: 523
+    },
+    {
+      answer: "Club Voltage",
+      options: ["Club Voltage", "Dream Static", "Echo Bass", "Sunrise Beat"],
+      freq: 659
+    }
+  ];
+
+  let round = 0;
+
+  function playTone(freq) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = "sawtooth";
+    osc.frequency.value = freq;
+
+    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.8);
+  }
+
+  function updateOptions() {
+    optionButtons.forEach((btn, index) => {
+      btn.textContent = tracks[round].options[index] || "Option";
+    });
+    result.innerHTML = "";
+  }
+
+  playBtn.onclick = function () {
+    playTone(tracks[round].freq);
+  };
+
+  optionButtons.forEach((btn) => {
+    btn.onclick = function () {
+      if (btn.innerText === tracks[round].answer) {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "#00ff9f";
+      } else {
+        result.innerHTML = "❌ Wrong! Answer: " + tracks[round].answer;
+        result.style.color = "#ff4d6d";
+      }
+    };
+  });
+
+  next.onclick = function () {
+    round++;
+    if (round >= tracks.length) {
+      round = 0;
+    }
+    updateOptions();
+  };
+
+  updateOptions();
+})();
