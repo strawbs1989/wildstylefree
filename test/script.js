@@ -548,27 +548,32 @@ function playGuessClip() {
       guessAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
+    if (guessAudioCtx.state === "suspended") {
+      guessAudioCtx.resume();
+    }
+
     var osc = guessAudioCtx.createOscillator();
     var gain = guessAudioCtx.createGain();
 
-    osc.type = "sawtooth";
+    osc.type = "square";
     osc.frequency.value = guessTracks[guessRound].freq;
 
-    gain.gain.setValueAtTime(0.0001, guessAudioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.2, guessAudioCtx.currentTime + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, guessAudioCtx.currentTime + 0.8);
+    gain.gain.setValueAtTime(0.001, guessAudioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.25, guessAudioCtx.currentTime + 0.02);
+    gain.gain.linearRampToValueAtTime(0.18, guessAudioCtx.currentTime + 0.25);
+    gain.gain.linearRampToValueAtTime(0.001, guessAudioCtx.currentTime + 1);
 
     osc.connect(gain);
     gain.connect(guessAudioCtx.destination);
 
     osc.start();
-    osc.stop(guessAudioCtx.currentTime + 0.8);
+    osc.stop(guessAudioCtx.currentTime + 1);
 
-    console.log("Guess clip played");
+    console.log("Guess clip played", guessAudioCtx.state);
   } catch (err) {
     console.error("Guess The Tune play error:", err);
   }
-}
+} 
 
 function setupGuessTheTune() {
   var result = document.getElementById("guess-result");
