@@ -612,4 +612,3 @@ document.getElementById("navBackdrop").onclick = closeMenu;
   updateOptions();
 })();
 
-console.log("play button found", playBtn);
