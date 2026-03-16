@@ -521,134 +521,92 @@ document.getElementById("navBackdrop").onclick = closeMenu;
 // GUESS THE TUNE
 // =======================
 
-var guessTracks = [];
-var guessRound = 0;
+let guessTracks = [];
+let guessRound = 0;
 
-// Replace this with your published Google Sheet CSV link
-var GUESS_TUNES_CSV_URL = "https://docs.google.com/spreadsheets/d/1YrH1TrDyCApuOnMOurYJdhS_yBruHLsqQ2BrITFMLcY/edit?usp=sharing";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/1YrH1TrDyCApuOnMOurYJdhS_yBruHLsqQ2BrITFMLcY/edit?usp=sharing";
 
-function playGuessClip() {
-  var audio = document.getElementById("guessAudio");
+function playGuessClip(){
+  const audio = document.getElementById("guessAudio");
 
-  if (!audio || !guessTracks.length) return;
+  if(!audio || !guessTracks.length) return;
 
   audio.src = guessTracks[guessRound].clip;
   audio.currentTime = 0;
-
-  audio.play().then(function () {
-    console.log("Guess clip playing");
-  }).catch(function (err) {
-    console.error("Audio play failed:", err);
-  });
+  audio.play();
 }
 
-function parseCSVLine(line) {
-  var result = [];
-  var current = "";
-  var inQuotes = false;
+function loadGuessTracks(){
 
-  for (var i = 0; i < line.length; i++) {
-    var char = line[i];
-    var next = line[i + 1];
+fetch(SHEET_URL)
+.then(res => res.text())
+.then(csv => {
 
-    if (char === '"' && inQuotes && next === '"') {
-      current += '"';
-      i++;
-    } else if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === "," && !inQuotes) {
-      result.push(current.trim());
-      current = "";
-    } else {
-      current += char;
-    }
-  }
+const rows = csv.split("\n").slice(1);
 
-  result.push(current.trim());
-  return result;
+guessTracks = rows.map(row => {
+
+const cols = row.split(",");
+
+return {
+clip: cols[0],
+answer: cols[1],
+options: [
+cols[2],
+cols[3],
+cols[4],
+cols[5]
+]
+};
+
+});
+
+setupOptions();
+
+});
+
 }
 
-function setupGuessTheTune() {
-  var result = document.getElementById("guess-result");
-  var next = document.getElementById("nextRound");
-  var optionButtons = document.querySelectorAll(".guess-btn");
+function setupOptions(){
 
-  if (!result || !next || optionButtons.length === 0) {
-    return;
-  }
+const buttons = document.querySelectorAll(".guess-btn");
+const result = document.getElementById("guess-result");
 
-  function updateOptions() {
-    if (!guessTracks.length) return;
+buttons.forEach((btn,i)=>{
 
-    for (var i = 0; i < optionButtons.length; i++) {
-      optionButtons[i].textContent = guessTracks[guessRound].options[i] || "Option";
-    }
+btn.textContent = guessTracks[guessRound].options[i];
 
-    result.innerHTML = "";
-    result.style.color = "";
-  }
+btn.onclick = () => {
 
-  for (var i = 0; i < optionButtons.length; i++) {
-    optionButtons[i].onclick = function () {
-      if (!guessTracks.length) return;
+if(btn.textContent === guessTracks[guessRound].answer){
 
-      if (this.innerText === guessTracks[guessRound].answer) {
-        result.innerHTML = "✅ Correct!";
-        result.style.color = "#00ff9f";
-      } else {
-        result.innerHTML = "❌ Wrong! Answer: " + guessTracks[guessRound].answer;
-        result.style.color = "#ff4d6d";
-      }
-    };
-  }
+result.innerHTML = "✅ Correct!";
+result.style.color = "#00ff9f";
 
-  next.onclick = function () {
-    if (!guessTracks.length) return;
+}else{
 
-    guessRound++;
+result.innerHTML = "❌ Wrong! Answer: " + guessTracks[guessRound].answer;
+result.style.color = "#ff4d6d";
 
-    if (guessRound >= guessTracks.length) {
-      guessRound = 0;
-    }
-
-    updateOptions();
-  };
-
-  fetch(GUESS_TUNES_CSV_URL)
-    .then(function (res) {
-      return res.text();
-    })
-    .then(function (csv) {
-      var rows = csv.trim().split(/\r?\n/);
-
-      // remove header row
-      rows.shift();
-
-      guessTracks = rows.map(function (row) {
-        var cols = parseCSVLine(row);
-
-        return {
-          clip: cols[0],
-          answer: cols[1],
-          options: [cols[2], cols[3], cols[4], cols[5]]
-        };
-      }).filter(function (item) {
-        return item.clip && item.answer;
-      });
-
-      guessRound = 0;
-      updateOptions();
-    })
-    .catch(function (err) {
-      console.error("Could not load Guess The Tune CSV", err);
-      result.innerHTML = "Could not load Guess The Tune.";
-      result.style.color = "#ff4d6d";
-    });
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", setupGuessTheTune);
-} else {
-  setupGuessTheTune();
-} 
+};
+
+});
+
+}
+
+document.getElementById("nextRound").onclick = () => {
+
+guessRound++;
+
+if(guessRound >= guessTracks.length){
+guessRound = 0;
+}
+
+setupOptions();
+
+};
+
+loadGuessTracks(); 
 
