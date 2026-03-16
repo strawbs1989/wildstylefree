@@ -333,18 +333,7 @@ PORTAL HERO
   justify-content:center;
 }
 
-.player-badge{
-  width:140px;
-  height:140px;
-  border-radius:20px;
-  background:linear-gradient(135deg,var(--purple),var(--pink),var(--cyan));
-  display:grid;
-  place-items:center;
-  font-size:3rem;
-  font-weight:800;
-  color:#fff;
-  box-shadow:0 16px 28px rgba(124,58,237,.35);
-}
+
 
 .player-copy .headline{
   margin:0;
