@@ -527,6 +527,7 @@ document.getElementById("navBackdrop").onclick = closeMenu;
   const optionButtons = document.querySelectorAll(".guess-btn");
 
   if (!playBtn || !result || !next || optionButtons.length === 0) {
+    console.log("Guess The Tune not found on this page.");
     return;
   }
 
@@ -549,24 +550,32 @@ document.getElementById("navBackdrop").onclick = closeMenu;
   ];
 
   let round = 0;
+  let audioCtx = null;
 
   function playTone(freq) {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    try {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
 
-    osc.type = "sawtooth";
-    osc.frequency.value = freq;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
 
-    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
+      osc.type = "sawtooth";
+      osc.frequency.value = freq;
 
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
 
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.8);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.8);
+    } catch (err) {
+      console.error("Play tone error:", err);
+    }
   }
 
   function updateOptions() {
@@ -576,12 +585,12 @@ document.getElementById("navBackdrop").onclick = closeMenu;
     result.innerHTML = "";
   }
 
-  playBtn.onclick = function () {
+  playBtn.addEventListener("click", function () {
     playTone(tracks[round].freq);
-  };
+  });
 
   optionButtons.forEach((btn) => {
-    btn.onclick = function () {
+    btn.addEventListener("click", function () {
       if (btn.innerText === tracks[round].answer) {
         result.innerHTML = "✅ Correct!";
         result.style.color = "#00ff9f";
@@ -589,16 +598,18 @@ document.getElementById("navBackdrop").onclick = closeMenu;
         result.innerHTML = "❌ Wrong! Answer: " + tracks[round].answer;
         result.style.color = "#ff4d6d";
       }
-    };
+    });
   });
 
-  next.onclick = function () {
+  next.addEventListener("click", function () {
     round++;
     if (round >= tracks.length) {
       round = 0;
     }
     updateOptions();
-  };
+  });
 
   updateOptions();
 })();
+
+console.log("play button found", playBtn);
