@@ -937,3 +937,95 @@ color:var(--muted);
   text-decoration:none;
   font-weight:bold;
 } 
+
+/* =========================
+SCHEDULE HERO
+========================= */
+
+.schedule-hero{
+padding:70px 20px 30px;
+text-align:center;
+}
+
+.schedule-hero-inner{
+width:min(1100px,92%);
+margin:auto;
+}
+
+.schedule-hero h1{
+font-family:Oswald;
+font-size:42px;
+margin-bottom:10px;
+color:white;
+}
+
+.schedule-hero p{
+color:#d3c7ef;
+}
+
+
+/* =========================
+SCHEDULE TABLE
+========================= */
+
+.schedule-section{
+padding:40px 20px 60px;
+}
+
+.schedule-table{
+background:linear-gradient(180deg,#17131f,#0f0d14);
+border-radius:20px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,.12);
+box-shadow:var(--glow);
+}
+
+.schedule-table table{
+width:100%;
+border-collapse:collapse;
+}
+
+.schedule-table th{
+background:linear-gradient(135deg,var(--pink),var(--purple));
+color:white;
+padding:16px;
+font-family:Oswald;
+letter-spacing:1px;
+}
+
+.schedule-table td{
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,.08);
+color:#d3c7ef;
+}
+
+.schedule-table tr:hover{
+background:rgba(255,255,255,.05);
+}
+
+
+/* =========================
+SCHEDULE CTA
+========================= */
+
+.schedule-cta{
+padding:40px 20px 80px;
+}
+
+.schedule-cta-box{
+text-align:center;
+padding:40px;
+border-radius:20px;
+background:linear-gradient(135deg,rgba(255,207,89,.2),rgba(255,77,166,.14),rgba(69,213,255,.16));
+border:1px solid rgba(255,255,255,.08);
+}
+
+.schedule-cta-box h2{
+color:white;
+margin-bottom:10px;
+}
+
+.schedule-cta-box p{
+color:#eadffd;
+margin-bottom:20px;
+} 
