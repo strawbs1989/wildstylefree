@@ -176,21 +176,26 @@
 
 </section>
 
-<section>
+<!-- GUESS THE TUNE -->
+<section class="guess-game">
+  <h2>🎵 Guess The Tune</h2>
+  <p class="guess-sub">Listen to the clip and pick the correct track</p>
 
-<button id="playClip" class="guess-play" onclick="playGuessClip()">▶ Play Clip</button>
+  <audio id="guessAudio" preload="auto"></audio>
 
-<div class="guess-options">
-  <button class="guess-btn">Midnight Rush</button>
-  <button class="guess-btn">Neon Nights</button>
-  <button class="guess-btn">Bass Signal</button>
-  <button class="guess-btn">After Hours</button>
-</div>
+  <button id="playClip" class="guess-play" onclick="playGuessClip()">▶ Play Clip</button>
 
-<div id="guess-result"></div>
+  <div class="guess-options">
+    <button class="guess-btn">Option 1</button>
+    <button class="guess-btn">Option 2</button>
+    <button class="guess-btn">Option 3</button>
+    <button class="guess-btn">Option 4</button>
+  </div>
 
-<button id="nextRound" class="guess-next">Next Round</button>
-</section>
+  <div id="guess-result"></div>
+
+  <button id="nextRound" class="guess-next">Next Round</button>
+</section> 
 
 <!-- SUPPORT -->
 
