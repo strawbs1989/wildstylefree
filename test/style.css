@@ -1029,3 +1029,44 @@ margin-bottom:10px;
 color:#eadffd;
 margin-bottom:20px;
 } 
+
+/* =========================
+SCHEDULE GRID
+========================= */
+
+.schedule-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.schedule-day{
+  background:linear-gradient(180deg,#17131f,#0f0d14);
+  border-radius:20px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--glow);
+}
+
+.schedule-day h3{
+  color:white;
+  margin-bottom:12px;
+  font-family:Oswald,sans-serif;
+}
+
+.slot{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.slot .time{
+  color:#fff;
+  font-weight:800;
+}
+
+.slot .show{
+  color:#d3c7ef;
+} 
