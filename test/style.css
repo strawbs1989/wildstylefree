@@ -321,7 +321,7 @@ PORTAL HERO
 
 .portal-player-body{
   padding:18px;
-  display:none;
+  display:block;
   text-align:center;
 } 
 
