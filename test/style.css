@@ -806,63 +806,134 @@ color:var(--muted);
 }
 
 
-/* =========================
-DJ GRID
-========================= */
+/* DJs page real layout */
 
-.dj-grid-section{
-padding:40px 20px 80px;
+.dj-page-hero{
+  padding:70px 20px 30px;
+  text-align:center;
 }
 
-.dj-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:30px;
+.dj-page-hero-inner{
+  width:min(1200px,92%);
+  margin:0 auto;
 }
 
+.page-kicker{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  margin-bottom:18px;
+  font-size:.85rem;
+  letter-spacing:.08em;
+}
+
+.dj-page-hero h1{
+  font-family:Oswald,sans-serif;
+  font-size:clamp(2.2rem,6vw,4rem);
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.dj-page-hero p{
+  color:#d3c7ef;
+}
+
+.dj-lineup-section{
+  padding:45px 0;
+}
+
+.alt-band{
+  background:transparent;
+}
+
+.lineup-head{
+  margin-bottom:24px;
+  text-align:center;
+}
+
+.lineup-title{
+  margin:0;
+  font-family:Oswald,sans-serif;
+  letter-spacing:.05em;
+  font-size:2rem;
+  color:#fff;
+}
+
+.lineup-sub{
+  margin:8px 0 0;
+  color:#d3c7ef;
+}
+
+.lineup-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
 
 .dj-card{
-background:linear-gradient(180deg,#17131f,#0f0d14);
-border-radius:20px;
-overflow:hidden;
-border:1px solid rgba(255,255,255,.1);
-box-shadow:var(--glow);
-transition:0.3s;
+  overflow:hidden;
 }
 
-.dj-card:hover{
-transform:translateY(-6px);
+.dj-image{
+  width:100%;
+  height:280px;
+  object-fit:cover;
 }
 
-.dj-card img{
-width:100%;
-height:280px;
-object-fit:cover;
+.dj-card-body{
+  padding:14px 16px 18px;
 }
 
-.dj-info{
-padding:20px;
-text-align:center;
+.dj-name{
+  color:#fff;
+  margin-bottom:6px;
 }
 
-.dj-info h3{
-margin-bottom:10px;
-font-family:Oswald;
-color:white;
+.dj-show{
+  color:#d3c7ef;
+  margin-bottom:6px;
 }
 
-.dj-info p{
-color:#d3c7ef;
-font-size:14px;
-margin-bottom:15px;
+.dj-role{
+  color:#d3c7ef;
+  font-size:.95rem;
+}
+
+.featured-card{
+  box-shadow:0 0 20px rgba(255,77,166,.18);
+}
+
+.dj-link{
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.dj-page-cta-section{
+  padding:30px 0 60px;
+}
+
+.dj-page-cta-box{
+  padding:26px;
+  text-align:center;
+  border-radius:20px;
+  background:linear-gradient(180deg,#17131f,#0f0d14);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--glow);
+}
+
+.center-cta{
+  margin-top:18px;
 }
 
 .dj-btn{
-display:inline-block;
-padding:10px 20px;
-background:linear-gradient(135deg,var(--pink),var(--purple));
-color:white;
-border-radius:30px;
-text-decoration:none;
-font-weight:bold;
+  display:inline-block;
+  padding:10px 20px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:white;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:bold;
 } 
