@@ -321,7 +321,8 @@ PORTAL HERO
 
 .portal-player-body{
   padding:18px;
-  display:block;
+  display:none;
+  visibility: hidden;
   text-align:center;
 } 
 
@@ -341,6 +342,8 @@ PORTAL HERO
   font-weight:800;
   color:#fff;
   box-shadow:0 16px 28px rgba(124,58,237,.35);
+  visibility: hidden;
+  display: none;
 }
 
 .player-copy .headline{
