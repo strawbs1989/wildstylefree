@@ -520,95 +520,99 @@ document.getElementById("navBackdrop").onclick = closeMenu;
 // =======================
 // GUESS THE TUNE
 // =======================
-(function () {
-  const playBtn = document.getElementById("playClip");
-  const result = document.getElementById("guess-result");
-  const next = document.getElementById("nextRound");
-  const optionButtons = document.querySelectorAll(".guess-btn");
 
-  if (!playBtn || !result || !next || optionButtons.length === 0) {
-    console.log("Guess The Tune not found on this page.");
+var guessTracks = [
+  {
+    answer: "Neon Nights",
+    options: ["Midnight Rush", "Neon Nights", "Bass Signal", "After Hours"],
+    freq: 440
+  },
+  {
+    answer: "After Hours",
+    options: ["Festival Line", "After Hours", "Club Voltage", "Skyline FM"],
+    freq: 523
+  },
+  {
+    answer: "Club Voltage",
+    options: ["Club Voltage", "Dream Static", "Echo Bass", "Sunrise Beat"],
+    freq: 659
+  }
+];
+
+var guessRound = 0;
+var guessAudioCtx = null;
+
+function playGuessClip() {
+  try {
+    if (!guessAudioCtx) {
+      guessAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    var osc = guessAudioCtx.createOscillator();
+    var gain = guessAudioCtx.createGain();
+
+    osc.type = "sawtooth";
+    osc.frequency.value = guessTracks[guessRound].freq;
+
+    gain.gain.setValueAtTime(0.0001, guessAudioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.2, guessAudioCtx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, guessAudioCtx.currentTime + 0.8);
+
+    osc.connect(gain);
+    gain.connect(guessAudioCtx.destination);
+
+    osc.start();
+    osc.stop(guessAudioCtx.currentTime + 0.8);
+
+    console.log("Guess clip played");
+  } catch (err) {
+    console.error("Guess The Tune play error:", err);
+  }
+}
+
+function setupGuessTheTune() {
+  var result = document.getElementById("guess-result");
+  var next = document.getElementById("nextRound");
+  var optionButtons = document.querySelectorAll(".guess-btn");
+
+  if (!result || !next || optionButtons.length === 0) {
+    console.log("Guess The Tune section not found.");
     return;
   }
 
-  const tracks = [
-    {
-      answer: "Neon Nights",
-      options: ["Midnight Rush", "Neon Nights", "Bass Signal", "After Hours"],
-      freq: 440
-    },
-    {
-      answer: "After Hours",
-      options: ["Festival Line", "After Hours", "Club Voltage", "Skyline FM"],
-      freq: 523
-    },
-    {
-      answer: "Club Voltage",
-      options: ["Club Voltage", "Dream Static", "Echo Bass", "Sunrise Beat"],
-      freq: 659
-    }
-  ];
-
-  let round = 0;
-  let audioCtx = null;
-
-  function playTone(freq) {
-    try {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = "sawtooth";
-      osc.frequency.value = freq;
-
-      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.8);
-    } catch (err) {
-      console.error("Play tone error:", err);
-    }
-  }
-
   function updateOptions() {
-    optionButtons.forEach((btn, index) => {
-      btn.textContent = tracks[round].options[index] || "Option";
-    });
+    for (var i = 0; i < optionButtons.length; i++) {
+      optionButtons[i].textContent = guessTracks[guessRound].options[i] || "Option";
+    }
     result.innerHTML = "";
   }
 
-  playBtn.addEventListener("click", function () {
-    playTone(tracks[round].freq);
-  });
-
-  optionButtons.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      if (btn.innerText === tracks[round].answer) {
+  for (var i = 0; i < optionButtons.length; i++) {
+    optionButtons[i].onclick = function () {
+      if (this.innerText === guessTracks[guessRound].answer) {
         result.innerHTML = "✅ Correct!";
         result.style.color = "#00ff9f";
       } else {
-        result.innerHTML = "❌ Wrong! Answer: " + tracks[round].answer;
+        result.innerHTML = "❌ Wrong! Answer: " + guessTracks[guessRound].answer;
         result.style.color = "#ff4d6d";
       }
-    });
-  });
+    };
+  }
 
-  next.addEventListener("click", function () {
-    round++;
-    if (round >= tracks.length) {
-      round = 0;
+  next.onclick = function () {
+    guessRound++;
+    if (guessRound >= guessTracks.length) {
+      guessRound = 0;
     }
     updateOptions();
-  });
+  };
 
   updateOptions();
-})();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupGuessTheTune);
+} else {
+  setupGuessTheTune();
+} 
 
