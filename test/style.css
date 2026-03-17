@@ -1070,3 +1070,129 @@ SCHEDULE GRID
 .slot .show{
   color:#d3c7ef;
 } 
+
+/* =========================
+REQUEST PAGE
+========================= */
+
+.request-hero{
+  padding:70px 20px 30px;
+  text-align:center;
+}
+
+.request-hero-inner{
+  width:min(1100px,92%);
+  margin:auto;
+}
+
+.request-hero h1{
+  font-family:Oswald,sans-serif;
+  font-size:clamp(2.2rem,6vw,4rem);
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.request-hero p{
+  color:#d3c7ef;
+}
+
+.request-page-section{
+  padding:30px 0 70px;
+}
+
+.request-page-grid{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:20px;
+}
+
+.request-intro{
+  color:#d3c7ef;
+  margin-bottom:18px;
+}
+
+.request-form-portal{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.request-form-portal input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:.95rem;
+  outline:none;
+}
+
+.request-form-portal input::placeholder{
+  color:#d3c7ef;
+}
+
+.request-form-portal input:focus{
+  border-color:rgba(255,255,255,.3);
+  background:rgba(255,255,255,.12);
+}
+
+.request-submit-btn{
+  grid-column:1 / -1;
+  padding:15px 18px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  font-weight:800;
+  font-size:1rem;
+  cursor:pointer;
+}
+
+.request-side-stack{
+  display:grid;
+  gap:20px;
+}
+
+.request-info-list{
+  display:grid;
+  gap:12px;
+}
+
+.request-info-card{
+  display:grid;
+  grid-template-columns:44px 1fr;
+  gap:12px;
+  align-items:start;
+  padding:14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.request-info-card strong{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+}
+
+.request-info-card p{
+  color:#d3c7ef;
+  margin:0;
+}
+
+@media(max-width:900px){
+  .request-page-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:640px){
+  .request-form-portal{
+    grid-template-columns:1fr;
+  }
+}
