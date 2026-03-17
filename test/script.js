@@ -622,7 +622,7 @@ loadGuessTracks();
     return;
   }
 
-  const SHOUTOUTS_URL = "https://docs.google.com/spreadsheets/d/1O84mNddhBHjqRl4iM_3joG-hSMzkAyPs7nS0aJSgiC0/edit?usp=sharing";
+  const SHOUTOUTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRczHmCBV2ef-aaYHoKgLPuv8hLcmWwzzHW91tp3GwRDpbr0F1bdM2BVBLxDot4ojGYC3ubuNITrN1x/pub?output=csv";
 
   fetch(SHOUTOUTS_URL)
     .then(function (res) {
@@ -651,6 +651,7 @@ loadGuessTracks();
       tickerTextClone.textContent = tickerText.textContent;
     });
 })(); 
+
 
 
 
