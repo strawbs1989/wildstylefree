@@ -611,30 +611,63 @@ setupOptions();
 loadGuessTracks(); 
 
 // =======================
-// LIVE SHOUT-OUT TICKER (CSV VERSION)
+// LIVE SHOUT-OUT TICKER
 // =======================
 
 (function () {
   const tickerText = document.getElementById("tickerText");
   const tickerTextClone = document.getElementById("tickerTextClone");
 
-  if (!tickerText || !tickerTextClone) {
-    return;
-  }
+  if (!tickerText || !tickerTextClone) return;
 
   const SHOUTOUTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRczHmCBV2ef-aaYHoKgLPuv8hLcmWwzzHW91tp3GwRDpbr0F1bdM2BVBLxDot4ojGYC3ubuNITrN1x/pub?output=csv";
+
+  function parseCSVLine(line) {
+    const result = [];
+    let current = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const next = line[i + 1];
+
+      if (char === '"' && inQuotes && next === '"') {
+        current += '"';
+        i++;
+      } else if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === "," && !inQuotes) {
+        result.push(current.trim());
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+
+    result.push(current.trim());
+    return result;
+  }
 
   fetch(SHOUTOUTS_URL)
     .then(function (res) {
       return res.text();
     })
     .then(function (csv) {
-      const rows = csv.trim().split(/\r?\n/).slice(1);
+      const rows = csv.trim().split(/\r?\n/);
+
+      // remove header row
+      rows.shift();
 
       const messages = rows
         .map(function (row) {
-          const cols = row.split(",");
-          return cols[0] ? cols[0].trim() : "";
+          const cols = parseCSVLine(row);
+
+          const name = cols[0] ? cols[0].trim() : "";
+          const message = cols[1] ? cols[1].trim() : "";
+
+          if (!name && !message) return "";
+          if (name && message) return name + " 🎉 " + message;
+          return name || message;
         })
         .filter(function (msg) {
           return msg !== "";
@@ -651,6 +684,7 @@ loadGuessTracks();
       tickerTextClone.textContent = tickerText.textContent;
     });
 })(); 
+
 
 
 
