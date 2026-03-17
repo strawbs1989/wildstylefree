@@ -368,39 +368,39 @@ const statusText = document.getElementById("status");
 const wave = document.getElementById("wave");
 const previewBtn = document.querySelector(".preview");
 const deleteBtn = document.querySelector(".delete");
+const sendBtn = document.querySelector(".send");
 
 let mediaRecorder;
 let audioChunks = [];
 let recordedBlob;
 let recordingTimeout;
-let userCountry = "Detecting...";
-
-
-// 🌍 SHOW CURRENT VISITOR COUNTRY
 let userCountry = "Unknown Country";
 
+// 🌍 GET COUNTRY
 async function getCountry() {
   const countryEl = document.getElementById("listenerCountry");
-
-  if (!countryEl) return;
 
   try {
     const res = await fetch("https://ipwho.is/");
     const data = await res.json();
-
     userCountry = data.country || "Unknown Country";
-    countryEl.textContent = "🌍 Listener from: " + userCountry;
+
+    if (countryEl) {
+      countryEl.textContent = "🌍 Listener from: " + userCountry;
+    }
   } catch (err) {
     console.warn("Country lookup failed:", err);
-    countryEl.textContent = "🌍 Listener from: Unknown Country";
+
+    if (countryEl) {
+      countryEl.textContent = "🌍 Listener from: Unknown Country";
+    }
   }
 }
 
-getCountry();  
-
+getCountry();
 
 // 🎤 START RECORDING
-if (recordBtn) {
+if (recordBtn && statusText && wave) {
   recordBtn.addEventListener("click", async () => {
     if (!mediaRecorder || mediaRecorder.state === "inactive") {
       startRecording();
@@ -408,7 +408,7 @@ if (recordBtn) {
       stopRecording();
     }
   });
-} 
+}
 
 async function startRecording() {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -422,25 +422,25 @@ async function startRecording() {
 
   mediaRecorder.onstop = () => {
     recordedBlob = new Blob(audioChunks, { type: "audio/webm" });
-    statusText.textContent = `Recording complete ✔ (${userCountry})`;
+    if (statusText) {
+      statusText.textContent = `Recording complete ✔ (${userCountry})`;
+    }
   };
 
   mediaRecorder.start();
-  recordBtn.classList.add("recording");
-  statusText.textContent = "Recording... (5 sec max)";
 
-  // fake waveform animation
+  if (recordBtn) recordBtn.classList.add("recording");
+  if (statusText) statusText.textContent = "Recording... (5 sec max)";
+
   let progress = 0;
   recordingTimeout = setInterval(() => {
     progress += 10;
-    wave.style.width = progress + "%";
+    if (wave) wave.style.width = progress + "%";
     if (progress >= 100) stopRecording();
   }, 500);
 
-  // auto stop after 5 sec
   setTimeout(stopRecording, 5000);
 }
-
 
 // 🛑 STOP RECORDING
 function stopRecording() {
@@ -448,86 +448,91 @@ function stopRecording() {
     mediaRecorder.stop();
   }
   clearInterval(recordingTimeout);
-  recordBtn.classList.remove("recording");
+  if (recordBtn) recordBtn.classList.remove("recording");
 }
 
-
 // ▶ PREVIEW
-previewBtn.addEventListener("click", () => {
-  if (!recordedBlob) return alert("No recording yet!");
-
-  const audioURL = URL.createObjectURL(recordedBlob);
-  const audio = new Audio(audioURL);
-  audio.play();
-});
-
+if (previewBtn) {
+  previewBtn.addEventListener("click", () => {
+    if (!recordedBlob) return alert("No recording yet!");
+    const audioURL = URL.createObjectURL(recordedBlob);
+    const audio = new Audio(audioURL);
+    audio.play();
+  });
+}
 
 // ❌ DELETE
-deleteBtn.addEventListener("click", () => {
-  recordedBlob = null;
-  wave.style.width = "0%";
-  statusText.textContent = "Recording deleted";
-});
+if (deleteBtn) {
+  deleteBtn.addEventListener("click", () => {
+    recordedBlob = null;
+    if (wave) wave.style.width = "0%";
+    if (statusText) statusText.textContent = "Recording deleted";
+  });
+}
 
-// Discord send
-// 🚀 SEND TO STUDIO (Discord via Worker)
-
-const sendBtn = document.querySelector(".send");
-
-sendBtn.addEventListener("click", async () => {
-
-  if (!recordedBlob) {
-    alert("No recording to send!");
-    return;
-  }
-
-  sendBtn.disabled = true;
-  sendBtn.textContent = "Sending...";
-
-  try {
-
-    const formData = new FormData();
-    formData.append("audio", recordedBlob);
-    formData.append("country", userCountry || "Unknown");
-
-    const response = await fetch("https://discord.jayaubs89.workers.dev/", {
-      method: "POST",
-      body: formData
-    });
-
-    if (response.ok) {
-      alert("🎉 Shoutout sent to studio!");
-      recordedBlob = null;
-      wave.style.width = "0%";
-      statusText.textContent = "Tap to Record (5 seconds max)";
-    } else {
-      alert("Upload failed.");
+// 🚀 SEND TO STUDIO
+if (sendBtn) {
+  sendBtn.addEventListener("click", async () => {
+    if (!recordedBlob) {
+      alert("No recording to send!");
+      return;
     }
 
-  } catch (err) {
-    alert("Error sending shoutout.");
-  }
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending...";
 
-  sendBtn.disabled = false;
-  sendBtn.textContent = "🚀 Send to Studio";
-}); 
+    try {
+      const formData = new FormData();
+      formData.append("audio", recordedBlob);
+      formData.append("country", userCountry || "Unknown");
+
+      const response = await fetch("https://discord.jayaubs89.workers.dev/", {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("🎉 Shoutout sent to studio!");
+        recordedBlob = null;
+        if (wave) wave.style.width = "0%";
+        if (statusText) statusText.textContent = "Tap to Record (5 seconds max)";
+      } else {
+        alert("Upload failed.");
+      }
+    } catch (err) {
+      alert("Error sending shoutout.");
+    }
+
+    sendBtn.disabled = false;
+    sendBtn.textContent = "🚀 Send to Studio";
+  });
+} 
+
 
 // =======================
 // MOBILE MENU
 // =======================
 
-function openMenu(){
-document.getElementById("mobileNav").classList.add("active");
-document.getElementById("navBackdrop").hidden = false;
+function openMenu() {
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.add("active");
+  if (navBackdrop) navBackdrop.hidden = false;
 }
 
-function closeMenu(){
-document.getElementById("mobileNav").classList.remove("active");
-document.getElementById("navBackdrop").hidden = true;
+function closeMenu() {
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.remove("active");
+  if (navBackdrop) navBackdrop.hidden = true;
 }
 
-document.getElementById("navClose").onclick = closeMenu;
-document.getElementById("navBackdrop").onclick = closeMenu;
+const navClose = document.getElementById("navClose");
+const navBackdrop = document.getElementById("navBackdrop");
+
+if (navClose) navClose.onclick = closeMenu;
+if (navBackdrop) navBackdrop.onclick = closeMenu; 
+
 
 // =======================
 // GUESS THE TUNE
@@ -536,91 +541,73 @@ document.getElementById("navBackdrop").onclick = closeMenu;
 let guessTracks = [];
 let guessRound = 0;
 
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/1YrH1TrDyCApuOnMOurYJdhS_yBruHLsqQ2BrITFMLcY/edit?usp=sharing";
+// Use a published CSV link, not the edit URL
+const SHEET_URL = "PASTE_YOUR_GUESS_THE_TUNE_CSV_URL_HERE";
 
-function playGuessClip(){
+function playGuessClip() {
   const audio = document.getElementById("guessAudio");
-
-  if(!audio || !guessTracks.length) return;
+  if (!audio || !guessTracks.length) return;
 
   audio.src = guessTracks[guessRound].clip;
   audio.currentTime = 0;
   audio.play();
 }
 
-function loadGuessTracks(){
+function loadGuessTracks() {
+  const buttons = document.querySelectorAll(".guess-btn");
+  const result = document.getElementById("guess-result");
+  const nextRoundBtn = document.getElementById("nextRound");
 
-fetch(SHEET_URL)
-.then(res => res.text())
-.then(csv => {
+  if (!buttons.length || !result || !nextRoundBtn) return;
 
-const rows = csv.split("\n").slice(1);
+  fetch(SHEET_URL)
+    .then(res => res.text())
+    .then(csv => {
+      const rows = csv.trim().split(/\r?\n/).slice(1);
 
-guessTracks = rows.map(row => {
+      guessTracks = rows.map(row => {
+        const cols = row.split(",");
+        return {
+          clip: cols[0],
+          answer: cols[1],
+          options: [cols[2], cols[3], cols[4], cols[5]]
+        };
+      });
 
-const cols = row.split(",");
+      setupOptions(buttons, result);
+    })
+    .catch(err => {
+      console.error("Guess The Tune load failed:", err);
+    });
 
-return {
-clip: cols[0],
-answer: cols[1],
-options: [
-cols[2],
-cols[3],
-cols[4],
-cols[5]
-]
-};
-
-});
-
-setupOptions();
-
-});
-
+  nextRoundBtn.onclick = () => {
+    if (!guessTracks.length) return;
+    guessRound++;
+    if (guessRound >= guessTracks.length) guessRound = 0;
+    setupOptions(buttons, result);
+  };
 }
 
-function setupOptions(){
+function setupOptions(buttons, result) {
+  if (!guessTracks.length) return;
 
-const buttons = document.querySelectorAll(".guess-btn");
-const result = document.getElementById("guess-result");
+  buttons.forEach((btn, i) => {
+    btn.textContent = guessTracks[guessRound].options[i] || "Option";
 
-buttons.forEach((btn,i)=>{
-
-btn.textContent = guessTracks[guessRound].options[i];
-
-btn.onclick = () => {
-
-if(btn.textContent === guessTracks[guessRound].answer){
-
-result.innerHTML = "✅ Correct!";
-result.style.color = "#00ff9f";
-
-}else{
-
-result.innerHTML = "❌ Wrong! Answer: " + guessTracks[guessRound].answer;
-result.style.color = "#ff4d6d";
-
+    btn.onclick = () => {
+      if (btn.textContent === guessTracks[guessRound].answer) {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "#00ff9f";
+      } else {
+        result.innerHTML = "❌ Wrong! Answer: " + guessTracks[guessRound].answer;
+        result.style.color = "#ff4d6d";
+      }
+    };
+  });
 }
-
-};
-
-});
-
-}
-
-document.getElementById("nextRound").onclick = () => {
-
-guessRound++;
-
-if(guessRound >= guessTracks.length){
-guessRound = 0;
-}
-
-setupOptions();
-
-};
 
 loadGuessTracks(); 
+
 
 // =======================
 // LIVE SHOUT-OUT TICKER
