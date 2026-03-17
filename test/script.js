@@ -610,3 +610,47 @@ setupOptions();
 
 loadGuessTracks(); 
 
+// =======================
+// LIVE SHOUT-OUT TICKER (CSV VERSION)
+// =======================
+
+(function () {
+  const tickerText = document.getElementById("tickerText");
+  const tickerTextClone = document.getElementById("tickerTextClone");
+
+  if (!tickerText || !tickerTextClone) {
+    return;
+  }
+
+  const SHOUTOUTS_URL = "https://docs.google.com/spreadsheets/d/1O84mNddhBHjqRl4iM_3joG-hSMzkAyPs7nS0aJSgiC0/edit?usp=sharing";
+
+  fetch(SHOUTOUTS_URL)
+    .then(function (res) {
+      return res.text();
+    })
+    .then(function (csv) {
+      const rows = csv.trim().split(/\r?\n/).slice(1);
+
+      const messages = rows
+        .map(function (row) {
+          const cols = row.split(",");
+          return cols[0] ? cols[0].trim() : "";
+        })
+        .filter(function (msg) {
+          return msg !== "";
+        });
+
+      const joined = messages.join(" • ");
+
+      tickerText.textContent = joined || "No shout-outs yet — send yours in!";
+      tickerTextClone.textContent = tickerText.textContent;
+    })
+    .catch(function (err) {
+      console.error("Shout-out ticker failed:", err);
+      tickerText.textContent = "Shout-outs unavailable right now.";
+      tickerTextClone.textContent = tickerText.textContent;
+    });
+})(); 
+
+
+
