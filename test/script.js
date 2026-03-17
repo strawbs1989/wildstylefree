@@ -376,33 +376,27 @@ let recordingTimeout;
 let userCountry = "Detecting...";
 
 
-// 🌍 GET COUNTRY
+// 🌍 SHOW CURRENT VISITOR COUNTRY
 let userCountry = "Unknown Country";
 
 async function getCountry() {
   const countryEl = document.getElementById("listenerCountry");
 
+  if (!countryEl) return;
+
   try {
-    const res = await fetch("https://ipapi.co/json/");
+    const res = await fetch("https://ipwho.is/");
     const data = await res.json();
-    userCountry = data.country_name || "Unknown Country";
 
-    if (countryEl) {
-      countryEl.textContent = "🌍 Listener from: " + userCountry;
-    }
-
-    console.log("Detected country:", userCountry);
+    userCountry = data.country || "Unknown Country";
+    countryEl.textContent = "🌍 Listener from: " + userCountry;
   } catch (err) {
     console.warn("Country lookup failed:", err);
-    userCountry = "Unknown Country";
-
-    if (countryEl) {
-      countryEl.textContent = "🌍 Listener from: Unknown Country";
-    }
+    countryEl.textContent = "🌍 Listener from: Unknown Country";
   }
 }
 
-getCountry(); 
+getCountry();  
 
 
 // 🎤 START RECORDING
