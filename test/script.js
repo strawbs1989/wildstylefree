@@ -377,23 +377,32 @@ let userCountry = "Detecting...";
 
 
 // 🌍 GET COUNTRY
+let userCountry = "Unknown Country";
+
 async function getCountry() {
+  const countryEl = document.getElementById("listenerCountry");
+
   try {
-    const res = await fetch("https://ipapi.co/json/")
-  .then(res => res.json())
-  .then(data => {
-    console.log(data);
-  })
-  .catch(err => {
-    console.warn("Country lookup failed:", err);
-  }); 
+    const res = await fetch("https://ipapi.co/json/");
     const data = await res.json();
     userCountry = data.country_name || "Unknown Country";
-  } catch {
+
+    if (countryEl) {
+      countryEl.textContent = "🌍 Listener from: " + userCountry;
+    }
+
+    console.log("Detected country:", userCountry);
+  } catch (err) {
+    console.warn("Country lookup failed:", err);
     userCountry = "Unknown Country";
+
+    if (countryEl) {
+      countryEl.textContent = "🌍 Listener from: Unknown Country";
+    }
   }
 }
-getCountry();
+
+getCountry(); 
 
 
 // 🎤 START RECORDING
