@@ -379,7 +379,14 @@ let userCountry = "Detecting...";
 // 🌍 GET COUNTRY
 async function getCountry() {
   try {
-    const res = await fetch("https://ipapi.co/json/");
+    const res = await fetch("https://ipapi.co/json/")
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => {
+    console.warn("Country lookup failed:", err);
+  }); 
     const data = await res.json();
     userCountry = data.country_name || "Unknown Country";
   } catch {
@@ -390,13 +397,15 @@ getCountry();
 
 
 // 🎤 START RECORDING
-recordBtn.addEventListener("click", async () => {
-  if (!mediaRecorder || mediaRecorder.state === "inactive") {
-    startRecording();
-  } else {
-    stopRecording();
-  }
-});
+if (recordBtn) {
+  recordBtn.addEventListener("click", async () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+      startRecording();
+    } else {
+      stopRecording();
+    }
+  });
+} 
 
 async function startRecording() {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
