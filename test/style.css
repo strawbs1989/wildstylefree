@@ -1118,3 +1118,92 @@ REQUEST FORM FIX
     grid-template-columns:1fr;
   }
 } 
+
+/* =========================
+MERCH PAGE
+========================= */
+
+.merch-hero{
+  padding:70px 20px 30px;
+  text-align:center;
+}
+
+.merch-hero-inner{
+  width:min(1100px,92%);
+  margin:auto;
+}
+
+.merch-hero h1{
+  font-family:Oswald,sans-serif;
+  font-size:clamp(2.2rem,6vw,4rem);
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.merch-hero p{
+  color:#d3c7ef;
+}
+
+.merch-page-section{
+  padding:30px 0 60px;
+}
+
+.merch-page-grid{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:20px;
+}
+
+.merch-side-stack{
+  display:grid;
+  gap:20px;
+}
+
+.shop-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+}
+
+.shop-item{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:16px;
+  text-align:center;
+}
+
+.shop-item img{
+  width:100%;
+  height:220px;
+  object-fit:contain;
+  border-radius:14px;
+  margin-bottom:14px;
+  background:rgba(255,255,255,.03);
+}
+
+.shop-item h3{
+  color:#fff;
+  margin-bottom:8px;
+}
+
+.shop-item p{
+  color:#d3c7ef;
+  font-size:.95rem;
+  margin-bottom:14px;
+}
+
+.merch-info-list{
+  display:grid;
+  gap:12px;
+}
+
+.merch-cta{
+  padding:30px 0 80px;
+}
+
+@media(max-width:900px){
+  .merch-page-grid{
+    grid-template-columns:1fr;
+  }
+} 
