@@ -542,7 +542,7 @@ let guessTracks = [];
 let guessRound = 0;
 
 // Use a published CSV link, not the edit URL
-const SHEET_URL = "PASTE_YOUR_GUESS_THE_TUNE_CSV_URL_HERE";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTKikwIIXG6VxIRfoFYVEIr97lQmscpP8X-bQ_iqouO2jgaFseI8HMKD6L6QG67Z-Ob36fTEa50zBa-/pub?output=csv";
 
 function playGuessClip() {
   const audio = document.getElementById("guessAudio");
