@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Merch</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css?v=8">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar wild-header">
+    <div class="wild-header-inner">
+
+      <a href="/test/index.html" class="brand-block">
+        <span class="brand-badge">WS</span>
+        <span class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>Merch Hub</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" id="nav">
+        <a href="/test/index.html">Home</a>
+    <a href="/test/djs.html">DJs</a>
+    <a href="/test/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/test/request.html">Request</a>
+    <a href="/test/merch.html">Merch</a>
+      </nav>
+
+      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
+
+    </div>
+  </header>
+
+  <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
+
+  <!-- MOBILE NAV -->
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+    </div>
+
+    <a href="/test/index.html">Home</a>
+    <a href="/test/djs.html">DJs</a>
+    <a href="/test/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/test/request.html">Request</a>
+    <a href="/test/merch.html">Merch</a>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="merch-hero">
+    <div class="merch-hero-inner">
+      <span class="page-kicker">WILDSTYLE SHOP</span>
+      <h1>Official Wildstyle Merch</h1>
+      <p>Support the station and rep the brand with official Wildstyle gear.</p>
+    </div>
+  </section>
+
+  <!-- MERCH GRID -->
+  <section class="merch-page-section">
+    <div class="container merch-page-grid">
+
+      <article class="portal-panel portal-span-2">
+        <div class="portal-head">
+          <h2>Featured Merch</h2>
+        </div>
+
+        <div class="portal-box-body">
+          <div class="shop-grid">
+
+            <div class="shop-item">
+              <img src="/test/images/merch1.jpg" alt="Wildstyle T-Shirt">
+              <h3>Wildstyle T-Shirt</h3>
+              <p>Classic station branding for everyday wear.</p>
+              <a href="#" class="dj-btn">View Item</a>
+            </div>
+
+            <div class="shop-item">
+              <img src="/test/images/merch2.jpg" alt="Wildstyle Hoodie">
+              <h3>Wildstyle Hoodie</h3>
+              <p>Stay warm and show off the station in style.</p>
+              <a href="#" class="dj-btn">View Item</a>
+            </div>
+
+            <div class="shop-item">
+              <img src="/test/images/merch3.jpg" alt="Wildstyle Mug">
+              <h3>Wildstyle Mug</h3>
+              <p>Perfect for late night listening sessions.</p>
+              <a href="#" class="dj-btn">View Item</a>
+            </div>
+
+            <div class="shop-item">
+              <img src="/test/images/merch4.jpg" alt="Wildstyle Cap">
+              <h3>Wildstyle Cap</h3>
+              <p>Clean branded look for the real supporters.</p>
+              <a href="#" class="dj-btn">View Item</a>
+            </div>
+
+          </div>
+        </div>
+      </article>
+
+      <aside class="merch-side-stack">
+
+        <article class="portal-panel">
+          <div class="portal-head">
+            <h2>Why Buy?</h2>
+          </div>
+          <div class="portal-box-body merch-info-list">
+            <div class="request-info-card">
+              <strong>1.</strong>
+              <p>Support Wildstyle Radio and help keep the station growing.</p>
+            </div>
+            <div class="request-info-card">
+              <strong>2.</strong>
+              <p>Rep the station online, at events, and out in the community.</p>
+            </div>
+            <div class="request-info-card">
+              <strong>3.</strong>
+              <p>Help build the Wildstyle brand with every purchase.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="portal-panel">
+          <div class="portal-head">
+            <h2>Quick Links</h2>
+          </div>
+          <div class="portal-box-body quick-grid">
+            <a href="/djs.html" class="quick-tile">Our DJs</a>
+            <a href="/schedule.html" class="quick-tile">Schedule</a>
+            <a href="/request.html" class="quick-tile">Request</a>
+            <a href="/chat.html" class="quick-tile">Chat</a>
+          </div>
+        </article>
+
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="merch-cta">
+    <div class="container">
+      <div class="schedule-cta-box">
+        <h2>More Merch Coming Soon</h2>
+        <p>New Wildstyle products, gifts and station gear will be added as the brand grows.</p>
+        <a href="#" class="dj-btn">Visit Shop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="portal-footer">
+    <div class="container footer-grid">
+
+      <div class="footer-box">
+        <h5>Wildstyle Radio</h5>
+        <p>United by beats.<br>Powered by volunteer passion.</p>
+      </div>
+
+      <div class="footer-box">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="/merch.html">Merch</a></li>
+          <li><a href="/djs.html">Our DJs</a></li>
+          <li><a href="/schedule.html">Schedule</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-box">
+        <h5>Follow Us</h5>
+        <p>Facebook • Instagram • TikTok</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script src="https://wildstyle.vip/test/script.js?v=6" defer></script>
+
+</body>
+</html> 
