@@ -68,10 +68,17 @@ function createFeedItems(sorted) {
     .slice(0, 5);
 
   if (!updates.length) {
+    const topCountry = sorted[0];
+    const secondCountry = sorted[1];
+
     feed.innerHTML = `
       <div class="feed-item">
-        <strong>No new listener jumps yet</strong>
-        <span>Map is live and checking every 30 seconds</span>
+        <strong>${topCountry ? topCountry.country : "Wildstyle"}</strong>
+        <span>${topCountry ? formatNumber(topCountry.count) : "0"} logged listeners currently leading</span>
+      </div>
+      <div class="feed-item">
+        <strong>${secondCountry ? secondCountry.country : "System Live"}</strong>
+        <span>${secondCountry ? formatNumber(secondCountry.count) + " logged listeners active" : "Tracking audience globally"}</span>
       </div>
     `;
     return;
@@ -144,7 +151,9 @@ function renderMap(data) {
   countryList.innerHTML = topSix.map((item) => {
     const prev = previousData.get(item.country) || 0;
     const diff = item.count - prev;
-    const trend = diff > 0 ? `<small class="trend-up">+${diff} since last check</small>` : `<small>Logged audience activity</small>`;
+    const trend = diff > 0
+      ? `<small class="trend-up">+${diff} since last check</small>`
+      : `<small>Logged audience activity</small>`;
 
     return `
       <div class="country-row">
