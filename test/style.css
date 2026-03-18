@@ -1490,4 +1490,34 @@ SHOUTOUT PAGE
   font-weight: bold;
   color: #fff;
 } 
+.listener-map-page .layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.listener-map-page .panel {
+  background: linear-gradient(180deg,#17131f,#0f0d14);
+  border-radius: 20px;
+  padding: 15px;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(0,255,255,0.2);
+}
+
+.listener-map-page .portal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(90deg,#ff2a6d,#2a7bff);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.listener-map-page h1,
+.listener-map-page h2 {
+  color: white;
+} 
 
