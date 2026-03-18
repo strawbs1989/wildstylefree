@@ -223,28 +223,56 @@ async function reportListener() {
 }
 
 // FETCH CURRENT COUNTRY COUNT
-async function updateListenerCounter(country) {
+async function getCountry() {
   try {
-    const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/");
+    if (listenerCountry) {
+      listenerCountry.textContent = "🌍 Listener from: Detecting...";
+    }
+
+    const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/country");
     const data = await res.json();
 
-    const countryData = Array.isArray(data)
-      ? data.find(c => c.country === country)
-      : null;
+    const countryMap = {
+      GB: "United Kingdom",
+      US: "United States",
+      IE: "Ireland",
+      CA: "Canada",
+      AU: "Australia",
+      IN: "India",
+      DE: "Germany",
+      ES: "Spain",
+      ZA: "South Africa",
+      NG: "Nigeria",
+      TT: "Trinidad and Tobago",
+      MY: "Malaysia",
+      MT: "Malta",
+      KE: "Kenya",
+      FI: "Finland",
+      NO: "Norway",
+      SE: "Sweden",
+      CH: "Switzerland",
+      PR: "Puerto Rico"
+    };
 
-    const count = countryData ? countryData.count : 1;
+    detectedCountry = countryMap[data.country] || data.country || "Unknown Country";
 
-    if (listenerCounter) {
-      listenerCounter.textContent = `🌍 Listeners from your country: ${count}`;
+    if (listenerCountry) {
+      listenerCountry.textContent = "🌍 Listener from: " + detectedCountry;
     }
+
+    return detectedCountry;
   } catch (err) {
-    console.log("Listener counter update failed:", err);
+    console.log("Country detection failed:", err);
+    detectedCountry = "Unknown Country";
 
-    if (listenerCounter) {
-      listenerCounter.textContent = "🌍 Listeners from your country: 1";
+    if (listenerCountry) {
+      listenerCountry.textContent = "🌍 Listener from: Unknown Country";
     }
+
+    return detectedCountry;
   }
-}
+} 
+
 
 // PLAY / PAUSE BUTTON
 playBtn.addEventListener("click", async () => {
