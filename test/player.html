@@ -160,7 +160,10 @@
 <div id="listenerCounter" style="margin-top:8px; color:#00ffff; font-weight:bold; text-align:center;">
   🌍 Listeners from your country: 0
 </div>
-<div id="listenerCountry">🌍 Listener from: Detecting...</div> 
+
+<div id="listenerCountry" style="margin-top:6px; color:#ffffff; text-align:center;">
+  🌍 Listener from: Detecting...
+</div> 
 </div>
 
 <audio id="radioAudio">
@@ -172,26 +175,48 @@ const audio = document.getElementById("radioAudio");
 const playBtn = document.getElementById("playButton");
 const nowPlayingText = document.getElementById("nowPlayingText");
 const listenerCounter = document.getElementById("listenerCounter");
+const listenerCountry = document.getElementById("listenerCountry");
 
-let hasReported = false; // ensures listener is only reported once
+let hasReported = false;
+let detectedCountry = "Unknown Country";
+
+// GET VISITOR COUNTRY
+async function getCountry() {
+  try {
+    const res = await fetch("https://ipwho.is/");
+    const data = await res.json();
+
+    detectedCountry = data.country || "Unknown Country";
+
+    if (listenerCountry) {
+      listenerCountry.textContent = `🌍 Listener from: ${detectedCountry}`;
+    }
+
+    return detectedCountry;
+  } catch (err) {
+    console.log("Country detection failed:", err);
+    detectedCountry = "Unknown Country";
+
+    if (listenerCountry) {
+      listenerCountry.textContent = "🌍 Listener from: Unknown Country";
+    }
+
+    return detectedCountry;
+  }
+}
 
 // REPORT WEBSITE LISTENER COUNTRY
 async function reportListener() {
   try {
-    const geoRes = await fetch("https://ipapi.co/json/");
-    const geoData = await geoRes.json();
-    const country = geoData.country_name;
+    const country = await getCountry();
 
-    // Send to Worker
-    const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/", {
+    await fetch("https://wildstyle-geo.jayaubs89.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ country: country })
     });
 
-    // After reporting, fetch updated counts
     updateListenerCounter(country);
-
   } catch (err) {
     console.log("Geo reporting failed:", err);
   }
@@ -202,19 +227,34 @@ async function updateListenerCounter(country) {
   try {
     const res = await fetch("https://wildstyle-geo.jayaubs89.workers.dev/");
     const data = await res.json();
-    const countryData = data.find(c => c.country === country);
+
+    const countryData = Array.isArray(data)
+      ? data.find(c => c.country === country)
+      : null;
+
     const count = countryData ? countryData.count : 1;
-    listenerCounter.textContent = `🌍 Listeners from your country: ${count}`;
+
+    if (listenerCounter) {
+      listenerCounter.textContent = `🌍 Listeners from your country: ${count}`;
+    }
   } catch (err) {
     console.log("Listener counter update failed:", err);
+
+    if (listenerCounter) {
+      listenerCounter.textContent = "🌍 Listeners from your country: 1";
+    }
   }
 }
 
 // PLAY / PAUSE BUTTON
-playBtn.addEventListener("click", () => {
+playBtn.addEventListener("click", async () => {
   if (audio.paused) {
-    audio.play();
-    playBtn.textContent = "⏸";
+    try {
+      await audio.play();
+      playBtn.textContent = "⏸";
+    } catch (err) {
+      console.log("Audio play failed:", err);
+    }
   } else {
     audio.pause();
     playBtn.textContent = "▶";
@@ -222,17 +262,32 @@ playBtn.addEventListener("click", () => {
 });
 
 // TRIGGER reportListener WHEN AUDIO ACTUALLY STARTS
-audio.addEventListener("play", () => {
+audio.addEventListener("play", async () => {
   if (!hasReported) {
-    reportListener();
+    await reportListener();
     hasReported = true;
   }
 });
 
+// If paused manually, switch button back
+audio.addEventListener("pause", () => {
+  if (!audio.ended) {
+    playBtn.textContent = "▶";
+  }
+});
+
 // VOLUME CONTROLS
-document.getElementById("volUp").onclick = () => audio.volume = Math.min(1, audio.volume + 0.1);
-document.getElementById("volDown").onclick = () => audio.volume = Math.max(0, audio.volume - 0.1);
-document.getElementById("muteBtn").onclick = () => audio.muted = !audio.muted;
+document.getElementById("volUp").onclick = () => {
+  audio.volume = Math.min(1, audio.volume + 0.1);
+};
+
+document.getElementById("volDown").onclick = () => {
+  audio.volume = Math.max(0, audio.volume - 0.1);
+};
+
+document.getElementById("muteBtn").onclick = () => {
+  audio.muted = !audio.muted;
+};
 
 // NOW PLAYING FETCH
 async function fetchNowPlaying() {
@@ -246,15 +301,19 @@ async function fetchNowPlaying() {
     const title = json?.now_playing?.title || "Unknown";
     const artist = json?.now_playing?.artist || "";
 
-    nowPlayingText.innerHTML = `<b>${title}</b> <br><small>${artist}</small>`;
+    nowPlayingText.innerHTML = `<b>${title}</b><br><small>${artist}</small>`;
   } catch {
     nowPlayingText.textContent = "Track unavailable";
   }
 }
 
+// Show country even before pressing play
+getCountry();
+
 fetchNowPlaying();
 setInterval(fetchNowPlaying, 15000);
-</script>
+</script> 
+
 
 </body>
 </html>
