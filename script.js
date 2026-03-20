@@ -368,35 +368,47 @@ const statusText = document.getElementById("status");
 const wave = document.getElementById("wave");
 const previewBtn = document.querySelector(".preview");
 const deleteBtn = document.querySelector(".delete");
+const sendBtn = document.querySelector(".send");
 
 let mediaRecorder;
 let audioChunks = [];
 let recordedBlob;
 let recordingTimeout;
-let userCountry = "Detecting...";
-
+let userCountry = "Unknown Country";
 
 // 🌍 GET COUNTRY
 async function getCountry() {
+  const countryEl = document.getElementById("listenerCountry");
+
   try {
-    const res = await fetch("https://ipapi.co/json/");
+    const res = await fetch("https://ipwho.is/");
     const data = await res.json();
-    userCountry = data.country_name || "Unknown Country";
-  } catch {
-    userCountry = "Unknown Country";
+    userCountry = data.country || "Unknown Country";
+
+    if (countryEl) {
+      countryEl.textContent = "🌍 Listener from: " + userCountry;
+    }
+  } catch (err) {
+    console.warn("Country lookup failed:", err);
+
+    if (countryEl) {
+      countryEl.textContent = "🌍 Listener from: Unknown Country";
+    }
   }
 }
+
 getCountry();
 
-
 // 🎤 START RECORDING
-recordBtn.addEventListener("click", async () => {
-  if (!mediaRecorder || mediaRecorder.state === "inactive") {
-    startRecording();
-  } else {
-    stopRecording();
-  }
-});
+if (recordBtn && statusText && wave) {
+  recordBtn.addEventListener("click", async () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+      startRecording();
+    } else {
+      stopRecording();
+    }
+  });
+}
 
 async function startRecording() {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -410,25 +422,25 @@ async function startRecording() {
 
   mediaRecorder.onstop = () => {
     recordedBlob = new Blob(audioChunks, { type: "audio/webm" });
-    statusText.textContent = `Recording complete ✔ (${userCountry})`;
+    if (statusText) {
+      statusText.textContent = `Recording complete ✔ (${userCountry})`;
+    }
   };
 
   mediaRecorder.start();
-  recordBtn.classList.add("recording");
-  statusText.textContent = "Recording... (5 sec max)";
 
-  // fake waveform animation
+  if (recordBtn) recordBtn.classList.add("recording");
+  if (statusText) statusText.textContent = "Recording... (5 sec max)";
+
   let progress = 0;
   recordingTimeout = setInterval(() => {
     progress += 10;
-    wave.style.width = progress + "%";
+    if (wave) wave.style.width = progress + "%";
     if (progress >= 100) stopRecording();
   }, 500);
 
-  // auto stop after 5 sec
   setTimeout(stopRecording, 5000);
 }
-
 
 // 🛑 STOP RECORDING
 function stopRecording() {
@@ -436,66 +448,243 @@ function stopRecording() {
     mediaRecorder.stop();
   }
   clearInterval(recordingTimeout);
-  recordBtn.classList.remove("recording");
+  if (recordBtn) recordBtn.classList.remove("recording");
 }
 
-
 // ▶ PREVIEW
-previewBtn.addEventListener("click", () => {
-  if (!recordedBlob) return alert("No recording yet!");
-
-  const audioURL = URL.createObjectURL(recordedBlob);
-  const audio = new Audio(audioURL);
-  audio.play();
-});
-
+if (previewBtn) {
+  previewBtn.addEventListener("click", () => {
+    if (!recordedBlob) return alert("No recording yet!");
+    const audioURL = URL.createObjectURL(recordedBlob);
+    const audio = new Audio(audioURL);
+    audio.play();
+  });
+}
 
 // ❌ DELETE
-deleteBtn.addEventListener("click", () => {
-  recordedBlob = null;
-  wave.style.width = "0%";
-  statusText.textContent = "Recording deleted";
-});
+if (deleteBtn) {
+  deleteBtn.addEventListener("click", () => {
+    recordedBlob = null;
+    if (wave) wave.style.width = "0%";
+    if (statusText) statusText.textContent = "Recording deleted";
+  });
+}
 
-// Discord send
-// 🚀 SEND TO STUDIO (Discord via Worker)
-
-const sendBtn = document.querySelector(".send");
-
-sendBtn.addEventListener("click", async () => {
-
-  if (!recordedBlob) {
-    alert("No recording to send!");
-    return;
-  }
-
-  sendBtn.disabled = true;
-  sendBtn.textContent = "Sending...";
-
-  try {
-
-    const formData = new FormData();
-    formData.append("audio", recordedBlob);
-    formData.append("country", userCountry || "Unknown");
-
-    const response = await fetch("https://discord.jayaubs89.workers.dev/", {
-      method: "POST",
-      body: formData
-    });
-
-    if (response.ok) {
-      alert("🎉 Shoutout sent to studio!");
-      recordedBlob = null;
-      wave.style.width = "0%";
-      statusText.textContent = "Tap to Record (5 seconds max)";
-    } else {
-      alert("Upload failed.");
+// 🚀 SEND TO STUDIO
+if (sendBtn) {
+  sendBtn.addEventListener("click", async () => {
+    if (!recordedBlob) {
+      alert("No recording to send!");
+      return;
     }
 
-  } catch (err) {
-    alert("Error sending shoutout.");
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending...";
+
+    try {
+      const formData = new FormData();
+      formData.append("audio", recordedBlob);
+      formData.append("country", userCountry || "Unknown");
+
+      const response = await fetch("https://discord.jayaubs89.workers.dev/", {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("🎉 Shoutout sent to studio!");
+        recordedBlob = null;
+        if (wave) wave.style.width = "0%";
+        if (statusText) statusText.textContent = "Tap to Record (5 seconds max)";
+      } else {
+        alert("Upload failed.");
+      }
+    } catch (err) {
+      alert("Error sending shoutout.");
+    }
+
+    sendBtn.disabled = false;
+    sendBtn.textContent = "🚀 Send to Studio";
+  });
+} 
+
+
+// =======================
+// MOBILE MENU
+// =======================
+
+function openMenu() {
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.add("active");
+  if (navBackdrop) navBackdrop.hidden = false;
+}
+
+function closeMenu() {
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.remove("active");
+  if (navBackdrop) navBackdrop.hidden = true;
+}
+
+const navClose = document.getElementById("navClose");
+const navBackdrop = document.getElementById("navBackdrop");
+
+if (navClose) navClose.onclick = closeMenu;
+if (navBackdrop) navBackdrop.onclick = closeMenu; 
+
+
+// =======================
+// GUESS THE TUNE
+// =======================
+
+let guessTracks = [];
+let guessRound = 0;
+
+// Use a published CSV link, not the edit URL
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTKikwIIXG6VxIRfoFYVEIr97lQmscpP8X-bQ_iqouO2jgaFseI8HMKD6L6QG67Z-Ob36fTEa50zBa-/pub?output=csv";
+
+function playGuessClip() {
+  const audio = document.getElementById("guessAudio");
+  if (!audio || !guessTracks.length) return;
+
+  audio.src = guessTracks[guessRound].clip;
+  audio.currentTime = 0;
+  audio.play();
+}
+
+function loadGuessTracks() {
+  const buttons = document.querySelectorAll(".guess-btn");
+  const result = document.getElementById("guess-result");
+  const nextRoundBtn = document.getElementById("nextRound");
+
+  if (!buttons.length || !result || !nextRoundBtn) return;
+
+  fetch(SHEET_URL)
+    .then(res => res.text())
+    .then(csv => {
+      const rows = csv.trim().split(/\r?\n/).slice(1);
+
+      guessTracks = rows.map(row => {
+        const cols = row.split(",");
+        return {
+          clip: cols[0],
+          answer: cols[1],
+          options: [cols[2], cols[3], cols[4], cols[5]]
+        };
+      });
+
+      setupOptions(buttons, result);
+    })
+    .catch(err => {
+      console.error("Guess The Tune load failed:", err);
+    });
+
+  nextRoundBtn.onclick = () => {
+    if (!guessTracks.length) return;
+    guessRound++;
+    if (guessRound >= guessTracks.length) guessRound = 0;
+    setupOptions(buttons, result);
+  };
+}
+
+function setupOptions(buttons, result) {
+  if (!guessTracks.length) return;
+
+  buttons.forEach((btn, i) => {
+    btn.textContent = guessTracks[guessRound].options[i] || "Option";
+
+    btn.onclick = () => {
+      if (btn.textContent === guessTracks[guessRound].answer) {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "#00ff9f";
+      } else {
+        result.innerHTML = "❌ Wrong! Answer: " + guessTracks[guessRound].answer;
+        result.style.color = "#ff4d6d";
+      }
+    };
+  });
+}
+
+loadGuessTracks(); 
+
+
+// =======================
+// LIVE SHOUT-OUT TICKER
+// =======================
+
+(function () {
+  const tickerText = document.getElementById("tickerText");
+  const tickerTextClone = document.getElementById("tickerTextClone");
+
+  if (!tickerText || !tickerTextClone) return;
+
+  const SHOUTOUTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRczHmCBV2ef-aaYHoKgLPuv8hLcmWwzzHW91tp3GwRDpbr0F1bdM2BVBLxDot4ojGYC3ubuNITrN1x/pub?output=csv";
+
+  function parseCSVLine(line) {
+    const result = [];
+    let current = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const next = line[i + 1];
+
+      if (char === '"' && inQuotes && next === '"') {
+        current += '"';
+        i++;
+      } else if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === "," && !inQuotes) {
+        result.push(current.trim());
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+
+    result.push(current.trim());
+    return result;
   }
 
-  sendBtn.disabled = false;
-  sendBtn.textContent = "🚀 Send to Studio";
-}); 
+  fetch(SHOUTOUTS_URL)
+    .then(function (res) {
+      return res.text();
+    })
+    .then(function (csv) {
+      const rows = csv.trim().split(/\r?\n/);
+
+      // remove header row
+      rows.shift();
+
+      const messages = rows
+        .map(function (row) {
+          const cols = parseCSVLine(row);
+
+          const name = cols[0] ? cols[0].trim() : "";
+          const message = cols[1] ? cols[1].trim() : "";
+
+          if (!name && !message) return "";
+          if (name && message) return name + " 🎉 " + message;
+          return name || message;
+        })
+        .filter(function (msg) {
+          return msg !== "";
+        });
+
+      const joined = messages.join(" • ");
+
+      tickerText.textContent = joined || "No shout-outs yet — send yours in!";
+      tickerTextClone.textContent = tickerText.textContent;
+    })
+    .catch(function (err) {
+      console.error("Shout-out ticker failed:", err);
+      tickerText.textContent = "Shout-outs unavailable right now.";
+      tickerTextClone.textContent = tickerText.textContent;
+    });
+})(); 
+
+
+
+
+
