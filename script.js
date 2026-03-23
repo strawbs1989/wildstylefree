@@ -13,6 +13,12 @@ const DAY_ORDER = [
   "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
 ];
 
+/* -------------------------
+   SCHEDULE TIME DISPLAY MODE
+   "uk" | "local" | "both"
+------------------------- */
+let SCHEDULE_TIME_MODE = "both";
+
 /* ---------- Year ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
@@ -33,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const freshBurger = document.getElementById("burger");
   const freshNav = document.getElementById("nav");
+
+  if (!freshBurger || !freshNav) return;
 
   freshBurger.setAttribute("aria-expanded", "false");
 
@@ -123,9 +131,6 @@ function slotStartEndMinutes(slot) {
   };
 }
 
-/* -------------------------
-   Render Schedule Grid
-------------------------- */
 function cleanTime(v) {
   const s = String(v || "").trim().toLowerCase();
   if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(s)) return s;
@@ -141,6 +146,124 @@ function cleanTime(v) {
   return v;
 }
 
+/* -------------------------
+   TIMEZONE DISPLAY HELPERS
+------------------------- */
+function getUserTimeZone() {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+}
+
+function parse12HourTimeTo24(timeStr) {
+  const mins = parseTime(timeStr);
+  if (mins == null) return null;
+
+  return {
+    hours: Math.floor(mins / 60),
+    minutes: mins % 60
+  };
+}
+
+function getNextDateForDay(dayName) {
+  const nowUK = getUKNow();
+  const jsDay = nowUK.getDay(); // 0=Sun
+  const todayIndex = jsDay === 0 ? 6 : jsDay - 1; // Monday=0
+  const targetIndex = DAY_ORDER.indexOf(dayName);
+
+  if (targetIndex === -1) return null;
+
+  const diff = (targetIndex - todayIndex + 7) % 7;
+  const targetDate = new Date(nowUK);
+  targetDate.setDate(nowUK.getDate() + diff);
+  return targetDate;
+}
+
+function buildUKDateForSlot(dayName, timeStr) {
+  const date = getNextDateForDay(dayName);
+  const parsed = parse12HourTimeTo24(timeStr);
+
+  if (!date || !parsed) return null;
+
+  const d = new Date(date);
+  d.setHours(parsed.hours, parsed.minutes, 0, 0);
+  return d;
+}
+
+function formatDateInTimeZone(date, timeZone) {
+  try {
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone
+    }).format(date);
+  } catch {
+    return "";
+  }
+}
+
+function getSlotDisplayTime(slot) {
+  const userTZ = getUserTimeZone();
+
+  const ukStartDate = buildUKDateForSlot(slot.day, slot.start);
+  const ukEndDate = buildUKDateForSlot(slot.day, slot.end);
+
+  if (!ukStartDate || !ukEndDate) {
+    return cleanTime(slot.start) + " - " + cleanTime(slot.end);
+  }
+
+  const ukStart = formatDateInTimeZone(ukStartDate, "Europe/London");
+  const ukEnd = formatDateInTimeZone(ukEndDate, "Europe/London");
+
+  const localStart = formatDateInTimeZone(ukStartDate, userTZ);
+  const localEnd = formatDateInTimeZone(ukEndDate, userTZ);
+
+  if (SCHEDULE_TIME_MODE === "uk") {
+    return `<span class="time-uk">${ukStart} - ${ukEnd}</span>`;
+  }
+
+  if (SCHEDULE_TIME_MODE === "local") {
+    return `<span class="time-local">${localStart} - ${localEnd}</span>`;
+  }
+
+  return `
+    <span class="time-uk"><strong>UK:</strong> ${ukStart} - ${ukEnd}</span>
+    <span class="time-local"><strong>Local:</strong> ${localStart} - ${localEnd}</span>
+  `;
+}
+
+function updateScheduleTimeNote() {
+  const note = document.getElementById("scheduleTimeNote");
+  if (!note) return;
+
+  const userTZ = getUserTimeZone();
+
+  if (SCHEDULE_TIME_MODE === "uk") {
+    note.textContent = "Schedule shown in UK station time";
+  } else if (SCHEDULE_TIME_MODE === "local") {
+    note.textContent = "Schedule shown in your local time (" + userTZ + ")";
+  } else {
+    note.textContent = "Schedule shown in UK station time and your local time (" + userTZ + ")";
+  }
+}
+
+function setScheduleTimeMode(mode) {
+  SCHEDULE_TIME_MODE = mode;
+  updateScheduleTimeNote();
+
+  if (window.ALL_SLOTS) {
+    renderSchedule(window.ALL_SLOTS);
+  }
+}
+window.setScheduleTimeMode = setScheduleTimeMode;
+
+/* -------------------------
+   Render Schedule Grid
+------------------------- */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
@@ -171,7 +294,7 @@ function renderSchedule(slots) {
         days[day].length
           ? days[day].map(s => `
               <div class="slot">
-                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div>
+                <div class="time">${getSlotDisplayTime({ day, start: s.start, end: s.end, dj: s.dj })}</div>
                 <div class="show">${s.dj}</div>
               </div>
             `).join("")
@@ -187,9 +310,8 @@ function renderSchedule(slots) {
 }
 
 /* -------------------------
-   NOW ON + UP NEXT (FINAL FIXED)
+   NOW ON + UP NEXT (UK-BASED)
 ------------------------- */
-
 function getNowMinutes() {
   const now = getUKNow();
   return {
@@ -226,7 +348,7 @@ function findUpNextSlot(slots) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
     for (const s of slots.filter(x => x.day === day)) {
-      if (s.dj.toLowerCase() === "free") continue;
+      if ((s.dj || "").toLowerCase() === "free") continue;
 
       const r = slotStartEndMinutes(s);
       if (!r) continue;
@@ -269,6 +391,7 @@ async function initSchedule() {
   window.ALL_SLOTS = slots;
 
   renderSchedule(slots);
+  updateScheduleTimeNote();
   updateNowNext();
 
   setInterval(updateNowNext, 60000);
@@ -301,20 +424,20 @@ function updateNowNext() {
 ------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   initSchedule();
-}); 
+});
 
 /* -------------------------
    NOW PLAYING UI UPDATE
 ------------------------- */
-
 function updateNowPlayingUI(track) {
   const artEl = document.getElementById("np-art");
   const titleEl = document.getElementById("np-title");
   const artistEl = document.getElementById("np-artist");
   const liveEl = document.getElementById("live-pill");
 
+  if (!artEl || !titleEl || !artistEl || !liveEl) return;
+
   if (!track) {
-    // No track playing
     titleEl.textContent = "Loading track…";
     artistEl.textContent = "Please wait";
     artEl.src = "./assets/cover_placeholder.png";
@@ -323,12 +446,10 @@ function updateNowPlayingUI(track) {
     return;
   }
 
-  // Update UI
   titleEl.textContent = track.title || "Unknown Track";
   artistEl.textContent = track.artist || "Unknown Artist";
   artEl.src = track.art || "./assets/cover_placeholder.png";
 
-  // Live pill
   if (track.isLive) {
     liveEl.textContent = "LIVE";
     liveEl.classList.add("live");
@@ -336,13 +457,11 @@ function updateNowPlayingUI(track) {
     liveEl.textContent = "OFF AIR";
     liveEl.classList.remove("live");
   }
-} 
+}
 
 /* -------------------------
    Report Listener Country
 ------------------------- */
-
-// REPORT WEBSITE LISTENER COUNTRY
 async function reportListener() {
   try {
     const geo = await fetch("https://ipapi.co/json/");
@@ -359,10 +478,9 @@ async function reportListener() {
   }
 }
 
-/*--------
-SHOUT
-----------*/
-
+/* -------------------------
+   SHOUT
+------------------------- */
 const recordBtn = document.getElementById("recordBtn");
 const statusText = document.getElementById("status");
 const wave = document.getElementById("wave");
@@ -499,6 +617,7 @@ if (sendBtn) {
       } else {
         alert("Upload failed.");
       }
+
     } catch (err) {
       alert("Error sending shoutout.");
     }
@@ -506,13 +625,11 @@ if (sendBtn) {
     sendBtn.disabled = false;
     sendBtn.textContent = "🚀 Send to Studio";
   });
-} 
+}
 
-
-// =======================
-// MOBILE MENU
-// =======================
-
+/* -------------------------
+   MOBILE MENU
+------------------------- */
 function openMenu() {
   const mobileNav = document.getElementById("mobileNav");
   const navBackdrop = document.getElementById("navBackdrop");
@@ -531,17 +648,14 @@ const navClose = document.getElementById("navClose");
 const navBackdrop = document.getElementById("navBackdrop");
 
 if (navClose) navClose.onclick = closeMenu;
-if (navBackdrop) navBackdrop.onclick = closeMenu; 
+if (navBackdrop) navBackdrop.onclick = closeMenu;
 
-
-// =======================
-// GUESS THE TUNE
-// =======================
-
+/* -------------------------
+   GUESS THE TUNE
+------------------------- */
 let guessTracks = [];
 let guessRound = 0;
 
-// Use a published CSV link, not the edit URL
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTKikwIIXG6VxIRfoFYVEIr97lQmscpP8X-bQ_iqouO2jgaFseI8HMKD6L6QG67Z-Ob36fTEa50zBa-/pub?output=csv";
 
 function playGuessClip() {
@@ -606,13 +720,11 @@ function setupOptions(buttons, result) {
   });
 }
 
-loadGuessTracks(); 
+loadGuessTracks();
 
-
-// =======================
-// LIVE SHOUT-OUT TICKER
-// =======================
-
+/* -------------------------
+   LIVE SHOUT-OUT TICKER
+------------------------- */
 (function () {
   const tickerText = document.getElementById("tickerText");
   const tickerTextClone = document.getElementById("tickerTextClone");
@@ -653,8 +765,6 @@ loadGuessTracks();
     })
     .then(function (csv) {
       const rows = csv.trim().split(/\r?\n/);
-
-      // remove header row
       rows.shift();
 
       const messages = rows
@@ -683,8 +793,3 @@ loadGuessTracks();
       tickerTextClone.textContent = tickerText.textContent;
     });
 })(); 
-
-
-
-
-
