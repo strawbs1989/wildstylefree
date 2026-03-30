@@ -369,37 +369,52 @@ function findUpNextSlot(slots) {
 /* -------------------------
    FETCH + INIT
 ------------------------- */
-function getUKNow() {
-  return new Date(new Date().toLocaleString("en-GB", {
-    timeZone: "Europe/London"
-  }));
+async function loadSchedule() {
+  try {
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
+    const data = await res.json();
+    return data.slots || [];
+  } catch (e) {
+    console.error("Schedule load error:", e);
+    return [];
+  }
 }
 
-function getTimeString(date) {
-  return date.toTimeString().slice(0, 5); // HH:MM
+async function initSchedule() {
+  const slots = (await loadSchedule()).map(s => ({
+    day: normDay(s.day),
+    start: s.start,
+    end: s.end,
+    dj: s.dj || "Free"
+  }));
+
+  window.ALL_SLOTS = slots;
+
+  renderSchedule(slots);
+  updateScheduleTimeNote();
+  updateNowNext();
+
+  setInterval(updateNowNext, 60000);
 }
 
 function updateNowNext() {
   if (!window.ALL_SLOTS) return;
 
-  const nowDate = getUKNow();
-  const nowTime = getTimeString(nowDate);
-
-  const now = findCurrentSlot(window.ALL_SLOTS, nowTime);
-  const next = findUpNextSlot(window.ALL_SLOTS, nowTime);
+  const now = findCurrentSlot(window.ALL_SLOTS);
+  const next = findUpNextSlot(window.ALL_SLOTS);
 
   const nowEl = document.getElementById("nowon");
   const nextEl = document.getElementById("upnext");
 
   if (nowEl) {
     nowEl.innerHTML = now
-      ? `${now.dj} <span>${now.start}-${now.end}</span>`
+      ? `${now.dj} <span>${now.start}–${now.end}</span>`
       : "Off Air";
   }
 
   if (nextEl) {
     nextEl.innerHTML = next
-      ? `${next.dj} <span>${next.start}-${next.end}</span>`
+      ? `${next.dj} <span>${next.start}–${next.end}</span>`
       : "No upcoming shows";
   }
 }
