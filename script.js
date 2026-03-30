@@ -82,18 +82,12 @@ document.addEventListener("DOMContentLoaded", () => {
    UK Time (BST aware)
 ------------------------- */
 function getUKNow() {
-  const now = new Date();
-  const y = now.getUTCFullYear();
-
-  const bstStart = new Date(Date.UTC(y, 2, 31));
-  bstStart.setUTCDate(31 - bstStart.getUTCDay());
-
-  const bstEnd = new Date(Date.UTC(y, 9, 31));
-  bstEnd.setUTCDate(31 - bstEnd.getUTCDay());
-
-  const inBST = now >= bstStart && now < bstEnd;
-  return new Date(now.getTime() + (inBST ? 3600000 : 0));
-}
+  return new Date(
+    new Date().toLocaleString("en-GB", {
+      timeZone: "Europe/London"
+    })
+  );
+} 
 
 /* -------------------------
    Helpers
