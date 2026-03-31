@@ -170,26 +170,113 @@ function buildLondonSlotDate(dayName, timeStr) {
   const parsed = parse12HourTimeTo24(timeStr);
   if (!parsed) return null;
 
-  const now = new Date();
-
-  // Get current date in UK timezone
-  const londonNow = new Date(
-    now.toLocaleString("en-US", { timeZone: "Europe/London" })
-  );
-
-  const todayIndex = londonNow.getDay(); // 0 = Sunday
+  const londonNow = getUKNow();
+  const todayIndex = DAY_ORDER.indexOf(londonNow.weekday);
   const targetIndex = DAY_ORDER.indexOf(dayName);
 
   if (targetIndex === -1) return null;
 
   const dayOffset = (targetIndex - todayIndex + 7) % 7;
 
-  const result = new Date(londonNow);
-  result.setDate(londonNow.getDate() + dayOffset);
-  result.setHours(parsed.hours, parsed.minutes, 0, 0);
+  const utcGuess = new Date(Date.UTC(
+    londonNow.year,
+    londonNow.month - 1,
+    londonNow.day,
+    parsed.hours,
+    parsed.minutes,
+    0,
+    0
+  ));
 
-  return result; 
+  utcGuess.setUTCDate(utcGuess.getUTCDate() + dayOffset);
+  return utcGuess;
+}
 
+function formatInTimeZone(date, timeZone, showWeekday = true) {
+  try {
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: showWeekday ? "short" : undefined,
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone
+    }).format(date);
+  } catch {
+    return "";
+  }
+}
+
+function getSlotDisplayTime(slot) {
+  const userTZ = getUserTimeZone();
+  const usEastTZ = "America/New_York";
+
+  const ukStartDate = buildLondonSlotDate(slot.day, slot.start);
+  const ukEndDate = buildLondonSlotDate(slot.day, slot.end);
+
+  if (!ukStartDate || !ukEndDate) {
+    return `${cleanTime(slot.start)} - ${cleanTime(slot.end)}`;
+  }
+
+  const ukStart = formatInTimeZone(ukStartDate, "Europe/London");
+  const ukEnd = formatInTimeZone(ukEndDate, "Europe/London");
+
+  const localStart = formatInTimeZone(ukStartDate, userTZ);
+  const localEnd = formatInTimeZone(ukEndDate, userTZ);
+
+  const usStart = formatInTimeZone(ukStartDate, usEastTZ);
+  const usEnd = formatInTimeZone(ukEndDate, usEastTZ);
+
+  if (SCHEDULE_TIME_MODE === "uk") {
+    return `<span class="time-uk">${ukStart} - ${ukEnd}</span>`;
+  }
+
+  if (SCHEDULE_TIME_MODE === "local") {
+    return `<span class="time-local">${localStart} - ${localEnd}</span>`;
+  }
+
+  return `
+    <span class="time-uk"><strong>UK:</strong> ${ukStart} - ${ukEnd}</span>
+    <span class="time-local"><strong>Local:</strong> ${localStart} - ${localEnd}</span>
+    <span class="time-us"><strong>USA East:</strong> ${usStart} - ${usEnd}</span>
+  `;
+}
+
+function getSlotDisplayTimeSafe(slot) {
+  try {
+    const result = getSlotDisplayTime(slot);
+    return result && String(result).trim()
+      ? result
+      : `${cleanTime(slot.start)} - ${cleanTime(slot.end)}`;
+  } catch {
+    return `${cleanTime(slot.start)} - ${cleanTime(slot.end)}`;
+  }
+}
+
+function updateScheduleTimeNote() {
+  const note = document.getElementById("scheduleTimeNote");
+  if (!note) return;
+
+  const userTZ = getUserTimeZone();
+
+  if (SCHEDULE_TIME_MODE === "uk") {
+    note.textContent = "Schedule shown in UK station time";
+  } else if (SCHEDULE_TIME_MODE === "local") {
+    note.textContent = `Schedule shown in your local time (${userTZ})`;
+  } else {
+    note.textContent = `Schedule shown in UK, your local time (${userTZ}), and USA East`;
+  }
+}
+
+function setScheduleTimeMode(mode) {
+  SCHEDULE_TIME_MODE = mode;
+  updateScheduleTimeNote();
+
+  if (window.ALL_SLOTS) {
+    renderSchedule(window.ALL_SLOTS);
+  }
+}
+
+window.setScheduleTimeMode = setScheduleTimeMode;
 
 /* -------------------------
    RENDER SCHEDULE GRID
