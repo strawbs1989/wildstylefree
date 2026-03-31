@@ -1749,10 +1749,11 @@ DJS PAGE FIX
 Time Uk
 ========================= */
   
-  .time-uk,
-.time-local{
+ .time-uk,
+.time-local,
+.time-us{
   display:block;
-  line-height:1.4;
+  line-height:1.45;
 }
 
 .schedule-time-note{
@@ -1778,5 +1779,6 @@ Time Uk
   font-weight:700;
   cursor:pointer;
 } 
+
 
 
