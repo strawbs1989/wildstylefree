@@ -1,5 +1,6 @@
 /* =========================
-   Wildstyle - script.js (FIXED)
+   Wildstyle - script.js
+   Schedule Grid + Now On + Up Next + Burger Menu
    ========================= */
 
 /* -------------------------
@@ -9,71 +10,93 @@ const SCHEDULE_URL =
   "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 const DAY_ORDER = [
-  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
 ];
 
-let SCHEDULE_TIME_MODE = "triple"; // "uk" | "local" | "triple"
-
 /* -------------------------
-   YEAR
+   SCHEDULE TIME DISPLAY MODE
+   "uk" | "local" | "both"
 ------------------------- */
+let SCHEDULE_TIME_MODE = "both";
+
+/* ---------- Year ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
-/* -------------------------
-   MOBILE MENU
-------------------------- */
-function openMenu() {
-  document.getElementById("mobileNav")?.classList.add("active");
-  document.getElementById("navBackdrop").hidden = false;
-}
+/* ===============================
+   BURGER MENU FIX
+   =============================== */
+(function () {
+  const burger = document.getElementById("burger");
+  const nav = document.getElementById("nav");
 
-function closeMenu() {
-  document.getElementById("mobileNav")?.classList.remove("active");
-  document.getElementById("navBackdrop").hidden = true;
-}
+  if (!burger || !nav) return;
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("navClose")?.addEventListener("click", closeMenu);
-  document.getElementById("navBackdrop")?.addEventListener("click", closeMenu);
-});
+  burger.replaceWith(burger.cloneNode(true));
+  nav.replaceWith(nav.cloneNode(true));
 
-/* -------------------------
-   UK TIME HELPERS
-------------------------- */
-function getLondonParts(date = new Date()) {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Europe/London",
-    weekday: "long",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: false
-  }).formatToParts(date);
+  const freshBurger = document.getElementById("burger");
+  const freshNav = document.getElementById("nav");
 
-  const out = {};
-  parts.forEach(p => {
-    if (p.type !== "literal") out[p.type] = p.value;
+  if (!freshBurger || !freshNav) return;
+
+  freshBurger.setAttribute("aria-expanded", "false");
+
+  freshBurger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const isOpen = freshNav.classList.contains("open");
+    freshNav.classList.toggle("open", !isOpen);
+    freshBurger.setAttribute("aria-expanded", String(!isOpen));
   });
 
-  return {
-    weekday: out.weekday,
-    hour: Number(out.hour),
-    minute: Number(out.minute)
-  };
-}
+  freshNav.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
 
-function getNowMinutes() {
-  const now = getLondonParts();
-  return {
-    dayNum: DAY_ORDER.indexOf(now.weekday) + 1,
-    mins: now.hour * 60 + now.minute
-  };
+  document.addEventListener("click", function (e) {
+    if (
+      freshNav.classList.contains("open") &&
+      !e.target.closest("#nav") &&
+      !e.target.closest("#burger")
+    ) {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+})();
+
+/* -------------------------
+   UK Time (BST aware)
+------------------------- */
+function getUKNow() {
+  const now = new Date();
+  const y = now.getUTCFullYear();
+
+  const bstStart = new Date(Date.UTC(y, 2, 31));
+  bstStart.setUTCDate(31 - bstStart.getUTCDay());
+
+  const bstEnd = new Date(Date.UTC(y, 9, 31));
+  bstEnd.setUTCDate(31 - bstEnd.getUTCDay());
+
+  const inBST = now >= bstStart && now < bstEnd;
+  return new Date(now.getTime() + (inBST ? 3600000 : 0));
 }
 
 /* -------------------------
-   HELPERS
+   Helpers
 ------------------------- */
 function normDay(d) {
   const s = String(d || "").trim().toLowerCase();
@@ -82,14 +105,16 @@ function normDay(d) {
 }
 
 function parseTime(t) {
-  const m = String(t).toLowerCase().match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
+  t = String(t || "").trim().toLowerCase();
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
   if (!m) return null;
 
-  let h = +m[1];
-  const mins = +(m[2] || 0);
+  let h = parseInt(m[1], 10);
+  const mins = parseInt(m[2] || "0", 10);
+  const ampm = m[3];
 
-  if (m[3] === "pm" && h !== 12) h += 12;
-  if (m[3] === "am" && h === 12) h = 0;
+  if (ampm === "pm" && h !== 12) h += 12;
+  if (ampm === "am" && h === 12) h = 0;
 
   return h * 60 + mins;
 }
@@ -106,11 +131,30 @@ function slotStartEndMinutes(slot) {
   };
 }
 
+function cleanTime(v) {
+  const s = String(v || "").trim().toLowerCase();
+  if (/^\d{1,2}(:\d{2})?(am|pm)$/.test(s)) return s;
+
+  const d = new Date(v);
+  if (!isNaN(d)) {
+    let h = d.getHours();
+    const ampm = h >= 12 ? "pm" : "am";
+    h = h % 12 || 12;
+    const m = d.getMinutes();
+    return m ? `${h}:${String(m).padStart(2,"0")}${ampm}` : `${h}${ampm}`;
+  }
+  return v;
+}
+
 /* -------------------------
-   TIMEZONE DISPLAY
+   TIMEZONE DISPLAY HELPERS
 ------------------------- */
 function getUserTimeZone() {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
 }
 
 function parse12HourTimeTo24(timeStr) {
@@ -123,64 +167,102 @@ function parse12HourTimeTo24(timeStr) {
   };
 }
 
-/* ✅ FIXED FUNCTION */
-function buildLondonSlotDate(dayName, timeStr) {
-  const parsed = parse12HourTimeTo24(timeStr);
-  if (!parsed) return null;
-
-  const now = new Date();
-  const londonNow = new Date(
-    now.toLocaleString("en-US", { timeZone: "Europe/London" })
-  );
-
-  const todayIndex = londonNow.getDay();
+function getNextDateForDay(dayName) {
+  const nowUK = getUKNow();
+  const jsDay = nowUK.getDay(); // 0=Sun
+  const todayIndex = jsDay === 0 ? 6 : jsDay - 1; // Monday=0
   const targetIndex = DAY_ORDER.indexOf(dayName);
 
   if (targetIndex === -1) return null;
 
-  const dayOffset = (targetIndex - todayIndex + 7) % 7;
-
-  const base = new Date(londonNow);
-  base.setDate(londonNow.getDate() + dayOffset);
-
-  const utc = Date.UTC(
-    base.getFullYear(),
-    base.getMonth(),
-    base.getDate(),
-    parsed.hours,
-    parsed.minutes
-  );
-
-  return new Date(utc);
+  const diff = (targetIndex - todayIndex + 7) % 7;
+  const targetDate = new Date(nowUK);
+  targetDate.setDate(nowUK.getDate() + diff);
+  return targetDate;
 }
 
-/* ✅ NEW FUNCTION */
-function getSlotDisplayTimeSafe(slot) {
+function buildUKDateForSlot(dayName, timeStr) {
+  const date = getNextDateForDay(dayName);
+  const parsed = parse12HourTimeTo24(timeStr);
+
+  if (!date || !parsed) return null;
+
+  const d = new Date(date);
+  d.setHours(parsed.hours, parsed.minutes, 0, 0);
+  return d;
+}
+
+function formatDateInTimeZone(date, timeZone) {
+  try {
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone
+    }).format(date);
+  } catch {
+    return "";
+  }
+}
+
+function getSlotDisplayTime(slot) {
+  const userTZ = getUserTimeZone();
+
+  const ukStartDate = buildUKDateForSlot(slot.day, slot.start);
+  const ukEndDate = buildUKDateForSlot(slot.day, slot.end);
+
+  if (!ukStartDate || !ukEndDate) {
+    return cleanTime(slot.start) + " - " + cleanTime(slot.end);
+  }
+
+  const ukStart = formatDateInTimeZone(ukStartDate, "Europe/London");
+  const ukEnd = formatDateInTimeZone(ukEndDate, "Europe/London");
+
+  const localStart = formatDateInTimeZone(ukStartDate, userTZ);
+  const localEnd = formatDateInTimeZone(ukEndDate, userTZ);
+
   if (SCHEDULE_TIME_MODE === "uk") {
-    return `${slot.start}–${slot.end}`;
+    return `<span class="time-uk">${ukStart} - ${ukEnd}</span>`;
   }
-
-  const startDate = buildLondonSlotDate(slot.day, slot.start);
-  const endDate = buildLondonSlotDate(slot.day, slot.end);
-
-  if (!startDate || !endDate) {
-    return `${slot.start}–${slot.end}`;
-  }
-
-  const opts = { hour: "2-digit", minute: "2-digit" };
-
-  const localStart = startDate.toLocaleTimeString([], opts);
-  const localEnd = endDate.toLocaleTimeString([], opts);
 
   if (SCHEDULE_TIME_MODE === "local") {
-    return `${localStart}–${localEnd}`;
+    return `<span class="time-local">${localStart} - ${localEnd}</span>`;
   }
 
-  return `${slot.start}–${slot.end} (Local: ${localStart}–${localEnd})`;
+  return `
+    <span class="time-uk"><strong>UK:</strong> ${ukStart} - ${ukEnd}</span>
+    <span class="time-local"><strong>Local:</strong> ${localStart} - ${localEnd}</span>
+  `;
 }
 
+function updateScheduleTimeNote() {
+  const note = document.getElementById("scheduleTimeNote");
+  if (!note) return;
+
+  const userTZ = getUserTimeZone();
+
+  if (SCHEDULE_TIME_MODE === "uk") {
+    note.textContent = "Schedule shown in UK station time";
+  } else if (SCHEDULE_TIME_MODE === "local") {
+    note.textContent = "Schedule shown in your local time (" + userTZ + ")";
+  } else {
+    note.textContent = "Schedule shown in UK station time and your local time (" + userTZ + ")";
+  }
+}
+
+function setScheduleTimeMode(mode) {
+  SCHEDULE_TIME_MODE = mode;
+  updateScheduleTimeNote();
+
+  if (window.ALL_SLOTS) {
+    renderSchedule(window.ALL_SLOTS);
+  }
+}
+window.setScheduleTimeMode = setScheduleTimeMode;
+
 /* -------------------------
-   RENDER
+   Render Schedule Grid
 ------------------------- */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
@@ -192,17 +274,40 @@ function renderSchedule(slots) {
   slots.forEach(s => {
     const day = normDay(s.day);
     if (!day) return;
-
-    days[day].push(s);
+    days[day].push({
+      start: s.start,
+      end: s.end,
+      dj: s.dj || "Free"
+    });
   });
 
   DAY_ORDER.forEach(d => {
-    days[d].sort((a, b) => parseTime(a.start) - parseTime(b.start));
+    days[d].sort((a, b) =>
+      (parseTime(a.start) ?? 9999) - (parseTime(b.start) ?? 9999)
+    );
   });
 
   grid.innerHTML = DAY_ORDER.map(day => `
-    <div class="schedule- 
-
+    <div class="schedule-day glass">
+      <h3>${day}</h3>
+      ${
+        days[day].length
+          ? days[day].map(s => `
+              <div class="slot">
+                <div class="time">${getSlotDisplayTime({ day, start: s.start, end: s.end, dj: s.dj })}</div>
+                <div class="show">${s.dj}</div>
+              </div>
+            `).join("")
+          : `
+              <div class="slot">
+                <div class="time">—</div>
+                <div class="show">Free</div>
+              </div>
+            `
+      }
+    </div>
+  `).join("");
+}
 
 /* -------------------------
    NOW ON + UP NEXT (UK-BASED)
