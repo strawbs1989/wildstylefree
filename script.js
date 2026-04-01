@@ -79,24 +79,40 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 
 /* -------------------------
-   UK Time (BST aware)
+   UK TIME
+   Proper UK time without manual BST edits
 ------------------------- */
-function getUKNow() {
-  const now = new Date();
-  const y = now.getUTCFullYear();
+function getUKParts() {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    weekday: "long",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false
+  }).formatToParts(new Date());
 
-  const bstStart = new Date(Date.UTC(y, 2, 31));
-  bstStart.setUTCDate(31 - bstStart.getUTCDay());
+  const out = {};
+  for (const part of parts) {
+    if (part.type !== "literal") out[part.type] = part.value;
+  }
 
-  const bstEnd = new Date(Date.UTC(y, 9, 31));
-  bstEnd.setUTCDate(31 - bstEnd.getUTCDay());
+  return {
+    weekday: out.weekday,
+    hour: Number(out.hour),
+    minute: Number(out.minute)
+  };
+}
 
-  const inBST = now >= bstStart && now < bstEnd;
-  return new Date(now.getTime() + (inBST ? 3600000 : 0));
+function getNowMinutes() {
+  const now = getUKParts();
+  return {
+    dayNum: DAY_ORDER.indexOf(now.weekday) + 1,
+    mins: now.hour * 60 + now.minute
+  };
 }
 
 /* -------------------------
-   Helpers
+   HELPERS
 ------------------------- */
 function normDay(d) {
   const s = String(d || "").trim().toLowerCase();
@@ -143,7 +159,7 @@ function cleanTime(v) {
     const m = d.getMinutes();
     return m ? `${h}:${String(m).padStart(2,"0")}${ampm}` : `${h}${ampm}`;
   }
-  return v;
+  return String(v || "");
 }
 
 /* -------------------------
@@ -262,7 +278,8 @@ function setScheduleTimeMode(mode) {
 window.setScheduleTimeMode = setScheduleTimeMode;
 
 /* -------------------------
-   Render Schedule Grid
+   RENDER SCHEDULE GRID
+   Keep schedule in UK time only
 ------------------------- */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
@@ -294,7 +311,7 @@ function renderSchedule(slots) {
         days[day].length
           ? days[day].map(s => `
               <div class="slot">
-                <div class="time">${getSlotDisplayTime({ day, start: s.start, end: s.end, dj: s.dj })}</div>
+                <div class="time">${cleanTime(s.start)} - ${cleanTime(s.end)}</div>
                 <div class="show">${s.dj}</div>
               </div>
             `).join("")
@@ -310,16 +327,9 @@ function renderSchedule(slots) {
 }
 
 /* -------------------------
-   NOW ON + UP NEXT (UK-BASED)
+   NOW ON + UP NEXT
+   Based on UK station time
 ------------------------- */
-function getNowMinutes() {
-  const now = getUKNow();
-  return {
-    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
-    mins: now.getHours() * 60 + now.getMinutes()
-  };
-}
-
 function findCurrentSlot(slots) {
   const { dayNum, mins } = getNowMinutes();
   const today = DAY_ORDER[dayNum - 1];
@@ -371,9 +381,15 @@ function findUpNextSlot(slots) {
 ------------------------- */
 async function loadSchedule() {
   try {
-    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
-    return data.slots || [];
+
+    // supports either {slots:[...]} or plain [...]
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.slots)) return data.slots;
+
+    console.error("Unexpected schedule response:", data);
+    return [];
   } catch (e) {
     console.error("Schedule load error:", e);
     return [];
@@ -381,17 +397,18 @@ async function loadSchedule() {
 }
 
 async function initSchedule() {
-  const slots = (await loadSchedule()).map(s => ({
+  const rawSlots = await loadSchedule();
+
+  const slots = rawSlots.map(s => ({
     day: normDay(s.day),
     start: s.start,
     end: s.end,
     dj: s.dj || "Free"
-  }));
+  })).filter(s => s.day && s.start && s.end);
 
   window.ALL_SLOTS = slots;
 
   renderSchedule(slots);
-  updateScheduleTimeNote();
   updateNowNext();
 
   setInterval(updateNowNext, 60000);
@@ -408,16 +425,21 @@ function updateNowNext() {
 
   if (nowEl) {
     nowEl.innerHTML = now
-      ? `${now.dj} <span>${now.start}–${now.end}</span>`
+      ? `${now.dj} <span>${cleanTime(now.start)}–${cleanTime(now.end)}</span>`
       : "Off Air";
   }
 
   if (nextEl) {
     nextEl.innerHTML = next
-      ? `${next.dj} <span>${next.start}–${next.end}</span>`
+      ? `${next.dj} <span>${cleanTime(next.start)}–${cleanTime(next.end)}</span>`
       : "No upcoming shows";
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSchedule();
+});
+
 
 /* -------------------------
    START
