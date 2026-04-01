@@ -4,56 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body{
-      margin:0;
-      font-family:Inter, sans-serif;
-      background:transparent;
-      color:white;
-    }
+body{
+  margin:0;
+  font-family:Inter, sans-serif;
+  background:transparent;
+  color:white;
+}
 
-    .request-embed{
-      padding:15px;
-    }
+.request-form-portal{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
 
-    .request-form{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+.request-form-portal input{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  background:rgba(255,255,255,.08);
+  color:white;
+}
 
-    .request-form input{
-      padding:10px;
-      border-radius:10px;
-      border:none;
-      background:rgba(255,255,255,.08);
-      color:white;
-    }
+.request-submit-btn{
+  grid-column:1 / -1;
+  padding:14px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#ff2a6d,#7c3aed);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .request-form input::placeholder{
-      color:#aaa;
-    }
+@media(max-width:600px){
+  .request-form-portal{
+    grid-template-columns:1fr;
+  }
+}
+</style> 
 
-    .send-btn{
-      padding:12px;
-      border:none;
-      border-radius:999px;
-      background:linear-gradient(135deg,#ff2a6d,#7c3aed);
-      color:white;
-      font-weight:bold;
-      cursor:pointer;
-    }
-
-    .closed-box{
-      text-align:center;
-      padding:20px;
-      border-radius:16px;
-      background:linear-gradient(180deg,#17131f,#0f0d14);
-      border:1px solid rgba(255,255,255,.12);
-      color:#fff;
-      font-weight:700;
-      line-height:1.6;
-    }
-  </style>
 </head>
 <body>
   <div class="request-embed">
@@ -63,7 +53,7 @@
             <input type="text" name="artistname" placeholder="Artist Name" required>
             <input type="text" name="shoutout" placeholder="Dedication / Shout-out">
 
-            <button type="submit" class="request-submit-btn">Send Request</button>
+            <button type="submit" class="request-submit-btn">Send Request</button> 
           </form>
   </div>
 
