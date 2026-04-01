@@ -4,71 +4,118 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-body{
-  margin:0;
-  font-family:Inter, sans-serif;
-  background:transparent;
-  color:white;
-}
+    body{
+      margin:0;
+      font-family:Inter,sans-serif;
+      background:transparent;
+      color:#fff;
+    }
 
-.request-form-portal{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
+    .request-embed{
+      padding:15px;
+    }
 
-.request-form-portal input{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-  background:rgba(255,255,255,.08);
-  color:white;
-}
+    .request-form-portal{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
 
-.request-submit-btn{
-  grid-column:1 / -1;
-  padding:14px;
-  border:none;
-  border-radius:999px;
-  background:linear-gradient(135deg,#ff2a6d,#7c3aed);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
+    .request-form-portal input{
+      width:100%;
+      padding:14px 16px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      font-size:0.95rem;
+      outline:none;
+      box-sizing:border-box;
+    }
 
-@media(max-width:600px){
-  .request-form-portal{
-    grid-template-columns:1fr;
-  }
-}
-</style> 
+    .request-form-portal input::placeholder{
+      color:#cfcfcf;
+    }
 
+    .request-form-portal input:focus{
+      border-color:rgba(255,255,255,.28);
+      background:rgba(255,255,255,.11);
+    }
+
+    .request-submit-btn{
+      grid-column:1 / -1;
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:999px;
+      background:linear-gradient(135deg,#ff2a6d,#7c3aed);
+      color:#fff;
+      font-weight:800;
+      font-size:1rem;
+      cursor:pointer;
+      transition:transform .18s ease, opacity .18s ease;
+    }
+
+    .request-submit-btn:active{
+      transform:scale(.98);
+    }
+
+    .request-submit-btn:disabled{
+      opacity:.7;
+      cursor:not-allowed;
+    }
+
+    .request-status{
+      grid-column:1 / -1;
+      min-height:24px;
+      font-size:.92rem;
+      font-weight:700;
+      text-align:center;
+      color:#fff;
+    }
+
+    .closed-box{
+      text-align:center;
+      padding:20px;
+      border-radius:16px;
+      background:linear-gradient(180deg,#17131f,#0f0d14);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;
+      font-weight:700;
+      line-height:1.6;
+    }
+
+    @media(max-width:600px){
+      .request-form-portal{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="request-embed">
-    <form action="https://script.google.com/macros/s/AKfycbx9eVZV1AvgrPfFMDoVNr_tQN2vdSFcXQnkx4cIaqnGdGk69wKLfDMfnC64hL0ohQ/exec" method="post" class="request-form-portal">
-            <input type="text" name="yourname" placeholder="Your Name" required>
-            <input type="text" name="songtitle" placeholder="Song Title" required>
-            <input type="text" name="artistname" placeholder="Artist Name" required>
-            <input type="text" name="shoutout" placeholder="Dedication / Shout-out">
-
-            <button type="submit" class="request-submit-btn">Send Request</button> 
-          </form>
+    <form id="requestForm" class="request-form-portal">
+      <input type="text" name="yourname" placeholder="Your Name" required>
+      <input type="text" name="songtitle" placeholder="Song Title" required>
+      <input type="text" name="artistname" placeholder="Artist Name" required>
+      <input type="text" name="shoutout" placeholder="Shout-out (optional)">
+      <button type="submit" class="request-submit-btn" id="requestSubmitBtn">Send Request</button>
+      <div class="request-status" id="requestStatus"></div>
+    </form>
   </div>
 
   <script>
+    const REQUEST_POST_URL = "https://script.google.com/macros/s/AKfycbz4TY_tQZEsJflfzeKB8ALDR7aEDNVe6jjQhoGO-d8Rqv0Nr_yiIa2peKbC2-oaBZE/exec";
     const STATUS_URL = "https://script.google.com/macros/s/AKfycbz4TY_tQZEsJflfzeKB8ALDR7aEDNVe6jjQhoGO-d8Rqv0Nr_yiIa2peKbC2-oaBZE/exec";
 
     async function checkRequestStatus() {
-      const form = document.querySelector(".request-form");
+      const form = document.getElementById("requestForm");
       if (!form) return;
 
       try {
         const res = await fetch(STATUS_URL);
         const data = await res.json();
-
-        console.log("Request status:", data);
 
         if (!data.requests || String(data.requests).trim().toUpperCase() !== "ON") {
           form.outerHTML = `
@@ -83,7 +130,53 @@ body{
       }
     }
 
+    async function setupRequestForm() {
+      const form = document.getElementById("requestForm");
+      const status = document.getElementById("requestStatus");
+      const submitBtn = document.getElementById("requestSubmitBtn");
+
+      if (!form || !status || !submitBtn) return;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        status.textContent = "";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+
+        try {
+          const formData = new FormData(form);
+
+          const response = await fetch(REQUEST_POST_URL, {
+            method: "POST",
+            body: formData
+          });
+
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+
+          status.textContent = "✅ Request sent!";
+          status.style.color = "#7dffb2";
+          form.reset();
+
+          setTimeout(() => {
+            status.textContent = "";
+          }, 2500);
+
+        } catch (err) {
+          console.log("Request submit failed:", err);
+          status.textContent = "❌ Could not send request";
+          status.style.color = "#ff8aa8";
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send Request";
+      });
+    }
+
     checkRequestStatus();
+    setupRequestForm();
   </script>
 </body>
 </html> 
