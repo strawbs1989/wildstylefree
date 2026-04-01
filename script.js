@@ -1,6 +1,5 @@
 /* =========================
    Wildstyle - script.js
-   Schedule Grid + Now On + Up Next + Burger Menu
    ========================= */
 
 /* -------------------------
@@ -10,93 +9,92 @@ const SCHEDULE_URL =
   "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 const DAY_ORDER = [
-  "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ];
 
-/* -------------------------
-   SCHEDULE TIME DISPLAY MODE
-   "uk" | "local" | "both"
-------------------------- */
-let SCHEDULE_TIME_MODE = "both";
+let SCHEDULE_TIME_MODE = "both"; // "uk" | "local" | "both"
 
-/* ---------- Year ---------- */
+/* -------------------------
+   YEAR
+------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
-/* ===============================
-   BURGER MENU FIX
-   =============================== */
-(function () {
-  const burger = document.getElementById("burger");
-  const nav = document.getElementById("nav");
+/* -------------------------
+   MOBILE MENU
+------------------------- */
+function openMenu() {
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.add("active");
+  if (navBackdrop) navBackdrop.hidden = false;
+}
 
-  if (!burger || !nav) return;
+function closeMenu() {
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.remove("active");
+  if (navBackdrop) navBackdrop.hidden = true;
+}
 
-  burger.replaceWith(burger.cloneNode(true));
-  nav.replaceWith(nav.cloneNode(true));
+document.addEventListener("DOMContentLoaded", () => {
+  const navClose = document.getElementById("navClose");
+  const navBackdrop = document.getElementById("navBackdrop");
 
-  const freshBurger = document.getElementById("burger");
-  const freshNav = document.getElementById("nav");
-
-  if (!freshBurger || !freshNav) return;
-
-  freshBurger.setAttribute("aria-expanded", "false");
-
-  freshBurger.addEventListener("click", function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-    const isOpen = freshNav.classList.contains("open");
-    freshNav.classList.toggle("open", !isOpen);
-    freshBurger.setAttribute("aria-expanded", String(!isOpen));
-  });
-
-  freshNav.addEventListener("click", function (e) {
-    if (e.target.tagName === "A") {
-      freshNav.classList.remove("open");
-      freshBurger.setAttribute("aria-expanded", "false");
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (
-      freshNav.classList.contains("open") &&
-      !e.target.closest("#nav") &&
-      !e.target.closest("#burger")
-    ) {
-      freshNav.classList.remove("open");
-      freshBurger.setAttribute("aria-expanded", "false");
-    }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
-      freshNav.classList.remove("open");
-      freshBurger.setAttribute("aria-expanded", "false");
-    }
-  });
-})();
+  if (navClose) navClose.onclick = closeMenu;
+  if (navBackdrop) navBackdrop.onclick = closeMenu;
+});
 
 /* -------------------------
-   UK Time (BST aware)
+   UK TIMEZONE HELPERS
+   Proper BST/GMT handling via Europe/London
 ------------------------- */
+function getLondonParts(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    weekday: "long",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false
+  }).formatToParts(date);
+
+  const out = {};
+  for (const part of parts) {
+    if (part.type !== "literal") {
+      out[part.type] = part.value;
+    }
+  }
+
+  return {
+    weekday: out.weekday,
+    year: Number(out.year),
+    month: Number(out.month),
+    day: Number(out.day),
+    hour: Number(out.hour),
+    minute: Number(out.minute)
+  };
+}
+
 function getUKNow() {
-  const now = new Date();
-  const y = now.getUTCFullYear();
+  return getLondonParts(new Date());
+}
 
-  const bstStart = new Date(Date.UTC(y, 2, 31));
-  bstStart.setUTCDate(31 - bstStart.getUTCDay());
+function getNowMinutes() {
+  const now = getUKNow();
 
-  const bstEnd = new Date(Date.UTC(y, 9, 31));
-  bstEnd.setUTCDate(31 - bstEnd.getUTCDay());
-
-  const inBST = now >= bstStart && now < bstEnd;
-  return new Date(now.getTime() + (inBST ? 3600000 : 0));
+  return {
+    dayNum: DAY_ORDER.indexOf(now.weekday) + 1,
+    mins: now.hour * 60 + now.minute
+  };
 }
 
 /* -------------------------
-   Helpers
+   HELPERS
 ------------------------- */
 function normDay(d) {
   const s = String(d || "").trim().toLowerCase();
@@ -141,13 +139,13 @@ function cleanTime(v) {
     const ampm = h >= 12 ? "pm" : "am";
     h = h % 12 || 12;
     const m = d.getMinutes();
-    return m ? `${h}:${String(m).padStart(2,"0")}${ampm}` : `${h}${ampm}`;
+    return m ? `${h}:${String(m).padStart(2, "0")}${ampm}` : `${h}${ampm}`;
   }
-  return v;
+  return String(v || "");
 }
 
 /* -------------------------
-   TIMEZONE DISPLAY HELPERS
+   SCHEDULE TIMEZONE DISPLAY
 ------------------------- */
 function getUserTimeZone() {
   try {
@@ -168,28 +166,44 @@ function parse12HourTimeTo24(timeStr) {
 }
 
 function getNextDateForDay(dayName) {
-  const nowUK = getUKNow();
-  const jsDay = nowUK.getDay(); // 0=Sun
-  const todayIndex = jsDay === 0 ? 6 : jsDay - 1; // Monday=0
+  const now = getUKNow();
+  const todayIndex = DAY_ORDER.indexOf(now.weekday);
   const targetIndex = DAY_ORDER.indexOf(dayName);
 
   if (targetIndex === -1) return null;
 
   const diff = (targetIndex - todayIndex + 7) % 7;
-  const targetDate = new Date(nowUK);
-  targetDate.setDate(nowUK.getDate() + diff);
-  return targetDate;
+  const base = new Date();
+  base.setDate(base.getDate() + diff);
+
+  return base;
 }
 
 function buildUKDateForSlot(dayName, timeStr) {
-  const date = getNextDateForDay(dayName);
   const parsed = parse12HourTimeTo24(timeStr);
+  if (!parsed) return null;
 
-  if (!date || !parsed) return null;
+  const londonNow = getUKNow();
+  const todayIndex = DAY_ORDER.indexOf(londonNow.weekday);
+  const targetIndex = DAY_ORDER.indexOf(dayName);
 
-  const d = new Date(date);
-  d.setHours(parsed.hours, parsed.minutes, 0, 0);
-  return d;
+  if (targetIndex === -1) return null;
+
+  const dayOffset = (targetIndex - todayIndex + 7) % 7;
+
+  const utcGuess = new Date(Date.UTC(
+    londonNow.year,
+    londonNow.month - 1,
+    londonNow.day,
+    parsed.hours,
+    parsed.minutes,
+    0,
+    0
+  ));
+
+  utcGuess.setUTCDate(utcGuess.getUTCDate() + dayOffset);
+
+  return utcGuess;
 }
 
 function formatDateInTimeZone(date, timeZone) {
@@ -213,7 +227,7 @@ function getSlotDisplayTime(slot) {
   const ukEndDate = buildUKDateForSlot(slot.day, slot.end);
 
   if (!ukStartDate || !ukEndDate) {
-    return cleanTime(slot.start) + " - " + cleanTime(slot.end);
+    return `${cleanTime(slot.start)} - ${cleanTime(slot.end)}`;
   }
 
   const ukStart = formatDateInTimeZone(ukStartDate, "Europe/London");
@@ -236,6 +250,17 @@ function getSlotDisplayTime(slot) {
   `;
 }
 
+function getSlotDisplayTimeSafe(slot) {
+  try {
+    const result = getSlotDisplayTime(slot);
+    return result && String(result).trim()
+      ? result
+      : `${cleanTime(slot.start)} - ${cleanTime(slot.end)}`;
+  } catch {
+    return `${cleanTime(slot.start)} - ${cleanTime(slot.end)}`;
+  }
+}
+
 function updateScheduleTimeNote() {
   const note = document.getElementById("scheduleTimeNote");
   if (!note) return;
@@ -245,9 +270,9 @@ function updateScheduleTimeNote() {
   if (SCHEDULE_TIME_MODE === "uk") {
     note.textContent = "Schedule shown in UK station time";
   } else if (SCHEDULE_TIME_MODE === "local") {
-    note.textContent = "Schedule shown in your local time (" + userTZ + ")";
+    note.textContent = `Schedule shown in your local time (${userTZ})`;
   } else {
-    note.textContent = "Schedule shown in UK station time and your local time (" + userTZ + ")";
+    note.textContent = `Schedule shown in UK station time and your local time (${userTZ})`;
   }
 }
 
@@ -259,10 +284,11 @@ function setScheduleTimeMode(mode) {
     renderSchedule(window.ALL_SLOTS);
   }
 }
+
 window.setScheduleTimeMode = setScheduleTimeMode;
 
 /* -------------------------
-   Render Schedule Grid
+   RENDER SCHEDULE
 ------------------------- */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
@@ -294,7 +320,7 @@ function renderSchedule(slots) {
         days[day].length
           ? days[day].map(s => `
               <div class="slot">
-                <div class="time">${getSlotDisplayTime({ day, start: s.start, end: s.end, dj: s.dj })}</div>
+                <div class="time">${getSlotDisplayTimeSafe({ day, start: s.start, end: s.end, dj: s.dj })}</div>
                 <div class="show">${s.dj}</div>
               </div>
             `).join("")
@@ -310,16 +336,8 @@ function renderSchedule(slots) {
 }
 
 /* -------------------------
-   NOW ON + UP NEXT (UK-BASED)
+   NOW ON / UP NEXT
 ------------------------- */
-function getNowMinutes() {
-  const now = getUKNow();
-  return {
-    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
-    mins: now.getHours() * 60 + now.getMinutes()
-  };
-}
-
 function findCurrentSlot(slots) {
   const { dayNum, mins } = getNowMinutes();
   const today = DAY_ORDER[dayNum - 1];
@@ -367,7 +385,7 @@ function findUpNextSlot(slots) {
 }
 
 /* -------------------------
-   FETCH + INIT
+   LOAD SCHEDULE
 ------------------------- */
 async function loadSchedule() {
   try {
@@ -427,7 +445,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* -------------------------
-   NOW PLAYING UI UPDATE
+   NOW PLAYING UI
 ------------------------- */
 function updateNowPlayingUI(track) {
   const artEl = document.getElementById("np-art");
@@ -460,7 +478,7 @@ function updateNowPlayingUI(track) {
 }
 
 /* -------------------------
-   Report Listener Country
+   REPORT LISTENER COUNTRY
 ------------------------- */
 async function reportListener() {
   try {
@@ -472,14 +490,13 @@ async function reportListener() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ country: data.country_name })
     });
-
   } catch (err) {
     console.log("Geo reporting failed:", err);
   }
 }
 
 /* -------------------------
-   SHOUT
+   SHOUT RECORDING
 ------------------------- */
 const recordBtn = document.getElementById("recordBtn");
 const statusText = document.getElementById("status");
@@ -494,7 +511,6 @@ let recordedBlob;
 let recordingTimeout;
 let userCountry = "Unknown Country";
 
-// 🌍 GET COUNTRY
 async function getCountry() {
   const countryEl = document.getElementById("listenerCountry");
 
@@ -508,7 +524,6 @@ async function getCountry() {
     }
   } catch (err) {
     console.warn("Country lookup failed:", err);
-
     if (countryEl) {
       countryEl.textContent = "🌍 Listener from: Unknown Country";
     }
@@ -517,7 +532,6 @@ async function getCountry() {
 
 getCountry();
 
-// 🎤 START RECORDING
 if (recordBtn && statusText && wave) {
   recordBtn.addEventListener("click", async () => {
     if (!mediaRecorder || mediaRecorder.state === "inactive") {
@@ -560,7 +574,6 @@ async function startRecording() {
   setTimeout(stopRecording, 5000);
 }
 
-// 🛑 STOP RECORDING
 function stopRecording() {
   if (mediaRecorder && mediaRecorder.state !== "inactive") {
     mediaRecorder.stop();
@@ -569,7 +582,6 @@ function stopRecording() {
   if (recordBtn) recordBtn.classList.remove("recording");
 }
 
-// ▶ PREVIEW
 if (previewBtn) {
   previewBtn.addEventListener("click", () => {
     if (!recordedBlob) return alert("No recording yet!");
@@ -579,7 +591,6 @@ if (previewBtn) {
   });
 }
 
-// ❌ DELETE
 if (deleteBtn) {
   deleteBtn.addEventListener("click", () => {
     recordedBlob = null;
@@ -588,7 +599,6 @@ if (deleteBtn) {
   });
 }
 
-// 🚀 SEND TO STUDIO
 if (sendBtn) {
   sendBtn.addEventListener("click", async () => {
     if (!recordedBlob) {
@@ -617,7 +627,6 @@ if (sendBtn) {
       } else {
         alert("Upload failed.");
       }
-
     } catch (err) {
       alert("Error sending shoutout.");
     }
@@ -626,29 +635,6 @@ if (sendBtn) {
     sendBtn.textContent = "🚀 Send to Studio";
   });
 }
-
-/* -------------------------
-   MOBILE MENU
-------------------------- */
-function openMenu() {
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  if (mobileNav) mobileNav.classList.add("active");
-  if (navBackdrop) navBackdrop.hidden = false;
-}
-
-function closeMenu() {
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  if (mobileNav) mobileNav.classList.remove("active");
-  if (navBackdrop) navBackdrop.hidden = true;
-}
-
-const navClose = document.getElementById("navClose");
-const navBackdrop = document.getElementById("navBackdrop");
-
-if (navClose) navClose.onclick = closeMenu;
-if (navBackdrop) navBackdrop.onclick = closeMenu;
 
 /* -------------------------
    GUESS THE TUNE
@@ -760,15 +746,13 @@ loadGuessTracks();
   }
 
   fetch(SHOUTOUTS_URL)
-    .then(function (res) {
-      return res.text();
-    })
-    .then(function (csv) {
+    .then(res => res.text())
+    .then(csv => {
       const rows = csv.trim().split(/\r?\n/);
       rows.shift();
 
       const messages = rows
-        .map(function (row) {
+        .map(row => {
           const cols = parseCSVLine(row);
 
           const name = cols[0] ? cols[0].trim() : "";
@@ -778,16 +762,14 @@ loadGuessTracks();
           if (name && message) return name + " 🎉 " + message;
           return name || message;
         })
-        .filter(function (msg) {
-          return msg !== "";
-        });
+        .filter(Boolean);
 
       const joined = messages.join(" • ");
 
       tickerText.textContent = joined || "No shout-outs yet — send yours in!";
       tickerTextClone.textContent = tickerText.textContent;
     })
-    .catch(function (err) {
+    .catch(err => {
       console.error("Shout-out ticker failed:", err);
       tickerText.textContent = "Shout-outs unavailable right now.";
       tickerTextClone.textContent = tickerText.textContent;
