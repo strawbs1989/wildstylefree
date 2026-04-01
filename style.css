@@ -1745,38 +1745,5 @@ DJS PAGE FIX
   .dj-image{
     height:240px;
   }
-  /* =========================
-Time Uk
-========================= */
-  
-  .time-uk,
-.time-local{
-  display:block;
-  line-height:1.4;
-}
-
-.schedule-time-note{
-  margin:0 0 18px;
-  color:#8d7ba8;
-  text-align:center;
-}
-
-.schedule-time-toggle{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin:0 0 18px;
-}
-
-.schedule-time-toggle button{
-  padding:10px 14px;
-  border:none;
-  border-radius:999px;
-  background:linear-gradient(135deg,#ff2a6d,#7c3aed);
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
-} 
 
 
