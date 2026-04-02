@@ -19,14 +19,19 @@
   }
 
   function addBanner(text) {
-    if (!body) return;
+  if (!body) return;
 
-    removeOldBanner();
+  removeOldBanner();
 
-    const banner = document.createElement("div");
-    banner.className = "season-banner";
-    banner.textContent = text;
+  const banner = document.createElement("div");
+  banner.className = "season-banner";
+  banner.textContent = text;
 
+  const hero = document.querySelector(".hero, .portal-hero, .hero-inner, .listen-live, .portal-panel");
+
+  if (hero) {
+    hero.prepend(banner);
+  } else {
     const header = document.querySelector("header");
     if (header) {
       header.insertAdjacentElement("afterend", banner);
@@ -34,6 +39,8 @@
       body.prepend(banner);
     }
   }
+} 
+
 
   function applyTheme(cls, text) {
     removeOldThemes();
