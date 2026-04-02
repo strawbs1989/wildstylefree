@@ -104,12 +104,13 @@ function getUKParts() {
 }
 
 function getNowMinutes() {
-  const now = getUKParts();
+  const now = new Date(); // 
+
   return {
-    dayNum: DAY_ORDER.indexOf(now.weekday) + 1,
-    mins: now.hour * 60 + now.minute
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
   };
-}
+} 
 
 /* -------------------------
    HELPERS
@@ -184,7 +185,7 @@ function parse12HourTimeTo24(timeStr) {
 }
 
 function getNextDateForDay(dayName) {
-  const nowUK = getUKNow();
+  const nowUK = new Date();
   const jsDay = nowUK.getDay(); // 0=Sun
   const todayIndex = jsDay === 0 ? 6 : jsDay - 1; // Monday=0
   const targetIndex = DAY_ORDER.indexOf(dayName);
