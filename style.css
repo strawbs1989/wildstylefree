@@ -1747,8 +1747,143 @@ DJS PAGE FIX
   }
 
 /* =========================
-WEB THEME
-========================= */
-.theme-easter {
-  background: hotpink !important;
+   SEASONAL THEMES
+   ========================= */
+
+.season-banner{
+  width:min(1200px,92%);
+  margin:14px auto 18px;
+  padding:12px 18px;
+  border-radius:16px;
+  text-align:center;
+  font-weight:800;
+  letter-spacing:.04em;
+  box-shadow:0 10px 25px rgba(0,0,0,.12);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(10px);
+}
+
+/* Default smooth transitions */
+html,
+body,
+.navbar,
+.portal-panel,
+.schedule-day,
+.dj-card,
+.request-box,
+.chat-box,
+.hero,
+section{
+  transition:background .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+/* ===== EASTER ===== */
+.theme-easter body{
+  background:
+    radial-gradient(circle at top left, rgba(255,183,227,.28), transparent 35%),
+    radial-gradient(circle at top right, rgba(151,224,255,.22), transparent 35%),
+    linear-gradient(180deg,#f7eef7 0%, #efe4f5 100%);
+}
+
+.theme-easter .season-banner{
+  background:linear-gradient(135deg,#ffb6df,#9ae7ff);
+  color:#40234f;
+}
+
+.theme-easter .portal-panel,
+.theme-easter .schedule-day,
+.theme-easter .dj-card,
+.theme-easter .quick-card,
+.theme-easter .status-card{
+  border-color:rgba(255,255,255,.35);
+  box-shadow:0 10px 30px rgba(255,182,223,.18);
+}
+
+.theme-easter .portal-head{
+  background:linear-gradient(90deg,#ff9ed8,#8ddfff);
+}
+
+/* ===== VALENTINES ===== */
+.theme-valentines body{
+  background:
+    radial-gradient(circle at top left, rgba(255,77,136,.25), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(255,181,213,.25), transparent 38%),
+    linear-gradient(180deg,#fff0f6 0%, #f8e3ee 100%);
+}
+
+.theme-valentines .season-banner{
+  background:linear-gradient(135deg,#ff2a6d,#ff7ab6);
+  color:#fff;
+}
+
+.theme-valentines .portal-head{
+  background:linear-gradient(90deg,#ff2a6d,#ff7ab6);
+}
+
+/* ===== XMAS ===== */
+.theme-xmas body{
+  background:
+    radial-gradient(circle at top left, rgba(33,186,120,.22), transparent 38%),
+    radial-gradient(circle at top right, rgba(255,59,59,.18), transparent 38%),
+    linear-gradient(180deg,#edf7f0 0%, #e4efe9 100%);
+}
+
+.theme-xmas .season-banner{
+  background:linear-gradient(135deg,#0f9d58,#d62828);
+  color:#fff;
+}
+
+.theme-xmas .portal-head{
+  background:linear-gradient(90deg,#0f9d58,#d62828);
+}
+
+/* ===== NEW YEAR ===== */
+.theme-newyear body{
+  background:
+    radial-gradient(circle at top left, rgba(80,120,255,.22), transparent 38%),
+    radial-gradient(circle at top right, rgba(255,215,0,.18), transparent 38%),
+    linear-gradient(180deg,#eef2ff 0%, #e8e6f8 100%);
+}
+
+.theme-newyear .season-banner{
+  background:linear-gradient(135deg,#3a86ff,#8338ec,#ffbe0b);
+  color:#fff;
+}
+
+.theme-newyear .portal-head{
+  background:linear-gradient(90deg,#3a86ff,#8338ec,#ffbe0b);
+}
+
+/* ===== HALLOWEEN ===== */
+.theme-halloween body{
+  background:
+    radial-gradient(circle at top left, rgba(255,136,0,.22), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(108,44,145,.24), transparent 38%),
+    linear-gradient(180deg,#1a1022 0%, #130b1c 100%);
+}
+
+.theme-halloween .season-banner{
+  background:linear-gradient(135deg,#ff7b00,#6c2c91);
+  color:#fff;
+}
+
+.theme-halloween .portal-head{
+  background:linear-gradient(90deg,#ff7b00,#6c2c91);
+}
+
+/* ===== SUMMER ===== */
+.theme-summer body{
+  background:
+    radial-gradient(circle at top left, rgba(0,209,255,.22), transparent 38%),
+    radial-gradient(circle at top right, rgba(255,190,11,.20), transparent 38%),
+    linear-gradient(180deg,#eefcff 0%, #f9f3dd 100%);
+}
+
+.theme-summer .season-banner{
+  background:linear-gradient(135deg,#00d1ff,#ffbe0b,#ff4d6d);
+  color:#1f1f1f;
+}
+
+.theme-summer .portal-head{
+  background:linear-gradient(90deg,#00d1ff,#ffbe0b,#ff4d6d);
 } 

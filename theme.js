@@ -1,7 +1,8 @@
 (function () {
   const html = document.documentElement;
+  const body = document.body;
 
-  const apply = (cls) => {
+  function removeOldThemes() {
     html.classList.remove(
       "theme-xmas",
       "theme-halloween",
@@ -10,26 +11,44 @@
       "theme-easter",
       "theme-valentines"
     );
-    if (cls) html.classList.add(cls);
-  };
+  }
+
+  function removeOldBanner() {
+    const oldBanner = document.querySelector(".season-banner");
+    if (oldBanner) oldBanner.remove();
+  }
+
+  function addBanner(text) {
+    if (!body) return;
+
+    removeOldBanner();
+
+    const banner = document.createElement("div");
+    banner.className = "season-banner";
+    banner.textContent = text;
+
+    const header = document.querySelector("header");
+    if (header) {
+      header.insertAdjacentElement("afterend", banner);
+    } else {
+      body.prepend(banner);
+    }
+  }
+
+  function applyTheme(cls, text) {
+    removeOldThemes();
+    if (cls) {
+      html.classList.add(cls);
+      addBanner(text);
+    }
+  }
 
   const m = new Date().getMonth() + 1;
 
-  // 🎄 December
-  if (m === 12) apply("theme-xmas");
-
-  // 🎃 October
-  else if (m === 10) apply("theme-halloween");
-
-  // 🐣 Easter (March & April)
-  else if (m === 3 || m === 4) apply("theme-easter");
-
-  // ❤️ Valentine’s (February)
-  else if (m === 2) apply("theme-valentines");
-
-  // 🎇 January
-  else if (m === 1) apply("theme-newyear");
-
-  // ☀️ Summer Festival
-  else if (m >= 6 && m <= 8) apply("theme-summer");
+  if (m === 12) applyTheme("theme-xmas", "🎄 Christmas at Wildstyle Radio");
+  else if (m === 10) applyTheme("theme-halloween", "🎃 Halloween Vibes Live on Wildstyle");
+  else if (m === 3 || m === 4) applyTheme("theme-easter", "🐣 Easter Vibes on Wildstyle Radio");
+  else if (m === 2) applyTheme("theme-valentines", "❤️ Valentine’s Month on Wildstyle");
+  else if (m === 1) applyTheme("theme-newyear", "🎆 New Year Energy on Wildstyle");
+  else if (m >= 6 && m <= 8) applyTheme("theme-summer", "☀️ Summer Festival Season at Wildstyle");
 })(); 
