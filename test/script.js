@@ -104,12 +104,13 @@ function getUKParts() {
 }
 
 function getNowMinutes() {
-  const now = getUKParts();
+  const now = new Date(); // 
+
   return {
-    dayNum: DAY_ORDER.indexOf(now.weekday) + 1,
-    mins: now.hour * 60 + now.minute
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
   };
-}
+} 
 
 /* -------------------------
    HELPERS
@@ -184,7 +185,7 @@ function parse12HourTimeTo24(timeStr) {
 }
 
 function getNextDateForDay(dayName) {
-  const nowUK = getUKNow();
+  const nowUK = new Date();
   const jsDay = nowUK.getDay(); // 0=Sun
   const todayIndex = jsDay === 0 ? 6 : jsDay - 1; // Monday=0
   const targetIndex = DAY_ORDER.indexOf(dayName);
@@ -351,23 +352,30 @@ function findCurrentSlot(slots) {
 }
 
 function findUpNextSlot(slots) {
-  const now = new Date();
+  const { dayNum, mins } = getNowMinutes();
+  const list = [];
 
-const ukNow = getUKNow();
+  for (let o = 0; o < 7; o++) {
+    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
-// Calculate offset difference in minutes
-const offsetMinutes = (now.getTime() - ukNow.getTime()) / 60000;
+    for (const s of slots.filter(x => x.day === day)) {
+      if ((s.dj || "").toLowerCase() === "free") continue;
 
-// Convert UK minutes into user local minutes
-const localMins = ukNow.getHours() * 60 + ukNow.getMinutes() + offsetMinutes;
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
 
-// Normalize
-const mins = ((localMins % 1440) + 1440) % 1440;
+      if (o === 0) {
+        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
+        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
+      } else {
+        list.push({ o, start: r.start, s });
+      }
+    }
+  }
 
-return {
-  dayNum: now.getDay() === 0 ? 7 : now.getDay(), // ✅ LOCAL DAY
-  mins: Math.floor(mins)
-}; 
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
+}
 
 /* -------------------------
    FETCH + INIT
