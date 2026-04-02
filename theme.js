@@ -18,7 +18,7 @@
     if (oldBanner) oldBanner.remove();
   }
 
-  function addBanner(text) {
+function addBanner(text) {
   if (!body) return;
 
   removeOldBanner();
@@ -27,17 +27,15 @@
   banner.className = "season-banner";
   banner.textContent = text;
 
-  const hero = document.querySelector(".hero, .portal-hero, .hero-inner, .listen-live, .portal-panel");
+  const nowOnBar = document.querySelector(".now-on-stage, .now-on-bar");
+  const hero = document.querySelector(".hero");
 
-  if (hero) {
+  if (nowOnBar) {
+    nowOnBar.insertAdjacentElement("afterend", banner);
+  } else if (hero) {
     hero.prepend(banner);
   } else {
-    const header = document.querySelector("header");
-    if (header) {
-      header.insertAdjacentElement("afterend", banner);
-    } else {
-      body.prepend(banner);
-    }
+    body.prepend(banner);
   }
 } 
 
