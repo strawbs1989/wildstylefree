@@ -1746,4 +1746,9 @@ DJS PAGE FIX
     height:240px;
   }
 
-
+/* =========================
+WEB THEME
+========================= */
+.theme-easter {
+  background: hotpink !important;
+} 
