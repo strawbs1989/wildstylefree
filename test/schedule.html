@@ -7,7 +7,7 @@
 <title>Wildstyle Schedule</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://wildstyle.vip/style.css">
+<link rel="stylesheet" href="https://wildstyle.vip/test/style.css">
 
 </head>
 
@@ -29,60 +29,47 @@
 </a>
 
 <nav class="desktop-nav" id="nav">
+        <a href="/index.html" class="active-link">Home</a>
+        <a href="/djs.html">DJs</a>
+		<a href="/shout.html">Shout</a>
+        <a href="/schedule.html">Schedule</a>
+        <a href="/chat.html">Chat</a>
+        <a href="/merch.html">Merch</a>
+		<a href="/listenermap.html">Listener</a>
+      </nav>
 
-<a href="/index.html">Home</a>
-<a href="/djs.html">DJs</a>
-<a href="/schedule.html" class="active-link">Schedule</a>
-<a href="/chat.html">Chat</a>
-<a href="/request.html">Request</a>
-<a href="/merch.html">Merch</a>
+      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
+    </div>
+  </header>
 
-</nav>
+  <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
 
-<button class="menu-toggle" onclick="openMenu()">☰</button>
+  <!-- MOBILE NAV -->
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
 
-</div>
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+    </div>
 
-</header>
-
-
-<!-- NOW ON -->
-
-<section class="now-on-stage">
-
-<div class="container now-on-stage-inner">
-
-<div class="now-on-left">
-<span class="live-dot"></span>
-<span class="nowOn">Now On</span>
-</div>
-
-<div class="nowOnShow" id="nowon">Loading…</div>
-
-</div>
-
-</section>
-
-
-<!-- MOBILE NAV -->
-
-<div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
-
-<nav class="mobile-nav" id="mobileNav">
-
-<div class="mobile-nav-top">
-<div class="mobile-nav-title">Menu</div>
-<button class="mobile-nav-close" onclick="closeMenu()">✕</button>
-</div>
-
-<a href="/index.html">Home</a>
-<a href="/djs.html">DJs</a>
-<a href="/schedule.html">Schedule</a>
-<a href="/chat.html">Chat</a>
-<a href="/request.html">Request</a>
-<a href="/merch.html">Merch</a>
-
-</nav>
+    <a href="/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+	<a href="/shout.html">Shout</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/merch.html">Merch</a>
+	<a href="/listenermap.html">Listener</a>
+  </nav>
 
 
 <!-- PAGE HERO -->
@@ -102,6 +89,8 @@ See who is live across the week and never miss your favourite show.
 </div>
 
 </section>
+
+
 
 
 <!-- SCHEDULE GRID -->
@@ -163,7 +152,6 @@ Powered by volunteer passion.
 <ul>
 <li><a href="/schedule.html">Schedule</a></li>
 <li><a href="/chat.html">Chat</a></li>
-<li><a href="/request.html">Request</a></li>
 </ul>
 </div>
 
@@ -179,7 +167,7 @@ Powered by volunteer passion.
 
 <!-- SCRIPT -->
 
-<script src="https://wildstyle.vip/script.js?v=6" defer></script>
+<script src="https://wildstyle.vip/test/script.js?v=6" defer></script>
 
 </body>
 </html> 
