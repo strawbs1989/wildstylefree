@@ -110,6 +110,37 @@ a{text-decoration:none;color:inherit}
 .list-item{display:flex;justify-content:space-between;gap:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:18px;padding:14px;color:#fff}
 .list-item small{color:#b9abd7;display:block;margin-top:4px}
 
+.request-ticker-wrap{
+  overflow:hidden;
+  width:100%;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  padding:0;
+}
+
+.request-ticker{
+  display:flex;
+  white-space:nowrap;
+  width:max-content;
+  animation:scrollTicker 38s linear infinite;
+}
+
+.request-ticker div{
+  padding:14px 22px;
+  font-weight:800;
+  color:#fff;
+}
+
+.request-ticker-wrap:hover .request-ticker{
+  animation-play-state:paused;
+}
+
+@keyframes scrollTicker{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
 .footer{margin-top:24px;background:var(--grad-soft);border-radius:28px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:18px;color:#fff}
 .footer h3{margin:0 0 10px;font-family:Oswald,sans-serif;letter-spacing:.04em}
 .footer p,.footer li{color:#d9cdf4;line-height:1.6}
@@ -312,20 +343,12 @@ a{text-decoration:none;color:inherit}
       <div class="card-head">
         <h2>Live Requests</h2>
       </div>
-      <div class="card-body list">
-        <div class="list-item">
-          <div>
-            <strong>Jay requested Titanium</strong>
-            <small>David Guetta • shout-out for Laura</small>
+      <div class="card-body">
+        <div class="request-ticker-wrap">
+          <div class="request-ticker">
+            <div id="requestTickerText">Loading live requests…</div>
+            <div id="requestTickerClone"></div>
           </div>
-          <span class="badge">Live</span>
-        </div>
-        <div class="list-item">
-          <div>
-            <strong>Sarah requested Blue Monday</strong>
-            <small>New Order • just now</small>
-          </div>
-          <span class="badge">Queue</span>
         </div>
       </div>
     </article>
@@ -380,5 +403,71 @@ a{text-decoration:none;color:inherit}
 </footer>
 
   </div>
+  <script>
+    (function () {
+      const ticker = document.getElementById("requestTickerText");
+      const clone = document.getElementById("requestTickerClone");if (!ticker || !clone) return;
+
+  const REQUESTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv";
+
+  function parseCSV(line) {
+    const result = [];
+    let current = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const next = line[i + 1];
+
+      if (char === '"' && inQuotes && next === '"') {
+        current += '"';
+        i++;
+      } else if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+
+    result.push(current.trim());
+    return result;
+  }
+
+  async function loadRequestsTicker() {
+    try {
+      const res = await fetch(REQUESTS_URL + "&t=" + Date.now());
+      const csv = await res.text();
+      const rows = csv.trim().split(/
+
+? /); rows.shift();
+
+const requests = rows
+        .map(row => {
+          const cols = parseCSV(row);
+          const name = cols[1] || "Listener";
+          const song = cols[2] || "Unknown Song";
+          const artist = cols[3] || "Unknown Artist";
+          return `${name} requested ${song} - ${artist}`;
+        })
+        .filter(Boolean)
+        .slice(-10);
+
+      const joined = requests.length ? requests.join(" • ") : "No requests yet — be the first!";
+      ticker.textContent = joined;
+      clone.textContent = joined;
+    } catch (err) {
+      ticker.textContent = "Requests unavailable right now.";
+      clone.textContent = ticker.textContent;
+    }
+  }
+
+  loadRequestsTicker();
+  setInterval(loadRequestsTicker, 15000);
+})();
+
+  </script>
 </body>
-</html> 
+</html>
