@@ -687,78 +687,58 @@ button,input,textarea{font:inherit}
     }
 
     function listenForPosts() {
-      if (!els.feedContainer) return;
-      if (unsubscribePosts) unsubscribePosts();
-      if (usingPlaceholders || !db) {
-        renderFeed([]);
-        return;
-      }
-      const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(12));
-      unsubscribePosts = onSnapshot(q, (snapshot) => {
-        const posts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderFeed(posts);
-        if (auth?.currentUser) updateProfilePostCount(auth.currentUser.uid);
-      }, (error) => {
-        console.error('Feed error:', error);
-        renderFeed([]);
-      });
+  if (!els.feedContainer) return;
+  if (unsubscribePosts) unsubscribePosts();
+
+  if (usingPlaceholders || !db) {
+    renderFeed([]);
+    return;
+  }
+
+  const q = query(
+    collection(db, 'posts'),
+    orderBy('createdAt', 'desc'),
+    limit(12)
+  );
+
+  unsubscribePosts = onSnapshot(q, (snapshot) => {
+    els.feedContainer.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const post = docSnap.data();
+
+      els.feedContainer.innerHTML += `
+        <div class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">WS</div>
+              <div>
+                <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+                <small>${escapeHtml(post.role || 'Listener')}</small>
+              </div>
+            </div>
+          </div>
+
+          <p>${escapeHtml(post.text || '')}</p>
+
+          <div class="post-actions">
+            <button onclick="likePost('${docSnap.id}', ${post.likesCount || 0})">
+              ❤️ ${post.likesCount || 0} Likes
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    if (auth?.currentUser) {
+      updateProfilePostCount(auth.currentUser.uid);
     }
+  }, (error) => {
+    console.error('Feed error:', error);
+    renderFeed([]);
+  });
+} 
 
-    async function createPost() {
-      if (usingPlaceholders || !auth || !db) {
-        setPostMessage('Paste your Firebase config first.', true);
-        return;
-      }
-      if (!auth.currentUser || !currentUserProfile) {
-        setPostMessage('Login to create a post.', true);
-        openAuth();
-        return;
-      }
-      const text = els.postInput?.value.trim();
-      if (!text) {
-        setPostMessage('Write something before posting.', true);
-        return;
-      }
-
-      try {
-        els.createPostBtn.disabled = true;
-        els.createPostBtn.textContent = 'Posting...';
-        setPostMessage('');
-
-        await addDoc(collection(db, 'posts'), {
-          uid: auth.currentUser.uid,
-          authorName: currentUserProfile.displayName,
-          role: currentUserProfile.role || 'Listener',
-          text,
-          likesCount: 0,
-          createdAt: serverTimestamp()
-        });
-
-        els.postInput.value = '';
-        setPostMessage('✅ Post published!');
-      } catch (error) {
-        console.error('Create post error:', error);
-        setPostMessage(error.message, true);
-      } finally {
-        els.createPostBtn.disabled = false;
-        els.createPostBtn.textContent = 'Post Now';
-      }
-    }
-
-    async function likePost(postId, currentLikes = 0) {
-      if (usingPlaceholders || !db) {
-        alert('Paste your Firebase config first.');
-        return;
-      }
-      try {
-        const ref = doc(db, 'posts', postId);
-        await updateDoc(ref, {
-          likesCount: Number(currentLikes || 0) + 1
-        });
-      } catch (error) {
-        console.error('Like post error:', error);
-      }
-    }
 
     function parseCSV(line) {
       const result = [];
