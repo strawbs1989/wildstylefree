@@ -355,6 +355,7 @@ button,input,textarea{font:inherit}
       getDoc,
       serverTimestamp,
       addDoc,
+      updateDoc,
       collection,
       query,
       orderBy,
@@ -365,12 +366,12 @@ button,input,textarea{font:inherit}
     } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDEdR9n8imkT5e0mJaPi3gLmiiUtTfSoXw",
-  authDomain: "wildstyle-social.firebaseapp.com",
-  projectId: "wildstyle-social",
-  storageBucket: "wildstyle-social.firebasestorage.app",
-  messagingSenderId: "608635701800",
-  appId: "1:608635701800:web:c53acf7aa7198ed949c31d",
+      apiKey: 'PASTE_API_KEY_HERE',
+      authDomain: 'PASTE_AUTH_DOMAIN_HERE',
+      projectId: 'PASTE_PROJECT_ID_HERE',
+      storageBucket: 'PASTE_STORAGE_BUCKET_HERE',
+      messagingSenderId: 'PASTE_MESSAGING_SENDER_ID_HERE',
+      appId: 'PASTE_APP_ID_HERE'
     };
 
     const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes('PASTE_'));
@@ -622,38 +623,67 @@ button,input,textarea{font:inherit}
       });
     }
 
+    function bindRealtimeLikeButtons() {
+      document.querySelectorAll('.post-like-btn').forEach((btn) => {
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', async () => {
+          const postId = btn.dataset.postId;
+          const currentLikes = Number(btn.dataset.likes || 0);
+          await likePost(postId, currentLikes);
+        });
+      });
+    }
+
     function renderFeed(posts) {
       if (!els.feedContainer) return;
-      const live = posts.map(post => {
+
+      if (!posts.length) {
+        els.feedContainer.innerHTML = defaultPostsMarkup();
+        bindPostInteractions();
+        return;
+      }
+
+      els.feedContainer.innerHTML = '';
+
+      posts.forEach((post) => {
+        const article = document.createElement('article');
+        article.className = 'post';
+
         const created = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleString() : 'Just now';
-        return `
-          <article class="post">
-            <div class="post-top">
-              <div class="author">
-                <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
-                <div>
-                  <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
-                  <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
-                </div>
+
+        article.innerHTML = `
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
+              <div>
+                <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+                <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
               </div>
-              <span class="badge">Live Post</span>
             </div>
-            <p>${escapeHtml(post.text || '')}</p>
-            <div class="post-actions">
-              <button class="like-btn" data-liked="false"><span class="like-count">${Number(post.likesCount || 0)}</span> Likes</button>
-              <button class="comment-toggle" data-target="comments-${post.id}">💬 <span class="comment-count">0</span> Comments</button>
-            </div>
-            <div class="comments-box" id="comments-${post.id}">
-              <form class="comment-form">
-                <input type="text" placeholder="Write a comment..." maxlength="140">
-                <button type="submit">Post</button>
-              </form>
-            </div>
-          </article>
+            <span class="badge">Live Post</span>
+          </div>
+
+          <p>${escapeHtml(post.text || '')}</p>
+
+          <div class="post-actions">
+            <button class="post-like-btn" data-post-id="${post.id}" data-likes="${Number(post.likesCount || 0)}">
+              ❤️ ${Number(post.likesCount || 0)} Likes
+            </button>
+          </div>
         `;
-      }).join('');
-      els.feedContainer.innerHTML = live + defaultPostsMarkup();
+
+        els.feedContainer.appendChild(article);
+      });
+
+      const defaults = document.createElement('div');
+      defaults.innerHTML = defaultPostsMarkup();
+      while (defaults.firstChild) {
+        els.feedContainer.appendChild(defaults.firstChild);
+      }
+
       bindPostInteractions();
+      bindRealtimeLikeButtons();
     }
 
     function listenForPosts() {
@@ -715,6 +745,21 @@ button,input,textarea{font:inherit}
       }
     }
 
+    async function likePost(postId, currentLikes = 0) {
+      if (usingPlaceholders || !db) {
+        alert('Paste your Firebase config first.');
+        return;
+      }
+      try {
+        const ref = doc(db, 'posts', postId);
+        await updateDoc(ref, {
+          likesCount: Number(currentLikes || 0) + 1
+        });
+      } catch (error) {
+        console.error('Like post error:', error);
+      }
+    }
+
     function parseCSV(line) {
       const result = [];
       let current = '';
@@ -737,7 +782,9 @@ button,input,textarea{font:inherit}
       try {
         const res = await fetch(url + '&t=' + Date.now());
         const csv = await res.text();
-        const rows = csv.trim().split('\n')
+        const rows = csv.trim().split(/
+?
+/);
         rows.shift();
         const items = rows.map(row => {
           const cols = parseCSV(row);
@@ -825,8 +872,11 @@ button,input,textarea{font:inherit}
       });
     }
 
+    window.likePost = likePost;
+
     bindSidebarButtons();
     bindPostInteractions();
+    bindRealtimeLikeButtons();
     loadRequestsTicker();
     setInterval(loadRequestsTicker, 15000);
   </script></body>
