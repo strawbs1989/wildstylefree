@@ -759,6 +759,7 @@ button,input,textarea{font:inherit}
         console.error('Like post error:', error);
       }
     }
+	
 
     function parseCSV(line) {
       const result = [];
@@ -860,7 +861,63 @@ button,input,textarea{font:inherit}
 
     if (usingPlaceholders) {
       setLoggedOutState();
-      listenForPosts();
+      function listenForPosts() {
+  if (!els.feedContainer) return;
+  if (unsubscribePosts) unsubscribePosts();
+
+  if (usingPlaceholders || !db) {
+    renderFeed([]);
+    return;
+  }
+
+  const q = query(
+    collection(db, 'posts'),
+    orderBy('createdAt', 'desc'),
+    limit(12)
+  );
+
+  unsubscribePosts = onSnapshot(q, (snapshot) => {
+    els.feedContainer.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const post = docSnap.data();
+      const created = post.createdAt?.toDate
+        ? post.createdAt.toDate().toLocaleString()
+        : 'Just now';
+
+      els.feedContainer.innerHTML += `
+        <div class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
+              <div>
+                <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+                <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
+              </div>
+            </div>
+            <span class="badge">Live Post</span>
+          </div>
+
+          <p>${escapeHtml(post.text || '')}</p>
+
+          <div class="post-actions">
+            <button onclick="likePost('${docSnap.id}', ${post.likesCount || 0})">
+              ❤️ ${post.likesCount || 0} Likes
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    if (auth?.currentUser) {
+      updateProfilePostCount(auth.currentUser.uid);
+    }
+  }, (error) => {
+    console.error('Feed error:', error);
+    renderFeed([]);
+  });
+} 
+
       setAuthMessage('Paste your Firebase config first.');
     } else {
       onAuthStateChanged(auth, async (user) => {
