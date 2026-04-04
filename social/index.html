@@ -27,6 +27,7 @@ html,body{margin:0;padding:0;font-family:Inter,system-ui,sans-serif;background:
   radial-gradient(circle at top right, rgba(78,176,255,.15), transparent 24%),
   var(--bg);color:#231a37;}
 a{text-decoration:none;color:inherit}
+button{font:inherit}
 
 .shell{max-width:1400px;margin:0 auto;padding:20px 18px 40px}
 
@@ -60,7 +61,7 @@ a{text-decoration:none;color:inherit}
 .hero-copy h1{margin:0 0 12px;font-family:Oswald,sans-serif;font-size:4rem;line-height:.95;color:#fff;letter-spacing:.03em}
 .hero-copy p{margin:0;color:#d1c4ee;font-size:1.08rem;max-width:720px;line-height:1.7}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-.btn-primary,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:18px;font-weight:800}
+.btn-primary,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:18px;font-weight:800;border:none;cursor:pointer}
 .btn-primary{background:var(--grad);color:#fff}
 .btn-secondary{background:#fff;color:#1c1432}
 
@@ -119,36 +120,11 @@ a{text-decoration:none;color:inherit}
 .list-item{display:flex;justify-content:space-between;gap:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:18px;padding:14px;color:#fff}
 .list-item small{color:#b9abd7;display:block;margin-top:4px}
 
-.request-ticker-wrap{
-  overflow:hidden;
-  width:100%;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.05);
-  padding:0;
-}
-
-.request-ticker{
-  display:flex;
-  white-space:nowrap;
-  width:max-content;
-  animation:scrollTicker 38s linear infinite;
-}
-
-.request-ticker div{
-  padding:14px 22px;
-  font-weight:800;
-  color:#fff;
-}
-
-.request-ticker-wrap:hover .request-ticker{
-  animation-play-state:paused;
-}
-
-@keyframes scrollTicker{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(-50%)}
-}
+.request-ticker-wrap{overflow:hidden;width:100%;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.request-ticker{display:flex;white-space:nowrap;width:max-content;animation:scrollTicker 38s linear infinite}
+.request-ticker div{padding:14px 22px;font-weight:800;color:#fff}
+.request-ticker-wrap:hover .request-ticker{animation-play-state:paused}
+@keyframes scrollTicker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 .auth-overlay{position:fixed;inset:0;background:rgba(8,5,18,.58);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:.22s ease;z-index:40}
 .auth-overlay.open{opacity:1;pointer-events:auto}
@@ -166,6 +142,7 @@ a{text-decoration:none;color:inherit}
 .auth-form input::placeholder{color:#b8a9d6}
 .auth-submit{border:none;cursor:pointer}
 .auth-note{margin:14px 0 0;color:#b8a9d6;line-height:1.6}
+
 .profile-card .card-body{display:grid;gap:16px}
 .profile-top{display:flex;align-items:center;gap:14px}
 .profile-avatar{width:72px;height:72px;border-radius:22px;background:var(--grad);display:grid;place-items:center;font-weight:800;font-size:1.25rem;color:#fff}
@@ -178,6 +155,7 @@ a{text-decoration:none;color:inherit}
 .profile-stats span{display:block;color:#b8a9d6;margin-top:4px;font-size:.9rem}
 .profile-actions{display:flex;gap:10px;flex-wrap:wrap}
 .small-btn{padding:12px 16px;border-radius:16px;font-size:.92rem}
+
 .footer{margin-top:24px;background:var(--grad-soft);border-radius:28px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:18px;color:#fff}
 .footer h3{margin:0 0 10px;font-family:Oswald,sans-serif;letter-spacing:.04em}
 .footer p,.footer li{color:#d9cdf4;line-height:1.6}
@@ -199,8 +177,9 @@ a{text-decoration:none;color:inherit}
   .nav a,.nav button{padding:10px 14px;border-radius:14px;font-size:.92rem}
   .hero-copy h1{font-size:2.35rem}
   .hero-body{padding:18px}
-  .mini-row,.quick-grid{grid-template-columns:1fr}
+  .mini-row,.quick-grid,.profile-stats{grid-template-columns:1fr}
   .card-head h2{font-size:1.3rem}
+  .comment-form{grid-template-columns:1fr}
 }
 
   </style>
@@ -283,7 +262,7 @@ a{text-decoration:none;color:inherit}
     <input type="password" placeholder="Create password" required>
     <button type="submit" class="btn-primary auth-submit">Create account</button>
   </form>
-  <p class="auth-note">Beta wiring preview. Next step is connecting Firebase Authentication and Firestore users.</p>
+  <p class="auth-note">Login, signup, profile creation and live posts are wired for Firebase. Paste your Firebase config into the script block below.</p>
 </section>
 
 <main class="main">
@@ -294,15 +273,16 @@ a{text-decoration:none;color:inherit}
         <span class="badge">Listener Post</span>
       </div>
       <div class="card-body composer">
-        <textarea placeholder="What’s happening in your Wildstyle world?"></textarea>
+        <textarea id="postInput" placeholder="What’s happening in your Wildstyle world?"></textarea>
         <div class="composer-tools">
           <div class="tool-pills">
             <span class="pill">📷 Add image</span>
             <span class="pill">🎧 Tag DJ</span>
             <span class="pill">🎉 Shout-out</span>
           </div>
-          <a href="#" class="btn-primary">Post Now</a>
+          <button type="button" class="btn-primary" id="createPostBtn">Post Now</button>
         </div>
+        <div id="postStatus" style="margin-top:12px;color:#b8a9d6;font-weight:700"></div>
       </div>
     </article>
 
@@ -311,86 +291,7 @@ a{text-decoration:none;color:inherit}
         <h2>Live Feed</h2>
         <span class="badge">Beta Community</span>
       </div>
-      <div class="card-body feed">
-        <article class="post">
-          <div class="post-top">
-            <div class="author">
-              <div class="avatar">DJ</div>
-              <div>
-                <strong>DJ EchoFalls</strong>
-                <small>Verified DJ • 7 mins ago</small>
-              </div>
-            </div>
-            <span class="badge">Pinned Update</span>
-          </div>
-          <p>Going live tonight with a proper multi-genre workout. Drop your requests, jump in the chat, and let’s make it a madness 🔥</p>
-          <div class="post-actions">
-            <button class="like-btn" data-post="1" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">128</span> Likes</button>
-            <button class="comment-toggle" data-target="comments-1">💬 <span class="comment-count">2</span> Comments</button>
-            <button>📌 Pinned</button>
-          </div>
-          <div class="comments-box" id="comments-1">
-            <div class="comment-item"><strong>Laura:</strong> Can’t wait for tonight 🔥</div>
-            <div class="comment-item"><strong>Mike:</strong> Requests locked and loaded!</div>
-            <form class="comment-form">
-              <input type="text" placeholder="Write a comment..." maxlength="140" />
-              <button type="submit">Post</button>
-            </form>
-          </div>
-        </article>
-
-        <article class="post">
-          <div class="post-top">
-            <div class="author">
-              <div class="avatar">JR</div>
-              <div>
-                <strong>Jay</strong>
-                <small>Admin • 22 mins ago</small>
-              </div>
-            </div>
-            <span class="badge">Station Update</span>
-          </div>
-          <p>Wildstyle Social Beta is officially in motion. We’re bringing together the stream, DJ culture, requests, shout-outs, the listener map, and community posts into one place.</p>
-          <div class="post-image">WILDSTYLE SOCIAL</div>
-          <div class="post-actions">
-            <button class="like-btn" data-post="2" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">241</span> Likes</button>
-            <button class="comment-toggle" data-target="comments-2">💬 <span class="comment-count">1</span> Comments</button>
-            <button>🔁 Share</button>
-          </div>
-          <div class="comments-box" id="comments-2">
-            <div class="comment-item"><strong>Nala:</strong> This is looking massive already 💜</div>
-            <form class="comment-form">
-              <input type="text" placeholder="Write a comment..." maxlength="140" />
-              <button type="submit">Post</button>
-            </form>
-          </div>
-        </article>
-
-        <article class="post">
-          <div class="post-top">
-            <div class="author">
-              <div class="avatar">LN</div>
-              <div>
-                <strong>Listener Nala</strong>
-                <small>Listener • 41 mins ago</small>
-              </div>
-            </div>
-            <span class="badge">Community</span>
-          </div>
-          <p>Loving the new site vibe. The shout-outs and requests all in one space feels proper radio-social. Can’t wait for profiles and comments to go fully live 💜</p>
-          <div class="post-actions">
-            <button class="like-btn" data-post="3" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">46</span> Likes</button>
-            <button class="comment-toggle" data-target="comments-3">💬 <span class="comment-count">0</span> Comments</button>
-            <button>🎧 Tag DJ</button>
-          </div>
-          <div class="comments-box" id="comments-3">
-            <form class="comment-form">
-              <input type="text" placeholder="Write a comment..." maxlength="140" />
-              <button type="submit">Post</button>
-            </form>
-          </div>
-        </article>
-      </div>
+      <div class="card-body feed" id="feedContainer"></div>
     </article>
   </section>
 
@@ -402,24 +303,25 @@ a{text-decoration:none;color:inherit}
       </div>
       <div class="card-body">
         <div class="profile-top">
-          <div class="profile-avatar">JR</div>
+          <div class="profile-avatar">WL</div>
           <div>
-            <strong class="profile-name">Jay</strong>
-            <div class="profile-role">Admin • Wildstyle Team</div>
+            <strong class="profile-name">Guest Listener</strong>
+            <div class="profile-role">Listener • Not signed in</div>
           </div>
         </div>
-        <p class="profile-bio">Building Wildstyle into a full radio-social platform with live requests, feed posts, DJ updates, and community energy.</p>
+        <p class="profile-bio">Log in to post, comment, like, and build your Wildstyle profile.</p>
         <div class="profile-stats">
-          <div><strong>128</strong><span>Posts</span></div>
-          <div><strong>412</strong><span>Followers</span></div>
-          <div><strong>26</strong><span>Following</span></div>
+          <div><strong>0</strong><span>Posts</span></div>
+          <div><strong>0</strong><span>Followers</span></div>
+          <div><strong>0</strong><span>Following</span></div>
         </div>
         <div class="profile-actions">
-          <a href="#" class="btn-primary small-btn">View Profile</a>
-          <a href="#" class="btn-secondary small-btn">Edit Profile</a>
+          <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
+          <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
         </div>
       </div>
     </article>
+
     <article class="card">
       <div class="card-head">
         <h2>Quick Access</h2>
@@ -502,140 +404,15 @@ a{text-decoration:none;color:inherit}
   <div>
     <h3>Next Up</h3>
     <ul>
-      <li>Login / signup</li>
-      <li>Profiles</li>
-      <li>Likes + comments</li>
+      <li>Real comments</li>
+      <li>Real likes</li>
+      <li>Profile editing</li>
       <li>DJ verified badges</li>
     </ul>
   </div>
 </footer>
 
-  </div>
-  <script>
-    (function () {
-      const ticker = document.getElementById("requestTickerText");
-      const clone = document.getElementById("requestTickerClone");if (!ticker || !clone) return;
-
-  const REQUESTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv";
-
-  function parseCSV(line) {
-    const result = [];
-    let current = "";
-    let inQuotes = false;
-
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      const next = line[i + 1];
-
-      if (char === '"' && inQuotes && next === '"') {
-        current += '"';
-        i++;
-      } else if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        result.push(current.trim());
-        current = "";
-      } else {
-        current += char;
-      }
-    }
-
-    result.push(current.trim());
-    return result;
-  }
-
-  async function loadRequestsTicker() {
-    try {
-      const res = await fetch(REQUESTS_URL + "&t=" + Date.now());
-      const csv = await res.text();
-      const rows = csv.trim().split(/
-
-? /); rows.shift();
-
-const requests = rows
-        .map(row => {
-          const cols = parseCSV(row);
-          const name = cols[1] || "Listener";
-          const song = cols[2] || "Unknown Song";
-          const artist = cols[3] || "Unknown Artist";
-          return `${name} requested ${song} - ${artist}`;
-        })
-        .filter(Boolean)
-        .slice(-10);
-
-      const joined = requests.length ? requests.join(" • ") : "No requests yet — be the first!";
-      ticker.textContent = joined;
-      clone.textContent = joined;
-    } catch (err) {
-      ticker.textContent = "Requests unavailable right now.";
-      clone.textContent = ticker.textContent;
-    }
-  }
-
-  loadRequestsTicker();
-  setInterval(loadRequestsTicker, 15000);
-})();
-
-  </script>
-  <script>
-    (function () {
-      const likeButtons = document.querySelectorAll('.like-btn');
-      const commentToggles = document.querySelectorAll('.comment-toggle');
-      const commentForms = document.querySelectorAll('.comment-form');likeButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const countEl = btn.querySelector('.like-count');
-      let count = Number(countEl.textContent);
-      const liked = btn.dataset.liked === 'true';
-
-      if (liked) {
-        count -= 1;
-        btn.dataset.liked = 'false';
-        btn.classList.remove('liked');
-      } else {
-        count += 1;
-        btn.dataset.liked = 'true';
-        btn.classList.add('liked');
-      }
-
-      countEl.textContent = count;
-    });
-  });
-
-  commentToggles.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const target = document.getElementById(btn.dataset.target);
-      if (target) target.classList.toggle('open');
-    });
-  });
-
-  commentForms.forEach((form) => {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const input = form.querySelector('input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const box = form.closest('.comments-box');
-      const toggleBtn = box ? document.querySelector(`[data-target="${box.id}"]`) : null;
-      const countEl = toggleBtn ? toggleBtn.querySelector('.comment-count') : null;
-
-      const comment = document.createElement('div');
-      comment.className = 'comment-item';
-      comment.innerHTML = '<strong>You:</strong> ' + text;
-
-      form.before(comment);
-      input.value = '';
-
-      if (countEl) {
-        countEl.textContent = String(Number(countEl.textContent) + 1);
-      }
-    });
-  });
-})();
-
-  </script>
-  <script type="module">
+  </div>  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import {
       getAuth,
@@ -650,204 +427,545 @@ const requests = rows
       doc,
       setDoc,
       getDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";const firebaseConfig = {
-  apiKey: "AIzaSyDEdR9n8imkT5e0mJaPi3gLmiiUtTfSoXw",
-  authDomain: "wildstyle-social.firebaseapp.com",
-  projectId: "wildstyle-social",
-  storageBucket: "wildstyle-social.firebasestorage.app",
-  messagingSenderId: "608635701800",
-  appId: "1:608635701800:web:c53acf7aa7198ed949c31d",
-};
+      serverTimestamp,
+      addDoc,
+      collection,
+      query,
+      orderBy,
+      limit,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes("PASTE_"));
-
-let app = null;
-let auth = null;
-let db = null;
-
-if (!usingPlaceholders) {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-}
-
-const openBtn = document.getElementById('openAuthBtn');
-const closeBtn = document.getElementById('closeAuthBtn');
-const overlay = document.getElementById('authOverlay');
-const modal = document.getElementById('authModal');
-const tabs = document.querySelectorAll('.auth-tab');
-const panels = document.querySelectorAll('.auth-form');
-const loginForm = document.getElementById('loginForm');
-const signupForm = document.getElementById('signupForm');
-
-const profileName = document.querySelector('.profile-name');
-const profileRole = document.querySelector('.profile-role');
-const profileBio = document.querySelector('.profile-bio');
-const profileAvatar = document.querySelector('.profile-avatar');
-const profileActions = document.querySelector('.profile-actions');
-
-function openAuth() {
-  overlay.classList.add('open');
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
-}
-
-function closeAuth() {
-  overlay.classList.remove('open');
-  modal.classList.remove('open');
-  modal.setAttribute('aria-hidden', 'true');
-}
-
-function initialsFromName(name = 'WS') {
-  return name
-    .split(' ')
-    .map(part => part[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-function setLoggedOutState() {
-  if (openBtn) {
-    openBtn.textContent = 'Login';
-    openBtn.onclick = openAuth;
-  }
-  if (profileName) profileName.textContent = 'Guest Listener';
-  if (profileRole) profileRole.textContent = 'Listener • Not signed in';
-  if (profileBio) profileBio.textContent = 'Log in to post, comment, like, and build your Wildstyle profile.';
-  if (profileAvatar) profileAvatar.textContent = 'WL';
-  if (profileActions) {
-    profileActions.innerHTML = `
-      <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
-      <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
-    `;
-    document.getElementById('sidebarLoginBtn')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuth();
-    });
-    document.getElementById('sidebarSignupBtn')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuth();
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      document.querySelector('[data-auth-tab="signup"]')?.classList.add('active');
-      document.querySelector('[data-auth-panel="signup"]')?.classList.add('active');
-    });
-  }
-}
-
-async function setLoggedInState(user) {
-  let profileData = {
-    displayName: user.displayName || user.email?.split('@')[0] || 'Wildstyle User',
-    role: 'Listener',
-    bio: 'Wildstyle community member.'
-  };
-
-  if (db) {
-    const profileRef = doc(db, 'users', user.uid);
-    const snap = await getDoc(profileRef);
-    if (snap.exists()) {
-      profileData = { ...profileData, ...snap.data() };
-    }
-  }
-
-  if (openBtn) {
-    openBtn.textContent = 'Logout';
-    openBtn.onclick = async () => {
-      if (auth) await signOut(auth);
+    const firebaseConfig = {
+      apiKey: "PASTE_API_KEY_HERE",
+      authDomain: "PASTE_AUTH_DOMAIN_HERE",
+      projectId: "PASTE_PROJECT_ID_HERE",
+      storageBucket: "PASTE_STORAGE_BUCKET_HERE",
+      messagingSenderId: "PASTE_MESSAGING_SENDER_ID_HERE",
+      appId: "PASTE_APP_ID_HERE"
     };
-  }
 
-  if (profileName) profileName.textContent = profileData.displayName;
-  if (profileRole) profileRole.textContent = `${profileData.role || 'Listener'} • Signed in`;
-  if (profileBio) profileBio.textContent = profileData.bio || 'Wildstyle community member.';
-  if (profileAvatar) profileAvatar.textContent = initialsFromName(profileData.displayName);
-  if (profileActions) {
-    profileActions.innerHTML = `
-      <a href="#" class="btn-primary small-btn">View Profile</a>
-      <a href="#" class="btn-secondary small-btn">Edit Profile</a>
-    `;
-  }
-}
+    const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes("PASTE_"));
 
-if (openBtn) openBtn.addEventListener('click', (e) => {
-  if (openBtn.textContent === 'Login') {
-    e.preventDefault();
-    openAuth();
-  }
-});
-if (closeBtn) closeBtn.addEventListener('click', closeAuth);
-if (overlay) overlay.addEventListener('click', closeAuth);
+    let app = null;
+    let auth = null;
+    let db = null;
+    let currentUserProfile = null;
+    let unsubscribePosts = null;
 
-tabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    tabs.forEach((t) => t.classList.remove('active'));
-    panels.forEach((p) => p.classList.remove('active'));
-    tab.classList.add('active');
-    const panel = document.querySelector(`[data-auth-panel="${tab.dataset.authTab}"]`);
-    if (panel) panel.classList.add('active');
-  });
-});
-
-loginForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (usingPlaceholders || !auth) {
-    alert('Paste your Firebase config first, then login will go live.');
-    return;
-  }
-
-  const email = loginForm.querySelector('input[type="email"]').value.trim();
-  const password = loginForm.querySelector('input[type="password"]').value;
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    closeAuth();
-  } catch (err) {
-    alert(err.message);
-  }
-});
-
-signupForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (usingPlaceholders || !auth || !db) {
-    alert('Paste your Firebase config first, then signup will go live.');
-    return;
-  }
-
-  const displayName = signupForm.querySelector('input[type="text"]').value.trim();
-  const email = signupForm.querySelector('input[type="email"]').value.trim();
-  const password = signupForm.querySelector('input[type="password"]').value;
-
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(cred.user, { displayName });
-    await setDoc(doc(db, 'users', cred.user.uid), {
-      uid: cred.user.uid,
-      displayName,
-      email,
-      bio: 'New to Wildstyle Social Beta.',
-      role: 'Listener',
-      createdAt: serverTimestamp()
-    });
-    closeAuth();
-  } catch (err) {
-    alert(err.message);
-  }
-});
-
-if (usingPlaceholders) {
-  setLoggedOutState();
-} else {
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      await setLoggedInState(user);
-    } else {
-      setLoggedOutState();
+    if (!usingPlaceholders) {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
     }
-  });
-}
 
-  </script>
-</body>
+    const openBtn = document.getElementById('openAuthBtn');
+    const closeBtn = document.getElementById('closeAuthBtn');
+    const overlay = document.getElementById('authOverlay');
+    const modal = document.getElementById('authModal');
+    const tabs = document.querySelectorAll('.auth-tab');
+    const panels = document.querySelectorAll('.auth-form');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+
+    const postInput = document.getElementById('postInput');
+    const createPostBtn = document.getElementById('createPostBtn');
+    const postStatus = document.getElementById('postStatus');
+    const feedContainer = document.getElementById('feedContainer');
+
+    const profileName = document.querySelector('.profile-name');
+    const profileRole = document.querySelector('.profile-role');
+    const profileBio = document.querySelector('.profile-bio');
+    const profileAvatar = document.querySelector('.profile-avatar');
+    const profileActions = document.querySelector('.profile-actions');
+
+    function openAuth() {
+      overlay.classList.add('open');
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeAuth() {
+      overlay.classList.remove('open');
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function initialsFromName(name = 'WS') {
+      return name
+        .split(' ')
+        .map(part => part[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+    }
+
+    function escapeHtml(text = '') {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function bindSidebarAuthButtons() {
+      document.getElementById('sidebarLoginBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAuth();
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        document.querySelector('[data-auth-tab="login"]')?.classList.add('active');
+        document.querySelector('[data-auth-panel="login"]')?.classList.add('active');
+      });
+
+      document.getElementById('sidebarSignupBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAuth();
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        document.querySelector('[data-auth-tab="signup"]')?.classList.add('active');
+        document.querySelector('[data-auth-panel="signup"]')?.classList.add('active');
+      });
+    }
+
+    function setLoggedOutState() {
+      if (openBtn) {
+        openBtn.textContent = 'Login';
+        openBtn.onclick = null;
+        openBtn.addEventListener('click', openAuth, { once: true });
+      }
+
+      if (profileName) profileName.textContent = 'Guest Listener';
+      if (profileRole) profileRole.textContent = 'Listener • Not signed in';
+      if (profileBio) profileBio.textContent = 'Log in to post, comment, like, and build your Wildstyle profile.';
+      if (profileAvatar) profileAvatar.textContent = 'WL';
+      if (profileActions) {
+        profileActions.innerHTML = `
+          <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
+          <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
+        `;
+        bindSidebarAuthButtons();
+      }
+    }
+
+    async function setLoggedInState(user) {
+      let profileData = {
+        displayName: user.displayName || user.email?.split('@')[0] || 'Wildstyle User',
+        role: 'Listener',
+        bio: 'Wildstyle community member.'
+      };
+
+      if (db) {
+        const profileRef = doc(db, 'users', user.uid);
+        const snap = await getDoc(profileRef);
+        if (snap.exists()) {
+          profileData = { ...profileData, ...snap.data() };
+        }
+      }
+
+      currentUserProfile = {
+        uid: user.uid,
+        displayName: profileData.displayName,
+        role: profileData.role || 'Listener',
+        bio: profileData.bio || 'Wildstyle community member.'
+      };
+
+      if (openBtn) {
+        openBtn.textContent = 'Logout';
+        openBtn.onclick = async () => {
+          if (auth) await signOut(auth);
+        };
+      }
+
+      if (profileName) profileName.textContent = profileData.displayName;
+      if (profileRole) profileRole.textContent = `${profileData.role || 'Listener'} • Signed in`;
+      if (profileBio) profileBio.textContent = profileData.bio || 'Wildstyle community member.';
+      if (profileAvatar) profileAvatar.textContent = initialsFromName(profileData.displayName);
+      if (profileActions) {
+        profileActions.innerHTML = `
+          <a href="#" class="btn-primary small-btn">View Profile</a>
+          <a href="#" class="btn-secondary small-btn">Edit Profile</a>
+        `;
+      }
+    }
+
+    function getDefaultFeedMarkup() {
+      return `
+        <article class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">DJ</div>
+              <div>
+                <strong>DJ EchoFalls</strong>
+                <small>Verified DJ • 7 mins ago</small>
+              </div>
+            </div>
+            <span class="badge">Pinned Update</span>
+          </div>
+          <p>Going live tonight with a proper multi-genre workout. Drop your requests, jump in the chat, and let’s make it a madness 🔥</p>
+          <div class="post-actions">
+            <button class="like-btn" data-post="demo-1" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">128</span> Likes</button>
+            <button class="comment-toggle" data-target="comments-demo-1">💬 <span class="comment-count">2</span> Comments</button>
+            <button>📌 Pinned</button>
+          </div>
+          <div class="comments-box" id="comments-demo-1">
+            <div class="comment-item"><strong>Laura:</strong> Can’t wait for tonight 🔥</div>
+            <div class="comment-item"><strong>Mike:</strong> Requests locked and loaded!</div>
+            <form class="comment-form">
+              <input type="text" placeholder="Write a comment..." maxlength="140" />
+              <button type="submit">Post</button>
+            </form>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">JR</div>
+              <div>
+                <strong>Jay</strong>
+                <small>Admin • 22 mins ago</small>
+              </div>
+            </div>
+            <span class="badge">Station Update</span>
+          </div>
+          <p>Wildstyle Social Beta is officially in motion. We’re bringing together the stream, DJ culture, requests, shout-outs, the listener map, and community posts into one place.</p>
+          <div class="post-image">WILDSTYLE SOCIAL</div>
+          <div class="post-actions">
+            <button class="like-btn" data-post="demo-2" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">241</span> Likes</button>
+            <button class="comment-toggle" data-target="comments-demo-2">💬 <span class="comment-count">1</span> Comments</button>
+            <button>🔁 Share</button>
+          </div>
+          <div class="comments-box" id="comments-demo-2">
+            <div class="comment-item"><strong>Nala:</strong> This is looking massive already 💜</div>
+            <form class="comment-form">
+              <input type="text" placeholder="Write a comment..." maxlength="140" />
+              <button type="submit">Post</button>
+            </form>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderRealtimePosts(posts) {
+      if (!feedContainer) return;
+
+      const livePosts = posts.map((post) => {
+        const avatar = initialsFromName(post.authorName || 'WS');
+        const when = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleString() : 'Just now';
+        const likes = Number(post.likesCount || 0);
+
+        return `
+          <article class="post">
+            <div class="post-top">
+              <div class="author">
+                <div class="avatar">${avatar}</div>
+                <div>
+                  <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+                  <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(when)}</small>
+                </div>
+              </div>
+              <span class="badge">Live Post</span>
+            </div>
+            <p>${escapeHtml(post.text || '')}</p>
+            <div class="post-actions">
+              <button class="like-btn" data-post="live-${post.id}" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">${likes}</span> Likes</button>
+              <button class="comment-toggle" data-target="comments-live-${post.id}">💬 <span class="comment-count">0</span> Comments</button>
+            </div>
+            <div class="comments-box" id="comments-live-${post.id}">
+              <form class="comment-form">
+                <input type="text" placeholder="Write a comment..." maxlength="140" />
+                <button type="submit">Post</button>
+              </form>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      feedContainer.innerHTML = livePosts + getDefaultFeedMarkup();
+      bindPostInteractions();
+    }
+
+    function listenForPosts() {
+      if (!feedContainer) return;
+
+      if (usingPlaceholders || !db) {
+        renderRealtimePosts([]);
+        return;
+      }
+
+      if (unsubscribePosts) unsubscribePosts();
+
+      const postsQuery = query(
+        collection(db, 'posts'),
+        orderBy('createdAt', 'desc'),
+        limit(12)
+      );
+
+      unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
+        const posts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderRealtimePosts(posts);
+      }, (err) => {
+        console.error('Post feed error:', err);
+        feedContainer.innerHTML = getDefaultFeedMarkup();
+        bindPostInteractions();
+      });
+    }
+
+    async function createPost() {
+      if (usingPlaceholders || !auth || !db) {
+        alert('Paste your Firebase config first, then Create Post will go live.');
+        return;
+      }
+
+      if (!auth.currentUser || !currentUserProfile) {
+        openAuth();
+        if (postStatus) postStatus.textContent = 'Login to create a post.';
+        return;
+      }
+
+      const text = postInput?.value.trim();
+      if (!text) {
+        if (postStatus) postStatus.textContent = 'Write something before posting.';
+        return;
+      }
+
+      try {
+        if (createPostBtn) {
+          createPostBtn.disabled = true;
+          createPostBtn.textContent = 'Posting...';
+        }
+        if (postStatus) postStatus.textContent = '';
+
+        await addDoc(collection(db, 'posts'), {
+          uid: auth.currentUser.uid,
+          authorName: currentUserProfile.displayName,
+          role: currentUserProfile.role || 'Listener',
+          text,
+          likesCount: 0,
+          createdAt: serverTimestamp()
+        });
+
+        if (postInput) postInput.value = '';
+        if (postStatus) postStatus.textContent = '✅ Post published!';
+        setTimeout(() => {
+          if (postStatus?.textContent === '✅ Post published!') postStatus.textContent = '';
+        }, 2500);
+      } catch (err) {
+        console.error(err);
+        if (postStatus) postStatus.textContent = err.message;
+      } finally {
+        if (createPostBtn) {
+          createPostBtn.disabled = false;
+          createPostBtn.textContent = 'Post Now';
+        }
+      }
+    }
+
+    function bindPostInteractions() {
+      const likeButtons = document.querySelectorAll('.like-btn');
+      const commentToggles = document.querySelectorAll('.comment-toggle');
+      const commentForms = document.querySelectorAll('.comment-form');
+
+      likeButtons.forEach((btn) => {
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', () => {
+          const countEl = btn.querySelector('.like-count');
+          if (!countEl) return;
+          let count = Number(countEl.textContent);
+          const liked = btn.dataset.liked === 'true';
+
+          if (liked) {
+            count -= 1;
+            btn.dataset.liked = 'false';
+            btn.classList.remove('liked');
+          } else {
+            count += 1;
+            btn.dataset.liked = 'true';
+            btn.classList.add('liked');
+          }
+          countEl.textContent = count;
+        });
+      });
+
+      commentToggles.forEach((btn) => {
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.classList.toggle('open');
+        });
+      });
+
+      commentForms.forEach((form) => {
+        if (form.dataset.bound === 'true') return;
+        form.dataset.bound = 'true';
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const input = form.querySelector('input');
+          const text = input?.value.trim();
+          if (!text) return;
+
+          const box = form.closest('.comments-box');
+          const toggleBtn = box ? document.querySelector(`[data-target="${box.id}"]`) : null;
+          const countEl = toggleBtn ? toggleBtn.querySelector('.comment-count') : null;
+
+          const comment = document.createElement('div');
+          comment.className = 'comment-item';
+          comment.innerHTML = '<strong>You:</strong> ' + escapeHtml(text);
+          form.before(comment);
+          input.value = '';
+          if (countEl) countEl.textContent = String(Number(countEl.textContent) + 1);
+        });
+      });
+    }
+
+    if (openBtn) openBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (openBtn.textContent === 'Login') openAuth();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeAuth);
+    if (overlay) overlay.addEventListener('click', closeAuth);
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.classList.remove('active'));
+        panels.forEach((p) => p.classList.remove('active'));
+        tab.classList.add('active');
+        const panel = document.querySelector(`[data-auth-panel="${tab.dataset.authTab}"]`);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
+    loginForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (usingPlaceholders || !auth) {
+        alert('Paste your Firebase config first, then login will go live.');
+        return;
+      }
+
+      const email = loginForm.querySelector('input[type="email"]').value.trim();
+      const password = loginForm.querySelector('input[type="password"]').value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        closeAuth();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    signupForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (usingPlaceholders || !auth || !db) {
+        alert('Paste your Firebase config first, then signup will go live.');
+        return;
+      }
+
+      const displayName = signupForm.querySelector('input[type="text"]').value.trim();
+      const email = signupForm.querySelector('input[type="email"]').value.trim();
+      const password = signupForm.querySelector('input[type="password"]').value;
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName });
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          uid: cred.user.uid,
+          displayName,
+          email,
+          bio: 'New to Wildstyle Social Beta.',
+          role: 'Listener',
+          createdAt: serverTimestamp()
+        });
+        closeAuth();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    createPostBtn?.addEventListener('click', createPost);
+
+    if (usingPlaceholders) {
+      setLoggedOutState();
+      listenForPosts();
+    } else {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          await setLoggedInState(user);
+          listenForPosts();
+        } else {
+          currentUserProfile = null;
+          setLoggedOutState();
+          listenForPosts();
+        }
+      });
+    }
+
+    bindPostInteractions();
+
+    (function () {
+      const ticker = document.getElementById("requestTickerText");
+      const clone = document.getElementById("requestTickerClone");
+      if (!ticker || !clone) return;
+
+      const REQUESTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv";
+
+      function parseCSV(line) {
+        const result = [];
+        let current = "";
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+          const next = line[i + 1];
+          if (char === '"' && inQuotes && next === '"') {
+            current += '"';
+            i++;
+          } else if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = "";
+          } else {
+            current += char;
+          }
+        }
+        result.push(current.trim());
+        return result;
+      }
+
+      async function loadRequestsTicker() {
+        try {
+          const res = await fetch(REQUESTS_URL + "&t=" + Date.now());
+          const csv = await res.text();
+          const rows = csv.trim().split(/
+?
+/);
+          rows.shift();
+
+          const requests = rows
+            .map(row => {
+              const cols = parseCSV(row);
+              const name = cols[1] || 'Listener';
+              const song = cols[2] || 'Unknown Song';
+              const artist = cols[3] || 'Unknown Artist';
+              return `${name} requested ${song} - ${artist}`;
+            })
+            .filter(Boolean)
+            .slice(-10);
+
+          const joined = requests.length ? requests.join(' • ') : 'No requests yet — be the first!';
+          ticker.textContent = joined;
+          clone.textContent = joined;
+        } catch (err) {
+          ticker.textContent = 'Requests unavailable right now.';
+          clone.textContent = ticker.textContent;
+        }
+      }
+
+      loadRequestsTicker();
+      setInterval(loadRequestsTicker, 15000);
+    })();
+  </script></body>
 </html> 
