@@ -737,9 +737,7 @@ button,input,textarea{font:inherit}
       try {
         const res = await fetch(url + '&t=' + Date.now());
         const csv = await res.text();
-        const rows = csv.trim().split(/
-?
-/);
+        const rows = csv.trim().split('\n')
         rows.shift();
         const items = rows.map(row => {
           const cols = parseCSV(row);
