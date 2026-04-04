@@ -1,5 +1,3 @@
-<!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -12,51 +10,33 @@
     :root{
       --bg:#f5edf7;
       --panel:#0f0b18;
-      --panel-2:#171126;
       --text:#ffffff;
       --muted:#b8a9d6;
-      --dark:#1d1630;
       --line:rgba(255,255,255,.09);
       --grad:linear-gradient(90deg,#ff2a6d 0%,#8a46ff 48%,#2a7bff 100%);
       --grad-soft:linear-gradient(180deg,#1b1528 0%,#0d0915 100%);
       --shadow:0 18px 45px rgba(42,16,68,.14);
-      --radius:24px;
     }*{box-sizing:border-box}
 html,body{margin:0;padding:0;font-family:Inter,system-ui,sans-serif;background:
   radial-gradient(circle at top left, rgba(255,122,182,.18), transparent 24%),
   radial-gradient(circle at top right, rgba(78,176,255,.15), transparent 24%),
   var(--bg);color:#231a37;}
 a{text-decoration:none;color:inherit}
-button{font:inherit}
+button,input,textarea{font:inherit}
 
 .shell{max-width:1400px;margin:0 auto;padding:20px 18px 40px}
-
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:20px;
-  background:rgba(255,255,255,.58);backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.55);border-radius:28px;padding:14px 18px;
-  box-shadow:var(--shadow);position:sticky;top:10px;z-index:20;
-}
-
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;background:rgba(255,255,255,.58);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.55);border-radius:28px;padding:14px 18px;box-shadow:var(--shadow);position:sticky;top:10px;z-index:20}
 .brand{display:flex;align-items:center;gap:14px;min-width:0}
 .brand-badge{width:58px;height:58px;border-radius:18px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.4rem;box-shadow:0 10px 24px rgba(159,46,255,.28)}
-.brand-copy{min-width:0}
 .brand-copy strong{display:block;font-family:Oswald,sans-serif;letter-spacing:.04em;font-size:2rem;line-height:1}
 .brand-copy small{display:block;color:#746792;font-size:1rem;margin-top:4px}
-
 .nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.nav a,.nav button{
-  border:none;background:#120d1d;color:#fff;padding:12px 18px;border-radius:16px;
-  font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(17,8,29,.12)
-}
+.nav a,.nav button{border:none;background:#120d1d;color:#fff;padding:12px 18px;border-radius:16px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(17,8,29,.12)}
 .nav a.active,.nav button.active{background:var(--grad)}
 
-.hero{
-  margin-top:18px;background:var(--grad-soft);border-radius:32px;overflow:hidden;
-  box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08)
-}
+.hero{margin-top:18px;background:var(--grad-soft);border-radius:32px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08)}
 .hero-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px;background:var(--grad);color:#fff;font-family:Oswald,sans-serif;letter-spacing:.04em}
-.live-pill{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.18);font-family:Inter,sans-serif;font-size:.9rem;font-weight:800}
+.live-pill{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.18);font-size:.9rem;font-weight:800}
 .hero-body{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;padding:28px}
 .hero-copy h1{margin:0 0 12px;font-family:Oswald,sans-serif;font-size:4rem;line-height:.95;color:#fff;letter-spacing:.03em}
 .hero-copy p{margin:0;color:#d1c4ee;font-size:1.08rem;max-width:720px;line-height:1.7}
@@ -64,28 +44,23 @@ button{font:inherit}
 .btn-primary,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:18px;font-weight:800;border:none;cursor:pointer}
 .btn-primary{background:var(--grad);color:#fff}
 .btn-secondary{background:#fff;color:#1c1432}
-
-.hero-status{display:grid;gap:14px}
 .mini-card{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:22px;padding:18px;color:#fff}
 .mini-card h4{margin:0 0 8px;font-family:Oswald,sans-serif;font-size:1.35rem;letter-spacing:.04em}
 .mini-card p{margin:0;color:#d7cbef;line-height:1.6}
 .mini-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
 .main{display:grid;grid-template-columns:minmax(0,1.4fr) 360px;gap:22px;margin-top:22px}
-
 .card{background:var(--grad-soft);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08)}
 .card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;background:var(--grad);color:#fff}
 .card-head h2{margin:0;font-family:Oswald,sans-serif;font-size:1.6rem;letter-spacing:.04em}
 .card-body{padding:20px;color:#fff}
 
-.composer textarea{
-  width:100%;min-height:130px;resize:vertical;border:none;outline:none;border-radius:22px;
-  padding:18px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;font:inherit
-}
+.composer textarea{width:100%;min-height:130px;resize:vertical;border:none;outline:none;border-radius:22px;padding:18px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff}
 .composer textarea::placeholder{color:#a997cf}
 .composer-tools{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
 .tool-pills{display:flex;gap:10px;flex-wrap:wrap}
 .pill{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;font-weight:700;font-size:.92rem}
+#postStatus{margin-top:12px;color:#b8a9d6;font-weight:700;min-height:22px}
 
 .feed{display:grid;gap:18px}
 .post{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:24px;padding:18px}
@@ -115,7 +90,6 @@ button{font:inherit}
 .spotlight{display:flex;gap:14px;align-items:center}
 .spotlight img{width:86px;height:86px;border-radius:18px;object-fit:cover;background:#221738}
 .spotlight p{margin:6px 0 0;color:#dbcdf5;line-height:1.6}
-
 .list{display:grid;gap:12px}
 .list-item{display:flex;justify-content:space-between;gap:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:18px;padding:14px;color:#fff}
 .list-item small{color:#b9abd7;display:block;margin-top:4px}
@@ -140,7 +114,6 @@ button{font:inherit}
 .auth-form.active{display:grid}
 .auth-form input{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;outline:none}
 .auth-form input::placeholder{color:#b8a9d6}
-.auth-submit{border:none;cursor:pointer}
 .auth-note{margin:14px 0 0;color:#b8a9d6;line-height:1.6}
 
 .profile-card .card-body{display:grid;gap:16px}
@@ -161,26 +134,8 @@ button{font:inherit}
 .footer p,.footer li{color:#d9cdf4;line-height:1.6}
 .footer ul{margin:0;padding-left:18px}
 
-@media (max-width: 1100px){
-  .hero-body,.main,.footer{grid-template-columns:1fr}
-  .brand-copy strong{font-size:1.5rem}
-  .hero-copy h1{font-size:3rem}
-}
-
-@media (max-width: 720px){
-  .shell{padding:14px 12px 30px}
-  .topbar{padding:12px}
-  .brand-badge{width:50px;height:50px;border-radius:16px}
-  .brand-copy strong{font-size:1.18rem}
-  .brand-copy small{font-size:.88rem}
-  .nav{width:100%;justify-content:flex-start}
-  .nav a,.nav button{padding:10px 14px;border-radius:14px;font-size:.92rem}
-  .hero-copy h1{font-size:2.35rem}
-  .hero-body{padding:18px}
-  .mini-row,.quick-grid,.profile-stats{grid-template-columns:1fr}
-  .card-head h2{font-size:1.3rem}
-  .comment-form{grid-template-columns:1fr}
-}
+@media (max-width:1100px){.hero-body,.main,.footer{grid-template-columns:1fr}.brand-copy strong{font-size:1.5rem}.hero-copy h1{font-size:3rem}}
+@media (max-width:720px){.shell{padding:14px 12px 30px}.topbar{padding:12px}.brand-badge{width:50px;height:50px;border-radius:16px}.brand-copy strong{font-size:1.18rem}.brand-copy small{font-size:.88rem}.nav{width:100%;justify-content:flex-start}.nav a,.nav button{padding:10px 14px;border-radius:14px;font-size:.92rem}.hero-copy h1{font-size:2.35rem}.hero-body{padding:18px}.mini-row,.quick-grid,.profile-stats{grid-template-columns:1fr}.card-head h2{font-size:1.3rem}.comment-form{grid-template-columns:1fr}}
 
   </style>
 </head>
@@ -193,18 +148,17 @@ button{font:inherit}
           <strong>WILDSTYLE RADIO</strong>
           <small>Social Beta</small>
         </div>
-      </a><nav class="nav">
-    <a href="#" class="active">Home</a>
-    <a href="#">DJs</a>
-    <a href="#">Schedule</a>
-    <a href="#">Chat</a>
-    <a href="#">Requests</a>
-    <a href="#">Map</a>
-    <button id="openAuthBtn">Login</button>
-  </nav>
-</header>
-
-<section class="hero">
+      </a>
+      <nav class="nav">
+        <a href="#" class="active">Home</a>
+        <a href="#">DJs</a>
+        <a href="#">Schedule</a>
+        <a href="#">Chat</a>
+        <a href="#">Requests</a>
+        <a href="#">Map</a>
+        <button id="openAuthBtn">Login</button>
+      </nav>
+    </header><section class="hero">
   <div class="hero-head">
     <span>Wildstyle Social Beta</span>
     <span class="live-pill">NOW ON • DJ EchoFalls 8pm–9pm</span>
@@ -212,15 +166,12 @@ button{font:inherit}
   <div class="hero-body">
     <div class="hero-copy">
       <h1>Radio Meets Community</h1>
-      <p>
-        Wildstyle Social brings your station, DJs, listeners, events, requests, shout-outs, and community updates into one live social platform. Built for radio culture, not just another feed.
-      </p>
+      <p>Wildstyle Social brings your station, DJs, listeners, events, requests, shout-outs, and community updates into one live social platform. Built for radio culture, not just another feed.</p>
       <div class="hero-actions">
         <a href="#" class="btn-primary">Create a Post</a>
         <a href="#" class="btn-secondary">Open Live Chat</a>
       </div>
     </div>
-
     <div class="hero-status">
       <div class="mini-card">
         <h4>Station Pulse</h4>
@@ -241,28 +192,27 @@ button{font:inherit}
 </section>
 
 <div class="auth-overlay" id="authOverlay"></div>
-
 <section class="auth-modal" id="authModal" aria-hidden="true">
   <div class="auth-head">
     <h2>Wildstyle Login</h2>
-    <button class="auth-close" id="closeAuthBtn">✕</button>
+    <button class="auth-close" id="closeAuthBtn" type="button">✕</button>
   </div>
   <div class="auth-tabs">
-    <button class="auth-tab active" data-auth-tab="login">Login</button>
-    <button class="auth-tab" data-auth-tab="signup">Sign Up</button>
+    <button class="auth-tab active" data-auth-tab="login" type="button">Login</button>
+    <button class="auth-tab" data-auth-tab="signup" type="button">Sign Up</button>
   </div>
   <form class="auth-form active" id="loginForm" data-auth-panel="login">
-    <input type="email" placeholder="Email address" required>
-    <input type="password" placeholder="Password" required>
-    <button type="submit" class="btn-primary auth-submit">Login to Wildstyle</button>
+    <input id="loginEmail" type="email" placeholder="Email address" required>
+    <input id="loginPassword" type="password" placeholder="Password" required>
+    <button type="submit" class="btn-primary">Login to Wildstyle</button>
   </form>
   <form class="auth-form" id="signupForm" data-auth-panel="signup">
-    <input type="text" placeholder="Display name" required>
-    <input type="email" placeholder="Email address" required>
-    <input type="password" placeholder="Create password" required>
-    <button type="submit" class="btn-primary auth-submit">Create account</button>
+    <input id="signupDisplayName" type="text" placeholder="Display name" required>
+    <input id="signupEmail" type="email" placeholder="Email address" required>
+    <input id="signupPassword" type="password" placeholder="Create password" required>
+    <button type="submit" class="btn-primary">Create account</button>
   </form>
-  <p class="auth-note">Login, signup, profile creation and live posts are wired for Firebase. Paste your Firebase config into the script block below.</p>
+  <p class="auth-note" id="authStatus">Paste your Firebase config in the script block below.</p>
 </section>
 
 <main class="main">
@@ -282,7 +232,7 @@ button{font:inherit}
           </div>
           <button type="button" class="btn-primary" id="createPostBtn">Post Now</button>
         </div>
-        <div id="postStatus" style="margin-top:12px;color:#b8a9d6;font-weight:700"></div>
+        <div id="postStatus"></div>
       </div>
     </article>
 
@@ -303,19 +253,19 @@ button{font:inherit}
       </div>
       <div class="card-body">
         <div class="profile-top">
-          <div class="profile-avatar">WL</div>
+          <div class="profile-avatar" id="profileAvatar">WL</div>
           <div>
-            <strong class="profile-name">Guest Listener</strong>
-            <div class="profile-role">Listener • Not signed in</div>
+            <strong class="profile-name" id="profileName">Guest Listener</strong>
+            <div class="profile-role" id="profileRole">Listener • Not signed in</div>
           </div>
         </div>
-        <p class="profile-bio">Log in to post, comment, like, and build your Wildstyle profile.</p>
+        <p class="profile-bio" id="profileBio">Log in to post, comment, like, and build your Wildstyle profile.</p>
         <div class="profile-stats">
-          <div><strong>0</strong><span>Posts</span></div>
+          <div><strong id="profilePosts">0</strong><span>Posts</span></div>
           <div><strong>0</strong><span>Followers</span></div>
           <div><strong>0</strong><span>Following</span></div>
         </div>
-        <div class="profile-actions">
+        <div class="profile-actions" id="profileActions">
           <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
           <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
         </div>
@@ -323,9 +273,7 @@ button{font:inherit}
     </article>
 
     <article class="card">
-      <div class="card-head">
-        <h2>Quick Access</h2>
-      </div>
+      <div class="card-head"><h2>Quick Access</h2></div>
       <div class="card-body quick-grid">
         <a class="quick-link" href="#">Schedule</a>
         <a class="quick-link" href="#">Chat Room</a>
@@ -335,12 +283,10 @@ button{font:inherit}
     </article>
 
     <article class="card">
-      <div class="card-head">
-        <h2>DJ Spotlight</h2>
-      </div>
+      <div class="card-head"><h2>DJ Spotlight</h2></div>
       <div class="card-body">
         <div class="spotlight">
-          <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=600&auto=format&fit=crop" alt="DJ spotlight" />
+          <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=600&auto=format&fit=crop" alt="DJ spotlight">
           <div>
             <strong style="font-size:1.15rem;color:#fff">DJ Nala</strong>
             <p>Bringing the hottest multi-genre mixes every week with proper community energy.</p>
@@ -350,9 +296,7 @@ button{font:inherit}
     </article>
 
     <article class="card">
-      <div class="card-head">
-        <h2>Live Requests</h2>
-      </div>
+      <div class="card-head"><h2>Live Requests</h2></div>
       <div class="card-body">
         <div class="request-ticker-wrap">
           <div class="request-ticker">
@@ -364,22 +308,14 @@ button{font:inherit}
     </article>
 
     <article class="card">
-      <div class="card-head">
-        <h2>Events</h2>
-      </div>
+      <div class="card-head"><h2>Events</h2></div>
       <div class="card-body list">
         <div class="list-item">
-          <div>
-            <strong>TikTok Live Takeover</strong>
-            <small>Sunday • 8pm UK</small>
-          </div>
+          <div><strong>TikTok Live Takeover</strong><small>Sunday • 8pm UK</small></div>
           <span class="badge">Upcoming</span>
         </div>
         <div class="list-item">
-          <div>
-            <strong>Unsigned Spotlight Night</strong>
-            <small>Thursday • 7pm UK</small>
-          </div>
+          <div><strong>Unsigned Spotlight Night</strong><small>Thursday • 7pm UK</small></div>
           <span class="badge">Promo</span>
         </div>
       </div>
@@ -394,26 +330,16 @@ button{font:inherit}
   </div>
   <div>
     <h3>Beta Modules</h3>
-    <ul>
-      <li>Live player</li>
-      <li>Community feed</li>
-      <li>Schedule + requests</li>
-      <li>DJ spotlight</li>
-    </ul>
+    <ul><li>Live player</li><li>Community feed</li><li>Schedule + requests</li><li>DJ spotlight</li></ul>
   </div>
   <div>
     <h3>Next Up</h3>
-    <ul>
-      <li>Real comments</li>
-      <li>Real likes</li>
-      <li>Profile editing</li>
-      <li>DJ verified badges</li>
-    </ul>
+    <ul><li>Real comments</li><li>Real likes</li><li>Profile editing</li><li>DJ verified badges</li></ul>
   </div>
 </footer>
 
   </div>  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
     import {
       getAuth,
       createUserWithEmailAndPassword,
@@ -421,7 +347,7 @@ button{font:inherit}
       onAuthStateChanged,
       updateProfile,
       signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
     import {
       getFirestore,
       doc,
@@ -433,8 +359,10 @@ button{font:inherit}
       query,
       orderBy,
       limit,
-      onSnapshot
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+      onSnapshot,
+      where,
+      getDocs
+    } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyDEdR9n8imkT5e0mJaPi3gLmiiUtTfSoXw",
@@ -445,60 +373,46 @@ button{font:inherit}
   appId: "1:608635701800:web:c53acf7aa7198ed949c31d",
     };
 
-    const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes("PASTE_"));
-
-    let app = null;
+    const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes('PASTE_'));
     let auth = null;
     let db = null;
     let currentUserProfile = null;
     let unsubscribePosts = null;
 
     if (!usingPlaceholders) {
-      app = initializeApp(firebaseConfig);
+      const app = initializeApp(firebaseConfig);
       auth = getAuth(app);
       db = getFirestore(app);
     }
 
-    const openBtn = document.getElementById('openAuthBtn');
-    const closeBtn = document.getElementById('closeAuthBtn');
-    const overlay = document.getElementById('authOverlay');
-    const modal = document.getElementById('authModal');
-    const tabs = document.querySelectorAll('.auth-tab');
-    const panels = document.querySelectorAll('.auth-form');
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-
-    const postInput = document.getElementById('postInput');
-    const createPostBtn = document.getElementById('createPostBtn');
-    const postStatus = document.getElementById('postStatus');
-    const feedContainer = document.getElementById('feedContainer');
-
-    const profileName = document.querySelector('.profile-name');
-    const profileRole = document.querySelector('.profile-role');
-    const profileBio = document.querySelector('.profile-bio');
-    const profileAvatar = document.querySelector('.profile-avatar');
-    const profileActions = document.querySelector('.profile-actions');
-
-    function openAuth() {
-      overlay.classList.add('open');
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeAuth() {
-      overlay.classList.remove('open');
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
-    }
-
-    function initialsFromName(name = 'WS') {
-      return name
-        .split(' ')
-        .map(part => part[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase();
-    }
+    const els = {
+      openAuthBtn: document.getElementById('openAuthBtn'),
+      closeAuthBtn: document.getElementById('closeAuthBtn'),
+      authOverlay: document.getElementById('authOverlay'),
+      authModal: document.getElementById('authModal'),
+      authTabs: document.querySelectorAll('.auth-tab'),
+      authPanels: document.querySelectorAll('.auth-form'),
+      authStatus: document.getElementById('authStatus'),
+      loginForm: document.getElementById('loginForm'),
+      signupForm: document.getElementById('signupForm'),
+      loginEmail: document.getElementById('loginEmail'),
+      loginPassword: document.getElementById('loginPassword'),
+      signupDisplayName: document.getElementById('signupDisplayName'),
+      signupEmail: document.getElementById('signupEmail'),
+      signupPassword: document.getElementById('signupPassword'),
+      postInput: document.getElementById('postInput'),
+      createPostBtn: document.getElementById('createPostBtn'),
+      postStatus: document.getElementById('postStatus'),
+      feedContainer: document.getElementById('feedContainer'),
+      profileAvatar: document.getElementById('profileAvatar'),
+      profileName: document.getElementById('profileName'),
+      profileRole: document.getElementById('profileRole'),
+      profileBio: document.getElementById('profileBio'),
+      profilePosts: document.getElementById('profilePosts'),
+      profileActions: document.getElementById('profileActions'),
+      requestTickerText: document.getElementById('requestTickerText'),
+      requestTickerClone: document.getElementById('requestTickerClone')
+    };
 
     function escapeHtml(text = '') {
       return String(text)
@@ -509,43 +423,80 @@ button{font:inherit}
         .replace(/'/g, '&#039;');
     }
 
-    function bindSidebarAuthButtons() {
+    function initialsFromName(name = 'WS') {
+      return name.split(' ').map(p => p[0] || '').join('').slice(0, 2).toUpperCase();
+    }
+
+    function setAuthMessage(message, isError = false) {
+      if (!els.authStatus) return;
+      els.authStatus.textContent = message;
+      els.authStatus.style.color = isError ? '#ff9eb8' : '#b8a9d6';
+    }
+
+    function setPostMessage(message, isError = false) {
+      if (!els.postStatus) return;
+      els.postStatus.textContent = message;
+      els.postStatus.style.color = isError ? '#ff9eb8' : '#b8a9d6';
+    }
+
+    function openAuth() {
+      els.authOverlay?.classList.add('open');
+      els.authModal?.classList.add('open');
+      els.authModal?.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeAuth() {
+      els.authOverlay?.classList.remove('open');
+      els.authModal?.classList.remove('open');
+      els.authModal?.setAttribute('aria-hidden', 'true');
+    }
+
+    function switchAuthTab(tabName) {
+      els.authTabs.forEach(tab => tab.classList.toggle('active', tab.dataset.authTab === tabName));
+      els.authPanels.forEach(panel => panel.classList.toggle('active', panel.dataset.authPanel === tabName));
+    }
+
+    function bindSidebarButtons() {
       document.getElementById('sidebarLoginBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
+        switchAuthTab('login');
         openAuth();
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-        document.querySelector('[data-auth-tab="login"]')?.classList.add('active');
-        document.querySelector('[data-auth-panel="login"]')?.classList.add('active');
       });
-
       document.getElementById('sidebarSignupBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
+        switchAuthTab('signup');
         openAuth();
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-        document.querySelector('[data-auth-tab="signup"]')?.classList.add('active');
-        document.querySelector('[data-auth-panel="signup"]')?.classList.add('active');
       });
     }
 
     function setLoggedOutState() {
-      if (openBtn) {
-        openBtn.textContent = 'Login';
-        openBtn.onclick = null;
-        openBtn.addEventListener('click', openAuth, { once: true });
+      currentUserProfile = null;
+      if (els.openAuthBtn) {
+        els.openAuthBtn.textContent = 'Login';
+        els.openAuthBtn.classList.remove('active');
       }
-
-      if (profileName) profileName.textContent = 'Guest Listener';
-      if (profileRole) profileRole.textContent = 'Listener • Not signed in';
-      if (profileBio) profileBio.textContent = 'Log in to post, comment, like, and build your Wildstyle profile.';
-      if (profileAvatar) profileAvatar.textContent = 'WL';
-      if (profileActions) {
-        profileActions.innerHTML = `
+      if (els.profileAvatar) els.profileAvatar.textContent = 'WL';
+      if (els.profileName) els.profileName.textContent = 'Guest Listener';
+      if (els.profileRole) els.profileRole.textContent = 'Listener • Not signed in';
+      if (els.profileBio) els.profileBio.textContent = 'Log in to post, comment, like, and build your Wildstyle profile.';
+      if (els.profilePosts) els.profilePosts.textContent = '0';
+      if (els.profileActions) {
+        els.profileActions.innerHTML = `
           <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
           <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
         `;
-        bindSidebarAuthButtons();
+        bindSidebarButtons();
+      }
+    }
+
+    async function updateProfilePostCount(uid) {
+      if (!db || !els.profilePosts) return;
+      try {
+        const q = query(collection(db, 'posts'), where('uid', '==', uid));
+        const snap = await getDocs(q);
+        els.profilePosts.textContent = String(snap.size);
+      } catch {
+        els.profilePosts.textContent = '0';
       }
     }
 
@@ -556,13 +507,9 @@ button{font:inherit}
         bio: 'Wildstyle community member.'
       };
 
-      if (db) {
-        const profileRef = doc(db, 'users', user.uid);
-        const snap = await getDoc(profileRef);
-        if (snap.exists()) {
-          profileData = { ...profileData, ...snap.data() };
-        }
-      }
+      const profileRef = doc(db, 'users', user.uid);
+      const snap = await getDoc(profileRef);
+      if (snap.exists()) profileData = { ...profileData, ...snap.data() };
 
       currentUserProfile = {
         uid: user.uid,
@@ -571,26 +518,28 @@ button{font:inherit}
         bio: profileData.bio || 'Wildstyle community member.'
       };
 
-      if (openBtn) {
-        openBtn.textContent = 'Logout';
-        openBtn.onclick = async () => {
-          if (auth) await signOut(auth);
-        };
+      if (els.openAuthBtn) {
+        els.openAuthBtn.textContent = 'Logout';
+        els.openAuthBtn.classList.add('active');
       }
-
-      if (profileName) profileName.textContent = profileData.displayName;
-      if (profileRole) profileRole.textContent = `${profileData.role || 'Listener'} • Signed in`;
-      if (profileBio) profileBio.textContent = profileData.bio || 'Wildstyle community member.';
-      if (profileAvatar) profileAvatar.textContent = initialsFromName(profileData.displayName);
-      if (profileActions) {
-        profileActions.innerHTML = `
+      if (els.profileAvatar) els.profileAvatar.textContent = initialsFromName(profileData.displayName);
+      if (els.profileName) els.profileName.textContent = profileData.displayName;
+      if (els.profileRole) els.profileRole.textContent = `${profileData.role || 'Listener'} • Signed in`;
+      if (els.profileBio) els.profileBio.textContent = profileData.bio || 'Wildstyle community member.';
+      if (els.profileActions) {
+        els.profileActions.innerHTML = `
           <a href="#" class="btn-primary small-btn">View Profile</a>
-          <a href="#" class="btn-secondary small-btn">Edit Profile</a>
+          <a href="#" class="btn-secondary small-btn" id="sidebarLogoutBtn">Logout</a>
         `;
+        document.getElementById('sidebarLogoutBtn')?.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await signOut(auth);
+        });
       }
+      await updateProfilePostCount(user.uid);
     }
 
-    function getDefaultFeedMarkup() {
+    function defaultPostsMarkup() {
       return `
         <article class="post">
           <div class="post-top">
@@ -605,7 +554,7 @@ button{font:inherit}
           </div>
           <p>Going live tonight with a proper multi-genre workout. Drop your requests, jump in the chat, and let’s make it a madness 🔥</p>
           <div class="post-actions">
-            <button class="like-btn" data-post="demo-1" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">128</span> Likes</button>
+            <button class="like-btn" data-liked="false"><span class="like-count">128</span> Likes</button>
             <button class="comment-toggle" data-target="comments-demo-1">💬 <span class="comment-count">2</span> Comments</button>
             <button>📌 Pinned</button>
           </div>
@@ -613,34 +562,7 @@ button{font:inherit}
             <div class="comment-item"><strong>Laura:</strong> Can’t wait for tonight 🔥</div>
             <div class="comment-item"><strong>Mike:</strong> Requests locked and loaded!</div>
             <form class="comment-form">
-              <input type="text" placeholder="Write a comment..." maxlength="140" />
-              <button type="submit">Post</button>
-            </form>
-          </div>
-        </article>
-
-        <article class="post">
-          <div class="post-top">
-            <div class="author">
-              <div class="avatar">JR</div>
-              <div>
-                <strong>Jay</strong>
-                <small>Admin • 22 mins ago</small>
-              </div>
-            </div>
-            <span class="badge">Station Update</span>
-          </div>
-          <p>Wildstyle Social Beta is officially in motion. We’re bringing together the stream, DJ culture, requests, shout-outs, the listener map, and community posts into one place.</p>
-          <div class="post-image">WILDSTYLE SOCIAL</div>
-          <div class="post-actions">
-            <button class="like-btn" data-post="demo-2" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">241</span> Likes</button>
-            <button class="comment-toggle" data-target="comments-demo-2">💬 <span class="comment-count">1</span> Comments</button>
-            <button>🔁 Share</button>
-          </div>
-          <div class="comments-box" id="comments-demo-2">
-            <div class="comment-item"><strong>Nala:</strong> This is looking massive already 💜</div>
-            <form class="comment-form">
-              <input type="text" placeholder="Write a comment..." maxlength="140" />
+              <input type="text" placeholder="Write a comment..." maxlength="140">
               <button type="submit">Post</button>
             </form>
           </div>
@@ -648,95 +570,130 @@ button{font:inherit}
       `;
     }
 
-    function renderRealtimePosts(posts) {
-      if (!feedContainer) return;
+    function bindPostInteractions() {
+      document.querySelectorAll('.like-btn').forEach((btn) => {
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', () => {
+          const countEl = btn.querySelector('.like-count');
+          if (!countEl) return;
+          let count = Number(countEl.textContent || 0);
+          const liked = btn.dataset.liked === 'true';
+          if (liked) {
+            count -= 1;
+            btn.dataset.liked = 'false';
+            btn.classList.remove('liked');
+          } else {
+            count += 1;
+            btn.dataset.liked = 'true';
+            btn.classList.add('liked');
+          }
+          countEl.textContent = String(count);
+        });
+      });
 
-      const livePosts = posts.map((post) => {
-        const avatar = initialsFromName(post.authorName || 'WS');
-        const when = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleString() : 'Just now';
-        const likes = Number(post.likesCount || 0);
+      document.querySelectorAll('.comment-toggle').forEach((btn) => {
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.classList.toggle('open');
+        });
+      });
 
+      document.querySelectorAll('.comment-form').forEach((form) => {
+        if (form.dataset.bound === 'true') return;
+        form.dataset.bound = 'true';
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const input = form.querySelector('input');
+          const value = input?.value.trim();
+          if (!value) return;
+          const box = form.closest('.comments-box');
+          const toggleBtn = box ? document.querySelector(`[data-target="${box.id}"]`) : null;
+          const countEl = toggleBtn?.querySelector('.comment-count');
+          const item = document.createElement('div');
+          item.className = 'comment-item';
+          item.innerHTML = `<strong>You:</strong> ${escapeHtml(value)}`;
+          form.before(item);
+          if (input) input.value = '';
+          if (countEl) countEl.textContent = String(Number(countEl.textContent || 0) + 1);
+        });
+      });
+    }
+
+    function renderFeed(posts) {
+      if (!els.feedContainer) return;
+      const live = posts.map(post => {
+        const created = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleString() : 'Just now';
         return `
           <article class="post">
             <div class="post-top">
               <div class="author">
-                <div class="avatar">${avatar}</div>
+                <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
                 <div>
                   <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
-                  <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(when)}</small>
+                  <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
                 </div>
               </div>
               <span class="badge">Live Post</span>
             </div>
             <p>${escapeHtml(post.text || '')}</p>
             <div class="post-actions">
-              <button class="like-btn" data-post="live-${post.id}" data-liked="false"><span class="like-icon">❤️</span> <span class="like-count">${likes}</span> Likes</button>
-              <button class="comment-toggle" data-target="comments-live-${post.id}">💬 <span class="comment-count">0</span> Comments</button>
+              <button class="like-btn" data-liked="false"><span class="like-count">${Number(post.likesCount || 0)}</span> Likes</button>
+              <button class="comment-toggle" data-target="comments-${post.id}">💬 <span class="comment-count">0</span> Comments</button>
             </div>
-            <div class="comments-box" id="comments-live-${post.id}">
+            <div class="comments-box" id="comments-${post.id}">
               <form class="comment-form">
-                <input type="text" placeholder="Write a comment..." maxlength="140" />
+                <input type="text" placeholder="Write a comment..." maxlength="140">
                 <button type="submit">Post</button>
               </form>
             </div>
           </article>
         `;
       }).join('');
-
-      feedContainer.innerHTML = livePosts + getDefaultFeedMarkup();
+      els.feedContainer.innerHTML = live + defaultPostsMarkup();
       bindPostInteractions();
     }
 
     function listenForPosts() {
-      if (!feedContainer) return;
-
+      if (!els.feedContainer) return;
+      if (unsubscribePosts) unsubscribePosts();
       if (usingPlaceholders || !db) {
-        renderRealtimePosts([]);
+        renderFeed([]);
         return;
       }
-
-      if (unsubscribePosts) unsubscribePosts();
-
-      const postsQuery = query(
-        collection(db, 'posts'),
-        orderBy('createdAt', 'desc'),
-        limit(12)
-      );
-
-      unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
+      const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(12));
+      unsubscribePosts = onSnapshot(q, (snapshot) => {
         const posts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderRealtimePosts(posts);
-      }, (err) => {
-        console.error('Post feed error:', err);
-        feedContainer.innerHTML = getDefaultFeedMarkup();
-        bindPostInteractions();
+        renderFeed(posts);
+        if (auth?.currentUser) updateProfilePostCount(auth.currentUser.uid);
+      }, (error) => {
+        console.error('Feed error:', error);
+        renderFeed([]);
       });
     }
 
     async function createPost() {
       if (usingPlaceholders || !auth || !db) {
-        alert('Paste your Firebase config first, then Create Post will go live.');
+        setPostMessage('Paste your Firebase config first.', true);
         return;
       }
-
       if (!auth.currentUser || !currentUserProfile) {
+        setPostMessage('Login to create a post.', true);
         openAuth();
-        if (postStatus) postStatus.textContent = 'Login to create a post.';
         return;
       }
-
-      const text = postInput?.value.trim();
+      const text = els.postInput?.value.trim();
       if (!text) {
-        if (postStatus) postStatus.textContent = 'Write something before posting.';
+        setPostMessage('Write something before posting.', true);
         return;
       }
 
       try {
-        if (createPostBtn) {
-          createPostBtn.disabled = true;
-          createPostBtn.textContent = 'Posting...';
-        }
-        if (postStatus) postStatus.textContent = '';
+        els.createPostBtn.disabled = true;
+        els.createPostBtn.textContent = 'Posting...';
+        setPostMessage('');
 
         await addDoc(collection(db, 'posts'), {
           uid: auth.currentUser.uid,
@@ -747,225 +704,132 @@ button{font:inherit}
           createdAt: serverTimestamp()
         });
 
-        if (postInput) postInput.value = '';
-        if (postStatus) postStatus.textContent = '✅ Post published!';
-        setTimeout(() => {
-          if (postStatus?.textContent === '✅ Post published!') postStatus.textContent = '';
-        }, 2500);
-      } catch (err) {
-        console.error(err);
-        if (postStatus) postStatus.textContent = err.message;
+        els.postInput.value = '';
+        setPostMessage('✅ Post published!');
+      } catch (error) {
+        console.error('Create post error:', error);
+        setPostMessage(error.message, true);
       } finally {
-        if (createPostBtn) {
-          createPostBtn.disabled = false;
-          createPostBtn.textContent = 'Post Now';
-        }
+        els.createPostBtn.disabled = false;
+        els.createPostBtn.textContent = 'Post Now';
       }
     }
 
-    function bindPostInteractions() {
-      const likeButtons = document.querySelectorAll('.like-btn');
-      const commentToggles = document.querySelectorAll('.comment-toggle');
-      const commentForms = document.querySelectorAll('.comment-form');
-
-      likeButtons.forEach((btn) => {
-        if (btn.dataset.bound === 'true') return;
-        btn.dataset.bound = 'true';
-        btn.addEventListener('click', () => {
-          const countEl = btn.querySelector('.like-count');
-          if (!countEl) return;
-          let count = Number(countEl.textContent);
-          const liked = btn.dataset.liked === 'true';
-
-          if (liked) {
-            count -= 1;
-            btn.dataset.liked = 'false';
-            btn.classList.remove('liked');
-          } else {
-            count += 1;
-            btn.dataset.liked = 'true';
-            btn.classList.add('liked');
-          }
-          countEl.textContent = count;
-        });
-      });
-
-      commentToggles.forEach((btn) => {
-        if (btn.dataset.bound === 'true') return;
-        btn.dataset.bound = 'true';
-        btn.addEventListener('click', () => {
-          const target = document.getElementById(btn.dataset.target);
-          if (target) target.classList.toggle('open');
-        });
-      });
-
-      commentForms.forEach((form) => {
-        if (form.dataset.bound === 'true') return;
-        form.dataset.bound = 'true';
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const input = form.querySelector('input');
-          const text = input?.value.trim();
-          if (!text) return;
-
-          const box = form.closest('.comments-box');
-          const toggleBtn = box ? document.querySelector(`[data-target="${box.id}"]`) : null;
-          const countEl = toggleBtn ? toggleBtn.querySelector('.comment-count') : null;
-
-          const comment = document.createElement('div');
-          comment.className = 'comment-item';
-          comment.innerHTML = '<strong>You:</strong> ' + escapeHtml(text);
-          form.before(comment);
-          input.value = '';
-          if (countEl) countEl.textContent = String(Number(countEl.textContent) + 1);
-        });
-      });
+    function parseCSV(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const next = line[i + 1];
+        if (char === '"' && inQuotes && next === '"') { current += '"'; i++; }
+        else if (char === '"') inQuotes = !inQuotes;
+        else if (char === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+        else current += char;
+      }
+      result.push(current.trim());
+      return result;
     }
 
-    if (openBtn) openBtn.addEventListener('click', (e) => {
+    async function loadRequestsTicker() {
+      if (!els.requestTickerText || !els.requestTickerClone) return;
+      const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv';
+      try {
+        const res = await fetch(url + '&t=' + Date.now());
+        const csv = await res.text();
+        const rows = csv.trim().split(/
+?
+/);
+        rows.shift();
+        const items = rows.map(row => {
+          const cols = parseCSV(row);
+          const name = cols[1] || 'Listener';
+          const song = cols[2] || 'Unknown Song';
+          const artist = cols[3] || 'Unknown Artist';
+          return `${name} requested ${song} - ${artist}`;
+        }).filter(Boolean).slice(-10);
+        const text = items.length ? items.join(' • ') : 'No requests yet — be the first!';
+        els.requestTickerText.textContent = text;
+        els.requestTickerClone.textContent = text;
+      } catch {
+        els.requestTickerText.textContent = 'Requests unavailable right now.';
+        els.requestTickerClone.textContent = els.requestTickerText.textContent;
+      }
+    }
+
+    els.authTabs.forEach(tab => tab.addEventListener('click', () => switchAuthTab(tab.dataset.authTab)));
+    els.openAuthBtn?.addEventListener('click', async (e) => {
       e.preventDefault();
-      if (openBtn.textContent === 'Login') openAuth();
+      if (els.openAuthBtn.textContent === 'Logout' && auth) {
+        await signOut(auth);
+      } else {
+        openAuth();
+      }
     });
-    if (closeBtn) closeBtn.addEventListener('click', closeAuth);
-    if (overlay) overlay.addEventListener('click', closeAuth);
+    els.closeAuthBtn?.addEventListener('click', closeAuth);
+    els.authOverlay?.addEventListener('click', closeAuth);
+    els.createPostBtn?.addEventListener('click', createPost);
 
-    tabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        tabs.forEach((t) => t.classList.remove('active'));
-        panels.forEach((p) => p.classList.remove('active'));
-        tab.classList.add('active');
-        const panel = document.querySelector(`[data-auth-panel="${tab.dataset.authTab}"]`);
-        if (panel) panel.classList.add('active');
-      });
-    });
-
-    loginForm?.addEventListener('submit', async (e) => {
+    els.loginForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (usingPlaceholders || !auth) {
-        alert('Paste your Firebase config first, then login will go live.');
+        setAuthMessage('Paste your Firebase config first.', true);
         return;
       }
-
-      const email = loginForm.querySelector('input[type="email"]').value.trim();
-      const password = loginForm.querySelector('input[type="password"]').value;
-
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        setAuthMessage('Logging in...');
+        await signInWithEmailAndPassword(auth, els.loginEmail.value.trim(), els.loginPassword.value);
+        els.loginForm.reset();
         closeAuth();
-      } catch (err) {
-        alert(err.message);
+        setAuthMessage('Logged in.');
+      } catch (error) {
+        console.error('Login error:', error);
+        setAuthMessage(error.message, true);
       }
     });
 
-    signupForm?.addEventListener('submit', async (e) => {
+    els.signupForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (usingPlaceholders || !auth || !db) {
-        alert('Paste your Firebase config first, then signup will go live.');
+        setAuthMessage('Paste your Firebase config first.', true);
         return;
       }
-
-      const displayName = signupForm.querySelector('input[type="text"]').value.trim();
-      const email = signupForm.querySelector('input[type="email"]').value.trim();
-      const password = signupForm.querySelector('input[type="password"]').value;
-
       try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName });
+        setAuthMessage('Creating account...');
+        const cred = await createUserWithEmailAndPassword(auth, els.signupEmail.value.trim(), els.signupPassword.value);
+        await updateProfile(cred.user, { displayName: els.signupDisplayName.value.trim() });
         await setDoc(doc(db, 'users', cred.user.uid), {
           uid: cred.user.uid,
-          displayName,
-          email,
+          displayName: els.signupDisplayName.value.trim(),
+          email: els.signupEmail.value.trim(),
           bio: 'New to Wildstyle Social Beta.',
           role: 'Listener',
           createdAt: serverTimestamp()
         });
+        els.signupForm.reset();
         closeAuth();
-      } catch (err) {
-        alert(err.message);
+        setAuthMessage('Account created.');
+      } catch (error) {
+        console.error('Signup error:', error);
+        setAuthMessage(error.message, true);
       }
     });
-
-    createPostBtn?.addEventListener('click', createPost);
 
     if (usingPlaceholders) {
       setLoggedOutState();
       listenForPosts();
+      setAuthMessage('Paste your Firebase config first.');
     } else {
       onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          await setLoggedInState(user);
-          listenForPosts();
-        } else {
-          currentUserProfile = null;
-          setLoggedOutState();
-          listenForPosts();
-        }
+        if (user) await setLoggedInState(user);
+        else setLoggedOutState();
+        listenForPosts();
       });
     }
 
+    bindSidebarButtons();
     bindPostInteractions();
-
-    (function () {
-      const ticker = document.getElementById("requestTickerText");
-      const clone = document.getElementById("requestTickerClone");
-      if (!ticker || !clone) return;
-
-      const REQUESTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv";
-
-      function parseCSV(line) {
-        const result = [];
-        let current = "";
-        let inQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-          const char = line[i];
-          const next = line[i + 1];
-          if (char === '"' && inQuotes && next === '"') {
-            current += '"';
-            i++;
-          } else if (char === '"') {
-            inQuotes = !inQuotes;
-          } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
-            current = "";
-          } else {
-            current += char;
-          }
-        }
-        result.push(current.trim());
-        return result;
-      }
-
-      async function loadRequestsTicker() {
-        try {
-          const res = await fetch(REQUESTS_URL + "&t=" + Date.now());
-          const csv = await res.text();
-          const rows = csv.trim().split(/
-?
-/);
-          rows.shift();
-
-          const requests = rows
-            .map(row => {
-              const cols = parseCSV(row);
-              const name = cols[1] || 'Listener';
-              const song = cols[2] || 'Unknown Song';
-              const artist = cols[3] || 'Unknown Artist';
-              return `${name} requested ${song} - ${artist}`;
-            })
-            .filter(Boolean)
-            .slice(-10);
-
-          const joined = requests.length ? requests.join(' • ') : 'No requests yet — be the first!';
-          ticker.textContent = joined;
-          clone.textContent = joined;
-        } catch (err) {
-          ticker.textContent = 'Requests unavailable right now.';
-          clone.textContent = ticker.textContent;
-        }
-      }
-
-      loadRequestsTicker();
-      setInterval(loadRequestsTicker, 15000);
-    })();
+    loadRequestsTicker();
+    setInterval(loadRequestsTicker, 15000);
   </script></body>
 </html> 
