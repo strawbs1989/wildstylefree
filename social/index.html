@@ -1,0 +1,384 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wildstyle Social Beta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5edf7;
+      --panel:#0f0b18;
+      --panel-2:#171126;
+      --text:#ffffff;
+      --muted:#b8a9d6;
+      --dark:#1d1630;
+      --line:rgba(255,255,255,.09);
+      --grad:linear-gradient(90deg,#ff2a6d 0%,#8a46ff 48%,#2a7bff 100%);
+      --grad-soft:linear-gradient(180deg,#1b1528 0%,#0d0915 100%);
+      --shadow:0 18px 45px rgba(42,16,68,.14);
+      --radius:24px;
+    }*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Inter,system-ui,sans-serif;background:
+  radial-gradient(circle at top left, rgba(255,122,182,.18), transparent 24%),
+  radial-gradient(circle at top right, rgba(78,176,255,.15), transparent 24%),
+  var(--bg);color:#231a37;}
+a{text-decoration:none;color:inherit}
+
+.shell{max-width:1400px;margin:0 auto;padding:20px 18px 40px}
+
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  background:rgba(255,255,255,.58);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.55);border-radius:28px;padding:14px 18px;
+  box-shadow:var(--shadow);position:sticky;top:10px;z-index:20;
+}
+
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.brand-badge{width:58px;height:58px;border-radius:18px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.4rem;box-shadow:0 10px 24px rgba(159,46,255,.28)}
+.brand-copy{min-width:0}
+.brand-copy strong{display:block;font-family:Oswald,sans-serif;letter-spacing:.04em;font-size:2rem;line-height:1}
+.brand-copy small{display:block;color:#746792;font-size:1rem;margin-top:4px}
+
+.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.nav a,.nav button{
+  border:none;background:#120d1d;color:#fff;padding:12px 18px;border-radius:16px;
+  font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(17,8,29,.12)
+}
+.nav a.active,.nav button.active{background:var(--grad)}
+
+.hero{
+  margin-top:18px;background:var(--grad-soft);border-radius:32px;overflow:hidden;
+  box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08)
+}
+.hero-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px;background:var(--grad);color:#fff;font-family:Oswald,sans-serif;letter-spacing:.04em}
+.live-pill{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.18);font-family:Inter,sans-serif;font-size:.9rem;font-weight:800}
+.hero-body{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;padding:28px}
+.hero-copy h1{margin:0 0 12px;font-family:Oswald,sans-serif;font-size:4rem;line-height:.95;color:#fff;letter-spacing:.03em}
+.hero-copy p{margin:0;color:#d1c4ee;font-size:1.08rem;max-width:720px;line-height:1.7}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn-primary,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:18px;font-weight:800}
+.btn-primary{background:var(--grad);color:#fff}
+.btn-secondary{background:#fff;color:#1c1432}
+
+.hero-status{display:grid;gap:14px}
+.mini-card{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:22px;padding:18px;color:#fff}
+.mini-card h4{margin:0 0 8px;font-family:Oswald,sans-serif;font-size:1.35rem;letter-spacing:.04em}
+.mini-card p{margin:0;color:#d7cbef;line-height:1.6}
+.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.main{display:grid;grid-template-columns:minmax(0,1.4fr) 360px;gap:22px;margin-top:22px}
+
+.card{background:var(--grad-soft);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08)}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;background:var(--grad);color:#fff}
+.card-head h2{margin:0;font-family:Oswald,sans-serif;font-size:1.6rem;letter-spacing:.04em}
+.card-body{padding:20px;color:#fff}
+
+.composer textarea{
+  width:100%;min-height:130px;resize:vertical;border:none;outline:none;border-radius:22px;
+  padding:18px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;font:inherit
+}
+.composer textarea::placeholder{color:#a997cf}
+.composer-tools{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
+.tool-pills{display:flex;gap:10px;flex-wrap:wrap}
+.pill{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;font-weight:700;font-size:.92rem}
+
+.feed{display:grid;gap:18px}
+.post{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:24px;padding:18px}
+.post-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.author{display:flex;align-items:center;gap:12px}
+.avatar{width:52px;height:52px;border-radius:16px;background:var(--grad);display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
+.author strong{display:block;color:#fff}
+.author small{display:block;color:#b9abd7;margin-top:3px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);font-size:.82rem;font-weight:800;color:#fff;border:1px solid var(--line)}
+.post p{color:#e6dcfb;line-height:1.7;margin:16px 0 0}
+.post-image{margin-top:16px;border-radius:22px;background:linear-gradient(135deg,rgba(255,42,109,.24),rgba(42,123,255,.22));height:220px;border:1px solid var(--line);display:grid;place-items:center;color:#fff;font-family:Oswald,sans-serif;font-size:2rem;letter-spacing:.04em}
+.post-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.post-actions button{border:none;border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.08);color:#fff;font-weight:700;cursor:pointer}
+
+.sidebar{display:grid;gap:18px}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quick-link{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center;color:#fff;font-weight:800}
+.spotlight{display:flex;gap:14px;align-items:center}
+.spotlight img{width:86px;height:86px;border-radius:18px;object-fit:cover;background:#221738}
+.spotlight p{margin:6px 0 0;color:#dbcdf5;line-height:1.6}
+
+.list{display:grid;gap:12px}
+.list-item{display:flex;justify-content:space-between;gap:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:18px;padding:14px;color:#fff}
+.list-item small{color:#b9abd7;display:block;margin-top:4px}
+
+.footer{margin-top:24px;background:var(--grad-soft);border-radius:28px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:18px;color:#fff}
+.footer h3{margin:0 0 10px;font-family:Oswald,sans-serif;letter-spacing:.04em}
+.footer p,.footer li{color:#d9cdf4;line-height:1.6}
+.footer ul{margin:0;padding-left:18px}
+
+@media (max-width: 1100px){
+  .hero-body,.main,.footer{grid-template-columns:1fr}
+  .brand-copy strong{font-size:1.5rem}
+  .hero-copy h1{font-size:3rem}
+}
+
+@media (max-width: 720px){
+  .shell{padding:14px 12px 30px}
+  .topbar{padding:12px}
+  .brand-badge{width:50px;height:50px;border-radius:16px}
+  .brand-copy strong{font-size:1.18rem}
+  .brand-copy small{font-size:.88rem}
+  .nav{width:100%;justify-content:flex-start}
+  .nav a,.nav button{padding:10px 14px;border-radius:14px;font-size:.92rem}
+  .hero-copy h1{font-size:2.35rem}
+  .hero-body{padding:18px}
+  .mini-row,.quick-grid{grid-template-columns:1fr}
+  .card-head h2{font-size:1.3rem}
+}
+
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#">
+        <div class="brand-badge">WS</div>
+        <div class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>Social Beta</small>
+        </div>
+      </a><nav class="nav">
+    <a href="#" class="active">Home</a>
+    <a href="#">DJs</a>
+    <a href="#">Schedule</a>
+    <a href="#">Chat</a>
+    <a href="#">Requests</a>
+    <a href="#">Map</a>
+    <button>Login</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-head">
+    <span>Wildstyle Social Beta</span>
+    <span class="live-pill">NOW ON • DJ EchoFalls 8pm–9pm</span>
+  </div>
+  <div class="hero-body">
+    <div class="hero-copy">
+      <h1>Radio Meets Community</h1>
+      <p>
+        Wildstyle Social brings your station, DJs, listeners, events, requests, shout-outs, and community updates into one live social platform. Built for radio culture, not just another feed.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Create a Post</a>
+        <a href="#" class="btn-secondary">Open Live Chat</a>
+      </div>
+    </div>
+
+    <div class="hero-status">
+      <div class="mini-card">
+        <h4>Station Pulse</h4>
+        <p>Stream online • Requests open • Shout-outs live • Listener map active.</p>
+      </div>
+      <div class="mini-row">
+        <div class="mini-card">
+          <h4>Up Next</h4>
+          <p>Matt Baker<br><span style="color:#a997cf">9pm–10pm UK</span></p>
+        </div>
+        <div class="mini-card">
+          <h4>Tonight’s Mood</h4>
+          <p>Multi-genre energy with community takeover vibes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+  <section style="display:grid;gap:18px;min-width:0">
+    <article class="card">
+      <div class="card-head">
+        <h2>Create Post</h2>
+        <span class="badge">Listener Post</span>
+      </div>
+      <div class="card-body composer">
+        <textarea placeholder="What’s happening in your Wildstyle world?"></textarea>
+        <div class="composer-tools">
+          <div class="tool-pills">
+            <span class="pill">📷 Add image</span>
+            <span class="pill">🎧 Tag DJ</span>
+            <span class="pill">🎉 Shout-out</span>
+          </div>
+          <a href="#" class="btn-primary">Post Now</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <h2>Live Feed</h2>
+        <span class="badge">Beta Community</span>
+      </div>
+      <div class="card-body feed">
+        <article class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">DJ</div>
+              <div>
+                <strong>DJ EchoFalls</strong>
+                <small>Verified DJ • 7 mins ago</small>
+              </div>
+            </div>
+            <span class="badge">Pinned Update</span>
+          </div>
+          <p>Going live tonight with a proper multi-genre workout. Drop your requests, jump in the chat, and let’s make it a madness 🔥</p>
+          <div class="post-actions">
+            <button>❤️ 128 Likes</button>
+            <button>💬 34 Comments</button>
+            <button>📌 Pinned</button>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">JR</div>
+              <div>
+                <strong>Jay</strong>
+                <small>Admin • 22 mins ago</small>
+              </div>
+            </div>
+            <span class="badge">Station Update</span>
+          </div>
+          <p>Wildstyle Social Beta is officially in motion. We’re bringing together the stream, DJ culture, requests, shout-outs, the listener map, and community posts into one place.</p>
+          <div class="post-image">WILDSTYLE SOCIAL</div>
+          <div class="post-actions">
+            <button>❤️ 241 Likes</button>
+            <button>💬 59 Comments</button>
+            <button>🔁 Share</button>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">LN</div>
+              <div>
+                <strong>Listener Nala</strong>
+                <small>Listener • 41 mins ago</small>
+              </div>
+            </div>
+            <span class="badge">Community</span>
+          </div>
+          <p>Loving the new site vibe. The shout-outs and requests all in one space feels proper radio-social. Can’t wait for profiles and comments to go fully live 💜</p>
+          <div class="post-actions">
+            <button>❤️ 46 Likes</button>
+            <button>💬 12 Comments</button>
+            <button>🎧 Tag DJ</button>
+          </div>
+        </article>
+      </div>
+    </article>
+  </section>
+
+  <aside class="sidebar">
+    <article class="card">
+      <div class="card-head">
+        <h2>Quick Access</h2>
+      </div>
+      <div class="card-body quick-grid">
+        <a class="quick-link" href="#">Schedule</a>
+        <a class="quick-link" href="#">Chat Room</a>
+        <a class="quick-link" href="#">Requests</a>
+        <a class="quick-link" href="#">Listener Map</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <h2>DJ Spotlight</h2>
+      </div>
+      <div class="card-body">
+        <div class="spotlight">
+          <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=600&auto=format&fit=crop" alt="DJ spotlight" />
+          <div>
+            <strong style="font-size:1.15rem;color:#fff">DJ Nala</strong>
+            <p>Bringing the hottest multi-genre mixes every week with proper community energy.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <h2>Live Requests</h2>
+      </div>
+      <div class="card-body list">
+        <div class="list-item">
+          <div>
+            <strong>Jay requested Titanium</strong>
+            <small>David Guetta • shout-out for Laura</small>
+          </div>
+          <span class="badge">Live</span>
+        </div>
+        <div class="list-item">
+          <div>
+            <strong>Sarah requested Blue Monday</strong>
+            <small>New Order • just now</small>
+          </div>
+          <span class="badge">Queue</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <h2>Events</h2>
+      </div>
+      <div class="card-body list">
+        <div class="list-item">
+          <div>
+            <strong>TikTok Live Takeover</strong>
+            <small>Sunday • 8pm UK</small>
+          </div>
+          <span class="badge">Upcoming</span>
+        </div>
+        <div class="list-item">
+          <div>
+            <strong>Unsigned Spotlight Night</strong>
+            <small>Thursday • 7pm UK</small>
+          </div>
+          <span class="badge">Promo</span>
+        </div>
+      </div>
+    </article>
+  </aside>
+</main>
+
+<footer class="footer">
+  <div>
+    <h3>Wildstyle Social Beta</h3>
+    <p>United by beats. Powered by volunteer passion. Built to bring the station and community together in one social home.</p>
+  </div>
+  <div>
+    <h3>Beta Modules</h3>
+    <ul>
+      <li>Live player</li>
+      <li>Community feed</li>
+      <li>Schedule + requests</li>
+      <li>DJ spotlight</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Next Up</h3>
+    <ul>
+      <li>Login / signup</li>
+      <li>Profiles</li>
+      <li>Likes + comments</li>
+      <li>DJ verified badges</li>
+    </ul>
+  </div>
+</footer>
+
+  </div>
+</body>
+</html> 
