@@ -668,10 +668,18 @@ button,input,textarea{font:inherit}
           <p>${escapeHtml(post.text || '')}</p>
 
           <div class="post-actions">
-            <button class="post-like-btn" data-post-id="${post.id}" data-likes="${Number(post.likesCount || 0)}">
-              ❤️ ${Number(post.likesCount || 0)} Likes
-            </button>
-          </div>
+  <button onclick="likePost('${postId}')">
+    ❤️ ${post.likesCount || 0} Likes
+  </button>
+  <button class="comment-toggle" data-target="comments-box-${postId}">
+    💬 Comments
+  </button>
+  ${
+    auth?.currentUser && post.uid === auth.currentUser.uid
+      ? `<button onclick="deletePost('${postId}')">🗑️ Delete</button>`
+      : ''
+  }
+</div> 
         `;
 
         els.feedContainer.appendChild(article);
@@ -859,6 +867,30 @@ button,input,textarea{font:inherit}
     console.error('Like post error:', error);
   }
 } 
+async function deletePost(postId) {
+  if (usingPlaceholders || !db || !auth) {
+    setPostMessage('Paste your Firebase config first.', true);
+    return;
+  }
+
+  if (!auth.currentUser) {
+    setPostMessage('Login to delete posts.', true);
+    openAuth();
+    return;
+  }
+
+  const ok = confirm('Delete this post?');
+  if (!ok) return;
+
+  try {
+    await deleteDoc(doc(db, 'posts', postId));
+    setPostMessage('🗑️ Post deleted.');
+  } catch (error) {
+    console.error('Delete post error:', error);
+    setPostMessage(error.message, true);
+  }
+} 
+
 
 	async function addComment(postId) {
   if (usingPlaceholders || !db || !auth) {
@@ -1092,6 +1124,7 @@ function listenForComments(postId) {
 
     window.likePost = likePost;
 	window.addComment = addComment;
+	window.deletePost = deletePost;
 
     bindSidebarButtons();
     bindPostInteractions();
