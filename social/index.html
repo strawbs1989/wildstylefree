@@ -349,21 +349,22 @@ button,input,textarea{font:inherit}
       signOut
     } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
     import {
-      getFirestore,
-      doc,
-      setDoc,
-      getDoc,
-      serverTimestamp,
-      addDoc,
-      updateDoc,
-      collection,
-      query,
-      orderBy,
-      limit,
-      onSnapshot,
-      where,
-      getDocs
-    } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  getDocs,
+  runTransaction
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
 
     const firebaseConfig = {
       apiKey: "AIzaSyDEdR9n8imkT5e0mJaPi3gLmiiUtTfSoXw",
@@ -687,22 +688,89 @@ button,input,textarea{font:inherit}
     }
 
     function listenForPosts() {
-      if (!els.feedContainer) return;
-      if (unsubscribePosts) unsubscribePosts();
-      if (usingPlaceholders || !db) {
-        renderFeed([]);
-        return;
-      }
-      const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(12));
-      unsubscribePosts = onSnapshot(q, (snapshot) => {
-        const posts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderFeed(posts);
-        if (auth?.currentUser) updateProfilePostCount(auth.currentUser.uid);
-      }, (error) => {
-        console.error('Feed error:', error);
-        renderFeed([]);
-      });
+  if (!els.feedContainer) return;
+  if (unsubscribePosts) unsubscribePosts();
+
+  if (usingPlaceholders || !db) {
+    renderFeed([]);
+    return;
+  }
+
+  const q = query(
+    collection(db, 'posts'),
+    orderBy('createdAt', 'desc'),
+    limit(12)
+  );
+
+  unsubscribePosts = onSnapshot(q, (snapshot) => {
+    els.feedContainer.innerHTML = '';
+
+    const postIds = [];
+
+    snapshot.forEach((docSnap) => {
+      const post = docSnap.data();
+      const postId = docSnap.id;
+      postIds.push(postId);
+
+      const created = post.createdAt?.toDate
+        ? post.createdAt.toDate().toLocaleString()
+        : 'Just now';
+
+      els.feedContainer.innerHTML += `
+        <div class="post">
+          <div class="post-top">
+            <div class="author">
+              <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
+              <div>
+                <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+                <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
+              </div>
+            </div>
+            <span class="badge">Live Post</span>
+          </div>
+
+          <p>${escapeHtml(post.text || '')}</p>
+
+          <div class="post-actions">
+            <button onclick="likePost('${postId}')">
+              ❤️ ${post.likesCount || 0} Likes
+            </button>
+            <button class="comment-toggle" data-target="comments-box-${postId}">
+              💬 Comments
+            </button>
+          </div>
+
+          <div class="comments-box" id="comments-box-${postId}">
+            <div id="comments-list-${postId}"></div>
+            <div class="comment-form">
+              <input
+                type="text"
+                id="comment-input-${postId}"
+                placeholder="Write a comment..."
+                maxlength="140"
+              />
+              <button onclick="addComment('${postId}')">Post</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    bindPostInteractions();
+
+    postIds.forEach((postId) => {
+      listenForComments(postId);
+    });
+
+    if (auth?.currentUser) {
+      updateProfilePostCount(auth.currentUser.uid);
     }
+  }, (error) => {
+    console.error('Feed error:', error);
+    renderFeed([]);
+  });
+} 
+
 
     async function createPost() {
       if (usingPlaceholders || !auth || !db) {
@@ -745,20 +813,115 @@ button,input,textarea{font:inherit}
       }
     }
 
-    async function likePost(postId, currentLikes = 0) {
-      if (usingPlaceholders || !db) {
-        alert('Paste your Firebase config first.');
-        return;
+    async function likePost(postId) {
+  if (usingPlaceholders || !db || !auth) {
+    setPostMessage('Paste your Firebase config first.', true);
+    return;
+  }
+
+  if (!auth.currentUser) {
+    setPostMessage('Login to like posts.', true);
+    openAuth();
+    return;
+  }
+
+  const userId = auth.currentUser.uid;
+  const postRef = doc(db, 'posts', postId);
+  const likeRef = doc(db, 'posts', postId, 'likes', userId);
+
+  try {
+    await runTransaction(db, async (transaction) => {
+      const postSnap = await transaction.get(postRef);
+      const likeSnap = await transaction.get(likeRef);
+
+      if (!postSnap.exists()) {
+        throw new Error('Post not found.');
       }
-      try {
-        const ref = doc(db, 'posts', postId);
-        await updateDoc(ref, {
-          likesCount: Number(currentLikes || 0) + 1
+
+      const currentLikes = Number(postSnap.data().likesCount || 0);
+
+      if (likeSnap.exists()) {
+        transaction.delete(likeRef);
+        transaction.update(postRef, {
+          likesCount: Math.max(0, currentLikes - 1)
         });
-      } catch (error) {
-        console.error('Like post error:', error);
+      } else {
+        transaction.set(likeRef, {
+          uid: userId,
+          createdAt: serverTimestamp()
+        });
+        transaction.update(postRef, {
+          likesCount: currentLikes + 1
+        });
       }
-    }
+    });
+  } catch (error) {
+    console.error('Like post error:', error);
+  }
+} 
+
+	async function addComment(postId) {
+  if (usingPlaceholders || !db || !auth) {
+    setPostMessage('Paste your Firebase config first.', true);
+    return;
+  }
+
+  if (!auth.currentUser || !currentUserProfile) {
+    setPostMessage('Login to comment.', true);
+    openAuth();
+    return;
+  }
+
+  const input = document.getElementById(`comment-input-${postId}`);
+  const text = input?.value.trim();
+
+  if (!text) return;
+
+  try {
+    await addDoc(collection(db, 'posts', postId, 'comments'), {
+      uid: auth.currentUser.uid,
+      authorName: currentUserProfile.displayName,
+      text,
+      createdAt: serverTimestamp()
+    });
+
+    input.value = '';
+  } catch (error) {
+    console.error('Add comment error:', error);
+  }
+}
+
+function listenForComments(postId) {
+  const commentsWrap = document.getElementById(`comments-list-${postId}`);
+  if (!commentsWrap || usingPlaceholders || !db) return;
+
+  const q = query(
+    collection(db, 'posts', postId, 'comments'),
+    orderBy('createdAt', 'asc')
+  );
+
+  onSnapshot(q, (snapshot) => {
+    commentsWrap.innerHTML = '';
+
+    snapshot.forEach((docSnap) => {
+      const comment = docSnap.data();
+      const created = comment.createdAt?.toDate
+        ? comment.createdAt.toDate().toLocaleString()
+        : 'Just now';
+
+      commentsWrap.innerHTML += `
+        <div class="comment-item">
+          <strong>${escapeHtml(comment.authorName || 'User')}</strong>
+          <div>${escapeHtml(comment.text || '')}</div>
+          <small style="display:block;margin-top:6px;color:#b8a9d6;">${escapeHtml(created)}</small>
+        </div>
+      `;
+    });
+  }, (error) => {
+    console.error('Comments listener error:', error);
+  });
+} 
+
 	
 
     function parseCSV(line) {
@@ -928,6 +1091,7 @@ button,input,textarea{font:inherit}
     }
 
     window.likePost = likePost;
+	window.addComment = addComment;
 
     bindSidebarButtons();
     bindPostInteractions();
