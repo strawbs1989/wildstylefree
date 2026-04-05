@@ -27,14 +27,7 @@ import {
   runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDEdR9n8imkT5e0mJaPi3gLmiiUtTfSoXw",
-  authDomain: "wildstyle-social.firebaseapp.com",
-  projectId: "wildstyle-social",
-  storageBucket: "wildstyle-social.firebasestorage.app",
-  messagingSenderId: "608635701800",
-  appId: "1:608635701800:web:c53acf7aa7198ed949c31d",
-};
+
 
 const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes('PASTE_'));
 let auth = null;
