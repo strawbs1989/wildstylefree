@@ -1,4 +1,4 @@
-import { firebaseConfig } from '.https://wildstyle.vip/social/firebase-config.js'; 
+import { firebaseConfig } from './firebase-config.js'; 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
 import {
   getAuth,
