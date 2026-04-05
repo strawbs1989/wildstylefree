@@ -1,0 +1,336 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Radio — DJs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <div class="brand-badge">WS</div>
+        <div class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>The Wildstyle Crew</small>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="djs.html" class="active">DJs</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="chat.html">Chat</a>
+        <a href="requests.html">Requests</a>
+        <a href="map.html">Map</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-head">
+        <span>Meet The Wildstyle DJs</span>
+        <span class="hero-pill">Live Shows • Volunteer Crew</span>
+      </div>
+
+      <div class="hero-body">
+        <div class="hero-copy">
+          <h1>The Faces Behind The Sound</h1>
+          <p>
+            Meet the DJs powering Wildstyle Radio. From multi-genre selectors to specialist vibe-setters, every presenter brings their own flavour to the station.
+          </p>
+
+          <div class="hero-actions">
+            <a href="schedule.html" class="btn-primary">View Schedule</a>
+            <a href="chat.html" class="btn-secondary">Chat To DJs</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Station Crew Snapshot</h3>
+          <p>
+            Wildstyle is built by a loyal, sociable team of live presenters. Every set is powered by community energy, passion, and proper radio vibes.
+          </p>
+
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <strong>12</strong>
+              <span>Active DJs</span>
+            </div>
+            <div class="hero-stat">
+              <strong>Live Only</strong>
+              <span>No pre-records</span>
+            </div>
+            <div class="hero-stat">
+              <strong>Multi-Genre</strong>
+              <span>All styles welcome</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="filters">
+      <div class="filter-row">
+        <input id="djSearch" class="search" type="text" placeholder="Search DJs by name, genre or vibe...">
+
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="multi">Multi-Genre</button>
+        <button class="filter-btn" data-filter="dance">Dance</button>
+        <button class="filter-btn" data-filter="urban">Urban</button>
+        <button class="filter-btn" data-filter="specialist">Specialist</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Our DJs</h2>
+        <span id="djCount">12 DJs</span>
+      </div>
+
+      <div class="section-body">
+        <div class="dj-grid" id="djGrid">
+
+          <article class="dj-card" data-category="multi" data-search="dj echofalls multi genre sunday evening high energy">
+            <div class="dj-image-wrap">
+              <img src="images/dj-echofalls.jpg" alt="DJ EchoFalls">
+              <span class="dj-badge">Featured</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ EchoFalls</h3>
+              <div class="dj-meta">
+                <span class="tag">Multi-Genre</span>
+                <span class="tag">High Energy</span>
+              </div>
+              <p>Bringing powerful multi-genre sets with upbeat energy, cheeky crowd vibes, and a proper Wildstyle feel.</p>
+              <div class="slot">Sunday • 8pm–9pm<small>TikTok live sessions & station takeover vibes</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="dance" data-search="dj nala dance club anthem weekend party">
+            <div class="dj-image-wrap">
+              <img src="images/dj-nala.jpg" alt="DJ Nala">
+              <span class="dj-badge">On Rotation</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Nala</h3>
+              <div class="dj-meta">
+                <span class="tag">Dance</span>
+                <span class="tag">Club Anthems</span>
+              </div>
+              <p>Serving feel-good club flavours, catchy anthems, and dancefloor-ready energy for the Wildstyle community.</p>
+              <div class="slot">Thursday • 7pm–8pm<small>Big hooks, big beats, big vibes</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="urban" data-search="matt baker urban rnb hip hop chilled groove">
+            <div class="dj-image-wrap">
+              <img src="images/matt-baker.jpg" alt="Matt Baker">
+              <span class="dj-badge">Tonight</span>
+            </div>
+            <div class="dj-body">
+              <h3>Matt Baker</h3>
+              <div class="dj-meta">
+                <span class="tag">Urban</span>
+                <span class="tag">R&B / Hip-Hop</span>
+              </div>
+              <p>Smooth urban blends, laid-back transitions, and after-dark selections that keep the mood right all night.</p>
+              <div class="slot">Tonight • 9pm–10pm<small>Late night groove with edge</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="specialist" data-search="simonpro old skool classics throwback party">
+            <div class="dj-image-wrap">
+              <img src="images/dj-simonpro.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Classic Cuts</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ SimonPro</h3>
+              <div class="dj-meta">
+                <span class="tag">Old Skool</span>
+                <span class="tag">Throwbacks</span>
+              </div>
+              <p>Classic crowd-pleasers, throwback fire, and nostalgia-heavy sessions built for real music heads.</p>
+              <div class="slot">Friday • 10pm–12am<small>Back-to-back memories and party moments</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="multi" data-search="dj storm multi genre bass floorfillers energy">
+            <div class="dj-image-wrap">
+              <img src="images/dj-storm.jpg" alt="DJ Storm">
+              <span class="dj-badge">Weekend Vibes</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Storm</h3>
+              <div class="dj-meta">
+                <span class="tag">Multi-Genre</span>
+                <span class="tag">Floorfillers</span>
+              </div>
+              <p>Packed with singalongs, floorfillers, and a touch of bass for listeners who want the energy switched all the way on.</p>
+              <div class="slot">Saturday • 6pm–8pm<small>Weekend warm-up with attitude</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="dance" data-search="dj pulse edm trance uplifting dance music">
+            <div class="dj-image-wrap">
+              <img src="images/dj-pulse.jpg" alt="DJ Pulse">
+              <span class="dj-badge">EDM Focus</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Pulse</h3>
+              <div class="dj-meta">
+                <span class="tag">EDM</span>
+                <span class="tag">Trance</span>
+              </div>
+              <p>Uplifting drops, fast-paced dance energy, and a polished set style built for peak-time listeners.</p>
+              <div class="slot">Wednesday • 8pm–9pm<small>Melodic builds and festival feels</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="urban" data-search="lady vibe afrobeats amapiano soulful urban">
+            <div class="dj-image-wrap">
+              <img src="images/lady-vibe.jpg" alt="Lady Vibe">
+              <span class="dj-badge">Fresh Selects</span>
+            </div>
+            <div class="dj-body">
+              <h3>Lady Vibe</h3>
+              <div class="dj-meta">
+                <span class="tag">Afrobeats</span>
+                <span class="tag">Amapiano</span>
+              </div>
+              <p>Fresh rhythmic blends, soulful bounce, and the kind of smooth heat that keeps the station sounding global.</p>
+              <div class="slot">Tuesday • 8pm–9pm<small>Sunset rhythm and worldwide flavour</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="specialist" data-search="captain k reggae dancehall island vibes">
+            <div class="dj-image-wrap">
+              <img src="images/captain-k.jpg" alt="Captain K">
+              <span class="dj-badge">Island Heat</span>
+            </div>
+            <div class="dj-body">
+              <h3>Captain K</h3>
+              <div class="dj-meta">
+                <span class="tag">Reggae</span>
+                <span class="tag">Dancehall</span>
+              </div>
+              <p>Island warmth, skanking rhythms, and proper feel-good sessions that roll easy but hit hard.</p>
+              <div class="slot">Monday • 7pm–8pm<small>Caribbean flavour with a Wildstyle twist</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="multi" data-search="dj nova pop mashups remixes upbeat">
+            <div class="dj-image-wrap">
+              <img src="images/dj-nova.jpg" alt="DJ Nova">
+              <span class="dj-badge">Radio Ready</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Nova</h3>
+              <div class="dj-meta">
+                <span class="tag">Pop</span>
+                <span class="tag">Mashups</span>
+              </div>
+              <p>Sharp, upbeat radio blends with catchy mashups and remix-driven moments built for broad appeal.</p>
+              <div class="slot">Saturday • 2pm–4pm<small>Daytime energy with crossover flavour</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="dance" data-search="dj velocity house bassline uk garage">
+            <div class="dj-image-wrap">
+              <img src="images/dj-velocity.jpg" alt="DJ Velocity">
+              <span class="dj-badge">Bass Sessions</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Velocity</h3>
+              <div class="dj-meta">
+                <span class="tag">House</span>
+                <span class="tag">UK Garage</span>
+              </div>
+              <p>Fast-moving selections, bassline pressure, and a specialist ear for high-impact club-ready sounds.</p>
+              <div class="slot">Friday • 8pm–10pm<small>Underground edges with polished delivery</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="urban" data-search="mc luxe slow jams soul neo soul lovers rock">
+            <div class="dj-image-wrap">
+              <img src="images/mc-luxe.jpg" alt="MC Luxe">
+              <span class="dj-badge">Smooth Vibes</span>
+            </div>
+            <div class="dj-body">
+              <h3>MC Luxe</h3>
+              <div class="dj-meta">
+                <span class="tag">Soul</span>
+                <span class="tag">Slow Jams</span>
+              </div>
+              <p>Silky vocals, soul-driven playlists, and mellow lover’s selections for listeners who like it smooth.</p>
+              <div class="slot">Sunday • 10pm–11pm<small>Nightcap music with heart</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-category="specialist" data-search="the professor indie alternative eclectic rare gems">
+            <div class="dj-image-wrap">
+              <img src="images/the-professor.jpg" alt="The Professor">
+              <span class="dj-badge">Eclectic Picks</span>
+            </div>
+            <div class="dj-body">
+              <h3>The Professor</h3>
+              <div class="dj-meta">
+                <span class="tag">Indie</span>
+                <span class="tag">Alternative</span>
+              </div>
+              <p>Unexpected picks, hidden gems, and eclectic curation for listeners who like discovering something different.</p>
+              <div class="slot">Thursday • 9pm–10pm<small>Leftfield flavour and smart selection</small></div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Want To Join The Crew?</h2>
+      <p>
+        Wildstyle Radio is always on the lookout for passionate live DJs who want to be part of a loyal, sociable, and fully licensed station.
+      </p>
+      <div class="cta-actions">
+        <a href="mailto:wildstyleradioo@gmail.com" class="btn-primary">Apply To Join</a>
+        <a href="schedule.html" class="btn-secondary">See Open Slots</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <h3>Wildstyle Radio</h3>
+        <p>United by beats. Powered by volunteer passion. Our DJs bring the sound, the personality, and the energy that make Wildstyle what it is.</p>
+      </div>
+
+      <div>
+        <h3>Quick Links</h3>
+        <ul>
+          <li>Home</li>
+          <li>Schedule</li>
+          <li>Chat</li>
+          <li>Requests</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Wildstyle Vibe</h3>
+        <ul>
+          <li>Live shows only</li>
+          <li>Friendly team</li>
+          <li>Multi-genre station</li>
+          <li>Worldwide community</li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html> 
