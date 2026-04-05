@@ -1,4 +1,4 @@
-import { firebaseConfig } from './firebase-config.js'; 
+import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
 import {
   getAuth,
@@ -27,13 +27,13 @@ import {
   runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
-
-
 const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes('PASTE_'));
+
 let auth = null;
 let db = null;
 let currentUserProfile = null;
 let unsubscribePosts = null;
+const commentUnsubscribers = new Map();
 
 if (!usingPlaceholders) {
   const app = initializeApp(firebaseConfig);
@@ -83,6 +83,10 @@ function initialsFromName(name = 'WS') {
   return name.split(' ').map(p => p[0] || '').join('').slice(0, 2).toUpperCase();
 }
 
+function formatDate(value) {
+  return value?.toDate ? value.toDate().toLocaleString() : 'Just now';
+}
+
 function setAuthMessage(message, isError = false) {
   if (!els.authStatus) return;
   els.authStatus.textContent = message;
@@ -108,8 +112,13 @@ function closeAuth() {
 }
 
 function switchAuthTab(tabName) {
-  els.authTabs.forEach(tab => tab.classList.toggle('active', tab.dataset.authTab === tabName));
-  els.authPanels.forEach(panel => panel.classList.toggle('active', panel.dataset.authPanel === tabName));
+  els.authTabs.forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.authTab === tabName);
+  });
+
+  els.authPanels.forEach(panel => {
+    panel.classList.toggle('active', panel.dataset.authPanel === tabName);
+  });
 }
 
 function bindSidebarButtons() {
@@ -129,6 +138,17 @@ function bindSidebarButtons() {
     e.preventDefault();
     if (auth) await signOut(auth);
   });
+}
+
+function cleanupCommentListeners() {
+  commentUnsubscribers.forEach((unsubscribe) => {
+    try {
+      unsubscribe();
+    } catch {
+      // ignore
+    }
+  });
+  commentUnsubscribers.clear();
 }
 
 function setLoggedOutState() {
@@ -175,6 +195,7 @@ async function setLoggedInState(user) {
 
   const profileRef = doc(db, 'users', user.uid);
   const snap = await getDoc(profileRef);
+
   if (snap.exists()) {
     profileData = { ...profileData, ...snap.data() };
   }
@@ -238,7 +259,7 @@ function defaultPostsMarkup() {
   `;
 }
 
-function bindPostInteractions() {
+function bindDemoInteractions() {
   document.querySelectorAll('.like-btn').forEach((btn) => {
     if (btn.dataset.bound === 'true') return;
     btn.dataset.bound = 'true';
@@ -299,12 +320,81 @@ function bindPostInteractions() {
   });
 }
 
+function listenForComments(postId) {
+  if (!db || usingPlaceholders) return;
+
+  const commentsList = document.getElementById(`comments-list-${postId}`);
+  if (!commentsList) return;
+
+  if (commentUnsubscribers.has(postId)) {
+    commentUnsubscribers.get(postId)();
+    commentUnsubscribers.delete(postId);
+  }
+
+  const q = query(
+    collection(db, 'posts', postId, 'comments'),
+    orderBy('createdAt', 'asc')
+  );
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    commentsList.innerHTML = '';
+
+    snapshot.forEach((docSnap) => {
+      const comment = docSnap.data();
+
+      commentsList.innerHTML += `
+        <div class="comment-item">
+          <strong>${escapeHtml(comment.authorName || 'User')}</strong>
+          <div>${escapeHtml(comment.text || '')}</div>
+          <small style="display:block;margin-top:6px;color:#b8a9d6;">${escapeHtml(formatDate(comment.createdAt))}</small>
+        </div>
+      `;
+    });
+  }, (error) => {
+    console.error('Comments listener error:', error);
+  });
+
+  commentUnsubscribers.set(postId, unsubscribe);
+}
+
+function bindLivePostButtons() {
+  document.querySelectorAll('.comment-toggle').forEach((btn) => {
+    if (btn.dataset.bound === 'true') return;
+    btn.dataset.bound = 'true';
+
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      if (target) target.classList.toggle('open');
+    });
+  });
+
+  document.querySelectorAll('.live-comment-submit').forEach((btn) => {
+    if (btn.dataset.bound === 'true') return;
+    btn.dataset.bound = 'true';
+
+    btn.addEventListener('click', async () => {
+      await addComment(btn.dataset.postId);
+    });
+  });
+
+  document.querySelectorAll('.delete-post-btn').forEach((btn) => {
+    if (btn.dataset.bound === 'true') return;
+    btn.dataset.bound = 'true';
+
+    btn.addEventListener('click', async () => {
+      await deletePost(btn.dataset.postId);
+    });
+  });
+}
+
 function renderFeed(posts) {
   if (!els.feedContainer) return;
 
+  cleanupCommentListeners();
+
   if (!posts.length) {
     els.feedContainer.innerHTML = defaultPostsMarkup();
-    bindPostInteractions();
+    bindDemoInteractions();
     return;
   }
 
@@ -314,7 +404,8 @@ function renderFeed(posts) {
     const article = document.createElement('article');
     article.className = 'post';
 
-    const created = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleString() : 'Just now';
+    const created = formatDate(post.createdAt);
+    const canDelete = auth?.currentUser && post.uid === auth.currentUser.uid;
 
     article.innerHTML = `
       <div class="post-top">
@@ -331,9 +422,26 @@ function renderFeed(posts) {
       <p>${escapeHtml(post.text || '')}</p>
 
       <div class="post-actions">
-        <button class="post-like-btn" data-post-id="${post.id}" data-likes="${Number(post.likesCount || 0)}">
+        <button onclick="likePost('${post.id}')">
           ❤️ ${Number(post.likesCount || 0)} Likes
         </button>
+        <button class="comment-toggle" data-target="comments-box-${post.id}">
+          💬 Comments
+        </button>
+        ${canDelete ? `<button class="delete-post-btn" data-post-id="${post.id}">🗑 Delete</button>` : ''}
+      </div>
+
+      <div class="comments-box" id="comments-box-${post.id}">
+        <div id="comments-list-${post.id}"></div>
+        <div class="comment-form">
+          <input
+            type="text"
+            id="comment-input-${post.id}"
+            placeholder="Write a comment..."
+            maxlength="140"
+          />
+          <button type="button" class="live-comment-submit" data-post-id="${post.id}">Post</button>
+        </div>
       </div>
     `;
 
@@ -346,8 +454,12 @@ function renderFeed(posts) {
     els.feedContainer.appendChild(defaults.firstChild);
   }
 
-  bindPostInteractions();
-  bindRealtimeLikeButtons();
+  bindLivePostButtons();
+  bindDemoInteractions();
+
+  posts.forEach((post) => {
+    listenForComments(post.id);
+  });
 }
 
 function listenForPosts() {
@@ -366,35 +478,8 @@ function listenForPosts() {
   );
 
   unsubscribePosts = onSnapshot(q, (snapshot) => {
-    els.feedContainer.innerHTML = '';
-
-    snapshot.forEach((docSnap) => {
-      const post = docSnap.data();
-      const article = document.createElement('div');
-      article.className = 'post';
-
-      article.innerHTML = `
-        <div class="post-top">
-          <div class="author">
-            <div class="avatar">WS</div>
-            <div>
-              <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
-              <small>${escapeHtml(post.role || 'Listener')}</small>
-            </div>
-          </div>
-        </div>
-
-        <p>${escapeHtml(post.text || '')}</p>
-
-        <div class="post-actions">
-          <button onclick="likePost('${docSnap.id}', ${post.likesCount || 0})">
-            ❤️ ${post.likesCount || 0} Likes
-          </button>
-        </div>
-      `;
-
-      els.feedContainer.appendChild(article);
-    });
+    const posts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderFeed(posts);
 
     if (auth?.currentUser) {
       updateProfilePostCount(auth.currentUser.uid);
@@ -418,7 +503,6 @@ async function createPost() {
   }
 
   const text = els.postInput?.value.trim();
-
   if (!text) {
     setPostMessage('Write something before posting.', true);
     return;
@@ -449,33 +533,106 @@ async function createPost() {
   }
 }
 
-async function likePost(postId, currentLikes = 0) {
-  if (usingPlaceholders || !db) {
+async function addComment(postId) {
+  if (usingPlaceholders || !db || !auth) {
     setPostMessage('Paste your Firebase config first.', true);
     return;
   }
 
+  if (!auth.currentUser || !currentUserProfile) {
+    setPostMessage('Login to comment.', true);
+    openAuth();
+    return;
+  }
+
+  const input = document.getElementById(`comment-input-${postId}`);
+  const text = input?.value.trim();
+
+  if (!text) return;
+
   try {
-    const ref = doc(db, 'posts', postId);
-    await updateDoc(ref, {
-      likesCount: Number(currentLikes || 0) + 1
+    await addDoc(collection(db, 'posts', postId, 'comments'), {
+      uid: auth.currentUser.uid,
+      authorName: currentUserProfile.displayName,
+      text,
+      createdAt: serverTimestamp()
+    });
+
+    input.value = '';
+  } catch (error) {
+    console.error('Add comment error:', error);
+  }
+}
+
+async function likePost(postId) {
+  if (usingPlaceholders || !db || !auth) {
+    setPostMessage('Paste your Firebase config first.', true);
+    return;
+  }
+
+  if (!auth.currentUser) {
+    setPostMessage('Login to like posts.', true);
+    openAuth();
+    return;
+  }
+
+  const userId = auth.currentUser.uid;
+  const postRef = doc(db, 'posts', postId);
+  const likeRef = doc(db, 'posts', postId, 'likes', userId);
+
+  try {
+    await runTransaction(db, async (transaction) => {
+      const postSnap = await transaction.get(postRef);
+      const likeSnap = await transaction.get(likeRef);
+
+      if (!postSnap.exists()) {
+        throw new Error('Post not found.');
+      }
+
+      const currentLikes = Number(postSnap.data().likesCount || 0);
+
+      if (likeSnap.exists()) {
+        transaction.delete(likeRef);
+        transaction.update(postRef, {
+          likesCount: Math.max(0, currentLikes - 1)
+        });
+      } else {
+        transaction.set(likeRef, {
+          uid: userId,
+          createdAt: serverTimestamp()
+        });
+        transaction.update(postRef, {
+          likesCount: currentLikes + 1
+        });
+      }
     });
   } catch (error) {
     console.error('Like post error:', error);
   }
 }
 
-function bindRealtimeLikeButtons() {
-  document.querySelectorAll('.post-like-btn').forEach((btn) => {
-    if (btn.dataset.bound === 'true') return;
-    btn.dataset.bound = 'true';
+async function deletePost(postId) {
+  if (usingPlaceholders || !db || !auth) {
+    setPostMessage('Paste your Firebase config first.', true);
+    return;
+  }
 
-    btn.addEventListener('click', async () => {
-      const postId = btn.dataset.postId;
-      const currentLikes = Number(btn.dataset.likes || 0);
-      await likePost(postId, currentLikes);
-    });
-  });
+  if (!auth.currentUser) {
+    setPostMessage('Login to delete posts.', true);
+    openAuth();
+    return;
+  }
+
+  const ok = confirm('Delete this post?');
+  if (!ok) return;
+
+  try {
+    await deleteDoc(doc(db, 'posts', postId));
+    setPostMessage('🗑️ Post deleted.');
+  } catch (error) {
+    console.error('Delete post error:', error);
+    setPostMessage(error.message, true);
+  }
 }
 
 function parseCSV(line) {
@@ -625,9 +782,10 @@ if (usingPlaceholders) {
 }
 
 window.likePost = likePost;
+window.addComment = addComment;
+window.deletePost = deletePost;
 
 bindSidebarButtons();
-bindPostInteractions();
-bindRealtimeLikeButtons();
+bindDemoInteractions();
 loadRequestsTicker();
 setInterval(loadRequestsTicker, 15000); 
