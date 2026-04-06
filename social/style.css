@@ -18,7 +18,7 @@ html,body{
     radial-gradient(circle at top left, rgba(255,122,182,.18), transparent 24%),
     radial-gradient(circle at top right, rgba(78,176,255,.15), transparent 24%),
     var(--bg);
-  color:#231a37;
+  color:#fff;
 }
 a{text-decoration:none;color:inherit}
 button,input,textarea{font:inherit}
