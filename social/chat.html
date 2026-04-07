@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Radio — Live Chat</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Main Site Style -->
+  <link rel="stylesheet" href="/social/style.css">
+
+  <!-- Chat Page Style -->
+  <link rel="stylesheet" href="/social/chat.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <div class="brand-badge">WS</div>
+      <div class="brand-copy">
+        <strong>WILDSTYLE RADIO</strong>
+        <small>Live Chat</small>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="djs.html">DJs</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="chat.html" class="active">Chat</a>
+      <a href="requests.html">Requests</a>
+      <a href="map.html">Map</a>
+    </nav>
+  </header>
+  
+  <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-head">
+      <span>Wildstyle Live Chat</span>
+      <span class="hero-pill">Live • Community • Real-Time</span>
+    </div>
+
+    <div class="hero-body">
+      <div class="hero-copy">
+        <h1>Join The Conversation</h1>
+        <p>
+          Connect with listeners, talk to DJs, send shout-outs, and vibe with the Wildstyle community live.
+        </p>
+
+        <div class="hero-actions">
+          <a href="requests.html" class="btn-primary">Send A Request</a>
+          <a href="schedule.html" class="btn-secondary">View Schedule</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h3>Chat Info</h3>
+        <p>
+          Be respectful, have fun, and enjoy the music 🎧 
+          DJs may pop in while live on air!
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong>Live</strong>
+            <span>24/7 Chat</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Global</strong>
+            <span>Listeners</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Real-Time</strong>
+            <span>Messages</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT SECTION -->
+  <section class="chat-container">
+
+    <div class="chat-header">
+      <h2>Wildstyle Live Chat Room</h2>
+      <span>Jump in and say hello 👋</span>
+    </div>
+
+    <div class="chat-frame">
+      <iframe
+        src="https://minnit.chat/c/WildstyleRadio?embed&nickname="
+        title="Wildstyle Live Chat"
+        loading="lazy"
+        allow="camera; microphone"
+        data-minnitchatembed="1">
+      </iframe>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div>
+      <h3>Wildstyle Radio</h3>
+      <p>United by beats • Powered by passion</p>
+    </div>
+
+    <div>
+      <h3>Quick Links</h3>
+      <ul>
+        <li>Home</li>
+        <li>DJs</li>
+        <li>Schedule</li>
+        <li>Requests</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Community</h3>
+      <ul>
+        <li>Live Chat</li>
+        <li>Shoutouts</li>
+        <li>Events</li>
+        <li>Listener Map</li>
+      </ul>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html> 
