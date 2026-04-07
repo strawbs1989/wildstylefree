@@ -287,3 +287,66 @@ async function loadNowOn() {
 loadNowOn();
 setInterval(loadNowOn, 60000); 
 
+/* -------------------------
+   FETCH + INIT
+------------------------- */
+async function loadSchedule() {
+  try {
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now(), { cache: "no-store" });
+    const data = await res.json();
+
+    // supports either {slots:[...]} or plain [...]
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.slots)) return data.slots;
+
+    console.error("Unexpected schedule response:", data);
+    return [];
+  } catch (e) {
+    console.error("Schedule load error:", e);
+    return [];
+  }
+}
+
+async function initSchedule() {
+  const rawSlots = await loadSchedule();
+
+  const slots = rawSlots.map(s => ({
+    day: normDay(s.day),
+    start: s.start,
+    end: s.end,
+    dj: s.dj || "Free"
+  })).filter(s => s.day && s.start && s.end);
+
+  window.ALL_SLOTS = slots;
+
+  renderSchedule(slots);
+  updateNowNext();
+
+  setInterval(updateNowNext, 60000);
+}
+
+function updateNowNext() {
+  if (!window.ALL_SLOTS) return;
+
+  const now = findCurrentSlot(window.ALL_SLOTS);
+  const next = findUpNextSlot(window.ALL_SLOTS);
+
+  const nowEl = document.getElementById("nowon");
+  const nextEl = document.getElementById("upnext");
+
+  if (nowEl) {
+    nowEl.innerHTML = now
+      ? `${now.dj} <span>${cleanTime(now.start)}–${cleanTime(now.end)}</span>`
+      : "Off Air";
+  }
+
+  if (nextEl) {
+    nextEl.innerHTML = next
+      ? `${next.dj} <span>${cleanTime(next.start)}–${cleanTime(next.end)}</span>`
+      : "No upcoming shows";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSchedule();
+});
