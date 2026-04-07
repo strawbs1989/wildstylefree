@@ -179,3 +179,111 @@ bindSidebarButtons({ els, auth });
 bindDemoInteractions();
 loadRequestsTicker(els);
 setInterval(() => loadRequestsTicker(els), 15000); 
+
+/* =========================
+   NOW ON (UK station time)
+========================= */
+
+const SCHEDULE_URL =
+  "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+
+const DAY_ORDER = [
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+];
+
+function normDay(day) {
+  const s = String(day || "").trim().toLowerCase();
+  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
+  return DAY_ORDER.includes(fixed) ? fixed : "";
+}
+
+function getUKNow() {
+  return new Date(new Date().toLocaleString("en-GB", {
+    timeZone: "Europe/London"
+  }));
+}
+
+function getNowMinutes() {
+  const now = getUKNow();
+  return {
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
+  };
+}
+
+function parseTime(t) {
+  t = String(t || "").trim().toLowerCase();
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
+  if (!m) return null;
+
+  let h = parseInt(m[1], 10);
+  const mins = parseInt(m[2] || "0", 10);
+  const ampm = m[3];
+
+  if (ampm === "pm" && h !== 12) h += 12;
+  if (ampm === "am" && h === 12) h = 0;
+
+  return h * 60 + mins;
+}
+
+function slotStartEndMinutes(slot) {
+  const start = parseTime(slot.start);
+  const end = parseTime(slot.end);
+  if (start == null || end == null) return null;
+
+  return {
+    start,
+    end,
+    crossesMidnight: end <= start
+  };
+}
+
+function findCurrentSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const today = DAY_ORDER[dayNum - 1];
+  const prev = DAY_ORDER[(dayNum + 5) % 7];
+
+  for (const s of slots) {
+    const r = slotStartEndMinutes(s);
+    if (!r) continue;
+
+    if (s.day === today) {
+      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
+      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
+    }
+
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
+  }
+
+  return null;
+}
+
+async function loadNowOn() {
+  const nowEl = document.getElementById("nowon");
+  if (!nowEl) return;
+
+  try {
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
+    const data = await res.json();
+
+    const slots = (data.slots || []).map(slot => ({
+      day: normDay(slot.day),
+      start: slot.start,
+      end: slot.end,
+      dj: slot.dj || "Free"
+    }));
+
+    const now = findCurrentSlot(slots);
+
+    nowEl.textContent = now
+      ? `${now.dj} (${now.start}–${now.end})`
+      : "Off Air";
+  } catch (err) {
+    console.error("Now On load failed:", err);
+    nowEl.textContent = "Unavailable";
+  }
+}
+
+loadNowOn();
+setInterval(loadNowOn, 60000); 
+
