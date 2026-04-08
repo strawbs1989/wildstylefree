@@ -850,3 +850,28 @@ button,input,textarea{font:inherit}
   text-align:center;
 } 
 
+/* =========================
+   Map Page
+========================= */
+
+.map-frame-wrap{
+  width:100%;
+  overflow:hidden;
+  border-radius:20px;
+}
+
+.map-frame-wrap iframe{
+  width:100%;
+  min-height:900px;
+  border:none;
+  border-radius:20px;
+  background:#120d1d;
+}
+
+@media (max-width: 720px){
+  .map-frame-wrap iframe{
+    min-height:700px;
+  }
+} 
+
+
