@@ -180,4 +180,16 @@ bindDemoInteractions();
 loadRequestsTicker(els);
 setInterval(() => loadRequestsTicker(els), 15000); 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const navClose = document.getElementById("navClose");
+  const navBackdrop = document.getElementById("navBackdrop");
+
+  if (burger) burger.onclick = openMenu;
+  if (navClose) navClose.onclick = closeMenu;
+  if (navBackdrop) navBackdrop.onclick = closeMenu;
+
+  loadMapData();
+  setInterval(loadMapData, 30000);
+}); 
 
