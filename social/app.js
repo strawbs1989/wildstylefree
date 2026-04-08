@@ -288,6 +288,15 @@ async function setLoggedInState(user) {
     role: 'Listener',
     bio: 'Wildstyle community member.'
   };
+  
+  const mobileLoginBtn = document.getElementById("mobileLoginBtn");
+
+if (mobileLoginBtn) {
+  mobileLoginBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    openAuth(); // 🔥 opens your login modal
+  });
+}
 
   if (db) {
     const profileRef = doc(db, 'users', user.uid);
