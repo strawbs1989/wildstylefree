@@ -21,14 +21,32 @@
         </div>
       </a>
 
-      <nav class="nav">
-        <a href="/social/index.html" class="active">Home</a>
+      <nav class="nav desktop-nav">
+        <a href="/social/index.html">Home</a>
         <a href="/social/djs.html">DJs</a>
         <a href="/social/schedule.html">Schedule</a>
         <a href="/social/chat.html">Chat</a>
-        <a href="/social/request.html">Requests</a>
-        <a href="/social/map.html">Map</a>
+        <a href="/social/request.html">Request</a>
+        <a href="/social/map.html" class="active">Map</a>
       </nav>
+
+      <button class="burger" id="burger" aria-label="Open menu">☰</button>
+    </header>
+
+    <div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+    <aside class="mobile-nav" id="mobileNav">
+      <div class="mobile-nav-top">
+        <strong>Menu</strong>
+        <button id="navClose" aria-label="Close menu">✕</button>
+      </div>
+      <a href="/social/index.html">Home</a>
+      <a href="/social/djs.html">DJs</a>
+      <a href="/social/schedule.html">Schedule</a>
+      <a href="/social/chat.html">Chat</a>
+      <a href="/social/request.html">Request</a>
+      <a href="/social/map.html" class="active">Map</a>
+    </aside>
     </header>
 
     <section class="hero">
