@@ -22,7 +22,7 @@
         </div>
       </a>
 
-      <nav class="nav">
+      <nav class="nav desktop-nav">
         <a href="/social/index.html">Home</a>
         <a href="/social/djs.html">DJs</a>
         <a href="/social/schedule.html">Schedule</a>
@@ -30,7 +30,24 @@
         <a href="/social/request.html">Request</a>
         <a href="/social/map.html" class="active">Map</a>
       </nav>
+
+      <button class="burger" id="burger" aria-label="Open menu">☰</button>
     </header>
+
+    <div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+    <aside class="mobile-nav" id="mobileNav">
+      <div class="mobile-nav-top">
+        <strong>Menu</strong>
+        <button id="navClose" aria-label="Close menu">✕</button>
+      </div>
+      <a href="/social/index.html">Home</a>
+      <a href="/social/djs.html">DJs</a>
+      <a href="/social/schedule.html">Schedule</a>
+      <a href="/social/chat.html">Chat</a>
+      <a href="/social/request.html">Request</a>
+      <a href="/social/map.html" class="active">Map</a>
+    </aside>
 
     <section class="hero">
       <div class="hero-head">
@@ -42,8 +59,8 @@
         <div class="hero-copy">
           <h1>See Where Wildstyle Is Being Heard</h1>
           <p>
-            Watch the Wildstyle audience spread across the globe. See where listeners
-            are tuning in from and explore the live reach of the station in real time.
+            Watch the Wildstyle audience spread across the globe. Track top countries,
+            logged listener activity, and station reach in real time.
           </p>
 
           <div class="hero-actions">
@@ -53,24 +70,23 @@
         </div>
 
         <div class="hero-card">
-          <h3>Global Reach</h3>
+          <h3>Listener Snapshot</h3>
           <p>
-            Wildstyle Radio connects listeners from different countries through music,
-            community, and live shows. Check the live map below to see where the vibe is landing.
+            Live listener activity is pulled from your Wildstyle geo worker and updated automatically.
           </p>
 
           <div class="hero-stats">
             <div class="hero-stat">
-              <strong>Worldwide</strong>
-              <span>Listener Reach</span>
+              <strong id="totalListenersBadge">0 total</strong>
+              <span>Total Logged</span>
             </div>
             <div class="hero-stat">
-              <strong>Live</strong>
-              <span>Updated Map</span>
+              <strong id="countryCountBadge">0 countries</strong>
+              <span>Countries Active</span>
             </div>
             <div class="hero-stat">
-              <strong>24/7</strong>
-              <span>Station Presence</span>
+              <strong id="lastUpdated">Updated --:--</strong>
+              <span>Last Refresh</span>
             </div>
           </div>
         </div>
@@ -86,18 +102,65 @@
           </div>
 
           <div class="card-body">
-            <div class="map-frame-wrap">
-              <iframe
-                src="https://wildstyle.vip/listenermap.html"
-                title="Wildstyle Listener Map"
-                loading="lazy">
-              </iframe>
+            <div class="map-panel">
+              <div class="map-header-row">
+                <div>
+                  <h3 class="map-title">Global Audience View</h3>
+                  <p class="map-subtitle">Live listener dots appear where Wildstyle is being heard</p>
+                </div>
+                <div class="map-top-country">
+                  <strong id="topCountryName">No data</strong>
+                  <span id="topCountryCount">0</span>
+                </div>
+              </div>
+
+              <div class="map-wrap" id="mapWrap">
+                <img
+                  src="https://wildstyle.vip/assets/worldmap.png"
+                  alt="World map"
+                  class="map-image"
+                  onerror="this.style.display='none'"
+                >
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h2>Live Activity</h2>
+            <span class="badge">Auto Refresh</span>
+          </div>
+
+          <div class="card-body">
+            <div class="activity-feed" id="activityFeed">
+              <div class="feed-item">
+                <strong>Loading activity</strong>
+                <span>Please wait while listener data is fetched.</span>
+              </div>
             </div>
           </div>
         </article>
       </section>
 
       <aside class="sidebar">
+        <article class="card">
+          <div class="card-head">
+            <h2>Top Countries</h2>
+          </div>
+          <div class="card-body">
+            <div class="country-list" id="countryList">
+              <div class="country-row">
+                <div>
+                  <b>Loading...</b><br>
+                  <small>Fetching listener data</small>
+                </div>
+                <span class="badge">--</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
         <article class="card">
           <div class="card-head">
             <h2>Quick Links</h2>
@@ -112,43 +175,25 @@
 
         <article class="card">
           <div class="card-head">
-            <h2>What This Shows</h2>
+            <h2>About This Map</h2>
           </div>
           <div class="card-body list">
             <div class="list-item">
               <div>
-                <strong>Live Listener Activity</strong>
-                <small>See where people are tuning in from</small>
+                <strong>Live Worker Data</strong>
+                <small>Powered by your Wildstyle geo worker</small>
               </div>
             </div>
-
             <div class="list-item">
               <div>
-                <strong>Global Station Reach</strong>
-                <small>Track Wildstyle’s worldwide audience</small>
+                <strong>30 Second Refresh</strong>
+                <small>Updates automatically in the background</small>
               </div>
             </div>
-
             <div class="list-item">
               <div>
-                <strong>Real-Time Vibes</strong>
-                <small>Watch the station community grow live</small>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head">
-            <h2>Listener Hub</h2>
-          </div>
-          <div class="card-body">
-            <div class="spotlight">
-              <div>
-                <strong class="spotlight-title">Stay Connected</strong>
-                <p>
-                  Tune in, chat live, send a request, and follow where Wildstyle is reaching next.
-                </p>
+                <strong>Country Tracking</strong>
+                <small>Shows logged station activity worldwide</small>
               </div>
             </div>
           </div>
@@ -184,5 +229,6 @@
     </footer>
   </div>
 
+  <script src="https://wildstyle.vip/social/map.js"></script>
 </body>
-</html> 
+</html>
