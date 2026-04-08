@@ -1102,3 +1102,272 @@ button,input,textarea{font:inherit}
     min-height:320px;
   }
 } 
+
+/* =========================================
+   GLOBAL MOBILE RESPONSIVE FIXES
+========================================= */
+
+html, body {
+  overflow-x: hidden;
+}
+
+img,
+iframe,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+.shell {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 18px 40px;
+}
+
+.main,
+.hero-body,
+.footer {
+  min-width: 0;
+}
+
+.main-left,
+.sidebar,
+.card,
+.hero-copy,
+.hero-card,
+.section,
+.section-body,
+.card-body {
+  min-width: 0;
+}
+
+/* Tablets */
+@media (max-width: 1100px) {
+  .hero-body,
+  .main,
+  .footer {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dj-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .schedule-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .quick-grid,
+  .hero-stats,
+  .profile-stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* Phones */
+@media (max-width: 720px) {
+  .shell {
+    padding: 14px 12px 28px !important;
+  }
+
+  .topbar {
+    padding: 12px !important;
+    border-radius: 22px !important;
+    gap: 14px !important;
+  }
+
+  .brand {
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  .brand-badge {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 16px !important;
+    font-size: 1.15rem !important;
+    flex: none !important;
+  }
+
+  .brand-copy strong {
+    font-size: 1.2rem !important;
+    line-height: 1 !important;
+  }
+
+  .brand-copy small {
+    font-size: 0.9rem !important;
+  }
+
+  .nav {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .nav a,
+  .nav button {
+    padding: 10px 14px !important;
+    border-radius: 14px !important;
+    font-size: 0.92rem !important;
+    flex: 0 0 auto !important;
+  }
+
+  .hero {
+    border-radius: 24px !important;
+  }
+
+  .hero-head,
+  .card-head,
+  .section-head {
+    padding: 14px 16px !important;
+  }
+
+  .hero-body,
+  .card-body,
+  .section-body {
+    padding: 16px !important;
+  }
+
+  .hero-copy h1 {
+    font-size: 2.35rem !important;
+    line-height: 0.95 !important;
+  }
+
+  .hero-copy p,
+  .mini-card p,
+  .profile-bio,
+  .spotlight p,
+  .list-item small {
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .hero-actions,
+  .composer-tools,
+  .profile-actions,
+  .cta-actions,
+  .filter-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .small-btn,
+  .request-submit-btn,
+  .chat-form button {
+    width: 100% !important;
+  }
+
+  .main,
+  .hero-body,
+  .footer,
+  .mini-row,
+  .quick-grid,
+  .profile-stats,
+  .dj-grid,
+  .schedule-grid,
+  .request-grid,
+  .chat-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .card,
+  .section,
+  .hero,
+  .footer {
+    border-radius: 24px !important;
+  }
+
+  .dj-card,
+  .post,
+  .mini-card,
+  .list-item,
+  .country-row,
+  .feed-item,
+  .user-item,
+  .quick-link {
+    border-radius: 18px !important;
+  }
+
+  .dj-body h3,
+  .section-head h2,
+  .card-head h2,
+  .hero-card h3 {
+    font-size: 1.3rem !important;
+  }
+
+  .search,
+  .request-grid input,
+  .chat-form input,
+  .composer textarea,
+  .auth-form input {
+    width: 100% !important;
+    font-size: 1rem !important;
+  }
+
+  .request-grid {
+    gap: 12px !important;
+  }
+
+  .chat-form {
+    grid-template-columns: 1fr !important;
+  }
+
+  .chat-messages {
+    padding: 16px !important;
+  }
+
+  .message-content {
+    max-width: 100% !important;
+  }
+
+  .map-wrap,
+  .listener-map-stage,
+  .map-placeholder,
+  .chat-frame iframe,
+  .map-frame-wrap iframe {
+    min-height: 320px !important;
+    height: 320px !important;
+  }
+
+  .player-frame-wrap iframe {
+    width: 100% !important;
+    height: 240px !important;
+  }
+
+  .footer {
+    gap: 14px !important;
+  }
+
+  .footer h3 {
+    font-size: 1.15rem !important;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+  .hero-copy h1 {
+    font-size: 2rem !important;
+  }
+
+  .brand-copy strong {
+    font-size: 1.05rem !important;
+  }
+
+  .nav a,
+  .nav button {
+    font-size: 0.88rem !important;
+    padding: 9px 12px !important;
+  }
+
+  .hero-pill,
+  .badge,
+  .tag,
+  .filter-btn {
+    font-size: 0.8rem !important;
+  }
+} 
