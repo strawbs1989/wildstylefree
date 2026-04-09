@@ -1450,11 +1450,13 @@ video {
 } 
 
 /* =========================
-   FORCE MAIN-SITE NAV STYLE
+   RESPONSIVE NAV
+   Desktop = full nav
+   Tablet/Mobile = burger
 ========================= */
 
 .desktop-nav{
-  display:flex !important;
+  display:flex;
   align-items:center;
   gap:10px;
   flex-wrap:wrap;
@@ -1462,85 +1464,127 @@ video {
 }
 
 .burger{
-  display:none !important;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  background:linear-gradient(135deg,#ff2a6d,#8a46ff,#2a7bff);
+  color:#fff;
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  font-size:1.5rem;
+  cursor:pointer;
+  flex:none;
+  box-shadow:0 10px 24px rgba(159,46,255,.28);
 }
 
-.mobile-nav,
 .nav-backdrop{
-  display:none !important;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:40;
 }
 
-@media (max-width:980px){
-  .topbar{
-    flex-wrap:wrap;
-    align-items:center;
-  }
-
-  .desktop-nav{
-    display:flex !important;
-    width:100%;
-    justify-content:flex-start;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:10px;
-  }
-
-  .desktop-nav a,
-  .desktop-nav button{
-    padding:10px 14px !important;
-    border-radius:14px !important;
-    font-size:.92rem !important;
-  }
+.mobile-nav{
+  position:fixed;
+  top:0;
+  right:-320px;
+  width:300px;
+  max-width:85vw;
+  height:100%;
+  background:var(--grad-soft);
+  border-left:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow);
+  z-index:50;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  transition:right .25s ease;
 }
 
-@media (max-width:720px){
-  .desktop-nav{
-    width:100%;
-    justify-content:flex-start;
-    gap:10px;
-  }
+.mobile-nav.active{
+  right:0;
+}
 
-  .desktop-nav a,
-  .desktop-nav button{
-    padding:10px 14px !important;
-    border-radius:14px !important;
-    font-size:.9rem !important;
-  }
-} 
+.mobile-nav-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#fff;
+  margin-bottom:10px;
+}
 
-/* FINAL BURGER OVERRIDE */
+.mobile-nav-top button{
+  border:none;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border-radius:12px;
+  padding:8px 12px;
+  cursor:pointer;
+}
+
+.mobile-nav a,
+.mobile-nav button{
+  display:block;
+  width:100%;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:#fff;
+  font-weight:800;
+  text-align:left;
+  cursor:pointer;
+}
+
+.mobile-nav a.active,
+.mobile-nav button.active{
+  background:var(--grad);
+}
+
+.mobile-login-btn{
+  background:linear-gradient(135deg,#ff2a6d,#2a7bff) !important;
+  text-align:center !important;
+}
+
+/* Tablet + Mobile = burger */
 @media (max-width:980px){
   .desktop-nav{
     display:none !important;
   }
 
-  #burger,
   .burger{
     display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    width:58px !important;
-    height:58px !important;
-    border:none !important;
-    border-radius:18px !important;
-    background:linear-gradient(135deg,#ff2a6d,#8a46ff,#2a7bff) !important;
-    color:#fff !important;
-    font-size:1.5rem !important;
-    cursor:pointer !important;
-    box-shadow:0 10px 24px rgba(159,46,255,.28) !important;
+  }
+
+  .topbar{
+    flex-wrap:nowrap;
+    align-items:center;
+  }
+
+  .brand-copy strong{
+    font-size:1.18rem;
+  }
+
+  .brand-copy small{
+    font-size:.88rem;
   }
 }
 
+/* Desktop = full nav */
 @media (min-width:981px){
   .desktop-nav{
     display:flex !important;
   }
 
-  #burger,
   .burger{
     display:none !important;
   }
+
+  .mobile-nav,
+  .nav-backdrop{
+    display:none !important;
+  }
 } 
-
-
-
