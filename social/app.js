@@ -363,53 +363,7 @@ function closeMenu() {
   if (navBackdrop) navBackdrop.hidden = true;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
 
-  // NAV ELEMENTS
-  const burger = document.getElementById("burger");
-  const navClose = document.getElementById("navClose");
-  const navBackdrop = document.getElementById("navBackdrop");
-  const mobileLoginBtn = document.getElementById("mobileLoginBtn");
-
-  // 🔥 IMPORTANT: DEBUG
-  console.log("Burger:", burger);
-  console.log("NavClose:", navClose);
-  console.log("Backdrop:", navBackdrop);
-
-  // DESKTOP MODE DETECTION
-  detectDesktopModeOnMobile();
-  window.addEventListener("resize", detectDesktopModeOnMobile);
-
-  // BURGER EVENTS
-  if (burger) {
-    burger.addEventListener("click", () => {
-      console.log("Burger clicked");
-      openMenu();
-    });
-  }
-
-  if (navClose) {
-    navClose.addEventListener("click", closeMenu);
-  }
-
-  if (navBackdrop) {
-    navBackdrop.addEventListener("click", closeMenu);
-  }
-
-  // LOGIN BUTTON IN MOBILE NAV
-  if (mobileLoginBtn) {
-    mobileLoginBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      closeMenu();
-      openAuth();
-    });
-  }
-
-  // NOW ON + UP NEXT
-  loadNowOnAndUpNext();
-  setInterval(loadNowOnAndUpNext, 60000);
-
-}); 
 
 
 
@@ -581,7 +535,6 @@ async function handleLogin(e) {
     setAuthMessage('Logged in.');
   } catch (error) {
     console.error('Login error:', error);
-
     if (error.code === 'auth/invalid-credential') {
       setAuthMessage('Incorrect email or password.', true);
     } else {
@@ -659,28 +612,17 @@ function bindAuthUI() {
     });
   }
 
-  if (els.closeAuthBtn) {
-    els.closeAuthBtn.addEventListener('click', closeAuth);
-  }
-
-  if (els.authOverlay) {
-    els.authOverlay.addEventListener('click', closeAuth);
-  }
+  if (els.closeAuthBtn) els.closeAuthBtn.addEventListener('click', closeAuth);
+  if (els.authOverlay) els.authOverlay.addEventListener('click', closeAuth);
 
   els.authTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      switchAuthTab(tab.dataset.authTab);
-    });
+    tab.addEventListener('click', () => switchAuthTab(tab.dataset.authTab));
   });
 
-  if (els.loginForm) {
-    els.loginForm.addEventListener('submit', handleLogin);
-  }
-
-  if (els.signupForm) {
-    els.signupForm.addEventListener('submit', handleSignup);
-  }
+  if (els.loginForm) els.loginForm.addEventListener('submit', handleLogin);
+  if (els.signupForm) els.signupForm.addEventListener('submit', handleSignup);
 } 
+
 
 
 /* =========================================
@@ -1359,22 +1301,24 @@ function initAuthState() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  setupMobileMenu();
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const navClose = document.getElementById("navClose");
+  const navBackdrop = document.getElementById("navBackdrop");
+
+  detectDesktopModeOnMobile();
+  window.addEventListener("resize", detectDesktopModeOnMobile);
+
+  if (burger) burger.addEventListener("click", openMenu);
+  if (navClose) navClose.addEventListener("click", closeMenu);
+  if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
+
   bindAuthUI();
-  bindFeedUI();
   bindSidebarButtons();
-  bindDemoInteractions();
-
-  initAuthState();
-  loadRequestsTicker();
-  setInterval(loadRequestsTicker, 15000);
-
-  checkRequestStatus();
 
   loadNowOnAndUpNext();
   setInterval(loadNowOnAndUpNext, 60000);
-});
+}); 
 
 /* =========================================
    GLOBALS FOR INLINE HTML
