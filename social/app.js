@@ -1112,19 +1112,7 @@ async function checkRequestStatus() {
    NOW ON / UP NEXT
 ========================================= */
 
-function getUKNow() {
-  return new Date(new Date().toLocaleString('en-GB', {
-    timeZone: 'Europe/London'
-  }));
-}
 
-function getNowMinutes() {
-  const now = getUKNow();
-  return {
-    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
-    mins: now.getHours() * 60 + now.getMinutes()
-  };
-}
 
 function parseTime(t) {
   t = String(t || '').trim().toLowerCase();
