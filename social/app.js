@@ -50,12 +50,161 @@ const REQUEST_STATUS_URL =
 const REQUEST_TICKER_CSV =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv';
 
-const SCHEDULE_URL =
-  'https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec';
+const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 const DAY_ORDER = [
-  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ];
+
+function normDay(day) {
+  const s = String(day || "").trim().toLowerCase();
+  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
+  return DAY_ORDER.includes(fixed) ? fixed : "";
+}
+
+function getUKNow() {
+  return new Date(new Date().toLocaleString("en-GB", {
+    timeZone: "Europe/London"
+  }));
+}
+
+function getNowMinutes() {
+  const now = getUKNow();
+  return {
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
+  };
+}
+
+function parseTime(t) {
+  t = String(t || "").trim().toLowerCase();
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
+  if (!m) return null;
+
+  let h = parseInt(m[1], 10);
+  const mins = parseInt(m[2] || "0", 10);
+  const ampm = m[3];
+
+  if (ampm === "pm" && h !== 12) h += 12;
+  if (ampm === "am" && h === 12) h = 0;
+
+  return h * 60 + mins;
+}
+
+function slotStartEndMinutes(slot) {
+  const start = parseTime(slot.start);
+  const end = parseTime(slot.end);
+  if (start == null || end == null) return null;
+
+  return {
+    start,
+    end,
+    crossesMidnight: end <= start
+  };
+}
+
+function findCurrentSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const today = DAY_ORDER[dayNum - 1];
+  const prev = DAY_ORDER[(dayNum + 5) % 7];
+
+  for (const s of slots) {
+    const r = slotStartEndMinutes(s);
+    if (!r) continue;
+
+    if (s.day === today) {
+      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
+      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
+    }
+
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
+  }
+
+  return null;
+}
+
+function findUpNextSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const list = [];
+
+  for (let o = 0; o < 7; o++) {
+    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
+
+    for (const s of slots.filter(x => x.day === day)) {
+      if ((s.dj || "").toLowerCase() === "free") continue;
+
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
+
+      if (o === 0) {
+        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
+        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
+      } else {
+        list.push({ o, start: r.start, s });
+      }
+    }
+  }
+
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
+}
+
+async function loadNowOnAndUpNext() {
+  const nowEl = document.getElementById("nowon");
+  const upNextEl = document.getElementById("upNext");
+  const scheduleNowOn = document.getElementById("scheduleNowOn");
+  const scheduleUpNext = document.getElementById("scheduleUpNext");
+
+  if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
+
+  try {
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
+    const data = await res.json();
+
+    const slots = (data.slots || []).map(slot => ({
+      day: normDay(slot.day),
+      start: slot.start,
+      end: slot.end,
+      dj: slot.dj || "Free"
+    }));
+
+    const now = findCurrentSlot(slots);
+    const next = findUpNextSlot(slots);
+
+    if (nowEl) {
+      nowEl.textContent = now
+        ? `${now.dj} ${now.start}–${now.end}`
+        : "Off Air";
+    }
+
+    if (upNextEl) {
+      upNextEl.innerHTML = next
+        ? `${next.dj}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
+        : "No upcoming shows";
+    }
+
+    if (scheduleNowOn) {
+      scheduleNowOn.textContent = now
+        ? `Now On: ${now.dj} (${now.start}–${now.end})`
+        : "Now On: Off Air";
+    }
+
+    if (scheduleUpNext) {
+      scheduleUpNext.textContent = next
+        ? `${next.dj} (${next.start}–${next.end})`
+        : "No upcoming shows";
+    }
+
+  } catch (err) {
+    console.error("Now On / Up Next load failed:", err);
+
+    if (nowEl) nowEl.textContent = "Unavailable";
+    if (upNextEl) upNextEl.textContent = "Unavailable";
+    if (scheduleNowOn) scheduleNowOn.textContent = "Now On: Unavailable";
+    if (scheduleUpNext) scheduleUpNext.textContent = "Unavailable";
+  }
+} 
+
 
 function detectDesktopModeOnMobile() {
   const ua = navigator.userAgent || "";
@@ -224,8 +373,8 @@ window.addEventListener("resize", detectDesktopModeOnMobile);
   if (burger) burger.addEventListener("click", openMenu);
   if (navClose) navClose.addEventListener("click", closeMenu);
   if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
-setInterval(updateUpNext, 60000);
-updateUpNext();
+loadNowOnAndUpNext();
+setInterval(loadNowOnAndUpNext, 60000); 
   if (mobileLoginBtn) {
     mobileLoginBtn.addEventListener("click", (e) => {
       e.preventDefault();
