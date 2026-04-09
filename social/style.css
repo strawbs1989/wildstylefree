@@ -1508,3 +1508,39 @@ video {
   }
 } 
 
+/* FINAL BURGER OVERRIDE */
+@media (max-width:980px){
+  .desktop-nav{
+    display:none !important;
+  }
+
+  #burger,
+  .burger{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:58px !important;
+    height:58px !important;
+    border:none !important;
+    border-radius:18px !important;
+    background:linear-gradient(135deg,#ff2a6d,#8a46ff,#2a7bff) !important;
+    color:#fff !important;
+    font-size:1.5rem !important;
+    cursor:pointer !important;
+    box-shadow:0 10px 24px rgba(159,46,255,.28) !important;
+  }
+}
+
+@media (min-width:981px){
+  .desktop-nav{
+    display:flex !important;
+  }
+
+  #burger,
+  .burger{
+    display:none !important;
+  }
+} 
+
+
+
