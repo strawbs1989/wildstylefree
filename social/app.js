@@ -224,7 +224,8 @@ window.addEventListener("resize", detectDesktopModeOnMobile);
   if (burger) burger.addEventListener("click", openMenu);
   if (navClose) navClose.addEventListener("click", closeMenu);
   if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
-
+setInterval(updateUpNext, 60000);
+updateUpNext();
   if (mobileLoginBtn) {
     mobileLoginBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -1136,3 +1137,84 @@ window.likePost = likePost;
 window.addComment = addComment;
 window.deletePost = deletePost;
 window.showRequestSuccess = showRequestSuccess; 
+
+
+/* =========================================
+   GETUK NOW
+========================================= */
+function getUKNow() {
+  const now = new Date();
+
+  // BST calculation
+  const startBST = new Date(Date.UTC(now.getUTCFullYear(), 2, 31));
+  startBST.setUTCDate(31 - startBST.getUTCDay());
+
+  const endBST = new Date(Date.UTC(now.getUTCFullYear(), 9, 31));
+  endBST.setUTCDate(31 - endBST.getUTCDay());
+
+  const isBST = now >= startBST && now < endBST;
+
+  return new Date(now.getTime() + (isBST ? 3600000 : 0));
+}
+
+function updateUpNext() {
+  const el = document.getElementById("upNext");
+  if (!el) return;
+
+  const now = getUKNow();
+  const day = now.getDay() === 0 ? 7 : now.getDay(); // Sun = 7
+  const minutesNow = now.getHours() * 60 + now.getMinutes();
+
+  // 🔥 YOUR SCHEDULE (EDIT THIS)
+  const schedule = {
+    1: [ // Monday
+      { start: 21 * 60, end: 22 * 60, name: "Matt Baker" }
+    ],
+    4: [ // Thursday
+      { start: 19 * 60, end: 20 * 60, name: "DJ EchoFalls" }
+    ],
+    7: [ // Sunday
+      { start: 20 * 60, end: 21 * 60, name: "DJ EchoFalls" }
+    ]
+  };
+
+  const today = schedule[day] || [];
+
+  let nextShow = null;
+
+  for (let show of today) {
+    if (show.start > minutesNow) {
+      nextShow = show;
+      break;
+    }
+  }
+
+  // If no more shows today → get tomorrow
+  if (!nextShow) {
+    const nextDay = day === 7 ? 1 : day + 1;
+    const tomorrow = schedule[nextDay] || [];
+    if (tomorrow.length > 0) {
+      nextShow = tomorrow[0];
+    }
+  }
+
+  if (!nextShow) {
+    el.innerHTML = "No upcoming shows";
+    return;
+  }
+
+  const startHour = Math.floor(nextShow.start / 60);
+  const endHour = Math.floor(nextShow.end / 60);
+
+  el.innerHTML = `
+    ${nextShow.name}<br>
+    <span class="muted-inline">${formatTime(startHour)}–${formatTime(endHour)} UK</span>
+  `;
+}
+
+function formatTime(hour) {
+  const suffix = hour >= 12 ? "pm" : "am";
+  const h = hour % 12 || 12;
+  return `${h}${suffix}`;
+} 
+
