@@ -57,6 +57,22 @@ const DAY_ORDER = [
   'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
 ];
 
+function detectDesktopModeOnMobile() {
+  const ua = navigator.userAgent || "";
+  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+  const looksDesktopUA =
+    !/Android|iPhone|iPad|iPod|Mobile/i.test(ua) ||
+    ua.includes("X11") ||
+    ua.includes("Windows NT") ||
+    ua.includes("Macintosh");
+
+  if (isTouchDevice && looksDesktopUA) {
+    document.documentElement.classList.add("force-desktop-nav");
+  } else {
+    document.documentElement.classList.remove("force-desktop-nav");
+  }
+} 
+
 /* =========================================
    ELEMENTS
 ========================================= */
@@ -203,7 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const navClose = document.getElementById("navClose");
   const navBackdrop = document.getElementById("navBackdrop");
   const mobileLoginBtn = document.getElementById("mobileLoginBtn");
-
+detectDesktopModeOnMobile();
+window.addEventListener("resize", detectDesktopModeOnMobile); 
   if (burger) burger.addEventListener("click", openMenu);
   if (navClose) navClose.addEventListener("click", closeMenu);
   if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);

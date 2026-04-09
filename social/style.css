@@ -1615,3 +1615,16 @@ video {
   }
 }
 
+/* Force full nav when phone is in desktop-mode style browsing */
+html.force-desktop-nav .desktop-nav{
+  display:flex !important;
+}
+
+html.force-desktop-nav .burger{
+  display:none !important;
+}
+
+html.force-desktop-nav .mobile-nav,
+html.force-desktop-nav .nav-backdrop{
+  display:none !important;
+} 
