@@ -1094,12 +1094,6 @@ async function checkRequestStatus() {
    NOW ON / UP NEXT
 ========================================= */
 
-function normDay(day) {
-  const s = String(day || '').trim().toLowerCase();
-  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
-  return DAY_ORDER.includes(fixed) ? fixed : '';
-}
-
 function getUKNow() {
   return new Date(new Date().toLocaleString('en-GB', {
     timeZone: 'Europe/London'
