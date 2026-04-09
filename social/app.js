@@ -15,8 +15,10 @@ import {
   getDoc,
   serverTimestamp,
   addDoc,
+  updateDoc,
   deleteDoc,
   collection,
+  collectionGroup,
   query,
   orderBy,
   limit,
@@ -50,21 +52,180 @@ const REQUEST_STATUS_URL =
 const REQUEST_TICKER_CSV =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv';
 
-const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+const SCHEDULE_URL =
+  'https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec';
 
 const DAY_ORDER = [
-  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
 ];
 
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const els = {
+  // nav / burger
+  burger: document.getElementById('burger'),
+  navClose: document.getElementById('navClose'),
+  navBackdrop: document.getElementById('navBackdrop'),
+  mobileNav: document.getElementById('mobileNav'),
+  mobileLoginBtn: document.getElementById('mobileLoginBtn'),
+
+  // auth
+  openAuthBtn: document.getElementById('openAuthBtn'),
+  closeAuthBtn: document.getElementById('closeAuthBtn'),
+  authOverlay: document.getElementById('authOverlay'),
+  authModal: document.getElementById('authModal'),
+  authTabs: document.querySelectorAll('.auth-tab'),
+  authPanels: document.querySelectorAll('.auth-form'),
+  authStatus: document.getElementById('authStatus'),
+  loginForm: document.getElementById('loginForm'),
+  signupForm: document.getElementById('signupForm'),
+  loginEmail: document.getElementById('loginEmail'),
+  loginPassword: document.getElementById('loginPassword'),
+  signupDisplayName: document.getElementById('signupDisplayName'),
+  signupEmail: document.getElementById('signupEmail'),
+  signupPassword: document.getElementById('signupPassword'),
+
+  // feed / post
+  postInput: document.getElementById('postInput'),
+  createPostBtn: document.getElementById('createPostBtn'),
+  postStatus: document.getElementById('postStatus'),
+  feedContainer: document.getElementById('feedContainer'),
+
+  // profile
+  profileAvatar: document.getElementById('profileAvatar'),
+  profileName: document.getElementById('profileName'),
+  profileRole: document.getElementById('profileRole'),
+  profileBio: document.getElementById('profileBio'),
+  profilePosts: document.getElementById('profilePosts'),
+  profileActions: document.getElementById('profileActions'),
+
+  // requests ticker
+  requestTickerText: document.getElementById('requestTickerText'),
+  requestTickerClone: document.getElementById('requestTickerClone'),
+
+  // now on / up next
+  nowOn: document.getElementById('nowon'),
+  upNext: document.getElementById('upNext'),
+
+  // request page
+  requestForm: document.querySelector('.request-form-page'),
+  requestSuccess: document.getElementById('requestSuccess'),
+  requestClosed: document.getElementById('requestClosed'),
+
+  // schedule page
+  scheduleNowOn: document.getElementById('scheduleNowOn'),
+  scheduleUpNext: document.getElementById('scheduleUpNext')
+};
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function escapeHtml(text = '') {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function initialsFromName(name = 'WS') {
+  return String(name)
+    .split(' ')
+    .map(p => p[0] || '')
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || 'WS';
+}
+
+function formatDate(value) {
+  return value?.toDate ? value.toDate().toLocaleString() : 'Just now';
+}
+
+function setAuthMessage(message, isError = false) {
+  if (!els.authStatus) return;
+  els.authStatus.textContent = message;
+  els.authStatus.style.color = isError ? '#ff9eb8' : '#b8a9d6';
+}
+
+function setPostMessage(message, isError = false) {
+  if (!els.postStatus) return;
+  els.postStatus.textContent = message;
+  els.postStatus.style.color = isError ? '#ff9eb8' : '#b8a9d6';
+}
+
+function parseCSV(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const next = line[i + 1];
+
+    if (char === '"' && inQuotes && next === '"') {
+      current += '"';
+      i++;
+    } else if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+
+  result.push(current.trim());
+  return result;
+}
+
+/* =========================================
+   RESPONSIVE NAV / BURGER
+========================================= */
+
+function openMenu() {
+  if (els.mobileNav) els.mobileNav.classList.add('active');
+  if (els.navBackdrop) els.navBackdrop.hidden = false;
+}
+
+function closeMenu() {
+  if (els.mobileNav) els.mobileNav.classList.remove('active');
+  if (els.navBackdrop) els.navBackdrop.hidden = true;
+}
+
+function detectDesktopModeOnMobile() {
+  const ua = navigator.userAgent || '';
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+  const looksDesktopUA =
+    !/Android|iPhone|iPad|iPod|Mobile/i.test(ua) ||
+    ua.includes('X11') ||
+    ua.includes('Windows NT') ||
+    ua.includes('Macintosh');
+
+  if (isTouchDevice && looksDesktopUA) {
+    document.documentElement.classList.add('force-desktop-nav');
+  } else {
+    document.documentElement.classList.remove('force-desktop-nav');
+  }
+}
+
+/* =========================================
+   SCHEDULE / NOW ON / UP NEXT
+========================================= */
+
 function normDay(day) {
-  const s = String(day || "").trim().toLowerCase();
+  const s = String(day || '').trim().toLowerCase();
   const fixed = s.charAt(0).toUpperCase() + s.slice(1);
-  return DAY_ORDER.includes(fixed) ? fixed : "";
+  return DAY_ORDER.includes(fixed) ? fixed : '';
 }
 
 function getUKNow() {
-  return new Date(new Date().toLocaleString("en-GB", {
-    timeZone: "Europe/London"
+  return new Date(new Date().toLocaleString('en-GB', {
+    timeZone: 'Europe/London'
   }));
 }
 
@@ -77,16 +238,16 @@ function getNowMinutes() {
 }
 
 function parseTime(t) {
-  t = String(t || "").trim().toLowerCase();
+  t = String(t || '').trim().toLowerCase();
   const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
   if (!m) return null;
 
   let h = parseInt(m[1], 10);
-  const mins = parseInt(m[2] || "0", 10);
+  const mins = parseInt(m[2] || '0', 10);
   const ampm = m[3];
 
-  if (ampm === "pm" && h !== 12) h += 12;
-  if (ampm === "am" && h === 12) h = 0;
+  if (ampm === 'pm' && h !== 12) h += 12;
+  if (ampm === 'am' && h === 12) h = 0;
 
   return h * 60 + mins;
 }
@@ -131,7 +292,7 @@ function findUpNextSlot(slots) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
     for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || "").toLowerCase() === "free") continue;
+      if ((s.dj || '').toLowerCase() === 'free') continue;
 
       const r = slotStartEndMinutes(s);
       if (!r) continue;
@@ -150,222 +311,57 @@ function findUpNextSlot(slots) {
 }
 
 async function loadNowOnAndUpNext() {
-  const nowEl = document.getElementById("nowon");
-  const upNextEl = document.getElementById("upNext");
-  const scheduleNowOn = document.getElementById("scheduleNowOn");
-  const scheduleUpNext = document.getElementById("scheduleUpNext");
+  const nowEl = els.nowOn;
+  const upNextEl = els.upNext;
+  const scheduleNowOn = els.scheduleNowOn;
+  const scheduleUpNext = els.scheduleUpNext;
 
   if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
 
   try {
-    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
+    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now());
     const data = await res.json();
 
     const slots = (data.slots || []).map(slot => ({
       day: normDay(slot.day),
       start: slot.start,
       end: slot.end,
-      dj: slot.dj || "Free"
+      dj: slot.dj || 'Free'
     }));
 
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
 
     if (nowEl) {
-      nowEl.textContent = now
-        ? `${now.dj} ${now.start}–${now.end}`
-        : "Off Air";
+      nowEl.textContent = now ? `${now.dj} ${now.start}–${now.end}` : 'Off Air';
     }
 
     if (upNextEl) {
       upNextEl.innerHTML = next
-        ? `${next.dj}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
-        : "No upcoming shows";
+        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
+        : 'No upcoming shows';
     }
 
     if (scheduleNowOn) {
       scheduleNowOn.textContent = now
         ? `Now On: ${now.dj} (${now.start}–${now.end})`
-        : "Now On: Off Air";
+        : 'Now On: Off Air';
     }
 
     if (scheduleUpNext) {
       scheduleUpNext.textContent = next
         ? `${next.dj} (${next.start}–${next.end})`
-        : "No upcoming shows";
+        : 'No upcoming shows';
     }
-
   } catch (err) {
-    console.error("Now On / Up Next load failed:", err);
+    console.error('Now On / Up Next load failed:', err);
 
-    if (nowEl) nowEl.textContent = "Unavailable";
-    if (upNextEl) upNextEl.textContent = "Unavailable";
-    if (scheduleNowOn) scheduleNowOn.textContent = "Now On: Unavailable";
-    if (scheduleUpNext) scheduleUpNext.textContent = "Unavailable";
+    if (nowEl) nowEl.textContent = 'Unavailable';
+    if (upNextEl) upNextEl.textContent = 'Unavailable';
+    if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
+    if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
-} 
-
-
-function detectDesktopModeOnMobile() {
-  const ua = navigator.userAgent || "";
-  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-  const looksDesktopUA =
-    !/Android|iPhone|iPad|iPod|Mobile/i.test(ua) ||
-    ua.includes("X11") ||
-    ua.includes("Windows NT") ||
-    ua.includes("Macintosh");
-
-  if (isTouchDevice && looksDesktopUA) {
-    document.documentElement.classList.add("force-desktop-nav");
-  } else {
-    document.documentElement.classList.remove("force-desktop-nav");
-  }
-} 
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-const els = {
-  // nav / burger
-  burger: document.getElementById('burger'),
-  navClose: document.getElementById('navClose'),
-  navBackdrop: document.getElementById('navBackdrop'),
-  mobileNav: document.getElementById('mobileNav'),
-
-  // auth
-  openAuthBtn: document.getElementById('openAuthBtn'),
-  closeAuthBtn: document.getElementById('closeAuthBtn'),
-  authOverlay: document.getElementById('authOverlay'),
-  authModal: document.getElementById('authModal'),
-  authTabs: document.querySelectorAll('.auth-tab'),
-  authPanels: document.querySelectorAll('.auth-form'),
-  authStatus: document.getElementById('authStatus'),
-  loginForm: document.getElementById('loginForm'),
-  signupForm: document.getElementById('signupForm'),
-  loginEmail: document.getElementById('loginEmail'),
-  loginPassword: document.getElementById('loginPassword'),
-  signupDisplayName: document.getElementById('signupDisplayName'),
-  signupEmail: document.getElementById('signupEmail'),
-  signupPassword: document.getElementById('signupPassword'),
-
-  // feed
-  postInput: document.getElementById('postInput'),
-  createPostBtn: document.getElementById('createPostBtn'),
-  postStatus: document.getElementById('postStatus'),
-  feedContainer: document.getElementById('feedContainer'),
-
-  // profile
-  profileAvatar: document.getElementById('profileAvatar'),
-  profileName: document.getElementById('profileName'),
-  profileRole: document.getElementById('profileRole'),
-  profileBio: document.getElementById('profileBio'),
-  profilePosts: document.getElementById('profilePosts'),
-  profileActions: document.getElementById('profileActions'),
-
-  // requests ticker
-  requestTickerText: document.getElementById('requestTickerText'),
-  requestTickerClone: document.getElementById('requestTickerClone'),
-
-  // now on
-  nowOn: document.getElementById('nowon'),
-  upNext: document.getElementById('upNext'),
-
-  // request page
-  requestForm: document.querySelector('.request-form-page'),
-  requestSuccess: document.getElementById('requestSuccess'),
-  requestClosed: document.getElementById('requestClosed'),
-
-  // schedule page
-  scheduleNowOn: document.getElementById('scheduleNowOn'),
-  scheduleUpNext: document.getElementById('scheduleUpNext')
-};
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function escapeHtml(text = '') {
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
 }
-
-function initialsFromName(name = 'WS') {
-  return name
-    .split(' ')
-    .map(p => p[0] || '')
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-function formatDate(value) {
-  return value?.toDate ? value.toDate().toLocaleString() : 'Just now';
-}
-
-function parseCSV(line) {
-  const result = [];
-  let current = '';
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    const next = line[i + 1];
-
-    if (char === '"' && inQuotes && next === '"') {
-      current += '"';
-      i++;
-    } else if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      result.push(current.trim());
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-
-  result.push(current.trim());
-  return result;
-}
-
-function setAuthMessage(message, isError = false) {
-  if (!els.authStatus) return;
-  els.authStatus.textContent = message;
-  els.authStatus.style.color = isError ? '#ff9eb8' : '#b8a9d6';
-}
-
-function setPostMessage(message, isError = false) {
-  if (!els.postStatus) return;
-  els.postStatus.textContent = message;
-  els.postStatus.style.color = isError ? '#ff9eb8' : '#b8a9d6';
-}
-
-/* =========================================
-   BURGER MENU
-========================================= */
-
-function openMenu() {
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  if (mobileNav) mobileNav.classList.add("active");
-  if (navBackdrop) navBackdrop.hidden = false;
-}
-
-function closeMenu() {
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  if (mobileNav) mobileNav.classList.remove("active");
-  if (navBackdrop) navBackdrop.hidden = true;
-}
-
-
-
-
 
 /* =========================================
    AUTH UI
@@ -398,15 +394,14 @@ function switchAuthTab(tabName) {
 }
 
 function syncMobileLoginButton(isLoggedIn = false) {
-  const mobileLoginBtn = document.getElementById('mobileLoginBtn');
-  if (!mobileLoginBtn) return;
+  if (!els.mobileLoginBtn) return;
 
   if (isLoggedIn) {
-    mobileLoginBtn.textContent = 'Logout';
-    mobileLoginBtn.classList.add('active');
+    els.mobileLoginBtn.textContent = 'Logout';
+    els.mobileLoginBtn.classList.add('active');
   } else {
-    mobileLoginBtn.textContent = 'Login';
-    mobileLoginBtn.classList.remove('active');
+    els.mobileLoginBtn.textContent = 'Login';
+    els.mobileLoginBtn.classList.remove('active');
   }
 }
 
@@ -597,13 +592,12 @@ function bindAuthUI() {
     });
   }
 
-  const mobileLoginBtn = document.getElementById('mobileLoginBtn');
-  if (mobileLoginBtn) {
-    mobileLoginBtn.addEventListener('click', async (e) => {
+  if (els.mobileLoginBtn) {
+    els.mobileLoginBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       closeMenu();
 
-      if (mobileLoginBtn.textContent === 'Logout' && auth) {
+      if (els.mobileLoginBtn.textContent === 'Logout' && auth) {
         await signOut(auth);
       } else {
         switchAuthTab('login');
@@ -621,9 +615,7 @@ function bindAuthUI() {
 
   if (els.loginForm) els.loginForm.addEventListener('submit', handleLogin);
   if (els.signupForm) els.signupForm.addEventListener('submit', handleSignup);
-} 
-
-
+}
 
 /* =========================================
    FEED / POSTS
@@ -680,7 +672,7 @@ function bindDemoInteractions() {
       const liked = btn.dataset.liked === 'true';
 
       if (liked) {
-        count -= 1;
+        count = Math.max(0, count - 1);
         btn.dataset.liked = 'false';
         btn.classList.remove('liked');
       } else {
@@ -726,6 +718,95 @@ function bindDemoInteractions() {
       if (countEl) countEl.textContent = String(Number(countEl.textContent || 0) + 1);
     });
   });
+}
+
+async function isPostLikedByCurrentUser(postId) {
+  if (!db || !auth?.currentUser) return false;
+
+  const likeRef = doc(db, 'posts', postId, 'likes', auth.currentUser.uid);
+  const likeSnap = await getDoc(likeRef);
+  return likeSnap.exists();
+}
+
+function renderFeed(posts) {
+  if (!els.feedContainer) return;
+
+  cleanupCommentListeners();
+
+  if (!posts.length) {
+    els.feedContainer.innerHTML = defaultPostsMarkup();
+    bindDemoInteractions();
+    return;
+  }
+
+  els.feedContainer.innerHTML = '';
+
+  posts.forEach((post) => {
+    const article = document.createElement('article');
+    article.className = 'post';
+
+    const created = formatDate(post.createdAt);
+    const canDelete = auth?.currentUser && post.uid === auth.currentUser.uid;
+
+    article.innerHTML = `
+      <div class="post-top">
+        <div class="author">
+          <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
+          <div>
+            <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+            <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
+          </div>
+        </div>
+        <span class="badge">Live Post</span>
+      </div>
+
+      <p>${escapeHtml(post.text || '')}</p>
+
+      <div class="post-actions">
+        <button class="live-like-btn" data-post-id="${post.id}">
+          ❤️ <span class="live-like-count">${Number(post.likesCount || 0)}</span> Likes
+        </button>
+        <button class="comment-toggle" data-target="comments-box-${post.id}">
+          💬 Comments
+        </button>
+        ${canDelete ? `<button class="delete-post-btn" data-post-id="${post.id}">🗑 Delete</button>` : ''}
+      </div>
+
+      <div class="comments-box" id="comments-box-${post.id}">
+        <div id="comments-list-${post.id}"></div>
+        <div class="comment-form">
+          <input
+            type="text"
+            id="comment-input-${post.id}"
+            placeholder="Write a comment..."
+            maxlength="140"
+          />
+          <button type="button" class="live-comment-submit" data-post-id="${post.id}">Post</button>
+        </div>
+      </div>
+    `;
+
+    els.feedContainer.appendChild(article);
+  });
+
+  bindLivePostButtons();
+
+  posts.forEach((post) => {
+    listenForComments(post.id);
+  });
+
+  markLikedButtons();
+}
+
+async function markLikedButtons() {
+  const buttons = document.querySelectorAll('.live-like-btn');
+  for (const btn of buttons) {
+    const postId = btn.dataset.postId;
+    if (!postId) continue;
+
+    const liked = await isPostLikedByCurrentUser(postId);
+    btn.classList.toggle('liked', liked);
+  }
 }
 
 function listenForComments(postId) {
@@ -793,73 +874,14 @@ function bindLivePostButtons() {
       await deletePost(btn.dataset.postId);
     });
   });
-}
 
-function renderFeed(posts) {
-  if (!els.feedContainer) return;
+  document.querySelectorAll('.live-like-btn').forEach((btn) => {
+    if (btn.dataset.boundLike === 'true') return;
+    btn.dataset.boundLike = 'true';
 
-  cleanupCommentListeners();
-
-  if (!posts.length) {
-    els.feedContainer.innerHTML = defaultPostsMarkup();
-    bindDemoInteractions();
-    return;
-  }
-
-  els.feedContainer.innerHTML = '';
-
-  posts.forEach((post) => {
-    const article = document.createElement('article');
-    article.className = 'post';
-
-    const created = formatDate(post.createdAt);
-    const canDelete = auth?.currentUser && post.uid === auth.currentUser.uid;
-
-    article.innerHTML = `
-      <div class="post-top">
-        <div class="author">
-          <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
-          <div>
-            <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
-            <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
-          </div>
-        </div>
-        <span class="badge">Live Post</span>
-      </div>
-
-      <p>${escapeHtml(post.text || '')}</p>
-
-      <div class="post-actions">
-        <button onclick="likePost('${post.id}')">
-          ❤️ ${Number(post.likesCount || 0)} Likes
-        </button>
-        <button class="comment-toggle" data-target="comments-box-${post.id}">
-          💬 Comments
-        </button>
-        ${canDelete ? `<button class="delete-post-btn" data-post-id="${post.id}">🗑 Delete</button>` : ''}
-      </div>
-
-      <div class="comments-box" id="comments-box-${post.id}">
-        <div id="comments-list-${post.id}"></div>
-        <div class="comment-form">
-          <input
-            type="text"
-            id="comment-input-${post.id}"
-            placeholder="Write a comment..."
-            maxlength="140"
-          />
-          <button type="button" class="live-comment-submit" data-post-id="${post.id}">Post</button>
-        </div>
-      </div>
-    `;
-
-    els.feedContainer.appendChild(article);
-  });
-
-  bindLivePostButtons();
-
-  posts.forEach((post) => {
-    listenForComments(post.id);
+    btn.addEventListener('click', async () => {
+      await likePost(btn.dataset.postId);
+    });
   });
 }
 
@@ -899,6 +921,7 @@ async function createPost() {
 
   if (!auth.currentUser || !currentUserProfile) {
     setPostMessage('Login to create a post.', true);
+    switchAuthTab('login');
     openAuth();
     return;
   }
@@ -940,14 +963,15 @@ async function createPost() {
 }
 
 async function addComment(postId) {
-  if (usingPlaceholders || !db || !auth) {
-    setPostMessage('Paste your Firebase config first.', true);
+  if (!usingPlaceholders && (!auth?.currentUser || !currentUserProfile)) {
+    setPostMessage('Login to comment.', true);
+    switchAuthTab('login');
+    openAuth();
     return;
   }
 
-  if (!auth.currentUser || !currentUserProfile) {
-    setPostMessage('Login to comment.', true);
-    openAuth();
+  if (usingPlaceholders || !db || !auth) {
+    setPostMessage('Paste your Firebase config first.', true);
     return;
   }
 
@@ -977,6 +1001,7 @@ async function likePost(postId) {
 
   if (!auth.currentUser) {
     setPostMessage('Login to like posts.', true);
+    switchAuthTab('login');
     openAuth();
     return;
   }
@@ -1022,14 +1047,27 @@ async function deletePost(postId) {
 
   if (!auth.currentUser) {
     setPostMessage('Login to delete posts.', true);
+    switchAuthTab('login');
     openAuth();
     return;
   }
 
-  const ok = confirm('Delete this post?');
+  const ok = window.confirm('Delete this post?');
   if (!ok) return;
 
   try {
+    const commentsQ = query(collection(db, 'posts', postId, 'comments'));
+    const commentsSnap = await getDocs(commentsQ);
+    for (const c of commentsSnap.docs) {
+      await deleteDoc(c.ref);
+    }
+
+    const likesQ = query(collection(db, 'posts', postId, 'likes'));
+    const likesSnap = await getDocs(likesQ);
+    for (const l of likesSnap.docs) {
+      await deleteDoc(l.ref);
+    }
+
     await deleteDoc(doc(db, 'posts', postId));
     setPostMessage('🗑️ Post deleted.');
   } catch (error) {
@@ -1039,7 +1077,7 @@ async function deletePost(postId) {
 }
 
 /* =========================================
-   REQUESTS TICKER
+   REQUESTS
 ========================================= */
 
 async function loadRequestsTicker() {
@@ -1062,15 +1100,12 @@ async function loadRequestsTicker() {
     const text = items.length ? items.join(' • ') : 'No requests yet — be the first!';
     els.requestTickerText.textContent = text;
     els.requestTickerClone.textContent = text;
-  } catch {
+  } catch (err) {
+    console.error('Ticker load failed:', err);
     els.requestTickerText.textContent = 'Requests unavailable right now.';
-    els.requestTickerClone.textContent = els.requestTickerText.textContent;
+    els.requestTickerClone.textContent = 'Requests unavailable right now.';
   }
 }
-
-/* =========================================
-   REQUEST PAGE STATUS
-========================================= */
 
 function showRequestSuccess() {
   setTimeout(() => {
@@ -1102,176 +1137,45 @@ async function checkRequestStatus() {
     }
   } catch (err) {
     console.error('Request status check failed:', err);
-    els.requestForm.style.display = 'none';
+    if (els.requestForm) els.requestForm.style.display = 'none';
     els.requestClosed.innerHTML = '⚠️ Request status unavailable right now.<br>Please try again later.';
     els.requestClosed.classList.remove('hidden');
   }
 }
 
 /* =========================================
-   NOW ON / UP NEXT
+   INITIAL BINDING
 ========================================= */
 
+function bindCoreUI() {
+  detectDesktopModeOnMobile();
+  window.addEventListener('resize', detectDesktopModeOnMobile);
 
+  if (els.burger) els.burger.addEventListener('click', openMenu);
+  if (els.navClose) els.navClose.addEventListener('click', closeMenu);
+  if (els.navBackdrop) els.navBackdrop.addEventListener('click', closeMenu);
 
-function parseTime(t) {
-  t = String(t || '').trim().toLowerCase();
-  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
-  if (!m) return null;
+  bindAuthUI();
+  bindSidebarButtons();
 
-  let h = parseInt(m[1], 10);
-  const mins = parseInt(m[2] || '0', 10);
-  const ampm = m[3];
-
-  if (ampm === 'pm' && h !== 12) h += 12;
-  if (ampm === 'am' && h === 12) h = 0;
-
-  return h * 60 + mins;
-}
-
-function slotStartEndMinutes(slot) {
-  const start = parseTime(slot.start);
-  const end = parseTime(slot.end);
-  if (start == null || end == null) return null;
-
-  return {
-    start,
-    end,
-    crossesMidnight: end <= start
-  };
-}
-
-function findCurrentSlot(slots) {
-  const { dayNum, mins } = getNowMinutes();
-  const today = DAY_ORDER[dayNum - 1];
-  const prev = DAY_ORDER[(dayNum + 5) % 7];
-
-  for (const s of slots) {
-    const r = slotStartEndMinutes(s);
-    if (!r) continue;
-
-    if (s.day === today) {
-      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
-      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
-    }
-
-    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
-  }
-
-  return null;
-}
-
-function findUpNextSlot(slots) {
-  const { dayNum, mins } = getNowMinutes();
-  const list = [];
-
-  for (let o = 0; o < 7; o++) {
-    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
-
-    for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || '').toLowerCase() === 'free') continue;
-
-      const r = slotStartEndMinutes(s);
-      if (!r) continue;
-
-      if (o === 0) {
-        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
-        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
-      } else {
-        list.push({ o, start: r.start, s });
-      }
-    }
-  }
-
-  list.sort((a, b) => a.o - b.o || a.start - b.start);
-  return list[0]?.s || null;
-}
-
-async function loadNowOnAndUpNext() {
-  if (!els.nowOn && !els.upNext && !els.scheduleNowOn && !els.scheduleUpNext) return;
-
-  try {
-    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now());
-    const data = await res.json();
-
-    const slots = (data.slots || []).map(slot => ({
-      day: normDay(slot.day),
-      start: slot.start,
-      end: slot.end,
-      dj: slot.dj || 'Free'
-    }));
-
-    const now = findCurrentSlot(slots);
-    const next = findUpNextSlot(slots);
-
-    if (els.nowOn) {
-      els.nowOn.textContent = now
-        ? `${now.dj} (${now.start}–${now.end})`
-        : 'Off Air';
-    }
-
-    if (els.upNext) {
-      els.upNext.textContent = next
-        ? `${next.dj} (${next.start}–${next.end})`
-        : 'No upcoming shows';
-    }
-
-    if (els.scheduleNowOn) {
-      els.scheduleNowOn.textContent = now
-        ? `Now On: ${now.dj} (${now.start}–${now.end})`
-        : 'Now On: Off Air';
-    }
-
-    if (els.scheduleUpNext) {
-      els.scheduleUpNext.textContent = next
-        ? `${next.dj} (${next.start}–${next.end})`
-        : 'No upcoming shows';
-    }
-  } catch (err) {
-    console.error('Now On / Up Next load failed:', err);
-
-    if (els.nowOn) els.nowOn.textContent = 'Unavailable';
-    if (els.upNext) els.upNext.textContent = 'Unavailable';
-    if (els.scheduleNowOn) els.scheduleNowOn.textContent = 'Now On: Unavailable';
-    if (els.scheduleUpNext) els.scheduleUpNext.textContent = 'Unavailable';
-  }
+  if (els.createPostBtn) els.createPostBtn.addEventListener('click', createPost);
 }
 
 /* =========================================
-   BINDINGS
+   AUTH STATE / STARTUP
 ========================================= */
 
-function bindAuthUI() {
-  els.authTabs.forEach(tab => {
-    tab.addEventListener('click', () => switchAuthTab(tab.dataset.authTab));
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  bindCoreUI();
 
-  els.openAuthBtn?.addEventListener('click', async (e) => {
-    e.preventDefault();
+  loadNowOnAndUpNext();
+  setInterval(loadNowOnAndUpNext, 60000);
 
-    if (els.openAuthBtn.textContent === 'Logout' && auth) {
-      await signOut(auth);
-    } else {
-      openAuth();
-    }
-  });
+  loadRequestsTicker();
+  setInterval(loadRequestsTicker, 15000);
 
-  els.closeAuthBtn?.addEventListener('click', closeAuth);
-  els.authOverlay?.addEventListener('click', closeAuth);
+  checkRequestStatus();
 
-  els.loginForm?.addEventListener('submit', handleLogin);
-  els.signupForm?.addEventListener('submit', handleSignup);
-}
-
-function bindFeedUI() {
-  els.createPostBtn?.addEventListener('click', createPost);
-}
-
-/* =========================================
-   INIT
-========================================= */
-
-function initAuthState() {
   if (usingPlaceholders) {
     setLoggedOutState();
     listenForPosts();
@@ -1285,115 +1189,16 @@ function initAuthState() {
     } else {
       setLoggedOutState();
     }
+
     listenForPosts();
   });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const burger = document.getElementById("burger");
-  const navClose = document.getElementById("navClose");
-  const navBackdrop = document.getElementById("navBackdrop");
-
-  detectDesktopModeOnMobile();
-  window.addEventListener("resize", detectDesktopModeOnMobile);
-
-  if (burger) burger.addEventListener("click", openMenu);
-  if (navClose) navClose.addEventListener("click", closeMenu);
-  if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
-
-  bindAuthUI();
-  bindSidebarButtons();
-
-  loadNowOnAndUpNext();
-  setInterval(loadNowOnAndUpNext, 60000);
-}); 
+});
 
 /* =========================================
-   GLOBALS FOR INLINE HTML
+   GLOBALS
 ========================================= */
 
 window.likePost = likePost;
 window.addComment = addComment;
 window.deletePost = deletePost;
 window.showRequestSuccess = showRequestSuccess; 
-
-
-/* =========================================
-   GETUK NOW
-========================================= */
-function getUKNow() {
-  const now = new Date();
-
-  // BST calculation
-  const startBST = new Date(Date.UTC(now.getUTCFullYear(), 2, 31));
-  startBST.setUTCDate(31 - startBST.getUTCDay());
-
-  const endBST = new Date(Date.UTC(now.getUTCFullYear(), 9, 31));
-  endBST.setUTCDate(31 - endBST.getUTCDay());
-
-  const isBST = now >= startBST && now < endBST;
-
-  return new Date(now.getTime() + (isBST ? 3600000 : 0));
-}
-
-function updateUpNext() {
-  const el = document.getElementById("upNext");
-  if (!el) return;
-
-  const now = getUKNow();
-  const day = now.getDay() === 0 ? 7 : now.getDay(); // Sun = 7
-  const minutesNow = now.getHours() * 60 + now.getMinutes();
-
-  // 🔥 YOUR SCHEDULE (EDIT THIS)
-  const schedule = {
-    1: [ // Monday
-      { start: 21 * 60, end: 22 * 60, name: "Matt Baker" }
-    ],
-    4: [ // Thursday
-      { start: 19 * 60, end: 20 * 60, name: "DJ EchoFalls" }
-    ],
-    7: [ // Sunday
-      { start: 20 * 60, end: 21 * 60, name: "DJ EchoFalls" }
-    ]
-  };
-
-  const today = schedule[day] || [];
-
-  let nextShow = null;
-
-  for (let show of today) {
-    if (show.start > minutesNow) {
-      nextShow = show;
-      break;
-    }
-  }
-
-  // If no more shows today → get tomorrow
-  if (!nextShow) {
-    const nextDay = day === 7 ? 1 : day + 1;
-    const tomorrow = schedule[nextDay] || [];
-    if (tomorrow.length > 0) {
-      nextShow = tomorrow[0];
-    }
-  }
-
-  if (!nextShow) {
-    el.innerHTML = "No upcoming shows";
-    return;
-  }
-
-  const startHour = Math.floor(nextShow.start / 60);
-  const endHour = Math.floor(nextShow.end / 60);
-
-  el.innerHTML = `
-    ${nextShow.name}<br>
-    <span class="muted-inline">${formatTime(startHour)}–${formatTime(endHour)} UK</span>
-  `;
-}
-
-function formatTime(hour) {
-  const suffix = hour >= 12 ? "pm" : "am";
-  const h = hour % 12 || 12;
-  return `${h}${suffix}`;
-} 
-
