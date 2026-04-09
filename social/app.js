@@ -364,17 +364,39 @@ function closeMenu() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // NAV ELEMENTS
   const burger = document.getElementById("burger");
   const navClose = document.getElementById("navClose");
   const navBackdrop = document.getElementById("navBackdrop");
   const mobileLoginBtn = document.getElementById("mobileLoginBtn");
-detectDesktopModeOnMobile();
-window.addEventListener("resize", detectDesktopModeOnMobile); 
-  if (burger) burger.addEventListener("click", openMenu);
-  if (navClose) navClose.addEventListener("click", closeMenu);
-  if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
-loadNowOnAndUpNext();
-setInterval(loadNowOnAndUpNext, 60000); 
+
+  // 🔥 IMPORTANT: DEBUG
+  console.log("Burger:", burger);
+  console.log("NavClose:", navClose);
+  console.log("Backdrop:", navBackdrop);
+
+  // DESKTOP MODE DETECTION
+  detectDesktopModeOnMobile();
+  window.addEventListener("resize", detectDesktopModeOnMobile);
+
+  // BURGER EVENTS
+  if (burger) {
+    burger.addEventListener("click", () => {
+      console.log("Burger clicked");
+      openMenu();
+    });
+  }
+
+  if (navClose) {
+    navClose.addEventListener("click", closeMenu);
+  }
+
+  if (navBackdrop) {
+    navBackdrop.addEventListener("click", closeMenu);
+  }
+
+  // LOGIN BUTTON IN MOBILE NAV
   if (mobileLoginBtn) {
     mobileLoginBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -382,7 +404,13 @@ setInterval(loadNowOnAndUpNext, 60000);
       openAuth();
     });
   }
+
+  // NOW ON + UP NEXT
+  loadNowOnAndUpNext();
+  setInterval(loadNowOnAndUpNext, 60000);
+
 }); 
+
 
 
 /* =========================================
