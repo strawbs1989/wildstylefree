@@ -269,7 +269,7 @@ const els = {
 
   // now on
   nowOn: document.getElementById('nowon'),
-  upNext: document.getElementById('upnext'),
+  upNext: document.getElementById('upNext'),
 
   // request page
   requestForm: document.querySelector('.request-form-page'),
@@ -418,15 +418,19 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 function openAuth() {
-  els.authOverlay?.classList.add('open');
-  els.authModal?.classList.add('open');
-  els.authModal?.setAttribute('aria-hidden', 'false');
+  if (els.authOverlay) els.authOverlay.classList.add('open');
+  if (els.authModal) {
+    els.authModal.classList.add('open');
+    els.authModal.setAttribute('aria-hidden', 'false');
+  }
 }
 
 function closeAuth() {
-  els.authOverlay?.classList.remove('open');
-  els.authModal?.classList.remove('open');
-  els.authModal?.setAttribute('aria-hidden', 'true');
+  if (els.authOverlay) els.authOverlay.classList.remove('open');
+  if (els.authModal) {
+    els.authModal.classList.remove('open');
+    els.authModal.setAttribute('aria-hidden', 'true');
+  }
 }
 
 function switchAuthTab(tabName) {
@@ -437,6 +441,19 @@ function switchAuthTab(tabName) {
   els.authPanels.forEach(panel => {
     panel.classList.toggle('active', panel.dataset.authPanel === tabName);
   });
+}
+
+function syncMobileLoginButton(isLoggedIn = false) {
+  const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+  if (!mobileLoginBtn) return;
+
+  if (isLoggedIn) {
+    mobileLoginBtn.textContent = 'Logout';
+    mobileLoginBtn.classList.add('active');
+  } else {
+    mobileLoginBtn.textContent = 'Login';
+    mobileLoginBtn.classList.remove('active');
+  }
 }
 
 function bindSidebarButtons() {
@@ -465,6 +482,8 @@ function setLoggedOutState() {
     els.openAuthBtn.textContent = 'Login';
     els.openAuthBtn.classList.remove('active');
   }
+
+  syncMobileLoginButton(false);
 
   if (els.profileAvatar) els.profileAvatar.textContent = 'WL';
   if (els.profileName) els.profileName.textContent = 'Guest Listener';
@@ -501,15 +520,6 @@ async function setLoggedInState(user) {
     role: 'Listener',
     bio: 'Wildstyle community member.'
   };
-  
-  const mobileLoginBtn = document.getElementById("mobileLoginBtn");
-
-if (mobileLoginBtn) {
-  mobileLoginBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    openAuth(); // 🔥 opens your login modal
-  });
-}
 
   if (db) {
     const profileRef = doc(db, 'users', user.uid);
@@ -530,6 +540,8 @@ if (mobileLoginBtn) {
     els.openAuthBtn.textContent = 'Logout';
     els.openAuthBtn.classList.add('active');
   }
+
+  syncMobileLoginButton(true);
 
   if (els.profileAvatar) els.profileAvatar.textContent = initialsFromName(profileData.displayName);
   if (els.profileName) els.profileName.textContent = profileData.displayName;
@@ -557,13 +569,24 @@ async function handleLogin(e) {
 
   try {
     setAuthMessage('Logging in...');
-    await signInWithEmailAndPassword(auth, els.loginEmail.value.trim(), els.loginPassword.value);
-    els.loginForm.reset();
+
+    await signInWithEmailAndPassword(
+      auth,
+      els.loginEmail.value.trim(),
+      els.loginPassword.value
+    );
+
+    if (els.loginForm) els.loginForm.reset();
     closeAuth();
     setAuthMessage('Logged in.');
   } catch (error) {
     console.error('Login error:', error);
-    setAuthMessage(error.message, true);
+
+    if (error.code === 'auth/invalid-credential') {
+      setAuthMessage('Incorrect email or password.', true);
+    } else {
+      setAuthMessage(error.message, true);
+    }
   }
 }
 
@@ -598,7 +621,7 @@ async function handleSignup(e) {
       createdAt: serverTimestamp()
     });
 
-    els.signupForm.reset();
+    if (els.signupForm) els.signupForm.reset();
     closeAuth();
     setAuthMessage('Account created.');
   } catch (error) {
@@ -606,6 +629,59 @@ async function handleSignup(e) {
     setAuthMessage(error.message, true);
   }
 }
+
+function bindAuthUI() {
+  if (els.openAuthBtn) {
+    els.openAuthBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      if (els.openAuthBtn.textContent === 'Logout' && auth) {
+        await signOut(auth);
+      } else {
+        switchAuthTab('login');
+        openAuth();
+      }
+    });
+  }
+
+  const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+  if (mobileLoginBtn) {
+    mobileLoginBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      closeMenu();
+
+      if (mobileLoginBtn.textContent === 'Logout' && auth) {
+        await signOut(auth);
+      } else {
+        switchAuthTab('login');
+        openAuth();
+      }
+    });
+  }
+
+  if (els.closeAuthBtn) {
+    els.closeAuthBtn.addEventListener('click', closeAuth);
+  }
+
+  if (els.authOverlay) {
+    els.authOverlay.addEventListener('click', closeAuth);
+  }
+
+  els.authTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      switchAuthTab(tab.dataset.authTab);
+    });
+  });
+
+  if (els.loginForm) {
+    els.loginForm.addEventListener('submit', handleLogin);
+  }
+
+  if (els.signupForm) {
+    els.signupForm.addEventListener('submit', handleSignup);
+  }
+} 
+
 
 /* =========================================
    FEED / POSTS
