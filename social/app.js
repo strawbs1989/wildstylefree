@@ -185,20 +185,38 @@ function setPostMessage(message, isError = false) {
 ========================================= */
 
 function openMenu() {
-  if (els.mobileNav) els.mobileNav.classList.add('active');
-  if (els.navBackdrop) els.navBackdrop.hidden = false;
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.add("active");
+  if (navBackdrop) navBackdrop.hidden = false;
 }
 
 function closeMenu() {
-  if (els.mobileNav) els.mobileNav.classList.remove('active');
-  if (els.navBackdrop) els.navBackdrop.hidden = true;
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  if (mobileNav) mobileNav.classList.remove("active");
+  if (navBackdrop) navBackdrop.hidden = true;
 }
 
-function setupMobileMenu() {
-  if (els.burger) els.burger.addEventListener('click', openMenu);
-  if (els.navClose) els.navClose.addEventListener('click', closeMenu);
-  if (els.navBackdrop) els.navBackdrop.addEventListener('click', closeMenu);
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const navClose = document.getElementById("navClose");
+  const navBackdrop = document.getElementById("navBackdrop");
+  const mobileLoginBtn = document.getElementById("mobileLoginBtn");
+
+  if (burger) burger.addEventListener("click", openMenu);
+  if (navClose) navClose.addEventListener("click", closeMenu);
+  if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
+
+  if (mobileLoginBtn) {
+    mobileLoginBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeMenu();
+      openAuth();
+    });
+  }
+}); 
+
 
 /* =========================================
    AUTH UI
