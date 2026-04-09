@@ -1588,3 +1588,30 @@ video {
     display:none !important;
   }
 } 
+/* Mobile + small tablets */
+@media (max-width:768px){
+  .desktop-nav{
+    display:none !important;
+  }
+
+  .burger{
+    display:flex !important;
+  }
+}
+
+/* Desktop + large screens */
+@media (min-width:769px){
+  .desktop-nav{
+    display:flex !important;
+  }
+
+  .burger{
+    display:none !important;
+  }
+
+  .mobile-nav,
+  .nav-backdrop{
+    display:none !important;
+  }
+}
+
