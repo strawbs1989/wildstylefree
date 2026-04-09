@@ -1550,7 +1550,7 @@ video {
 }
 
 /* Tablet + Mobile = burger */
-@media (max-width:980px){
+@media (max-width:768px){
   .desktop-nav{
     display:none !important;
   }
