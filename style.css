@@ -2993,83 +2993,30 @@ body.menu-open{
   }
 }
 
+
+
 /* =========================
-MAIN SITE NAV - MATCH SOCIAL
+INDEX NAV - MATCH SOCIAL MENU
 ========================= */
 
-/* desktop */
-.wild-header{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  background:rgba(247,239,255,.82);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(35,26,53,.08);
+.desktop-nav .nav-login-btn{
+  border:none;
+  background:#120d1d;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:16px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(17,8,29,.12);
 }
 
-.wild-header-inner{
-  width:min(1280px,94%);
-  margin:0 auto;
-  min-height:82px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-}
-
-.desktop-nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-left:auto;
-}
-
-.menu-toggle{
-  display:none;
-}
-
-/* mobile menu hidden by default */
-.mobile-nav{
-  position:fixed;
-  top:0;
-  right:-100%;
-  width:280px;
-  max-width:80%;
-  height:100vh;
-  background:linear-gradient(180deg,#1e1a2a,#120f18);
-  padding:24px 18px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  border-left:1px solid rgba(255,255,255,.12);
-  transition:right .3s ease;
-  z-index:9999;
-}
-
-.mobile-nav.active{
-  right:0;
-}
-
-.nav-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(35,26,53,.28);
-  z-index:9000;
-}
-
-/* mobile like social page */
-@media (max-width: 900px){
-
-  .wild-header-inner{
-    min-height:88px;
-    padding:0;
-  }
+@media (max-width:900px){
 
   .desktop-nav{
     display:none !important;
   }
 
-  .menu-toggle{
+  .burger{
     display:grid !important;
     place-items:center;
     width:58px;
@@ -3084,40 +3031,101 @@ MAIN SITE NAV - MATCH SOCIAL
     flex:none;
   }
 
-  .brand-block{
-    min-width:0;
-    flex:1;
+  .mobile-nav{
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:min(78vw,540px);
+    max-width:100%;
+    height:100vh;
+    padding:24px 18px 30px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    background:linear-gradient(180deg,#141022 0%, #0b0815 100%);
+    border-left:1px solid rgba(255,255,255,.08);
+    transition:right .3s ease;
+    z-index:9999;
+    overflow-y:auto;
   }
 
-  .brand-badge{
-    width:58px;
-    height:58px;
-    border-radius:18px;
+  .mobile-nav.active{
+    right:0;
   }
 
-  .brand-copy strong{
+  .mobile-nav-top{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    align-items:center;
+    gap:12px;
+    margin-bottom:6px;
+  }
+
+  .mobile-nav-title{
+    color:#fff;
     font-size:1.15rem;
-    line-height:1.05;
+    font-weight:800;
+    line-height:1;
   }
 
-  .brand-copy small{
-    font-size:.9rem;
+  .mobile-nav-close{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    border-radius:22px;
+    min-height:72px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    padding:0 22px;
+    font-size:2rem;
+    cursor:pointer;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
+  }
+
+  .mobile-nav-link{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    min-height:82px;
+    width:100%;
+    padding:0 28px;
+    border-radius:26px;
+    text-decoration:none;
+    color:#fff;
+    font-size:1rem;
+    font-weight:800;
+    line-height:1;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.06);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+  }
+
+  .mobile-nav .mobile-login-btn{
+    appearance:none;
+    cursor:pointer;
+  }
+
+  .mobile-nav-link.active{
+    background:linear-gradient(90deg,#ff2a6d 0%, #b14cff 50%, #2f7cff 100%);
+    border-color:transparent;
+    color:#fff;
+  }
+
+  .nav-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(8,5,18,.45);
+    backdrop-filter:blur(3px);
+    z-index:9000;
   }
 }
 
-/* desktop only */
-@media (min-width: 901px){
-  .mobile-nav,
-  .nav-backdrop{
+@media (min-width:901px){
+  .burger{
     display:none !important;
-  }
-
-  .menu-toggle{
-    display:none !important;
-  }
-
-  .desktop-nav{
-    display:flex !important;
   }
 }
 
