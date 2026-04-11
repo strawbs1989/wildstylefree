@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting to Bing Search</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #000;
+      color: #0f0;
+    }
+    a {
+      color: #0ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Redirecting to Bing...</h1>
+  <p>If not redirected, <a id="searchLink" href="#">click here</a>.</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q");
+
+    if (query) {
+      const redirectUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+      document.getElementById("searchLink").href = redirectUrl;
+      window.location.href = redirectUrl;
+    } else {
+      document.querySelector("h1").textContent = "No search query provided.";
+    }
+  </script>
+</body>
+</html>

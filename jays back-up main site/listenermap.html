@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Listener Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <script src="/map.js" defer></script>
+</head>
+<body class="listener-map-page">
+
+  <header class="navbar">
+    <div class="wild-header-inner">
+      <a href="/index.html" class="brand-block">
+        <span class="brand-badge">WS</span>
+        <span class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>Listener Map</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" id="nav">
+        <a href="/index.html">Home</a>
+        <a href="/djs.html">DJs</a>
+		<a href="/shout.html">Shout</a>
+        <a href="/schedule.html">Schedule</a>
+        <a href="/chat.html">Chat</a>
+        <a href="/merch.html">Merch</a>
+        <a href="/listener-map.html" class="active-link">Map</a>
+      </nav>
+
+      <button class="menu-toggle" id="burger" type="button">☰</button>
+    </div>
+  </header>
+
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" id="navClose" type="button">✕</button>
+    </div>
+
+    <a href="/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+	<a href="/shout.html">Shout</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/merch.html">Merch</a>
+    <a href="/listener-map.html">Map</a>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container hero-panel">
+      <div class="portal-head">
+        <h2>Wildstyle Audience Map</h2>
+        <span class="badge" id="totalListenersBadge">Loading…</span>
+      </div>
+      <div class="hero-content">
+        <h1>Where Wildstyle Is Being Heard</h1>
+        <p>This page pulls country totals from your live worker and places them on a stylised world map. It’s designed to feel like a real radio platform feature, not just another stats page.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container layout">
+
+      <article class="panel">
+        <div class="portal-head">
+          <h2>Global Audience</h2>
+          <span class="badge" id="countryCountBadge">0 countries</span>
+        </div>
+
+        <div class="panel-body">
+          <div class="map-wrap" id="mapWrap">
+            <div class="continent na"></div>
+            <div class="continent sa"></div>
+            <div class="continent eu"></div>
+            <div class="continent af"></div>
+            <div class="continent as"></div>
+            <div class="continent au"></div>
+            <div class="grid-overlay"></div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <strong id="topCountryName">Loading…</strong>
+              <span>Top country by logged listener count</span>
+            </div>
+            <div class="stat-card">
+              <strong id="topCountryCount">0</strong>
+              <span>Listeners in top country</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <p id="lastUpdated" class="map-updated-text">Updated just now</p> 
+      <aside class="side-stack">
+        <article class="panel">
+          <div class="portal-head">
+            <h2>Top Countries</h2>
+          </div>
+          <div class="panel-body country-list" id="countryList">
+            <div class="muted-note">Loading country totals…</div>
+          </div>
+        </article>
+<article class="panel">
+  <div class="portal-head">
+    <h2>Live Activity</h2>
+  </div>
+  <div class="panel-body activity-feed" id="activityFeed">
+    <div class="feed-item">
+      <strong>Loading live activity…</strong>
+      <span>Checking latest country changes</span>
+    </div>
+  </div>
+</article>
+        <article class="panel">
+          <div class="portal-head">
+            <h2>Map Notes</h2>
+          </div>
+          <div class="panel-body">
+            <div class="muted-note">
+              These values are coming from your existing worker country log. The map dots are stylised placements for a fast, branded experience that suits Wildstyle better than a generic embed.
+            </div>
+          </div>
+        </article>
+      </aside>
+
+    </div>
+  </section>
+
+</body>
+</html> 

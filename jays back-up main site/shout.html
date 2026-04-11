@@ -1,0 +1,172 @@
+<html lang="en">
+<head>
+  <title>Wildstyle Radio — ShoutOut</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=10">
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar wild-header">
+    <div class="wild-header-inner">
+
+      <a href="/index.html" class="brand-block">
+        <span class="brand-badge">WS</span>
+        <span class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>ShoutOut Hub</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" id="nav">
+        <a href="/index.html">Home</a>
+        <a href="/djs.html">DJs</a>
+        <a href="/schedule.html">Schedule</a>
+        <a href="/chat.html">Chat</a>
+        <a href="/request.html">Request</a>
+        <a href="/merch.html">Merch</a>
+        <a href="/shoutout.html" class="active-link">ShoutOut</a>
+      </nav>
+
+      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
+    </div>
+  </header>
+
+  <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
+
+  <!-- MOBILE NAV -->
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+    </div>
+
+    <a href="/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/request.html">Request</a>
+    <a href="/merch.html">Merch</a>
+    <a href="/shoutout.html">ShoutOut</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="shoutout-hero">
+    <div class="shoutout-hero-inner">
+      <span class="page-kicker">SEND SOME LOVE</span>
+      <h1>Send a Live ShoutOut</h1>
+      <p>Want to give a shout-out to someone special? Send it in and get it on the Wildstyle ticker.</p>
+    </div>
+  </section>
+
+  <!-- SHOUTOUT PAGE -->
+  <section class="shoutout-page-section">
+    <div class="container shoutout-page-grid">
+
+      <article class="portal-panel portal-span-2">
+        <div class="portal-head">
+          <h2>Send Your ShoutOut</h2>
+        </div>
+
+        <div class="portal-box-body">
+          <p class="shoutout-intro">
+            Add your name and message below. Once sent, it can appear in the live shout-out ticker on the homepage.
+          </p>
+
+          <div class="shoutout-box shoutout-box-portal">
+            <form id="shoutoutForm" class="shoutout-form-portal">
+              <input name="name" placeholder="Your name" required maxlength="25">
+              <input name="message" placeholder="Your shout-out (max 120)" required maxlength="120">
+              <button type="submit" class="shoutout-submit-btn">Send ShoutOut</button>
+              <div id="shoutoutStatus"></div>
+            </form>
+          </div>
+        </div>
+      </article>
+
+      <aside class="shoutout-side-stack">
+
+        <article class="portal-panel">
+          <div class="portal-head">
+            <h2>How It Works</h2>
+          </div>
+          <div class="portal-box-body request-info-list">
+            <div class="request-info-card">
+              <strong>1.</strong>
+              <p>Type your name and your message.</p>
+            </div>
+            <div class="request-info-card">
+              <strong>2.</strong>
+              <p>Submit it to Wildstyle using the form.</p>
+            </div>
+            <div class="request-info-card">
+              <strong>3.</strong>
+              <p>Your message can appear on the live homepage ticker.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="portal-panel">
+          <div class="portal-head">
+            <h2>Quick Links</h2>
+          </div>
+          <div class="portal-box-body quick-grid">
+            <a href="/index.html" class="quick-tile">Home</a>
+            <a href="/request.html" class="quick-tile">Request</a>
+            <a href="/schedule.html" class="quick-tile">Schedule</a>
+            <a href="/chat.html" class="quick-tile">Chat</a>
+          </div>
+        </article>
+
+      </aside>
+
+    </div>
+  </section>
+
+ 
+
+  <!-- FOOTER -->
+  <footer class="portal-footer">
+    <div class="container footer-grid">
+
+      <div class="footer-box">
+        <h5>Wildstyle Radio</h5>
+        <p>United by beats.<br>Powered by volunteer passion.</p>
+      </div>
+
+      <div class="footer-box">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="/shoutout.html">ShoutOut</a></li>
+          <li><a href="/request.html">Request</a></li>
+          <li><a href="/schedule.html">Schedule</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-box">
+        <h5>Follow Us</h5>
+        <p>Facebook • Instagram • TikTok</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://wildstyle.vip/script.js?v=8" defer></script>
+</body>
+</html> 

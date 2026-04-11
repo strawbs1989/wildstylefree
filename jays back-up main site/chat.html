@@ -1,0 +1,204 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Wildstyle Radio — Chat</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=9">
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar wild-header">
+    <div class="wild-header-inner">
+
+      <a href="/index.html" class="brand-block">
+        <span class="brand-badge">WS</span>
+        <span class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>Chat Hub</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" id="nav">
+        <a href="/index.html">Home</a>
+        <a href="/djs.html">DJs</a>
+		<a href="/shout.html">Shout</a>
+        <a href="/schedule.html">Schedule</a>
+        <a href="/chat.html" class="active-link">Chat</a>
+        <a href="/merch.html">Merch</a>
+      </nav>
+
+      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
+    </div>
+  </header>
+
+  <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
+
+  <!-- MOBILE NAV -->
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+    </div>
+
+    <a href="/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+	<a href="/shout.html">Shout</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/merch.html">Merch</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="chat-hero">
+    <div class="chat-hero-inner">
+      <span class="page-kicker">JOIN THE COMMUNITY</span>
+      <h1>Wildstyle Live Chat</h1>
+      <p>Jump into the conversation, connect with listeners, and chat while the music plays.</p>
+    </div>
+  </section>
+
+  <!-- CHAT PAGE -->
+  <section class="chat-page-section">
+    <div class="container chat-page-grid">
+
+      <article class="portal-panel portal-span-2">
+        <div class="portal-head">
+          <h2>Live Chat Room</h2>
+        </div>
+
+        <div class="portal-box-body">
+          <div class="chat-frame-wrap">
+            <iframe
+              src="https://minnit.chat/c/WildstyleRadio?embed&nickname="
+              title="Wildstyle Live Chat"
+              style="border:none; width:100%; height:560px; max-height:90vh;"
+              data-minnitchatembed="1">
+            </iframe>
+			<iframe
+  src="/request-ticker.html"
+  style="
+    width:100%;
+    height:70px;
+    border:none;
+    border-radius:16px;
+    margin-top:15px;
+  ">
+</iframe>
+			<!-- REQUEST FORM UNDERNEATH -->
+<div style="margin-top:20px;">
+
+<h3 style="text-align:center;">🎶 Request a Track</h3>
+
+<iframe
+  src="/request-embed.html"
+  style="
+    width:100%;
+    max-width:500px;
+    height:260px;
+    border:none;
+    display:block;
+    margin:0 auto;
+    border-radius:16px;
+  ">
+</iframe>
+
+</div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="chat-side-stack">
+
+        <article class="portal-panel">
+          <div class="portal-head">
+            <h2>Chat Rules</h2>
+          </div>
+          <div class="portal-box-body request-info-list">
+            <div class="request-info-card">
+              <strong>1.</strong>
+              <p>Be respectful to DJs, staff and listeners.</p>
+            </div>
+            <div class="request-info-card">
+              <strong>2.</strong>
+              <p>No abusive language, harassment or drama.</p>
+            </div>
+            <div class="request-info-card">
+              <strong>3.</strong>
+              <p>Keep the chat fun, friendly and music focused.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="portal-panel">
+          <div class="portal-head">
+            <h2>Quick Links</h2>
+          </div>
+          <div class="portal-box-body quick-grid">
+            <a href="/djs.html" class="quick-tile">Our DJs</a>
+            <a href="/schedule.html" class="quick-tile">Schedule</a>
+            <a href="/merch.html" class="quick-tile">Merch</a>
+          </div>
+        </article>
+
+      </aside>
+
+    </div>
+  </section>
+  
+ 
+
+  <!-- CTA -->
+  <section class="chat-cta">
+    <div class="container">
+      <div class="schedule-cta-box">
+        <h2>Keep The Vibe Going</h2>
+        <p>Chat live, send requests, and stay locked into Wildstyle Radio.</p>
+        <a href="/request.html" class="dj-btn">Send Request</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="portal-footer">
+    <div class="container footer-grid">
+
+      <div class="footer-box">
+        <h5>Wildstyle Radio</h5>
+        <p>United by beats.<br>Powered by volunteer passion.</p>
+      </div>
+
+      <div class="footer-box">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="/chat.html">Chat</a></li>
+          <li><a href="/schedule.html">Schedule</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-box">
+        <h5>Follow Us</h5>
+        <p>Facebook • Instagram • TikTok</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://wildstyle.vip/script.js?v=6" defer></script>
+</body>
+</html> 

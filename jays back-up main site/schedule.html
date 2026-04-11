@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wildstyle Schedule</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://wildstyle.vip/style.css">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="navbar wild-header">
+
+<div class="wild-header-inner">
+
+<a href="/index.html" class="brand-block">
+<span class="brand-badge">WS</span>
+
+<span class="brand-copy">
+<strong>WILDSTYLE RADIO</strong>
+<small>The Wildstyle Crew</small>
+</span>
+</a>
+
+<nav class="desktop-nav" id="nav">
+        <a href="/index.html" class="active-link">Home</a>
+        <a href="/djs.html">DJs</a>
+		<a href="/shout.html">Shout</a>
+        <a href="/schedule.html">Schedule</a>
+        <a href="/chat.html">Chat</a>
+        <a href="/merch.html">Merch</a>
+		<a href="/listenermap.html">Listener</a>
+      </nav>
+
+      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
+    </div>
+  </header>
+
+  <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
+
+  <!-- MOBILE NAV -->
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <div class="mobile-nav-title">Menu</div>
+      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
+    </div>
+
+    <a href="/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+	<a href="/shout.html">Shout</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/merch.html">Merch</a>
+	<a href="/listenermap.html">Listener</a>
+  </nav>
+
+
+<!-- PAGE HERO -->
+
+<section class="schedule-hero">
+
+<div class="schedule-hero-inner">
+
+<span class="page-kicker">LIVE SHOW TIMETABLE</span>
+
+<h1>Wildstyle Radio Schedule</h1>
+
+<p>
+See who is live across the week and never miss your favourite show.
+</p>
+
+</div>
+
+</section>
+
+
+
+
+<!-- SCHEDULE GRID -->
+
+<section class="schedule-section">
+<div class="container">
+
+<div class="schedule-grid" 
+ id="scheduleGrid">
+  <div class="schedule-day">
+    <h3>Loading schedule...</h3>
+  </div>
+</div> 
+
+</div>
+
+</section>
+
+
+<!-- CTA -->
+
+<section class="schedule-cta">
+
+<div class="container">
+
+<div class="schedule-cta-box">
+
+<h2>Want to Request a Track?</h2>
+
+<p>
+Send your request and hear it live on Wildstyle Radio.
+</p>
+
+<a href="/request.html" class="dj-btn">Send Request</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer class="portal-footer">
+
+<div class="container footer-grid">
+
+<div class="footer-box">
+<h5>Wildstyle Radio</h5>
+<p>
+United by beats.<br>
+Powered by volunteer passion.
+</p>
+</div>
+
+<div class="footer-box">
+<h5>Quick Links</h5>
+<ul>
+<li><a href="/schedule.html">Schedule</a></li>
+<li><a href="/chat.html">Chat</a></li>
+</ul>
+</div>
+
+<div class="footer-box">
+<h5>Follow Us</h5>
+<p>Facebook • Instagram • TikTok</p>
+</div>
+
+</div>
+
+</footer>
+
+
+<!-- SCRIPT -->
+
+<script src="https://wildstyle.vip/script.js?v=6" defer></script>
+
+</body>
+</html> 

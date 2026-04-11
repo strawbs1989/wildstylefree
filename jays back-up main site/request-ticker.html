@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Inter,system-ui,sans-serif;
+  background:transparent;
+  overflow:hidden;
+}
+
+/* TICKER BAR */
+.request-ticker{
+  width:100%;
+  overflow:hidden;
+  border-radius:16px;
+  padding:12px 0;
+  background:linear-gradient(90deg,#45d5ff,#ff4da6);
+  color:#fff;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+/* MOVING TRACK */
+.ticker-track{
+  display:flex;
+  gap:50px;
+  width:max-content;
+  animation:scroll 90s linear infinite;
+}
+
+/* TEXT */
+.ticker-text{
+  padding-left:20px;
+}
+
+/* ANIMATION */
+@keyframes scroll{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* PAUSE ON HOVER */
+.request-ticker:hover .ticker-track{
+  animation-play-state:paused;
+}
+</style>
+</head>
+
+<body>
+
+<div class="request-ticker">
+  <div class="ticker-track">
+    <span class="ticker-text" id="tickerText">Loading live requests…</span>
+    <span class="ticker-text" id="tickerClone"></span>
+  </div>
+</div>
+
+<script>
+
+const REQUESTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv";
+
+const tickerText = document.getElementById("tickerText");
+const tickerClone = document.getElementById("tickerClone");
+
+// CSV parser (handles commas properly)
+function parseCSV(line){
+  let result = [];
+  let current = "";
+  let inQuotes = false;
+
+  for(let i=0;i<line.length;i++){
+    const char = line[i];
+    const next = line[i+1];
+
+    if(char === '"' && inQuotes && next === '"'){
+      current += '"';
+      i++;
+    } else if(char === '"'){
+      inQuotes = !inQuotes;
+    } else if(char === "," && !inQuotes){
+      result.push(current.trim());
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  result.push(current.trim());
+  return result;
+}
+
+async function loadRequests(){
+  try{
+    const res = await fetch(REQUESTS_URL + "&t=" + Date.now());
+    const csv = await res.text();
+
+    const rows = csv.trim().split(/\r?\n/);
+    rows.shift(); // remove header
+
+    const requests = rows.map(row=>{
+      const cols = parseCSV(row);
+
+      const name = cols[0] || "";
+      const song = cols[1] || "";
+      const artist = cols[2] || "";
+      const shout = cols[3] || "";
+
+      let text = "";
+
+      if(name && song && artist){
+        text = `${name} requested ${song} - ${artist}`;
+      } else if(song && artist){
+        text = `${song} - ${artist}`;
+      }
+
+      if(shout){
+        text += ` • ${shout}`;
+      }
+
+      return text;
+    })
+    .filter(Boolean)
+    .slice(-10); // last 10 only
+
+    const joined = requests.length
+      ? requests.join(" • ")
+      : "No requests yet — be the first!";
+
+    tickerText.textContent = joined;
+    tickerClone.textContent = joined;
+
+  }catch(err){
+    console.error("Ticker error:", err);
+    tickerText.textContent = "Requests unavailable right now.";
+    tickerClone.textContent = tickerText.textContent;
+  }
+}
+
+// load + refresh
+loadRequests();
+setInterval(loadRequests, 15000);
+
+</script>
+
+</body>
+</html> 
