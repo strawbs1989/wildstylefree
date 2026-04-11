@@ -2993,3 +2993,131 @@ body.menu-open{
   }
 }
 
+/* =========================
+MAIN SITE NAV - MATCH SOCIAL
+========================= */
+
+/* desktop */
+.wild-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(247,239,255,.82);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(35,26,53,.08);
+}
+
+.wild-header-inner{
+  width:min(1280px,94%);
+  margin:0 auto;
+  min-height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.desktop-nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-left:auto;
+}
+
+.menu-toggle{
+  display:none;
+}
+
+/* mobile menu hidden by default */
+.mobile-nav{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:280px;
+  max-width:80%;
+  height:100vh;
+  background:linear-gradient(180deg,#1e1a2a,#120f18);
+  padding:24px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  border-left:1px solid rgba(255,255,255,.12);
+  transition:right .3s ease;
+  z-index:9999;
+}
+
+.mobile-nav.active{
+  right:0;
+}
+
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(35,26,53,.28);
+  z-index:9000;
+}
+
+/* mobile like social page */
+@media (max-width: 900px){
+
+  .wild-header-inner{
+    min-height:88px;
+    padding:0;
+  }
+
+  .desktop-nav{
+    display:none !important;
+  }
+
+  .menu-toggle{
+    display:grid !important;
+    place-items:center;
+    width:58px;
+    height:58px;
+    border:none;
+    border-radius:20px;
+    background:linear-gradient(135deg,#ff2a6d,#7c3aed,#2a7bff);
+    color:#fff;
+    font-size:2rem;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(159,46,255,.28);
+    flex:none;
+  }
+
+  .brand-block{
+    min-width:0;
+    flex:1;
+  }
+
+  .brand-badge{
+    width:58px;
+    height:58px;
+    border-radius:18px;
+  }
+
+  .brand-copy strong{
+    font-size:1.15rem;
+    line-height:1.05;
+  }
+
+  .brand-copy small{
+    font-size:.9rem;
+  }
+}
+
+/* desktop only */
+@media (min-width: 901px){
+  .mobile-nav,
+  .nav-backdrop{
+    display:none !important;
+  }
+
+  .menu-toggle{
+    display:none !important;
+  }
+
+  .desktop-nav{
+    display:flex !important;
+  }
+}
+

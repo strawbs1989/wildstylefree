@@ -313,5 +313,33 @@
 
   <script type="module" src="https://wildstyle.vip/app.js"></script>
   <script src="https://wildstyle.vip/theme.js"></script>
+  <script>
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  const navBackdrop = document.getElementById('navBackdrop');
+  const mobileNavClose = document.getElementById('mobileNavClose');
+
+  function openMenu() {
+    mobileNav.classList.add('active');
+    navBackdrop.hidden = false;
+    document.body.classList.add('menu-open');
+  }
+
+  function closeMenu() {
+    mobileNav.classList.remove('active');
+    navBackdrop.hidden = true;
+    document.body.classList.remove('menu-open');
+  }
+
+  if (menuToggle) menuToggle.addEventListener('click', openMenu);
+  if (mobileNavClose) mobileNavClose.addEventListener('click', closeMenu);
+  if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
+  });
+</script>
 </body>
 </html> 
