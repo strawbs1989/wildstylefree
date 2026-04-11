@@ -24,48 +24,36 @@
     </div>
   </a>
 
-  <nav class="desktop-nav" id="nav">
-        <a href="/index.html" class="active-link">Home</a>
-        <a href="/djs.html">DJs</a>
-		<a href="/shout.html">Shout</a>
-        <a href="/schedule.html">Schedule</a>
-        <a href="/chat.html">Chat</a>
-        <a href="/merch.html">Merch</a>
-		<a href="/listenermap.html">Listener</a>
-      </nav>
-
-      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
-    </div>
-  </header>
-
-  <!-- NOW ON -->
-  <section class="now-on-stage">
-    <div class="container now-on-stage-inner">
-      <div class="now-on-left">
-        <span class="live-dot"></span>
-        <span class="nowOn">Now On</span>
-      </div>
-      <div class="nowOnShow" id="nowon">Loading…</div>
-    </div>
-  </section>
-
-  <!-- MOBILE NAV -->
-  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
-
-  <nav class="mobile-nav" id="mobileNav">
-    <div class="mobile-nav-top">
-      <div class="mobile-nav-title">Menu</div>
-      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
-    </div>
-
-    <a href="/index.html">Home</a>
+  <nav class="nav desktop-nav">
+    <a href="/index.html" class="active">Home</a>
     <a href="/djs.html">DJs</a>
-	<a href="/shout.html">Shout</a>
     <a href="/schedule.html">Schedule</a>
     <a href="/chat.html">Chat</a>
-    <a href="/merch.html">Merch</a>
-	<a href="/listenermap.html">Listener</a>
+    <a href="/request.html">Request</a>
+    <a href="/map.html">Map</a>
+    <button id="openAuthBtn">Login</button>
   </nav>
+
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
+</header>
+
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<aside class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-top">
+    <strong>Menu</strong>
+    <button id="navClose" aria-label="Close menu">✕</button>
+  </div>
+
+  <button id="openAuthBtnMobile" class="mobile-login-btn">Login</button>
+  <a href="/index.html" class="active">Home</a>
+  <a href="/djs.html">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/chat.html">Chat</a>
+  <a href="/request.html">Request</a>
+  <a href="/map.html">Map</a>
+</aside>
+
       <section class="hero">
         <div class="hero-head">
           <span>Wildstyle Social Beta</span>
