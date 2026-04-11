@@ -3151,8 +3151,8 @@ INDEX NAV - MATCH SOCIAL MENU
     display:flex;
     align-items:center;
     justify-content:center;
-    min-height:82px;
-    width:100%;
+    min-height:40;
+    
     padding:0 28px;
     border-radius:26px;
     border:none;
