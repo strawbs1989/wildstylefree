@@ -45,7 +45,7 @@
     <button id="navClose" aria-label="Close menu">✕</button>
   </div>
 
-  <button id="openAuthBtn">Login</button>
+  <button id="openAuthBtnMobile" class="mobile-login-btn">Login</button>
   <a href="/index.html" class="active">Home</a>
   <a href="/djs.html">DJs</a>
   <a href="/schedule.html">Schedule</a>
@@ -336,7 +336,7 @@
   if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
 
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 900) {
+    if (window.innerWidth > 600) {
       closeMenu();
     }
   });
