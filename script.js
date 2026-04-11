@@ -816,3 +816,36 @@ loadGuessTracks();
       tickerTextClone.textContent = tickerText.textContent;
     });
 })(); 
+/* -------------------------
+   BURGER
+------------------------- */
+
+  const burger = document.getElementById('burger');
+  const mobileNav = document.getElementById('mobileNav');
+  const navClose = document.getElementById('navClose');
+  const navBackdrop = document.getElementById('navBackdrop');
+
+  function openMenu() {
+    mobileNav.classList.add('active');
+    navBackdrop.hidden = false;
+    document.body.classList.add('menu-open');
+    burger.setAttribute('aria-expanded', 'true');
+    mobileNav.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeMenu() {
+    mobileNav.classList.remove('active');
+    navBackdrop.hidden = true;
+    document.body.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded', 'false');
+    mobileNav.setAttribute('aria-hidden', 'true');
+  }
+
+  if (burger) burger.addEventListener('click', openMenu);
+  if (navClose) navClose.addEventListener('click', closeMenu);
+  if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+
+  document.querySelectorAll('#mobileNav a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
