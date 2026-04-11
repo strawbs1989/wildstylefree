@@ -3129,3 +3129,20 @@ INDEX NAV - MATCH SOCIAL MENU
   }
 }
 
+@media (max-width:900px){
+  .wild-header-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .brand-block{
+    order:1;
+  }
+
+  .menu-toggle{
+    order:2;
+    margin-left:auto;
+  }
+}
+
