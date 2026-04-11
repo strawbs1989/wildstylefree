@@ -25,33 +25,33 @@
   </a>
 
   <nav class="nav desktop-nav">
-  <a href="/index.html" class="active">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html">Chat</a>
-  <a href="/request.html">Request</a>
-  <a href="/map.html">Map</a>
-  <button type="button" class="nav-login-btn" id="openAuthBtnDesktop">Login</button>
-</nav>
+    <a href="/index.html" class="active">Home</a>
+    <a href="/djs.html">DJs</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/request.html">Request</a>
+    <a href="/map.html">Map</a>
+    <button id="openAuthBtn">Login</button>
+  </nav>
 
-<button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
 </header>
 
 <div class="nav-backdrop" id="navBackdrop" hidden></div>
 
 <aside class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-top">
-    <strong class="mobile-nav-title">Menu</strong>
-    <button type="button" class="mobile-nav-close" id="navClose" aria-label="Close menu">✕</button>
+    <strong>Menu</strong>
+    <button id="navClose" aria-label="Close menu">✕</button>
   </div>
 
-  <button type="button" class="mobile-nav-link mobile-login-btn active" id="openAuthBtnMobile">Login</button>
-  <a href="/index.html" class="mobile-nav-link">Home</a>
-  <a href="/djs.html" class="mobile-nav-link">DJs</a>
-  <a href="/schedule.html" class="mobile-nav-link">Schedule</a>
-  <a href="/chat.html" class="mobile-nav-link">Chat</a>
-  <a href="/request.html" class="mobile-nav-link">Request</a>
-  <a href="/map.html" class="mobile-nav-link">Map</a>
+  <button id="openAuthBtn">Login</button>
+  <a href="/index.html" class="active">Home</a>
+  <a href="/djs.html">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/chat.html">Chat</a>
+  <a href="/request.html">Request</a>
+  <a href="/map.html">Map</a>
 </aside>
 
       <section class="hero">
@@ -314,20 +314,32 @@
   <script type="module" src="https://wildstyle.vip/app.js"></script>
   <script src="https://wildstyle.vip/theme.js"></script>
   <script>
-  const openAuthBtnDesktop = document.getElementById('openAuthBtnDesktop');
-  const openAuthBtnMobile = document.getElementById('openAuthBtnMobile');
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  const navBackdrop = document.getElementById('navBackdrop');
+  const mobileNavClose = document.getElementById('mobileNavClose');
 
-  function openAuthModal() {
-    // your existing login modal open code here
+  function openMenu() {
+    mobileNav.classList.add('active');
+    navBackdrop.hidden = false;
+    document.body.classList.add('menu-open');
   }
 
-  if (openAuthBtnDesktop) {
-    openAuthBtnDesktop.addEventListener('click', openAuthModal);
+  function closeMenu() {
+    mobileNav.classList.remove('active');
+    navBackdrop.hidden = true;
+    document.body.classList.remove('menu-open');
   }
 
-  if (openAuthBtnMobile) {
-    openAuthBtnMobile.addEventListener('click', openAuthModal);
-  }
+  if (menuToggle) menuToggle.addEventListener('click', openMenu);
+  if (mobileNavClose) mobileNavClose.addEventListener('click', closeMenu);
+  if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
+  });
 </script>
 </body>
 </html> 
