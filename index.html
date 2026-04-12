@@ -324,75 +324,216 @@
     </div>
   </div>
 
-  <script type="module" src="https://wildstyle.vip/social/app.js?v=9"></script>
   <script src="https://wildstyle.vip/theme.js"></script>
-  <script>
-  const burger = document.getElementById('burger');
-  const mobileNav = document.getElementById('mobileNav');
-  const navBackdrop = document.getElementById('navBackdrop');
-  const navClose = document.getElementById('navClose');
-  const openAuthBtn = document.getElementById('openAuthBtn');
-  const openAuthBtnMobile = document.getElementById('openAuthBtnMobile');
-  const authOverlay = document.getElementById('authOverlay');
-  const authModal = document.getElementById('authModal');
-  const closeAuthBtn = document.getElementById('closeAuthBtn');
 
-  function openMenu() {
-    mobileNav?.classList.add('active');
-    if (navBackdrop) navBackdrop.hidden = false;
-    document.body.classList.add('menu-open');
-    burger?.setAttribute('aria-expanded', 'true');
-    mobileNav?.setAttribute('aria-hidden', 'false');
-  }
+<script>
+/* =========================
+   CONFIG
+========================= */
+const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
-  function closeMenu() {
-    mobileNav?.classList.remove('active');
-    if (navBackdrop) navBackdrop.hidden = true;
-    document.body.classList.remove('menu-open');
-    burger?.setAttribute('aria-expanded', 'false');
-    mobileNav?.setAttribute('aria-hidden', 'true');
-  }
+const DAY_ORDER = [
+  "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+];
 
-  function openAuthModal() {
-    authOverlay?.classList.add('open');
-    authModal?.classList.add('open');
-    authModal?.setAttribute('aria-hidden', 'false');
-  }
+/* =========================
+   BURGER MENU
+========================= */
+const burger = document.getElementById('burger');
+const mobileNav = document.getElementById('mobileNav');
+const navBackdrop = document.getElementById('navBackdrop');
+const navClose = document.getElementById('navClose');
 
-  function closeAuthModal() {
-    authOverlay?.classList.remove('open');
-    authModal?.classList.remove('open');
-    authModal?.setAttribute('aria-hidden', 'true');
-  }
+function openMenu() {
+  mobileNav?.classList.add('active');
+  if (navBackdrop) navBackdrop.hidden = false;
+  document.body.classList.add('menu-open');
+}
 
-  if (burger) burger.addEventListener('click', openMenu);
-  if (navClose) navClose.addEventListener('click', closeMenu);
-  if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+function closeMenu() {
+  mobileNav?.classList.remove('active');
+  if (navBackdrop) navBackdrop.hidden = true;
+  document.body.classList.remove('menu-open');
+}
 
-  if (openAuthBtn) {
-    openAuthBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuthModal();
-    });
-  }
+burger?.addEventListener('click', openMenu);
+navClose?.addEventListener('click', closeMenu);
+navBackdrop?.addEventListener('click', closeMenu);
 
-  if (openAuthBtnMobile) {
-    openAuthBtnMobile.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeMenu();
-      openAuthModal();
-    });
-  }
+/* =========================
+   AUTH MODAL
+========================= */
+const openAuthBtn = document.getElementById('openAuthBtn');
+const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+const authOverlay = document.getElementById('authOverlay');
+const authModal = document.getElementById('authModal');
+const closeAuthBtn = document.getElementById('closeAuthBtn');
 
-  if (closeAuthBtn) closeAuthBtn.addEventListener('click', closeAuthModal);
-  if (authOverlay) authOverlay.addEventListener('click', closeAuthModal);
+function openAuth() {
+  authOverlay?.classList.add('open');
+  authModal?.classList.add('open');
+}
 
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 900) {
-      closeMenu();
+function closeAuth() {
+  authOverlay?.classList.remove('open');
+  authModal?.classList.remove('open');
+}
+
+openAuthBtn?.addEventListener('click', (e) => {
+  e.preventDefault();
+  openAuth();
+});
+
+mobileLoginBtn?.addEventListener('click', (e) => {
+  e.preventDefault();
+  closeMenu();
+  openAuth();
+});
+
+closeAuthBtn?.addEventListener('click', closeAuth);
+authOverlay?.addEventListener('click', closeAuth);
+
+/* =========================
+   SCHEDULE LOGIC
+========================= */
+function normDay(day) {
+  const s = String(day || "").trim().toLowerCase();
+  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
+  return DAY_ORDER.includes(fixed) ? fixed : "";
+}
+
+function getUKNow() {
+  return new Date(new Date().toLocaleString("en-GB", {
+    timeZone: "Europe/London"
+  }));
+}
+
+function getNowMinutes() {
+  const now = getUKNow();
+  return {
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
+  };
+}
+
+function parseTime(t) {
+  t = String(t || "").trim().toLowerCase();
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
+  if (!m) return null;
+
+  let h = parseInt(m[1], 10);
+  const mins = parseInt(m[2] || "0", 10);
+  const ampm = m[3];
+
+  if (ampm === "pm" && h !== 12) h += 12;
+  if (ampm === "am" && h === 12) h = 0;
+
+  return h * 60 + mins;
+}
+
+function slotStartEndMinutes(slot) {
+  const start = parseTime(slot.start);
+  const end = parseTime(slot.end);
+  if (start == null || end == null) return null;
+
+  return {
+    start,
+    end,
+    crossesMidnight: end <= start
+  };
+}
+
+function findCurrentSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const today = DAY_ORDER[dayNum - 1];
+  const prev = DAY_ORDER[(dayNum + 5) % 7];
+
+  for (const s of slots) {
+    const r = slotStartEndMinutes(s);
+    if (!r) continue;
+
+    if (s.day === today) {
+      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
+      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
     }
-  });
+
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
+  }
+
+  return null;
+}
+
+function findUpNextSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const list = [];
+
+  for (let o = 0; o < 7; o++) {
+    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
+
+    for (const s of slots.filter(x => x.day === day)) {
+      if ((s.dj || "").toLowerCase() === "free") continue;
+
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
+
+      if (o === 0) {
+        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
+        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
+      } else {
+        list.push({ o, start: r.start, s });
+      }
+    }
+  }
+
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
+}
+
+async function loadNowOnAndUpNext() {
+  const nowEl = document.getElementById("nowon");
+  const upNextEl = document.getElementById("upNext");
+
+  try {
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
+    const data = await res.json();
+
+    const slots = (data.slots || []).map(slot => ({
+      day: normDay(slot.day),
+      start: slot.start,
+      end: slot.end,
+      dj: slot.dj || "Free"
+    }));
+
+    const now = findCurrentSlot(slots);
+    const next = findUpNextSlot(slots);
+
+    if (nowEl) {
+      nowEl.textContent = now
+        ? `${now.dj} ${now.start}–${now.end}`
+        : "Off Air";
+    }
+
+    if (upNextEl) {
+      upNextEl.innerHTML = next
+        ? `${next.dj}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
+        : "No upcoming shows";
+    }
+
+  } catch (err) {
+    console.error("Schedule error:", err);
+  }
+}
+
+/* =========================
+   INIT
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  loadNowOnAndUpNext();
+  setInterval(loadNowOnAndUpNext, 60000);
+});
+
 </script> 
+
 
 </body>
 </html> 
