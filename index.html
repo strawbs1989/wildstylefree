@@ -326,6 +326,58 @@
 
   <script type="module" src="https://wildstyle.vip/app.js"></script>
   <script src="https://wildstyle.vip/theme.js"></script>
+  <script>
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  const navBackdrop = document.getElementById('navBackdrop');
+  const mobileNavClose = document.getElementById('mobileNavClose');
 
+  function openMenu() {
+    mobileNav.classList.add('active');
+    navBackdrop.hidden = false;
+    document.body.classList.add('menu-open');
+  }
+
+  function closeMenu() {
+    mobileNav.classList.remove('active');
+    navBackdrop.hidden = true;
+    document.body.classList.remove('menu-open');
+  }
+
+  if (menuToggle) menuToggle.addEventListener('click', openMenu);
+  if (mobileNavClose) mobileNavClose.addEventListener('click', closeMenu);
+  if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 600) {
+      closeMenu();
+    }
+  });
+  
+  const openAuthBtn = document.getElementById('openAuthBtn');
+const openAuthBtnMobile = document.getElementById('openAuthBtnMobile');
+
+function openAuthModal() {
+  document.getElementById('authOverlay')?.classList.add('open');
+  document.getElementById('authModal')?.classList.add('open');
+}
+
+if (openAuthBtn) {
+  openAuthBtn.addEventListener('click', openAuthModal);
+}
+
+if (openAuthBtnMobile) {
+  openAuthBtnMobile.addEventListener('click', () => {
+    openAuthModal();
+
+    const mobileNav = document.getElementById('mobileNav');
+    const navBackdrop = document.getElementById('navBackdrop');
+
+    mobileNav?.classList.remove('active');
+    if (navBackdrop) navBackdrop.hidden = true;
+    document.body.classList.remove('menu-open');
+  });
+}
+</script>
 </body>
 </html> 
