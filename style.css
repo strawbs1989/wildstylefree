@@ -2798,6 +2798,74 @@ section{
   }
 }
 
+/* =========================
+   MATCH ROOT BURGER TO SCHEDULE BURGER
+========================= */
+
+.social-home .topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.social-home .brand{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  min-width:0;
+  flex:1;
+}
+
+.social-home .burger{
+  display:none;
+  width:78px;
+  height:78px;
+  border:none;
+  border-radius:24px;
+  background:linear-gradient(135deg,#ff2a6d,#8a46ff,#2a7bff);
+  color:#fff;
+  font-size:2.2rem;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 16px 30px rgba(124,58,237,.22);
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  line-height:1;
+}
+
+@media (max-width:900px){
+  .social-home .topbar{
+    padding:18px 20px;
+  }
+
+  .social-home .desktop-nav{
+    display:none !important;
+  }
+
+  .social-home .burger{
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    margin-left:auto;
+  }
+
+  .social-home .brand-badge{
+    width:64px;
+    height:64px;
+    border-radius:20px;
+  }
+
+  .social-home .brand-copy strong{
+    font-size:1.9rem;
+  }
+
+  .social-home .brand-copy small{
+    font-size:1rem;
+  }
+} 
+
+
 .topbar{
   width:min(1280px,94%);
   margin:14px auto 18px;
