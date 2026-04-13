@@ -5,7 +5,6 @@
 
 /* =========================
    NOW ON / UP NEXT
-   MAIN SITE
 ========================= */
 
 const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
@@ -67,7 +66,6 @@ function splitTimeRange(range) {
 function slotStartEndMinutes(slot) {
   const start = parseTime(slot.start);
   const end = parseTime(slot.end);
-
   if (start == null || end == null) return null;
 
   return {
@@ -174,8 +172,8 @@ async function loadNowOnAndUpNext() {
     const data = await res.json();
     const slots = normaliseSlots(data);
 
-    console.log("Schedule API raw:", data);
-    console.log("Schedule slots normalised:", slots);
+    console.log("RAW SCHEDULE DATA:", data);
+    console.log("NORMALISED SLOTS:", slots);
 
     if (!slots.length) {
       if (nowEl) nowEl.textContent = "Schedule unavailable";
@@ -186,8 +184,8 @@ async function loadNowOnAndUpNext() {
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
 
-    console.log("Current slot:", now);
-    console.log("Up next slot:", next);
+    console.log("NOW SLOT:", now);
+    console.log("NEXT SLOT:", next);
 
     if (nowEl) {
       nowEl.textContent = now
