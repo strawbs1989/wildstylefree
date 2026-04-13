@@ -779,6 +779,8 @@ function setupOptions(buttons, result) {
 document.addEventListener("DOMContentLoaded", () => {
   initSchedule();
   loadGuessTracks();
+  loadNowOnAndUpNext();
+setInterval(loadNowOnAndUpNext, 60000);
 
   const navCloseBtn = document.getElementById("navClose");
   const navBackdropEl = document.getElementById("navBackdrop");
