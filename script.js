@@ -465,54 +465,7 @@ function renderSchedule(slots) {
   `).join("");
 }
 
-/* -------------------------
-   NOW ON + UP NEXT
-------------------------- */
-function findCurrentSlot(slots) {
-  const { dayNum, mins } = getNowMinutes();
-  const today = DAY_ORDER[dayNum - 1];
-  const prev = DAY_ORDER[(dayNum + 5) % 7];
 
-  for (const s of slots) {
-    const r = slotStartEndMinutes(s);
-    if (!r) continue;
-
-    if (s.day === today) {
-      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
-      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
-    }
-
-    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
-  }
-
-  return null;
-}
-
-function findUpNextSlot(slots) {
-  const { dayNum, mins } = getNowMinutes();
-  const list = [];
-
-  for (let o = 0; o < 7; o++) {
-    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
-
-    for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || "").toLowerCase() === "free") continue;
-
-      const r = slotStartEndMinutes(s);
-      if (!r) continue;
-
-      if (o === 0) {
-        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
-        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
-      } else {
-        list.push({ o, start: r.start, s });
-      }
-    }
-  }
-
-  list.sort((a, b) => a.o - b.o || a.start - b.start);
-  return list[0]?.s || null;
-}
 
 /* -------------------------
    FETCH + INIT SCHEDULE
