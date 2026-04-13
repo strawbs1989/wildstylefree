@@ -172,9 +172,6 @@ async function loadNowOnAndUpNext() {
     const data = await res.json();
     const slots = normaliseSlots(data);
 
-    console.log("RAW SCHEDULE DATA:", data);
-    console.log("NORMALISED SLOTS:", slots);
-
     if (!slots.length) {
       if (nowEl) nowEl.textContent = "Schedule unavailable";
       if (upNextEl) upNextEl.textContent = "Schedule unavailable";
@@ -183,9 +180,6 @@ async function loadNowOnAndUpNext() {
 
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
-
-    console.log("NOW SLOT:", now);
-    console.log("NEXT SLOT:", next);
 
     if (nowEl) {
       nowEl.textContent = now
