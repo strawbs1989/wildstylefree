@@ -13,11 +13,7 @@ const DAY_ORDER = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ];
 
-function normDay(day) {
-  const s = String(day || "").trim().toLowerCase();
-  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
-  return DAY_ORDER.includes(fixed) ? fixed : "";
-}
+
 
 function getUKNow() {
   return new Date(
@@ -251,7 +247,7 @@ function getNowMinutes() {
    HELPERS
 ------------------------- */
 function normDay(d) {
-  const s = String(d || "").trim().toLowerCase();
+  const s = String(day || "").trim().toLowerCase();
   const cap = s.charAt(0).toUpperCase() + s.slice(1);
   return DAY_ORDER.includes(cap) ? cap : "";
 }
