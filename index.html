@@ -58,9 +58,9 @@
 
       <section class="hero">
         <div class="hero-head">
-          <span>Wildstyle Social Beta</span>
-          <div class="nowOnShow" id="socialNowOn">Loading…</div>
-        </div>
+  <span>Wildstyle Social Beta</span>
+  <div class="nowOnShow" id="socialNowOn">Loading...</div>
+</div> 
 
         <div class="hero-body">
           <div class="hero-copy">
@@ -85,9 +85,9 @@
 
             <div class="mini-row">
               <div class="mini-card">
-                <h4>Up Next</h4>
-                <p id="socialUpNext">Loading…</p>
-              </div>
+  <h4>Up Next</h4>
+  <p id="socialUpNext">Loading...</p>
+</div>
 
               <div class="mini-card">
                 <h4>Tonight’s Mood</h4>
@@ -395,6 +395,65 @@
     }
   });
 </script> 
+
+<script>
+const SOCIAL_NOWON_URL = "PASTE_YOUR_NOWON_EXEC_URL_HERE";
+const SOCIAL_UPNEXT_URL = "PASTE_YOUR_UPNEXT_EXEC_URL_HERE";
+
+async function loadSocialNowOn() {
+  const el = document.getElementById("socialNowOn");
+  if (!el) return;
+
+  try {
+    const res = await fetch(SOCIAL_NOWON_URL + "?t=" + Date.now(), {
+      cache: "no-store"
+    });
+
+    if (!res.ok) {
+      throw new Error("Now On request failed: " + res.status);
+    }
+
+    const data = await res.json();
+    el.textContent = data.text || "Off Air";
+  } catch (err) {
+    console.error("Social Now On failed:", err);
+    el.textContent = "Off Air";
+  }
+}
+
+async function loadSocialUpNext() {
+  const el = document.getElementById("socialUpNext");
+  if (!el) return;
+
+  try {
+    const res = await fetch(SOCIAL_UPNEXT_URL + "?t=" + Date.now(), {
+      cache: "no-store"
+    });
+
+    if (!res.ok) {
+      throw new Error("Up Next request failed: " + res.status);
+    }
+
+    const data = await res.json();
+
+    el.innerHTML = data.dj
+      ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
+      : (data.text || "No upcoming shows");
+  } catch (err) {
+    console.error("Social Up Next failed:", err);
+    el.textContent = "Unavailable";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadSocialNowOn();
+  loadSocialUpNext();
+
+  setInterval(loadSocialNowOn, 60000);
+  setInterval(loadSocialUpNext, 60000);
+});
+</script> 
+
 
 </body>
 </html> 

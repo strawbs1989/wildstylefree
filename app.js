@@ -310,48 +310,58 @@ function findUpNextSlot(slots) {
   return list[0]?.s || null;
 }
 
+async function loadNowOnAndUpNext() {
+  const nowEl = els.nowOn;
+  const upNextEl = els.upNext;
+  const scheduleNowOn = els.scheduleNowOn;
+  const scheduleUpNext = els.scheduleUpNext;
 
-const NOWON_URL = "https://script.google.com/macros/s/AKfycbze6G605GR2QpJU8uDlilbh3ie8Wr9zpTLUmz3azHdSl1OtalHQWSlTPiUSH7oWhlc/exec";
-const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbw1qz4qgUrlon1BI9WD28y78OPQkQ01Wmhr9mygD6Jxm-ZfDDiL0tC3kwDurHYT-73Y/exec";
-
-async function loadNowOn() {
-  const el = document.getElementById("nowon");
-  if (!el) return;
-
-  try {
-    const res = await fetch(NOWON_URL + "?t=" + Date.now(), { cache: "no-store" });
-    const data = await res.json();
-    el.textContent = data.text || "Off Air";
-  } catch (err) {
-    console.error("Now On failed:", err);
-    el.textContent = "Off Air";
-  }
-}
-
-async function loadUpNext() {
-  const el = document.getElementById("upNext");
-  if (!el) return;
+  if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
 
   try {
-    const res = await fetch(UPNEXT_URL + "?t=" + Date.now(), { cache: "no-store" });
+    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now());
     const data = await res.json();
 
-    el.innerHTML = data.dj
-      ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
-      : (data.text || "No upcoming shows");
+    const slots = (data.slots || []).map(slot => ({
+      day: normDay(slot.day),
+      start: slot.start,
+      end: slot.end,
+      dj: slot.dj || 'Free'
+    }));
+
+    const now = findCurrentSlot(slots);
+    const next = findUpNextSlot(slots);
+
+    if (nowEl) {
+      nowEl.textContent = now ? `${now.dj} ${now.start}–${now.end}` : 'Off Air';
+    }
+
+    if (upNextEl) {
+      upNextEl.innerHTML = next
+        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
+        : 'No upcoming shows';
+    }
+
+    if (scheduleNowOn) {
+      scheduleNowOn.textContent = now
+        ? `Now On: ${now.dj} (${now.start}–${now.end})`
+        : 'Now On: Off Air';
+    }
+
+    if (scheduleUpNext) {
+      scheduleUpNext.textContent = next
+        ? `${next.dj} (${next.start}–${next.end})`
+        : 'No upcoming shows';
+    }
   } catch (err) {
-    console.error("Up Next failed:", err);
-    el.textContent = "Unavailable";
+    console.error('Now On / Up Next load failed:', err);
+
+    if (nowEl) nowEl.textContent = 'Unavailable';
+    if (upNextEl) upNextEl.textContent = 'Unavailable';
+    if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
+    if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadNowOn();
-  loadUpNext();
-
-  setInterval(loadNowOn, 60000);
-  setInterval(loadUpNext, 60000);
-}); 
 
 /* =========================================
    AUTH UI
