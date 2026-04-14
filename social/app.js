@@ -239,7 +239,7 @@ function getNowMinutes() {
 
 function parseTime(t) {
   t = String(t || '').trim().toLowerCase();
-  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/);
   if (!m) return null;
 
   let h = parseInt(m[1], 10);
@@ -252,6 +252,21 @@ function parseTime(t) {
   return h * 60 + mins;
 }
 
+function splitTimeRange(range) {
+  const text = String(range || '').trim();
+  if (!text) return { start: '', end: '' };
+
+  const parts = text.split(/\s*[-–—]\s*/);
+  if (parts.length >= 2) {
+    return {
+      start: parts[0].trim(),
+      end: parts[1].trim()
+    };
+  }
+
+  return { start: '', end: '' };
+}
+
 function slotStartEndMinutes(slot) {
   const start = parseTime(slot.start);
   const end = parseTime(slot.end);
@@ -262,6 +277,52 @@ function slotStartEndMinutes(slot) {
     end,
     crossesMidnight: end <= start
   };
+}
+
+function normaliseSlots(data) {
+  let raw = [];
+
+  if (Array.isArray(data?.slots)) {
+    raw = data.slots;
+  } else if (Array.isArray(data)) {
+    raw = data;
+  } else if (data && typeof data === 'object') {
+    for (const [key, value] of Object.entries(data)) {
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          raw.push({
+            ...item,
+            day: item.day || key
+          });
+        });
+      }
+    }
+  }
+
+  return raw.map(slot => {
+    const split = splitTimeRange(
+      slot.timeRange ||
+      slot.time ||
+      slot.slot ||
+      slot.hours ||
+      ''
+    );
+
+    return {
+      day: normDay(slot.day || slot.dayName || slot.weekday),
+      start: String(slot.start || slot.startTime || slot.from || split.start || '').trim(),
+      end: String(slot.end || slot.endTime || slot.to || split.end || '').trim(),
+      dj: String(
+        slot.dj ||
+        slot.presenter ||
+        slot.host ||
+        slot.name ||
+        slot.show ||
+        slot.title ||
+        'Free'
+      ).trim()
+    };
+  }).filter(slot => slot.day && slot.start && slot.end);
 }
 
 function findCurrentSlot(slots) {
@@ -292,14 +353,18 @@ function findUpNextSlot(slots) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
     for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || '').toLowerCase() === 'free') continue;
+      if ((s.dj || '').trim().toLowerCase() === 'free') continue;
 
       const r = slotStartEndMinutes(s);
       if (!r) continue;
 
       if (o === 0) {
-        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
-        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
+        if (!r.crossesMidnight && r.start > mins) {
+          list.push({ o, start: r.start, s });
+        }
+        if (r.crossesMidnight && mins < r.start) {
+          list.push({ o, start: r.start, s });
+        }
       } else {
         list.push({ o, start: r.start, s });
       }
@@ -321,13 +386,7 @@ async function loadNowOnAndUpNext() {
   try {
     const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
     const data = await res.json();
-
-    const slots = (data.slots || []).map(slot => ({
-      day: normDay(slot.day),
-      start: slot.start,
-      end: slot.end,
-      dj: slot.dj || 'Free'
-    })).filter(slot => slot.day && slot.start && slot.end);
+    const slots = normaliseSlots(data);
 
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
@@ -364,6 +423,7 @@ async function loadNowOnAndUpNext() {
     if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
 } 
+
 
 
 /* =========================================
