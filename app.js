@@ -214,7 +214,216 @@ function detectDesktopModeOnMobile() {
 }
 
 
+/* =========================================
+   SCHEDULE / NOW ON / UP NEXT
+========================================= */
 
+function normDay(day) {
+  const s = String(day || '').trim().toLowerCase();
+  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
+  return DAY_ORDER.includes(fixed) ? fixed : '';
+}
+
+function getUKNow() {
+  return new Date(new Date().toLocaleString('en-GB', {
+    timeZone: 'Europe/London'
+  }));
+}
+
+function getNowMinutes() {
+  const now = getUKNow();
+  return {
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
+  };
+}
+
+function parseTime(t) {
+  t = String(t || '').trim().toLowerCase();
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/);
+  if (!m) return null;
+
+  let h = parseInt(m[1], 10);
+  const mins = parseInt(m[2] || '0', 10);
+  const ampm = m[3];
+
+  if (ampm === 'pm' && h !== 12) h += 12;
+  if (ampm === 'am' && h === 12) h = 0;
+
+  return h * 60 + mins;
+}
+
+function splitTimeRange(range) {
+  const text = String(range || '').trim();
+  if (!text) return { start: '', end: '' };
+
+  const parts = text.split(/\s*[-–—]\s*/);
+  if (parts.length >= 2) {
+    return {
+      start: parts[0].trim(),
+      end: parts[1].trim()
+    };
+  }
+
+  return { start: '', end: '' };
+}
+
+function slotStartEndMinutes(slot) {
+  const start = parseTime(slot.start);
+  const end = parseTime(slot.end);
+  if (start == null || end == null) return null;
+
+  return {
+    start,
+    end,
+    crossesMidnight: end <= start
+  };
+}
+
+function normaliseSlots(data) {
+  let raw = [];
+
+  if (Array.isArray(data?.slots)) {
+    raw = data.slots;
+  } else if (Array.isArray(data)) {
+    raw = data;
+  } else if (data && typeof data === 'object') {
+    for (const [key, value] of Object.entries(data)) {
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          raw.push({
+            ...item,
+            day: item.day || key
+          });
+        });
+      }
+    }
+  }
+
+  return raw.map(slot => {
+    const split = splitTimeRange(
+      slot.timeRange ||
+      slot.time ||
+      slot.slot ||
+      slot.hours ||
+      ''
+    );
+
+    return {
+      day: normDay(slot.day || slot.dayName || slot.weekday),
+      start: String(slot.start || slot.startTime || slot.from || split.start || '').trim(),
+      end: String(slot.end || slot.endTime || slot.to || split.end || '').trim(),
+      dj: String(
+        slot.dj ||
+        slot.presenter ||
+        slot.host ||
+        slot.name ||
+        slot.show ||
+        slot.title ||
+        'Free'
+      ).trim()
+    };
+  }).filter(slot => slot.day && slot.start && slot.end);
+}
+
+function findCurrentSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const today = DAY_ORDER[dayNum - 1];
+  const prev = DAY_ORDER[(dayNum + 5) % 7];
+
+  for (const s of slots) {
+    const r = slotStartEndMinutes(s);
+    if (!r) continue;
+
+    if (s.day === today) {
+      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
+      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
+    }
+
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
+  }
+
+  return null;
+}
+
+function findUpNextSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const list = [];
+
+  for (let o = 0; o < 7; o++) {
+    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
+
+    for (const s of slots.filter(x => x.day === day)) {
+      if ((s.dj || '').trim().toLowerCase() === 'free') continue;
+
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
+
+      if (o === 0) {
+        if (!r.crossesMidnight && r.start > mins) {
+          list.push({ o, start: r.start, s });
+        }
+        if (r.crossesMidnight && mins < r.start) {
+          list.push({ o, start: r.start, s });
+        }
+      } else {
+        list.push({ o, start: r.start, s });
+      }
+    }
+  }
+
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
+}
+
+async function loadNowOnAndUpNext() {
+  const nowEl = els.nowOn;
+  const upNextEl = els.upNext;
+  const scheduleNowOn = els.scheduleNowOn;
+  const scheduleUpNext = els.scheduleUpNext;
+
+  if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
+
+  try {
+    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
+    const data = await res.json();
+    const slots = normaliseSlots(data);
+
+    const now = findCurrentSlot(slots);
+    const next = findUpNextSlot(slots);
+
+    if (nowEl) {
+      nowEl.textContent = now
+        ? `${now.dj} ${now.start}–${now.end}`
+        : 'Off Air';
+    }
+
+    if (upNextEl) {
+      upNextEl.innerHTML = next
+        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
+        : 'No upcoming shows';
+    }
+
+    if (scheduleNowOn) {
+      scheduleNowOn.textContent = now
+        ? `Now On: ${now.dj} (${now.start}–${now.end})`
+        : 'Now On: Off Air';
+    }
+
+    if (scheduleUpNext) {
+      scheduleUpNext.textContent = next
+        ? `${next.dj} (${next.start}–${next.end})`
+        : 'No upcoming shows';
+    }
+  } catch (err) {
+    console.error('Now On / Up Next load failed:', err);
+
+    if (nowEl) nowEl.textContent = 'Unavailable';
+    if (upNextEl) upNextEl.textContent = 'Unavailable';
+    if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
+    if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
+  }
+} 
 
 /* =========================================
    AUTH UI
@@ -1018,7 +1227,29 @@ function bindCoreUI() {
    AUTH STATE / STARTUP
 ========================================= */
 
+const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbyz46hBv4Sd1Qyl0vtbZ78n41RxjSn1UWydb8b36yymk8uVJeJGCLiYz7kiBQYNlaIN/exec'";
 
+async function loadUpNext() {
+  const el = document.getElementById("upNext");
+  if (!el) return;
+
+  try {
+    const res = await fetch(UPNEXT_URL + "?t=" + Date.now());
+    const data = await res.json();
+
+    el.innerHTML = data.dj
+      ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
+      : (data.text || "No upcoming shows");
+  } catch (err) {
+    console.error("Up Next failed:", err);
+    el.textContent = "Unavailable";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadUpNext();
+  setInterval(loadUpNext, 60000);
+}); 
 
   loadRequestsTicker();
   setInterval(loadRequestsTicker, 15000);
