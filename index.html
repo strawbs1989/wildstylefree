@@ -59,7 +59,7 @@
       <section class="hero">
         <div class="hero-head">
   <span>Wildstyle Social Beta</span>
-  <div class="nowOnShow" id="NowOn">Loading...</div>
+  <div class="nowOnShow" id="nowon">Loading...</div>
 </div> 
 
         <div class="hero-body">
@@ -86,7 +86,7 @@
             <div class="mini-row">
               <div class="mini-card">
   <h4>Up Next</h4>
-  <p id="UpNext">Loading...</p>
+  <p id="upNext">Loading...</p>
 </div>
 
               <div class="mini-card">
@@ -327,6 +327,7 @@
   </div>
 
   <script type="module" src="https://wildstyle.vip/app.js?v=9"></script>
+  <script type="module" src="https://wildstyle.vip/nowon.js"></script>
   <script src="https://wildstyle.vip/script.js"></script>
   <script src="https://wildstyle.vip/theme.js"></script>
   <script>
@@ -397,63 +398,7 @@
   });
 </script> 
 
-<script>
-const NOWON_URL = "https://script.google.com/macros/s/AKfycbze6G605GR2QpJU8uDlilbh3ie8Wr9zpTLUmz3azHdSl1OtalHQWSlTPiUSH7oWhlc/exec";
-const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbw1qz4qgUrlon1BI9WD28y78OPQkQ01Wmhr9mygD6Jxm-ZfDDiL0tC3kwDurHYT-73Y/exec";
 
-async function loadNowOn() {
-  const el = document.getElementById("NowOn");
-  if (!el) return;
-
-  try {
-    const res = await fetch(NOWON_URL + "?t=" + Date.now(), {
-      cache: "no-store"
-    });
-
-    if (!res.ok) {
-      throw new Error("Now On request failed: " + res.status);
-    }
-
-    const data = await res.json();
-    el.textContent = data.text || "Off Air";
-  } catch (err) {
-    console.error("Now On failed:", err);
-    el.textContent = "Off Air";
-  }
-}
-
-async function loadUpNext() {
-  const el = document.getElementById("UpNext");
-  if (!el) return;
-
-  try {
-    const res = await fetch(UPNEXT_URL + "?t=" + Date.now(), {
-      cache: "no-store"
-    });
-
-    if (!res.ok) {
-      throw new Error("Up Next request failed: " + res.status);
-    }
-
-    const data = await res.json();
-
-    el.innerHTML = data.dj
-      ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
-      : (data.text || "No upcoming shows");
-  } catch (err) {
-    console.error("Up Next failed:", err);
-    el.textContent = "Unavailable";
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadSocialNowOn();
-  loadSocialUpNext();
-
-  setInterval(loadSocialNowOn, 60000);
-  setInterval(loadSocialUpNext, 60000);
-});
-</script> 
 
 
 </body>
