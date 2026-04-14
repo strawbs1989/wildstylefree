@@ -1,4 +1,4 @@
-import { firebaseConfig } from '/social/firebase-config.js';
+import { firebaseConfig } from '/firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
 import {
   getAuth,
@@ -1247,9 +1247,7 @@ async function loadUpNext() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadUpNext();
-  setInterval(loadUpNext, 60000);
-}); 
+  bindCoreUI();
 
   loadRequestsTicker();
   setInterval(loadRequestsTicker, 15000);
@@ -1271,6 +1269,7 @@ document.addEventListener("DOMContentLoaded", () => {
     listenForPosts();
   });
 }
+ });
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
