@@ -213,6 +213,7 @@ function detectDesktopModeOnMobile() {
   }
 }
 
+
 /* =========================================
    SCHEDULE / NOW ON / UP NEXT
 ========================================= */
@@ -239,7 +240,7 @@ function getNowMinutes() {
 
 function parseTime(t) {
   t = String(t || '').trim().toLowerCase();
-  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/);
   if (!m) return null;
 
   let h = parseInt(m[1], 10);
@@ -252,6 +253,21 @@ function parseTime(t) {
   return h * 60 + mins;
 }
 
+function splitTimeRange(range) {
+  const text = String(range || '').trim();
+  if (!text) return { start: '', end: '' };
+
+  const parts = text.split(/\s*[-–—]\s*/);
+  if (parts.length >= 2) {
+    return {
+      start: parts[0].trim(),
+      end: parts[1].trim()
+    };
+  }
+
+  return { start: '', end: '' };
+}
+
 function slotStartEndMinutes(slot) {
   const start = parseTime(slot.start);
   const end = parseTime(slot.end);
@@ -262,6 +278,52 @@ function slotStartEndMinutes(slot) {
     end,
     crossesMidnight: end <= start
   };
+}
+
+function normaliseSlots(data) {
+  let raw = [];
+
+  if (Array.isArray(data?.slots)) {
+    raw = data.slots;
+  } else if (Array.isArray(data)) {
+    raw = data;
+  } else if (data && typeof data === 'object') {
+    for (const [key, value] of Object.entries(data)) {
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          raw.push({
+            ...item,
+            day: item.day || key
+          });
+        });
+      }
+    }
+  }
+
+  return raw.map(slot => {
+    const split = splitTimeRange(
+      slot.timeRange ||
+      slot.time ||
+      slot.slot ||
+      slot.hours ||
+      ''
+    );
+
+    return {
+      day: normDay(slot.day || slot.dayName || slot.weekday),
+      start: String(slot.start || slot.startTime || slot.from || split.start || '').trim(),
+      end: String(slot.end || slot.endTime || slot.to || split.end || '').trim(),
+      dj: String(
+        slot.dj ||
+        slot.presenter ||
+        slot.host ||
+        slot.name ||
+        slot.show ||
+        slot.title ||
+        'Free'
+      ).trim()
+    };
+  }).filter(slot => slot.day && slot.start && slot.end);
 }
 
 function findCurrentSlot(slots) {
@@ -292,14 +354,18 @@ function findUpNextSlot(slots) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
     for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || '').toLowerCase() === 'free') continue;
+      if ((s.dj || '').trim().toLowerCase() === 'free') continue;
 
       const r = slotStartEndMinutes(s);
       if (!r) continue;
 
       if (o === 0) {
-        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
-        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
+        if (!r.crossesMidnight && r.start > mins) {
+          list.push({ o, start: r.start, s });
+        }
+        if (r.crossesMidnight && mins < r.start) {
+          list.push({ o, start: r.start, s });
+        }
       } else {
         list.push({ o, start: r.start, s });
       }
@@ -319,21 +385,17 @@ async function loadNowOnAndUpNext() {
   if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
 
   try {
-    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now());
+    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
     const data = await res.json();
-
-    const slots = (data.slots || []).map(slot => ({
-      day: normDay(slot.day),
-      start: slot.start,
-      end: slot.end,
-      dj: slot.dj || 'Free'
-    }));
+    const slots = normaliseSlots(data);
 
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
 
     if (nowEl) {
-      nowEl.textContent = now ? `${now.dj} ${now.start}–${now.end}` : 'Off Air';
+      nowEl.textContent = now
+        ? `${now.dj} ${now.start}–${now.end}`
+        : 'Off Air';
     }
 
     if (upNextEl) {
@@ -361,7 +423,7 @@ async function loadNowOnAndUpNext() {
     if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
     if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
-}
+} 
 
 /* =========================================
    AUTH UI
@@ -1165,11 +1227,29 @@ function bindCoreUI() {
    AUTH STATE / STARTUP
 ========================================= */
 
-document.addEventListener('DOMContentLoaded', () => {
-  bindCoreUI();
+const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbyz46hBv4Sd1Qyl0vtbZ78n41RxjSn1UWydb8b36yymk8uVJeJGCLiYz7kiBQYNlaIN/exec'";
 
-  loadNowOnAndUpNext();
-  setInterval(loadNowOnAndUpNext, 60000);
+async function loadUpNext() {
+  const el = document.getElementById("upNext");
+  if (!el) return;
+
+  try {
+    const res = await fetch(UPNEXT_URL + "?t=" + Date.now());
+    const data = await res.json();
+
+    el.innerHTML = data.dj
+      ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
+      : (data.text || "No upcoming shows");
+  } catch (err) {
+    console.error("Up Next failed:", err);
+    el.textContent = "Unavailable";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadUpNext();
+  setInterval(loadUpNext, 60000);
+}); 
 
   loadRequestsTicker();
   setInterval(loadRequestsTicker, 15000);
@@ -1177,11 +1257,20 @@ document.addEventListener('DOMContentLoaded', () => {
   checkRequestStatus();
 
   if (usingPlaceholders) {
-    setLoggedOutState();
+  setLoggedOutState();
+  listenForPosts();
+  setAuthMessage('Paste your Firebase config...');
+} else {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      await setLoggedInState(user);
+    } else {
+      setLoggedOutState();
+    }
+
     listenForPosts();
-    setAuthMessage('Paste your Firebase config first.');
-    return;
-  }
+  });
+}
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
