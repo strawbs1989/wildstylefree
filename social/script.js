@@ -123,205 +123,201 @@ async function loadDjTimes() {
 filterDjCards();
 loadDjTimes(); 
 
-/* ===============================
-   Schedule
-   =============================== */
+/* =========================
+   NOW ON / UP NEXT
+========================= */
 
- const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
-    const DAY_ORDER = [
-      "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
-    ];
+function getUKNow() {
+  return new Date(new Date().toLocaleString("en-GB", {
+    timeZone: "Europe/London"
+  }));
+}
 
-    function normDay(day) {
-      const s = String(day || "").trim().toLowerCase();
-      const fixed = s.charAt(0).toUpperCase() + s.slice(1);
-      return DAY_ORDER.includes(fixed) ? fixed : "";
-    }
+function parseTimeToMinutes(t) {
+  const s = String(t || "").trim().toLowerCase();
+  const m = s.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+  if (!m) return null;
 
-    function parseTime(t) {
-      t = String(t || "").trim().toLowerCase();
-      const m = t.match(/(\\d{1,2})(?::(\\d{2}))?(am|pm)/);
-      if (!m) return null;
+  let h = parseInt(m[1], 10);
+  const mins = parseInt(m[2] || "0", 10);
+  const ampm = m[3].toLowerCase();
 
-      let h = parseInt(m[1], 10);
-      const mins = parseInt(m[2] || "0", 10);
-      const ampm = m[3];
+  if (ampm === "pm" && h !== 12) h += 12;
+  if (ampm === "am" && h === 12) h = 0;
 
-      if (ampm === "pm" && h !== 12) h += 12;
-      if (ampm === "am" && h === 12) h = 0;
+  return h * 60 + mins;
+}
 
-      return h * 60 + mins;
-    }
+function splitRange(range) {
+  const text = String(range || "").trim();
+  const parts = text.split(/\s*[-–—]\s*/);
+  if (parts.length >= 2) {
+    return { start: parts[0].trim(), end: parts[1].trim() };
+  }
+  return { start: "", end: "" };
+}
 
-    function getUKNow() {
-      return new Date(new Date().toLocaleString("en-GB", {
-        timeZone: "Europe/London"
-      }));
-    }
+function dayNameToIndex(day) {
+  const map = {
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+    sunday: 7
+  };
+  return map[String(day || "").trim().toLowerCase()] || null;
+}
 
-    function getNowMinutes() {
-      const now = getUKNow();
-      return {
-        dayNum: now.getDay() === 0 ? 7 : now.getDay(),
-        mins: now.getHours() * 60 + now.getMinutes()
-      };
-    }
+function normaliseScheduleData(data) {
+  let rows = [];
 
-    function slotRange(slot) {
-      const start = parseTime(slot.start);
-      const end = parseTime(slot.end);
-
-      if (start == null || end == null) return null;
-
-      return {
-        start,
-        end,
-        crossesMidnight: end <= start
-      };
-    }
-
-    function findCurrentSlot(slots) {
-      const { dayNum, mins } = getNowMinutes();
-      const today = DAY_ORDER[dayNum - 1];
-      const prev = DAY_ORDER[(dayNum + 5) % 7];
-
-      for (const s of slots) {
-        const r = slotRange(s);
-        if (!r) continue;
-
-        if (s.day === today) {
-          if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
-          if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
-        }
-
-        if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
-      }
-
-      return null;
-    }
-
-    function findUpNextSlot(slots) {
-      const { dayNum, mins } = getNowMinutes();
-      const list = [];
-
-      for (let offset = 0; offset < 7; offset++) {
-        const day = DAY_ORDER[(dayNum - 1 + offset) % 7];
-
-        for (const s of slots.filter(x => x.day === day)) {
-          if ((s.dj || "").toLowerCase() === "free") continue;
-
-          const r = slotRange(s);
-          if (!r) continue;
-
-          if (offset === 0) {
-            if (!r.crossesMidnight && r.start > mins) list.push({ offset, start: r.start, s });
-            if (r.crossesMidnight && mins < r.start) list.push({ offset, start: r.start, s });
-          } else {
-            list.push({ offset, start: r.start, s });
-          }
-        }
-      }
-
-      list.sort((a, b) => a.offset - b.offset || a.start - b.start);
-      return list[0]?.s || null;
-    }
-
-    function renderSchedule(slots) {
-      const grid = document.getElementById("scheduleGrid");
-      const count = document.getElementById("scheduleCount");
-      if (!grid) return;
-
-      const grouped = {};
-      DAY_ORDER.forEach(day => grouped[day] = []);
-
-      slots.forEach(slot => {
-        const day = normDay(slot.day);
-        if (!day) return;
-
-        grouped[day].push({
-          start: slot.start,
-          end: slot.end,
-          dj: slot.dj || "Free"
-        });
-      });
-
-      DAY_ORDER.forEach(day => {
-        grouped[day].sort((a, b) => (parseTime(a.start) ?? 9999) - (parseTime(b.start) ?? 9999));
-      });
-
-      grid.innerHTML = DAY_ORDER.map(day => `
-        <div class="schedule-day glass">
-          <h3>${day}</h3>
-          ${
-            grouped[day].length
-              ? grouped[day].map(slot => `
-                  <div class="slot">
-                    <div class="time">${slot.start} – ${slot.end}</div>
-                    <div class="show">${slot.dj}</div>
-                  </div>
-                `).join("")
-              : `
-                  <div class="slot">
-                    <div class="time">—</div>
-                    <div class="show">Free</div>
-                  </div>
-                `
-          }
-        </div>
-      `).join("");
-
-      if (count) {
-        const total = slots.filter(s => (s.dj || "").toLowerCase() !== "free").length;
-        count.textContent = `${total} live slot${total === 1 ? "" : "s"}`;
-      }
-    }
-
-    function updateNowNext(slots) {
-      const nowEl = document.getElementById("scheduleNowOn");
-      const nextEl = document.getElementById("scheduleUpNext");
-
-      const now = findCurrentSlot(slots);
-      const next = findUpNextSlot(slots);
-
-      if (nowEl) {
-        nowEl.textContent = now
-          ? `Now On: ${now.dj} (${now.start}–${now.end})`
-          : "Now On: Off Air";
-      }
-
-      if (nextEl) {
-        nextEl.textContent = next
-          ? `${next.dj} (${next.start}–${next.end})`
-          : "No upcoming shows";
-      }
-    }
-
-    async function loadSchedule() {
-      try {
-        const res = await fetch(SCHEDULE_URL + "?v=" + Date.now());
-        const data = await res.json();
-
-        const slots = (data.slots || []).map(slot => ({
-          day: normDay(slot.day),
-          start: slot.start,
-          end: slot.end,
-          dj: slot.dj || "Free"
-        }));
-
-        renderSchedule(slots);
-        updateNowNext(slots);
-        setInterval(() => updateNowNext(slots), 60000);
-      } catch (err) {
-        console.error("Schedule load failed:", err);
-        const grid = document.getElementById("scheduleGrid");
-        if (grid) {
-          grid.innerHTML = "Schedule unavailable right now.";
+  if (Array.isArray(data?.slots)) {
+    rows = data.slots;
+  } else if (Array.isArray(data)) {
+    rows = data;
+  } else if (data && typeof data === "object") {
+    for (const [key, value] of Object.entries(data)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          rows.push({ ...item, day: item.day || key });
         }
       }
     }
+  }
 
-    loadSchedule();
+  return rows.map((row) => {
+    const range = row.timeRange || row.time || row.slot || row.hours || "";
+    const split = splitRange(range);
+
+    const start = String(row.start || row.startTime || row.from || split.start || "").trim();
+    const end = String(row.end || row.endTime || row.to || split.end || "").trim();
+
+    const dj = String(
+      row.dj || row.presenter || row.host || row.name || ""
+    ).trim();
+
+    const show = String(
+      row.show || row.title || row.programme || row.program || ""
+    ).trim();
+
+    const day = String(row.day || row.dayName || row.weekday || "").trim();
+
+    return {
+      day,
+      dayIndex: dayNameToIndex(day),
+      start,
+      end,
+      startMins: parseTimeToMinutes(start),
+      endMins: parseTimeToMinutes(end),
+      dj,
+      show
+    };
+  }).filter((row) =>
+    row.dayIndex &&
+    row.start &&
+    row.end &&
+    row.startMins != null &&
+    row.endMins != null
+  );
+}
+
+function displayName(row) {
+  if (row.dj && row.show && row.show.toLowerCase() !== row.dj.toLowerCase()) {
+    return `${row.dj} - ${row.show}`;
+  }
+  return row.dj || row.show || "Free";
+}
+
+function isFreeRow(row) {
+  const txt = displayName(row).trim().toLowerCase();
+  return !txt || txt === "free" || txt.includes("off air");
+}
+
+function isCurrentRow(row, nowDay, nowMins) {
+  const crossesMidnight = row.endMins <= row.startMins;
+
+  if (!crossesMidnight) {
+    return row.dayIndex === nowDay && nowMins >= row.startMins && nowMins < row.endMins;
+  }
+
+  const prevDay = nowDay === 1 ? 7 : nowDay - 1;
+
+  return (
+    (row.dayIndex === nowDay && nowMins >= row.startMins) ||
+    (row.dayIndex === prevDay && nowMins < row.endMins)
+  );
+}
+
+function findCurrentAndNext(rows) {
+  const now = getUKNow();
+  const nowDay = now.getDay() === 0 ? 7 : now.getDay();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+
+  let current = null;
+  for (const row of rows) {
+    if (isCurrentRow(row, nowDay, nowMins)) {
+      current = row;
+      break;
+    }
+  }
+
+  const upcoming = [];
+  for (const row of rows) {
+    if (isFreeRow(row)) continue;
+
+    const dayDiff = (row.dayIndex - nowDay + 7) % 7;
+    const crossesMidnight = row.endMins <= row.startMins;
+
+    if (dayDiff === 0) {
+      if (!crossesMidnight && row.startMins > nowMins) {
+        upcoming.push({ scoreDay: 0, scoreTime: row.startMins, row });
+      } else if (crossesMidnight && row.startMins > nowMins) {
+        upcoming.push({ scoreDay: 0, scoreTime: row.startMins, row });
+      }
+    } else {
+      upcoming.push({ scoreDay: dayDiff, scoreTime: row.startMins, row });
+    }
+  }
+
+  upcoming.sort((a, b) => a.scoreDay - b.scoreDay || a.scoreTime - b.scoreTime);
+  const next = upcoming[0]?.row || null;
+
+  return { current, next };
+}
+
+async function loadNowOnAndUpNext() {
+  const nowEl = document.getElementById("nowon");
+  const upNextEl = document.getElementById("upNext");
+  if (!nowEl && !upNextEl) return;
+
+  try {
+    const res = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`, { cache: "no-store" });
+    const data = await res.json();
+    const rows = normaliseScheduleData(data);
+    const { current, next } = findCurrentAndNext(rows);
+
+    if (nowEl) {
+      nowEl.textContent = current
+        ? `${displayName(current)} ${current.start}–${current.end}`
+        : "Off Air";
+    }
+
+    if (upNextEl) {
+      upNextEl.innerHTML = next
+        ? `${displayName(next)}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
+        : "No upcoming shows";
+    }
+  } catch (err) {
+    console.error("Now On / Up Next load failed:", err);
+    if (nowEl) nowEl.textContent = "Unavailable";
+    if (upNextEl) upNextEl.textContent = "Unavailable";
+  }
+} 
+
 	
 	
 	
