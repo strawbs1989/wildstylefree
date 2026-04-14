@@ -1165,11 +1165,23 @@ function bindCoreUI() {
    AUTH STATE / STARTUP
 ========================================= */
 
-document.addEventListener('DOMContentLoaded', () => {
-  bindCoreUI();
+document.addEventListener("DOMContentLoaded", () => {
+  initSchedule();
+  loadGuessTracks();
 
   loadNowOnAndUpNext();
   setInterval(loadNowOnAndUpNext, 60000);
+
+  const navCloseBtn = document.getElementById("navClose");
+  const navBackdropEl = document.getElementById("navBackdrop");
+
+  if (navCloseBtn) navCloseBtn.addEventListener("click", closeMenu);
+  if (navBackdropEl) navBackdropEl.addEventListener("click", closeMenu);
+
+  document.querySelectorAll("#mobileNav a").forEach(link => {
+    link.addEventListener("click", closeMenu);
+  });
+}); 
 
   loadRequestsTicker();
   setInterval(loadRequestsTicker, 15000);
