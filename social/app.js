@@ -52,217 +52,12 @@ const REQUEST_STATUS_URL =
 const REQUEST_TICKER_CSV =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv';
 
-/* =========================
-   NOW ON / UP NEXT
-========================= */
+const SCHEDULE_URL =
+  'https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec';
 
-const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
-
-function getUKNow() {
-  return new Date(new Date().toLocaleString("en-GB", {
-    timeZone: "Europe/London"
-  }));
-}
-
-function parseTimeToMinutes(t) {
-  const s = String(t || "").trim().toLowerCase();
-  const m = s.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
-  if (!m) return null;
-
-  let h = parseInt(m[1], 10);
-  const mins = parseInt(m[2] || "0", 10);
-  const ampm = m[3].toLowerCase();
-
-  if (ampm === "pm" && h !== 12) h += 12;
-  if (ampm === "am" && h === 12) h = 0;
-
-  return h * 60 + mins;
-}
-
-function splitRange(range) {
-  const text = String(range || "").trim();
-  const parts = text.split(/\s*[-–—]\s*/);
-  if (parts.length >= 2) {
-    return { start: parts[0].trim(), end: parts[1].trim() };
-  }
-  return { start: "", end: "" };
-}
-
-function dayNameToIndex(day) {
-  const map = {
-    monday: 1,
-    tuesday: 2,
-    wednesday: 3,
-    thursday: 4,
-    friday: 5,
-    saturday: 6,
-    sunday: 7
-  };
-  return map[String(day || "").trim().toLowerCase()] || null;
-}
-
-function normaliseScheduleData(data) {
-  let rows = [];
-
-  if (Array.isArray(data?.slots)) {
-    rows = data.slots;
-  } else if (Array.isArray(data)) {
-    rows = data;
-  } else if (data && typeof data === "object") {
-    for (const [key, value] of Object.entries(data)) {
-      if (Array.isArray(value)) {
-        for (const item of value) {
-          rows.push({ ...item, day: item.day || key });
-        }
-      }
-    }
-  }
-
-  return rows.map((row) => {
-    const range = row.timeRange || row.time || row.slot || row.hours || "";
-    const split = splitRange(range);
-
-    const start = String(row.start || row.startTime || row.from || split.start || "").trim();
-    const end = String(row.end || row.endTime || row.to || split.end || "").trim();
-
-    const dj = String(
-      row.dj || row.presenter || row.host || row.name || ""
-    ).trim();
-
-    const show = String(
-      row.show || row.title || row.programme || row.program || ""
-    ).trim();
-
-    const day = String(row.day || row.dayName || row.weekday || "").trim();
-
-    return {
-      day,
-      dayIndex: dayNameToIndex(day),
-      start,
-      end,
-      startMins: parseTimeToMinutes(start),
-      endMins: parseTimeToMinutes(end),
-      dj,
-      show
-    };
-  }).filter((row) =>
-    row.dayIndex &&
-    row.start &&
-    row.end &&
-    row.startMins != null &&
-    row.endMins != null
-  );
-}
-
-function displayName(row) {
-  if (row.dj && row.show && row.show.toLowerCase() !== row.dj.toLowerCase()) {
-    return `${row.dj} - ${row.show}`;
-  }
-  return row.dj || row.show || "Free";
-}
-
-function isFreeRow(row) {
-  const txt = displayName(row).trim().toLowerCase();
-  return !txt || txt === "free" || txt.includes("off air");
-}
-
-function isCurrentRow(row, nowDay, nowMins) {
-  const crossesMidnight = row.endMins <= row.startMins;
-
-  if (!crossesMidnight) {
-    return row.dayIndex === nowDay && nowMins >= row.startMins && nowMins < row.endMins;
-  }
-
-  const prevDay = nowDay === 1 ? 7 : nowDay - 1;
-
-  return (
-    (row.dayIndex === nowDay && nowMins >= row.startMins) ||
-    (row.dayIndex === prevDay && nowMins < row.endMins)
-  );
-}
-
-function findCurrentAndNext(rows) {
-  const now = getUKNow();
-  const nowDay = now.getDay() === 0 ? 7 : now.getDay();
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-
-  let current = null;
-  for (const row of rows) {
-    if (isCurrentRow(row, nowDay, nowMins)) {
-      current = row;
-      break;
-    }
-  }
-
-  const upcoming = [];
-  for (const row of rows) {
-    if (isFreeRow(row)) continue;
-
-    const dayDiff = (row.dayIndex - nowDay + 7) % 7;
-    const crossesMidnight = row.endMins <= row.startMins;
-
-    if (dayDiff === 0) {
-      if (!crossesMidnight && row.startMins > nowMins) {
-        upcoming.push({ scoreDay: 0, scoreTime: row.startMins, row });
-      } else if (crossesMidnight && row.startMins > nowMins) {
-        upcoming.push({ scoreDay: 0, scoreTime: row.startMins, row });
-      }
-    } else {
-      upcoming.push({ scoreDay: dayDiff, scoreTime: row.startMins, row });
-    }
-  }
-
-  upcoming.sort((a, b) => a.scoreDay - b.scoreDay || a.scoreTime - b.scoreTime);
-  const next = upcoming[0]?.row || null;
-
-  return { current, next };
-}
-
-async function loadNowOnAndUpNext() {
-  const nowEl = document.getElementById("nowon");
-  const upNextEl = document.getElementById("upNext");
-
-  if (!nowEl && !upNextEl) return;
-
-  try {
-    const res = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`, { cache: "no-store" });
-    const data = await res.json();
-    const slots = normaliseSlots(data);
-
-    console.log("RAW SCHEDULE DATA:", data);
-    console.log("NORMALISED SLOTS:", slots);
-
-    if (!slots.length) {
-      if (nowEl) nowEl.textContent = "Schedule unavailable";
-      if (upNextEl) upNextEl.textContent = "Schedule unavailable";
-      return;
-    }
-
-    const now = findCurrentSlot(slots);
-    const next = findUpNextSlot(slots);
-
-    console.log("NOW SLOT:", now);
-    console.log("NEXT SLOT:", next);
-
-    if (nowEl) {
-      nowEl.textContent = now
-        ? `${buildDisplayName(now)} ${now.start}–${now.end}`
-        : "Off Air";
-    }
-
-    if (upNextEl) {
-      upNextEl.innerHTML = next
-        ? `${buildDisplayName(next)}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
-        : "No upcoming shows";
-    }
-  } catch (err) {
-    console.error("Now On / Up Next load failed:", err);
-    if (nowEl) nowEl.textContent = "Unavailable";
-    if (upNextEl) upNextEl.textContent = "Unavailable";
-  }
-} 
- 
-
+const DAY_ORDER = [
+  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+];
 
 /* =========================================
    ELEMENTS
@@ -524,7 +319,7 @@ async function loadNowOnAndUpNext() {
   if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
 
   try {
-    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now());
+    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
     const data = await res.json();
 
     const slots = (data.slots || []).map(slot => ({
@@ -532,13 +327,15 @@ async function loadNowOnAndUpNext() {
       start: slot.start,
       end: slot.end,
       dj: slot.dj || 'Free'
-    }));
+    })).filter(slot => slot.day && slot.start && slot.end);
 
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
 
     if (nowEl) {
-      nowEl.textContent = now ? `${now.dj} ${now.start}–${now.end}` : 'Off Air';
+      nowEl.textContent = now
+        ? `${now.dj} ${now.start}–${now.end}`
+        : 'Off Air';
     }
 
     if (upNextEl) {
@@ -566,7 +363,8 @@ async function loadNowOnAndUpNext() {
     if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
     if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
-}
+} 
+
 
 /* =========================================
    AUTH UI
