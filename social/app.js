@@ -221,23 +221,38 @@ function findCurrentAndNext(rows) {
 async function loadNowOnAndUpNext() {
   const nowEl = document.getElementById("nowon");
   const upNextEl = document.getElementById("upNext");
+
   if (!nowEl && !upNextEl) return;
 
   try {
     const res = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`, { cache: "no-store" });
     const data = await res.json();
-    const rows = normaliseScheduleData(data);
-    const { current, next } = findCurrentAndNext(rows);
+    const slots = normaliseSlots(data);
+
+    console.log("RAW SCHEDULE DATA:", data);
+    console.log("NORMALISED SLOTS:", slots);
+
+    if (!slots.length) {
+      if (nowEl) nowEl.textContent = "Schedule unavailable";
+      if (upNextEl) upNextEl.textContent = "Schedule unavailable";
+      return;
+    }
+
+    const now = findCurrentSlot(slots);
+    const next = findUpNextSlot(slots);
+
+    console.log("NOW SLOT:", now);
+    console.log("NEXT SLOT:", next);
 
     if (nowEl) {
-      nowEl.textContent = current
-        ? `${displayName(current)} ${current.start}–${current.end}`
+      nowEl.textContent = now
+        ? `${buildDisplayName(now)} ${now.start}–${now.end}`
         : "Off Air";
     }
 
     if (upNextEl) {
       upNextEl.innerHTML = next
-        ? `${displayName(next)}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
+        ? `${buildDisplayName(next)}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
         : "No upcoming shows";
     }
   } catch (err) {
@@ -246,6 +261,7 @@ async function loadNowOnAndUpNext() {
     if (upNextEl) upNextEl.textContent = "Unavailable";
   }
 } 
+ 
 
 
 /* =========================================
