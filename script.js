@@ -10,7 +10,7 @@ const SCHEDULE_URL =
   "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 const DAY_ORDER = [
-  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
 ];
 
 /* -------------------------
@@ -19,16 +19,68 @@ const DAY_ORDER = [
 ------------------------- */
 let SCHEDULE_TIME_MODE = "both";
 
-/* -------------------------
-   YEAR
-------------------------- */
+/* ---------- Year ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
+/* ===============================
+   BURGER MENU FIX
+   =============================== */
+(function () {
+  const burger = document.getElementById("burger");
+  const nav = document.getElementById("nav");
+
+  if (!burger || !nav) return;
+
+  burger.replaceWith(burger.cloneNode(true));
+  nav.replaceWith(nav.cloneNode(true));
+
+  const freshBurger = document.getElementById("burger");
+  const freshNav = document.getElementById("nav");
+
+  if (!freshBurger || !freshNav) return;
+
+  freshBurger.setAttribute("aria-expanded", "false");
+
+  freshBurger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const isOpen = freshNav.classList.contains("open");
+    freshNav.classList.toggle("open", !isOpen);
+    freshBurger.setAttribute("aria-expanded", String(!isOpen));
+  });
+
+  freshNav.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (
+      freshNav.classList.contains("open") &&
+      !e.target.closest("#nav") &&
+      !e.target.closest("#burger")
+    ) {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      freshNav.classList.remove("open");
+      freshBurger.setAttribute("aria-expanded", "false");
+    }
+  });
+})();
+
 /* -------------------------
    UK TIME
+   Proper UK time without manual BST edits
 ------------------------- */
 function getUKParts() {
   const parts = new Intl.DateTimeFormat("en-GB", {
@@ -52,13 +104,13 @@ function getUKParts() {
 }
 
 function getNowMinutes() {
-  const uk = getUKParts();
+  const now = new Date(); // 
 
   return {
-    dayNum: DAY_ORDER.indexOf(uk.weekday) + 1,
-    mins: uk.hour * 60 + uk.minute
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
   };
-}
+} 
 
 /* -------------------------
    HELPERS
@@ -106,9 +158,8 @@ function cleanTime(v) {
     const ampm = h >= 12 ? "pm" : "am";
     h = h % 12 || 12;
     const m = d.getMinutes();
-    return m ? `${h}:${String(m).padStart(2, "0")}${ampm}` : `${h}${ampm}`;
+    return m ? `${h}:${String(m).padStart(2,"0")}${ampm}` : `${h}${ampm}`;
   }
-
   return String(v || "");
 }
 
@@ -135,8 +186,8 @@ function parse12HourTimeTo24(timeStr) {
 
 function getNextDateForDay(dayName) {
   const nowUK = new Date();
-  const jsDay = nowUK.getDay();
-  const todayIndex = jsDay === 0 ? 6 : jsDay - 1;
+  const jsDay = nowUK.getDay(); // 0=Sun
+  const todayIndex = jsDay === 0 ? 6 : jsDay - 1; // Monday=0
   const targetIndex = DAY_ORDER.indexOf(dayName);
 
   if (targetIndex === -1) return null;
@@ -229,20 +280,18 @@ window.setScheduleTimeMode = setScheduleTimeMode;
 
 /* -------------------------
    RENDER SCHEDULE GRID
+   Keep schedule in UK time only
 ------------------------- */
 function renderSchedule(slots) {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
 
   const days = {};
-  DAY_ORDER.forEach(d => {
-    days[d] = [];
-  });
+  DAY_ORDER.forEach(d => (days[d] = []));
 
   slots.forEach(s => {
     const day = normDay(s.day);
     if (!day) return;
-
     days[day].push({
       start: s.start,
       end: s.end,
@@ -280,6 +329,7 @@ function renderSchedule(slots) {
 
 /* -------------------------
    NOW ON + UP NEXT
+   Based on UK station time
 ------------------------- */
 function findCurrentSlot(slots) {
   const { dayNum, mins } = getNowMinutes();
@@ -328,20 +378,14 @@ function findUpNextSlot(slots) {
 }
 
 /* -------------------------
-   FETCH + INIT SCHEDULE
+   FETCH + INIT
 ------------------------- */
 async function loadSchedule() {
   try {
-    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now(), {
-      cache: "no-store"
-    });
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-
+    const res = await fetch(SCHEDULE_URL + "?v=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
 
+    // supports either {slots:[...]} or plain [...]
     if (Array.isArray(data)) return data;
     if (Array.isArray(data.slots)) return data.slots;
 
@@ -354,16 +398,6 @@ async function loadSchedule() {
 }
 
 async function initSchedule() {
-  const grid = document.getElementById("scheduleGrid");
-
-  if (grid) {
-    grid.innerHTML = `
-      <div class="schedule-day glass">
-        <h3>Loading schedule...</h3>
-      </div>
-    `;
-  }
-
   const rawSlots = await loadSchedule();
 
   const slots = rawSlots.map(s => ({
@@ -377,6 +411,7 @@ async function initSchedule() {
 
   renderSchedule(slots);
   updateNowNext();
+
   setInterval(updateNowNext, 60000);
 }
 
@@ -401,6 +436,18 @@ function updateNowNext() {
       : "No upcoming shows";
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSchedule();
+});
+
+
+/* -------------------------
+   START
+------------------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  initSchedule();
+});
 
 /* -------------------------
    NOW PLAYING UI UPDATE
@@ -436,7 +483,7 @@ function updateNowPlayingUI(track) {
 }
 
 /* -------------------------
-   REPORT LISTENER COUNTRY
+   Report Listener Country
 ------------------------- */
 async function reportListener() {
   try {
@@ -448,6 +495,7 @@ async function reportListener() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ country: data.country_name })
     });
+
   } catch (err) {
     console.log("Geo reporting failed:", err);
   }
@@ -469,6 +517,7 @@ let recordedBlob;
 let recordingTimeout;
 let userCountry = "Unknown Country";
 
+// 🌍 GET COUNTRY
 async function getCountry() {
   const countryEl = document.getElementById("listenerCountry");
 
@@ -491,6 +540,7 @@ async function getCountry() {
 
 getCountry();
 
+// 🎤 START RECORDING
 if (recordBtn && statusText && wave) {
   recordBtn.addEventListener("click", async () => {
     if (!mediaRecorder || mediaRecorder.state === "inactive") {
@@ -533,6 +583,7 @@ async function startRecording() {
   setTimeout(stopRecording, 5000);
 }
 
+// 🛑 STOP RECORDING
 function stopRecording() {
   if (mediaRecorder && mediaRecorder.state !== "inactive") {
     mediaRecorder.stop();
@@ -541,6 +592,7 @@ function stopRecording() {
   if (recordBtn) recordBtn.classList.remove("recording");
 }
 
+// ▶ PREVIEW
 if (previewBtn) {
   previewBtn.addEventListener("click", () => {
     if (!recordedBlob) return alert("No recording yet!");
@@ -550,6 +602,7 @@ if (previewBtn) {
   });
 }
 
+// ❌ DELETE
 if (deleteBtn) {
   deleteBtn.addEventListener("click", () => {
     recordedBlob = null;
@@ -558,6 +611,7 @@ if (deleteBtn) {
   });
 }
 
+// 🚀 SEND TO STUDIO
 if (sendBtn) {
   sendBtn.addEventListener("click", async () => {
     if (!recordedBlob) {
@@ -586,6 +640,7 @@ if (sendBtn) {
       } else {
         alert("Upload failed.");
       }
+
     } catch (err) {
       alert("Error sending shoutout.");
     }
@@ -601,39 +656,22 @@ if (sendBtn) {
 function openMenu() {
   const mobileNav = document.getElementById("mobileNav");
   const navBackdrop = document.getElementById("navBackdrop");
-  const burger = document.getElementById("burger");
-
-  if (mobileNav) {
-    mobileNav.classList.add("active");
-    mobileNav.setAttribute("aria-hidden", "false");
-  }
-
+  if (mobileNav) mobileNav.classList.add("active");
   if (navBackdrop) navBackdrop.hidden = false;
-
-  document.body.classList.add("menu-open");
-
-  if (burger) burger.setAttribute("aria-expanded", "true");
 }
 
 function closeMenu() {
   const mobileNav = document.getElementById("mobileNav");
   const navBackdrop = document.getElementById("navBackdrop");
-  const burger = document.getElementById("burger");
-
-  if (mobileNav) {
-    mobileNav.classList.remove("active");
-    mobileNav.setAttribute("aria-hidden", "true");
-  }
-
+  if (mobileNav) mobileNav.classList.remove("active");
   if (navBackdrop) navBackdrop.hidden = true;
-
-  document.body.classList.remove("menu-open");
-
-  if (burger) burger.setAttribute("aria-expanded", "false");
 }
 
-window.openMenu = openMenu;
-window.closeMenu = closeMenu;
+const navClose = document.getElementById("navClose");
+const navBackdrop = document.getElementById("navBackdrop");
+
+if (navClose) navClose.onclick = closeMenu;
+if (navBackdrop) navBackdrop.onclick = closeMenu;
 
 /* -------------------------
    GUESS THE TUNE
@@ -705,6 +743,8 @@ function setupOptions(buttons, result) {
   });
 }
 
+loadGuessTracks();
+
 /* -------------------------
    LIVE SHOUT-OUT TICKER
 ------------------------- */
@@ -743,13 +783,15 @@ function setupOptions(buttons, result) {
   }
 
   fetch(SHOUTOUTS_URL)
-    .then(res => res.text())
-    .then(csv => {
+    .then(function (res) {
+      return res.text();
+    })
+    .then(function (csv) {
       const rows = csv.trim().split(/\r?\n/);
       rows.shift();
 
       const messages = rows
-        .map(row => {
+        .map(function (row) {
           const cols = parseCSVLine(row);
 
           const name = cols[0] ? cols[0].trim() : "";
@@ -759,36 +801,51 @@ function setupOptions(buttons, result) {
           if (name && message) return name + " 🎉 " + message;
           return name || message;
         })
-        .filter(msg => msg !== "");
+        .filter(function (msg) {
+          return msg !== "";
+        });
 
       const joined = messages.join(" • ");
 
       tickerText.textContent = joined || "No shout-outs yet — send yours in!";
       tickerTextClone.textContent = tickerText.textContent;
     })
-    .catch(err => {
+    .catch(function (err) {
       console.error("Shout-out ticker failed:", err);
       tickerText.textContent = "Shout-outs unavailable right now.";
       tickerTextClone.textContent = tickerText.textContent;
     });
-})();
-
+})(); 
 /* -------------------------
-   START
+   BURGER
 ------------------------- */
-document.addEventListener("DOMContentLoaded", () => {
-  initSchedule();
-  loadGuessTracks();
-  loadNowOnAndUpNext();
-setInterval(loadNowOnAndUpNext, 60000);
 
-  const navCloseBtn = document.getElementById("navClose");
-  const navBackdropEl = document.getElementById("navBackdrop");
+  const burger = document.getElementById('burger');
+  const mobileNav = document.getElementById('mobileNav');
+  const navClose = document.getElementById('navClose');
+  const navBackdrop = document.getElementById('navBackdrop');
 
-  if (navCloseBtn) navCloseBtn.addEventListener("click", closeMenu);
-  if (navBackdropEl) navBackdropEl.addEventListener("click", closeMenu);
+  function openMenu() {
+    mobileNav.classList.add('active');
+    navBackdrop.hidden = false;
+    document.body.classList.add('menu-open');
+    burger.setAttribute('aria-expanded', 'true');
+    mobileNav.setAttribute('aria-hidden', 'false');
+  }
 
-  document.querySelectorAll("#mobileNav a").forEach(link => {
-    link.addEventListener("click", closeMenu);
+  function closeMenu() {
+    mobileNav.classList.remove('active');
+    navBackdrop.hidden = true;
+    document.body.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded', 'false');
+    mobileNav.setAttribute('aria-hidden', 'true');
+  }
+
+  if (burger) burger.addEventListener('click', openMenu);
+  if (navClose) navClose.addEventListener('click', closeMenu);
+  if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+
+  document.querySelectorAll('#mobileNav a').forEach(link => {
+    link.addEventListener('click', closeMenu);
   });
-});
+
