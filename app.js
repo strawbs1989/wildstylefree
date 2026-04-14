@@ -310,10 +310,6 @@ function findUpNextSlot(slots) {
   return list[0]?.s || null;
 }
 
-up next: https://script.google.com/macros/s/AKfycbw1qz4qgUrlon1BI9WD28y78OPQkQ01Wmhr9mygD6Jxm-ZfDDiL0tC3kwDurHYT-73Y/exec
-
-NowOn: https://script.google.com/macros/s/AKfycbze6G605GR2QpJU8uDlilbh3ie8Wr9zpTLUmz3azHdSl1OtalHQWSlTPiUSH7oWhlc/exec
-
 
 const NOWON_URL = "https://script.google.com/macros/s/AKfycbze6G605GR2QpJU8uDlilbh3ie8Wr9zpTLUmz3azHdSl1OtalHQWSlTPiUSH7oWhlc/exec";
 const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbw1qz4qgUrlon1BI9WD28y78OPQkQ01Wmhr9mygD6Jxm-ZfDDiL0tC3kwDurHYT-73Y/exec";
