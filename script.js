@@ -650,28 +650,7 @@ if (sendBtn) {
   });
 }
 
-/* -------------------------
-   MOBILE MENU
-------------------------- */
-function openMenu() {
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  if (mobileNav) mobileNav.classList.add("active");
-  if (navBackdrop) navBackdrop.hidden = false;
-}
 
-function closeMenu() {
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  if (mobileNav) mobileNav.classList.remove("active");
-  if (navBackdrop) navBackdrop.hidden = true;
-}
-
-const navClose = document.getElementById("navClose");
-const navBackdrop = document.getElementById("navBackdrop");
-
-if (navClose) navClose.onclick = closeMenu;
-if (navBackdrop) navBackdrop.onclick = closeMenu;
 
 /* -------------------------
    GUESS THE TUNE
