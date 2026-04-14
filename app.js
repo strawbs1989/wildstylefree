@@ -1271,15 +1271,7 @@ document.addEventListener("DOMContentLoaded", () => {
 }
  });
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      await setLoggedInState(user);
-    } else {
-      setLoggedOutState();
-    }
-
-    listenForPosts();
-  });
+  
 
 
 /* =========================================
