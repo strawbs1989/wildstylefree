@@ -1280,7 +1280,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     listenForPosts();
   });
-});
+
 
 /* =========================================
    GLOBALS
