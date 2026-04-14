@@ -1228,7 +1228,7 @@ function bindCoreUI() {
    AUTH STATE / STARTUP
 ========================================= */
 
-const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbxo9b0dYbixT917LcU1wgI4PAWPJbiRuCkewnYnvWtFSI-kz09zckW7hBRjBtSMb_VZ/exec";
+const UPNEXT_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec'";
 
 async function loadUpNext() {
   const el = document.getElementById("upNext");
