@@ -7,7 +7,7 @@
    CONFIG
 ------------------------- */
 const SCHEDULE_URL =
-  "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+  'https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec';
 
 const DAY_ORDER = [
   "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
