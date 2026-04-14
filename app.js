@@ -1257,11 +1257,20 @@ document.addEventListener("DOMContentLoaded", () => {
   checkRequestStatus();
 
   if (usingPlaceholders) {
-    setLoggedOutState();
+  setLoggedOutState();
+  listenForPosts();
+  setAuthMessage('Paste your Firebase config...');
+} else {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      await setLoggedInState(user);
+    } else {
+      setLoggedOutState();
+    }
+
     listenForPosts();
-    setAuthMessage('Paste your Firebase config first.');
-    return;
-  }
+  });
+}
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
