@@ -398,15 +398,15 @@
 </script> 
 
 <script>
-const SOCIAL_NOWON_URL = "https://script.google.com/macros/s/AKfycbze6G605GR2QpJU8uDlilbh3ie8Wr9zpTLUmz3azHdSl1OtalHQWSlTPiUSH7oWhlc/exec";
-const SOCIAL_UPNEXT_URL = "https://script.google.com/macros/s/AKfycbw1qz4qgUrlon1BI9WD28y78OPQkQ01Wmhr9mygD6Jxm-ZfDDiL0tC3kwDurHYT-73Y/exec";
+const NOWON_URL = "https://script.google.com/macros/s/AKfycbze6G605GR2QpJU8uDlilbh3ie8Wr9zpTLUmz3azHdSl1OtalHQWSlTPiUSH7oWhlc/exec";
+const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbw1qz4qgUrlon1BI9WD28y78OPQkQ01Wmhr9mygD6Jxm-ZfDDiL0tC3kwDurHYT-73Y/exec";
 
-async function loadSocialNowOn() {
-  const el = document.getElementById("socialNowOn");
+async function loadNowOn() {
+  const el = document.getElementById("NowOn");
   if (!el) return;
 
   try {
-    const res = await fetch(SOCIAL_NOWON_URL + "?t=" + Date.now(), {
+    const res = await fetch(NOWON_URL + "?t=" + Date.now(), {
       cache: "no-store"
     });
 
@@ -417,17 +417,17 @@ async function loadSocialNowOn() {
     const data = await res.json();
     el.textContent = data.text || "Off Air";
   } catch (err) {
-    console.error("Social Now On failed:", err);
+    console.error("Now On failed:", err);
     el.textContent = "Off Air";
   }
 }
 
-async function loadSocialUpNext() {
-  const el = document.getElementById("socialUpNext");
+async function loadUpNext() {
+  const el = document.getElementById("UpNext");
   if (!el) return;
 
   try {
-    const res = await fetch(SOCIAL_UPNEXT_URL + "?t=" + Date.now(), {
+    const res = await fetch(UPNEXT_URL + "?t=" + Date.now(), {
       cache: "no-store"
     });
 
@@ -441,7 +441,7 @@ async function loadSocialUpNext() {
       ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
       : (data.text || "No upcoming shows");
   } catch (err) {
-    console.error("Social Up Next failed:", err);
+    console.error("Up Next failed:", err);
     el.textContent = "Unavailable";
   }
 }
