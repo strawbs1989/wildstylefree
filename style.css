@@ -3255,3 +3255,16 @@ NOW ON
   color: white;
 } 
 
+.nowOnShow.onair {
+  background: #ff2a6d;
+  color: #fff;
+  border-color: #ff2a6d;
+  box-shadow: 0 0 18px rgba(255,42,109,.4);
+}
+
+.nowOnShow.offair {
+  background: #fff;
+  color: var(--muted);
+  border:1px solid rgba(35,26,53,.08);
+} 
+

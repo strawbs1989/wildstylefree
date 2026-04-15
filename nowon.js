@@ -187,8 +187,7 @@ async function loadNowAndUpNext() {
     const slots = normaliseSlots(data);
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
-
-    if (nowEl) {
+if (nowEl) {
   if (now) {
     nowEl.textContent = `${now.dj} ${now.start}–${now.end}`;
     nowEl.classList.remove("offair");
@@ -198,7 +197,7 @@ async function loadNowAndUpNext() {
     nowEl.classList.remove("onair");
     nowEl.classList.add("offair");
   }
-}
+} 
 
     if (upNextEl) {
       upNextEl.innerHTML = next
