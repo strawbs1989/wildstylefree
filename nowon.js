@@ -189,10 +189,16 @@ async function loadNowAndUpNext() {
     const next = findUpNextSlot(slots);
 
     if (nowEl) {
-      nowEl.textContent = now
-        ? `${now.dj} ${now.start}–${now.end}`
-        : "Off Air";
-    }
+  if (now) {
+    nowEl.textContent = `${now.dj} ${now.start}–${now.end}`;
+    nowEl.classList.remove("offair");
+    nowEl.classList.add("onair");
+  } else {
+    nowEl.textContent = "Off Air";
+    nowEl.classList.remove("onair");
+    nowEl.classList.add("offair");
+  }
+}
 
     if (upNextEl) {
       upNextEl.innerHTML = next

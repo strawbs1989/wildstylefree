@@ -3233,3 +3233,25 @@ INDEX NAV - MATCH SOCIAL MENU
   }
 } 
 
+/* =========================
+NOW ON
+========================= */
+
+.nowOnShow {
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 18px;
+}
+
+.nowOnShow.onair {
+  background: red;
+  color: white;
+}
+
+.nowOnShow.offair {
+  background: grey;
+  color: white;
+} 
+
