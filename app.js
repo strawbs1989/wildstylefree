@@ -53,7 +53,7 @@ const REQUEST_TICKER_CSV =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv';
 
 const SCHEDULE_URL =
-  'https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec';
+  'https://script.googleusercontent.com/macros/echo?user_content_key=AWDtjMVtacmYtSGPNNeT0mzIBorEPIvnGLDe4G4LrDCK8F3lUS6NkWyl_z5oAhTDJorVMxqPN8esIoBctFDyyJdgGi9VeuzcGlOQKRv6YBLoK4D-IT-h2f81TkB6_mVPJVIdroAIDQmS98zWiqHjDjMtsM-5-GH4PjI_vUMAXr-Rbi4tgYP6d4ulPWNFTFAGeLjR3gsAGhPogjaDDrVgHszmqDB-7rJ3VgU3bqI2IaaJVugsy0Mpvvw716kFELFPbk9zh5TpGoS0hhphqmBkXSfF6_fFYWFkNg&lib=MpeUWhAb9CJmYiRHsXLYuv7qPCa2hpXwN';
 
 const DAY_ORDER = [
   'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'

@@ -171,61 +171,41 @@ function escapeHtml(text = "") {
 async function loadNowAndUpNext() {
   const nowEl = document.getElementById("nowon");
   const upNextEl = document.getElementById("upNext");
-  const badgeEl = document.getElementById("onair-badge");
+
+  if (!nowEl && !upNextEl) return;
 
   try {
     const res = await fetch(SCHEDULE_SOURCE_URL + "&t=" + Date.now(), {
       cache: "no-store"
     });
 
-    if (!res.ok) throw new Error("Schedule request failed: " + res.status);
+    if (!res.ok) {
+      throw new Error("Schedule request failed: " + res.status);
+    }
 
     const data = await res.json();
     const slots = normaliseSlots(data);
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
 
-    // NOW ON
     if (nowEl) {
       nowEl.textContent = now
         ? `${now.dj} ${now.start}–${now.end}`
         : "Off Air";
     }
 
-    // UP NEXT
     if (upNextEl) {
       upNextEl.innerHTML = next
         ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
         : "No upcoming shows";
     }
-
-    // ON AIR BADGE
-    if (badgeEl) {
-      if (now) {
-        badgeEl.textContent = "ON AIR";
-        badgeEl.classList.remove("offair");
-        badgeEl.classList.add("onair");
-      } else {
-        badgeEl.textContent = "OFF AIR";
-        badgeEl.classList.remove("onair");
-        badgeEl.classList.add("offair");
-      }
-    }
-
   } catch (err) {
     console.error("Now/Up Next failed:", err);
 
     if (nowEl) nowEl.textContent = "Off Air";
     if (upNextEl) upNextEl.textContent = "Unavailable";
-
-    if (badgeEl) {
-      badgeEl.textContent = "OFF AIR";
-      badgeEl.classList.remove("onair");
-      badgeEl.classList.add("offair");
-    }
   }
-} 
-
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   loadNowAndUpNext();
