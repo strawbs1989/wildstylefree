@@ -6,7 +6,7 @@
 /* -------------------------
    CONFIG
 ------------------------- */
-const SCHEDULE_URL =
+const  = SCHEDULE_URL
   'https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec';
 
 const DAY_ORDER = [
@@ -327,198 +327,214 @@ function renderSchedule(slots) {
   `).join("");
 }
 
-/* =========================
-   NOW ON / UP NEXT
-========================= */
+/* =========================================
+   SCHEDULE / NOW ON / UP NEXT
+========================================= */
 
-const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+function normDay(day) {
+  const s = String(day || '').trim().toLowerCase();
+  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
+  return DAY_ORDER.includes(fixed) ? fixed : '';
+}
 
 function getUKNow() {
-  return new Date(new Date().toLocaleString("en-GB", {
-    timeZone: "Europe/London"
+  return new Date(new Date().toLocaleString('en-GB', {
+    timeZone: 'Europe/London'
   }));
 }
 
-function parseTimeToMinutes(t) {
-  const s = String(t || "").trim().toLowerCase();
-  const m = s.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+function getNowMinutes() {
+  const now = getUKNow();
+  return {
+    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
+    mins: now.getHours() * 60 + now.getMinutes()
+  };
+}
+
+function parseTime(t) {
+  t = String(t || '').trim().toLowerCase();
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/);
   if (!m) return null;
 
   let h = parseInt(m[1], 10);
-  const mins = parseInt(m[2] || "0", 10);
-  const ampm = m[3].toLowerCase();
+  const mins = parseInt(m[2] || '0', 10);
+  const ampm = m[3];
 
-  if (ampm === "pm" && h !== 12) h += 12;
-  if (ampm === "am" && h === 12) h = 0;
+  if (ampm === 'pm' && h !== 12) h += 12;
+  if (ampm === 'am' && h === 12) h = 0;
 
   return h * 60 + mins;
 }
 
-function splitRange(range) {
-  const text = String(range || "").trim();
+function splitTimeRange(range) {
+  const text = String(range || '').trim();
+  if (!text) return { start: '', end: '' };
+
   const parts = text.split(/\s*[-–—]\s*/);
   if (parts.length >= 2) {
-    return { start: parts[0].trim(), end: parts[1].trim() };
+    return {
+      start: parts[0].trim(),
+      end: parts[1].trim()
+    };
   }
-  return { start: "", end: "" };
+
+  return { start: '', end: '' };
 }
 
-function dayNameToIndex(day) {
-  const map = {
-    monday: 1,
-    tuesday: 2,
-    wednesday: 3,
-    thursday: 4,
-    friday: 5,
-    saturday: 6,
-    sunday: 7
+function slotStartEndMinutes(slot) {
+  const start = parseTime(slot.start);
+  const end = parseTime(slot.end);
+  if (start == null || end == null) return null;
+
+  return {
+    start,
+    end,
+    crossesMidnight: end <= start
   };
-  return map[String(day || "").trim().toLowerCase()] || null;
 }
 
-function normaliseScheduleData(data) {
-  let rows = [];
+function normaliseSlots(data) {
+  let raw = [];
 
   if (Array.isArray(data?.slots)) {
-    rows = data.slots;
+    raw = data.slots;
   } else if (Array.isArray(data)) {
-    rows = data;
-  } else if (data && typeof data === "object") {
+    raw = data;
+  } else if (data && typeof data === 'object') {
     for (const [key, value] of Object.entries(data)) {
       if (Array.isArray(value)) {
-        for (const item of value) {
-          rows.push({ ...item, day: item.day || key });
-        }
+        value.forEach(item => {
+          raw.push({
+            ...item,
+            day: item.day || key
+          });
+        });
       }
     }
   }
 
-  return rows.map((row) => {
-    const range = row.timeRange || row.time || row.slot || row.hours || "";
-    const split = splitRange(range);
-
-    const start = String(row.start || row.startTime || row.from || split.start || "").trim();
-    const end = String(row.end || row.endTime || row.to || split.end || "").trim();
-
-    const dj = String(
-      row.dj || row.presenter || row.host || row.name || ""
-    ).trim();
-
-    const show = String(
-      row.show || row.title || row.programme || row.program || ""
-    ).trim();
-
-    const day = String(row.day || row.dayName || row.weekday || "").trim();
+  return raw.map(slot => {
+    const split = splitTimeRange(
+      slot.timeRange ||
+      slot.time ||
+      slot.slot ||
+      slot.hours ||
+      ''
+    );
 
     return {
-      day,
-      dayIndex: dayNameToIndex(day),
-      start,
-      end,
-      startMins: parseTimeToMinutes(start),
-      endMins: parseTimeToMinutes(end),
-      dj,
-      show
+      day: normDay(slot.day || slot.dayName || slot.weekday),
+      start: String(slot.start || slot.startTime || slot.from || split.start || '').trim(),
+      end: String(slot.end || slot.endTime || slot.to || split.end || '').trim(),
+      dj: String(
+        slot.dj ||
+        slot.presenter ||
+        slot.host ||
+        slot.name ||
+        slot.show ||
+        slot.title ||
+        'Free'
+      ).trim()
     };
-  }).filter((row) =>
-    row.dayIndex &&
-    row.start &&
-    row.end &&
-    row.startMins != null &&
-    row.endMins != null
-  );
+  }).filter(slot => slot.day && slot.start && slot.end);
 }
 
-function displayName(row) {
-  if (row.dj && row.show && row.show.toLowerCase() !== row.dj.toLowerCase()) {
-    return `${row.dj} - ${row.show}`;
-  }
-  return row.dj || row.show || "Free";
-}
+function findCurrentSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const today = DAY_ORDER[dayNum - 1];
+  const prev = DAY_ORDER[(dayNum + 5) % 7];
 
-function isFreeRow(row) {
-  const txt = displayName(row).trim().toLowerCase();
-  return !txt || txt === "free" || txt.includes("off air");
-}
+  for (const s of slots) {
+    const r = slotStartEndMinutes(s);
+    if (!r) continue;
 
-function isCurrentRow(row, nowDay, nowMins) {
-  const crossesMidnight = row.endMins <= row.startMins;
-
-  if (!crossesMidnight) {
-    return row.dayIndex === nowDay && nowMins >= row.startMins && nowMins < row.endMins;
-  }
-
-  const prevDay = nowDay === 1 ? 7 : nowDay - 1;
-
-  return (
-    (row.dayIndex === nowDay && nowMins >= row.startMins) ||
-    (row.dayIndex === prevDay && nowMins < row.endMins)
-  );
-}
-
-function findCurrentAndNext(rows) {
-  const now = getUKNow();
-  const nowDay = now.getDay() === 0 ? 7 : now.getDay();
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-
-  let current = null;
-  for (const row of rows) {
-    if (isCurrentRow(row, nowDay, nowMins)) {
-      current = row;
-      break;
+    if (s.day === today) {
+      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
+      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
     }
+
+    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
   }
 
-  const upcoming = [];
-  for (const row of rows) {
-    if (isFreeRow(row)) continue;
+  return null;
+}
 
-    const dayDiff = (row.dayIndex - nowDay + 7) % 7;
-    const crossesMidnight = row.endMins <= row.startMins;
+function findUpNextSlot(slots) {
+  const { dayNum, mins } = getNowMinutes();
+  const list = [];
 
-    if (dayDiff === 0) {
-      if (!crossesMidnight && row.startMins > nowMins) {
-        upcoming.push({ scoreDay: 0, scoreTime: row.startMins, row });
-      } else if (crossesMidnight && row.startMins > nowMins) {
-        upcoming.push({ scoreDay: 0, scoreTime: row.startMins, row });
+  for (let o = 0; o < 7; o++) {
+    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
+
+    for (const s of slots.filter(x => x.day === day)) {
+      if ((s.dj || '').trim().toLowerCase() === 'free') continue;
+
+      const r = slotStartEndMinutes(s);
+      if (!r) continue;
+
+      if (o === 0) {
+        if (!r.crossesMidnight && r.start > mins) {
+          list.push({ o, start: r.start, s });
+        }
+        if (r.crossesMidnight && mins < r.start) {
+          list.push({ o, start: r.start, s });
+        }
+      } else {
+        list.push({ o, start: r.start, s });
       }
-    } else {
-      upcoming.push({ scoreDay: dayDiff, scoreTime: row.startMins, row });
     }
   }
 
-  upcoming.sort((a, b) => a.scoreDay - b.scoreDay || a.scoreTime - b.scoreTime);
-  const next = upcoming[0]?.row || null;
-
-  return { current, next };
+  list.sort((a, b) => a.o - b.o || a.start - b.start);
+  return list[0]?.s || null;
 }
 
 async function loadNowOnAndUpNext() {
-  const nowEl = document.getElementById("nowon");
-  const upNextEl = document.getElementById("upNext");
-  if (!nowEl && !upNextEl) return;
+  const nowEl = els.nowOn;
+  const upNextEl = els.upNext;
+  const scheduleNowOn = els.scheduleNowOn;
+  const scheduleUpNext = els.scheduleUpNext;
+
+  if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
 
   try {
-    const res = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`, { cache: "no-store" });
+    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
     const data = await res.json();
-    const rows = normaliseScheduleData(data);
-    const { current, next } = findCurrentAndNext(rows);
+    const slots = normaliseSlots(data);
+
+    const now = findCurrentSlot(slots);
+    const next = findUpNextSlot(slots);
 
     if (nowEl) {
-      nowEl.textContent = current
-        ? `${displayName(current)} ${current.start}–${current.end}`
-        : "Off Air";
+      nowEl.textContent = now
+        ? `${now.dj} ${now.start}–${now.end}`
+        : 'Off Air';
     }
 
     if (upNextEl) {
       upNextEl.innerHTML = next
-        ? `${displayName(next)}<br><span class="muted-inline">${next.start}–${next.end} UK</span>`
-        : "No upcoming shows";
+        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
+        : 'No upcoming shows';
+    }
+
+    if (scheduleNowOn) {
+      scheduleNowOn.textContent = now
+        ? `Now On: ${now.dj} (${now.start}–${now.end})`
+        : 'Now On: Off Air';
+    }
+
+    if (scheduleUpNext) {
+      scheduleUpNext.textContent = next
+        ? `${next.dj} (${next.start}–${next.end})`
+        : 'No upcoming shows';
     }
   } catch (err) {
-    console.error("Now On / Up Next load failed:", err);
-    if (nowEl) nowEl.textContent = "Unavailable";
-    if (upNextEl) upNextEl.textContent = "Unavailable";
+    console.error('Now On / Up Next load failed:', err);
+
+    if (nowEl) nowEl.textContent = 'Unavailable';
+    if (upNextEl) upNextEl.textContent = 'Unavailable';
+    if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
+    if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
 } 
 
