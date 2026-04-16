@@ -1117,8 +1117,6 @@ function bindCoreUI() {
 document.addEventListener('DOMContentLoaded', () => {
   bindCoreUI();
 
-  
-
   loadRequestsTicker();
   setInterval(loadRequestsTicker, 15000);
 
@@ -1128,19 +1126,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setLoggedOutState();
     listenForPosts();
     setAuthMessage('Paste your Firebase config first.');
-    return;
+  } else {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await setLoggedInState(user);
+      } else {
+        setLoggedOutState();
+      }
+
+      listenForPosts();
+    });
   }
+}); 
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      await setLoggedInState(user);
-    } else {
-      setLoggedOutState();
-    }
-
-    listenForPosts();
-  });
-});
 
 /* =========================================
    GLOBALS
