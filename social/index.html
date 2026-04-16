@@ -293,8 +293,77 @@
     </footer>
   </div>
 
-  <script type="module" src="https://wildstyle.vip/social/app.js?v=9"></script>
-  <script src="https://wildstyle.vip/script.js"></script>
-  <script defer src="https://wildstyle.vip/social/theme.js"></script>
+  <script type="module" src="/social/app.js?v=20"></script>
+<script src="/social/nowon.js?v=20"></script>
+<script src="/social/theme.js"></script>
+
+<script>
+const burger = document.getElementById('burger');
+const mobileNav = document.getElementById('mobileNav');
+const navBackdrop = document.getElementById('navBackdrop');
+const navClose = document.getElementById('navClose');
+const openAuthBtn = document.getElementById('openAuthBtn');
+const openAuthBtnMobile = document.getElementById('openAuthBtnMobile');
+const authOverlay = document.getElementById('authOverlay');
+const authModal = document.getElementById('authModal');
+const closeAuthBtn = document.getElementById('closeAuthBtn');
+
+function openMenu() {
+  mobileNav?.classList.add('active');
+  if (navBackdrop) navBackdrop.hidden = false;
+  document.body.classList.add('menu-open');
+  burger?.setAttribute('aria-expanded', 'true');
+  mobileNav?.setAttribute('aria-hidden', 'false');
+}
+
+function closeMenu() {
+  mobileNav?.classList.remove('active');
+  if (navBackdrop) navBackdrop.hidden = true;
+  document.body.classList.remove('menu-open');
+  burger?.setAttribute('aria-expanded', 'false');
+  mobileNav?.setAttribute('aria-hidden', 'true');
+}
+
+function openAuthModal() {
+  authOverlay?.classList.add('open');
+  authModal?.classList.add('open');
+  authModal?.setAttribute('aria-hidden', 'false');
+}
+
+function closeAuthModal() {
+  authOverlay?.classList.remove('open');
+  authModal?.classList.remove('open');
+  authModal?.setAttribute('aria-hidden', 'true');
+}
+
+if (burger) burger.addEventListener('click', openMenu);
+if (navClose) navClose.addEventListener('click', closeMenu);
+if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+
+if (openAuthBtn) {
+  openAuthBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openAuthModal();
+  });
+}
+
+if (openAuthBtnMobile) {
+  openAuthBtnMobile.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeMenu();
+    openAuthModal();
+  });
+}
+
+if (closeAuthBtn) closeAuthBtn.addEventListener('click', closeAuthModal);
+if (authOverlay) authOverlay.addEventListener('click', closeAuthModal);
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 900) {
+    closeMenu();
+  }
+});
+</script> 
+
 </body>
 </html> 
