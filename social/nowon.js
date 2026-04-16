@@ -117,17 +117,14 @@ function findCurrentSlot(slots) {
     const r = slotStartEndMinutes(s);
     if (!r) continue;
 
-    // Normal same-day slot
     if (s.day === today && !r.crossesMidnight) {
       if (mins >= r.start && mins < r.end) return s;
     }
 
-    // Slot that starts today and runs past midnight
     if (s.day === today && r.crossesMidnight) {
       if (mins >= r.start) return s;
     }
 
-    // Slot that started yesterday and continues after midnight
     if (s.day === prev && r.crossesMidnight) {
       if (mins < r.end) return s;
     }
@@ -135,6 +132,7 @@ function findCurrentSlot(slots) {
 
   return null;
 }
+
 function findUpNextSlot(slots) {
   const now = getUKNow();
   const dayNum = now.getDay() === 0 ? 7 : now.getDay();
@@ -151,7 +149,6 @@ function findUpNextSlot(slots) {
       if (!r) continue;
 
       if (offset === 0) {
-        // Same day, only future start times count as up next
         if (r.start > mins) {
           list.push({ offset, start: r.start, slot: s });
         }
@@ -164,7 +161,6 @@ function findUpNextSlot(slots) {
   list.sort((a, b) => a.offset - b.offset || a.start - b.start);
   return list[0]?.slot || null;
 }
-  
 
 function escapeHtml(text = "") {
   return String(text)
@@ -182,7 +178,7 @@ async function loadNowAndUpNext() {
   if (!nowEl && !upNextEl) return;
 
   try {
-    const res = await fetch(SCHEDULE_SOURCE_URL + "&t=" + Date.now(), {
+    const res = await fetch(SCHEDULE_SOURCE_URL + "?t=" + Date.now(), {
       cache: "no-store"
     });
 
@@ -194,17 +190,16 @@ async function loadNowAndUpNext() {
     const slots = normaliseSlots(data);
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
-if (nowEl) {
-  nowEl.textContent = now ? "On Air" : "Off Air";
-}
 
-if (upNextEl) {
-  upNextEl.innerHTML = next
-    ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
-    : "No upcoming shows";
-}
+    if (nowEl) {
+      nowEl.textContent = now ? "On Air" : "Off Air";
+    }
 
-   
+    if (upNextEl) {
+      upNextEl.innerHTML = next
+        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
+        : "No upcoming shows";
+    }
   } catch (err) {
     console.error("Now/Up Next failed:", err);
 
@@ -216,4 +211,4 @@ if (upNextEl) {
 document.addEventListener("DOMContentLoaded", () => {
   loadNowAndUpNext();
   setInterval(loadNowAndUpNext, 60000);
-}); 
+});
