@@ -310,58 +310,7 @@ function findUpNextSlot(slots) {
   return list[0]?.s || null;
 }
 
-async function loadNowOnAndUpNext() {
-  const nowEl = els.nowOn;
-  const upNextEl = els.upNext;
-  const scheduleNowOn = els.scheduleNowOn;
-  const scheduleUpNext = els.scheduleUpNext;
 
-  if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
-
-  try {
-    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now());
-    const data = await res.json();
-
-    const slots = (data.slots || []).map(slot => ({
-      day: normDay(slot.day),
-      start: slot.start,
-      end: slot.end,
-      dj: slot.dj || 'Free'
-    }));
-
-    const now = findCurrentSlot(slots);
-    const next = findUpNextSlot(slots);
-
-    if (nowEl) {
-      nowEl.textContent = now ? `${now.dj} ${now.start}–${now.end}` : 'Off Air';
-    }
-
-    if (upNextEl) {
-      upNextEl.innerHTML = next
-        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
-        : 'No upcoming shows';
-    }
-
-    if (scheduleNowOn) {
-      scheduleNowOn.textContent = now
-        ? `Now On: ${now.dj} (${now.start}–${now.end})`
-        : 'Now On: Off Air';
-    }
-
-    if (scheduleUpNext) {
-      scheduleUpNext.textContent = next
-        ? `${next.dj} (${next.start}–${next.end})`
-        : 'No upcoming shows';
-    }
-  } catch (err) {
-    console.error('Now On / Up Next load failed:', err);
-
-    if (nowEl) nowEl.textContent = 'Unavailable';
-    if (upNextEl) upNextEl.textContent = 'Unavailable';
-    if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
-    if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
-  }
-}
 
 /* =========================================
    AUTH UI
@@ -1168,8 +1117,7 @@ function bindCoreUI() {
 document.addEventListener('DOMContentLoaded', () => {
   bindCoreUI();
 
-  loadNowOnAndUpNext();
-  setInterval(loadNowOnAndUpNext, 60000);
+  
 
   loadRequestsTicker();
   setInterval(loadRequestsTicker, 15000);
