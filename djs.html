@@ -12,59 +12,56 @@
 <body>
 
   <!-- HEADER -->
-  <header class="navbar wild-header">
-    <div class="wild-header-inner">
-
-      <a href="/index.html" class="brand-block">
-        <span class="brand-badge">WS</span>
-        <span class="brand-copy">
-          <strong>WILDSTYLE RADIO</strong>
-          <small>The Wildstyle Crew</small>
-        </span>
-      </a>
-
-      <nav class="desktop-nav" id="nav">
-        <a href="/index.html" class="active-link">Home</a>
-        <a href="/djs.html">DJs</a>
-		<a href="/shout.html">Shout</a>
-        <a href="/schedule.html">Schedule</a>
-        <a href="/chat.html">Chat</a>
-        <a href="/merch.html">Merch</a>
-		<a href="/listenermap.html">Listener</a>
-      </nav>
-
-      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
-    </div>
-  </header>
-
-  <!-- NOW ON -->
-  <section class="now-on-stage">
-    <div class="container now-on-stage-inner">
-      <div class="now-on-left">
-        <span class="live-dot"></span>
-        <span class="nowOn">Now On</span>
+    <header class="wild-header">
+  <div class="wild-header-inner">
+    <a href="/index.html" class="brand-block">
+      <div class="brand-badge">WS</div>
+      <div class="brand-copy">
+        <strong>WILDSTYLE RADIO</strong>
+        <small>United by Beats • Powered by Passion</small>
       </div>
-      <div class="nowOnShow" id="nowon">Loading…</div>
+    </a>
+
+    <nav class="desktop-nav" id="nav">
+      <a href="/index.html">Home</a>
+      <a href="/djs.html">DJs</a>
+      <a href="/shout.html">Shout</a>
+      <a href="/schedule.html">Schedule</a>
+      <a href="/chat.html" class="active-link">Chat</a>
+      <a href="/merch.html">Merch</a>
+    </nav>
+
+    <button class="menu-toggle" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
+  </div>
+</header>
+
+<!-- NOW ON -->
+<section class="now-on-stage">
+  <div class="container now-on-stage-inner">
+    <div class="now-on-left">
+      <span class="live-dot"></span>
+      <span class="nowOn">Now On</span>
     </div>
-  </section>
+    <div class="nowOnShow" id="nowon">Loading…</div>
+  </div>
+</section>
 
-  <!-- MOBILE NAV -->
-  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
+<!-- MOBILE NAV -->
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
 
-  <nav class="mobile-nav" id="mobileNav">
-    <div class="mobile-nav-top">
-      <div class="mobile-nav-title">Menu</div>
-      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
-    </div>
+<aside class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-top">
+    <strong class="mobile-nav-title">Menu</strong>
+    <button id="navClose" class="mobile-nav-close" aria-label="Close menu">✕</button>
+  </div>
 
-    <a href="/index.html">Home</a>
-    <a href="/djs.html">DJs</a>
-	<a href="/shout.html">Shout</a>
-    <a href="/schedule.html">Schedule</a>
-    <a href="/chat.html">Chat</a>
-    <a href="/merch.html">Merch</a>
-	<a href="/listenermap.html">Listener</a>
-  </nav>
+  <a href="/index.html">Home</a>
+  <a href="/djs.html">DJs</a>
+  <a href="/shout.html">Shout</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/chat.html" class="active-link">Chat</a>
+  <a href="/merch.html">Merch</a>
+</aside>
 
   <!-- PAGE HERO -->
   <section class="dj-page-hero">
@@ -331,6 +328,44 @@
 
   <!-- SCRIPT -->
   <script src="https://wildstyle.vip/script.js?v=4" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  const navClose = document.getElementById("navClose");
+
+  function openMenu() {
+    mobileNav?.classList.add("active");
+    if (navBackdrop) navBackdrop.hidden = false;
+    document.body.classList.add("menu-open");
+    burger?.setAttribute("aria-expanded", "true");
+    mobileNav?.setAttribute("aria-hidden", "false");
+  }
+
+  function closeMenu() {
+    mobileNav?.classList.remove("active");
+    if (navBackdrop) navBackdrop.hidden = true;
+    document.body.classList.remove("menu-open");
+    burger?.setAttribute("aria-expanded", "false");
+    mobileNav?.setAttribute("aria-hidden", "true");
+  }
+
+  burger?.addEventListener("click", openMenu);
+  navClose?.addEventListener("click", closeMenu);
+  navBackdrop?.addEventListener("click", closeMenu);
+
+  document.querySelectorAll("#mobileNav a").forEach(link => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
+  });
+});
+</script>
 
 </body>
 </html> 
