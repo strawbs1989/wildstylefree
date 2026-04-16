@@ -730,12 +730,7 @@ article.innerHTML = `
         placeholder="Write a comment..."
         maxlength="140"
       />
-      <button type="button" class="live-comment-submit" data-post-id="${post.id}">
-        Post
-      </button>
-    </div>
-  </div>
-`;
+      
           <button type="button" class="live-comment-submit" data-post-id="${post.id}">Post</button>
         </div>
       </div>
