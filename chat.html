@@ -47,22 +47,24 @@
   </section>
 
   <!-- MOBILE NAV -->
-  <div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" hidden></div>
+  
+<button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
 
-  <nav class="mobile-nav" id="mobileNav">
-    <div class="mobile-nav-top">
-      <div class="mobile-nav-title">Menu</div>
-      <button class="mobile-nav-close" onclick="closeMenu()">✕</button>
-    </div>
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
 
-    <a href="/index.html">Home</a>
-    <a href="/djs.html">DJs</a>
-	<a href="/shout.html">Shout</a>
-    <a href="/schedule.html">Schedule</a>
-    <a href="/chat.html">Chat</a>
-    <a href="/merch.html">Merch</a>
-  </nav>
+<aside class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-top">
+    <strong>Menu</strong>
+    <button id="navClose" aria-label="Close menu">✕</button>
+  </div>
 
+  <a href="/index.html">Home</a>
+  <a href="/djs.html">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/chat.html">Chat</a>
+  <a href="/request.html">Request</a>
+  <a href="/map.html">Map</a>
+</aside>
   <!-- HERO -->
   <section class="chat-hero">
     <div class="chat-hero-inner">
