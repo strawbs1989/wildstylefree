@@ -1770,3 +1770,33 @@ section{
 .theme-summer .portal-head{
   background:linear-gradient(90deg,#00d1ff,#ffbe0b,#ff4d6d);
 } 
+
+/* =========================
+   FIX: SOCIAL NOW ON BADGE
+========================= */
+
+.social-home .hero-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.social-home .hero-head > span{
+  flex:1;
+  min-width:0;
+}
+
+.social-home .nowOnShow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  min-width:140px;
+  padding:12px 18px;
+  border-radius:999px;
+  text-align:center;
+  line-height:1;
+  flex-shrink:0;
+} 
+
