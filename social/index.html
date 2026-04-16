@@ -21,33 +21,33 @@
       </a>
 
       <nav class="nav desktop-nav">
-  <a href="/social/index.html">Home</a>
+  <a href="/social/index.html" class="active">Home</a>
   <a href="/social/djs.html">DJs</a>
   <a href="/social/schedule.html">Schedule</a>
   <a href="/social/chat.html">Chat</a>
   <a href="/social/request.html">Request</a>
-  <a href="/social/map.html" class="active">Map</a>
+  <a href="/social/map.html">Map</a>
   <button id="openAuthBtn">Login</button>
-</nav> 
+</nav>
 
       <button class="burger" id="burger" aria-label="Open menu">☰</button>
     </header>
 
     <div class="nav-backdrop" id="navBackdrop" hidden></div>
 
-    <aside class="mobile-nav" id="mobileNav">
-      <div class="mobile-nav-top">
-        <strong>Menu</strong>
-        <button id="navClose" aria-label="Close menu">✕</button>
-      </div>
-	  <button id="mobileLoginBtn" class="mobile-login-btn">Login</button> 
-      <a href="/social/index.html">Home</a>
-      <a href="/social/djs.html">DJs</a>
-      <a href="/social/schedule.html">Schedule</a>
-      <a href="/social/chat.html">Chat</a>
-      <a href="/social/request.html">Request</a>
-      <a href="/social/map.html" class="active">Map</a>
-    </aside>
+    <aside class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-top">
+    <strong>Menu</strong>
+    <button id="navClose" aria-label="Close menu">✕</button>
+  </div>
+  <button id="openAuthBtnMobile" class="mobile-login-btn">Login</button>
+  <a href="/index.html" class="active">Home</a>
+  <a href="/djs.html">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/chat.html">Chat</a>
+  <a href="/request.html">Request</a>
+  <a href="/map.html">Map</a>
+</aside>
 
     <section class="hero">
       <div class="hero-head">
@@ -79,14 +79,16 @@
             <p>Stream online • Requests open • Shout-outs live • Listener map active.</p>
           </div>
           <div class="mini-row">
-            <div class="mini-card">
-              <h4>Up Next</h4>
-              <p id="upNext">Loading…</p>
-            <div class="mini-card">
-              <h4>Tonight’s Mood</h4>
-              <p>Multi-genre energy with community takeover vibes.</p>
-            </div>
-          </div>
+  <div class="mini-card">
+    <h4>Up Next</h4>
+    <p id="upNext">Loading…</p>
+  </div>
+
+  <div class="mini-card">
+    <h4>Tonight’s Mood</h4>
+    <p>Multi-genre energy with community takeover vibes.</p>
+  </div>
+</div>
         </div>
       </div>
     </section>
