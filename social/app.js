@@ -695,7 +695,7 @@ function renderFeed(posts) {
     const created = formatDate(post.createdAt);
     const canDelete = auth?.currentUser && post.uid === auth.currentUser.uid;
 
-    article.innerHTML = `
+    
 article.innerHTML = `
   <div class="post-top">
     <div class="author">
@@ -735,7 +735,7 @@ article.innerHTML = `
       </button>
     </div>
   </div>
-`; 
+`;
           <button type="button" class="live-comment-submit" data-post-id="${post.id}">Post</button>
         </div>
       </div>
