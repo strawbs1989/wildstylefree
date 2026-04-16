@@ -109,6 +109,7 @@ function findCurrentSlot(slots) {
   const now = getUKNow();
   const dayNum = now.getDay() === 0 ? 7 : now.getDay();
   const mins = now.getHours() * 60 + now.getMinutes();
+
   const today = DAY_ORDER[dayNum - 1];
   const prev = DAY_ORDER[(dayNum + 5) % 7];
 
@@ -116,17 +117,24 @@ function findCurrentSlot(slots) {
     const r = slotStartEndMinutes(s);
     if (!r) continue;
 
-    if (s.day === today) {
-      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
-      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
+    // Normal same-day slot
+    if (s.day === today && !r.crossesMidnight) {
+      if (mins >= r.start && mins < r.end) return s;
     }
 
-    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
+    // Slot that starts today and runs past midnight
+    if (s.day === today && r.crossesMidnight) {
+      if (mins >= r.start) return s;
+    }
+
+    // Slot that started yesterday and continues after midnight
+    if (s.day === prev && r.crossesMidnight) {
+      if (mins < r.end) return s;
+    }
   }
 
   return null;
 }
-
 function findUpNextSlot(slots) {
   const now = getUKNow();
   const dayNum = now.getDay() === 0 ? 7 : now.getDay();
@@ -143,10 +151,8 @@ function findUpNextSlot(slots) {
       if (!r) continue;
 
       if (offset === 0) {
-        if (!r.crossesMidnight && r.start > mins) {
-          list.push({ offset, start: r.start, slot: s });
-        }
-        if (r.crossesMidnight && mins < r.start) {
+        // Same day, only future start times count as up next
+        if (r.start > mins) {
           list.push({ offset, start: r.start, slot: s });
         }
       } else {
@@ -158,6 +164,7 @@ function findUpNextSlot(slots) {
   list.sort((a, b) => a.offset - b.offset || a.start - b.start);
   return list[0]?.slot || null;
 }
+  
 
 function escapeHtml(text = "") {
   return String(text)
@@ -188,22 +195,16 @@ async function loadNowAndUpNext() {
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
 if (nowEl) {
-  if (now) {
-    nowEl.textContent = `${now.dj} ${now.start}–${now.end}`;
-    nowEl.classList.remove("offair");
-    nowEl.classList.add("onair");
-  } else {
-    nowEl.textContent = "Off Air";
-    nowEl.classList.remove("onair");
-    nowEl.classList.add("offair");
-  }
-} 
+  nowEl.textContent = now ? "On Air" : "Off Air";
+}
 
-    if (upNextEl) {
-      upNextEl.innerHTML = next
-        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
-        : "No upcoming shows";
-    }
+if (upNextEl) {
+  upNextEl.innerHTML = next
+    ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
+    : "No upcoming shows";
+}
+
+   
   } catch (err) {
     console.error("Now/Up Next failed:", err);
 
