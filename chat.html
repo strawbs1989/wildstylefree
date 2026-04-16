@@ -11,59 +11,55 @@
 <body>
 
   <!-- HEADER -->
-  <header class="navbar wild-header">
-    <div class="wild-header-inner">
-
-      <a href="/index.html" class="brand-block">
-        <span class="brand-badge">WS</span>
-        <span class="brand-copy">
-          <strong>WILDSTYLE RADIO</strong>
-          <small>Chat Hub</small>
-        </span>
-      </a>
-
-      <nav class="desktop-nav" id="nav">
-        <a href="/index.html">Home</a>
-        <a href="/djs.html">DJs</a>
-		<a href="/shout.html">Shout</a>
-        <a href="/schedule.html">Schedule</a>
-        <a href="/chat.html" class="active-link">Chat</a>
-        <a href="/merch.html">Merch</a>
-      </nav>
-
-      <button class="menu-toggle" id="burger" onclick="openMenu()">☰</button>
-    </div>
-  </header>
-
-  <!-- NOW ON -->
-  <section class="now-on-stage">
-    <div class="container now-on-stage-inner">
-      <div class="now-on-left">
-        <span class="live-dot"></span>
-        <span class="nowOn">Now On</span>
+  <header class="wild-header">
+  <div class="wild-header-inner">
+    <a href="/index.html" class="brand-block">
+      <div class="brand-badge">WS</div>
+      <div class="brand-copy">
+        <strong>WILDSTYLE RADIO</strong>
+        <small>United by Beats • Powered by Passion</small>
       </div>
-      <div class="nowOnShow" id="nowon">Loading…</div>
+    </a>
+
+    <nav class="desktop-nav" id="nav">
+      <a href="/index.html">Home</a>
+      <a href="/djs.html">DJs</a>
+      <a href="/shout.html">Shout</a>
+      <a href="/schedule.html">Schedule</a>
+      <a href="/chat.html" class="active-link">Chat</a>
+      <a href="/merch.html">Merch</a>
+    </nav>
+
+    <button class="menu-toggle" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
+  </div>
+</header>
+
+<!-- NOW ON -->
+<section class="now-on-stage">
+  <div class="container now-on-stage-inner">
+    <div class="now-on-left">
+      <span class="live-dot"></span>
+      <span class="nowOn">Now On</span>
     </div>
-  </section>
+    <div class="nowOnShow" id="nowon">Loading…</div>
+  </div>
+</section>
 
-  <!-- MOBILE NAV -->
-  
-<button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
-
+<!-- MOBILE NAV -->
 <div class="nav-backdrop" id="navBackdrop" hidden></div>
 
 <aside class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-top">
-    <strong>Menu</strong>
-    <button id="navClose" aria-label="Close menu">✕</button>
+    <strong class="mobile-nav-title">Menu</strong>
+    <button id="navClose" class="mobile-nav-close" aria-label="Close menu">✕</button>
   </div>
 
   <a href="/index.html">Home</a>
   <a href="/djs.html">DJs</a>
+  <a href="/shout.html">Shout</a>
   <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html">Chat</a>
-  <a href="/request.html">Request</a>
-  <a href="/map.html">Map</a>
+  <a href="/chat.html" class="active-link">Chat</a>
+  <a href="/merch.html">Merch</a>
 </aside>
   <!-- HERO -->
   <section class="chat-hero">
