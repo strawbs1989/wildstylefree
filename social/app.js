@@ -105,9 +105,7 @@ const els = {
   requestTickerText: document.getElementById('requestTickerText'),
   requestTickerClone: document.getElementById('requestTickerClone'),
 
-  // now on / up next
-  nowOn: document.getElementById('nowon'),
-  upNext: document.getElementById('upNext'),
+  
 
   // request page
   requestForm: document.querySelector('.request-form-page'),
