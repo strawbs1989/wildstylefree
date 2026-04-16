@@ -28,8 +28,9 @@ import {
   runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
-/* === CONFIGURATION === */
-const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+/* =========================================
+   CONFIG
+========================================= */
 
 const usingPlaceholders = Object.values(firebaseConfig).some(v => String(v).includes('PASTE_'));
 
@@ -51,95 +52,12 @@ const REQUEST_STATUS_URL =
 const REQUEST_TICKER_CSV =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv';
 
-/* === UTILITIES === */
-const getUKNow = () => new Date(new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }));
+const SCHEDULE_URL =
+  'https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec';
 
-function parseTimeToMinutes(t) {
-    const s = String(t || "").trim().toLowerCase();
-    const m = s.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
-    if (!m) return null;
-    let h = parseInt(m[1], 10);
-    const mins = parseInt(m[2] || "0", 10);
-    const ampm = m[3].toLowerCase();
-    if (ampm === "pm" && h !== 12) h += 12;
-    if (ampm === "am" && h === 12) h = 0;
-    return h * 60 + mins;
-}
-
-/* === CORE LOGIC === */
-async function updateRadioDisplay() {
-    const nowEl = document.getElementById("nowon");
-    const upNextEl = document.getElementById("upNext");
-    if (!nowEl && !upNextEl) return;
-
-    try {
-        const res = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
-        const data = await res.json();
-        const slots = data.slots || [];
-
-        const now = getUKNow();
-        const nowDay = now.getDay() === 0 ? 7 : now.getDay(); // 1 (Mon) - 7 (Sun)
-        const nowMins = (now.getHours() * 60) + now.getMinutes();
-
-        const dayMap = { monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7 };
-
-        // Process Rows
-        const processed = slots.map(s => {
-            const startMins = parseTimeToMinutes(s.start);
-            const endMins = parseTimeToMinutes(s.end);
-            return {
-                ...s,
-                dayIdx: dayMap[s.day.toLowerCase().trim()],
-                startMins,
-                endMins,
-                crossesMidnight: endMins <= startMins
-            };
-        }).filter(s => s.dayIdx && s.startMins !== null);
-
-        // Find Current
-        const current = processed.find(row => {
-            if (!row.crossesMidnight) {
-                return row.dayIdx === nowDay && nowMins >= row.startMins && nowMins < row.endMins;
-            } else {
-                const prevDay = nowDay === 1 ? 7 : nowDay - 1;
-                return (row.dayIdx === nowDay && nowMins >= row.startMins) ||
-                       (row.dayIdx === prevDay && nowMins < row.endMins);
-            }
-        });
-
-        // Find Next
-        const upcoming = processed
-            .filter(row => (row.dj || "").toLowerCase() !== "free")
-            .map(row => {
-                let dayDiff = (row.dayIdx - nowDay + 7) % 7;
-                if (dayDiff === 0 && row.startMins <= nowMins) dayDiff = 7;
-                return { dayDiff, row };
-            })
-            .sort((a, b) => a.dayDiff - b.dayDiff || a.row.startMins - b.row.startMins);
-
-        const next = upcoming[0]?.row;
-
-        // Update DOM
-        if (nowEl) {
-            nowEl.textContent = current ? `${current.dj} ${current.start}–${current.end}` : "Radio Offline";
-        }
-        if (upNextEl) {
-            upNextEl.innerHTML = next
-                ? `<strong>${next.dj}</strong><br><span class="muted-inline">${next.start}–${next.end} UK</span>`
-                : "Check schedule for updates";
-        }
-
-    } catch (err) {
-        console.error("Schedule failed to load:", err);
-        if (nowEl) nowEl.textContent = "Schedule Unavailable";
-    }
-}
-
-// Run on load
-document.addEventListener("DOMContentLoaded", updateRadioDisplay);
-
- 
-
+const DAY_ORDER = [
+  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+];
 
 /* =========================================
    ELEMENTS
@@ -321,7 +239,7 @@ function getNowMinutes() {
 
 function parseTime(t) {
   t = String(t || '').trim().toLowerCase();
-  const m = t.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/);
+  const m = t.match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
   if (!m) return null;
 
   let h = parseInt(m[1], 10);
@@ -334,21 +252,6 @@ function parseTime(t) {
   return h * 60 + mins;
 }
 
-function splitTimeRange(range) {
-  const text = String(range || '').trim();
-  if (!text) return { start: '', end: '' };
-
-  const parts = text.split(/\s*[-–—]\s*/);
-  if (parts.length >= 2) {
-    return {
-      start: parts[0].trim(),
-      end: parts[1].trim()
-    };
-  }
-
-  return { start: '', end: '' };
-}
-
 function slotStartEndMinutes(slot) {
   const start = parseTime(slot.start);
   const end = parseTime(slot.end);
@@ -359,52 +262,6 @@ function slotStartEndMinutes(slot) {
     end,
     crossesMidnight: end <= start
   };
-}
-
-function normaliseSlots(data) {
-  let raw = [];
-
-  if (Array.isArray(data?.slots)) {
-    raw = data.slots;
-  } else if (Array.isArray(data)) {
-    raw = data;
-  } else if (data && typeof data === 'object') {
-    for (const [key, value] of Object.entries(data)) {
-      if (Array.isArray(value)) {
-        value.forEach(item => {
-          raw.push({
-            ...item,
-            day: item.day || key
-          });
-        });
-      }
-    }
-  }
-
-  return raw.map(slot => {
-    const split = splitTimeRange(
-      slot.timeRange ||
-      slot.time ||
-      slot.slot ||
-      slot.hours ||
-      ''
-    );
-
-    return {
-      day: normDay(slot.day || slot.dayName || slot.weekday),
-      start: String(slot.start || slot.startTime || slot.from || split.start || '').trim(),
-      end: String(slot.end || slot.endTime || slot.to || split.end || '').trim(),
-      dj: String(
-        slot.dj ||
-        slot.presenter ||
-        slot.host ||
-        slot.name ||
-        slot.show ||
-        slot.title ||
-        'Free'
-      ).trim()
-    };
-  }).filter(slot => slot.day && slot.start && slot.end);
 }
 
 function findCurrentSlot(slots) {
@@ -435,18 +292,14 @@ function findUpNextSlot(slots) {
     const day = DAY_ORDER[(dayNum - 1 + o) % 7];
 
     for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || '').trim().toLowerCase() === 'free') continue;
+      if ((s.dj || '').toLowerCase() === 'free') continue;
 
       const r = slotStartEndMinutes(s);
       if (!r) continue;
 
       if (o === 0) {
-        if (!r.crossesMidnight && r.start > mins) {
-          list.push({ o, start: r.start, s });
-        }
-        if (r.crossesMidnight && mins < r.start) {
-          list.push({ o, start: r.start, s });
-        }
+        if (!r.crossesMidnight && r.start > mins) list.push({ o, start: r.start, s });
+        if (r.crossesMidnight && mins < r.start) list.push({ o, start: r.start, s });
       } else {
         list.push({ o, start: r.start, s });
       }
@@ -466,17 +319,21 @@ async function loadNowOnAndUpNext() {
   if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
 
   try {
-    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now());
     const data = await res.json();
-    const slots = normaliseSlots(data);
+
+    const slots = (data.slots || []).map(slot => ({
+      day: normDay(slot.day),
+      start: slot.start,
+      end: slot.end,
+      dj: slot.dj || 'Free'
+    }));
 
     const now = findCurrentSlot(slots);
     const next = findUpNextSlot(slots);
 
     if (nowEl) {
-      nowEl.textContent = now
-        ? `${now.dj} ${now.start}–${now.end}`
-        : 'Off Air';
+      nowEl.textContent = now ? `${now.dj} ${now.start}–${now.end}` : 'Off Air';
     }
 
     if (upNextEl) {
@@ -504,9 +361,7 @@ async function loadNowOnAndUpNext() {
     if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
     if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
-} 
-
-
+}
 
 /* =========================================
    AUTH UI
@@ -1310,30 +1165,11 @@ function bindCoreUI() {
    AUTH STATE / STARTUP
 ========================================= */
 
-const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbyz46hBv4Sd1Qyl0vtbZ78n41RxjSn1UWydb8b36yymk8uVJeJGCLiYz7kiBQYNlaIN/exec'";
+document.addEventListener('DOMContentLoaded', () => {
+  bindCoreUI();
 
-async function loadUpNext() {
-  const el = document.getElementById("upNext");
-  if (!el) return;
-
-  try {
-    const res = await fetch(UPNEXT_URL + "?t=" + Date.now());
-    const data = await res.json();
-
-    el.innerHTML = data.dj
-      ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
-      : (data.text || "No upcoming shows");
-  } catch (err) {
-    console.error("Up Next failed:", err);
-    el.textContent = "Unavailable";
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadUpNext();
-  setInterval(loadUpNext, 60000);
-}); 
-
+  loadNowOnAndUpNext();
+  setInterval(loadNowOnAndUpNext, 60000);
 
   loadRequestsTicker();
   setInterval(loadRequestsTicker, 15000);
