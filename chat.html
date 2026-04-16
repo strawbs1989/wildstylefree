@@ -198,5 +198,43 @@
 
   <!-- SCRIPTS -->
   <script src="https://wildstyle.vip/script.js?v=6" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  const navClose = document.getElementById("navClose");
+
+  function openMenu() {
+    mobileNav?.classList.add("active");
+    if (navBackdrop) navBackdrop.hidden = false;
+    document.body.classList.add("menu-open");
+    burger?.setAttribute("aria-expanded", "true");
+    mobileNav?.setAttribute("aria-hidden", "false");
+  }
+
+  function closeMenu() {
+    mobileNav?.classList.remove("active");
+    if (navBackdrop) navBackdrop.hidden = true;
+    document.body.classList.remove("menu-open");
+    burger?.setAttribute("aria-expanded", "false");
+    mobileNav?.setAttribute("aria-hidden", "true");
+  }
+
+  burger?.addEventListener("click", openMenu);
+  navClose?.addEventListener("click", closeMenu);
+  navBackdrop?.addEventListener("click", closeMenu);
+
+  document.querySelectorAll("#mobileNav a").forEach(link => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
+  });
+});
+</script>
 </body>
 </html> 
