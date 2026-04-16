@@ -105,7 +105,7 @@ const els = {
   requestTickerText: document.getElementById('requestTickerText'),
   requestTickerClone: document.getElementById('requestTickerClone'),
 
-  
+ 
 
   // request page
   requestForm: document.querySelector('.request-form-page'),
@@ -696,38 +696,46 @@ function renderFeed(posts) {
     const canDelete = auth?.currentUser && post.uid === auth.currentUser.uid;
 
     article.innerHTML = `
-      <div class="post-top">
-        <div class="author">
-          <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
-          <div>
-            <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
-            <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
-          </div>
-        </div>
-        <span class="badge">Live Post</span>
+article.innerHTML = `
+  <div class="post-top">
+    <div class="author">
+      <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
+      <div>
+        <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+        <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
       </div>
+    </div>
+    <span class="badge">Live Post</span>
+  </div>
 
-      <p>${escapeHtml(post.text || '')}</p>
+  <p>${escapeHtml(post.text || '')}</p>
 
-      <div class="post-actions">
-        <button class="live-like-btn" data-post-id="${post.id}">
-          ❤️ <span class="live-like-count">${Number(post.likesCount || 0)}</span> Likes
-        </button>
-        <button class="comment-toggle" data-target="comments-box-${post.id}">
-          💬 Comments
-        </button>
-        ${canDelete ? `<button class="delete-post-btn" data-post-id="${post.id}">🗑 Delete</button>` : ''}
-      </div>
+  <div class="post-actions">
+    <button class="live-like-btn" data-post-id="${post.id}">
+      ❤️ <span class="live-like-count">${Number(post.likesCount || 0)}</span> Likes
+    </button>
+    <button class="comment-toggle" data-target="comments-box-${post.id}">
+      💬 Comments
+    </button>
+    ${canDelete ? `<button class="delete-post-btn" data-post-id="${post.id}">🗑 Delete</button>` : ''}
+  </div>
 
-      <div class="comments-box" id="comments-box-${post.id}">
-        <div id="comments-list-${post.id}"></div>
-        <div class="comment-form">
-          <input
-            type="text"
-            id="comment-input-${post.id}"
-            placeholder="Write a comment..."
-            maxlength="140"
-          />
+  <div class="comments-box" id="comments-box-${post.id}">
+    <div id="comments-list-${post.id}"></div>
+
+    <div class="comment-form">
+      <input
+        type="text"
+        id="comment-input-${post.id}"
+        placeholder="Write a comment..."
+        maxlength="140"
+      />
+      <button type="button" class="live-comment-submit" data-post-id="${post.id}">
+        Post
+      </button>
+    </div>
+  </div>
+`; 
           <button type="button" class="live-comment-submit" data-post-id="${post.id}">Post</button>
         </div>
       </div>
@@ -1135,7 +1143,7 @@ document.addEventListener('DOMContentLoaded', () => {
       listenForPosts();
     });
   }
-}); 
+});
 
 
 /* =========================================
@@ -1145,4 +1153,4 @@ document.addEventListener('DOMContentLoaded', () => {
 window.likePost = likePost;
 window.addComment = addComment;
 window.deletePost = deletePost;
-window.showRequestSuccess = showRequestSuccess; 
+window.showRequestSuccess = showRequestSuccess;  
