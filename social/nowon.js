@@ -133,49 +133,9 @@ function findCurrentSlot(slots) {
   return null;
 }
 
-function findUpNextSlot(slots) {
-  const now = getUKNow();
-  const dayNum = now.getDay() === 0 ? 7 : now.getDay();
-  const mins = now.getHours() * 60 + now.getMinutes();
-  const list = [];
-
-  for (let offset = 0; offset < 7; offset++) {
-    const day = DAY_ORDER[(dayNum - 1 + offset) % 7];
-
-    for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || "").trim().toLowerCase() === "free") continue;
-
-      const r = slotStartEndMinutes(s);
-      if (!r) continue;
-
-      if (offset === 0) {
-        if (r.start > mins) {
-          list.push({ offset, start: r.start, slot: s });
-        }
-      } else {
-        list.push({ offset, start: r.start, slot: s });
-      }
-    }
-  }
-
-  list.sort((a, b) => a.offset - b.offset || a.start - b.start);
-  return list[0]?.slot || null;
-}
-
-function escapeHtml(text = "") {
-  return String(text)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-async function loadNowAndUpNext() {
+async function loadNowOn() {
   const nowEl = document.getElementById("nowon");
-  const upNextEl = document.getElementById("upNext");
-
-  if (!nowEl && !upNextEl) return;
+  if (!nowEl) return;
 
   try {
     const res = await fetch(SCHEDULE_SOURCE_URL + "?t=" + Date.now(), {
@@ -188,27 +148,18 @@ async function loadNowAndUpNext() {
 
     const data = await res.json();
     const slots = normaliseSlots(data);
-    const now = findCurrentSlot(slots);
-    const next = findUpNextSlot(slots);
+    const current = findCurrentSlot(slots);
 
-    if (nowEl) {
-      nowEl.textContent = now ? "On Air" : "Off Air";
-    }
-
-    if (upNextEl) {
-      upNextEl.innerHTML = next
-        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
-        : "No upcoming shows";
-    }
+    nowEl.textContent = current
+      ? `${current.dj} ${current.start}–${current.end}`
+      : "Off Air";
   } catch (err) {
-    console.error("Now/Up Next failed:", err);
-
-    if (nowEl) nowEl.textContent = "Off Air";
-    if (upNextEl) upNextEl.textContent = "Unavailable";
+    console.error("Now On failed:", err);
+    nowEl.textContent = "Off Air";
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadNowAndUpNext();
-  setInterval(loadNowAndUpNext, 60000);
+  loadNowOn();
+  setInterval(loadNowOn, 60000);
 });
