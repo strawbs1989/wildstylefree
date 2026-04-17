@@ -1,5 +1,5 @@
 const SCHEDULE_SOURCE_URL =
-  "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+  "https://script.google.com/macros/s/AKfycbze6G605GR2QpJU8uDlilbh3ie8Wr9zpTLUmz3azHdSl1OtalHQWSlTPiUSH7oWhlc/exec";
 
 const DAY_ORDER = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
