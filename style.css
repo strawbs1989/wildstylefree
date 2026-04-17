@@ -1889,7 +1889,28 @@ section{
   background:linear-gradient(90deg,#00d1ff,#ffbe0b,#ff4d6d);
 } 
 
-/* =========================================================
+/* ===== AUTISM AWARENESS ===== */
+
+.theme-autism .season-banner{
+  background: linear-gradient(135deg, #ff3b30, #ff9500, #ffcc00, #34c759, #007aff);
+  color: #fff;
+}
+
+
+/* ===== MOTHERS DAY ===== */
+
+.theme-mothersday .season-banner{
+  background: linear-gradient(135deg, #ff7eb6, #ff4d6d);
+  color: #fff;
+}
+
+/* ===== FATHERS DAY ===== */
+
+.theme-fathersday .season-banner{
+  background: linear-gradient(135deg, #2a7bff, #1d4ed8);
+  color: #fff;
+}
+ =========================================================
    SOCIAL HOME STYLES
    Scoped so they do not break the main site
 ========================================================= */
