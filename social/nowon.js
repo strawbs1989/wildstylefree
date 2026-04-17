@@ -1,4 +1,4 @@
-const NOWON_URL = "https://script.google.com/macros/s/AKfycbw-lpdR1T2agyEsXvj_ofHTlnICKfVrscn3GxEcWH-BtFNUcIZifTorigF6uTsUL_4/exec";
+const NOWON_URL = "https://script.google.com/macros/s/AKfycbydBPqENGJ6B49CGP6IIFKD0QD-bwJ9n9VL0b8UdckOKUmOkJ77W2ooobnf4KZ9jGU/exec";
 
 async function loadNowOn() {
   const nowEl = document.getElementById("nowon");
