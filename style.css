@@ -1910,7 +1910,8 @@ section{
   background: linear-gradient(135deg, #2a7bff, #1d4ed8);
   color: #fff;
 }
- =========================================================
+
+/* =========================================================
    SOCIAL HOME STYLES
    Scoped so they do not break the main site
 ========================================================= */
