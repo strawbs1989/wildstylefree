@@ -208,9 +208,8 @@ function detectDesktopModeOnMobile() {
   }
 }
 
-
 /* =========================================
-   SCHEDULE / NOW ON / UP NEXT
+   SCHEDULE / NOW ON ONLY
 ========================================= */
 
 function normDay(day) {
@@ -341,19 +340,11 @@ function findCurrentSlot(slots) {
   return null;
 }
 
-
-
-  list.sort((a, b) => a.o - b.o || a.start - b.start);
-  return list[0]?.s || null;
-}
-
 async function loadNowOnAndUpNext() {
   const nowEl = els.nowOn;
-  const upNextEl = els.upNext;
   const scheduleNowOn = els.scheduleNowOn;
-  const scheduleUpNext = els.scheduleUpNext;
 
-  if (!nowEl && !upNextEl && !scheduleNowOn && !scheduleUpNext) return;
+  if (!nowEl && !scheduleNowOn) return;
 
   try {
     const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
@@ -361,7 +352,6 @@ async function loadNowOnAndUpNext() {
     const slots = normaliseSlots(data);
 
     const now = findCurrentSlot(slots);
-    const next = findUpNextSlot(slots);
 
     if (nowEl) {
       nowEl.textContent = now
@@ -369,24 +359,19 @@ async function loadNowOnAndUpNext() {
         : 'Off Air';
     }
 
-    
-
     if (scheduleNowOn) {
       scheduleNowOn.textContent = now
         ? `Now On: ${now.dj} (${now.start}–${now.end})`
         : 'Now On: Off Air';
     }
 
-    
   } catch (err) {
-    console.error('Now On / Up Next load failed:', err);
+    console.error('Now On load failed:', err);
 
     if (nowEl) nowEl.textContent = 'Unavailable';
-    if (upNextEl) upNextEl.textContent = 'Unavailable';
     if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
-    if (scheduleUpNext) scheduleUpNext.textContent = 'Unavailable';
   }
-} 
+}
 
 /* =========================================
    AUTH UI
