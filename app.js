@@ -341,31 +341,7 @@ function findCurrentSlot(slots) {
   return null;
 }
 
-function findUpNextSlot(slots) {
-  const { dayNum, mins } = getNowMinutes();
-  const list = [];
 
-  for (let o = 0; o < 7; o++) {
-    const day = DAY_ORDER[(dayNum - 1 + o) % 7];
-
-    for (const s of slots.filter(x => x.day === day)) {
-      if ((s.dj || '').trim().toLowerCase() === 'free') continue;
-
-      const r = slotStartEndMinutes(s);
-      if (!r) continue;
-
-      if (o === 0) {
-        if (!r.crossesMidnight && r.start > mins) {
-          list.push({ o, start: r.start, s });
-        }
-        if (r.crossesMidnight && mins < r.start) {
-          list.push({ o, start: r.start, s });
-        }
-      } else {
-        list.push({ o, start: r.start, s });
-      }
-    }
-  }
 
   list.sort((a, b) => a.o - b.o || a.start - b.start);
   return list[0]?.s || null;
@@ -393,11 +369,7 @@ async function loadNowOnAndUpNext() {
         : 'Off Air';
     }
 
-    if (upNextEl) {
-      upNextEl.innerHTML = next
-        ? `${escapeHtml(next.dj)}<br><span class="muted-inline">${escapeHtml(next.start)}–${escapeHtml(next.end)} UK</span>`
-        : 'No upcoming shows';
-    }
+    
 
     if (scheduleNowOn) {
       scheduleNowOn.textContent = now
@@ -405,11 +377,7 @@ async function loadNowOnAndUpNext() {
         : 'Now On: Off Air';
     }
 
-    if (scheduleUpNext) {
-      scheduleUpNext.textContent = next
-        ? `${next.dj} (${next.start}–${next.end})`
-        : 'No upcoming shows';
-    }
+    
   } catch (err) {
     console.error('Now On / Up Next load failed:', err);
 
