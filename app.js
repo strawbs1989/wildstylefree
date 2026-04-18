@@ -340,7 +340,7 @@ function findCurrentSlot(slots) {
   return null;
 }
 
-async function loadNowOnAndUpNext() {
+async function loadNowOnOnly() {
   const nowEl = els.nowOn;
   const scheduleNowOn = els.scheduleNowOn;
 
