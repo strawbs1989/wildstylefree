@@ -1175,24 +1175,7 @@ function bindCoreUI() {
    AUTH STATE / STARTUP
 ========================================= */
 
-const UPNEXT_URL = "https://script.google.com/macros/s/AKfycbyz46hBv4Sd1Qyl0vtbZ78n41RxjSn1UWydb8b36yymk8uVJeJGCLiYz7kiBQYNlaIN/exec'";
 
-async function loadUpNext() {
-  const el = document.getElementById("upNext");
-  if (!el) return;
-
-  try {
-    const res = await fetch(UPNEXT_URL + "?t=" + Date.now());
-    const data = await res.json();
-
-    el.innerHTML = data.dj
-      ? `${data.dj}<br><span class="muted-inline">${data.start}–${data.end} UK</span>`
-      : (data.text || "No upcoming shows");
-  } catch (err) {
-    console.error("Up Next failed:", err);
-    el.textContent = "Unavailable";
-  }
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   bindCoreUI();
