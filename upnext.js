@@ -1,5 +1,5 @@
 const UPNEXT_URL =
-  "https://script.google.com/macros/s/AKfycbyz46hBv4Sd1Qyl0vtbZ78n41RxjSn1UWydb8b36yymk8uVJeJGCLiYz7kiBQYNlaIN/exec";
+  "https://script.google.com/macros/s/AKfycbwQlh91g-HHS1NdNgSf7A09hdq5_Tspwyc_eN09t81cT4wSTWw9AnfQo8n1x6xasfst/exec";
 
 function escapeHtmlUpNext(text = "") {
   return String(text)
