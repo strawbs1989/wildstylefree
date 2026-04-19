@@ -42,7 +42,7 @@ getCountry();
    SHOUT TICKER
 ------------------------- */
 
-const SHOUTS_URL = "PASTE_YOUR_SHOUTS_API_URL_HERE";
+const SHOUTS_URL ="https://script.google.com/macros/s/AKfycbyINLpNh85HCzGF5-Noc0BDlhHsS_14nLr4Iic825owJsJYzw3MLVNgEIcKgdAXDrc/exec";
 
 async function loadShoutouts() {
   const tickerText = document.getElementById("tickerText");
