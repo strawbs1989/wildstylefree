@@ -26,13 +26,10 @@ async function getCountry() {
     }
     
     const data = await res.json();
-    
-    // Validate API response
-    if (!data.success) {
-      throw new Error(data.message || "API returned error");
-    }
-    
-    userCountry = data.country || "Unknown Country";
+if (!data.success) {
+  throw new Error(data.message || "API request failed");
+}
+userCountry = data.country || "Unknown Country";
 
     if (countryEl) {
       countryEl.textContent = "🌍 Listener from: " + userCountry;
