@@ -20,7 +20,10 @@ async function getCountry() {
 
   try {
     const res = await fetch("https://ipwho.is/");
-    
+if (!res.ok) {
+  throw new Error(`HTTP error! status: ${res.status}`);
+}
+const data = await res.json();
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
