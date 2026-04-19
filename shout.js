@@ -20,7 +20,18 @@ async function getCountry() {
 
   try {
     const res = await fetch("https://ipwho.is/");
+    
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    
     const data = await res.json();
+    
+    // Validate API response
+    if (!data.success) {
+      throw new Error(data.message || "API returned error");
+    }
+    
     userCountry = data.country || "Unknown Country";
 
     if (countryEl) {
@@ -34,7 +45,6 @@ async function getCountry() {
     }
   }
 }
-
 getCountry();
 
 // 🎤 START RECORDING
