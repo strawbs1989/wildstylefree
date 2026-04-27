@@ -3290,3 +3290,14 @@ NOW ON
   border:1px solid rgba(35,26,53,.08);
 } 
 
+/* =====================
+PROMO
+======================= */
+
+.promo-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
