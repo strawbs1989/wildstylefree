@@ -3349,3 +3349,43 @@ NOW ON
   height: 100%;
   object-fit: cover; /* crops nicely */
 }
+
+/* =========================
+   SUPPORT PANELS
+========================= */
+
+.support-img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 18px;
+  flex-shrink: 0;
+}
+
+/* =========================
+   FANS SECTION
+========================= */
+
+.fans-image {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 18px;
+  display: block;
+  margin: 0 auto;
+  transition: 0.3s ease;
+}
+
+.fans-image:hover {
+  transform: scale(1.03);
+}
+
+.fans-text {
+  text-align: center;
+  margin-top: 12px;
+  opacity: 0.85;
+}
+
+.fans-link {
+  display: block;
+  text-decoration: none;
+}
