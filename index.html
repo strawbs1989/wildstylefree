@@ -458,17 +458,7 @@ Every Wednesday!!!</p>
     mobileNav?.setAttribute('aria-hidden', 'true');
   }
 
-  function openAuthModal() {
-    authOverlay?.classList.add('open');
-    authModal?.classList.add('open');
-    authModal?.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeAuthModal() {
-    authOverlay?.classList.remove('open');
-    authModal?.classList.remove('open');
-    authModal?.setAttribute('aria-hidden', 'true');
-  }
+  
 
   if (burger) burger.addEventListener('click', openMenu);
   if (navClose) navClose.addEventListener('click', closeMenu);
@@ -481,16 +471,7 @@ Every Wednesday!!!</p>
     });
   }
 
-  if (openAuthBtnMobile) {
-    openAuthBtnMobile.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeMenu();
-      openAuthModal();
-    });
-  }
-
-  if (closeAuthBtn) closeAuthBtn.addEventListener('click', closeAuthModal);
-  if (authOverlay) authOverlay.addEventListener('click', closeAuthModal);
+  
 
   window.addEventListener('resize', () => {
     if (window.innerWidth > 900) {
