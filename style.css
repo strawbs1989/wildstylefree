@@ -382,7 +382,7 @@ button,input,textarea{font:inherit}
   display:flex;
   white-space:nowrap;
   width:max-content;
-  animation:scrollTicker 38s linear infinite;
+  animation:scrollTicker 60s linear infinite;
 }
 .request-ticker div{padding:14px 22px;font-weight:800;color:#fff}
 .request-ticker-wrap:hover .request-ticker{animation-play-state:paused}
