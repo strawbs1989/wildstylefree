@@ -593,28 +593,40 @@ function openAuth() {
   const modal = document.getElementById('authModal');
   const overlay = document.getElementById('authOverlay');
 
-  if (overlay) overlay.classList.add('open');
-
-  if (modal) {
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-  }
-
-  document.body.classList.add('modal-open');
+  overlay?.classList.add('open');
+  modal?.classList.add('open');
+  modal?.setAttribute('aria-hidden', 'false');
 }
 
 function closeAuth() {
   const modal = document.getElementById('authModal');
   const overlay = document.getElementById('authOverlay');
 
-  if (overlay) overlay.classList.remove('open');
+  overlay?.classList.remove('open');
+  modal?.classList.remove('open');
+  modal?.setAttribute('aria-hidden', 'true');
+}
 
-  if (modal) {
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
+function switchAuthTab(tabName) {
+  document.querySelectorAll('[data-auth-tab]').forEach(tab => {
+    tab.classList.toggle(
+      'active',
+      tab.dataset.authTab === tabName
+    );
+  });
+
+  const loginPanel = document.getElementById('loginPanel');
+  const signupPanel = document.getElementById('signupPanel');
+
+  if (loginPanel) {
+    loginPanel.style.display =
+      tabName === 'login' ? 'block' : 'none';
   }
 
-  document.body.classList.remove('modal-open');
+  if (signupPanel) {
+    signupPanel.style.display =
+      tabName === 'signup' ? 'block' : 'none';
+  }
 } 
 
 
