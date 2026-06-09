@@ -588,6 +588,39 @@ async function handleSignup(e) {
   }
 }
 
+
+function openAuth() {
+  const modal = document.getElementById('authModal');
+  const overlay = document.getElementById('authOverlay');
+
+  if (overlay) overlay.classList.add('open');
+
+  if (modal) {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  document.body.classList.add('modal-open');
+}
+
+function closeAuth() {
+  const modal = document.getElementById('authModal');
+  const overlay = document.getElementById('authOverlay');
+
+  if (overlay) overlay.classList.remove('open');
+
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  document.body.classList.remove('modal-open');
+} 
+
+
+
+
+
 function bindAuthUI() {
   if (els.openAuthBtn) {
     els.openAuthBtn.addEventListener('click', async (e) => {
