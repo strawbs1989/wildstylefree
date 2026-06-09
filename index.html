@@ -1,174 +1,178 @@
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wildstyle Social Beta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=1">
+  <link rel="stylesheet" href="https://wildstyle.vip/social/style.css?v=3">
 </head>
 <body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/social/index.html">
+        <div class="brand-badge">WS</div>
+        <div class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>Social Beta</small>
+        </div>
+      </a>
 
-  <div class="social-home">
-    <div class="shell">
+      <nav class="nav desktop-nav">
+  <a href="/social/index.html" class="active">Home</a>
+  <a href="/social/djs.html">DJs</a>
+  <a href="/social/schedule.html">Schedule</a>
+  <a href="/social/chat.html">Chat</a>
+  <a href="/social/request.html">Request</a>
+  <a href="/social/map.html">Map</a>
+  <button id="openAuthBtn">Login</button>
+</nav>
 
-      <header class="topbar">
-  <a class="brand" href="/index.html">
-    <div class="brand-badge">WS</div>
-    <div class="brand-copy">
-      <strong>WILDSTYLE RADIO</strong>
-      <small>United by Beats • Powered by Passion</small>
-    </div>
-  </a>
+      <button class="burger" id="burger" aria-label="Open menu">☰</button>
+    </header>
 
-  <nav class="nav desktop-nav">
-    <a href="/index.html" class="active">Home</a>
-    <a href="/djs.html">DJs</a>
-    <a href="/schedule.html">Schedule</a>
-    <a href="/chat.html">Chat</a>
-    <a href="/request.html">Request</a>
-    <a href="/listenermap.html">Map</a>
-    <button id="openAuthBtn">Login</button>
-  </nav>
+    <div class="nav-backdrop" id="navBackdrop" hidden></div>
 
-  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
-</header>
-
-<div class="nav-backdrop" id="navBackdrop" hidden></div>
-
-<aside class="mobile-nav" id="mobileNav" aria-hidden="true">
+    <aside class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-top">
     <strong>Menu</strong>
     <button id="navClose" aria-label="Close menu">✕</button>
   </div>
-
   <button id="openAuthBtnMobile" class="mobile-login-btn">Login</button>
   <a href="/index.html" class="active">Home</a>
   <a href="/djs.html">DJs</a>
   <a href="/schedule.html">Schedule</a>
   <a href="/chat.html">Chat</a>
   <a href="/request.html">Request</a>
-  <a href="/listenermap.html">Map</a>
+  <a href="/map.html">Map</a>
 </aside>
 
-      <section class="hero">
-        <div class="hero-head">
-          <span>Wildstyle Social Beta</span>
-          <div class="nowOnShow" id="nowon">Loading…</div>
-        </div>
-
-        <div class="hero-body">
-          <div class="hero-copy">
-            <h1>Radio Meets Community</h1>
-            <p>
-              Wildstyle Social brings your station, DJs, listeners, events, requests,
-              shout-outs, and community updates into one live social platform.
-              Built for radio culture, not just another feed.
-            </p>
-
-            <div class="hero-actions">
-              <a href="#create-post" class="btn-primary">Create a Post</a>
-              <a href="/chat.html" class="btn-secondary">Open Live Chat</a>
-            </div>
-          </div>
-
-          <div class="hero-status">
-            <div class="mini-card">
-              <h4>Station Pulse</h4>
-              <p>Stream online • Requests open • Shout-outs live • Listener map active.</p>
-            </div>
-
-            <div class="mini-row">
-              <div class="mini-card">
-                <h4>Up Next</h4>
-                <p id="upNext">Loading…</p>
-              </div>
-
-              <div class="mini-card">
-                <h4>Tonight’s Mood</h4>
-                <p>Multi-genre energy with community takeover vibes.</p>
-              </div>
-            </div>
+    <section class="hero">
+      <div class="hero-head">
+        <span>Wildstyle Social Beta</span>
+         <!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
+    </div>
+  </section>
+      </div>
+      <div class="hero-body">
+        <div class="hero-copy">
+          <h1>Radio Meets Community</h1>
+          <p>Wildstyle Social brings your station, DJs, listeners, events, requests, shout-outs, and community updates into one live social platform. Built for radio culture, not just another feed.</p>
+          <div class="hero-actions">
+            <a href="#" class="btn-primary">Create a Post</a>
+            <a href="#" class="btn-secondary">Open Live Chat</a>
           </div>
         </div>
-      </section>
 
-      <div class="auth-overlay" id="authOverlay"></div>
+        <div class="hero-status">
+          <div class="mini-card">
+            <h4>Station Pulse</h4>
+            <p>Stream online • Requests open • Shout-outs live • Listener map active.</p>
+          </div>
+          <div class="mini-row">
+  <div class="mini-card">
+    <h4>Up Next</h4>
+    <p id="upNext">Loading…</p>
+  </div>
 
-      <section class="auth-modal" id="authModal" aria-hidden="true">
-        <div class="auth-head">
-          <h2>Wildstyle Login</h2>
-          <button class="auth-close" id="closeAuthBtn" type="button">✕</button>
+  <div class="mini-card">
+    <h4>Tonight’s Mood</h4>
+    <p>Multi-genre energy with community takeover vibes.</p>
+  </div>
+</div>
         </div>
+      </div>
+    </section>
 
-        <div class="auth-tabs">
-          <button class="auth-tab active" data-auth-tab="login" type="button">Login</button>
-          <button class="auth-tab" data-auth-tab="signup" type="button">Sign Up</button>
-        </div>
+    <div class="auth-overlay" id="authOverlay"></div>
 
-        <form class="auth-form active" id="loginForm" data-auth-panel="login">
-          <input id="loginEmail" type="email" placeholder="Email address" required>
-          <input id="loginPassword" type="password" placeholder="Password" required>
-          <button type="submit" class="btn-primary">Login to Wildstyle</button>
-        </form>
+    <section class="auth-modal" id="authModal" aria-hidden="true">
+      <div class="auth-head">
+        <h2>Wildstyle Login</h2>
+        <button class="auth-close" id="closeAuthBtn" type="button">✕</button>
+      </div>
 
-        <form class="auth-form" id="signupForm" data-auth-panel="signup">
-          <input id="signupDisplayName" type="text" placeholder="Display name" required>
-          <input id="signupEmail" type="email" placeholder="Email address" required>
-          <input id="signupPassword" type="password" placeholder="Create password" required>
-          <button type="submit" class="btn-primary">Create account</button>
-        </form>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth-tab="login" type="button">Login</button>
+        <button class="auth-tab" data-auth-tab="signup" type="button">Sign Up</button>
+      </div>
 
-        <p class="auth-note" id="authStatus">Loading…</p>
-      </section>
+      <form class="auth-form active" id="loginForm" data-auth-panel="login">
+        <input id="loginEmail" type="email" placeholder="Email address" required>
+        <input id="loginPassword" type="password" placeholder="Password" required>
+        <button type="submit" class="btn-primary">Login to Wildstyle</button>
+      </form>
 
-      <main class="main">
-        <section class="main-left">
-          <article class="card" id="create-post">
-            <div class="card-head">
-              <h2>Create Post</h2>
-              <span class="badge">Listener Post</span>
-            </div>
+      <form class="auth-form" id="signupForm" data-auth-panel="signup">
+        <input id="signupDisplayName" type="text" placeholder="Display name" required>
+        <input id="signupEmail" type="email" placeholder="Email address" required>
+        <input id="signupPassword" type="password" placeholder="Create password" required>
+        <button type="submit" class="btn-primary">Create account</button>
+      </form>
 
-            <div class="card-body composer">
-              <textarea id="postInput" placeholder="What’s happening in your Wildstyle world?"></textarea>
+      <p class="auth-note" id="authStatus">Login/Sign-Up.</p>
+    </section>
 
-              <div class="composer-tools">
-                <div class="tool-pills">
-                  <span class="pill">📷 Add image</span>
-                  <span class="pill">🎧 Tag DJ</span>
-                  <span class="pill">🎉 Shout-out</span>
-                </div>
+    <main class="main">
+      <section class="main-left">
+        <article class="card">
+          <div class="card-head">
+            <h2>Create Post</h2>
+            <span class="badge">Listener Post</span>
+          </div>
+          <div class="card-body composer">
+            <textarea id="postInput" placeholder="What’s happening in your Wildstyle world?"></textarea>
 
-                <button type="button" class="btn-primary" id="createPostBtn">Post Now</button>
+            <div class="composer-tools">
+              <div class="tool-pills">
+                <span class="pill">📷 Add image</span>
+                <span class="pill">🎧 Tag DJ</span>
+                <span class="pill">🎉 Shout-out</span>
               </div>
 
-              <div id="postStatus"></div>
+              <button type="button" class="btn-primary" id="createPostBtn">Post Now</button>
             </div>
-          </article>
+
+            <div id="postStatus"></div>
+          </div>
+        </article>
+		
+		
+		<article class="card">
+        <div class="card-head">
+        <h2>Tunein</h2>
+        <span class="badge">Tune into Our DJs</span>
+        </div>
+        <div class="card-body composer">
+        <div class="player-frame-wrap">
+      <iframe src="https://wildstyle.vip/player.html?v=3" height="240" width="400" title="Wildstyle Player"></iframe>
+    </div>
+  </div>
+</article> 
 
           <article class="card">
-            <div class="card-head">
-              <h2>Tunein</h2>
-              <span class="badge">Tune into Our DJs</span>
-            </div>
-
-            <div class="card-body composer">
-              <div class="player-frame-wrap">
-                <iframe
-                  src="https://wildstyle.vip/player.html?v=3"
-                  height="240"
-                  width="400"
-                  title="Wildstyle Player">
-                </iframe>
+          <div class="card-head"><h2>DJ Spotlight</h2></div>
+          <div class="card-body">
+            <div class="spotlight">
+              <img src="https://wildstyle.vip/images/djnala.jpg" alt="DJ spotlight">
+              <div>
+                <strong class="spotlight-title">DJ Becka</strong>
+                <p>Bringing the hottest multi-genre mixes every week with proper community energy.</p>
               </div>
             </div>
-          </article>
-
-<!-- Epilepsy Support -->
+          </div>
+        </article>
+		
+		<!-- Epilepsy Support -->
 <article class="portal-panel">
   <div class="portal-head">
     <h2>💜 Epilepsy Support</h2>
@@ -251,233 +255,202 @@
 
   </div>
 </article>
+        
+        <article class="card">
+          <div class="card-head">
+            <h2>Live Feed</h2>
+            <span class="badge">Beta Community</span>
+          </div>
+          <div class="card-body feed" id="feedContainer"></div>
+        </article>
+      </section>
 
-
-
-
-<article class="card">
-            <div class="card-head">
-              <h2>DJ Spotlight</h2>
-            </div>
-
-            <div class="card-body">
-              <div class="spotlight">
-                <img src="https://wildstyle.vip/images/" alt="DJ spotlight">
-                <div>
-                  <strong class="spotlight-title">DJ </strong>
-                  <p>Bringing the hottest Mixes
-Every Wednesday!!!</p>
-                </div>
+      <aside class="sidebar">
+        <article class="card profile-card">
+          <div class="card-head">
+            <h2>Your Profile</h2>
+            <span class="badge">Beta Wiring</span>
+          </div>
+          <div class="card-body">
+            <div class="profile-top">
+              <div class="profile-avatar" id="profileAvatar">WL</div>
+              <div>
+                <strong class="profile-name" id="profileName">Guest Listener</strong>
+                <div class="profile-role" id="profileRole">Listener • Not signed in</div>
               </div>
             </div>
-          </article>
 
-		  <article class="portal-panel">
-  <div class="portal-head">
-    <h2>Live Events</h2>
-  </div>
-  <div class="portal-box-body">
-    <div id="Events"> Events</div>
+            <p class="profile-bio" id="profileBio">Log in to post, comment, like, and build your Wildstyle profile.</p>
 
-    <div class="shoutout-ticker" aria-label="Shout-outs">
-      <div class="Events" id="Events">
-        <span class="event" id="event"> 
-<div id='listing_widget_299725' style='width:100%'><iframe frameborder="0" border="0" allowTransparency="true" width="100%" height="500" src="https://www.skiddle.com/embeds/listings-widget/?promoterId=299725&fetchLimit=8&orderBy=date&primaryColour=%2346C3BD&mobileViewType=list&desktopViewType=card" />
-</div>
-<p style='margin-top:0;font-size:8pt;line-height:13px;'>
+            <div class="profile-stats">
+              <div><strong id="profilePosts">0</strong><span>Posts</span></div>
+              <div><strong>0</strong><span>Followers</span></div>
+              <div><strong>0</strong><span>Following</span></div>
+            </div>
+
+            <div class="profile-actions" id="profileActions">
+              <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
+              <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>Quick Access</h2></div>
+          <div class="card-body quick-grid">
+            <a class="quick-link" href="#">Schedule</a>
+            <a class="quick-link" href="#">Chat Room</a>
+            <a class="quick-link" href="#">Requests</a>
+            <a class="quick-link" href="#">Listener Map</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>DJ Spotlight</h2></div>
+          <div class="card-body">
+            <div class="spotlight">
+              <img src="https://wildstyle.vip/social/images/becka.jpg" alt="DJ spotlight">
+              <div>
+                <strong class="spotlight-title">DJ Becka</strong>
+                <p>Bringing the hottest multi-genre mixes every week with proper community energy.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>Live Requests</h2></div>
+          <div class="card-body">
+            <div class="request-ticker-wrap">
+              <div class="request-ticker">
+                <div id="requestTickerText">Loading live requests…</div>
+                <div id="requestTickerClone"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>Events</h2></div>
+          <div class="card-body list">
+            <div class="list-item">
+              <div>
+                <p style='margin-top:0;font-size:8pt;line-height:13px;'>
   <a href='https://www.skiddle.com/' style='color:#666'></a>
 </p>
-  </span>
-        <span class="events" id="events" aria-hidden="true"></span>
+              </div>
+              <span class="badge">Upcoming</span>
+            </div>
+
+            <div class="list-item">
+              <div>
+                <strong>Unsigned Spotlight Night</strong>
+                <small>Thursday • 7pm UK</small>
+              </div>
+              <span class="badge">Promo</span>
+            </div>
+          </div>
+        </article>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <h3>Wildstyle Social Beta</h3>
+        <p>United by beats. Powered by volunteer passion. Built to bring the station and community together in one social home.</p>
       </div>
-    </div>
-  </div>
-</article>
-
-<article class="card">
-            <div class="card-head">
-              <h2>Live Requests</h2>
-            </div>
-
-            <div class="card-body">
-              <div class="request-ticker-wrap">
-                <div class="request-ticker">
-                  <div id="requestTickerText">Loading live requests…</div>
-                  <div id="requestTickerClone"></div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-
-          <article class="card">
-            <div class="card-head">
-              <h2>Live Feed</h2>
-              <span class="badge">Beta Community</span>
-            </div>
-
-            <div class="card-body feed" id="feedContainer"></div>
-          </article>
-        </section>
-
-        <aside class="sidebar">
-          <article class="card profile-card">
-            <div class="card-head">
-              <h2>Your Profile</h2>
-              <span class="badge">Beta Wiring</span>
-            </div>
-
-            <div class="card-body">
-              <div class="profile-top">
-                <div class="profile-avatar" id="profileAvatar">WL</div>
-                <div>
-                  <strong class="profile-name" id="profileName">Guest Listener</strong>
-                  <div class="profile-role" id="profileRole">Listener • Not signed in</div>
-                </div>
-              </div>
-
-              <p class="profile-bio" id="profileBio">
-                Log in to post, comment, like, and build your Wildstyle profile.
-              </p>
-
-              <div class="profile-stats">
-                <div><strong id="profilePosts">0</strong><span>Posts</span></div>
-                <div><strong>0</strong><span>Followers</span></div>
-                <div><strong>0</strong><span>Following</span></div>
-              </div>
-
-              <div class="profile-actions" id="profileActions">
-                <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
-                <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-head">
-              <h2>Quick Access</h2>
-            </div>
-
-            <div class="card-body quick-grid">
-              <a class="quick-link" href="/schedule.html">Schedule</a>
-              <a class="quick-link" href="/chat.html">Chat Room</a>
-              <a class="quick-link" href="/request.html">Requests</a>
-              <a class="quick-link" href="/map.html">Listener Map</a>
-            </div>
-          </article>
-
-          
-
-          
-
-          <article class="card">
-            <div class="card-head">
-              <h2>Events</h2>
-            </div>
-
-            <div class="card-body list">
-              <div class="list-item">
-                <div>
-                  <strong>TikTok Live Takeover</strong>
-                  <small>Sunday • 8pm UK</small>
-                </div>
-                <span class="badge">Upcoming</span>
-              </div>
-
-              <div class="list-item">
-                <div>
-                  <strong>Unsigned Spotlight Night</strong>
-                  <small>Thursday • 7pm UK</small>
-                </div>
-                <span class="badge">Promo</span>
-              </div>
-            </div>
-          </article>
-        </aside>
-      </main>
-
-      <footer class="footer">
-        <div>
-          <h3>Wildstyle Social Beta</h3>
-          <p>United by beats. Powered by volunteer passion. Built to bring the station and community together in one social home.</p>
-        </div>
-
-        <div>
-          <h3>Beta Modules</h3>
-          <ul>
-            <li>Live player</li>
-            <li>Community feed</li>
-            <li>Schedule + requests</li>
-            <li>DJ spotlight</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3>Next Up</h3>
-          <ul>
-            <li>Real comments</li>
-            <li>Real likes</li>
-            <li>Profile editing</li>
-            <li>DJ verified badges</li>
-          </ul>
-        </div>
-      </footer>
-
-    </div>
+      <div>
+        <h3>Beta Modules</h3>
+        <ul>
+          <li>Live player</li>
+          <li>Community feed</li>
+          <li>Schedule + requests</li>
+          <li>DJ spotlight</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Next Up</h3>
+        <ul>
+          <li>Real comments</li>
+          <li>Real likes</li>
+          <li>Profile editing</li>
+          <li>DJ verified badges</li>
+        </ul>
+      </div>
+    </footer>
   </div>
 
-  <script type="module" src="https://wildstyle.vip/app.js?v=11"></script>
-<script src="https://wildstyle.vip/upnext.js?v=99"></script>
-  <script type="module" src="https://wildstyle.vip/shout.js?v=1"></script>
-  <script src="https://wildstyle.vip/nowon.js?v=1"></script>
-  <script src="https://wildstyle.vip/theme.js"></script>
-  <script>
-  const burger = document.getElementById('burger');
-  const mobileNav = document.getElementById('mobileNav');
-  const navBackdrop = document.getElementById('navBackdrop');
-  const navClose = document.getElementById('navClose');
-  const openAuthBtn = document.getElementById('openAuthBtn');
-  const openAuthBtnMobile = document.getElementById('openAuthBtnMobile');
-  const authOverlay = document.getElementById('authOverlay');
-  const authModal = document.getElementById('authModal');
-  const closeAuthBtn = document.getElementById('closeAuthBtn');
+  <script type="module" src="/social/app.js?v=30"></script>
+<script src="/social/nowon.js?v=1"></script>
+<script src="/theme.js"></script>
 
-  function openMenu() {
-    mobileNav?.classList.add('active');
-    if (navBackdrop) navBackdrop.hidden = false;
-    document.body.classList.add('menu-open');
-    burger?.setAttribute('aria-expanded', 'true');
-    mobileNav?.setAttribute('aria-hidden', 'false');
-  }
+<script>
+const burger = document.getElementById('burger');
+const mobileNav = document.getElementById('mobileNav');
+const navBackdrop = document.getElementById('navBackdrop');
+const navClose = document.getElementById('navClose');
+const openAuthBtn = document.getElementById('openAuthBtn');
+const openAuthBtnMobile = document.getElementById('openAuthBtnMobile');
+const authOverlay = document.getElementById('authOverlay');
+const authModal = document.getElementById('authModal');
+const closeAuthBtn = document.getElementById('closeAuthBtn');
 
-  function closeMenu() {
-    mobileNav?.classList.remove('active');
-    if (navBackdrop) navBackdrop.hidden = true;
-    document.body.classList.remove('menu-open');
-    burger?.setAttribute('aria-expanded', 'false');
-    mobileNav?.setAttribute('aria-hidden', 'true');
-  }
+function openMenu() {
+  mobileNav?.classList.add('active');
+  if (navBackdrop) navBackdrop.hidden = false;
+  document.body.classList.add('menu-open');
+  burger?.setAttribute('aria-expanded', 'true');
+  mobileNav?.setAttribute('aria-hidden', 'false');
+}
 
-  
+function closeMenu() {
+  mobileNav?.classList.remove('active');
+  if (navBackdrop) navBackdrop.hidden = true;
+  document.body.classList.remove('menu-open');
+  burger?.setAttribute('aria-expanded', 'false');
+  mobileNav?.setAttribute('aria-hidden', 'true');
+}
 
-  if (burger) burger.addEventListener('click', openMenu);
-  if (navClose) navClose.addEventListener('click', closeMenu);
-  if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+function openAuthModal() {
+  authOverlay?.classList.add('open');
+  authModal?.classList.add('open');
+  authModal?.setAttribute('aria-hidden', 'false');
+}
 
-  if (openAuthBtn) {
-    openAuthBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuthModal();
-    });
-  }
+function closeAuthModal() {
+  authOverlay?.classList.remove('open');
+  authModal?.classList.remove('open');
+  authModal?.setAttribute('aria-hidden', 'true');
+}
 
-  
+if (burger) burger.addEventListener('click', openMenu);
+if (navClose) navClose.addEventListener('click', closeMenu);
+if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
 
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 900) {
-      closeMenu();
-    }
+if (openAuthBtn) {
+  openAuthBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openAuthModal();
   });
-</script>
+}
+
+if (openAuthBtnMobile) {
+  openAuthBtnMobile.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeMenu();
+    openAuthModal();
+  });
+}
+
+if (closeAuthBtn) closeAuthBtn.addEventListener('click', closeAuthModal);
+if (authOverlay) authOverlay.addEventListener('click', closeAuthModal);
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 900) {
+    closeMenu();
+  }
+});
+</script> 
+
 </body>
 </html> 

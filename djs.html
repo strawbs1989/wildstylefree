@@ -1,403 +1,483 @@
-<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle DJs</title>
+  <title>Wildstyle Radio — DJs</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=11">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://wildstyle.vip/social/style.css">
 </head>
-
 <body>
 
-  <!-- HEADER -->
-    <header class="wild-header">
-  <div class="wild-header-inner">
-    <a href="/index.html" class="brand-block">
-      <div class="brand-badge">WS</div>
-      <div class="brand-copy">
-        <strong>WILDSTYLE RADIO</strong>
-        <small>United by Beats • Powered by Passion</small>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/social/index.html">
+        <div class="brand-badge">WS</div>
+        <div class="brand-copy">
+          <strong>WILDSTYLE RADIO</strong>
+          <small>The Wildstyle Crew</small>
+        </div>
+      </a>
+
+      <nav class="nav desktop-nav">
+  <a href="/social/index.html">Home</a>
+  <a href="/social/djs.html">DJs</a>
+  <a href="/social/schedule.html">Schedule</a>
+  <a href="/social/chat.html">Chat</a>
+  <a href="/social/request.html">Request</a>
+  <a href="/social/map.html" class="active">Map</a>
+</nav> 
+
+      <button class="burger" id="burger" aria-label="Open menu">☰</button>
+    </header>
+
+    <div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+    <aside class="mobile-nav" id="mobileNav">
+      <div class="mobile-nav-top">
+        <strong>Menu</strong>
+        <button id="navClose" aria-label="Close menu">✕</button>
       </div>
-    </a>
+      <a href="/social/index.html">Home</a>
+      <a href="/social/djs.html">DJs</a>
+      <a href="/social/schedule.html">Schedule</a>
+      <a href="/social/chat.html">Chat</a>
+      <a href="/social/request.html">Request</a>
+      <a href="/social/map.html" class="active">Map</a>
+    </aside>
 
-    <nav class="desktop-nav" id="nav">
-      <a href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a>
-      <a href="/shout.html">Shout</a>
-      <a href="/schedule.html">Schedule</a>
-      <a href="/chat.html" class="active-link">Chat</a>
-      <a href="/merch.html">Merch</a>
-    </nav>
-
-    <button class="menu-toggle" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
-  </div>
-</header>
-
-<!-- NOW ON -->
-<section class="now-on-stage">
-  <div class="container now-on-stage-inner">
-    <div class="now-on-left">
-      <span class="live-dot"></span>
-      <span class="nowOn">Now On</span>
+    <section class="hero">
+      <div class="hero-head">
+        <span>Meet The Wildstyle DJs</span>
+        <span class="hero-pill">Live Shows • Volunteer Crew</span>
+		<!-- NOW ON -->
+  <section class="now-on-stage">
+    <div class="container now-on-stage-inner">
+      <div class="now-on-left">
+        <span class="live-dot"></span>
+        <span class="nowOn">Now On</span>
+      </div>
+      <div class="nowOnShow" id="nowon">Loading…</div>
     </div>
-    <div class="nowOnShow" id="nowon">Loading…</div>
-  </div>
-</section>
+  </section>
+      </div>
 
-<!-- MOBILE NAV -->
-<div class="nav-backdrop" id="navBackdrop" hidden></div>
+      <div class="hero-body">
+        <div class="hero-copy">
+          <h1>The Faces Behind The Sound</h1>
+          <p>
+            Meet the DJs powering Wildstyle Radio. From multi-genre selectors to specialist vibe-setters, every presenter brings their own flavour to the station.
+          </p>
 
-<aside class="mobile-nav" id="mobileNav" aria-hidden="true">
-  <div class="mobile-nav-top">
-    <strong class="mobile-nav-title">Menu</strong>
-    <button id="navClose" class="mobile-nav-close" aria-label="Close menu">✕</button>
-  </div>
+          <div class="hero-actions">
+            <a href="schedule.html" class="btn-primary">View Schedule</a>
+            <a href="chat.html" class="btn-secondary">Chat To DJs</a>
+          </div>
+        </div>
 
-  <a href="/index.html">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/shout.html">Shout</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html" class="active-link">Chat</a>
-  <a href="/merch.html">Merch</a>
-</aside>
+        <div class="hero-card">
+          <h3>Station Crew Snapshot</h3>
+          <p>
+            Wildstyle is built by a loyal, sociable team of live presenters. Every set is powered by community energy, passion, and proper radio vibes.
+          </p>
 
-  <!-- PAGE HERO -->
-  <section class="dj-page-hero">
-    <div class="dj-page-hero-inner">
-      <span class="page-kicker">MEET THE CREW</span>
-      <h1>Meet The Wildstyle DJs</h1>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <strong>12</strong>
+              <span>Active DJs</span>
+            </div>
+            <div class="hero-stat">
+              <strong>Live Only</strong>
+              <span>No pre-records</span>
+            </div>
+            <div class="hero-stat">
+              <strong>Multi-Genre</strong>
+              <span>All styles welcome</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="filters">
+      <div class="filter-row">
+        <input id="djSearch" class="search" type="text" placeholder="Search DJs by name, genre or vibe...">
+
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="multi">Multi-Genre</button>
+        <button class="filter-btn" data-filter="dance">Dance</button>
+        <button class="filter-btn" data-filter="urban">Urban</button>
+        <button class="filter-btn" data-filter="specialist">Specialist</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Our DJs</h2>
+        <span id="djCount">13 DJs</span>
+      </div>
+
+      <div class="section-body">
+        <div class="dj-grid" id="djGrid">
+
+          <article class="dj-card" data-dj="DJ EchoFalls" data-category="multi" data-search="dj echofalls multi genre sunday evening high energy">
+            <div class="dj-image-wrap">
+              <img src="/social/images/echo1.png" alt="DJ EchoFalls">
+              <span class="dj-badge">Featured</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ EchoFalls</h3>
+			  <h3>Big Boss</h3>
+              <div class="dj-meta">
+                <span class="tag">Multi-Genre</span>
+                <span class="tag">High Energy</span>
+              </div>
+              <p>Bringing powerful multi-genre sets with upbeat energy, cheeky crowd vibes, and a proper Wildstyle feel.</p>
+              <div class="slot">Sunday • 8pm–9pm<small>TikTok live sessions & station takeover vibes</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-dj="DJ Nala" data-category="dance" data-search="dj nala dance club anthem weekend party">
+            <div class="dj-image-wrap">
+              <img src="/social/images/djnala.jpg" alt="DJ Nala">
+              <span class="dj-badge">On Rotation</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Nala</h3>
+              <div class="dj-meta">
+                <span class="tag">Dance</span>
+                <span class="tag">Club Anthems</span>
+              </div>
+              <p>Serving feel-good club flavours, catchy anthems, and dancefloor-ready energy for the Wildstyle community.</p>
+              <div class="slot">Thursday • 7pm–8pm<small>Big hooks, big beats, big vibes</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-dj="Matt Baker" data-category="urban" data-search="matt baker urban rnb hip hop chilled groove">
+            <div class="dj-image-wrap">
+              <img src="/social/images/matt.jpeg" alt="Matt Baker">
+              <span class="dj-badge">Tonight</span>
+            </div>
+            <div class="dj-body">
+              <h3>Matt Baker</h3>
+              <div class="dj-meta">
+                <span class="tag">Urban</span>
+                <span class="tag">R&B / Hip-Hop</span>
+              </div>
+              <p>Smooth urban blends, laid-back transitions, and after-dark selections that keep the mood right all night.</p>
+              <div class="slot">Tonight • 9pm–10pm<small>Late night groove with edge</small></div>
+            </div>
+          </article>
+
+          <article class="dj-card" data-dj="DJ SimonPro" data-category="specialist" data-search="simonpro old skool classics throwback party">
+            <div class="dj-image-wrap">
+              <img src="/social/images/dj-simonpro.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Classic Cuts</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ SimonPro</h3>
+              <div class="dj-meta">
+                <span class="tag">Old Skool</span>
+                <span class="tag">Throwbacks</span>
+              </div>
+              <p>Classic crowd-pleasers, throwback fire, and nostalgia-heavy sessions built for real music heads.</p>
+              <div class="slot">Friday • 10pm–12am<small>Back-to-back memories and party moments</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ PatMan" data-category="specialist" data-search="spinning vinyl party">
+            <div class="dj-image-wrap">
+              <img src="/social/images/pat.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Classic Cuts</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ PatMan</h3>
+			  <h3>DJ Helper</h3>
+              <div class="dj-meta">
+                <span class="tag">Old Skool</span>
+                <span class="tag">Throwbacks</span>
+              </div>
+              <p>Classic crowd-pleasers, throwback fire, Propper Vinyl Old Skool</p>
+              <div class="slot">Wednesday • 7pm–8pm<small>Back-to-back memories and party moments</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="HotShotDj" data-category="specialist" data-search="teleporting back to the 80's,90's">
+            <div class="dj-image-wrap">
+              <img src="/social/images/hotshot.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Classic Cuts</span>
+            </div>
+            <div class="dj-body">
+              <h3>HotShotDJ </h3>
+			  <h3>Co-Owner/Manager </h3>
+              <div class="dj-meta">
+                <span class="tag">Randoms</span>
+                <span class="tag">Throwbacks</span>
+              </div>
+              <p>HotShot Love's TimeTravelling Taking People Back In TIme, Spinning Those Tunes.</p>
+              <div class="slot">Monday • 11am–12am<small>party moments</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="Vinda" data-category="specialist" data-search="vindas Pick N Mix">
+            <div class="dj-image-wrap">
+              <img src="/social/images/vinda.jpeg" alt="DJ SimonPro">
+              <span class="dj-badge">Pick N Mix</span>
+            </div>
+            <div class="dj-body">
+              <h3>Vinda</h3>
+              <div class="dj-meta">
+                <span class="tag">Vinda's Pick N Mix</span>
+              </div>
+              <p>throwback</p>
+              <div class="slot">Thursday • 12am–3am<small>Pick N Mix</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ GoldS" data-category="specialist" data-search="GoldS Spinning Those Futurama Sounds">
+            <div class="dj-image-wrap">
+              <img src="/social/images/golds.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Classic Cuts</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ GoldS</h3>
+              <div class="dj-meta">
+                <span class="tag">Time Travelling Party</span>
+                
+              </div>
+              <p>Time Warping.</p>
+              <div class="slot">Wednesday • 12pm–4pm<small>Back-to-back 80's,90 and Now</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ Becka" data-category="specialist" data-search="Becka On The Ones And Two's">
+            <div class="dj-image-wrap">
+              <img src="/social/images/becka.jpeg" alt="DJ SimonPro">
+              <span class="dj-badge">Banging Tunes</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Becka</h3>
+              <div class="dj-meta">
+                <span class="tag">PartyLand</span>
+              </div>
+              <div class="slot">Mondays • 3pm–5pm<small>Sexy Tunes</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ Mix&Match" data-category="specialist" data-search="mix&match classics">
+            <div class="dj-image-wrap">
+              <img src="/social/images/rebecca.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Club Classics</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Mix&Match</h3>
+              <div class="dj-meta">
+                <span class="tag">Mix&Match Randoms</span>
+              </div>
+              <div class="slot">Friday • 8pm–9pm<small>Mix&Match Classics</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card"  data-category="specialist" data-search="sweet beautiful manager">
+            <div class="dj-image-wrap">
+              <img src="/social/images/laura.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Manager</span>
+            </div>
+            <div class="dj-body">
+              <h3>Laura</h3>
+			  
+              <div class="dj-meta">
+                <span class="tag">Laura - Manager</span>
+              </div>
+              
+            </div>
+          </article>
+		  
+		  
+		  
+		  <article class="dj-card" data-dj="DJ Kai" data-category="specialist" data-search="jumping on the requests with bangers">
+            <div class="dj-image-wrap">
+              <img src="/social/images/kai.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Bangers</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Kai</h3>
+              <div class="dj-meta">
+                <span class="tag">FlashBacks</span>
+                
+              </div>
+              
+              <div class="slot">Sunday • 6pm–8m<small>FlashBacks</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ Suzie" data-category="specialist" data-search="djsuzy with her blues&two's">
+            <div class="dj-image-wrap">
+              <img src="/social/images/djsuzy.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Party Dance</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Suzie</h3>
+              <div class="dj-meta">
+                <span class="tag">Party Dancer</span>
+                
+              </div>
+              
+              <div class="slot">Monday • 7pm–9pm<small>She Loves Making People Dance</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-category="specialist" data-search="djpaul on the rave machine">
+            <div class="dj-image-wrap">
+              <img src="/social/images/paul.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Rave</span>
+            </div>
+            <div class="dj-body">
+              <h3>Paul</h3>
+              <div class="dj-meta">
+                <span class="tag">Raver</span>
+                
+              </div>
+              
+              <div class="slot">Thursday • 10am–12pm<small>he Loves Making People Dance</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ Karl" data-category="specialist" data-search="Karl Loves To Start A Party">
+            <div class="dj-image-wrap">
+              <img src="/social/images/karl.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">Karl's Random</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Karl</h3>
+              <div class="dj-meta">
+                <span class="tag">Raver</span>
+                
+              </div>
+              
+              <div class="slot">Thursday • 5pm–7pm<small>he Loves Making People Dance</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="Trev" data-category="specialist" data-search="trev loves to get people started">
+            <div class="dj-image-wrap">
+              <img src="/social/images/trev.jpeg" alt="DJ SimonPro">
+              <span class="dj-badge">ToastRack</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Trev</h3>
+              <div class="dj-meta">
+                <span class="tag">Bounce</span>
+                
+              </div>
+              
+              <div class="slot">Saturday • 2pm-4pm<small>Loves Getting Peoples Attention</small></div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ Karl" data-category="specialist" data-search="tony loves the vibes">
+            <div class="dj-image-wrap">
+              <img src="/social/images/tony.jpeg" alt="DJ SimonPro">
+              <span class="dj-badge">Tony's Dance</span>
+            </div>
+            <div class="dj-body">
+              <h3>Tony</h3>
+              <div class="dj-meta">
+                <span class="tag">Dance</span>
+                
+              </div>
+              
+              <div class="slot">Thursday • 8pm–10pm</div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ Don" data-category="specialist" data-search="don blares the music like an oldskool cd player">
+            <div class="dj-image-wrap">
+              <img src="/social/images/don.jpg" alt="DJ SimonPro">
+              <span class="dj-badge">don's tunes</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ Don</h3>
+              <div class="dj-meta">
+                <span class="tag">Dance</span>
+                
+              </div>
+              
+              <div class="slot">Saturday • 12pm–3pm</div>
+            </div>
+          </article>
+		  
+		  <article class="dj-card" data-dj="DJ Don" data-category="specialist" data-search="infected by house&uk garage">
+            <div class="dj-image-wrap">
+              <img src="/social/images/mickeyjay.jpeg" alt="DJ SimonPro">
+              <span class="dj-badge">MikeyJay</span>
+            </div>
+            <div class="dj-body">
+              <h3>DJ MikeyJay</h3>
+              <div class="dj-meta">
+                <span class="tag">house&uk garage</span>
+                
+              </div>
+              
+              <div class="slot">Friday • 6pm–8pm</div>
+            </div>
+          </article>
+		  
+		  
+		  
+		  
+		  
+		  
+
+          
+
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Want To Join The Crew?</h2>
       <p>
-        The voices behind the music.<br>
-        Live shows • real DJs • real passion.
+        Wildstyle Radio is always on the lookout for passionate live DJs who want to be part of a loyal, sociable, and fully licensed station.
       </p>
-    </div>
-  </section>
+      <div class="cta-actions">
+        <a href="mailto:wildstyleradioo@gmail.com" class="btn-primary">Apply To Join</a>
+        <a href="schedule.html" class="btn-secondary">See Open Slots</a>
+      </div>
+    </section>
 
-  <!-- OWNERS -->
-  <section class="dj-lineup-section">
-    <div class="container">
-      <div class="lineup-head">
-        <h2 class="lineup-title">Station Owners</h2>
-        <p class="lineup-sub">The people leading Wildstyle</p>
+    <footer class="footer">
+      <div>
+        <h3>Wildstyle Radio</h3>
+        <p>United by beats. Powered by volunteer passion. Our DJs bring the sound, the personality, and the energy that make Wildstyle what it is.</p>
       </div>
 
-      <div class="dj-grid lineup-grid">
-
-        <div class="dj-card featured-card">
-          <img src="/images/echo1.png" class="dj-image" "DJ EchoFalls">
-          <div class="dj-card-body">
-            <h3 class="dj-name">DJ EchoFalls</h3>
-            <p class="dj-show">Frequency Shift</p>
-            <h4 class="dj-role">Founder / Big Boss</h4>
-            <p><a class="dj-link" href="https://ask.the.dj/Wildstyle">Requests</a></p>
-          </div>
-        </div>
-
-        <div class="dj-card featured-card">
-          <img src="/images/laura.jpg" class="dj-image" >
-          <div class="dj-card-body">
-            <h3 class="dj-name">Laura</h3>
-            <h4 class="dj-role">Owner</h4>
-          </div>
-        </div>
-		
-		
-        </div>
-
-        <div class="dj-card featured-card">
-          <img src="/images/hotshot.jpg" class="dj-image" "HotShotDJ">
-          <div class="dj-card-body">
-            <h3 class="dj-name">Graham - HotShotDJ</h3>
-            <h4 class="dj-role">Co-Owner</h4>
-          </div>
-        </div>
-
-
-
-      </div>
-    </div>
-  </section>
-
-  <!-- MANAGEMENT -->
-  <section class="dj-lineup-section alt-band">
-    <div class="container">
-      <div class="lineup-head">
-        <h2 class="lineup-title">Managers</h2>
-        <p class="lineup-sub">The station team behind the scenes</p>
-      </div>
-
-      <div class="dj-grid lineup-grid">
-
-        <div class="dj-card">
-          <img src="/images/spark.jpeg" class="dj-image" "DJ Stormzzy">
-          <div class="dj-card-body">
-            <h3 class="dj-name">DJ Stormzzy</h3>
-            <h4 class="dj-role">Start-Up/DJ Manager</h4>
-          </div>
-        </div>
-
-        
-		
-		<div class="dj-card featured-card">
-          <img src="/images/djsuzy.jpg" class="dj-image" >
-          <div class="dj-card-body">
-            <h3 class="dj-name">Suzy</h3>
-            <h4 class="dj-role">Scheduler</h4>
-          </div>
-        </div>     
-
-      </div>
-    </div>
-  </section>
-
-  <!-- RESIDENT DJS -->
-  <section class="dj-lineup-section">
-    <div class="container">
-      <div class="lineup-head">
-        <h2 class="lineup-title">Resident DJs</h2>
-        <p class="lineup-sub">The core Wildstyle lineup</p>
-      </div>
-
-      <div class="dj-grid lineup-grid">
-
-        
-		<div class="dj-card">
-		<img src="/images/marshel.jpeg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Marshel - Wolf</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-
-
-
-
-<div class="dj-card">
-		<img src="/images/pat.jpg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">patman</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-<div class="dj-card">
-		<img src="/images/lewis.jpg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Lewis - DJ Lewis</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-
-<div class="dj-card">
-		<img src="/images/spark.jpeg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Stormzzy</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-
-		<div class="dj-card">
-		<img src="/images/robski.jpg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Robski - DJ Robski</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-<div class="dj-card">
-		<img src="/images/marty.jpg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">marty</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-
-
-<div class="dj-card">
-		<img src="/images/tony.jpg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Tony - DJ Serenity</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-<div class="dj-card">
-		<img src="/images/simon.jpg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Simon - DJ Simon</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-<div class="dj-card">
-		<img src="/images/micky.jpeg" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Micky - Micky Jay</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-
-		<div class="dj-card">
-		<img src="/images/" class="dj-image" "DJ JohnT"><div class="dj-card-body">
-		<h3 class="dj-name">Upcoming DJ</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-		
-		
-		<div class="dj-card"><img src="/images/alex.jpeg" class="dj-image" "Alex"><div class="dj-card-body">
-		<h3 class="dj-name">Alex - DJ AllyBee</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-		<div class="dj-card"><img src="/images/austin.jpeg" class="dj-image" "Alex"><div class="dj-card-body">
-		<h3 class="dj-name">Austin</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-        <div class="dj-card"><img src="/images/kai.jpg" class="dj-image" "Kai"><div class="dj-card-body">
-		<h3 class="dj-name">Kai</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-        
-        <div class="dj-card"><img src="/images/flincho.jpg" class="dj-image" "DJ Flincho"><div class="dj-card-body">
-		<h3 class="dj-name">DJ Flincho</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-		<div class="dj-card"><img src="/images/vinda.jpeg" class="dj-image" "DJ Flincho"><div class="dj-card-body">
-		<h3 class="dj-name">DJ Cycotic</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-        <div class="dj-card"><img src="/images/joanne.jpeg" class="dj-image" "Gabby"><div class="dj-card-body">
-		<h3 class="dj-name">Joanne - DJ Mystic</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-		<div class="dj-card"><img src="/images/gabby.jpg" class="dj-image" "Gabby"><div class="dj-card-body">
-		<h3 class="dj-name">Gabby</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-<div class="dj-card"><img src="/images/chanel.png" class="dj-image" "chanel"><div class="dj-card-body">
-		<h3 class="dj-name">Chanel-DJ Mix n It Up</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-
-		<div class="dj-card"><img src="/images/becka.jpeg" class="dj-image" "Gabby"><div class="dj-card-body">
-		<h3 class="dj-name">Becka</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-        <div class="dj-card"><img src="/images/rebecca.jpg" class="dj-image" "DJ Mix&Match"><div class="dj-card-body">
-		<h3 class="dj-name">DJ Mix&Match</h3>
-		<h4 class="dj-role">GB Resident DJ</h4></div>
-		</div>
-        <div class="dj-card"><img src="/images/djnala.jpg" class="dj-image" "DJ Nala"><div class="dj-card-body">
-		<h3 class="dj-name">DJ Nala</h3>
-		<h4 class="dj-role">Scotland Resident DJ</h4></div>
-		</div>
-        
-        <div class="dj-card"><img src="/images/golds.jpg" class="dj-image" "DJ Golds">
-		<div class="dj-card-body">
-		<h3 class="dj-name">DJ Golds</h3>
-		<h4 class="dj-role">Scotland Resident DJ</h4>
-		</div>
-		</div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- INTERNATIONAL / SPECIAL -->
-  <section class="dj-lineup-section alt-band">
-    <div class="container">
-      <div class="lineup-head">
-        <h2 class="lineup-title">International & Special DJs</h2>
-        <p class="lineup-sub">Wildstyle voices from beyond the core local roster</p>
-      </div>
-
-      <div class="dj-grid lineup-grid">
-
-        <div class="dj-card"><img src="/images/aj.png" class="dj-image" "AJ"><div class="dj-card-body">
-		<h3 class="dj-name">AJ</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-        
-		<div class="dj-card"><img src="/images/tee.jpg" class="dj-image" "Tee"><div class="dj-card-body">
-		<h3 class="dj-name">Tee</h3>
-		<h4 class="dj-role">Resident DJ</h4></div>
-		</div>
-        
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="dj-page-cta-section">
-    <div class="container">
-      <div class="dj-page-cta-box">
-        <h2 class="lineup-title">Want To Hear The Crew Live?</h2>
-        <p class="lineup-sub">Jump to the schedule, tune in, and catch the next Wildstyle show.</p>
-        <div class="center-cta">
-          <a href="/schedule.html" class="dj-btn">View Schedule</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="portal-footer">
-    <div class="container footer-grid">
-
-      <div class="footer-box">
-        <h5>Wildstyle Radio</h5>
-        <p>
-          United by beats.<br>
-          Powered by volunteer passion.
-        </p>
-      </div>
-
-      <div class="footer-box">
-        <h5>Quick Links</h5>
+      <div>
+        <h3>Quick Links</h3>
         <ul>
-          <li><a href="/schedule.html">Schedule</a></li>
-          <li><a href="/chat.html">Chat</a></li>
+          <li>Home</li>
+          <li>Schedule</li>
+          <li>Chat</li>
+          <li>Requests</li>
         </ul>
       </div>
 
-      <div class="footer-box">
-        <h5>Follow Us</h5>
-        <p>Facebook • Instagram • TikTok</p>
+      <div>
+        <h3>Wildstyle Vibe</h3>
+        <ul>
+          <li>Live shows only</li>
+          <li>Friendly team</li>
+          <li>Multi-genre station</li>
+          <li>Worldwide community</li>
+        </ul>
       </div>
+    </footer>
+  </div>
 
-    </div>
-  </footer>
-
-  <!-- SCRIPT -->
-  <script src="https://wildstyle.vip/script.js?v=4" defer></script>
-  <script src="https://wildstyle.vip/nowon.js?v=1"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const burger = document.getElementById("burger");
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  const navClose = document.getElementById("navClose");
-
-  function openMenu() {
-    mobileNav?.classList.add("active");
-    if (navBackdrop) navBackdrop.hidden = false;
-    document.body.classList.add("menu-open");
-    burger?.setAttribute("aria-expanded", "true");
-    mobileNav?.setAttribute("aria-hidden", "false");
-  }
-
-  function closeMenu() {
-    mobileNav?.classList.remove("active");
-    if (navBackdrop) navBackdrop.hidden = true;
-    document.body.classList.remove("menu-open");
-    burger?.setAttribute("aria-expanded", "false");
-    mobileNav?.setAttribute("aria-hidden", "true");
-  }
-
-  burger?.addEventListener("click", openMenu);
-  navClose?.addEventListener("click", closeMenu);
-  navBackdrop?.addEventListener("click", closeMenu);
-
-  document.querySelectorAll("#mobileNav a").forEach(link => {
-    link.addEventListener("click", closeMenu);
-  });
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 900) {
-      closeMenu();
-    }
-  });
-});
-</script>
-
+  <script type="module" src="https://wildstyle.vip/social/app.js"></script>
+  <script src="https://wildstyle.vip/script.js"></script>
 </body>
 </html> 

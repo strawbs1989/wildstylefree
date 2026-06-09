@@ -1,4 +1,4 @@
-import { firebaseConfig } from '/firebase-config.js';
+import { firebaseConfig } from '/social/firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
 import {
   getAuth,
@@ -64,7 +64,7 @@ const els = {
   navClose: document.getElementById('navClose'),
   navBackdrop: document.getElementById('navBackdrop'),
   mobileNav: document.getElementById('mobileNav'),
-  mobileLoginBtn: document.getElementById('OpenAuthBtnMobile'),
+  mobileLoginBtn: document.getElementById('mobileLoginBtn'),
 
   // auth
   openAuthBtn: document.getElementById('openAuthBtn'),
@@ -100,9 +100,7 @@ const els = {
   requestTickerText: document.getElementById('requestTickerText'),
   requestTickerClone: document.getElementById('requestTickerClone'),
 
-  // now on / up next
-  nowOn: document.getElementById('nowon'),
-  upNext: document.getElementById('upNext'),
+ 
 
   // request page
   requestForm: document.querySelector('.request-form-page'),
@@ -208,176 +206,20 @@ function detectDesktopModeOnMobile() {
   }
 }
 
-/* =========================================
-   SCHEDULE / NOW ON ONLY
-========================================= */
 
-function normDay(day) {
-  const s = String(day || '').trim().toLowerCase();
-  const fixed = s.charAt(0).toUpperCase() + s.slice(1);
-  return DAY_ORDER.includes(fixed) ? fixed : '';
-}
 
-function getUKNow() {
-  return new Date(new Date().toLocaleString('en-GB', {
-    timeZone: 'Europe/London'
-  }));
-}
-
-function getNowMinutes() {
-  const now = getUKNow();
-  return {
-    dayNum: now.getDay() === 0 ? 7 : now.getDay(),
-    mins: now.getHours() * 60 + now.getMinutes()
-  };
-}
-
-function parseTime(t) {
-  t = String(t || '').trim().toLowerCase();
-  const m = t.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/);
-  if (!m) return null;
-
-  let h = parseInt(m[1], 10);
-  const mins = parseInt(m[2] || '0', 10);
-  const ampm = m[3];
-
-  if (ampm === 'pm' && h !== 12) h += 12;
-  if (ampm === 'am' && h === 12) h = 0;
-
-  return h * 60 + mins;
-}
-
-function splitTimeRange(range) {
-  const text = String(range || '').trim();
-  if (!text) return { start: '', end: '' };
-
-  const parts = text.split(/\s*[-–—]\s*/);
-  if (parts.length >= 2) {
-    return {
-      start: parts[0].trim(),
-      end: parts[1].trim()
-    };
-  }
-
-  return { start: '', end: '' };
-}
-
-function slotStartEndMinutes(slot) {
-  const start = parseTime(slot.start);
-  const end = parseTime(slot.end);
-  if (start == null || end == null) return null;
-
-  return {
-    start,
-    end,
-    crossesMidnight: end <= start
-  };
-}
-
-function normaliseSlots(data) {
-  let raw = [];
-
-  if (Array.isArray(data?.slots)) {
-    raw = data.slots;
-  } else if (Array.isArray(data)) {
-    raw = data;
-  } else if (data && typeof data === 'object') {
-    for (const [key, value] of Object.entries(data)) {
-      if (Array.isArray(value)) {
-        value.forEach(item => {
-          raw.push({
-            ...item,
-            day: item.day || key
-          });
-        });
-      }
-    }
-  }
-
-  return raw.map(slot => {
-    const split = splitTimeRange(
-      slot.timeRange ||
-      slot.time ||
-      slot.slot ||
-      slot.hours ||
-      ''
-    );
-
-    return {
-      day: normDay(slot.day || slot.dayName || slot.weekday),
-      start: String(slot.start || slot.startTime || slot.from || split.start || '').trim(),
-      end: String(slot.end || slot.endTime || slot.to || split.end || '').trim(),
-      dj: String(
-        slot.dj ||
-        slot.presenter ||
-        slot.host ||
-        slot.name ||
-        slot.show ||
-        slot.title ||
-        'Free'
-      ).trim()
-    };
-  }).filter(slot => slot.day && slot.start && slot.end);
-}
-
-function findCurrentSlot(slots) {
-  const { dayNum, mins } = getNowMinutes();
-  const today = DAY_ORDER[dayNum - 1];
-  const prev = DAY_ORDER[(dayNum + 5) % 7];
-
-  for (const s of slots) {
-    const r = slotStartEndMinutes(s);
-    if (!r) continue;
-
-    if (s.day === today) {
-      if (!r.crossesMidnight && mins >= r.start && mins < r.end) return s;
-      if (r.crossesMidnight && (mins >= r.start || mins < r.end)) return s;
-    }
-
-    if (s.day === prev && r.crossesMidnight && mins < r.end) return s;
-  }
-
-  return null;
-}
-
-async function loadNowOnOnly() {
-  const nowEl = els.nowOn;
-  const scheduleNowOn = els.scheduleNowOn;
-
-  if (!nowEl && !scheduleNowOn) return;
-
-  try {
-    const res = await fetch(SCHEDULE_URL + '?v=' + Date.now(), { cache: 'no-store' });
-    const data = await res.json();
-    const slots = normaliseSlots(data);
-
-    const now = findCurrentSlot(slots);
-
-    if (nowEl) {
-      nowEl.textContent = now
-        ? `${now.dj} ${now.start}–${now.end}`
-        : 'Off Air';
-    }
-
-    if (scheduleNowOn) {
-      scheduleNowOn.textContent = now
-        ? `Now On: ${now.dj} (${now.start}–${now.end})`
-        : 'Now On: Off Air';
-    }
-
-  } catch (err) {
-    console.error('Now On load failed:', err);
-
-    if (nowEl) nowEl.textContent = 'Unavailable';
-    if (scheduleNowOn) scheduleNowOn.textContent = 'Now On: Unavailable';
-  }
-}
 
 /* =========================================
    AUTH UI
 ========================================= */
 
-
+function openAuth() {
+  if (els.authOverlay) els.authOverlay.classList.add('open');
+  if (els.authModal) {
+    els.authModal.classList.add('open');
+    els.authModal.setAttribute('aria-hidden', 'false');
+  }
+}
 
 function closeAuth() {
   if (els.authOverlay) els.authOverlay.classList.remove('open');
@@ -582,49 +424,33 @@ async function handleSignup(e) {
   }
 }
 
-
 function openAuth() {
   const modal = document.getElementById('authModal');
   const overlay = document.getElementById('authOverlay');
 
-  overlay?.classList.add('open');
-  modal?.classList.add('open');
-  modal?.setAttribute('aria-hidden', 'false');
+  if (overlay) overlay.classList.add('open');
+
+  if (modal) {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  document.body.classList.add('modal-open');
 }
 
 function closeAuth() {
   const modal = document.getElementById('authModal');
   const overlay = document.getElementById('authOverlay');
 
-  overlay?.classList.remove('open');
-  modal?.classList.remove('open');
-  modal?.setAttribute('aria-hidden', 'true');
-}
+  if (overlay) overlay.classList.remove('open');
 
-function switchAuthTab(tabName) {
-  document.querySelectorAll('[data-auth-tab]').forEach(tab => {
-    tab.classList.toggle(
-      'active',
-      tab.dataset.authTab === tabName
-    );
-  });
-
-  const loginPanel = document.getElementById('loginPanel');
-  const signupPanel = document.getElementById('signupPanel');
-
-  if (loginPanel) {
-    loginPanel.style.display =
-      tabName === 'login' ? 'block' : 'none';
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
   }
 
-  if (signupPanel) {
-    signupPanel.style.display =
-      tabName === 'signup' ? 'block' : 'none';
-  }
+  document.body.classList.remove('modal-open');
 } 
-
-
-
 
 
 function bindAuthUI() {
@@ -797,39 +623,42 @@ function renderFeed(posts) {
     const created = formatDate(post.createdAt);
     const canDelete = auth?.currentUser && post.uid === auth.currentUser.uid;
 
-    article.innerHTML = `
-      <div class="post-top">
-        <div class="author">
-          <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
-          <div>
-            <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
-            <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
-          </div>
-        </div>
-        <span class="badge">Live Post</span>
+    
+article.innerHTML = `
+  <div class="post-top">
+    <div class="author">
+      <div class="avatar">${initialsFromName(post.authorName || 'WS')}</div>
+      <div>
+        <strong>${escapeHtml(post.authorName || 'Wildstyle User')}</strong>
+        <small>${escapeHtml(post.role || 'Listener')} • ${escapeHtml(created)}</small>
       </div>
+    </div>
+    <span class="badge">Live Post</span>
+  </div>
 
-      <p>${escapeHtml(post.text || '')}</p>
+  <p>${escapeHtml(post.text || '')}</p>
 
-      <div class="post-actions">
-        <button class="live-like-btn" data-post-id="${post.id}">
-          ❤️ <span class="live-like-count">${Number(post.likesCount || 0)}</span> Likes
-        </button>
-        <button class="comment-toggle" data-target="comments-box-${post.id}">
-          💬 Comments
-        </button>
-        ${canDelete ? `<button class="delete-post-btn" data-post-id="${post.id}">🗑 Delete</button>` : ''}
-      </div>
+  <div class="post-actions">
+    <button class="live-like-btn" data-post-id="${post.id}">
+      ❤️ <span class="live-like-count">${Number(post.likesCount || 0)}</span> Likes
+    </button>
+    <button class="comment-toggle" data-target="comments-box-${post.id}">
+      💬 Comments
+    </button>
+    ${canDelete ? `<button class="delete-post-btn" data-post-id="${post.id}">🗑 Delete</button>` : ''}
+  </div>
 
-      <div class="comments-box" id="comments-box-${post.id}">
-        <div id="comments-list-${post.id}"></div>
-        <div class="comment-form">
-          <input
-            type="text"
-            id="comment-input-${post.id}"
-            placeholder="Write a comment..."
-            maxlength="140"
-          />
+  <div class="comments-box" id="comments-box-${post.id}">
+    <div id="comments-list-${post.id}"></div>
+
+    <div class="comment-form">
+      <input
+        type="text"
+        id="comment-input-${post.id}"
+        placeholder="Write a comment..."
+        maxlength="140"
+      />
+      
           <button type="button" class="live-comment-submit" data-post-id="${post.id}">Post</button>
         </div>
       </div>
@@ -1214,9 +1043,7 @@ function bindCoreUI() {
    AUTH STATE / STARTUP
 ========================================= */
 
-
-
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   bindCoreUI();
 
   loadRequestsTicker();
@@ -1225,23 +1052,21 @@ document.addEventListener("DOMContentLoaded", () => {
   checkRequestStatus();
 
   if (usingPlaceholders) {
-  setLoggedOutState();
-  listenForPosts();
-  setAuthMessage('Paste your Firebase config...');
-} else {
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      await setLoggedInState(user);
-    } else {
-      setLoggedOutState();
-    }
-
+    setLoggedOutState();
     listenForPosts();
-  });
-}
- });
+    setAuthMessage('Paste your Firebase config first.');
+  } else {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await setLoggedInState(user);
+      } else {
+        setLoggedOutState();
+      }
 
-  
+      listenForPosts();
+    });
+  }
+});
 
 
 /* =========================================
@@ -1251,4 +1076,4 @@ document.addEventListener("DOMContentLoaded", () => {
 window.likePost = likePost;
 window.addComment = addComment;
 window.deletePost = deletePost;
-window.showRequestSuccess = showRequestSuccess; 
+window.showRequestSuccess = showRequestSuccess;  
