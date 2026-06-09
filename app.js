@@ -64,7 +64,7 @@ const els = {
   navClose: document.getElementById('navClose'),
   navBackdrop: document.getElementById('navBackdrop'),
   mobileNav: document.getElementById('mobileNav'),
-  mobileLoginBtn: document.getElementById('mobileLoginBtn'),
+  mobileLoginBtn: document.getElementById('OpenAuthBtnMobile'),
 
   // auth
   openAuthBtn: document.getElementById('openAuthBtn'),
