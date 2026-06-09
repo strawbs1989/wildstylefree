@@ -377,13 +377,7 @@ async function loadNowOnOnly() {
    AUTH UI
 ========================================= */
 
-function openAuth() {
-  if (els.authOverlay) els.authOverlay.classList.add('open');
-  if (els.authModal) {
-    els.authModal.classList.add('open');
-    els.authModal.setAttribute('aria-hidden', 'false');
-  }
-}
+
 
 function closeAuth() {
   if (els.authOverlay) els.authOverlay.classList.remove('open');
