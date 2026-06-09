@@ -347,6 +347,115 @@ button,input,textarea{font:inherit}
   color:#fff;
   font-weight:800;
 }
+
+/* =========================
+   Support Panels
+========================= */
+
+.portal-panel{
+  margin-top:22px;
+  background:var(--grad-soft);
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.portal-head{
+  padding:16px 20px;
+  color:#fff;
+}
+
+.portal-head h2{
+  margin:0;
+  font-family:Oswald,sans-serif;
+  font-size:1.5rem;
+  letter-spacing:.04em;
+}
+
+/* Epilepsy Header */
+.epilepsy-panel .portal-head{
+  background:linear-gradient(
+    90deg,
+    #8e44ad,
+    #b56cff,
+    #ff66cc
+  );
+}
+
+/* Autism Header */
+.autism-panel .portal-head{
+  background:linear-gradient(
+    90deg,
+    #00b4ff,
+    #00d084,
+    #ffcc00,
+    #ff6b6b
+  );
+}
+
+.portal-box-body{
+  padding:20px;
+}
+
+.portal-box-body p{
+  color:#e8ddff;
+  line-height:1.7;
+  margin-top:8px;
+}
+
+.support-img{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:18px;
+  flex-shrink:0;
+}
+
+/* Epilepsy Image Glow */
+.epilepsy-panel .support-img{
+  border:2px solid #b56cff;
+  box-shadow:0 0 20px rgba(181,108,255,.5);
+}
+
+/* Autism Image Glow */
+.autism-panel .support-img{
+  border:2px solid #ffffff;
+  box-shadow:0 0 20px rgba(255,255,255,.25);
+}
+
+/* Better title styling */
+.epilepsy-panel .spotlight-title,
+.autism-panel .spotlight-title{
+  display:block;
+  color:#fff;
+  font-size:1.25rem;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+/* Mobile */
+@media (max-width:720px){
+
+  .portal-box-body .spotlight{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .support-img{
+    width:110px;
+    height:110px;
+  }
+
+  .portal-head h2{
+    font-size:1.25rem;
+  }
+}
+
+
+
+
+
 .spotlight{display:flex;gap:14px;align-items:center}
 .spotlight img{
   width:86px;
