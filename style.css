@@ -462,8 +462,8 @@ button,input,textarea{font:inherit}
 }
 
 .fans-image{
-  width:100%;
-  max-width:100%;
+  width:90px;
+  max-width:90px;
   border-radius:22px;
   display:block;
   border:2px solid rgba(255,255,255,.12);
