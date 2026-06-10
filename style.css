@@ -452,6 +452,58 @@ button,input,textarea{font:inherit}
   }
 }
 
+/* =========================
+   Fans Of Wildstyle
+========================= */
+
+.fans-link{
+  display:block;
+  text-decoration:none;
+}
+
+.fans-image{
+  width:100%;
+  max-width:100%;
+  border-radius:22px;
+  display:block;
+  border:2px solid rgba(255,255,255,.12);
+  transition:all .25s ease;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+}
+
+.fans-image:hover{
+  transform:scale(1.02);
+  border-color:#b56cff;
+  box-shadow:0 0 25px rgba(181,108,255,.45);
+}
+
+.fans-text{
+  margin-top:16px;
+  text-align:center;
+  color:#e8ddff;
+  font-weight:700;
+  font-size:1.05rem;
+  line-height:1.6;
+}
+
+/* Facebook-style glow */
+.fans-link:hover .fans-text{
+  color:#ffffff;
+}
+
+/* Mobile */
+@media (max-width:720px){
+
+  .fans-text{
+    font-size:.95rem;
+  }
+
+  .fans-image{
+    border-radius:18px;
+  }
+
+}
+
 
 
 
@@ -1909,128 +1961,5 @@ section{
   flex-shrink:0;
 } 
 
-/* =========================
-   Support Sections
-========================= */
 
-.support-section{
-  margin-top:22px;
-  border-radius:28px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  border:1px solid rgba(255,255,255,.08);
-}
 
-.support-header{
-  padding:14px 20px;
-  font-family:Oswald,sans-serif;
-  font-size:1.4rem;
-  letter-spacing:.04em;
-  color:#fff;
-  font-weight:700;
-}
-
-.support-body{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:18px;
-}
-
-.support-body img{
-  width:80px;
-  height:80px;
-  border-radius:18px;
-  object-fit:cover;
-  flex-shrink:0;
-}
-
-.support-body h3{
-  margin:0 0 6px;
-  color:#fff;
-  font-size:1.2rem;
-}
-
-.support-body p{
-  margin:0;
-  line-height:1.7;
-}
-
-/* =========================
-   Epilepsy Support
-========================= */
-
-.epilepsy-support{
-  background:linear-gradient(
-    180deg,
-    #2b1747 0%,
-    #120d1d 100%
-  );
-}
-
-.epilepsy-support .support-header{
-  background:linear-gradient(
-    90deg,
-    #8e44ad,
-    #b56cff,
-    #ff66cc
-  );
-}
-
-.epilepsy-support .support-body{
-  color:#f1e6ff;
-}
-
-.epilepsy-support img{
-  border:2px solid #b56cff;
-  box-shadow:0 0 18px rgba(181,108,255,.45);
-}
-
-/* =========================
-   Autism Support
-========================= */
-
-.autism-support{
-  background:linear-gradient(
-    180deg,
-    #15111f 0%,
-    #0f0b18 100%
-  );
-}
-
-.autism-support .support-header{
-  background:linear-gradient(
-    90deg,
-    #00b4ff,
-    #00d084,
-    #ffcc00,
-    #ff6b6b
-  );
-}
-
-.autism-support .support-body{
-  color:#f5f5f5;
-}
-
-.autism-support img{
-  border:2px solid #ffffff;
-  box-shadow:0 0 18px rgba(255,255,255,.25);
-}
-
-/* Mobile */
-@media (max-width:720px){
-
-  .support-body{
-    flex-direction:column;
-    text-align:center;
-  }
-
-  .support-body img{
-    width:90px;
-    height:90px;
-  }
-
-  .support-header{
-    font-size:1.15rem;
-  }
-}
