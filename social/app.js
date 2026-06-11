@@ -592,7 +592,16 @@ function renderFeed(posts) {
     article.className = 'post';
 
     const created = formatDate(post.createdAt);
-    const canDelete = auth?.currentUser && post.uid === auth.currentUser.uid;
+
+const isAdmin =
+  currentUserProfile?.role === "Admin";
+
+const canDelete =
+  auth?.currentUser &&
+  (
+    post.uid === auth.currentUser.uid ||
+    isAdmin
+  );
 
     
 article.innerHTML = `
