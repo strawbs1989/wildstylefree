@@ -467,7 +467,7 @@ function bindAuthUI() {
    FEED / POSTS
 ========================================= */
 
-function cleanupCommentListeners() {
+/*function cleanupCommentListeners() {
   commentUnsubscribers.forEach((unsubscribe) => {
     try { unsubscribe(); } catch {}
   });
@@ -932,7 +932,7 @@ async function deletePost(postId) {
     console.error('Delete post error:', error);
     setPostMessage(error.message, true);
   }
-}
+}*/
 
 /* =========================================
    REQUESTS
