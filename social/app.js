@@ -574,14 +574,14 @@ async function isPostLikedByCurrentUser(postId) {
   return likeSnap.exists();
 }
 
-function renderFeed(posts) {
+*/function renderFeed(posts) {
 
   posts = posts.filter(post => post.hidden !== true);
 
   if (!els.feedContainer) return;
 
   cleanupCommentListeners();
-}
+}/*
 
   els.feedContainer.innerHTML = '';
 
