@@ -398,11 +398,11 @@ async function handleSignup(e) {
     const displayName = els.signupDisplayName.value.trim();
     const email = els.signupEmail.value.trim();
 
-    const cred = await createUserWithEmailAndPassword(
+   /* const cred = await createUserWithEmailAndPassword(
       auth,
       email,
       els.signupPassword.value
-    );
+    );*/
 
     await updateProfile(cred.user, { displayName });
 
