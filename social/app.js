@@ -575,15 +575,13 @@ async function isPostLikedByCurrentUser(postId) {
 }
 
 function renderFeed(posts) {
+
+  posts = posts.filter(post => post.hidden !== true);
+
   if (!els.feedContainer) return;
 
   cleanupCommentListeners();
-
-  if (!posts.length) {
-    els.feedContainer.innerHTML = defaultPostsMarkup();
-    bindDemoInteractions();
-    return;
-  }
+}
 
   els.feedContainer.innerHTML = '';
 
