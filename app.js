@@ -387,6 +387,15 @@ async function handleLogin(e) {
 async function handleSignup(e) {
   e.preventDefault();
 
+const captchaResponse = grecaptcha.getResponse();
+
+if (!captchaResponse) {
+  setAuthMessage(
+    'Please complete the reCAPTCHA.',
+    true
+  );
+  return;
+}
   if (usingPlaceholders || !auth || !db) {
     setAuthMessage('Paste your Firebase config first.', true);
     return;
