@@ -1035,7 +1035,7 @@ NOTICEBOARD
 ==================≠===========≠============*/
 
 const NOTICEBOARD_URL =
-  "YOUR_APPS_SCRIPT_URL";
+  "https://script.google.com/macros/s/AKfycbzPDcrNx5FGDIAopN2NH_aDVVRQdKozBzyzLGwhnegBo2PBW50IoqPvcZrFwFQoKQUr/exec";
 
 async function loadNoticeboard() {
 
