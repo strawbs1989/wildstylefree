@@ -1051,7 +1051,7 @@ async function loadNoticeboard() {
 
     const notices =
       await res.json();
-
+console.log(notices);
     container.innerHTML =
   notices.slice(1).map(n => `
     <div class="notice-item">
