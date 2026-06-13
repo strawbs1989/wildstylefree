@@ -1001,6 +1001,56 @@ async function checkRequestStatus() {
   }
 }
 
+
+/*===================≠======================
+NOTICEBOARD
+==================≠===========≠============*/
+
+const NOTICEBOARD_URL =
+  "https://script.google.com/macros/s/AKfycbzHscoN4-nXH5PX9FlV0rqorP9SDD7_ZWf6-JSamyK5ylJ3ZoLN6DjoE3QrzBE6Fbw/exec";
+
+async function loadNoticeboard() {
+
+  const container =
+    document.getElementById("noticeboard");
+
+  if (!container) {
+    console.log("NO CONTAINER FOUND");
+    return;
+  }
+
+  console.log("NOTICEBOARD STARTED");
+
+  container.innerHTML = "Connecting...";
+
+  try {
+
+    const res = await fetch(NOTICEBOARD_URL);
+
+    console.log("FETCH SUCCESS");
+
+    const notices = await res.json();
+
+    console.log("DATA:", notices);
+
+    container.innerHTML = `
+      <div class="notice-item">
+        <strong>SUCCESS</strong>
+        <p>${notices.length} notices loaded</p>
+      </div>
+    `;
+
+  } catch (err) {
+
+    console.error("NOTICEBOARD ERROR:", err);
+
+    container.innerHTML =
+      "ERROR LOADING NOTICEBOARD";
+  }
+}
+
+loadNoticeboard();
+
 /* =========================================
    INITIAL BINDING
 ========================================= */
