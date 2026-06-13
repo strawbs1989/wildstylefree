@@ -1030,6 +1030,48 @@ async function checkRequestStatus() {
   }
 }
 
+/*===================≠======================
+NOTICEBOARD
+==================≠===========≠============*/
+
+const NOTICEBOARD_URL =
+  "YOUR_APPS_SCRIPT_URL";
+
+async function loadNoticeboard() {
+
+  const container =
+    document.getElementById("noticeboard");
+
+  if (!container) return;
+
+  try {
+
+    const res =
+      await fetch(NOTICEBOARD_URL);
+
+    const notices =
+      await res.json();
+
+    container.innerHTML =
+      notices.map(n => `
+        <div class="notice-item">
+          <small>${n.category}</small>
+          <strong>${n.title}</strong>
+          <p>${n.message}</p>
+        </div>
+      `).join("");
+
+  } catch (err) {
+
+    container.innerHTML =
+      "Unable to load notices.";
+
+    console.error(err);
+  }
+}
+
+loadNoticeboard();
+
 /* =========================================
    INITIAL BINDING
 ========================================= */
