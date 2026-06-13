@@ -1042,31 +1042,38 @@ async function loadNoticeboard() {
   const container =
     document.getElementById("noticeboard");
 
-  if (!container) return;
+  if (!container) {
+    console.log("NO CONTAINER FOUND");
+    return;
+  }
+
+  console.log("NOTICEBOARD STARTED");
+
+  container.innerHTML = "Connecting...";
 
   try {
 
-    const res =
-      await fetch(NOTICEBOARD_URL);
+    const res = await fetch(NOTICEBOARD_URL);
 
-    const notices =
-      await res.json();
-console.log(notices);
-    container.innerHTML =
-  notices.slice(1).map(n => `
-    <div class="notice-item">
-      <small>${n[1]}</small>
-      <strong>${n[2]}</strong>
-      <p>${n[3]}</p>
-    </div>
-  `).join("");
+    console.log("FETCH SUCCESS");
+
+    const notices = await res.json();
+
+    console.log("DATA:", notices);
+
+    container.innerHTML = `
+      <div class="notice-item">
+        <strong>SUCCESS</strong>
+        <p>${notices.length} notices loaded</p>
+      </div>
+    `;
 
   } catch (err) {
 
-    container.innerHTML =
-      "Unable to load notices.";
+    console.error("NOTICEBOARD ERROR:", err);
 
-    console.error(err);
+    container.innerHTML =
+      "ERROR LOADING NOTICEBOARD";
   }
 }
 
