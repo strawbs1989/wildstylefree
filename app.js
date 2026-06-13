@@ -1053,13 +1053,13 @@ async function loadNoticeboard() {
       await res.json();
 
     container.innerHTML =
-      notices.map(n => `
-        <div class="notice-item">
-          <small>${n.category}</small>
-          <strong>${n.title}</strong>
-          <p>${n.message}</p>
-        </div>
-      `).join("");
+  notices.slice(1).map(n => `
+    <div class="notice-item">
+      <small>${n[1]}</small>
+      <strong>${n[2]}</strong>
+      <p>${n[3]}</p>
+    </div>
+  `).join("");
 
   } catch (err) {
 
