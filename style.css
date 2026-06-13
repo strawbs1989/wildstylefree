@@ -703,6 +703,33 @@ button,input,textarea{font:inherit}
   .card-head h2{font-size:1.3rem}
   .comment-form{grid-template-columns:1fr}
 } 
+
+/*==========================
+NoticeBoard
+===========≠===============*/
+
+.notice-item {
+  background: rgba(255,255,255,.05);
+  border-left: 4px solid #a855f7;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+
+.notice-item strong {
+  display: block;
+  margin: 6px 0;
+  color: #fff;
+}
+
+.notice-item p {
+  margin: 0;
+}
+
+.notice-item small {
+  color: #c084fc;
+  text-transform: uppercase;
+}
 /* =========================
    DJs Page
 ========================= */
