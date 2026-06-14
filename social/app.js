@@ -938,8 +938,6 @@ async function deletePost(postId) {
 /* =========================================
    REQUESTS
 ========================================= */
-const REQUEST_TICKER_URL =
-  'https://script.google.com/macros/s/AKfycbwS2Jm2bj9xVmy5IxHBF-FqZDSYav7waaPqdoECWn1yfRkwSO6reoViMjFq1LBnbEU/exec';
 
 async function loadRequestsTicker() {
 
@@ -948,16 +946,14 @@ async function loadRequestsTicker() {
   try {
 
     const res = await fetch(
-      REQUEST_TICKER_URL + '?t=' + Date.now()
+      REQUEST_TICKER_URL + '&t=' + Date.now()
     );
 
-    const requests = await res.json();
+    const data = await res.json();
 
-    const items = requests
-      .slice(-10)
-      .map(r =>
-        `${r.name} requested ${r.song} - ${r.artist}`
-      );
+    const items = data.map(r =>
+      `${r.name} requested "${r.song}" - ${r.artist}`
+    );
 
     const text = items.length
       ? items.join(' • ')
@@ -968,7 +964,7 @@ async function loadRequestsTicker() {
 
   } catch (err) {
 
-    console.error(err);
+    console.error('Ticker load failed:', err);
 
     els.requestTickerText.textContent =
       'Requests unavailable right now.';
