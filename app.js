@@ -1081,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindCoreUI();
 
   loadRequestsTicker();
-  setInterval(loadRequestsTicker, 15000);
+  setInterval(loadRequestsTicker, 10000);
 
   checkRequestStatus();
 
