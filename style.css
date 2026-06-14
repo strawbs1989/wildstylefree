@@ -730,6 +730,19 @@ NoticeBoard
   color: #c084fc;
   text-transform: uppercase;
 }
+
+/*==========================
+NOW PLAYING
+========================= */
+.card-body iframe {
+  width: 100%;
+  border: 0;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+
+
 /* =========================
    DJs Page
 ========================= */
