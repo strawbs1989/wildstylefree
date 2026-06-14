@@ -937,31 +937,44 @@ async function deletePost(postId) {
 /* =========================================
    REQUESTS
 ========================================= */
+const REQUEST_TICKER_URL =
+  'https://script.google.com/macros/s/AKfycbwS2Jm2bj9xVmy5IxHBF-FqZDSYav7waaPqdoECWn1yfRkwSO6reoViMjFq1LBnbEU/exec';
+
 
 async function loadRequestsTicker() {
+
   if (!els.requestTickerText || !els.requestTickerClone) return;
 
   try {
-    const res = await fetch(REQUEST_TICKER_CSV + '&t=' + Date.now());
-    const csv = await res.text();
-    const rows = csv.trim().split('\n');
-    rows.shift();
 
-    const items = rows.map(row => {
-      const cols = parseCSV(row);
-      const name = cols[1] || 'Listener';
-      const song = cols[2] || 'Unknown Song';
-      const artist = cols[3] || 'Unknown Artist';
-      return `${name} requested ${song} - ${artist}`;
-    }).filter(Boolean).slice(-10);
+    const res = await fetch(
+      REQUEST_TICKER_URL + '?t=' + Date.now()
+    );
 
-    const text = items.length ? items.join(' • ') : 'No requests yet — be the first!';
+    const requests = await res.json();
+
+    const items = requests
+      .slice(-10)
+      .map(r =>
+        `${r.name} requested ${r.song} - ${r.artist}`
+      );
+
+    const text = items.length
+      ? items.join(' • ')
+      : 'No requests yet — be the first!';
+
     els.requestTickerText.textContent = text;
     els.requestTickerClone.textContent = text;
+
   } catch (err) {
-    console.error('Ticker load failed:', err);
-    els.requestTickerText.textContent = 'Requests unavailable right now.';
-    els.requestTickerClone.textContent = 'Requests unavailable right now.';
+
+    console.error(err);
+
+    els.requestTickerText.textContent =
+      'Requests unavailable right now.';
+
+    els.requestTickerClone.textContent =
+      'Requests unavailable right now.';
   }
 }
 
