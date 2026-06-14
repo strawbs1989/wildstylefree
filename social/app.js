@@ -940,7 +940,6 @@ async function deletePost(postId) {
 const REQUEST_TICKER_URL =
   'https://script.google.com/macros/s/AKfycbwS2Jm2bj9xVmy5IxHBF-FqZDSYav7waaPqdoECWn1yfRkwSO6reoViMjFq1LBnbEU/exec';
 
-
 async function loadRequestsTicker() {
 
   if (!els.requestTickerText || !els.requestTickerClone) return;
