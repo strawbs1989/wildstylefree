@@ -49,8 +49,9 @@ if (!usingPlaceholders) {
 const REQUEST_STATUS_URL =
   'https://script.google.com/macros/s/AKfycbz4TY_tQZEsJflfzeKB8ALDR7aEDNVe6jjQhoGO-d8Rqv0Nr_yiIa2peKbC2-oaBZE/exec';
 
-const REQUEST_TICKER_CSV =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN3Wl2Tq0brZrYyKWkN-Dz1Ze4bjq3-S0iIL1O5Zo3CsT1S463y2surOifH4CLB2zHQHoR9paj0Mdk/pub?gid=0&single=true&output=csv';
+const REQUEST_TICKER_URL =
+
+'https://script.google.com/macros/s/AKfycbwS2Jm2bj9xVmy5IxHBF-FqZDSYav7waaPqdoECWn1yfRkwSO6reoViMjFq1LBnbEU/exec?action=ticker';
 
 
 
