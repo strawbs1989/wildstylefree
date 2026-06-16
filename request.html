@@ -95,43 +95,24 @@
     </section>
 
     <main class="main">
-      <section class="main-left">
-        <article class="card" id="requestFormCard">
-          <div class="card-head">
-            <h2>Song Request Form</h2>
-            <span class="badge">Live Requests</span>
-          </div>
+      <section class="main-left"> 
+      <article class="card" id="requestFormCard">
+      <div class="card-head">
+    <h2>Song Requests</h2>
+    <span class="badge">NoSongRequests</span>
+  </div>
 
-          <div class="card-body">
-            <form
-              class="request-form-page"
-              action="https://script.google.com/macros/s/AKfycbz4TY_tQZEsJflfzeKB8ALDR7aEDNVe6jjQhoGO-d8Rqv0Nr_yiIa2peKbC2-oaBZE/exec"
-              method="post"
-              target="hidden_iframe"
-              onsubmit="showRequestSuccess()"
-            >
-              <div class="request-grid">
-                <input type="text" name="yourname" placeholder="Your Name" required>
-                <input type="text" name="songtitle" placeholder="Song Title" required>
-                <input type="text" name="artistname" placeholder="Artist Name" required>
-                <input type="text" name="shoutout" placeholder="Dedication / Shout-out (optional)">
-              </div>
-
-              <button type="submit" class="btn-primary request-submit-btn">Send Request</button>
-            </form>
-
-            <iframe name="hidden_iframe" style="display:none;"></iframe>
-
-            <div id="requestSuccess" class="request-success hidden">
-              ✅ Your request has been sent to Wildstyle Radio.
-            </div>
-			<div id="requestClosed" class="request-closed hidden">
-  🚫 Requests are currently closed.<br>
-  Please check back later.
-</div> 
-          </div>
-        </article>
-
+  <div class="card-body" style="padding:0;">
+    <iframe
+      src="https://app.nosongrequests.com/WildStyle"
+      width="100%"
+      height="650"
+      frameborder="0"
+      scrolling="yes"
+      style="border:none;display:block;">
+    </iframe>
+  </div>
+</article>
         <article class="card">
           <div class="card-head">
             <h2>Listen Live</h2>
