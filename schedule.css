@@ -49,3 +49,24 @@ body{
   color:#fff;
   font-weight:700;
 } 
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 280px;
+  height: 100vh;
+  transition: right .3s ease;
+  z-index: 1000;
+}
+
+.mobile-nav.open {
+  right: 0;
+}
+
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 999;
+}
