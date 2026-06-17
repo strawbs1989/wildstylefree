@@ -382,6 +382,8 @@ async function loadSchedule() {
 }
 
 async function initSchedule() {
+  console.log("INIT SCHEDULE RUNNING");
+async function initSchedule() {
   const rawSlots = await loadSchedule();
 
   const slots = rawSlots.map(s => ({
@@ -392,7 +394,7 @@ async function initSchedule() {
   })).filter(s => s.day && s.start && s.end);
 
   window.ALL_SLOTS = slots;
-
+console.log("SLOTS:", slots);
   renderSchedule(slots);
   updateNowNext();
 
