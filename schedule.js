@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
    =============================== */
 (function () {
   const burger = document.getElementById("burger");
-  const nav = document.getElementById("nav");
+  const nav = document.getElementById("mobileNav");
 
   if (!burger || !nav) return;
 
