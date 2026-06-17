@@ -28,56 +28,40 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===============================
    BURGER MENU FIX
    =============================== */
-(function () {
+document.addEventListener("DOMContentLoaded", () => {
   const burger = document.getElementById("burger");
-  const nav = document.getElementById("mobileNav");
+  const mobileNav = document.getElementById("mobileNav");
+  const navClose = document.getElementById("navClose");
+  const navBackdrop = document.getElementById("navBackdrop");
 
-  if (!burger || !nav) return;
+  if (!burger || !mobileNav) return;
 
-  burger.replaceWith(burger.cloneNode(true));
-  nav.replaceWith(nav.cloneNode(true));
+  function openMenu() {
+    mobileNav.classList.add("open");
+    if (navBackdrop) navBackdrop.hidden = false;
+  }
 
-  const freshBurger = document.getElementById("burger");
-  const freshNav = document.getElementById("nav");
+  function closeMenu() {
+    mobileNav.classList.remove("open");
+    if (navBackdrop) navBackdrop.hidden = true;
+  }
 
-  if (!freshBurger || !freshNav) return;
+  burger.addEventListener("click", openMenu);
 
-  freshBurger.setAttribute("aria-expanded", "false");
+  if (navClose) {
+    navClose.addEventListener("click", closeMenu);
+  }
 
-  freshBurger.addEventListener("click", function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-    const isOpen = freshNav.classList.contains("open");
-    freshNav.classList.toggle("open", !isOpen);
-    freshBurger.setAttribute("aria-expanded", String(!isOpen));
-  });
+  if (navBackdrop) {
+    navBackdrop.addEventListener("click", closeMenu);
+  }
 
-  freshNav.addEventListener("click", function (e) {
-    if (e.target.tagName === "A") {
-      freshNav.classList.remove("open");
-      freshBurger.setAttribute("aria-expanded", "false");
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (
-      freshNav.classList.contains("open") &&
-      !e.target.closest("#nav") &&
-      !e.target.closest("#burger")
-    ) {
-      freshNav.classList.remove("open");
-      freshBurger.setAttribute("aria-expanded", "false");
-    }
-  });
-
-  document.addEventListener("keydown", function (e) {
+  document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      freshNav.classList.remove("open");
-      freshBurger.setAttribute("aria-expanded", "false");
+      closeMenu();
     }
   });
-})();
-
+});
 /* -------------------------
    UK TIME
    Proper UK time without manual BST edits
