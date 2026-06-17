@@ -385,6 +385,24 @@ async function loadSchedule() {
   }
 }
 
+async function initSchedule() {
+  const rawSlots = await loadSchedule();
+
+  const slots = rawSlots.map(s => ({
+    day: normDay(s.day),
+    start: s.start,
+    end: s.end,
+    dj: s.dj || "Free"
+  })).filter(s => s.day && s.start && s.end);
+
+  window.ALL_SLOTS = slots;
+
+  renderSchedule(slots);
+  updateNowNext();
+
+  setInterval(updateNowNext, 60000);
+}
+
 /* -------------------------
    START
 ------------------------- */
