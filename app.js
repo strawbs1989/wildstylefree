@@ -497,12 +497,12 @@ const wildyPicks = [
     name: "DJ EchoFalls",
     image: "/images/echo1.png",
     text: "Founder of Wildstyle Radio and master of multi-genre mayhem."
-  }
+  },
 {
     name: "HotShotDj",
     image: "/images/hotshot.jpg",
     text: "Co-Owner Of Wildstyle Radio Master Of All Genres."
-  }
+  },
 ];
 
 const today = new Date().getDate();
