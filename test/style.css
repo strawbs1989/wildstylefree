@@ -1,3 +1,16 @@
+body{
+  background:#00ff00 !important;
+}
+
+.topbar{
+  background:red !important;
+  display:flex !important;
+}
+
+.brand{
+  color:white !important;
+}
+
 :root{
   --bg:#f5edf7;
   --panel:#0f0b18;
