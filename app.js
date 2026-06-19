@@ -80,12 +80,7 @@ const els = {
   signupEmail: document.getElementById('signupEmail'),
   signupPassword: document.getElementById('signupPassword'),
 
-  // feed / post
-  postInput: document.getElementById('postInput'),
-  createPostBtn: document.getElementById('createPostBtn'),
-  postStatus: document.getElementById('postStatus'),
-  feedContainer: document.getElementById('feedContainer'),
-
+  
   // profile
   profileAvatar: document.getElementById('profileAvatar'),
   profileName: document.getElementById('profileName'),
@@ -94,17 +89,10 @@ const els = {
   profilePosts: document.getElementById('profilePosts'),
   profileActions: document.getElementById('profileActions'),
 
-  // requests ticker
-  requestTickerText: document.getElementById('requestTickerText'),
-  requestTickerClone: document.getElementById('requestTickerClone'),
-
+  
  
 
-  // request page
-  requestForm: document.querySelector('.request-form-page'),
-  requestSuccess: document.getElementById('requestSuccess'),
-  requestClosed: document.getElementById('requestClosed'),
-
+  
   // schedule page
   scheduleNowOn: document.getElementById('scheduleNowOn'),
   scheduleUpNext: document.getElementById('scheduleUpNext')
@@ -578,34 +566,6 @@ function bindCoreUI() {
 document.addEventListener('DOMContentLoaded', () => {
   bindCoreUI();
 
-  loadRequestsTicker();
-  setInterval(loadRequestsTicker, 10000);
-
-  checkRequestStatus();
-
-  if (usingPlaceholders) {
-    setLoggedOutState();
-    listenForPosts();
-    setAuthMessage('Paste your Firebase config first.');
-  } else {
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await setLoggedInState(user);
-      } else {
-        setLoggedOutState();
-      }
-
-      listenForPosts();
-    });
-  }
-});
+  
 
 
-/* =========================================
-   GLOBALS
-========================================= */
-
-window.likePost = likePost;
-window.addComment = addComment;
-window.deletePost = deletePost;
-window.showRequestSuccess = showRequestSuccess;  
