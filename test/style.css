@@ -1,15 +1,4 @@
-body{
-  background:#00ff00 !important;
-}
 
-.topbar{
-  background:red !important;
-  display:flex !important;
-}
-
-.brand{
-  color:white !important;
-}
 
 :root{
   --bg:#f5edf7;
@@ -22,9 +11,7 @@ body{
   --shadow:0 18px 45px rgba(42,16,68,.14);
 }
 
-body{
-  background: lime !important;
-}
+
 
 *{box-sizing:border-box}
 html,body{
@@ -2044,28 +2031,14 @@ DASHBOARD
   display:grid;
   grid-template-columns:minmax(0,1fr) 340px;
   gap:24px;
-  margin-top:24px;
 }
 
-.dashboard-main{
-  display:grid;
-  gap:20px;
-}
-
-.dashboard-main .card{
-  width:100%;
-}
-
-.sidebar{
-  display:grid;
-  gap:20px;
-  align-self:start;
-}
-
-@media (max-width:1000px){
-
+@media (max-width:1100px){
   .dashboard-layout{
     grid-template-columns:1fr;
   }
 
+  .sidebar{
+    margin-top:20px;
+  }
 }
