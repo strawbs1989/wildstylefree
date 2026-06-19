@@ -2082,3 +2082,30 @@ HERO
 .hero-stat span{
   color:#b8a9d6;
 }
+
+
+.dashboard-v2{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:24px;
+  margin-top:24px;
+}
+
+.main-content{
+  display:grid;
+  gap:20px;
+}
+
+.right-sidebar{
+  display:grid;
+  gap:20px;
+  align-content:start;
+}
+
+@media (max-width:1000px){
+
+  .dashboard-v2{
+    grid-template-columns:1fr;
+  }
+
+}
