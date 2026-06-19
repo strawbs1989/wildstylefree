@@ -2058,3 +2058,31 @@ DASHBOARD
     }
 
 }
+
+/*===================
+HERO
+================= */
+.hero-stats{
+  display:flex;
+  gap:15px;
+  margin-top:25px;
+  flex-wrap:wrap;
+}
+
+.hero-stat{
+  background:rgba(255,255,255,.06);
+  padding:15px 20px;
+  border-radius:18px;
+  text-align:center;
+  min-width:110px;
+}
+
+.hero-stat strong{
+  display:block;
+  font-size:1.5rem;
+  color:#fff;
+}
+
+.hero-stat span{
+  color:#b8a9d6;
+}
