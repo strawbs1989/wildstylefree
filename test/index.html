@@ -422,6 +422,22 @@ window.addEventListener('resize', () => {
     closeMenu();
   }
 });
+
+.dashboard-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:24px;
+}
+
+@media (max-width:1100px){
+  .dashboard-layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    margin-top:20px;
+  }
+}
 </script> 
 
 </body>
