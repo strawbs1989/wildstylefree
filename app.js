@@ -1,5 +1,5 @@
 
-console.log("JAY TEST 123");
+console.log
 import { firebaseConfig } from '/social/firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
 import {
