@@ -940,82 +940,42 @@ async function deletePost(postId) {
 }
 
 /* =========================================
-   REQUESTS
+   WILDPICKS
 ========================================= */
-const REQUEST_TICKER_URL=
- 'https://script.google.com/macros/s/AKfycbwS2Jm2bj9xVmy5IxHBF-FqZDSYav7waaPqdoECWn1yfRkwSO6reoViMjFq1LBnbEU/exec?action=ticker';
-
-async function loadRequestsTicker() {
-
-  if (!els.requestTickerText || !els.requestTickerClone) return;
-
-  try {
-
-    const res = await fetch(
-      REQUEST_TICKER_URL + '&t=' + Date.now()
-    );
-
-    const data = await res.json();
-
-    const items = data.map(r =>
-      `${r.name} requested "${r.song}" - ${r.artist}`
-    );
-
-    const text = items.length
-      ? items.join(' • ')
-      : 'No requests yet — be the first!';
-
-    els.requestTickerText.textContent = text;
-    els.requestTickerClone.textContent = text;
-
-  } catch (err) {
-
-    console.error('Ticker load failed:', err);
-
-    els.requestTickerText.textContent =
-      'Requests unavailable right now.';
-
-    els.requestTickerClone.textContent =
-      'Requests unavailable right now.';
+const wildyPicks = [
+  {
+    name: "DJ Nala",
+    image: "/images/djnala.jpg",
+    text: "Bringing the hottest genres every week with proper community energy."
+  },
+  {
+    name: "DJ Marty",
+    image: "/images/marty.jpg",
+    text: "80s, 90s and today's biggest hits every Tuesday."
+  },
+  {
+    name: "DJ Stormzy",
+    image: "/images/spark.jpeg",
+    text: "House and garage vibes with plenty of energy."
+  },
+  {
+    name: "DJ EchoFalls",
+    image: "/images/echo1.png",
+    text: "Founder of Wildstyle Radio and master of multi-genre mayhem."
   }
-}
-
-function showRequestSuccess() {
-  setTimeout(() => {
-    if (els.requestSuccess) {
-      els.requestSuccess.classList.remove('hidden');
-      setTimeout(() => els.requestSuccess?.classList.add('hidden'), 5000);
-    }
-
-    if (els.requestForm) els.requestForm.reset();
-  }, 900);
-}
-
-async function checkRequestStatus() {
-  if (!els.requestForm || !els.requestClosed) return;
-
-  try {
-    const res = await fetch(REQUEST_STATUS_URL + '?t=' + Date.now());
-    const data = await res.json();
-
-    const isOpen = String(data.requests || '').trim().toUpperCase() === 'ON';
-
-    if (isOpen) {
-      els.requestForm.style.display = 'flex';
-      els.requestClosed.classList.add('hidden');
-    } else {
-      els.requestForm.style.display = 'none';
-      els.requestSuccess?.classList.add('hidden');
-      els.requestClosed.classList.remove('hidden');
-    }
-  } catch (err) {
-    console.error('Request status check failed:', err);
-    if (els.requestForm) els.requestForm.style.display = 'none';
-    els.requestClosed.innerHTML = '⚠️ Request status unavailable right now.<br>Please try again later.';
-    els.requestClosed.classList.remove('hidden');
+{
+    name: "HotShotDj",
+    image: "/images/hotshot.jpg",
+    text: "Co-Owner Of Wildstyle Radio Master Of All Genres."
   }
-}
+];
 
+const today = new Date().getDate();
+const pick = wildyPicks[today % wildyPicks.length];
+
+document.getElementById("wildyDjName").textContent = pick.name;
+document.getElementById("wildyDjImage").src = pick.image;
+document.getElementById("wildyDjText").textContent = pick.text;
 /*===================≠======================
 NOTICEBOARD
 ==================≠===========≠============*/
