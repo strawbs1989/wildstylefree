@@ -340,16 +340,12 @@ button,input,textarea{font:inherit}
   cursor:pointer;
 }
 
-.sidebar{display:grid;gap:18px}
-.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.quick-link{
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:18px;
-  text-align:center;
-  color:#fff;
-  font-weight:800;
+.sidebar{
+   display:grid;
+   gap:20px;
+   position:sticky;
+   top:100px;
+   align-self:start;
 }
 
 /* =========================
