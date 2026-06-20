@@ -2089,10 +2089,16 @@ HERO DJ
     text-align:center;
   }
 
-  .hero-dj{
-    width:140px;
-    height:140px;
-  }
+  .hero-dj {
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:24px;
+  border:3px solid rgba(255,255,255,.15);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  margin-right:20px;
+  float:left;
+ }
 }
 
 /*===================
