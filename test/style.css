@@ -2318,3 +2318,23 @@ EVENTS
   text-align:center;
   margin-top:12px;
 }
+
+/*======================
+WILDY
+===================== */
+
+.wildy-time{
+  margin-top:8px;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  background:linear-gradient(
+    90deg,
+    #ff4da6,
+    #7c4dff,
+    #3d8bff
+  );
+  color:#fff;
+  font-size:.75rem;
+  font-weight:700;
+}
