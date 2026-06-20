@@ -1960,9 +1960,15 @@ section{
 /* ===== SUMMER ===== */
 .theme-summer body{
   background:
-    radial-gradient(circle at top left, rgba(0,209,255,.22), transparent 38%),
-    radial-gradient(circle at top right, rgba(255,190,11,.20), transparent 38%),
-    linear-gradient(180deg,#eefcff 0%, #f9f3dd 100%);
+    radial-gradient(circle at top left,
+    rgba(255,0,120,.15),
+    transparent 35%),
+
+    radial-gradient(circle at top right,
+    rgba(0,180,255,.12),
+    transparent 35%),
+
+    #070611;
 }
 
 .theme-summer .season-banner{
