@@ -21,7 +21,7 @@ const schedule = [
   dj: "Stormzy",
   start: "14:00",
   end: "16:00",
-  image: "/images/spark.jpg"
+  image: "/images/spark.jpeg"
 },
 ];
 
