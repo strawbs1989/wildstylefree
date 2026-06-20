@@ -59,3 +59,41 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updateHeroDJ, 60000);
 
 });
+
+
+function buildScheduleWidget() {
+
+  const list = document.getElementById("liveScheduleList");
+
+  if (!list) return;
+
+  let html = "";
+
+  schedule.forEach(show => {
+
+    html += `
+      <div class="schedule-row">
+
+        <img src="${show.image}" alt="${show.dj}">
+
+        <div class="schedule-info">
+          <div class="schedule-name">${show.dj}</div>
+          <div class="schedule-time">
+            ${show.start} - ${show.end}
+          </div>
+        </div>
+
+      </div>
+    `;
+
+  });
+
+  list.innerHTML = html;
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  buildScheduleWidget();
+
+});
