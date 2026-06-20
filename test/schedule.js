@@ -24,3 +24,38 @@ const schedule = [
   image: "/images/spark.jpg"
 },
 ];
+
+
+function updateHeroDJ() {
+
+  const heroDJ = document.getElementById("heroDJ");
+
+  if (!heroDJ) return;
+
+  const now = new Date();
+
+  const currentTime =
+    now.getHours().toString().padStart(2,"0") +
+    ":" +
+    now.getMinutes().toString().padStart(2,"0");
+
+  const currentShow = schedule.find(show =>
+    currentTime >= show.start &&
+    currentTime < show.end
+  );
+
+  if (currentShow && currentShow.image) {
+
+    heroDJ.src = currentShow.image;
+
+  }
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  updateHeroDJ();
+
+  setInterval(updateHeroDJ, 60000);
+
+});
