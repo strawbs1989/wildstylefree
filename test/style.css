@@ -512,11 +512,12 @@ button,input,textarea{font:inherit}
 
 .spotlight{display:flex;gap:14px;align-items:center}
 .spotlight img{
-  width:86px;
-  height:86px;
+  width:90px;
+  height:90px;
   border-radius:18px;
   object-fit:cover;
-  background:#221738;
+  border:2px solid rgba(255,255,255,.12);
+  box-shadow:0 0 20px rgba(138,70,255,.35);
 }
 
 .spotlight{
