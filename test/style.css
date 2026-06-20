@@ -2062,6 +2062,13 @@ DASHBOARD
 HERO DJ
 ================= */
 
+.hero-intro{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-bottom:20px;
+}
+
 .hero-dj{
   width:180px;
   height:180px;
@@ -2070,6 +2077,18 @@ HERO DJ
   margin-bottom:18px;
   border:3px solid rgba(255,255,255,.1);
   box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+@media(max-width:720px){
+  .hero-intro{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .hero-dj{
+    width:140px;
+    height:140px;
+  }
 }
 
 /*===================
