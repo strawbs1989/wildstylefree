@@ -1676,10 +1676,11 @@ video {
     height: 320px !important;
   }
 
-  .player-frame-wrap iframe {
-    width: 100% !important;
-    height: 240px !important;
-  }
+  .player-frame-wrap iframe{
+  width:100%;
+  height:320px;
+  border:none;
+}
 
   .footer {
     gap: 14px !important;
