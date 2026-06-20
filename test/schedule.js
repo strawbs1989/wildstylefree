@@ -4,12 +4,7 @@ const schedule = [
   start: "18:00",
   end: "20:00",
   image: "/images/chanel.png"
-  const currentShow = schedule.find(show =>
-  currentTime >= show.start &&
-  currentTime < show.end
-);
-
-},
+  },
 {
   dj: "stephan",
   start: "20:00",
@@ -61,10 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateHeroDJ();
 
-const currentShow = schedule.find(show =>
-  currentTime >= show.start &&
-  currentTime < show.end
-);
+
 
   setInterval(updateHeroDJ, 60000);
 
