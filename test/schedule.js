@@ -3,18 +3,18 @@ const schedule = [
   dj: "Chanel",
   start: "18:00",
   end: "29:00",
-  image: "/images/chanel.jpg"
+  image: "/images/chanel.png"
 },
 {
   dj: "stephan",
   start: "20:00",
   end: "22:00",
-  image: "/images/djdon.jpg"
+  image: "/images/don.jpg"
 },
 {
   dj: "Free",
   start: "22:00",
   end: "00:00",
-  image: "/images/djnala.jpg"
+  image: "/images/mouse.jpeg"
 }
 ];
