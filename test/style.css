@@ -790,12 +790,13 @@ button,input,textarea{font:inherit}
 NoticeBoard
 ===========≠===============*/
 
-.notice-item {
-  background: rgba(255,255,255,.05);
-  border-left: 4px solid #a855f7;
-  padding: 12px;
-  margin-bottom: 12px;
-  border-radius: 12px;
+.notice-item{
+  padding:12px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  color:#fff;
 }
 
 .notice-item strong {
