@@ -2104,11 +2104,9 @@ HERO
 }
 
 .hero-stat{
-  background:rgba(255,255,255,.06);
-  padding:15px 20px;
-  border-radius:18px;
-  text-align:center;
-  min-width:110px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 0 15px rgba(138,70,255,.2);
 }
 
 .hero-stat strong{
