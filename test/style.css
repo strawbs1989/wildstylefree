@@ -2055,6 +2055,23 @@ DASHBOARD
 
 }
 
+
+
+
+/*===================
+HERO DJ
+================= */
+
+.hero-dj{
+  width:180px;
+  height:180px;
+  object-fit:cover;
+  border-radius:24px;
+  margin-bottom:18px;
+  border:3px solid rgba(255,255,255,.1);
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
 /*===================
 HERO
 ================= */
