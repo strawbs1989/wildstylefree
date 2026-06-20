@@ -2288,6 +2288,8 @@ EVENTS
 }
 
 .event-card .btn-primary{
-  display:inline-block;
-  text-decoration:none;
+  display:block;
+  width:100%;
+  text-align:center;
+  margin-top:12px;
 }
