@@ -791,12 +791,36 @@ NoticeBoard
 ===========≠===============*/
 
 .notice-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
   padding:12px;
-  margin-bottom:10px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
+  margin-bottom:8px;
   border-radius:12px;
-  color:#fff;
+  background:rgba(255,255,255,.04);
+}
+
+.notice-tag{
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:.7rem;
+  font-weight:700;
+}
+
+.notice-tag.live{
+  background:#ff3d7f;
+}
+
+.notice-tag.event{
+  background:#8a2be2;
+}
+
+.notice-tag.recruit{
+  background:#00bcd4;
+}
+
+.notice-tag.award{
+  background:#ff9800;
 }
 
 .notice-item strong {
