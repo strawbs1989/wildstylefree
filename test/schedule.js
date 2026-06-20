@@ -99,3 +99,40 @@ document.addEventListener("DOMContentLoaded", () => {
   buildScheduleWidget();
 
 });
+
+function updateWildyRecommendation() {
+
+  const djImage = document.getElementById("wildyDjImage");
+  const djName = document.getElementById("wildyDjName");
+  const djText = document.getElementById("wildyDjText");
+  const djTime = document.getElementById("wildyDjTime");
+
+  if (!djImage || !djName || !djText || !djTime) return;
+
+  const now = new Date();
+
+  const currentTime =
+    now.getHours().toString().padStart(2, "0") +
+    ":" +
+    now.getMinutes().toString().padStart(2, "0");
+
+  let currentShow = schedule.find(show =>
+    currentTime >= show.start &&
+    currentTime < show.end
+  );
+
+  if (!currentShow) {
+    currentShow = schedule[0];
+  }
+
+  djImage.src = currentShow.image;
+  djName.textContent = currentShow.dj;
+  djText.textContent =
+    "Wildy recommends tuning into this show today.";
+  djTime.textContent =
+    currentShow.start + " - " + currentShow.end;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateWildyRecommendation();
+});
