@@ -2267,3 +2267,27 @@ TREND
   background:rgba(255,255,255,.08);
   transform:translateX(3px);
 }
+
+/*====================
+EVENTS
+================== */
+.event-card{
+  text-align:center;
+  padding:20px;
+}
+
+.event-card h3{
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.event-card p{
+  color:#d9d9d9;
+  margin-bottom:15px;
+  line-height:1.5;
+}
+
+.event-card .btn-primary{
+  display:inline-block;
+  text-decoration:none;
+}
