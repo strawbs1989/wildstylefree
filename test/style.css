@@ -518,6 +518,13 @@ button,input,textarea{font:inherit}
   object-fit:cover;
   background:#221738;
 }
+
+.spotlight{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  min-height:auto;
+}
 .spotlight p{margin:6px 0 0;color:#dbcdf5;line-height:1.6}
 .spotlight-title{font-size:1.15rem;color:#fff}
 
