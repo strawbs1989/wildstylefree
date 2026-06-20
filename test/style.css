@@ -15,13 +15,17 @@
 
 *{box-sizing:border-box}
 html,body{
-  margin:0;
-  padding:0;
-  font-family:Inter,system-ui,sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(255,122,182,.18), transparent 24%),
-    radial-gradient(circle at top right, rgba(78,176,255,.15), transparent 24%),
-    var(--bg);
+    radial-gradient(circle at top left,
+    rgba(255,0,120,.15),
+    transparent 35%),
+
+    radial-gradient(circle at top right,
+    rgba(0,180,255,.12),
+    transparent 35%),
+
+    #070611;
+
   color:#fff;
 }
 a{text-decoration:none;color:inherit}
