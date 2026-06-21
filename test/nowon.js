@@ -27,6 +27,18 @@ async function loadNowOn() {
 
     if (data.currentSlot) {
 
+    const playerArtwork =
+  document.getElementById("playerArtwork");
+
+const liveDJ =
+  schedule.find(
+    show => show.dj === data.currentSlot.dj
+  );
+
+if (playerArtwork && liveDJ) {
+  playerArtwork.src = liveDJ.image;
+}
+
       if (playerDJ) {
         playerDJ.textContent =
           data.currentSlot.dj;
