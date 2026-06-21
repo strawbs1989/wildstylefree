@@ -52,6 +52,24 @@ const heroShowTime =
 
   if (currentShow && currentShow.image) {
 
+
+
+heroDJ.src = currentShow.image;
+
+if(heroShowName){
+  heroShowName.textContent =
+    currentShow.dj;
+}
+
+if(heroShowTime){
+  heroShowTime.textContent =
+    currentShow.start + " - " +
+    currentShow.end;
+}
+
+
+
+
     heroDJ.src = currentShow.image;
 
   }
