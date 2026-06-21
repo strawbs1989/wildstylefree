@@ -2338,3 +2338,29 @@ WILDY
   font-size:.75rem;
   font-weight:700;
 }
+
+/*=======================
+Live Schedule 
+===================== */
+
+.schedule-live{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#ff2a6d;
+  color:#fff;
+  font-size:.7rem;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.schedule-next{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#3d8bff;
+  color:#fff;
+  font-size:.7rem;
+  font-weight:700;
+  margin-bottom:6px;
+}
