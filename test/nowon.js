@@ -3,20 +3,6 @@ const NOWON_URL = "https://script.google.com/macros/s/AKfycbydBPqENGJ6B49CGP6IIF
 async function loadNowOn() {
 
 
-heroShowTime.textContent =
-  data.currentSlot.start +
-  " - " +
-  data.currentSlot.end;
-
-const heroDJ = document.getElementById("heroDJ");
-
-const liveDJ = schedule.find(
-  show => show.dj === data.currentSlot.dj
-);
-
-if (heroDJ && liveDJ) {
-  heroDJ.src = liveDJ.image;
-}
 
 
 
@@ -45,44 +31,32 @@ const playerDJ =
 const playerTime =
   document.getElementById("playerTime");
 
-if (data.currentSlot) {
 
-  if (playerDJ) {
-    playerDJ.textContent =
+
+    if (data.currentSlot) {
+
+  if (heroShowName) {
+    heroShowName.textContent =
       data.currentSlot.dj;
   }
 
-  if (playerTime) {
-    playerTime.textContent =
+  if (heroShowTime) {
+    heroShowTime.textContent =
       data.currentSlot.start +
       " - " +
       data.currentSlot.end;
   }
 
-}
+  const heroDJ =
+    document.getElementById("heroDJ");
 
+  const liveDJ =
+    schedule.find(
+      show => show.dj === data.currentSlot.dj
+    );
 
-    if (data.currentSlot) {
-
-      if (heroShowName) {
-        heroShowName.textContent = data.currentSlot.dj;
-      }
-
-      if (heroShowTime) {
-        heroShowTime.textContent =
-          data.currentSlot.start +
-          " - " +
-          data.currentSlot.end;
-      }
-
-    }
-
-  } catch (err) {
-
-    console.error("Now On failed:", err);
-
-    nowEl.textContent = "Off Air";
-
+  if (heroDJ && liveDJ) {
+    heroDJ.src = liveDJ.image;
   }
 
 }
