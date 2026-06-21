@@ -38,6 +38,30 @@ if (heroDJ && liveDJ) {
 
     nowEl.textContent = data.text || "Off Air";
 
+
+const playerDJ =
+  document.getElementById("playerDJ");
+
+const playerTime =
+  document.getElementById("playerTime");
+
+if (data.currentSlot) {
+
+  if (playerDJ) {
+    playerDJ.textContent =
+      data.currentSlot.dj;
+  }
+
+  if (playerTime) {
+    playerTime.textContent =
+      data.currentSlot.start +
+      " - " +
+      data.currentSlot.end;
+  }
+
+}
+
+
     if (data.currentSlot) {
 
       if (heroShowName) {
