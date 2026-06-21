@@ -2364,3 +2364,29 @@ Live Schedule
   font-weight:700;
   margin-bottom:6px;
 }
+
+/*======================
+CURRENT SHOW
+===================== */
+.hero-show-name{
+  font-size:1.2rem;
+  font-weight:700;
+  color:#fff;
+  margin-top:8px;
+}
+
+.hero-show-time{
+  color:#9ecbff;
+  font-size:.9rem;
+  margin-top:4px;
+}
+
+.live-badge{
+  animation:pulseLive 2s infinite;
+}
+
+@keyframes pulseLive{
+  0%{opacity:1;}
+  50%{opacity:.6;}
+  100%{opacity:1;}
+}
