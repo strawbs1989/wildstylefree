@@ -50,29 +50,23 @@ const heroShowTime =
     currentTime < show.end
   );
 
-  if (currentShow && currentShow.image) {
+  if (currentShow) {
 
-
-
-heroDJ.src = currentShow.image;
-
-if(heroShowName){
-  heroShowName.textContent =
-    currentShow.dj;
-}
-
-if(heroShowTime){
-  heroShowTime.textContent =
-    currentShow.start + " - " +
-    currentShow.end;
-}
-
-
-
-
+  if (currentShow.image) {
     heroDJ.src = currentShow.image;
-
   }
+
+  if (heroShowName) {
+    heroShowName.textContent = currentShow.dj;
+  }
+
+  if (heroShowTime) {
+    heroShowTime.textContent =
+      currentShow.start + " - " + currentShow.end;
+  }
+
+}
+
 
 }
 
