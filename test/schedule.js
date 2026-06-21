@@ -62,6 +62,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+function buildScheduleWidget() {
+
+  console.log("Schedule widget running");
+
+  const list = document.getElementById("liveScheduleList");
+
+  if (!list) {
+    console.log("liveScheduleList not found");
+    return;
+  }
+
+  // rest of code...
+}
 
 function buildScheduleWidget() {
 
@@ -167,3 +180,4 @@ function updateWildyRecommendation() {
 document.addEventListener("DOMContentLoaded", () => {
   updateWildyRecommendation();
 });
+
