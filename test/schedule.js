@@ -142,7 +142,7 @@ function buildScheduleWidget() {
 
   list.innerHTML = html;
 
-}
+});
 
 function updateWildyRecommendation() {
 
