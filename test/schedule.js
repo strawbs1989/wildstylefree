@@ -18,16 +18,52 @@ const schedule = [
   image: "/images/mouse.jpeg"
 },
 {
+  dj: "Don",
+  start: "12:00",
+  end: "14:00",
+  image: "/images/don.jpg"
+},
+{
   dj: "Stormzy",
   start: "14:00",
   end: "16:00",
   image: "/images/spark.jpeg"
 },
 {
-  dj: "Don",
-  start: "12pm",
-  end: "14:00",
-  image: "/images/don.jpg"
+  dj: "Stormzy",
+  start: "16:00",
+  end: "17:00",
+  image: "/images/spark.jpeg"
+},
+{
+  dj: "Micky J",
+  start: "17:00",
+  end: "18:00",
+  image: "/images/mickeyjay.jpeg"
+},
+{
+  dj: "Kai",
+  start: "18:00",
+  end: "19:00",
+  image: "/images/kai.jpg"
+},
+{
+  dj: "EchoFalls",
+  start: "19:00",
+  end: "20:00",
+  image: "/images/echo1.png"
+},
+{
+  dj: "HotShotDj",
+  start: "20:00",
+  end: "22:00",
+  image: "/images/hotshot.jpg"
+},
+{
+  dj: "Free",
+  start: "22:00",
+  end: "00:00",
+  image: "/images/"
 },
 ];
 
