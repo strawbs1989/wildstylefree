@@ -28,6 +28,12 @@ const schedule = [
 
 function updateHeroDJ() {
 
+const heroShowName =
+  document.getElementById("heroShowName");
+
+const heroShowTime =
+  document.getElementById("heroShowTime");
+
   const heroDJ = document.getElementById("heroDJ");
 
   if (!heroDJ) return;
