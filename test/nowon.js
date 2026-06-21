@@ -2,6 +2,25 @@ const NOWON_URL = "https://script.google.com/macros/s/AKfycbydBPqENGJ6B49CGP6IIF
 
 async function loadNowOn() {
 
+
+heroShowTime.textContent =
+  data.currentSlot.start +
+  " - " +
+  data.currentSlot.end;
+
+const heroDJ = document.getElementById("heroDJ");
+
+const liveDJ = schedule.find(
+  show => show.dj === data.currentSlot.dj
+);
+
+if (heroDJ && liveDJ) {
+  heroDJ.src = liveDJ.image;
+}
+
+
+
+
   const nowEl = document.getElementById("nowon");
   const heroShowName = document.getElementById("heroShowName");
   const heroShowTime = document.getElementById("heroShowTime");
