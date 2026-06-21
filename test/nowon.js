@@ -2,11 +2,6 @@ const NOWON_URL = "https://script.google.com/macros/s/AKfycbydBPqENGJ6B49CGP6IIF
 
 async function loadNowOn() {
 
-
-
-
-
-
   const nowEl = document.getElementById("nowon");
   const heroShowName = document.getElementById("heroShowName");
   const heroShowTime = document.getElementById("heroShowTime");
@@ -24,42 +19,62 @@ async function loadNowOn() {
 
     nowEl.textContent = data.text || "Off Air";
 
+    const playerDJ =
+      document.getElementById("playerDJ");
 
-const playerDJ =
-  document.getElementById("playerDJ");
-
-const playerTime =
-  document.getElementById("playerTime");
-
-
+    const playerTime =
+      document.getElementById("playerTime");
 
     if (data.currentSlot) {
 
-  if (heroShowName) {
-    heroShowName.textContent =
-      data.currentSlot.dj;
-  }
+      if (playerDJ) {
+        playerDJ.textContent =
+          data.currentSlot.dj;
+      }
 
-  if (heroShowTime) {
-    heroShowTime.textContent =
-      data.currentSlot.start +
-      " - " +
-      data.currentSlot.end;
-  }
+      if (playerTime) {
+        playerTime.textContent =
+          data.currentSlot.start +
+          " - " +
+          data.currentSlot.end;
+      }
 
-  const heroDJ =
-    document.getElementById("heroDJ");
+      if (heroShowName) {
+        heroShowName.textContent =
+          data.currentSlot.dj;
+      }
 
-  const liveDJ =
-    schedule.find(
-      show => show.dj === data.currentSlot.dj
-    );
+      if (heroShowTime) {
+        heroShowTime.textContent =
+          data.currentSlot.start +
+          " - " +
+          data.currentSlot.end;
+      }
 
-  if (heroDJ && liveDJ) {
-    heroDJ.src = liveDJ.image;
+      const heroDJ =
+        document.getElementById("heroDJ");
+
+      const liveDJ =
+        schedule.find(
+          show => show.dj === data.currentSlot.dj
+        );
+
+      if (heroDJ && liveDJ) {
+        heroDJ.src = liveDJ.image;
+      }
+
+    }
+
+  } catch (err) {
+
+    console.error("Now On failed:", err);
+
+    nowEl.textContent = "Off Air";
+
   }
 
 }
+
 document.addEventListener("DOMContentLoaded", () => {
 
   loadNowOn();
