@@ -69,9 +69,39 @@ function buildScheduleWidget() {
 
   if (!list) return;
 
+  const now = new Date();
+
+  const currentTime =
+    now.getHours().toString().padStart(2,"0") +
+    ":" +
+    now.getMinutes().toString().padStart(2,"0");
+
+  let currentIndex = -1;
+
+  schedule.forEach((show,index) => {
+
+    if(
+      currentTime >= show.start &&
+      currentTime < show.end
+    ){
+      currentIndex = index;
+    }
+
+  });
+
   let html = "";
 
-  schedule.forEach(show => {
+  schedule.forEach((show,index) => {
+
+    let badge = "";
+
+    if(index === currentIndex){
+      badge = `<span class="schedule-live">LIVE</span>`;
+    }
+
+    if(index === currentIndex + 1){
+      badge = `<span class="schedule-next">NEXT</span>`;
+    }
 
     html += `
       <div class="schedule-row">
@@ -79,10 +109,17 @@ function buildScheduleWidget() {
         <img src="${show.image}" alt="${show.dj}">
 
         <div class="schedule-info">
-          <div class="schedule-name">${show.dj}</div>
+
+          ${badge}
+
+          <div class="schedule-name">
+            ${show.dj}
+          </div>
+
           <div class="schedule-time">
             ${show.start} - ${show.end}
           </div>
+
         </div>
 
       </div>
@@ -93,12 +130,6 @@ function buildScheduleWidget() {
   list.innerHTML = html;
 
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  buildScheduleWidget();
-
-});
 
 function updateWildyRecommendation() {
 
