@@ -37,8 +37,8 @@ const liveDJ =
     show => show.dj === data.currentSlot.dj
   );
 
-if (playerArtwork && liveDJ) {
-  playerArtwork.src = liveDJ.image;
+if (playerArtwork && currentDJ) {
+  playerArtwork.src = currentDJ.image;
 }
 
       if (playerDJ) {
@@ -68,7 +68,7 @@ if (playerArtwork && liveDJ) {
       const heroDJ =
         document.getElementById("heroDJ");
 
-      const liveDJ =
+      const currentDJ =
         schedule.find(
           show => show.dj === data.currentSlot.dj
         );
