@@ -23,6 +23,12 @@ const schedule = [
   end: "16:00",
   image: "/images/spark.jpeg"
 },
+{
+  dj: "Don",
+  start: "12pm",
+  end: "14:00",
+  image: "/images/don.jpg"
+},
 ];
 
 
