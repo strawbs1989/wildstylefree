@@ -3,6 +3,8 @@ const NOWON_URL = "https://script.google.com/macros/s/AKfycbydBPqENGJ6B49CGP6IIF
 async function loadNowOn() {
 
   const nowEl = document.getElementById("nowon");
+  const heroShowName = document.getElementById("heroShowName");
+  const heroShowTime = document.getElementById("heroShowTime");
 
   if (!nowEl) return;
 
@@ -17,6 +19,21 @@ async function loadNowOn() {
 
     nowEl.textContent = data.text || "Off Air";
 
+    if (data.currentSlot) {
+
+      if (heroShowName) {
+        heroShowName.textContent = data.currentSlot.dj;
+      }
+
+      if (heroShowTime) {
+        heroShowTime.textContent =
+          data.currentSlot.start +
+          " - " +
+          data.currentSlot.end;
+      }
+
+    }
+
   } catch (err) {
 
     console.error("Now On failed:", err);
@@ -26,7 +43,6 @@ async function loadNowOn() {
   }
 
 }
-
 document.addEventListener("DOMContentLoaded", () => {
 
   loadNowOn();
