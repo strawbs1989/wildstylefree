@@ -5,7 +5,7 @@ const playBtn =
   document.getElementById("playBtn");
 
 player.src =
-  "YOUR_HLS_STREAM_URL.m3u8";
+  "https://streaming.live365.com/a50378";
 
 playBtn.addEventListener("click", () => {
 
