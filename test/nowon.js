@@ -26,6 +26,8 @@ async function loadNowOn() {
       document.getElementById("playerTime");
 
     if (data.currentSlot) {
+    console.log("FOUND SLOT");
+console.log(data.currentSlot);
 
     const playerArtwork =
   document.getElementById("playerArtwork");
