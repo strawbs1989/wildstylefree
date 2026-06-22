@@ -33,6 +33,7 @@ async function loadNowOn() {
 const heroDJ =
   document.getElementById("heroDJ");
 
+
 const currentDJ =
   schedule.find(
     show => show.dj === data.currentSlot.dj
@@ -45,7 +46,6 @@ if (playerArtwork && currentDJ) {
 if (heroDJ && currentDJ) {
   heroDJ.src = currentDJ.image;
 }
-
 
     console.log("FOUND SLOT");
 console.log(data.currentSlot);
@@ -53,18 +53,7 @@ console.log(data.currentSlot);
     const playerArtwork =
   document.getElementById("playerArtwork");
 
-const currentDJ =
-  schedule.find(
-    show => show.dj === data.currentSlot.dj
-  );
 
-if (playerArtwork && currentDJ) {
-  playerArtwork.src = currentDJ.image;
-}
-
-if (heroDJ && currentDJ) {
-  heroDJ.src = currentDJ.image;
-}
 
       if (playerDJ) {
         playerDJ.textContent =
