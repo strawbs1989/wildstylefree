@@ -2444,3 +2444,10 @@ PLAYER
 
   cursor:pointer;
 }
+
+
+
+#heroDJ,
+#playerArtwork {
+  object-fit: cover;
+}
