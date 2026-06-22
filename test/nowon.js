@@ -64,15 +64,15 @@ async function loadNowOn() {
           data.currentSlot.end;
       }
 
-      if (playerArtwork && currentDJ) {
-        playerArtwork.src =
-          currentDJ.image;
-      }
+      if (playerArtwork) {
+      playerArtwork.src =
+      currentDJ?.image || "/images/.         default-dj.jpg";
+}
 
-      if (heroDJ && currentDJ) {
-        heroDJ.src =
-          currentDJ.image;
-      }
+if (heroDJ) {
+  heroDJ.src =
+    currentDJ?.image || "/images/default-dj.jpg";
+}
 
     }
 
