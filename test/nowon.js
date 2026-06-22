@@ -50,8 +50,7 @@ if (heroDJ && currentDJ) {
     console.log("FOUND SLOT");
 console.log(data.currentSlot);
 
-    const playerArtwork =
-  document.getElementById("playerArtwork");
+    
 
 
 
