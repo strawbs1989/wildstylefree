@@ -11,7 +11,7 @@ const schedule = [
   dj: "stephan",
   start: "20:00",
   end: "22:00",
-  image: "/images/don.jpg"
+  image: "/images/golds.jpg"
 },
 {
   day: "Saturday",
