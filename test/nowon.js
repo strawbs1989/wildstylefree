@@ -25,34 +25,20 @@ async function loadNowOn() {
     const playerTime =
       document.getElementById("playerTime");
 
+    const playerArtwork =
+      document.getElementById("playerArtwork");
+
+    const heroDJ =
+      document.getElementById("heroDJ");
+
     if (data.currentSlot) {
 
-    const playerArtwork =
-  document.getElementById("playerArtwork");
+      console.log("FOUND SLOT");
+      console.log(data.currentSlot);
 
-const heroDJ =
-  document.getElementById("heroDJ");
-
-
-const currentDJ =
-  schedule.find(
-    show => show.dj === data.currentSlot.dj
-  );
-
-if (playerArtwork && currentDJ) {
-  playerArtwork.src = currentDJ.image;
-}
-
-if (heroDJ && currentDJ) {
-  heroDJ.src = currentDJ.image;
-}
-
-    console.log("FOUND SLOT");
-console.log(data.currentSlot);
-
-    
-
-
+      const currentDJ = schedule.find(
+        show => show.dj === data.currentSlot.dj
+      );
 
       if (playerDJ) {
         playerDJ.textContent =
@@ -78,11 +64,17 @@ console.log(data.currentSlot);
           data.currentSlot.end;
       }
 
-        }
-          }
-      
+      if (playerArtwork && currentDJ) {
+        playerArtwork.src =
+          currentDJ.image;
+      }
 
-    
+      if (heroDJ && currentDJ) {
+        heroDJ.src =
+          currentDJ.image;
+      }
+
+    }
 
   } catch (err) {
 
@@ -93,6 +85,9 @@ console.log(data.currentSlot);
   }
 
 }
+      
+
+ 
 
 document.addEventListener("DOMContentLoaded", () => {
 
