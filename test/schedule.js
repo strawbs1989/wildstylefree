@@ -1,19 +1,20 @@
 const schedule = [
 {
-  day: "saturday",
+  day: "Saturday",
   dj: "Chanel",
   start: "18:00",
   end: "20:00",
   image: "/images/chanel.png"
-  },
+},
 {
-  day: "saturday",
+  day: "Saturday",
   dj: "stephan",
   start: "20:00",
   end: "22:00",
   image: "/images/don.jpg"
 },
 {
+  day: "Saturday",
   dj: "Free",
   start: "22:00",
   end: "00:00",
@@ -41,24 +42,28 @@ const schedule = [
   image: "/images/spark.jpeg"
 },
 {
+  day: "Sunday",
   dj: "Micky J",
   start: "17:00",
   end: "18:00",
   image: "/images/mickeyjay.jpeg"
 },
 {
+  day: "Sunday",
   dj: "Kai",
   start: "18:00",
   end: "19:00",
   image: "/images/kai.jpg"
 },
 {
+  day: "Sunday",
   dj: "EchoFalls",
   start: "19:00",
   end: "20:00",
   image: "/images/echo1.png"
 },
 {
+  day: "Sunday",
   dj: "HotShotDj",
   start: "20:00",
   end: "22:00",
