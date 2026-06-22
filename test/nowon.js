@@ -78,6 +78,8 @@ console.log(data.currentSlot);
           data.currentSlot.end;
       }
 
+        }
+          }
       
 
     
