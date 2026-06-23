@@ -940,14 +940,13 @@ NOW PLAYING
   gap:18px;
 }
 
-.dj-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--line);
-  border-radius:24px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  min-height:100%;
+.dj-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.dj-body {
+  flex: 1;
 }
 
 .dj-image-wrap{
@@ -1090,73 +1089,7 @@ NOW PLAYING
   }
 } 
 
-/* =========================
-   Request Page
-========================= */
 
-.request-form-page{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
-.request-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.request-grid input{
-  width:100%;
-  padding:14px 16px;
-  border-radius:16px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.06);
-  color:#fff;
-  outline:none;
-}
-
-.request-grid input::placeholder{
-  color:#b8a9d6;
-}
-
-.request-submit-btn{
-  width:100%;
-}
-
-.request-success{
-  margin-top:14px;
-  padding:14px 16px;
-  border-radius:16px;
-  background:rgba(46, 204, 113, .12);
-  border:1px solid rgba(46, 204, 113, .28);
-  color:#dfffea;
-  font-weight:700;
-}
-
-.player-frame-wrap{
-  width:100%;
-}
-
-.hidden{
-  display:none !important;
-}
-
-@media (max-width:720px){
-  .request-grid{
-    grid-template-columns:1fr;
-  }
-} 
-.request-closed{
-  margin-top:14px;
-  padding:16px;
-  border-radius:16px;
-  background:rgba(255, 77, 109, .12);
-  border:1px solid rgba(255, 77, 109, .28);
-  color:#ffd7df;
-  font-weight:700;
-  text-align:center;
-} 
 
 /* =========================
    Responsive Nav
@@ -2463,19 +2396,11 @@ FEATURED DJ
 }
 
 .featured-dj-card {
-  display: flex;
-  align-items: center;
-  gap: 25px;
+  border: 2px solid transparent;
 
-  background: rgba(18, 10, 35, 0.95);
-
-  border: 1px solid rgba(255,255,255,.08);
-
-  border-radius: 20px;
-
-  padding: 20px;
-
-  overflow: hidden;
+  background:
+    linear-gradient(#130b25,#130b25) padding-box,
+    linear-gradient(90deg,#ff2b8a,#6c63ff,#00d4ff) border-box;
 }
 
 .featured-dj-card img {
@@ -2514,11 +2439,7 @@ FEATURED DJ
 }
 
 .featured-dj-content h2 {
-  margin: 0 0 10px;
-
   font-size: 2rem;
-
-  color: #fff;
 }
 
 .featured-dj-content p {
@@ -2543,9 +2464,8 @@ FEATURED DJ
   }
 
   .featured-dj-card img {
-    width: 100%;
-    max-width: 260px;
-    height: auto;
-  }
+  width: 140px;
+  height: 140px;
+}
 
 }
