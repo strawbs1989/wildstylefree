@@ -985,6 +985,21 @@ NOW PLAYING
   backdrop-filter:blur(6px);
 }
 
+.dj-badge.live {
+  background: #ff2b8a;
+}
+
+.dj-badge.later {
+  background: orange;
+  color: #111;
+}
+
+.dj-badge.off {
+  background: #444;
+}
+
+
+
 .dj-body{
   padding:16px;
   color:#fff;
