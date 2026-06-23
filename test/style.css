@@ -950,21 +950,20 @@ NOW PLAYING
 }
 
 .dj-image-wrap{
-  position:relative;
-  aspect-ratio:1 / 1;
-  background:#221738;
-  overflow:hidden;
-}
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #221738;
+  overflow: hidden;
 
-.dj-image-wrap {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   padding-top: 20px;
 }
 
 .dj-image-wrap img {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #ff2b8a;
