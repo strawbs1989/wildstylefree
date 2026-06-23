@@ -951,7 +951,7 @@ NOW PLAYING
 
 .dj-image-wrap{
   position: relative;
-  aspect-ratio: 1 / 1;
+  /* aspect-ratio: 1 / 1; */
   background: #221738;
   overflow: hidden;
 
