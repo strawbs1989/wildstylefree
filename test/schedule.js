@@ -28,18 +28,11 @@ const schedule = [
   image: "/images/don.jpg"
 },
 {
-  day: "Sunday",
-  dj: "Stormzy",
-  start: "14:00",
-  end: "16:00",
-  image: "/images/spark.jpeg"
-},
-{
-  day: "Sunday",
-  dj: "Stormzy",
-  start: "16:00",
-  end: "17:00",
-  image: "/images/spark.jpeg"
+  day: "Tuesday",
+  dj: "DJ Mystic",
+  start: "20:00",
+  end: "22:00",
+  image: "/images/joanne.jpg"
 },
 {
   day: "Sunday",
