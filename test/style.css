@@ -2451,3 +2451,101 @@ PLAYER
 #playerArtwork {
   object-fit: cover;
 }
+
+/*==============
+FEATURED DJ
+============== */
+
+/* Featured DJ */
+
+.featured-dj {
+  margin: 25px 0;
+}
+
+.featured-dj-card {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+
+  background: rgba(18, 10, 35, 0.95);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  border-radius: 20px;
+
+  padding: 20px;
+
+  overflow: hidden;
+}
+
+.featured-dj-card img {
+  width: 220px;
+  height: 220px;
+
+  border-radius: 16px;
+
+  object-fit: cover;
+}
+
+.featured-dj-content {
+  flex: 1;
+}
+
+.featured-tag {
+  display: inline-block;
+
+  background: linear-gradient(
+    90deg,
+    #ff2b8a,
+    #7a5cff
+  );
+
+  color: #fff;
+
+  padding: 6px 14px;
+
+  border-radius: 999px;
+
+  font-size: .85rem;
+
+  font-weight: 700;
+
+  margin-bottom: 12px;
+}
+
+.featured-dj-content h2 {
+  margin: 0 0 10px;
+
+  font-size: 2rem;
+
+  color: #fff;
+}
+
+.featured-dj-content p {
+  color: #cfcfe6;
+
+  line-height: 1.6;
+
+  margin-bottom: 15px;
+}
+
+.featured-meta {
+  color: #7db7ff;
+
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+
+  .featured-dj-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .featured-dj-card img {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+  }
+
+}
