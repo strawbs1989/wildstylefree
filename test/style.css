@@ -2512,16 +2512,17 @@ margin-bottom:40px;
 }
 
 .schedule-day-title{
+color:#fff;
 font-size:2rem;
 font-weight:800;
 margin-bottom:20px;
-color:#fff;
 border-left:4px solid #ff2ea6;
 padding-left:12px;
 }
 
 .schedule-day .dj-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
 gap:20px;
 }
