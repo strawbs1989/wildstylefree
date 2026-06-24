@@ -558,13 +558,6 @@ const tribes = [
 document
 .getElementById("findTribeBtn")
 ?.addEventListener("click", () => {
-document
-.getElementById("findMyTribeBtn")
-.addEventListener("click", () => {
-
-  alert("Button Working!");
-
-});
 
 const genre =
 document.getElementById("genreSelect").value;
@@ -586,8 +579,8 @@ if (tribe.eras.includes(era))
 score += 50;
 
 if (score > bestScore) {
-  bestScore = score;
-  bestMatch = tribe;
+bestScore = score;
+bestMatch = tribe;
 }
 
 });
@@ -596,8 +589,6 @@ const result =
 document.getElementById("tribeResult");
 
 if (!bestMatch) {
-
-result.style.display = "block";
 
 result.innerHTML = `
 <h3>No Match Found</h3>
@@ -608,35 +599,15 @@ return;
 
 }
 
-result.style.display = "block";
-
 result.innerHTML = `
-<div class="tribe-name">
-${bestMatch.name}
-</div>
-
-<div class="tribe-score">
-${bestScore}% Match
-</div>
-
-<p class="tribe-description">
-${bestMatch.description}
-</p>
+<h3>${bestMatch.name}</h3>
+<p>${bestScore}% Match</p>
+<p>${bestMatch.description}</p>
 `;
 
 });
 
 
 
-
-console.log("TRIBE JS LOADED");
-
-document
-.getElementById("findMyTribeBtn")
-?.addEventListener("click", () => {
-
-  alert("BUTTON WORKS!");
-
-});
 
 
