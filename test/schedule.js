@@ -1,204 +1,197 @@
 const SCHEDULE_URL =
 "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
-const DAY_ORDER = [
-"Monday",
-"Tuesday",
-"Wednesday",
-"Thursday",
-"Friday",
-"Saturday",
-"Sunday"
+const DAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
 ];
 
 async function loadSchedule() {
 
-try {
+  try {
 
-const res = await fetch(
-  SCHEDULE_URL + "?v=" + Date.now()
-);
+    const response = await fetch(
+      SCHEDULE_URL + "?v=" + Date.now()
+    );
 
-const data = await res.json();
+    const data = await response.json();
 
-return Array.isArray(data)
-  ? data
-  : [];
+    console.log("Schedule Data:", data);
 
-} catch (err) {
+    return data;
 
-console.error(err);
-return [];
+  } catch (err) {
+
+    console.error("Schedule Error:", err);
+
+    return [];
+
+  }
 
 }
 
-}
+function renderSchedule(data) {
 
-function renderSchedule(slots) {
+  const grid =
+    document.getElementById("scheduleGrid");
 
-const grid =
-document.getElementById("scheduleGrid");
+  if (!grid) return;
 
-if (!grid) return;
+  let html = "";
 
-let html = "";
+  DAYS.forEach(day => {
 
-DAY_ORDER.forEach(day => {
-
-const dayShows =
-  slots.filter(
-    show => show.day === day
-  );
-
-html += `
-  <div class="schedule-day">
-
-    <h2 class="schedule-day-title">
-      ${day}
-    </h2>
-
-    <div class="dj-grid">
-`;
-
-if (!dayShows.length) {
-
-  html += `
-    <article class="dj-card">
-
-      <div class="dj-body">
-
-        <h3>
-          Available Slots
-        </h3>
-
-        <p>
-          No DJs scheduled.
-        </p>
-
-      </div>
-
-    </article>
-  `;
-
-} else {
-
-  dayShows.forEach(show => {
+    const shows =
+      data.filter(
+        show => show.day === day
+      );
 
     html += `
-      <article class="dj-card">
+      <div class="schedule-day">
 
-        <div class="dj-body">
+        <h2 class="schedule-day-title">
+          ${day}
+        </h2>
 
-          <h3>
-            ${show.dj}
-          </h3>
+        <div class="dj-grid">
+    `;
 
-          <div class="slot">
-            ${show.start} - ${show.end}
+    if (!shows.length) {
+
+      html += `
+        <article class="dj-card">
+
+          <div class="dj-body">
+
+            <h3>
+              Available Slots
+            </h3>
+
+            <p>
+              No shows scheduled.
+            </p>
+
           </div>
 
+        </article>
+      `;
+
+    } else {
+
+      shows.forEach(show => {
+
+        html += `
+          <article class="dj-card">
+
+            <div class="dj-body">
+
+              <h3>${show.dj}</h3>
+
+              <div class="slot">
+                ${show.start} - ${show.end}
+              </div>
+
+            </div>
+
+          </article>
+        `;
+
+      });
+
+    }
+
+    html += `
         </div>
 
-      </article>
+      </div>
     `;
 
   });
 
-}
-
-html += `
-    </div>
-
-  </div>
-`;
-
-});
-
-grid.innerHTML = html;
+  grid.innerHTML = html;
 
 }
 
-function updateHero(slots) {
+function updateHero(data) {
 
-const heroShowName =
-document.getElementById("heroShowName");
+  const heroName =
+    document.getElementById("heroShowName");
 
-const heroShowTime =
-document.getElementById("heroShowTime");
+  const heroTime =
+    document.getElementById("heroShowTime");
 
-const heroDJ =
-document.getElementById("heroDJ");
+  const heroImage =
+    document.getElementById("heroDJ");
 
-if (!slots.length) return;
+  if (!data.length) return;
 
-const featured = slots[0];
+  const show = data[0];
 
-if (heroShowName)
-heroShowName.textContent =
-featured.dj;
+  if (heroName)
+    heroName.textContent = show.dj;
 
-if (heroShowTime)
-heroShowTime.textContent =
-featured.start +
-" - " +
-featured.end;
+  if (heroTime)
+    heroTime.textContent =
+      show.start + " - " + show.end;
 
-if (heroDJ)
-heroDJ.src =
-"/images/wildy.png";
+  if (heroImage)
+    heroImage.src = "/images/wildy.png";
 
 }
 
-function updateWildy(slots) {
+function updateWildy(data) {
 
-const img =
-document.getElementById("wildyDjImage");
+  const image =
+    document.getElementById("wildyDjImage");
 
-const name =
-document.getElementById("wildyDjName");
+  const name =
+    document.getElementById("wildyDjName");
 
-const text =
-document.getElementById("wildyDjText");
+  const text =
+    document.getElementById("wildyDjText");
 
-const time =
-document.getElementById("wildyDjTime");
+  const time =
+    document.getElementById("wildyDjTime");
 
-if (!slots.length) return;
+  if (!data.length) return;
 
-const show = slots[0];
+  const show = data[0];
 
-if (img)
-img.src = "/images/wildy.png";
+  if (image)
+    image.src = "/images/wildy.png";
 
-if (name)
-name.textContent = show.dj;
+  if (name)
+    name.textContent = show.dj;
 
-if (text)
-text.textContent =
-"Wildy recommends this show.";
+  if (text)
+    text.textContent =
+      "Wildy recommends tuning into this show today.";
 
-if (time)
-time.textContent =
-show.start +
-" - " +
-show.end;
+  if (time)
+    time.textContent =
+      show.start + " - " + show.end;
 
 }
 
 async function initSchedule() {
 
-const slots =
-await loadSchedule();
+  const schedule =
+    await loadSchedule();
 
-renderSchedule(slots);
+  renderSchedule(schedule);
 
-updateHero(slots);
+  updateHero(schedule);
 
-updateWildy(slots);
+  updateWildy(schedule);
 
 }
 
 document.addEventListener(
-"DOMContentLoaded",
-initSchedule
+  "DOMContentLoaded",
+  initSchedule
 );
