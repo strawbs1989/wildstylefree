@@ -127,29 +127,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function buildScheduleWidget() {
 
-  const list = document.getElementById("liveScheduleList");
+const list = document.getElementById("liveScheduleList");
 
-  if (!list) return;
+if (!list) return;
 
-  const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
+const days = [
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday",
+"Sunday"
+];
 
-  let html = "";
+let html = "";
 
-  days.forEach(day => {
+days.forEach(day => {
 
-    const dayShows = schedule.filter(
-      show => show.day === day
-    );
+const dayShows = schedule.filter(
+  show => show.day === day
+);
 
-    html += `
+html += `
   <div class="schedule-day">
 
     <h2 class="schedule-day-title">
@@ -168,19 +168,61 @@ if (!dayShows.length) {
 
         <h3>Available Slots</h3>
 
-        <p>
-          No DJs scheduled yet.
-        </p>
+        <p>No DJs scheduled yet.</p>
 
       </div>
 
     </article>
   `;
+
+} else {
+
+  dayShows.forEach(show => {
+
+    html += `
+      <article class="dj-card">
+
+        <div class="dj-image-wrap">
+
+          <img
+            src="${show.image}"
+            alt="${show.dj}"
+          >
+
+        </div>
+
+        <div class="dj-body">
+
+          <h3>${show.dj}</h3>
+
+          <div class="slot">
+            ${show.start} - ${show.end}
+          </div>
+
+        </div>
+
+      </article>
+    `;
+
+  });
+
+}
+
+html += `
+    </div>
+
+  </div>
+`;
+
+});
+
+list.innerHTML = html;
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  buildScheduleWidget();
+buildScheduleWidget();
 
 });
 
