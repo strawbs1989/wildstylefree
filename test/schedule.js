@@ -11,6 +11,8 @@ document.getElementById("heroShowTime");
 const heroDJ =
 document.getElementById("heroDJ");
 
+if (!heroShowName || !heroShowTime || !heroDJ) return;
+
 const now = new Date();
 
 const currentTime =
@@ -32,7 +34,20 @@ currentTime >= show.start &&
 currentTime < show.end
 );
 
+if (!currentShow) {
 
+heroShowName.textContent =
+"No Live Show";
+
+heroShowTime.textContent =
+"Check Weekly Schedule";
+
+heroDJ.src =
+"/images/wildy.png";
+
+return;
+
+}
 
 heroShowName.textContent =
 currentShow.dj;
@@ -43,6 +58,7 @@ heroShowTime.textContent =
 heroDJ.src =
 currentShow.image ||
 "/images/wildy.png";
+
 }
 
 
@@ -59,7 +75,7 @@ setInterval(updateHeroDJ, 60000);
 
 
 function buildScheduleWidget() {
-
+console.log(html);
   const list =
 document.getElementById("scheduleGrid");
 
