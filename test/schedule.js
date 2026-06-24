@@ -121,62 +121,92 @@ setInterval(updateHeroDJ, 60000);
 
 });
 
-function buildScheduleWidget() {
 
-console.log("Schedule widget running");
-
-const list = document.getElementById("liveScheduleList");
-
-if (!list) {
-console.log("liveScheduleList not found");
-return;
-}
-
-// rest of code...
-}
 
 function buildScheduleWidget() {
 
-const list = document.getElementById("liveScheduleList");
+  const list = document.getElementById("liveScheduleList");
 
-if (!list) return;
+  if (!list) return;
 
-let html = "";
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
 
-const today = new Date().toLocaleDateString(
-  "en-GB",
-  { weekday: "long" }
-);
+  let html = "";
 
-schedule
-  .filter(show => show.day === today)
-  .forEach(show => { 
+  days.forEach(day => {
 
-html += `
-<div class="dj-card">
+    const dayShows = schedule.filter(
+      show => show.day === day
+    );
 
-  <div class="dj-image-wrap">
-    <img src="${show.image}" alt="${show.dj}">
-    <span class="dj-badge">
-      ${show.day}
-    </span>
-  </div>
+    if (dayShows.length === 0) return;
 
-  <div class="dj-body">
+    html += `
+      <div class="schedule-day">
 
-    <h3>${show.dj}</h3>
+        <h2 class="schedule-day-title">
+          ${day}
+        </h2>
 
-    <div class="slot">
-      ${show.start} - ${show.end}
-    </div>
+        <div class="dj-grid">
+    `;
 
-  </div>
+    dayShows.forEach(show => {
 
-</div>
-`;
-});
+      html += `
+        <article class="dj-card">
 
-list.innerHTML = html;
+          <div class="dj-image-wrap">
+
+            <img
+              src="${show.image}"
+              alt="${show.dj}"
+            >
+
+            <span class="dj-badge">
+              LIVE
+            </span>
+
+          </div>
+
+          <div class="dj-body">
+
+            <h3>${show.dj}</h3>
+
+            <div class="dj-meta">
+              <span class="tag">
+                ${show.start} - ${show.end}
+              </span>
+            </div>
+
+            <p>
+              Tune in for another
+              Wildstyle Radio show.
+            </p>
+
+          </div>
+
+        </article>
+      `;
+
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+
+  });
+
+  list.innerHTML = html;
 
 }
 
