@@ -1,137 +1,7 @@
-const schedule = [
-{
-  day: "Saturday",
-  dj: "Chanel",
-  start: "18:00",
-  end: "20:00",
-  image: "/images/chanel.png"
-},
-{
-  day: "Saturday",
-  dj: "stephan",
-  start: "20:00",
-  end: "22:00",
-  image: "/images/golds.jpg"
-},
-{
-  day: "Saturday",
-  dj: "Free",
-  start: "22:00",
-  end: "00:00",
-  image: "/images/mouse.jpeg"
-},
-{
-  day: "Sunday",
-  dj: "Don",
-  start: "12:00",
-  end: "14:00",
-  image: "/images/don.jpg"
-},
-{
-  day: "Tuesday",
-  dj: "DJ Mystic",
-  start: "20:00",
-  end: "22:00",
-  image: "/images/joanne.jpg"
-},
-{
-  day: "Sunday",
-  dj: "Micky J",
-  start: "17:00",
-  end: "18:00",
-  image: "/images/mickeyjay.jpeg"
-},
-{
-  day: "Sunday",
-  dj: "Kai",
-  start: "18:00",
-  end: "19:00",
-  image: "/images/kai.jpg"
-},
-{
-  day: "Sunday",
-  dj: "EchoFalls",
-  start: "19:00",
-  end: "20:00",
-  image: "/images/echo1.png"
-},
-{
-  day: "Sunday",
-  dj: "HotShotDj",
-  start: "20:00",
-  end: "22:00",
-  image: "/images/hotshot.jpg"
-},
-{
-  dj: "Free",
-  start: "22:00",
-  end: "00:00",
-  image: "/images/"
-},
-];
+const SCHEDULE_URL =
+"https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
-
-function updateHeroDJ() {
-
-const heroShowName =
-  document.getElementById("heroShowName");
-
-const heroShowTime =
-  document.getElementById("heroShowTime");
-
-  const heroDJ = document.getElementById("heroDJ");
-
-  if (!heroDJ) return;
-
-  const now = new Date();
-
-  const currentTime =
-    now.getHours().toString().padStart(2,"0") +
-    ":" +
-    now.getMinutes().toString().padStart(2,"0");
-
-  const currentShow = schedule.find(show =>
-    currentTime >= show.start &&
-    currentTime < show.end
-  );
-
-  if (currentShow) {
-
-  if (currentShow.image) {
-    heroDJ.src = currentShow.image;
-  }
-
-  if (heroShowName) {
-    heroShowName.textContent = currentShow.dj;
-  }
-
-  if (heroShowTime) {
-    heroShowTime.textContent =
-      currentShow.start + " - " + currentShow.end;
-  }
-
-}
-
-
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  updateHeroDJ();
-
-
-
-  setInterval(updateHeroDJ, 60000);
-
-});
-
-function buildScheduleWidget() {
-
-const list = document.getElementById("liveScheduleList");
-
-if (!list) return;
-
-const days = [
+const DAY_ORDER = [
 "Monday",
 "Tuesday",
 "Wednesday",
@@ -141,13 +11,43 @@ const days = [
 "Sunday"
 ];
 
+async function loadSchedule() {
+
+try {
+
+const res = await fetch(
+  SCHEDULE_URL + "?v=" + Date.now(),
+  { cache: "no-store" }
+);
+
+const data = await res.json();
+
+return Array.isArray(data)
+  ? data
+  : [];
+
+} catch (err) {
+
+console.error("Schedule load error:", err);
+return [];
+
+}
+
+}
+
+function renderSchedule(slots) {
+
+const grid =
+document.getElementById("scheduleGrid");
+
+if (!grid) return;
+
 let html = "";
 
-days.forEach(day => {
+DAY_ORDER.forEach(day => {
 
-const dayShows = schedule.filter(
-  show => show.day === day
-);
+const dayShows =
+  slots.filter(show => show.day === day);
 
 html += `
   <div class="schedule-day">
@@ -182,15 +82,6 @@ if (!dayShows.length) {
     html += `
       <article class="dj-card">
 
-        <div class="dj-image-wrap">
-
-          <img
-            src="${show.image}"
-            alt="${show.dj}"
-          >
-
-        </div>
-
         <div class="dj-body">
 
           <h3>${show.dj}</h3>
@@ -216,50 +107,103 @@ html += `
 
 });
 
-list.innerHTML = html;
+grid.innerHTML = html;
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function updateHero(slots) {
 
-buildScheduleWidget();
+const heroShowName =
+document.getElementById("heroShowName");
 
-});
+const heroShowTime =
+document.getElementById("heroShowTime");
 
-function updateWildyRecommendation() {
+const heroDJ =
+document.getElementById("heroDJ");
 
-  const djImage = document.getElementById("wildyDjImage");
-  const djName = document.getElementById("wildyDjName");
-  const djText = document.getElementById("wildyDjText");
-  const djTime = document.getElementById("wildyDjTime");
+if (!slots.length) return;
 
-  if (!djImage || !djName || !djText || !djTime) return;
+const currentShow = slots.find(
+slot => slot.dj &&
+slot.dj.toLowerCase() !== "free"
+);
 
-  const now = new Date();
+if (!currentShow) return;
 
-  const currentTime =
-    now.getHours().toString().padStart(2, "0") +
-    ":" +
-    now.getMinutes().toString().padStart(2, "0");
+if (heroShowName)
+heroShowName.textContent =
+currentShow.dj;
 
-  let currentShow = schedule.find(show =>
-    currentTime >= show.start &&
-    currentTime < show.end
-  );
+if (heroShowTime)
+heroShowTime.textContent =
+currentShow.start +
+" - " +
+currentShow.end;
 
-  if (!currentShow) {
-    currentShow = schedule[0];
-  }
+if (heroDJ)
+heroDJ.src = "/images/wildy.png";
 
-  djImage.src = currentShow.image;
-  djName.textContent = currentShow.dj;
-  djText.textContent =
-    "Wildy recommends tuning into this show today.";
-  djTime.textContent =
-    currentShow.start + " - " + currentShow.end;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  updateWildyRecommendation();
-});
+function updateWildy(slots) {
 
+const img =
+document.getElementById("wildyDjImage");
+
+const name =
+document.getElementById("wildyDjName");
+
+const text =
+document.getElementById("wildyDjText");
+
+const time =
+document.getElementById("wildyDjTime");
+
+if (!slots.length) return;
+
+const featured = slots.find(
+slot => slot.dj &&
+slot.dj.toLowerCase() !== "free"
+);
+
+if (!featured) return;
+
+if (img)
+img.src = "/images/wildy.png";
+
+if (name)
+name.textContent =
+featured.dj;
+
+if (text)
+text.textContent =
+"Wildy recommends tuning into this show.";
+
+if (time)
+time.textContent =
+featured.start +
+" - " +
+featured.end;
+
+}
+
+async function initSchedule() {
+
+const slots =
+await loadSchedule();
+
+console.log("Schedule Loaded", slots);
+
+renderSchedule(slots);
+
+updateHero(slots);
+
+updateWildy(slots);
+
+}
+
+document.addEventListener(
+"DOMContentLoaded",
+initSchedule
+);
