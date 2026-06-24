@@ -2537,11 +2537,22 @@ TRIBE
 }
 
 #tribeResult{
-  margin-top:20px;
-  padding:16px;
-  border-radius:16px;
-  background:rgba(255,255,255,.05);
-  display:none;
+margin-top:20px;
+padding:15px;
+border-radius:12px;
+background:#1d1730;
+border:1px solid #ff2f92;
+display:block;
+}
+
+#tribeResult h3{
+margin:0 0 10px;
+color:#fff;
+}
+
+#tribeResult p{
+color:#ddd;
+margin:5px 0;
 }
 
 .tribe-name{
