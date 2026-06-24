@@ -54,19 +54,20 @@ function convertTimeToMinutes(timeString) {
 
   if (!timeString) return 0;
 
-  const parts = String(timeString).split(":");
+  const match = String(timeString)
+    .trim()
+    .toLowerCase()
+    .match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
 
-  if (parts.length === 2) {
+  if (!match) return 0;
 
-    return (
-      parseInt(parts[0], 10) * 60 +
-      parseInt(parts[1], 10)
-    );
+  let hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2] || "0", 10);
 
-  }
+  if (match[3] === "pm" && hours !== 12) hours += 12;
+  if (match[3] === "am" && hours === 12) hours = 0;
 
-  return 0;
-
+  return hours * 60 + minutes;
 }
 
 /* =====================================
