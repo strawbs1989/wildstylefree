@@ -25,23 +25,20 @@ async function loadSchedule() {
 
     const response = await fetch(
       TEST_SCHEDULE_URL + "?v=" + Date.now(),
-      {
-        cache: "no-store"
-      }
+      { cache: "no-store" }
     );
 
     const data = await response.json();
 
-    console.log("SCHEDULE LOADED:", data);
+    console.log("SCHEDULE LOADED", data);
 
-    if (Array.isArray(data)) return data;
-    if (Array.isArray(data.slots)) return data.slots;
-
-    return [];
+    return Array.isArray(data.slots)
+      ? data.slots
+      : [];
 
   } catch (err) {
 
-    console.error("Schedule Load Failed:", err);
+    console.error("Schedule Load Failed", err);
 
     return [];
 
@@ -190,10 +187,11 @@ function updateWildy(show) {
 
 function renderSchedule(schedule) {
 
-  const grid =
-    document.getElementById("scheduleGrid");
+  const grid = document.getElementById("scheduleGrid");
 
-  if (!grid) return;
+console.log("GRID =", grid);
+
+if (!grid) return;
 
   let html = "";
 
