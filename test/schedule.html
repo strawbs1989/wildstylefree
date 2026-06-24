@@ -1,170 +1,130 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wildstyle Radio — Schedule</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://wildstyle.vip/test/style.css">
-</head><body><div class="shell"><header class="topbar"><a class="brand" href="/index.html">
-<div class="brand-badge">WS</div>
-<div class="brand-copy">
-<strong>WILDSTYLE RADIO</strong>
-<small>The Wildstyle Crew</small>
-</div>
-</a><nav class="nav desktop-nav">
-<a href="/index.html">Home</a>
-<a href="/djs.html">DJs</a>
-<a href="/test/schedule.html" class="active">Schedule</a>
-<a href="/chat.html">Chat</a>
-<a href="/map.html">Map</a>
-</nav><button class="burger" id="burger" aria-label="Open menu">☰</button>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wildstyle Radio - Schedule</title>
 
-</header><div class="nav-backdrop" id="navBackdrop" hidden></div><aside class="mobile-nav" id="mobileNav"><div class="mobile-nav-top">
-<strong>Menu</strong>
-<button id="navClose" aria-label="Close menu">✕</button>
-</div><a href="/index.html">Home</a>
-<a href="/djs.html">DJs</a>
-<a href="/schedule.html" class="active">Schedule</a>
-<a href="/chat.html">Chat</a>
-<a href="/request.html">Request</a>
-<a href="/map.html">Map</a>
+<link rel="stylesheet" href="/test1/style.css">
+<link rel="stylesheet" href="schedule.css">
 
-</aside><section class="hero">
-  <div class="hero-copy">
-    <span class="hero-kicker">
-      🎧 LIVE RADIO SCHEDULE
-    </span>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
 
-    <h1 id="heroShowName">
-      Current Show
-    </h1>
+<body>
 
-    <p id="heroShowTime">
-      Loading...
-    </p>
+<!-- Sidebar -->
+<aside class="sidebar">
 
-    <div class="hero-actions">
-      <a href="/chat.html" class="btn-primary">
-        Join The Chat
-      </a>
-
-      <a href="/djs.html" class="btn-secondary">
-        Meet The DJs
-      </a>
-    </div>
+  <div class="logo">
+    <img src="images/logo.png" alt="Wildstyle Radio">
   </div>
 
-  <div class="hero-card">
-    <img
-      id="heroDJ"
-      src="/images/wildy.png"
-      alt="Current DJ"
-    >
-  </div>
-</section>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="djs.html">DJs</a>
+    <a class="active" href="schedule.html">Schedule</a>
+    <a href="noticeboard.html">Noticeboard</a>
+    <a href="chat.html">Chat</a>
+    <a href="fans.html">Fans Of Wildstyle</a>
+    <a href="support.html">Support Wildstyle</a>
+    <a href="map.html">Map</a>
+    <a href="about.html">About Us</a>
+  </nav>
 
-<section class="featured-dj">
-  <div class="featured-dj-card">
+</aside>
 
-    <img
-      id="wildyDjImage"
-      src="/images/wildy.png"
-      alt="Wildy Recommendation"
-    >
+<!-- Main Content -->
+<main class="content">
 
-    <div class="featured-dj-content">
+  <!-- Top Bar -->
+  <header class="topbar">
 
-      <span class="featured-tag">
-        🐺 WILDY RECOMMENDS
-      </span>
-
-      <h2 id="wildyDjName">
-        Loading...
-      </h2>
-
-      <p id="wildyDjText">
-        Loading recommendation...
-      </p>
-
-      <div
-        id="wildyDjTime"
-        class="featured-meta"
-      >
-        Loading...
-      </div>
-
+    <div class="search-box">
+      <input type="text" placeholder="Search DJs, Shows...">
     </div>
 
+    <div class="socials">
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+    </div>
+
+    <a href="listen.html" class="listen-btn">
+      Listen Live
+    </a>
+
+  </header>
+
+  <!-- Hero -->
+  <section class="schedule-hero">
+
+    <h1>SCHEDULE</h1>
+    <p>Your guide to what's live and coming up.</p>
+
+  </section>
+
+  <!-- Day Tabs -->
+  <section class="day-tabs">
+
+    <button class="active">Monday</button>
+    <button>Tuesday</button>
+    <button>Wednesday</button>
+    <button>Thursday</button>
+    <button>Friday</button>
+    <button>Saturday</button>
+    <button>Sunday</button>
+
+  </section>
+
+  <!-- Schedule Container -->
+  <section id="scheduleContainer">
+
+    <!-- schedule.js injects content here -->
+
+  </section>
+
+</main>
+
+<!-- Right Sidebar -->
+<aside class="right-sidebar">
+
+  <!-- DJ Of Week -->
+  <div class="widget">
+
+    <h3>Wildy Recommends</h3>
+
+    <img src="images/dj-week.jpg" alt="DJ Of Week">
+
+    <h4>DJ Nala</h4>
+
+    <p>Bringing the hottest genres every week.</p>
+
   </div>
-</section>
 
-<section class="section">
+  <!-- Next Live DJ -->
+  <div class="widget">
 
-  <div class="section-head">
-    <h2>Weekly Schedule</h2>
-    <span>All Live Wildstyle Shows</span>
+    <h3>Next Live DJ</h3>
+
+    <div id="nextLiveDJ"></div>
+
   </div>
 
-  <div class="section-body">
-    <div id="scheduleGrid"></div>
+  <!-- Support -->
+  <div class="widget">
+
+    <h3>Support Wildstyle</h3>
+
+    <a href="#">Donate</a>
+    <a href="#">Become A Sponsor</a>
+    <a href="#">Buy Merch</a>
+
   </div>
 
-</section>
+</aside>
 
-<section class="cta"><h2>
-Want Your Own Show?
-</h2><p>
-Wildstyle Radio is always looking for enthusiastic DJs and presenters to join our growing station.
-</p><div class="cta-actions"><a
-href="mailto:wildstyleradioo@gmail.com"
-class="btn-primary"
-
-
-
-Apply Now
-</a>
-
-<a
-href="/chat.html"
-class="btn-secondary"
-
-
-
-Contact Us
-</a>
-
-</div>
-
-</section>
-
-<footer class="footer">
-
-<div><h3>Wildstyle Radio</h3><p>
-United by beats. Powered by volunteer passion.
-Broadcasting live music, community vibes and unforgettable shows.
-</p></div>
-
-<div><h3>Quick Links</h3><ul>
-<li>Home</li>
-<li>DJs</li>
-<li>Schedule</li>
-<li>Chat</li>
-</ul></div
-
-><div><h3>Wildstyle Vibe</h3><ul>
-<li>Live Shows</li>
-<li>Volunteer Crew</li>
-<li>Multi Genre</li>
-<li>Worldwide Community</li>
-</ul>
-
-</div>
-
-</footer>
-
-</div>
-<script type="module" src="https://wildstyle.vip/social/app.js"></script>
-<script src="https://wildstyle.vip/test/schedule.js"></script>
- 
-
+<script src="schedule.js"></script>
 
 </body>
 </html>
