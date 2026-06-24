@@ -516,5 +516,107 @@ const navBackdrop = document.getElementById("navBackdrop");
 if (navClose) navClose.onclick = closeMenu;
 if (navBackdrop) navBackdrop.onclick = closeMenu;
 
+/* =================
+TRIBES
+================== */
+const tribes = [
+
+{
+  name:"🎧 Dancefloor Addicts",
+  genres:["Dance","House"],
+  eras:["00s","10s","Today"],
+  description:
+  "You love big beats, club anthems and weekend party vibes."
+},
+
+{
+  name:"🔥 Urban Legends",
+  genres:["Hip-Hop","R&B"],
+  eras:["90s","00s","10s"],
+  description:
+  "Hip-Hop, R&B and urban classics are your thing."
+},
+
+{
+  name:"🎸 Rock Revolution",
+  genres:["Rock","Indie"],
+  eras:["80s","90s","00s"],
+  description:
+  "You live for guitars, alternative sounds and rock anthems."
+},
+
+{
+  name:"🌈 Feel Good Vibes",
+  genres:["Pop"],
+  eras:["80s","90s","Today"],
+  description:
+  "You enjoy singalong hits and feel-good music."
+}
+
+];
+
+document
+.getElementById("findTribeBtn")
+?.addEventListener("click", () => {
+
+const genre =
+document.getElementById("genreSelect").value;
+
+const era =
+document.getElementById("eraSelect").value;
+
+let bestMatch = null;
+let bestScore = 0;
+
+tribes.forEach(tribe => {
+
+let score = 0;
+
+if (tribe.genres.includes(genre))
+score += 50;
+
+if (tribe.eras.includes(era))
+score += 50;
+
+if (score > bestScore) {
+  bestScore = score;
+  bestMatch = tribe;
+}
+
+});
+
+const result =
+document.getElementById("tribeResult");
+
+if (!bestMatch) {
+
+result.style.display = "block";
+
+result.innerHTML = `
+<h3>No Match Found</h3>
+<p>Try different choices.</p>
+`;
+
+return;
+
+}
+
+result.style.display = "block";
+
+result.innerHTML = `
+<div class="tribe-name">
+${bestMatch.name}
+</div>
+
+<div class="tribe-score">
+${bestScore}% Match
+</div>
+
+<p class="tribe-description">
+${bestMatch.description}
+</p>
+`;
+
+});
 
 
