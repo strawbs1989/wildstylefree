@@ -558,6 +558,13 @@ const tribes = [
 document
 .getElementById("findTribeBtn")
 ?.addEventListener("click", () => {
+document
+.getElementById("findMyTribeBtn")
+.addEventListener("click", () => {
+
+  alert("Button Working!");
+
+});
 
 const genre =
 document.getElementById("genreSelect").value;
