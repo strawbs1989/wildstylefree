@@ -2523,3 +2523,38 @@ SCHEDULE DAY
   flex-direction:column;
   gap:30px;
 }
+
+*/ ============
+TRIBE
+============= */
+
+.tribe-card select{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:12px;
+  border:none;
+}
+
+#tribeResult{
+  margin-top:20px;
+  padding:16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  display:none;
+}
+
+.tribe-name{
+  font-size:1.4rem;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.tribe-score{
+  color:#00ff99;
+  font-weight:700;
+}
+
+.tribe-description{
+  opacity:.9;
+}
