@@ -2001,22 +2001,48 @@ section{
   flex-shrink:0;
 } 
 
-/*==================
-NOSONGREQUESTS 
-================= */
+*/ ============
+TRIBE
+============= */
 
-.nosongrequests-wrap{
+.tribe-card select{
   width:100%;
-  height:650px;
-  overflow:visible;
-}
-
-.nosongrequests-wrap iframe{
-  width:100%;
-  height:650px;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:12px;
   border:none;
-  display:block;
-  border-radius:18px;
 }
 
+#tribeResult{
+margin-top:20px;
+padding:15px;
+border-radius:12px;
+background:#1d1730;
+border:1px solid #ff2f92;
+display:block;
+}
 
+#tribeResult h3{
+margin:0 0 10px;
+color:#fff;
+}
+
+#tribeResult p{
+color:#ddd;
+margin:5px 0;
+}
+
+.tribe-name{
+  font-size:1.4rem;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.tribe-score{
+  color:#00ff99;
+  font-weight:700;
+}
+
+.tribe-description{
+  opacity:.9;
+}
