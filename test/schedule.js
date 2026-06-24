@@ -149,7 +149,7 @@ setInterval(updateHeroDJ, 60000);
 function buildScheduleWidget() {
 console.log(html);
   const list =
-document.getElementById("scheduleGrid");
+document.getElementById("liveSchedulelist");
 
   if (!list) return;
 
@@ -358,8 +358,3 @@ function timeToMinutes(time) {
 
 }
 
-fetch(SCHEDULE_URL)
-.then(r => r.json())
-.then(data => {
-  console.log("SCHEDULE DATA", data);
-});
