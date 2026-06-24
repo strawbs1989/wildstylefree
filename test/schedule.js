@@ -103,19 +103,7 @@ currentTime >= show.start &&
 currentTime < show.end
 );
 
-if (!currentShow) {
 
-heroShowName.textContent =
-"No Live Show";
-
-heroShowTime.textContent =
-"Check Weekly Schedule";
-
-heroDJ.src =
-"/images/wildy.png";
-
-return;
-}
 
 heroShowName.textContent =
 currentShow.dj;
