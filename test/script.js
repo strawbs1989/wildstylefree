@@ -627,3 +627,16 @@ ${bestMatch.description}
 });
 
 
+
+
+console.log("TRIBE JS LOADED");
+
+document
+.getElementById("findMyTribeBtn")
+?.addEventListener("click", () => {
+
+  alert("BUTTON WORKS!");
+
+});
+
+
