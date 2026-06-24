@@ -152,21 +152,28 @@ schedule
   .filter(show => show.day === today)
   .forEach(show => { 
 
-html += `  
-  <div class="schedule-row">  
+html += `
+<div class="dj-card">
 
-    <img src="${show.image}" alt="${show.dj}">  
+  <div class="dj-image-wrap">
+    <img src="${show.image}" alt="${show.dj}">
+    <span class="dj-badge">
+      ${show.day}
+    </span>
+  </div>
 
-    <div class="schedule-info">  
-      <div class="schedule-name">${show.dj}</div>  
-      <div class="schedule-time">  
-        ${show.start} - ${show.end}  
-      </div>  
-    </div>  
+  <div class="dj-body">
 
-  </div>  
+    <h3>${show.dj}</h3>
+
+    <div class="slot">
+      ${show.start} - ${show.end}
+    </div>
+
+  </div>
+
+</div>
 `;
-
 });
 
 list.innerHTML = html;
