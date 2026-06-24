@@ -1,3 +1,7 @@
+/* =====================================
+   WILDSTYLE SCHEDULE SYSTEM
+===================================== */
+
 const SCHEDULE_URL =
 "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
@@ -11,23 +15,28 @@ const DAYS = [
   "Sunday"
 ];
 
+/* =====================================
+   LOAD SCHEDULE
+===================================== */
+
 async function loadSchedule() {
 
   try {
 
     const response = await fetch(
-      SCHEDULE_URL + "?v=" + Date.now()
+      SCHEDULE_URL + "?v=" + Date.now(),
+      { cache: "no-store" }
     );
 
     const data = await response.json();
 
-    console.log("Schedule Data:", data);
+    console.log("SCHEDULE LOADED", data);
 
     return data;
 
   } catch (err) {
 
-    console.error("Schedule Error:", err);
+    console.error("Schedule Load Failed", err);
 
     return [];
 
@@ -35,116 +44,133 @@ async function loadSchedule() {
 
 }
 
-function renderSchedule(data) {
+/* =====================================
+   TIME HELPERS
+===================================== */
 
-  const grid =
-    document.getElementById("scheduleGrid");
+function convertTimeToMinutes(timeString) {
 
-  if (!grid) return;
+  if (!timeString) return 0;
 
-  let html = "";
+  const match =
+    String(timeString)
+      .toLowerCase()
+      .trim()
+      .match(/(\d+)(?::(\d+))?(am|pm)/);
 
-  DAYS.forEach(day => {
+  if (!match) return 0;
 
-    const shows =
-      data.filter(
-        show => show.day === day
-      );
+  let hours = parseInt(match[1]);
+  const minutes = parseInt(match[2] || 0);
 
-    html += `
-      <div class="schedule-day">
+  if (match[3] === "pm" && hours !== 12) {
+    hours += 12;
+  }
 
-        <h2 class="schedule-day-title">
-          ${day}
-        </h2>
+  if (match[3] === "am" && hours === 12) {
+    hours = 0;
+  }
 
-        <div class="dj-grid">
-    `;
+  return (hours * 60) + minutes;
 
-    if (!shows.length) {
+}
 
-      html += `
-        <article class="dj-card">
+/* =====================================
+   CURRENT SHOW
+===================================== */
 
-          <div class="dj-body">
+function getCurrentShow(schedule) {
 
-            <h3>
-              Available Slots
-            </h3>
+  const now = new Date();
 
-            <p>
-              No shows scheduled.
-            </p>
+  const today =
+    DAYS[now.getDay() === 0 ? 6 : now.getDay() - 1];
 
-          </div>
+  const currentMinutes =
+    (now.getHours() * 60) + now.getMinutes();
 
-        </article>
-      `;
+  return schedule.find(show => {
 
-    } else {
+    if (show.day !== today) return false;
 
-      shows.forEach(show => {
+    const start =
+      convertTimeToMinutes(show.start);
 
-        html += `
-          <article class="dj-card">
+    const end =
+      convertTimeToMinutes(show.end);
 
-            <div class="dj-body">
-
-              <h3>${show.dj}</h3>
-
-              <div class="slot">
-                ${show.start} - ${show.end}
-              </div>
-
-            </div>
-
-          </article>
-        `;
-
-      });
-
-    }
-
-    html += `
-        </div>
-
-      </div>
-    `;
+    return (
+      currentMinutes >= start &&
+      currentMinutes < end
+    );
 
   });
 
-  grid.innerHTML = html;
-
 }
 
-function updateHero(data) {
+/* =====================================
+   HERO
+===================================== */
 
-  const heroName =
+function updateHero(show) {
+
+  const heroShowName =
     document.getElementById("heroShowName");
 
-  const heroTime =
+  const heroShowTime =
     document.getElementById("heroShowTime");
 
-  const heroImage =
+  const heroDJ =
     document.getElementById("heroDJ");
 
-  if (!data.length) return;
+  if (!show) {
 
-  const show = data[0];
+    if (heroShowName) {
+      heroShowName.textContent =
+        "No Live Show";
+    }
 
-  if (heroName)
-    heroName.textContent = show.dj;
+    if (heroShowTime) {
+      heroShowTime.textContent =
+        "Check Weekly Schedule";
+    }
 
-  if (heroTime)
-    heroTime.textContent =
+    return;
+
+  }
+
+  if (heroShowName) {
+    heroShowName.textContent =
+      show.dj;
+  }
+
+  if (heroShowTime) {
+    heroShowTime.textContent =
       show.start + " - " + show.end;
+  }
 
-  if (heroImage)
-    heroImage.src = "/images/wildy.png";
+  if (heroDJ) {
+
+    const djName =
+      show.dj.toLowerCase();
+
+    if (djName.includes("echo")) {
+      heroDJ.src = "/images/echo1.png";
+    } else if (djName.includes("kai")) {
+      heroDJ.src = "/images/kai.jpg";
+    } else {
+      heroDJ.src = "/images/wildy.png";
+    }
+
+  }
 
 }
 
-function updateWildy(data) {
+/* =====================================
+   WILDY RECOMMENDS
+===================================== */
+
+function updateWildy(show) {
 
   const image =
     document.getElementById("wildyDjImage");
@@ -158,36 +184,136 @@ function updateWildy(data) {
   const time =
     document.getElementById("wildyDjTime");
 
-  if (!data.length) return;
+  if (!show) return;
 
-  const show = data[0];
-
-  if (image)
+  if (image) {
     image.src = "/images/wildy.png";
+  }
 
-  if (name)
+  if (name) {
     name.textContent = show.dj;
+  }
 
-  if (text)
+  if (text) {
     text.textContent =
       "Wildy recommends tuning into this show today.";
+  }
 
-  if (time)
+  if (time) {
     time.textContent =
       show.start + " - " + show.end;
+  }
 
 }
+
+/* =====================================
+   WEEKLY SCHEDULE GRID
+===================================== */
+
+function renderSchedule(schedule) {
+
+  const grid =
+    document.getElementById("scheduleGrid");
+
+  if (!grid) {
+    console.log("NO CONTAINER FOUND");
+    return;
+  }
+
+  let html = "";
+
+  DAYS.forEach(day => {
+
+    const dayShows =
+      schedule.filter(
+        show => show.day === day
+      );
+
+    html += `
+      <div class="schedule-day">
+        <h2 class="schedule-day-title">
+          ${day}
+        </h2>
+
+        <div class="dj-grid">
+    `;
+
+    if (!dayShows.length) {
+
+      html += `
+        <article class="dj-card">
+
+          <div class="dj-body">
+
+            <h3>Available Slots</h3>
+
+            <p>No DJs booked yet.</p>
+
+          </div>
+
+        </article>
+      `;
+
+    } else {
+
+      dayShows.forEach(show => {
+
+        html += `
+          <article class="dj-card">
+
+            <div class="dj-body">
+
+              <h3>${show.dj}</h3>
+
+              <div class="slot">
+
+                ${show.start}
+                -
+                ${show.end}
+
+              </div>
+
+            </div>
+
+          </article>
+        `;
+
+      });
+
+    }
+
+    html += `
+        </div>
+      </div>
+    `;
+
+  });
+
+  grid.innerHTML = html;
+
+}
+
+/* =====================================
+   INIT
+===================================== */
 
 async function initSchedule() {
 
   const schedule =
     await loadSchedule();
 
+  if (!schedule.length) return;
+
+  const currentShow =
+    getCurrentShow(schedule);
+
+  updateHero(currentShow);
+
+  updateWildy(
+    currentShow || schedule[0]
+  );
+
   renderSchedule(schedule);
-
-  updateHero(schedule);
-
-  updateWildy(schedule);
 
 }
 
