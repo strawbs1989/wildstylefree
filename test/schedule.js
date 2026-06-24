@@ -145,7 +145,7 @@ currentShow.start + " - " + currentShow.end;
 
 }
 
-}
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
