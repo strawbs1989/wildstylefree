@@ -143,7 +143,14 @@ if (!list) return;
 
 let html = "";
 
-schedule.forEach(show => {
+const today = new Date().toLocaleDateString(
+  "en-GB",
+  { weekday: "long" }
+);
+
+schedule
+  .filter(show => show.day === today)
+  .forEach(show => { 
 
 html += `  
   <div class="schedule-row">  
