@@ -32,7 +32,7 @@ day: "Tuesday",
 dj: "DJ Mystic",
 start: "20:00",
 end: "22:00",
-image: "/images/joanne.jpg"
+image: "/images/joanne.jpeg"
 },
 {
 day: "Sunday",
