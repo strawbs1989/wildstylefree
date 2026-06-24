@@ -63,11 +63,12 @@ end: "22:00",
 image: "/images/hotshot.jpg"
 },
 {
+day: "Sunday",
 dj: "Free",
 start: "22:00",
-end: "00:00",
-image: "/images/"
-},
+end: "23:59",
+image: "/images/mouse.jpeg"
+}
 ];
 
 function updateHeroDJ() {
@@ -78,16 +79,13 @@ document.getElementById("heroShowName");
 const heroShowTime =
 document.getElementById("heroShowTime");
 
-const heroDJ = document.getElementById("heroDJ");
-
-if (!heroDJ) return;
+const heroDJ =
+document.getElementById("heroDJ");
 
 const now = new Date();
 
 const currentTime =
-now.getHours().toString().padStart(2,"0") +
-":" +
-now.getMinutes().toString().padStart(2,"0");
+now.toTimeString().slice(0,5);
 
 const today = [
 "Sunday",
@@ -104,6 +102,31 @@ show.day === today &&
 currentTime >= show.start &&
 currentTime < show.end
 );
+
+if (!currentShow) {
+
+heroShowName.textContent =
+"No Live Show";
+
+heroShowTime.textContent =
+"Check Weekly Schedule";
+
+heroDJ.src =
+"/images/wildy.png";
+
+return;
+}
+
+heroShowName.textContent =
+currentShow.dj;
+
+heroShowTime.textContent =
+`${currentShow.start} - ${currentShow.end}`;
+
+heroDJ.src =
+currentShow.image ||
+"/images/wildy.png";
+}
 
 if (currentShow) {
 
@@ -159,7 +182,22 @@ document.getElementById("scheduleGrid");
       show => show.day === day
     );
 
-    if (dayShows.length === 0) return;
+    if (dayShows.length === 0) {
+
+html += `
+<div class="schedule-day">
+
+<h2>${day}</h2>
+
+<div class="dj-card">
+Available Slots
+</div>
+
+</div>
+`;
+
+return;
+}
 
     html += `
       <div class="schedule-day">
