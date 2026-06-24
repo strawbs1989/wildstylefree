@@ -607,6 +607,14 @@ result.innerHTML = `
 
 });
 
+document
+.getElementById("findTribeBtn")
+?.addEventListener("click", () => {
+
+alert("TRIBE BUTTON CLICKED");
+
+});
+
 
 
 
