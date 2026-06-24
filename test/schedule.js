@@ -89,7 +89,18 @@ now.getHours().toString().padStart(2,"0") +
 ":" +
 now.getMinutes().toString().padStart(2,"0");
 
+const today = [
+"Sunday",
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday"
+][now.getDay()];
+
 const currentShow = schedule.find(show =>
+show.day === today &&
 currentTime >= show.start &&
 currentTime < show.end
 );
@@ -125,7 +136,8 @@ setInterval(updateHeroDJ, 60000);
 
 function buildScheduleWidget() {
 
-  const list = document.getElementById("liveScheduleList");
+  const list =
+document.getElementById("scheduleGrid");
 
   if (!list) return;
 
