@@ -1,300 +1,210 @@
-/* =====================================
-   WILDSTYLE SCHEDULE SYSTEM
-===================================== */
-
-const TEST_SCHEDULE_URL =
-"https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
-
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday"
+const schedule = [
+{
+day: "Saturday",
+dj: "Chanel",
+start: "18:00",
+end: "20:00",
+image: "/images/chanel.png"
+},
+{
+day: "Saturday",
+dj: "stephan",
+start: "20:00",
+end: "22:00",
+image: "/images/golds.jpg"
+},
+{
+day: "Saturday",
+dj: "Free",
+start: "22:00",
+end: "00:00",
+image: "/images/mouse.jpeg"
+},
+{
+day: "Sunday",
+dj: "Don",
+start: "12:00",
+end: "14:00",
+image: "/images/don.jpg"
+},
+{
+day: "Tuesday",
+dj: "DJ Mystic",
+start: "20:00",
+end: "22:00",
+image: "/images/joanne.jpg"
+},
+{
+day: "Sunday",
+dj: "Micky J",
+start: "17:00",
+end: "18:00",
+image: "/images/mickeyjay.jpeg"
+},
+{
+day: "Sunday",
+dj: "Kai",
+start: "18:00",
+end: "19:00",
+image: "/images/kai.jpg"
+},
+{
+day: "Sunday",
+dj: "EchoFalls",
+start: "19:00",
+end: "20:00",
+image: "/images/echo1.png"
+},
+{
+day: "Sunday",
+dj: "HotShotDj",
+start: "20:00",
+end: "22:00",
+image: "/images/hotshot.jpg"
+},
+{
+dj: "Free",
+start: "22:00",
+end: "00:00",
+image: "/images/"
+},
 ];
 
-/* =====================================
-   LOAD SCHEDULE
-===================================== */
+function updateHeroDJ() {
 
-async function loadSchedule() {
+const heroShowName =
+document.getElementById("heroShowName");
 
-  try {
+const heroShowTime =
+document.getElementById("heroShowTime");
 
-    const response = await fetch(
-      TEST_SCHEDULE_URL + "?v=" + Date.now(),
-      { cache: "no-store" }
-    );
+const heroDJ = document.getElementById("heroDJ");
 
-    const data = await response.json();
+if (!heroDJ) return;
 
-    console.log("SCHEDULE LOADED", data);
+const now = new Date();
 
-    return Array.isArray(data.slots)
-      ? data.slots
-      : [];
+const currentTime =
+now.getHours().toString().padStart(2,"0") +
+":" +
+now.getMinutes().toString().padStart(2,"0");
 
-  } catch (err) {
-
-    console.error("Schedule Load Failed", err);
-
-    return [];
-
-  }
-
-}
-
-/* =====================================
-   TIME HELPERS
-===================================== */
-
-function convertTimeToMinutes(timeString) {
-
-  if (!timeString) return 0;
-
-  const match = String(timeString)
-    .trim()
-    .toLowerCase()
-    .match(/(\d{1,2})(?::(\d{2}))?(am|pm)/);
-
-  if (!match) return 0;
-
-  let hours = parseInt(match[1], 10);
-  const minutes = parseInt(match[2] || "0", 10);
-
-  if (match[3] === "pm" && hours !== 12) hours += 12;
-  if (match[3] === "am" && hours === 12) hours = 0;
-
-  return hours * 60 + minutes;
-}
-
-/* =====================================
-   CURRENT SHOW
-===================================== */
-
-function getCurrentShow(schedule) {
-
-  const now = new Date();
-
-  const today =
-    DAYS[now.getDay() === 0 ? 6 : now.getDay() - 1];
-
-  const currentMinutes =
-    (now.getHours() * 60) +
-    now.getMinutes();
-
-  return schedule.find(show => {
-
-    if (show.day !== today) return false;
-
-    const start =
-      convertTimeToMinutes(show.start);
-
-    const end =
-      convertTimeToMinutes(show.end);
-
-    return (
-      currentMinutes >= start &&
-      currentMinutes < end
-    );
-
-  });
-
-}
-
-/* =====================================
-   HERO
-===================================== */
-
-function updateHero(show) {
-
-  const heroShowName =
-    document.getElementById("heroShowName");
-
-  const heroShowTime =
-    document.getElementById("heroShowTime");
-
-  const heroDJ =
-    document.getElementById("heroDJ");
-
-  if (!show) {
-
-    if (heroShowName)
-      heroShowName.textContent =
-      "No Live Show";
-
-    if (heroShowTime)
-      heroShowTime.textContent =
-      "Check Weekly Schedule";
-
-    return;
-
-  }
-
-  if (heroShowName)
-    heroShowName.textContent =
-    show.dj;
-
-  if (heroShowTime)
-    heroShowTime.textContent =
-    `${show.start} - ${show.end}`;
-
-  if (heroDJ)
-    heroDJ.src = "/images/wildy.png";
-
-}
-
-/* =====================================
-   WILDY RECOMMENDS
-===================================== */
-
-function updateWildy(show) {
-
-  if (!show) return;
-
-  const image =
-    document.getElementById("wildyDjImage");
-
-  const name =
-    document.getElementById("wildyDjName");
-
-  const text =
-    document.getElementById("wildyDjText");
-
-  const time =
-    document.getElementById("wildyDjTime");
-
-  if (image)
-    image.src = "/images/wildy.png";
-
-  if (name)
-    name.textContent = show.dj;
-
-  if (text)
-    text.textContent =
-    "Wildy recommends tuning into this show.";
-
-  if (time)
-    time.textContent =
-    `${show.start} - ${show.end}`;
-
-}
-
-/* =====================================
-   WEEKLY SCHEDULE GRID
-===================================== */
-
-function renderSchedule(schedule) {
-
-  const grid = document.getElementById("scheduleGrid");
-
-console.log("GRID =", grid);
-
-if (!grid) return;
-
-  let html = "";
-
-  DAYS.forEach(day => {
-
-    const dayShows =
-      schedule.filter(
-        show => show.day === day
-      );
-
-    html += `
-      <div class="schedule-day">
-        <h2>${day}</h2>
-    `;
-
-    if (!dayShows.length) {
-
-      html += `
-        <div class="slot">
-          Available Slots
-        </div>
-      `;
-
-    } else {
-
-      dayShows.forEach(show => {
-
-        html += `
-          <div class="slot">
-            <strong>${show.dj}</strong><br>
-            ${show.start} - ${show.end}
-          </div>
-        `;
-
-      });
-
-    }
-
-    html += `
-      </div>
-    `;
-
-  });
-
-  grid.innerHTML = html;
-
-}
-
-/* =====================================
-   HOME PAGE NOW ON
-===================================== */
-
-function updateNowOn(show) {
-
-  const nowOn =
-    document.getElementById("nowon");
-
-  if (!nowOn) return;
-
-  if (!show) {
-
-    nowOn.textContent =
-      "Currently Off Air";
-
-    return;
-
-  }
-
-  nowOn.textContent =
-    `${show.dj} (${show.start}-${show.end})`;
-
-}
-
-/* =====================================
-   INIT
-===================================== */
-
-async function initSchedule() {
-
-  const schedule =
-    await loadSchedule();
-
-  console.log(schedule);
-
-  if (!schedule.length) return;
-
-  const currentShow =
-    getCurrentShow(schedule);
-
-  updateHero(currentShow);
-
-  updateWildy(
-    currentShow || schedule[0]
-  );
-
-  updateNowOn(currentShow);
-
-  renderSchedule(schedule);
-
-}
-
-document.addEventListener(
-  "DOMContentLoaded",
-  initSchedule
+const currentShow = schedule.find(show =>
+currentTime >= show.start &&
+currentTime < show.end
 );
+
+if (currentShow) {
+
+if (currentShow.image) {
+heroDJ.src = currentShow.image;
+}
+
+if (heroShowName) {
+heroShowName.textContent = currentShow.dj;
+}
+
+if (heroShowTime) {
+heroShowTime.textContent =
+currentShow.start + " - " + currentShow.end;
+}
+
+}
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+updateHeroDJ();
+
+setInterval(updateHeroDJ, 60000);
+
+});
+
+function buildScheduleWidget() {
+
+console.log("Schedule widget running");
+
+const list = document.getElementById("liveScheduleList");
+
+if (!list) {
+console.log("liveScheduleList not found");
+return;
+}
+
+// rest of code...
+}
+
+function buildScheduleWidget() {
+
+const list = document.getElementById("liveScheduleList");
+
+if (!list) return;
+
+let html = "";
+
+schedule.forEach(show => {
+
+html += `  
+  <div class="schedule-row">  
+
+    <img src="${show.image}" alt="${show.dj}">  
+
+    <div class="schedule-info">  
+      <div class="schedule-name">${show.dj}</div>  
+      <div class="schedule-time">  
+        ${show.start} - ${show.end}  
+      </div>  
+    </div>  
+
+  </div>  
+`;
+
+});
+
+list.innerHTML = html;
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+buildScheduleWidget();
+
+});
+
+function updateWildyRecommendation() {
+
+const djImage = document.getElementById("wildyDjImage");
+const djName = document.getElementById("wildyDjName");
+const djText = document.getElementById("wildyDjText");
+const djTime = document.getElementById("wildyDjTime");
+
+if (!djImage || !djName || !djText || !djTime) return;
+
+const now = new Date();
+
+const currentTime =
+now.getHours().toString().padStart(2, "0") +
+":" +
+now.getMinutes().toString().padStart(2, "0");
+
+let currentShow = schedule.find(show =>
+currentTime >= show.start &&
+currentTime < show.end
+);
+
+if (!currentShow) {
+currentShow = schedule[0];
+}
+
+djImage.src = currentShow.image;
+djName.textContent = currentShow.dj;
+djText.textContent =
+"Wildy recommends tuning into this show today.";
+djTime.textContent =
+currentShow.start + " - " + currentShow.end;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+updateWildyRecommendation();
+});
