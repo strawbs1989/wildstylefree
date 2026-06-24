@@ -187,10 +187,18 @@ document.getElementById("scheduleGrid");
 html += `
 <div class="schedule-day">
 
-<h2>${day}</h2>
+<h2 class="schedule-day-title">${day}</h2>
 
 <div class="dj-card">
-Available Slots
+
+<div class="dj-body">
+
+<h3>Available Slots</h3>
+
+<p>No DJs booked yet.</p>
+
+</div>
+
 </div>
 
 </div>
