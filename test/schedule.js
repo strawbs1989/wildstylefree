@@ -310,3 +310,61 @@ currentShow.start + " - " + currentShow.end;
 document.addEventListener("DOMContentLoaded", () => {
 updateWildyRecommendation();
 });
+
+
+
+
+
+
+async function loadSchedule() {
+
+  try {
+
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec?v=" + Date.now()
+    );
+
+    const data = await response.json();
+
+    console.log("SCHEDULE:", data);
+
+    return data.slots || [];
+
+  } catch(err) {
+
+    console.error(err);
+
+    return [];
+
+  }
+
+}
+
+
+
+
+
+
+
+function timeToMinutes(time) {
+
+  const match =
+    String(time)
+      .toLowerCase()
+      .match(/(\d+)(?::(\d+))?(am|pm)/);
+
+  if (!match) return 0;
+
+  let h = parseInt(match[1]);
+
+  const m = parseInt(match[2] || 0);
+
+  if (match[3] === "pm" && h !== 12)
+    h += 12;
+
+  if (match[3] === "am" && h === 12)
+    h = 0;
+
+  return h * 60 + m;
+
+}
