@@ -517,103 +517,84 @@ if (navClose) navClose.onclick = closeMenu;
 if (navBackdrop) navBackdrop.onclick = closeMenu;
 
 /* =================
-TRIBES
+TRIBES DATA
 ================== */
 const tribes = [
-
-{
-  name:"🎧 Dancefloor Addicts",
-  genres:["Dance","House"],
-  eras:["00s","10s","Today"],
-  description:
-  "You love big beats, club anthems and weekend party vibes."
-},
-
-{
-  name:"🔥 Urban Legends",
-  genres:["Hip-Hop","R&B"],
-  eras:["90s","00s","10s"],
-  description:
-  "Hip-Hop, R&B and urban classics are your thing."
-},
-
-{
-  name:"🎸 Rock Revolution",
-  genres:["Rock","Indie"],
-  eras:["80s","90s","00s"],
-  description:
-  "You live for guitars, alternative sounds and rock anthems."
-},
-
-{
-  name:"🌈 Feel Good Vibes",
-  genres:["Pop"],
-  eras:["80s","90s","Today"],
-  description:
-  "You enjoy singalong hits and feel-good music."
-}
-
+  {
+    name: "🎧 Dancefloor Addicts",
+    genres: ["Dance", "House"],
+    eras: ["00s", "10s", "Today"],
+    description: "You love big beats, club anthems and weekend party vibes."
+  },
+  {
+    name: "🔥 Urban Legends",
+    genres: ["Hip-Hop", "R&B"],
+    eras: ["90s", "00s", "10s"],
+    description: "Hip-Hop, R&B and urban classics are your thing."
+  },
+  {
+    name: "🎸 Rock Revolution",
+    genres: ["Rock", "Indie"],
+    eras: ["80s", "90s", "00s"],
+    description: "You live for guitars, alternative sounds and rock anthems."
+  },
+  {
+    name: "🌈 Feel Good Vibes",
+    genres: ["Pop"],
+    eras: ["80s", "90s", "Today"],
+    description: "You enjoy singalong hits and feel-good music."
+  }
 ];
 
+/* =================
+MATCHING LOGIC
+================== */
 document.getElementById("findTribeBtn").addEventListener("click", () => {
+  const genre = document.getElementById("genreSelect").value;
+  const era = document.getElementById("eraSelect").value;
+  const result = document.getElementById("tribeResult");
 
-const genre = document.getElementById("genreSelect").value;
-const era = document.getElementById("eraSelect").value;
+  // Validation: Ensure they picked something
+  if (!genre || !era) {
+    result.innerHTML = `
+      <div style="margin-top: 15px; color: #ff4d4d;">
+        <p>Please select both a genre and an era!</p>
+      </div>
+    `;
+    return;
+  }
 
-alert(`Genre: ${genre}\nEra: ${era}`);
+  let bestMatch = null;
+  let bestScore = 0;
 
-let bestMatch = null;
-let bestScore = 0;
+  tribes.forEach(tribe => {
+    let score = 0;
 
-tribes.forEach(tribe => {
+    if (tribe.genres.includes(genre)) score += 50;
+    if (tribe.eras.includes(era)) score += 50;
 
-let score = 0;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = tribe;
+    }
+  });
 
-if (tribe.genres.includes(genre)) score += 50;
-if (tribe.eras.includes(era)) score += 50;
+  // Display results inside the event listener
+  if (!bestMatch || bestScore === 0) {
+    result.innerHTML = `
+      <div style="margin-top: 15px;">
+        <h3>No Match Found</h3>
+        <p>Try different choices.</p>
+      </div>
+    `;
+    return;
+  }
 
-if (score > bestScore) {
-bestScore = score;
-bestMatch = tribe;
-}
-
+  result.innerHTML = `
+    <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(255,255,255,0.1);">
+      <h3>${bestMatch.name}</h3>
+      <p><strong>${bestScore}% Match</strong></p>
+      <p>${bestMatch.description}</p>
+    </div>
+  `;
 });
-
-console.log(bestMatch);
-
-});
-
-const result =
-document.getElementById("tribeResult");
-
-if (!bestMatch) {
-
-result.innerHTML = `
-<h3>No Match Found</h3>
-<p>Try different choices.</p>
-`;
-
-return;
-
-}
-
-result.innerHTML = `
-<h3>${bestMatch.name}</h3>
-<p>${bestScore}% Match</p>
-<p>${bestMatch.description}</p>
-`;
-
-});
-
-document
-.getElementById("findTribeBtn")
-?.addEventListener("click", () => {
-
-alert("TRIBE BUTTON CLICKED");
-
-});
-
-
-
-
-
