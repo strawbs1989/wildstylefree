@@ -555,15 +555,12 @@ const tribes = [
 
 ];
 
-document
-.getElementById("findTribeBtn")
-?.addEventListener("click", () => {
+document.getElementById("findTribeBtn").addEventListener("click", () => {
 
-const genre =
-document.getElementById("genreSelect").value;
+const genre = document.getElementById("genreSelect").value;
+const era = document.getElementById("eraSelect").value;
 
-const era =
-document.getElementById("eraSelect").value;
+alert(`Genre: ${genre}\nEra: ${era}`);
 
 let bestMatch = null;
 let bestScore = 0;
@@ -572,16 +569,17 @@ tribes.forEach(tribe => {
 
 let score = 0;
 
-if (tribe.genres.includes(genre))
-score += 50;
-
-if (tribe.eras.includes(era))
-score += 50;
+if (tribe.genres.includes(genre)) score += 50;
+if (tribe.eras.includes(era)) score += 50;
 
 if (score > bestScore) {
 bestScore = score;
 bestMatch = tribe;
 }
+
+});
+
+console.log(bestMatch);
 
 });
 
