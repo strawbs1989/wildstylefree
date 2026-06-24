@@ -45,22 +45,6 @@ currentShow.image ||
 "/images/wildy.png";
 }
 
-if (currentShow) {
-
-if (currentShow.image) {
-heroDJ.src = currentShow.image;
-}
-
-if (heroShowName) {
-heroShowName.textContent = currentShow.dj;
-}
-
-if (heroShowTime) {
-heroShowTime.textContent =
-currentShow.start + " - " + currentShow.end;
-}
-
-}
 
 
 
