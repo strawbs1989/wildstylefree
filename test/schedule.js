@@ -149,52 +149,33 @@ function buildScheduleWidget() {
       show => show.day === day
     );
 
-    if (!dayShows.length) return;
-
     html += `
-      <div class="schedule-day">
+  <div class="schedule-day">
 
-        <h2 class="schedule-day-title">
-          ${day}
-        </h2>
+    <h2 class="schedule-day-title">
+      ${day}
+    </h2>
 
-        <div class="dj-grid">
-    `;
+    <div class="dj-grid">
+`;
 
-    dayShows.forEach(show => {
+if (!dayShows.length) {
 
-      html += `
-        <article class="dj-card">
+  html += `
+    <article class="dj-card">
 
-          <div class="dj-image-wrap">
-            <img src="${show.image}" alt="${show.dj}">
-          </div>
+      <div class="dj-body">
 
-          <div class="dj-body">
+        <h3>Available Slots</h3>
 
-            <h3>${show.dj}</h3>
-
-            <div class="slot">
-              ${show.start} - ${show.end}
-            </div>
-
-          </div>
-
-        </article>
-      `;
-
-    });
-
-    html += `
-        </div>
+        <p>
+          No DJs scheduled yet.
+        </p>
 
       </div>
-    `;
 
-  });
-
-  list.innerHTML = html;
-
+    </article>
+  `;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
