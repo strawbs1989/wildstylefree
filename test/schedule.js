@@ -3,7 +3,6 @@
 ===================================== */
 
 const TEST_SCHEDULE_URL =
-"https://script.google.com/macros/s/...";
 "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 const DAYS = [
@@ -24,19 +23,25 @@ async function loadSchedule() {
 
   try {
 
-    const response = await fetch(TEST_SCHEDULE_URL + "?v=" + Date.now())
-      { cache: "no-store" }
+    const response = await fetch(
+      TEST_SCHEDULE_URL + "?v=" + Date.now(),
+      {
+        cache: "no-store"
+      }
     );
 
     const data = await response.json();
 
-    console.log("SCHEDULE LOADED", data);
+    console.log("SCHEDULE LOADED:", data);
 
-    return data;
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.slots)) return data.slots;
+
+    return [];
 
   } catch (err) {
 
-    console.error("Schedule Load Failed", err);
+    console.error("Schedule Load Failed:", err);
 
     return [];
 
@@ -52,26 +57,18 @@ function convertTimeToMinutes(timeString) {
 
   if (!timeString) return 0;
 
-  const match =
-    String(timeString)
-      .toLowerCase()
-      .trim()
-      .match(/(\d+)(?::(\d+))?(am|pm)/);
+  const parts = String(timeString).split(":");
 
-  if (!match) return 0;
+  if (parts.length === 2) {
 
-  let hours = parseInt(match[1]);
-  const minutes = parseInt(match[2] || 0);
+    return (
+      parseInt(parts[0], 10) * 60 +
+      parseInt(parts[1], 10)
+    );
 
-  if (match[3] === "pm" && hours !== 12) {
-    hours += 12;
   }
 
-  if (match[3] === "am" && hours === 12) {
-    hours = 0;
-  }
-
-  return (hours * 60) + minutes;
+  return 0;
 
 }
 
@@ -87,7 +84,8 @@ function getCurrentShow(schedule) {
     DAYS[now.getDay() === 0 ? 6 : now.getDay() - 1];
 
   const currentMinutes =
-    (now.getHours() * 60) + now.getMinutes();
+    (now.getHours() * 60) +
+    now.getMinutes();
 
   return schedule.find(show => {
 
@@ -125,44 +123,28 @@ function updateHero(show) {
 
   if (!show) {
 
-    if (heroShowName) {
+    if (heroShowName)
       heroShowName.textContent =
-        "No Live Show";
-    }
+      "No Live Show";
 
-    if (heroShowTime) {
+    if (heroShowTime)
       heroShowTime.textContent =
-        "Check Weekly Schedule";
-    }
+      "Check Weekly Schedule";
 
     return;
 
   }
 
-  if (heroShowName) {
+  if (heroShowName)
     heroShowName.textContent =
-      show.dj;
-  }
+    show.dj;
 
-  if (heroShowTime) {
+  if (heroShowTime)
     heroShowTime.textContent =
-      show.start + " - " + show.end;
-  }
+    `${show.start} - ${show.end}`;
 
-  if (heroDJ) {
-
-    const djName =
-      show.dj.toLowerCase();
-
-    if (djName.includes("echo")) {
-      heroDJ.src = "/images/echo1.png";
-    } else if (djName.includes("kai")) {
-      heroDJ.src = "/images/kai.jpg";
-    } else {
-      heroDJ.src = "/images/wildy.png";
-    }
-
-  }
+  if (heroDJ)
+    heroDJ.src = "/images/wildy.png";
 
 }
 
@@ -171,6 +153,8 @@ function updateHero(show) {
 ===================================== */
 
 function updateWildy(show) {
+
+  if (!show) return;
 
   const image =
     document.getElementById("wildyDjImage");
@@ -184,25 +168,19 @@ function updateWildy(show) {
   const time =
     document.getElementById("wildyDjTime");
 
-  if (!show) return;
-
-  if (image) {
+  if (image)
     image.src = "/images/wildy.png";
-  }
 
-  if (name) {
+  if (name)
     name.textContent = show.dj;
-  }
 
-  if (text) {
+  if (text)
     text.textContent =
-      "Wildy recommends tuning into this show today.";
-  }
+    "Wildy recommends tuning into this show.";
 
-  if (time) {
+  if (time)
     time.textContent =
-      show.start + " - " + show.end;
-  }
+    `${show.start} - ${show.end}`;
 
 }
 
@@ -215,10 +193,7 @@ function renderSchedule(schedule) {
   const grid =
     document.getElementById("scheduleGrid");
 
-  if (!grid) {
-    console.log("NO CONTAINER FOUND");
-    return;
-  }
+  if (!grid) return;
 
   let html = "";
 
@@ -231,27 +206,15 @@ function renderSchedule(schedule) {
 
     html += `
       <div class="schedule-day">
-        <h2 class="schedule-day-title">
-          ${day}
-        </h2>
-
-        <div class="dj-grid">
+        <h2>${day}</h2>
     `;
 
     if (!dayShows.length) {
 
       html += `
-        <article class="dj-card">
-
-          <div class="dj-body">
-
-            <h3>Available Slots</h3>
-
-            <p>No DJs booked yet.</p>
-
-          </div>
-
-        </article>
+        <div class="slot">
+          Available Slots
+        </div>
       `;
 
     } else {
@@ -259,23 +222,10 @@ function renderSchedule(schedule) {
       dayShows.forEach(show => {
 
         html += `
-          <article class="dj-card">
-
-            <div class="dj-body">
-
-              <h3>${show.dj}</h3>
-
-              <div class="slot">
-
-                ${show.start}
-                -
-                ${show.end}
-
-              </div>
-
-            </div>
-
-          </article>
+          <div class="slot">
+            <strong>${show.dj}</strong><br>
+            ${show.start} - ${show.end}
+          </div>
         `;
 
       });
@@ -283,13 +233,37 @@ function renderSchedule(schedule) {
     }
 
     html += `
-        </div>
       </div>
     `;
 
   });
 
   grid.innerHTML = html;
+
+}
+
+/* =====================================
+   HOME PAGE NOW ON
+===================================== */
+
+function updateNowOn(show) {
+
+  const nowOn =
+    document.getElementById("nowon");
+
+  if (!nowOn) return;
+
+  if (!show) {
+
+    nowOn.textContent =
+      "Currently Off Air";
+
+    return;
+
+  }
+
+  nowOn.textContent =
+    `${show.dj} (${show.start}-${show.end})`;
 
 }
 
@@ -302,6 +276,8 @@ async function initSchedule() {
   const schedule =
     await loadSchedule();
 
+  console.log(schedule);
+
   if (!schedule.length) return;
 
   const currentShow =
@@ -312,6 +288,8 @@ async function initSchedule() {
   updateWildy(
     currentShow || schedule[0]
   );
+
+  updateNowOn(currentShow);
 
   renderSchedule(schedule);
 
