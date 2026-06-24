@@ -357,3 +357,9 @@ function timeToMinutes(time) {
   return h * 60 + m;
 
 }
+
+fetch(SCHEDULE_URL)
+.then(r => r.json())
+.then(data => {
+  console.log("SCHEDULE DATA", data);
+});
