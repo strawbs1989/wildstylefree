@@ -127,38 +127,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function buildScheduleWidget() {
 
-  console.log("Schedule widget running");
-
-  const list = document.getElementById("liveScheduleList");
-
-  if (!list) {
-    console.log("liveScheduleList not found");
-    return;
-  }
-
-  // rest of code...
-}
-
-function buildScheduleWidget() {
-
   const list = document.getElementById("liveScheduleList");
 
   if (!list) return;
 
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
   let html = "";
 
-  schedule.forEach(show => {
+  days.forEach(day => {
+
+    const dayShows = schedule.filter(
+      show => show.day === day
+    );
+
+    if (!dayShows.length) return;
 
     html += `
-      <div class="schedule-row">
+      <div class="schedule-day">
 
-        <img src="${show.image}" alt="${show.dj}">
+        <h2 class="schedule-day-title">
+          ${day}
+        </h2>
 
-        <div class="schedule-info">
-          <div class="schedule-name">${show.dj}</div>
-          <div class="schedule-time">
-            ${show.start} - ${show.end}
+        <div class="dj-grid">
+    `;
+
+    dayShows.forEach(show => {
+
+      html += `
+        <article class="dj-card">
+
+          <div class="dj-image-wrap">
+            <img src="${show.image}" alt="${show.dj}">
           </div>
+
+          <div class="dj-body">
+
+            <h3>${show.dj}</h3>
+
+            <div class="slot">
+              ${show.start} - ${show.end}
+            </div>
+
+          </div>
+
+        </article>
+      `;
+
+    });
+
+    html += `
         </div>
 
       </div>
