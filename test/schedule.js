@@ -16,8 +16,7 @@ async function loadSchedule() {
 try {
 
 const res = await fetch(
-  SCHEDULE_URL + "?v=" + Date.now(),
-  { cache: "no-store" }
+  SCHEDULE_URL + "?v=" + Date.now()
 );
 
 const data = await res.json();
@@ -28,7 +27,7 @@ return Array.isArray(data)
 
 } catch (err) {
 
-console.error("Schedule load error:", err);
+console.error(err);
 return [];
 
 }
@@ -47,7 +46,9 @@ let html = "";
 DAY_ORDER.forEach(day => {
 
 const dayShows =
-  slots.filter(show => show.day === day);
+  slots.filter(
+    show => show.day === day
+  );
 
 html += `
   <div class="schedule-day">
@@ -66,9 +67,13 @@ if (!dayShows.length) {
 
       <div class="dj-body">
 
-        <h3>Available Slots</h3>
+        <h3>
+          Available Slots
+        </h3>
 
-        <p>No DJs scheduled yet.</p>
+        <p>
+          No DJs scheduled.
+        </p>
 
       </div>
 
@@ -84,7 +89,9 @@ if (!dayShows.length) {
 
         <div class="dj-body">
 
-          <h3>${show.dj}</h3>
+          <h3>
+            ${show.dj}
+          </h3>
 
           <div class="slot">
             ${show.start} - ${show.end}
@@ -124,25 +131,21 @@ document.getElementById("heroDJ");
 
 if (!slots.length) return;
 
-const currentShow = slots.find(
-slot => slot.dj &&
-slot.dj.toLowerCase() !== "free"
-);
-
-if (!currentShow) return;
+const featured = slots[0];
 
 if (heroShowName)
 heroShowName.textContent =
-currentShow.dj;
+featured.dj;
 
 if (heroShowTime)
 heroShowTime.textContent =
-currentShow.start +
+featured.start +
 " - " +
-currentShow.end;
+featured.end;
 
 if (heroDJ)
-heroDJ.src = "/images/wildy.png";
+heroDJ.src =
+"/images/wildy.png";
 
 }
 
@@ -162,29 +165,23 @@ document.getElementById("wildyDjTime");
 
 if (!slots.length) return;
 
-const featured = slots.find(
-slot => slot.dj &&
-slot.dj.toLowerCase() !== "free"
-);
-
-if (!featured) return;
+const show = slots[0];
 
 if (img)
 img.src = "/images/wildy.png";
 
 if (name)
-name.textContent =
-featured.dj;
+name.textContent = show.dj;
 
 if (text)
 text.textContent =
-"Wildy recommends tuning into this show.";
+"Wildy recommends this show.";
 
 if (time)
 time.textContent =
-featured.start +
+show.start +
 " - " +
-featured.end;
+show.end;
 
 }
 
@@ -192,8 +189,6 @@ async function initSchedule() {
 
 const slots =
 await loadSchedule();
-
-console.log("Schedule Loaded", slots);
 
 renderSchedule(slots);
 
