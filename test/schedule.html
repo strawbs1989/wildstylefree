@@ -60,12 +60,46 @@
   </header>
 
   <!-- Hero -->
-  <section class="schedule-hero">
+  <section class="hero">
 
-    <h1>SCHEDULE</h1>
-    <p>Your guide to what's live and coming up.</p>
+  <div class="hero-head">
 
-  </section>
+    <span>Wildstyle Schedule</span>
+
+    <span class="hero-pill">
+      Live Shows • Weekly Timetable
+    </span>
+
+  </div>
+
+  <div class="hero-copy">
+
+    <span class="hero-kicker">
+      🎧 WHAT'S ON AIR
+    </span>
+
+    <h1 id="heroShowName">
+      Loading...
+    </h1>
+
+    <p id="heroShowTime">
+      Loading...
+    </p>
+
+  </div>
+
+  <div class="hero-card">
+
+    <img
+      id="heroDJ"
+      src="/images/wildy.png"
+      alt="Current DJ"
+      class="schedule-hero-image"
+    >
+
+  </div>
+
+</section>
 
   <!-- Day Tabs -->
   <section class="day-tabs">
@@ -81,12 +115,62 @@
   </section>
 
   <!-- Schedule Container -->
-  <section id="scheduleContainer">
+  <section class="section">
 
-    <!-- schedule.js injects content here -->
+  <div class="section-head">
 
-  </section>
+    <h2>Weekly Schedule</h2>
 
+    <span>
+      Live Shows & Open Slots
+    </span>
+
+  </div>
+
+  <div class="section-body">
+
+    <div id="liveScheduleList"></div>
+
+  </div>
+
+</section>
+<!-- WILDY Recommendation -->
+<section class="featured-dj">
+
+  <div class="featured-dj-card">
+
+    <img
+      id="wildyDjImage"
+      src="/images/wildy.png"
+      alt="Recommended DJ"
+    >
+
+    <div class="featured-dj-content">
+
+      <span class="featured-tag">
+        🐺 WILDY RECOMMENDS
+      </span>
+
+      <h2 id="wildyDjName">
+        Loading...
+      </h2>
+
+      <p id="wildyDjText">
+        Loading recommendation...
+      </p>
+
+      <div
+        id="wildyDjTime"
+        class="featured-meta"
+      >
+        Loading...
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 </main>
 
 <!-- Right Sidebar -->
