@@ -45,7 +45,13 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("ruckus")) {
         djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Ruckus!
       }
-
+      } else if (djName.includes("pat")) {
+        djImage = "/images/pat.jpg"; 
+      }
+      
+      } else if (djName.includes("Gabby")) {
+        djImage = "/images/gabby.jpg"; 
+      }
       return {
         day: slot.day || "Monday",
         dj: slot.dj || "Free Slot",
