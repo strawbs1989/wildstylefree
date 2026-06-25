@@ -10,29 +10,58 @@ let schedule = [];
 // 1. Fetch live data from your Google Sheet API
 async function loadScheduleFromGoogle() {
   try {
-    // Add a timestamp to prevent the browser from caching old data
     const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
     const data = await response.json();
-
-    // Check if the Google Script returned data inside a 'slots' or 'schedule' property
+    
     const fetchedSlots = data.slots || data.schedule || data || [];
+    
+    // Clean up times and automatically match local images based on the DJ name column
+    schedule = fetchedSlots.map(slot => {
+      // Grab the DJ name from your column and clean up any extra spacing
+      const djName = (slot.dj || "Free Slot").trim().toLowerCase();
+      let djImage = "/images/default-dj.jpg"; // Default fallback image
 
-    // Clean up times from the Google Sheet (converts 12am/2pm formats to clean 24hr format)
-    schedule = fetchedSlots.map(slot => ({
-      day: slot.day || "Monday",
-      dj: slot.dj || slot.name || "Free Slot",
-      start: formatTo24Hour(slot.start),
-      end: formatTo24Hour(slot.end),
-      image: slot.image || "/images/default-dj.jpg"
-    }));
+      // Check the text from your "DJ" column and map it to your local filenames
+      if (djName.includes("mystic")) {
+        djImage = "/images/joanne.jpeg";
+      } else if (djName.includes("stephan") || djName.includes("gold")) {
+        djImage = "/images/golds.jpg";
+      } else if (djName.includes("chanel")) {
+        djImage = "/images/chanel.png";
+      } else if (djName.includes("echofalls")) {
+        djImage = "/images/echo1.png";
+      } else if (djName.includes("hotshot")) {
+        djImage = "/images/graham.jpg";
+      } else if (djName.includes("mouse") || djName.includes("free")) {
+        djImage = "/images/mouse.jpeg";
+      } else if (djName.includes("micky")) {
+        djImage = "/images/mickeyjay.jpeg";
+      } else if (djName.includes("don")) {
+        djImage = "/images/don.jpg";
+      } else if (djName.includes("kai")) {
+        djImage = "/images/kai.jpg";
+      } else if (djName.includes("serenity")) {
+        djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Serenity!
+      } else if (djName.includes("ruckus")) {
+        djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Ruckus!
+      }
 
-    console.log("Live Schedule Loaded Successfully:", schedule);
+      return {
+        day: slot.day || "Monday",
+        dj: slot.dj || "Free Slot",
+        start: formatTo24Hour(slot.start),
+        end: formatTo24Hour(slot.end),
+        image: djImage // Safely passes down the matched local image path
+      };
+    });
+
     return true;
   } catch (err) {
-    console.error("Failed to load live Google Sheet schedule, staying empty:", err);
+    console.error("Failed to load live Google Sheet schedule:", err);
     return false;
   }
 }
+
 
 // Helper: Makes sure spreadsheet times like "11am" or "2pm" match our 24hr logic smoothly
 function formatTo24Hour(timeStr) {
