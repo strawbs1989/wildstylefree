@@ -15,7 +15,7 @@ async function loadScheduleFromGoogle() {
     
     const fetchedSlots = data.slots || data.schedule || data || [];
     
-        // Clean up times and automatically match local images based on the DJ name column
+    // Clean up times and automatically match local images based on the DJ name column
     schedule = fetchedSlots.map(slot => {
       // Grab the DJ name from your column and clean up any extra spacing
       const djName = (slot.dj || "Free Slot").trim().toLowerCase();
@@ -31,7 +31,7 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("echofalls")) {
         djImage = "/images/echo1.png";
       } else if (djName.includes("hotshot")) {
-        djImage = "/images/hotshot.jpg";
+        djImage = "/images/graham.jpg";
       } else if (djName.includes("mouse") || djName.includes("free")) {
         djImage = "/images/mouse.jpeg";
       } else if (djName.includes("micky")) {
@@ -44,13 +44,6 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Serenity!
       } else if (djName.includes("ruckus")) {
         djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Ruckus!
-      }
-      } else if (djName.includes("pat")) {
-        djImage = "/images/pat.jpg"; 
-      }
-
-      } else if (djName.includes("Gabby")) {
-        djImage = "/images/gabby.jpg"; 
       }
 
       return {
@@ -68,6 +61,7 @@ async function loadScheduleFromGoogle() {
     return false;
   }
 }
+
 
 
 // Helper: Makes sure spreadsheet times like "11am" or "2pm" match our 24hr logic smoothly
