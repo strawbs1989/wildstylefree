@@ -62,6 +62,53 @@ const schedule = [
     end: "14:00",
     image: "/images/default-dj.jpg"
   },
+
+
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "14:00",
+    end: "16:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "16:00",
+    end: "17:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+
+{
+    day: "Monday",
+    dj: "DJ Lewis",
+    start: "17:00",
+    end: "19:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "12am",
+    end: "2am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Monday",
+    dj: "DJ SUZY",
+    start: "19:00",
+    end: "21:00",
+    image: "/images/default-dj.jpg"
+  },
+
   // --- TUESDAY ---
   {
     day: "Tuesday",
