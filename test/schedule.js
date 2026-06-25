@@ -31,7 +31,7 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("echofalls")) {
         djImage = "/images/echo1.png";
       } else if (djName.includes("hotshot")) {
-        djImage = "/images/graham.jpg";
+        djImage = "/images/hotshot.jpg";
       } else if (djName.includes("mouse") || djName.includes("free")) {
         djImage = "/images/mouse.jpeg";
       } else if (djName.includes("micky")) {
@@ -44,6 +44,9 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Serenity!
       } else if (djName.includes("ruckus")) {
         djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Ruckus!
+      }
+      else if (djName.includes("DJ Pat")) {
+  djImage = "/images/pat.jpg";
       }
 
       return {
