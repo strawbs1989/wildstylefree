@@ -1,198 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wildstyle Radio - Schedule</title>
-
-<link rel="stylesheet" href="/test/style.css">
-<link rel="stylesheet" href="/test/schedule.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildstyle Radio - Schedule</title>
+  <link rel="stylesheet" href="/test/style.css">
+  <link rel="stylesheet" href="/test/schedule.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<!-- Sidebar -->
-<!-- <aside class="sidebar">
+  <aside class="sidebar">
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="djs.html">DJs</a>
+      <a class="active" href="schedule.html">Schedule</a>
+      <a href="noticeboard.html">Noticeboard</a>
+      <a href="chat.html">Chat</a>
+      <a href="fans.html">Fans Of Wildstyle</a>
+      <a href="support.html">Support Wildstyle</a>
+      <a href="map.html">Map</a>
+      <a href="about.html">About Us</a>
+    </nav>
+  </aside>
 
-  <div class="logo">
-    <img id="heroDJ" src="/images/default.jpg">
+  <main class="content">
 
-<h1 id="heroShowName">Wildstyle Radio</h1>
-
-<p id="heroShowTime">Loading...</p> -->
-
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="djs.html">DJs</a>
-    <a class="active" href="schedule.html">Schedule</a>
-    <a href="noticeboard.html">Noticeboard</a>
-    <a href="chat.html">Chat</a>
-    <a href="fans.html">Fans Of Wildstyle</a>
-    <a href="support.html">Support Wildstyle</a>
-    <a href="map.html">Map</a>
-    <a href="about.html">About Us</a>
-  </nav>
-
-</aside>
-
-<!-- Main Content -->
-<main class="content">
-
-  <!-- Top Bar -->
-  <header class="topbar">
-
-    <div class="search-box">
-      <input type="text" placeholder="Search DJs, Shows...">
-    </div>
-
-    <div class="socials">
-      <a href="#">Facebook</a>
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-    </div>
-
-    <a href="listen.html" class="listen-btn">
-      Listen Live
-    </a>
-
-  </header>
-
-  <!-- Hero -->
-  <section class="hero">
-
-  <div class="hero-head">
-
-    <span>Wildstyle Schedule</span>
-
-    <span class="hero-pill">
-      Live Shows • Weekly Timetable
-    </span>
-
-  </div>
-
-  <div class="hero-copy">
-
-    <span class="hero-kicker">
-      🎧 WHAT'S ON AIR
-    </span>
-
-    <h1 id="heroShowName">
-      Loading...
-    </h1>
-
-    <p id="heroShowTime">
-      Loading...
-    </p>
-
-  </div>
-
-  <div class="hero-card">
-
-    <img
-      id="heroDJ"
-      src="/images/wildy.png"
-      alt="Current DJ"
-      class="schedule-hero-image"
-    >
-
-  </div>
-
-</section>
-
-  <!-- Day Tabs -->
-  <section class="day-tabs">
-
-    <button class="active">Monday</button>
-    <button>Tuesday</button>
-    <button>Wednesday</button>
-    <button>Thursday</button>
-    <button>Friday</button>
-    <button>Saturday</button>
-    <button>Sunday</button>
-
-  </section>
-
-  <!-- Schedule Container -->
-  <section class="section">
-
-  <div class="section-head">
-
-    <h2>Weekly Schedule</h2>
-
-    <span>
-      Live Shows & Open Slots
-    </span>
-
-  </div>
-
-  <div class="section-body">
-
-    <div
-id="scheduleGrid"
-class="schedule-grid-wrapper">
-</div>
-
-  </div>
-
-</section>
-<!-- WILDY Recommendation -->
-<section class="featured-dj">
-
-  <div class="featured-dj-card">
-
-    <img
-      id="wildyDjImage"
-      src="/images/wildy.png"
-      alt="Recommended DJ"
-    >
-
-    <div class="featured-dj-content">
-
-      <span class="featured-tag">
-        🐺 WILDY RECOMMENDS
-      </span>
-
-      <h2 id="wildyDjName">
-        Loading...
-      </h2>
-
-      <p id="wildyDjText">
-        Loading recommendation...
-      </p>
-
-      <div
-        id="wildyDjTime"
-        class="featured-meta"
-      >
-        Loading...
+    <header class="topbar">
+      <div class="search-box">
+        <input type="text" placeholder="Search DJs, Shows...">
       </div>
+      <div class="socials">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+      </div>
+      <a href="listen.html" class="listen-btn">Listen Live</a>
+    </header>
 
-    </div>
+    <section class="hero">
+      <div class="hero-head">
+        <span>Wildstyle Schedule</span>
+        <span class="hero-pill">Live Shows • Weekly Timetable</span>
+      </div>
+      <div class="hero-copy">
+        <span class="hero-kicker">🎧 WHAT'S ON AIR</span>
+        <h1 id="heroShowName">Loading...</h1>
+        <p id="heroShowTime">Loading...</p>
+      </div>
+      <div class="hero-card">
+        <img id="heroDJ" src="/images/wildy.png" alt="Current DJ" class="schedule-hero-image">
+      </div>
+    </section>
 
-  </div>
+    <section class="day-tabs">
+      <button class="active">Monday</button>
+      <button>Tuesday</button>
+      <button>Wednesday</button>
+      <button>Thursday</button>
+      <button>Friday</button>
+      <button>Saturday</button>
+      <button>Sunday</button>
+    </section>
 
-</section>
-</main>
+    <section class="section">
+      <div class="section-head">
+        <h2>Weekly Schedule</h2>
+        <span>Live Shows & Open Slots</span>
+      </div>
+      <div class="section-body">
+        <div id="liveSchedulelist" class="schedule-grid-wrapper"></div>
+      </div>
+    </section>
 
-<!-- Right Sidebar -->
+    <section class="featured-dj">
+      <div class="featured-dj-card">
+        <img id="wildyDjImage" src="/images/wildy.png" alt="Recommended DJ">
+        <div class="featured-dj-content">
+          <span class="featured-tag">🐺 WILDY RECOMMENDS</span>
+          <h2 id="wildyDjName">Loading...</h2>
+          <p id="wildyDjText">Loading recommendation...</p>
+          <div id="wildyDjTime" class="featured-meta">Loading...</div>
+        </div>
+      </div>
+    </section>
 
+  </main>
 
-  <!-- Support -->
-  <div class="widget">
-
-    <h3>Support Wildstyle</h3>
-
-    <a href="#">Donate</a>
-    <a href="#">Become A Sponsor</a>
-    <a href="#">Buy Merch</a>
-
-  </div>
-
-</aside>
-
-<script src="/test/schedule.js"></script>
-
+  <script src="/test/schedule.js"></script>
 </body>
 </html>
