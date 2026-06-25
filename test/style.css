@@ -2569,3 +2569,69 @@ margin:5px 0;
 .tribe-description{
   opacity:.9;
 }
+
+*/ ===========
+   NAV
+   ========== */
+
+/* Base Mobile Styles (Under 768px screen width) */
+@media (max-width: 767px) {
+  /* Hide the desktop sidebar completely on mobile */
+  .sidebar {
+    display: none; 
+    position: fixed;
+    top: 60px; /* Adjust based on top bar height */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    background: #0d0f14;
+    z-index: 999;
+  }
+
+  /* When mobile menu has an 'open' class toggle active view */
+  .sidebar.mobile-open {
+    display: block;
+  }
+
+  .content {
+    margin-left: 0 !important; /* Remove desktop spacing offset */
+    padding: 15px;
+  }
+
+  /* Hamburger Bars styling */
+  .mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 2px;
+  }
+}
+
+/* Desktop Layout Setup (768px and up) */
+@media (min-width: 768px) {
+  .mobile-menu-toggle {
+    display: none; /* Hide hamburger icon on computers */
+  }
+
+  .sidebar {
+    display: block !important;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 240px;
+    background: #0a0c10;
+  }
+
+  .content {
+    margin-left: 240px; /* Prevents center dashboard from hiding under navigation bar */
+  }
+}
