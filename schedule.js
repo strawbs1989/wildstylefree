@@ -15,7 +15,7 @@ async function loadScheduleFromGoogle() {
 
     const fetchedSlots = data.slots || data.schedule || data || [];
 
-        // Clean up times and automatically match local images based on the DJ name column
+    // Clean up times and automatically match local images based on the DJ name column
     schedule = fetchedSlots.map(slot => {
       // Grab the DJ name from your column and clean up any extra spacing
       const djName = (slot.dj || "Free Slot").trim().toLowerCase();
@@ -47,11 +47,11 @@ async function loadScheduleFromGoogle() {
       }
       } else if (djName.includes("pat")) {
         djImage = "/images/pat.jpg"; 
-      }
-
       } else if (djName.includes("Gabby")) {
         djImage = "/images/gabby.jpg"; 
       }
+
+
 
       return {
         day: slot.day || "Monday",
@@ -68,6 +68,7 @@ async function loadScheduleFromGoogle() {
     return false;
   }
 }
+
 
 
 // Helper: Makes sure spreadsheet times like "11am" or "2pm" match our 24hr logic smoothly
