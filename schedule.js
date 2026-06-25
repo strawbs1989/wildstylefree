@@ -12,9 +12,9 @@ async function loadScheduleFromGoogle() {
   try {
     const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
     const data = await response.json();
-
+    
     const fetchedSlots = data.slots || data.schedule || data || [];
-
+    
     // Clean up times and automatically match local images based on the DJ name column
     schedule = fetchedSlots.map(slot => {
       // Grab the DJ name from your column and clean up any extra spacing
@@ -31,8 +31,8 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("echofalls")) {
         djImage = "/images/echo1.png";
       } else if (djName.includes("hotshot")) {
-        djImage = "/images/hotshot.jpg";
-            } else if (djName.includes("mouse") || djName.includes("free")) {
+        djImage = "/images/graham.jpg";
+      } else if (djName.includes("mouse") || djName.includes("free")) {
         djImage = "/images/mouse.jpeg";
       } else if (djName.includes("micky")) {
         djImage = "/images/mickeyjay.jpeg";
@@ -41,17 +41,14 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("kai")) {
         djImage = "/images/kai.jpg";
       } else if (djName.includes("serenity")) {
-        djImage = "/images/default-dj.jpg";
+        djImage = "/images/default-dj.jpg"; 
       } else if (djName.includes("ruckus")) {
-        djImage = "/images/default-dj.jpg";
+        djImage = "/images/default-dj.jpg"; 
       } else if (djName.includes("pat")) {
         djImage = "/images/pat.jpg";
       } else if (djName.includes("gabby")) {
         djImage = "/images/gabby.jpg";
       }
-
-
-
 
       return {
         day: slot.day || "Monday",
@@ -68,6 +65,7 @@ async function loadScheduleFromGoogle() {
     return false;
   }
 }
+
 
 
 
