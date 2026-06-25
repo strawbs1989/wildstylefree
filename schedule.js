@@ -101,56 +101,42 @@ function formatTo24Hour(timeStr) {
   return str;
 }
 
-// 2. Updates the "What's On Air" Hero banner to match the active day's first show
-function updateHeroDJ(selectedDay = null) {
+// 2. Updates the "What's On Air" Hero banner based on the UK Timezone
+function updateHeroDJ() {
   const heroShowName = document.getElementById("heroShowName");
   const heroShowTime = document.getElementById("heroShowTime");
   const heroDJ = document.getElementById("heroDJ");
   if (!heroShowName || !heroShowTime || !heroDJ) return;
 
-  // If no day is passed, find out what day button is currently highlighted active
-  if (!selectedDay) {
-    const activeBtn = document.querySelector(".day-tabs button.active");
-    selectedDay = activeBtn ? activeBtn.textContent.trim() : "Monday";
-  }
+  // Force the script to read the exact current time in London/UK timezone
+  const now = new Date();
+  
+  const optionsTime = { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit", hour12: false };
+  const currentTime = now.toLocaleTimeString("en-GB", optionsTime); // Returns exact UK time like "23:05"
 
-  // Find all shows for the selected day
-  const dayShows = schedule.filter(show => show.day.toLowerCase() === selectedDay.toLowerCase());
+  const optionsDay = { timeZone: "Europe/London", weekday: "long" };
+  const today = now.toLocaleDateString("en-GB", optionsDay); // Returns exact UK day like "Thursday"
 
-  if (dayShows.length === 0) {
+  // Scan your spreadsheet data for a DJ playing right now in the UK
+  const currentShow = schedule.find(show => 
+    show.day.toLowerCase() === today.toLowerCase() && 
+    currentTime >= show.start && 
+    currentTime < show.end
+  );
+
+  if (!currentShow) {
     heroShowName.textContent = "No Live Show";
     heroShowTime.textContent = "Check Weekly Schedule";
     heroDJ.src = "/images/wildy.png";
     return;
   }
 
-  // Sort them so the earliest show is at the top
-  dayShows.sort((a, b) => a.start.localeCompare(b.start));
-
-  // Lock the top banner onto the first show of that day!
-  const firstShow = dayShows[0];
-  heroShowName.textContent = firstShow.dj;
-  heroShowTime.textContent = `${firstShow.start} - ${firstShow.end}`;
-  heroDJ.src = firstShow.image || "/images/wildy.png";
+  // Display the DJ currently broadcasting live
+  heroShowName.textContent = currentShow.dj;
+  heroShowTime.textContent = `${currentShow.start} - ${currentShow.end}`;
+  heroDJ.src = currentShow.image || "/images/wildy.png";
 }
 
-// 4. Hooks up click events to the day buttons
-function setupDayTabs() {
-  const buttons = document.querySelectorAll(".day-tabs button");
-
-  buttons.forEach(button => {
-    button.addEventListener("click", () => {
-      document.querySelector(".day-tabs button.active")?.classList.remove("active");
-      button.classList.add("active");
-
-      const selectedDay = button.textContent.trim();
-      displayScheduleForDay(selectedDay);
-      
-      // Update the top banner immediately when a user switches days!
-      updateHeroDJ(selectedDay);
-    });
-  });
-}
 
 // 3. Builds and filters the schedule grid depending on the chosen day
 function displayScheduleForDay(dayName) {
@@ -262,5 +248,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayScheduleForDay("Monday");
   }
 
- // setInterval(updateHeroDJ, 60000);
+  setInterval(updateHeroDJ, 60000);
 });
