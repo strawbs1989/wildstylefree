@@ -1,0 +1,211 @@
+const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+
+const DAY_ORDER = [
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+];
+
+// We start with an empty array; it will be filled automatically when the page loads
+let schedule = [];
+
+// 1. Fetch live data from your Google Sheet API
+async function loadScheduleFromGoogle() {
+  try {
+    // Add a timestamp to prevent the browser from caching old data
+    const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
+    const data = await response.json();
+
+    // Check if the Google Script returned data inside a 'slots' or 'schedule' property
+    const fetchedSlots = data.slots || data.schedule || data || [];
+
+    // Clean up times from the Google Sheet (converts 12am/2pm formats to clean 24hr format)
+    schedule = fetchedSlots.map(slot => ({
+      day: slot.day || "Monday",
+      dj: slot.dj || slot.name || "Free Slot",
+      start: formatTo24Hour(slot.start),
+      end: formatTo24Hour(slot.end),
+      image: slot.image || "/images/default-dj.jpg"
+    }));
+
+    console.log("Live Schedule Loaded Successfully:", schedule);
+    return true;
+  } catch (err) {
+    console.error("Failed to load live Google Sheet schedule, staying empty:", err);
+    return false;
+  }
+}
+
+// Helper: Makes sure spreadsheet times like "11am" or "2pm" match our 24hr logic smoothly
+function formatTo24Hour(timeStr) {
+  if (!timeStr) return "00:00";
+  let str = String(timeStr).trim().toLowerCase();
+
+  // If it's already written as HH:MM format
+  if (str.includes(":")) {
+    // Pad single hours like "9:00" to "09:00"
+    return str.split(":")[0].length === 1 ? "0" + str : str;
+  }
+
+  // Parse am/pm text strings safely
+  const match = str.match(/(\d+)\s*(am|pm)/);
+  if (match) {
+    let hours = parseInt(match[1]);
+    const ampm = match[2];
+    if (ampm === "pm" && hours !== 12) hours += 12;
+    if (ampm === "am" && hours === 12) hours = 0;
+    return String(hours).padStart(2, "0") + ":00";
+  }
+  return str;
+}
+
+// 2. Updates the "What's On Air" Hero banner
+function updateHeroDJ() {
+  const heroShowName = document.getElementById("heroShowName");
+  const heroShowTime = document.getElementById("heroShowTime");
+  const heroDJ = document.getElementById("heroDJ");
+  if (!heroShowName || !heroShowTime || !heroDJ) return;
+
+  const now = new Date();
+  const currentTime = now.toTimeString().slice(0, 5);
+  const today = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][now.getDay()];
+
+  const currentShow = schedule.find(show => show.day === today && currentTime >= show.start && currentTime < show.end);
+
+  if (!currentShow) {
+    heroShowName.textContent = "No Live Show";
+    heroShowTime.textContent = "Check Weekly Schedule";
+    heroDJ.src = "/images/wildy.png";
+    return;
+  }
+
+  heroShowName.textContent = currentShow.dj;
+  heroShowTime.textContent = `${currentShow.start} - ${currentShow.end}`;
+  heroDJ.src = currentShow.image || "/images/wildy.png";
+}
+
+// 3. Builds and filters the schedule grid depending on the chosen day
+function displayScheduleForDay(dayName) {
+  const container = document.getElementById("liveSchedulelist");
+  if (!container) return;
+
+  const dayShows = schedule.filter(show => show.day.toLowerCase() === dayName.toLowerCase());
+
+  if (dayShows.length === 0) {
+    container.innerHTML = `
+      <div class="no-shows">
+        <h3>Available Slots</h3>
+        <p>No DJs booked for ${dayName} yet.</p>
+      </div>`;
+    return;
+  }
+
+  // Sort shows by their starting times chronologically
+  dayShows.sort((a, b) => a.start.localeCompare(b.start));
+
+  let html = `<div class="dj-grid">`;
+  dayShows.forEach(show => {
+    html += `
+      <article class="dj-card">
+        <div class="dj-image-wrap">
+          <img src="${show.image}" alt="${show.dj}">
+        </div>
+        <div class="dj-body">
+          <h3>${show.dj}</h3>
+          <span class="tag">${show.start} - ${show.end}</span>
+        </div>
+      </article>`;
+  });
+  html += `</div>`;
+
+  container.innerHTML = html;
+}
+
+// 4. Hooks up click events to the day buttons
+function setupDayTabs() {
+  const buttons = document.querySelectorAll(".day-tabs button");
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelector(".day-tabs button.active")?.classList.remove("active");
+      button.classList.add("active");
+
+      const selectedDay = button.textContent.trim();
+      displayScheduleForDay(selectedDay);
+    });
+  });
+}
+
+// 5. Updates the "Wildy Recommends" box
+function updateWildyRecommendation() {
+  const djImage = document.getElementById("wildyDjImage");
+  const djName = document.getElementById("wildyDjName");
+  const djText = document.getElementById("wildyDjText");
+  const djTime = document.getElementById("wildyDjTime");
+  if (!djImage || !djName || !djText || !djTime) return;
+
+  if (schedule.length > 0) {
+    // Recommend the first scheduled show found as a default fallback
+    djImage.src = schedule[0].image;
+    djName.textContent = schedule[0].dj;
+    djText.textContent = "Wildy recommends tuning into this show today.";
+    djTime.textContent = `${schedule[0].start} - ${schedule[0].end}`;
+  }
+}
+
+// Initialization Async Runner
+document.addEventListener("DOMContentLoaded", async () => {
+  setupDayTabs();
+
+// Mobile Responsive Dropdown Draw Controller
+const menuBtn = document.getElementById("mobileMenuBtn");
+const leftSidebar = document.querySelector(".sidebar");
+
+if (menuBtn && leftSidebar) {
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    leftSidebar.classList.toggle("mobile-active");
+  });
+
+  // Automatically close sidebar if user clicks outside of it
+  document.addEventListener("click", (e) => {
+    if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
+      leftSidebar.classList.remove("mobile-active");
+    }
+  });
+}
+
+
+  // Wait to download everything from Google Sheets before drawing layout
+  const success = await loadScheduleFromGoogle();
+
+  if (success && schedule.length > 0) {
+    updateHeroDJ();
+    updateWildyRecommendation();
+
+    // Automatically set view to whatever day today is!
+    const currentDay = DAY_ORDER[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
+    const activeBtn = Array.from(document.querySelectorAll(".day-tabs button")).find(b => b.textContent.trim() === currentDay);
+
+    if (activeBtn) {
+      document.querySelector(".day-tabs button.active")?.classList.remove("active");
+      activeBtn.classList.add("active");
+      displayScheduleForDay(currentDay);
+    } else {
+      displayScheduleForDay("Monday");
+    }
+  } else {
+    // If Google Sheet API fails or is completely blank
+    displayScheduleForDay("Monday");
+  }
+
+  setInterval(updateHeroDJ, 60000);
+});
+
+// Mobile Nav Menu Open/Close Toggle
+const menuToggle = document.querySelector(".mobile-menu-toggle");
+const sidebar = document.querySelector(".sidebar");
+
+if (menuToggle && sidebar) {
+  menuToggle.addEventListener("click", () => {
+    sidebar.classList.toggle("mobile-open");
+  });
+}
