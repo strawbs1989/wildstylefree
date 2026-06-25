@@ -11,22 +11,18 @@ const schedule = [
   { day: "Sunday", dj: "Free", start: "22:00", end: "23:59", image: "/images/mouse.jpeg" }
 ];
 
+// 1. Updates the "What's On Air" Hero banner
 function updateHeroDJ() {
   const heroShowName = document.getElementById("heroShowName");
   const heroShowTime = document.getElementById("heroShowTime");
   const heroDJ = document.getElementById("heroDJ");
-
   if (!heroShowName || !heroShowTime || !heroDJ) return;
 
   const now = new Date();
   const currentTime = now.toTimeString().slice(0, 5);
   const today = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][now.getDay()];
 
-  const currentShow = schedule.find(show =>
-    show.day === today &&
-    currentTime >= show.start &&
-    currentTime < show.end
-  );
+  const currentShow = schedule.find(show => show.day === today && currentTime >= show.start && currentTime < show.end);
 
   if (!currentShow) {
     heroShowName.textContent = "No Live Show";
@@ -40,88 +36,84 @@ function updateHeroDJ() {
   heroDJ.src = currentShow.image || "/images/wildy.png";
 }
 
-function buildScheduleWidget() {
-  const list = document.getElementById("liveSchedulelist");
-  if (!list) return;
+// 2. Builds and filters the schedule grid depending on the chosen day
+function displayScheduleForDay(dayName) {
+  // Finds your <div id="liveSchedulelist"> container
+  const container = document.getElementById("liveSchedulelist");
+  if (!container) return;
 
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  let html = "";
+  // Filter the array down to just matches for this day
+  const dayShows = schedule.filter(show => show.day === dayName);
 
-  days.forEach(day => {
-    const dayShows = schedule.filter(show => show.day === day);
+  if (dayShows.length === 0) {
+    container.innerHTML = `
+      <div class="no-shows">
+        <h3>Available Slots</h3>
+        <p>No DJs booked for ${dayName} yet.</p>
+      </div>`;
+    return;
+  }
 
-    if (dayShows.length === 0) {
-      html += `
-        <div class="schedule-day">
-          <h2 class="schedule-day-title">${day}</h2>
-          <div class="dj-card">
-            <div class="dj-body">
-              <h3>Available Slots</h3>
-              <p>No DJs booked yet.</p>
-            </div>
-          </div>
-        </div>`;
-      return;
-    }
-
+  // Generate HTML for the booked slots
+  let html = `<div class="dj-grid">`;
+  dayShows.forEach(show => {
     html += `
-      <div class="schedule-day">
-        <h2 class="schedule-day-title">${day}</h2>
-        <div class="dj-grid">`;
-
-    dayShows.forEach(show => {
-      html += `
-        <article class="dj-card">
-          <div class="dj-image-wrap">
-            <img src="${show.image}" alt="${show.dj}">
-            <span class="dj-badge">LIVE</span>
-          </div>
-          <div class="dj-body">
-            <h3>${show.dj}</h3>
-            <div class="dj-meta">
-              <span class="tag">${show.start} - ${show.end}</span>
-            </div>
-            <p>Tune in for another Wildstyle Radio show.</p>
-          </div>
-        </article>`;
-    });
-
-    html += `</div></div>`;
+      <article class="dj-card">
+        <div class="dj-image-wrap">
+          <img src="${show.image}" alt="${show.dj}">
+        </div>
+        <div class="dj-body">
+          <h3>${show.dj}</h3>
+          <span class="tag">${show.start} - ${show.end}</span>
+        </div>
+      </article>`;
   });
+  html += `</div>`;
 
-  list.innerHTML = html;
+  container.innerHTML = html;
 }
 
+// 3. Hooks up click events to the day buttons
+function setupDayTabs() {
+  const buttons = document.querySelectorAll(".day-tabs button");
+  
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      // Remove active class from old button, give it to the clicked one
+      document.querySelector(".day-tabs button.active")?.classList.remove("active");
+      button.classList.add("active");
+      
+      // Refresh the lower timetable grid for this specific day!
+      const selectedDay = button.textContent.trim();
+      displayScheduleForDay(selectedDay);
+    });
+  });
+}
+
+// 4. Updates the "Wildy Recommends" box
 function updateWildyRecommendation() {
   const djImage = document.getElementById("wildyDjImage");
   const djName = document.getElementById("wildyDjName");
   const djText = document.getElementById("wildyDjText");
   const djTime = document.getElementById("wildyDjTime");
-
   if (!djImage || !djName || !djText || !djTime) return;
 
-  const now = new Date();
-  const currentTime = now.getHours().toString().padStart(2, "0") + ":" + now.getMinutes().toString().padStart(2, "0");
-
-  let currentShow = schedule.find(show => currentTime >= show.start && currentTime < show.end);
-
-  // Fallback if nothing live right now
-  if (!currentShow) {
-    currentShow = schedule[0] || { dj: "Wildy", start: "00:00", end: "00:00", image: "/images/wildy.png" };
+  if (schedule.length > 0) {
+    djImage.src = schedule[0].image;
+    djName.textContent = schedule[0].dj;
+    djText.textContent = "Wildy recommends tuning into this show today.";
+    djTime.textContent = `${schedule[0].start} - ${schedule[0].end}`;
   }
-
-  djImage.src = currentShow.image;
-  djName.textContent = currentShow.dj;
-  djText.textContent = "Wildy recommends tuning into this show today.";
-  djTime.textContent = `${currentShow.start} - ${currentShow.end}`;
 }
 
-// Clean initialization handler
+// Initialization Runner
 document.addEventListener("DOMContentLoaded", () => {
   updateHeroDJ();
-  buildScheduleWidget();
   updateWildyRecommendation();
+  setupDayTabs();
   
-  // Refresh live tracks every minute
+  // Default to showing Monday's lineup on initial load
+  displayScheduleForDay("Monday");
+  
   setInterval(updateHeroDJ, 60000);
 });
