@@ -4,7 +4,7 @@ const DAY_ORDER = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ];
 
-// We start with an empty array; it will be filled automatically when the page loads
+// Stores the schedule array after download
 let schedule = [];
 
 // 1. Fetch live data from your Google Sheet API
@@ -17,7 +17,6 @@ async function loadScheduleFromGoogle() {
     
     // Clean up times and automatically match local images based on the DJ name column
     schedule = fetchedSlots.map(slot => {
-      // Grab the DJ name from your column and clean up any extra spacing
       const djName = (slot.dj || "Free Slot").trim().toLowerCase();
       let djImage = "/images/default-dj.jpg"; // Default fallback image
 
@@ -55,7 +54,7 @@ async function loadScheduleFromGoogle() {
         dj: slot.dj || "Free Slot",
         start: formatTo24Hour(slot.start),
         end: formatTo24Hour(slot.end),
-        image: djImage // Safely passes down the matched local image path
+        image: djImage
       };
     });
 
@@ -66,21 +65,15 @@ async function loadScheduleFromGoogle() {
   }
 }
 
-
-
-
 // Helper: Makes sure spreadsheet times like "11am" or "2pm" match our 24hr logic smoothly
 function formatTo24Hour(timeStr) {
   if (!timeStr) return "00:00";
   let str = String(timeStr).trim().toLowerCase();
-
-  // If it's already written as HH:MM format
+  
   if (str.includes(":")) {
-    // Pad single hours like "9:00" to "09:00"
     return str.split(":")[0].length === 1 ? "0" + str : str;
   }
-
-  // Parse am/pm text strings safely
+  
   const match = str.match(/(\d+)\s*(am|pm)/);
   if (match) {
     let hours = parseInt(match[1]);
@@ -133,7 +126,6 @@ function displayScheduleForDay(dayName) {
     return;
   }
 
-  // Sort shows by their starting times chronologically
   dayShows.sort((a, b) => a.start.localeCompare(b.start));
 
   let html = `<div class="dj-grid">`;
@@ -157,12 +149,12 @@ function displayScheduleForDay(dayName) {
 // 4. Hooks up click events to the day buttons
 function setupDayTabs() {
   const buttons = document.querySelectorAll(".day-tabs button");
-
+  
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       document.querySelector(".day-tabs button.active")?.classList.remove("active");
       button.classList.add("active");
-
+      
       const selectedDay = button.textContent.trim();
       displayScheduleForDay(selectedDay);
     });
@@ -178,7 +170,6 @@ function updateWildyRecommendation() {
   if (!djImage || !djName || !djText || !djTime) return;
 
   if (schedule.length > 0) {
-    // Recommend the first scheduled show found as a default fallback
     djImage.src = schedule[0].image;
     djName.textContent = schedule[0].dj;
     djText.textContent = "Wildy recommends tuning into this show today.";
@@ -189,37 +180,35 @@ function updateWildyRecommendation() {
 // Initialization Async Runner
 document.addEventListener("DOMContentLoaded", async () => {
   setupDayTabs();
+  
+  // Mobile Menu Navigation Drawer Toggle
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const leftSidebar = document.querySelector(".sidebar");
 
-// Mobile Responsive Dropdown Draw Controller
-const menuBtn = document.getElementById("mobileMenuBtn");
-const leftSidebar = document.querySelector(".sidebar");
+  if (menuBtn && leftSidebar) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      leftSidebar.classList.toggle("mobile-active");
+    });
 
-if (menuBtn && leftSidebar) {
-  menuBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    leftSidebar.classList.toggle("mobile-active");
-  });
+    document.addEventListener("click", (e) => {
+      if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
+        leftSidebar.classList.remove("mobile-active");
+      }
+    });
+  }
 
-  // Automatically close sidebar if user clicks outside of it
-  document.addEventListener("click", (e) => {
-    if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
-      leftSidebar.classList.remove("mobile-active");
-    }
-  });
-}
-
-
-  // Wait to download everything from Google Sheets before drawing layout
+  // Load information from sheet
   const success = await loadScheduleFromGoogle();
-
+  
   if (success && schedule.length > 0) {
     updateHeroDJ();
     updateWildyRecommendation();
-
-    // Automatically set view to whatever day today is!
+    
+    // Automatically match viewport view to today's current weekday name
     const currentDay = DAY_ORDER[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
     const activeBtn = Array.from(document.querySelectorAll(".day-tabs button")).find(b => b.textContent.trim() === currentDay);
-
+    
     if (activeBtn) {
       document.querySelector(".day-tabs button.active")?.classList.remove("active");
       activeBtn.classList.add("active");
@@ -228,19 +217,8 @@ if (menuBtn && leftSidebar) {
       displayScheduleForDay("Monday");
     }
   } else {
-    // If Google Sheet API fails or is completely blank
     displayScheduleForDay("Monday");
   }
-
+  
   setInterval(updateHeroDJ, 60000);
 });
-
-// Mobile Nav Menu Open/Close Toggle
-const menuToggle = document.querySelector(".mobile-menu-toggle");
-const sidebar = document.querySelector(".sidebar");
-
-if (menuToggle && sidebar) {
-  menuToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("mobile-open");
-  });
-}
