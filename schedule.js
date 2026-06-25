@@ -32,7 +32,7 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/echo1.png";
       } else if (djName.includes("hotshot")) {
         djImage = "/images/hotshot.jpg";
-      } else if (djName.includes("mouse") || djName.includes("free")) {
+            } else if (djName.includes("mouse") || djName.includes("free")) {
         djImage = "/images/mouse.jpeg";
       } else if (djName.includes("micky")) {
         djImage = "/images/mickeyjay.jpeg";
@@ -41,15 +41,15 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("kai")) {
         djImage = "/images/kai.jpg";
       } else if (djName.includes("serenity")) {
-        djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Serenity!
+        djImage = "/images/default-dj.jpg";
       } else if (djName.includes("ruckus")) {
-        djImage = "/images/default-dj.jpg"; // Swap this path out if you have an image for DJ Ruckus!
-      }
+        djImage = "/images/default-dj.jpg";
       } else if (djName.includes("pat")) {
-        djImage = "/images/pat.jpg"; 
-      } else if (djName.includes("Gabby")) {
-        djImage = "/images/gabby.jpg"; 
+        djImage = "/images/pat.jpg";
+      } else if (djName.includes("gabby")) {
+        djImage = "/images/gabby.jpg";
       }
+
 
 
 
