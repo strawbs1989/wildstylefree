@@ -109,8 +109,125 @@ const schedule = [
     image: "/images/default-dj.jpg"
   },
 
+{
+    day: "Monday",
+    dj: "DJ Gaby",
+    start: "19:00",
+    end: "20:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
   // --- TUESDAY ---
-  {
+  
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "12am",
+    end: "2am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "2am",
+    end: "4am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "4am",
+    end: "6am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Shakes - DJ Flincho",
+    start: "6am",
+    end: "8am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "8am",
+    end: "10am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "12am",
+    end: "12pm",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Thomas Deane",
+    start: "12pm",
+    end: "13:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "HotShot Dj",
+    start: "13:00",
+    end: "14:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "14:00",
+    end: "16:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "16:00",
+    end: "17:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "17:00",
+    end: "18:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Tuesday",
+    dj: "DJ Marty",
+    start: "18:00",
+    end: "20:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+ {
     day: "Tuesday",
     dj: "DJ Mystic",
     start: "20:00",
@@ -118,7 +235,214 @@ const schedule = [
     image: "/images/joanne.jpeg"
   },
 
-  // --- FRIDAY ---
+
+{
+    day: "Tuesday",
+    dj: "Free Slot",
+    start: "22:00",
+    end: "00:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+// --- WEDNESDAY ---
+  {
+    day: "Wednesday",
+    dj: "Free",
+    start: "12am",
+    end: "2am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "Free",
+    start: "2am",
+    end: "4am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "Free",
+    start: "4am",
+    end: "6am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "Free",
+    start: "6am",
+    end: "8am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Wednesday",
+    dj: "Free",
+    start: "8am",
+    end: "10am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "Leanne - DJ Nala",
+    start: "10am",
+    end: "12pm",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Wednesday",
+    dj: "Stephan",
+    start: "12pm",
+    end: "16:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Wednesday",
+    dj: "Free",
+    start: "16:00",
+    end: "17:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "🎯HotShotDj",
+    start: "17:00",
+    end: "19:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "DJ Suzy",
+    start: "19:00",
+    end: "21:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "DJ ALLYBEE",
+    start: "19:00",
+    end: "20:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Wednesday",
+    dj: "DJ Simon Pro",
+    start: "20:00",
+    end: "00:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+// --- THURSDAY ---
+  {
+    day: "Thursday",
+    dj: "Free",
+    start: "12am",
+    end: "3am",
+    image: "/images/default-dj.jpg"
+  },
+  {
+    day: "Thursday",
+    dj: "Free",
+    start: "3am",
+    end: "6am",
+    image: "/images/default-dj.jpg"
+  },
+  {
+    day: "Thursday",
+    dj: "Free",
+    start: "6am",
+    end: "8am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Thursday",
+    dj: "Free",
+    start: "8am",
+    end: "10am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Thursday",
+    dj: "DJ Serenity",
+    start: "10am",
+    end: "12pm",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Thursday",
+    dj: "Free",
+    start: "12pm",
+    end: "14:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Thursday",
+    dj: "HotShotDj",
+    start: "14:00",
+    end: "15:00",
+    image: "/images/default-dj.jpg
+  },
+
+{
+    day: "Thursday",
+    dj: "Stephan",
+    start: "15:00",
+    end: "18:00",
+    image: "/images/default-dj.jpg
+  },
+
+{
+    day: "Thursday",
+    dj: "Free",
+    start: "18:00",
+    end: "19:00",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Thursday",
+    dj: "DJ Ruckus",
+    start: "19:00",
+    end: "20:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Thursday",
+    dj: "HotShot DJ",
+    start: "20:00",
+    end: "22:00",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Thursday",
+    dj: "DJ Ruckus",
+    start: "22:00",
+    end: "00:00",
+    image: "/images/default-dj.jpg"
+  },
+
+// --- FRIDAY ---
   {
     day: "Friday",
     dj: "DJ EchoFalls",
@@ -127,7 +451,24 @@ const schedule = [
     image: "/images/echo1.png"
   },
 
-  // --- SATURDAY ---
+// --- SATURDAY ---
+  {
+    day: "Saturday",
+    dj: "Chanel",
+    start: "18:00",
+    end: "20:00",
+    image: "/images/chanel.png"
+  },
+  {
+    day: "Saturday",
+    dj: "stephan",
+    start: "20:00",
+    end: "22:00",
+    image: "/images/golds.jpg"
+  },
+  
+
+// --- SUNDAY ---
   {
     day: "Saturday",
     dj: "Chanel",
@@ -150,50 +491,7 @@ const schedule = [
     image: "/images/mouse.jpeg"
   },
 
-  // --- SUNDAY ---
-  {
-    day: "Sunday",
-    dj: "Don",
-    start: "12:00",
-    end: "14:00",
-    image: "/images/don.jpg"
-  },
-  {
-    day: "Sunday",
-    dj: "Micky J",
-    start: "17:00",
-    end: "18:00",
-    image: "/images/mickeyjay.jpeg"
-  },
-  {
-    day: "Sunday",
-    dj: "Kai",
-    start: "18:00",
-    end: "19:00",
-    image: "/images/kai.jpg"
-  },
-  {
-    day: "Sunday",
-    dj: "EchoFalls",
-    start: "19:00",
-    end: "20:00",
-    image: "/images/echo1.png"
-  },
-  {
-    day: "Sunday",
-    dj: "HotShotDj",
-    start: "20:00",
-    end: "22:00",
-    image: "/images/hotshot.jpg"
-  },
-  {
-    day: "Sunday",
-    dj: "Free",
-    start: "22:00",
-    end: "23:59",
-    image: "/images/mouse.jpeg"
-  }
-];
+  
 
 
 // 1. Updates the "What's On Air" Hero banner
