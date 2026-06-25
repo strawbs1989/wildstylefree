@@ -154,6 +154,25 @@ function updateWildyRecommendation() {
 // Initialization Async Runner
 document.addEventListener("DOMContentLoaded", async () => {
   setupDayTabs();
+
+// Mobile Responsive Dropdown Draw Controller
+const menuBtn = document.getElementById("mobileMenuBtn");
+const leftSidebar = document.querySelector(".sidebar");
+
+if (menuBtn && leftSidebar) {
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    leftSidebar.classList.toggle("mobile-active");
+  });
+
+  // Automatically close sidebar if user clicks outside of it
+  document.addEventListener("click", (e) => {
+    if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
+      leftSidebar.classList.remove("mobile-active");
+    }
+  });
+}
+
   
   // Wait to download everything from Google Sheets before drawing layout
   const success = await loadScheduleFromGoogle();
