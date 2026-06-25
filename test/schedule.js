@@ -1,81 +1,63 @@
-const schedule = [
-  // --- MONDAY ---
-  { day: "Monday", dj: "Free Slot", start: "00:00", end: "02:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "Free Slot", start: "02:00", end: "04:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "Free Slot", start: "04:00", end: "06:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "Free Slot", start: "06:00", end: "08:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "Free Slot", start: "08:00", end: "10:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "Free Slot", start: "10:00", end: "11:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "HotShotDj", start: "11:00", end: "12:00", image: "/images/graham.jpg" },
-  { day: "Monday", dj: "DJ States", start: "12:00", end: "14:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "Free Slot", start: "14:00", end: "16:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "Free Slot", start: "16:00", end: "17:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "DJ Lewis", start: "17:00", end: "19:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "DJ SUZY", start: "19:00", end: "21:00", image: "/images/default-dj.jpg" },
-  { day: "Monday", dj: "DJ Gaby", start: "19:00", end: "20:00", image: "/images/default-dj.jpg" },
+const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
-  // --- TUESDAY ---
-  { day: "Tuesday", dj: "Free Slot", start: "00:00", end: "02:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Free Slot", start: "02:00", end: "04:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Free Slot", start: "04:00", end: "06:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Shakes - DJ Flincho", start: "06:00", end: "08:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Free Slot", start: "08:00", end: "10:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Free Slot", start: "10:00", end: "12:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Thomas Deane", start: "12:00", end: "13:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "HotShot Dj", start: "13:00", end: "14:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Free Slot", start: "14:00", end: "16:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Free Slot", start: "16:00", end: "17:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "Free Slot", start: "17:00", end: "18:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "DJ Marty", start: "18:00", end: "20:00", image: "/images/default-dj.jpg" },
-  { day: "Tuesday", dj: "DJ Mystic", start: "20:00", end: "22:00", image: "/images/joanne.jpeg" },
-  { day: "Tuesday", dj: "Free Slot", start: "22:00", end: "00:00", image: "/images/default-dj.jpg" },
+const DAY_ORDER = [
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+];
 
-  // --- WEDNESDAY ---
-  { day: "Wednesday", dj: "Free", start: "00:00", end: "02:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "Free", start: "02:00", end: "04:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "Free", start: "04:00", end: "06:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "Free", start: "06:00", end: "08:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "Free", start: "08:00", end: "10:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "Leanne - DJ Nala", start: "10:00", end: "12:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "Stephan", start: "12:00", end: "16:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "Free", start: "16:00", end: "17:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "🎯HotShotDj", start: "17:00", end: "19:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "DJ Suzy", start: "19:00", end: "21:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "DJ ALLYBEE", start: "19:00", end: "20:00", image: "/images/default-dj.jpg" },
-  { day: "Wednesday", dj: "DJ Simon Pro", start: "20:00", end: "00:00", image: "/images/default-dj.jpg" },
+// We start with an empty array; it will be filled automatically when the page loads
+let schedule = [];
 
-  // --- THURSDAY ---
-  { day: "Thursday", dj: "Free", start: "00:00", end: "03:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "Free", start: "03:00", end: "06:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "Free", start: "06:00", end: "08:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "Free", start: "08:00", end: "10:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "DJ Serenity", start: "10:00", end: "12:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "Free", start: "12:00", end: "14:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "HotShotDj", start: "14:00", end: "15:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "Stephan", start: "15:00", end: "18:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "Free", start: "18:00", end: "19:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "DJ Ruckus", start: "19:00", end: "20:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "HotShot DJ", start: "20:00", end: "22:00", image: "/images/default-dj.jpg" },
-  { day: "Thursday", dj: "DJ Ruckus", start: "22:00", end: "00:00", image: "/images/default-dj.jpg" },
+// 1. Fetch live data from your Google Sheet API
+async function loadScheduleFromGoogle() {
+  try {
+    // Add a timestamp to prevent the browser from caching old data
+    const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
+    const data = await response.json();
+    
+    // Check if the Google Script returned data inside a 'slots' or 'schedule' property
+    const fetchedSlots = data.slots || data.schedule || data || [];
+    
+    // Clean up times from the Google Sheet (converts 12am/2pm formats to clean 24hr format)
+    schedule = fetchedSlots.map(slot => ({
+      day: slot.day || "Monday",
+      dj: slot.dj || slot.name || "Free Slot",
+      start: formatTo24Hour(slot.start),
+      end: formatTo24Hour(slot.end),
+      image: slot.image || "/images/default-dj.jpg"
+    }));
 
-  // --- FRIDAY ---
-  { day: "Friday", dj: "DJ EchoFalls", start: "20:00", end: "22:00", image: "/images/echo1.png" },
+    console.log("Live Schedule Loaded Successfully:", schedule);
+    return true;
+  } catch (err) {
+    console.error("Failed to load live Google Sheet schedule, staying empty:", err);
+    return false;
+  }
+}
 
-  // --- SATURDAY ---
-  { day: "Saturday", dj: "Chanel", start: "18:00", end: "20:00", image: "/images/chanel.png" },
-  { day: "Saturday", dj: "stephan", start: "20:00", end: "22:00", image: "/images/golds.jpg" },
-  { day: "Saturday", dj: "Free", start: "22:00", end: "00:00", image: "/images/mouse.jpeg" },
+// Helper: Makes sure spreadsheet times like "11am" or "2pm" match our 24hr logic smoothly
+function formatTo24Hour(timeStr) {
+  if (!timeStr) return "00:00";
+  let str = String(timeStr).trim().toLowerCase();
+  
+  // If it's already written as HH:MM format
+  if (str.includes(":")) {
+    // Pad single hours like "9:00" to "09:00"
+    return str.split(":")[0].length === 1 ? "0" + str : str;
+  }
+  
+  // Parse am/pm text strings safely
+  const match = str.match(/(\d+)\s*(am|pm)/);
+  if (match) {
+    let hours = parseInt(match[1]);
+    const ampm = match[2];
+    if (ampm === "pm" && hours !== 12) hours += 12;
+    if (ampm === "am" && hours === 12) hours = 0;
+    return String(hours).padStart(2, "0") + ":00";
+  }
+  return str;
+}
 
-  // --- SUNDAY ---
-  { day: "Sunday", dj: "Don", start: "12:00", end: "14:00", image: "/images/don.jpg" },
-  { day: "Sunday", dj: "Micky J", start: "17:00", end: "18:00", image: "/images/mickeyjay.jpeg" },
-  { day: "Sunday", dj: "Kai", start: "18:00", end: "19:00", image: "/images/kai.jpg" },
-  { day: "Sunday", dj: "EchoFalls", start: "19:00", end: "20:00", image: "/images/echo1.png" },
-  { day: "Sunday", dj: "HotShotDj", start: "20:00", end: "22:00", image: "/images/hotshot.jpg" },
-  { day: "Sunday", dj: "Free", start: "22:00", end: "23:59", image: "/images/mouse.jpeg" }
-]; // <-- This closing bracket was missing!
-
-// 1. Updates the "What's On Air" Hero banner
+// 2. Updates the "What's On Air" Hero banner
 function updateHeroDJ() {
   const heroShowName = document.getElementById("heroShowName");
   const heroShowTime = document.getElementById("heroShowTime");
@@ -100,12 +82,12 @@ function updateHeroDJ() {
   heroDJ.src = currentShow.image || "/images/wildy.png";
 }
 
-// 2. Builds and filters the schedule grid depending on the chosen day
+// 3. Builds and filters the schedule grid depending on the chosen day
 function displayScheduleForDay(dayName) {
   const container = document.getElementById("liveSchedulelist");
   if (!container) return;
 
-  const dayShows = schedule.filter(show => show.day === dayName);
+  const dayShows = schedule.filter(show => show.day.toLowerCase() === dayName.toLowerCase());
 
   if (dayShows.length === 0) {
     container.innerHTML = `
@@ -115,6 +97,9 @@ function displayScheduleForDay(dayName) {
       </div>`;
     return;
   }
+
+  // Sort shows by their starting times chronologically
+  dayShows.sort((a, b) => a.start.localeCompare(b.start));
 
   let html = `<div class="dj-grid">`;
   dayShows.forEach(show => {
@@ -134,7 +119,7 @@ function displayScheduleForDay(dayName) {
   container.innerHTML = html;
 }
 
-// 3. Hooks up click events to the day buttons
+// 4. Hooks up click events to the day buttons
 function setupDayTabs() {
   const buttons = document.querySelectorAll(".day-tabs button");
   
@@ -149,7 +134,7 @@ function setupDayTabs() {
   });
 }
 
-// 4. Updates the "Wildy Recommends" box
+// 5. Updates the "Wildy Recommends" box
 function updateWildyRecommendation() {
   const djImage = document.getElementById("wildyDjImage");
   const djName = document.getElementById("wildyDjName");
@@ -158,6 +143,7 @@ function updateWildyRecommendation() {
   if (!djImage || !djName || !djText || !djTime) return;
 
   if (schedule.length > 0) {
+    // Recommend the first scheduled show found as a default fallback
     djImage.src = schedule[0].image;
     djName.textContent = schedule[0].dj;
     djText.textContent = "Wildy recommends tuning into this show today.";
@@ -165,13 +151,32 @@ function updateWildyRecommendation() {
   }
 }
 
-// Initialization Runner
-document.addEventListener("DOMContentLoaded", () => {
-  updateHeroDJ();
-  updateWildyRecommendation();
+// Initialization Async Runner
+document.addEventListener("DOMContentLoaded", async () => {
   setupDayTabs();
   
-  displayScheduleForDay("Monday");
+  // Wait to download everything from Google Sheets before drawing layout
+  const success = await loadScheduleFromGoogle();
+  
+  if (success && schedule.length > 0) {
+    updateHeroDJ();
+    updateWildyRecommendation();
+    
+    // Automatically set view to whatever day today is!
+    const currentDay = DAY_ORDER[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
+    const activeBtn = Array.from(document.querySelectorAll(".day-tabs button")).find(b => b.textContent.trim() === currentDay);
+    
+    if (activeBtn) {
+      document.querySelector(".day-tabs button.active")?.classList.remove("active");
+      activeBtn.classList.add("active");
+      displayScheduleForDay(currentDay);
+    } else {
+      displayScheduleForDay("Monday");
+    }
+  } else {
+    // If Google Sheet API fails or is completely blank
+    displayScheduleForDay("Monday");
+  }
   
   setInterval(updateHeroDJ, 60000);
 });
