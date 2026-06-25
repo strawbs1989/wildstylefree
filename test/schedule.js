@@ -180,3 +180,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   setInterval(updateHeroDJ, 60000);
 });
+
+// Mobile Nav Menu Open/Close Toggle
+const menuToggle = document.querySelector(".mobile-menu-toggle");
+const sidebar = document.querySelector(".sidebar");
+
+if (menuToggle && sidebar) {
+  menuToggle.addEventListener("click", () => {
+    sidebar.classList.toggle("mobile-open");
+  });
+}
+
+
