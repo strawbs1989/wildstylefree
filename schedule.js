@@ -12,9 +12,9 @@ async function loadScheduleFromGoogle() {
   try {
     const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
     const data = await response.json();
-    
+
     const fetchedSlots = data.slots || data.schedule || data || [];
-    
+
     // Clean up times and automatically match local images based on the DJ name column
     schedule = fetchedSlots.map(slot => {
       const djName = (slot.dj || "Free Slot").trim().toLowerCase();
@@ -59,7 +59,7 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/flincho.jpg";
       } else if (djName.includes("dj nala")) {
         djImage = "/images/djnala.jpg";
-      } else if (djName.includes("dj spara)) {
+      } else if (djName.includes("dj spara")) { // Fixed closing quote here!
         djImage = "/images/spara.jpeg";
       } else if (djName.includes("dj tom")) {
         djImage = "/images/tom.jpeg";
@@ -85,11 +85,11 @@ async function loadScheduleFromGoogle() {
 function formatTo24Hour(timeStr) {
   if (!timeStr) return "00:00";
   let str = String(timeStr).trim().toLowerCase();
-  
+
   if (str.includes(":")) {
     return str.split(":")[0].length === 1 ? "0" + str : str;
   }
-  
+
   const match = str.match(/(\d+)\s*(am|pm)/);
   if (match) {
     let hours = parseInt(match[1]);
@@ -165,12 +165,12 @@ function displayScheduleForDay(dayName) {
 // 4. Hooks up click events to the day buttons
 function setupDayTabs() {
   const buttons = document.querySelectorAll(".day-tabs button");
-  
+
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       document.querySelector(".day-tabs button.active")?.classList.remove("active");
       button.classList.add("active");
-      
+
       const selectedDay = button.textContent.trim();
       displayScheduleForDay(selectedDay);
     });
@@ -196,7 +196,7 @@ function updateWildyRecommendation() {
 // Initialization Async Runner
 document.addEventListener("DOMContentLoaded", async () => {
   setupDayTabs();
-  
+
   // Mobile Menu Navigation Drawer Toggle
   const menuBtn = document.getElementById("mobileMenuBtn");
   const leftSidebar = document.querySelector(".sidebar");
@@ -216,15 +216,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Load information from sheet
   const success = await loadScheduleFromGoogle();
-  
+
   if (success && schedule.length > 0) {
     updateHeroDJ();
     updateWildyRecommendation();
-    
+
     // Automatically match viewport view to today's current weekday name
     const currentDay = DAY_ORDER[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
     const activeBtn = Array.from(document.querySelectorAll(".day-tabs button")).find(b => b.textContent.trim() === currentDay);
-    
+
     if (activeBtn) {
       document.querySelector(".day-tabs button.active")?.classList.remove("active");
       activeBtn.classList.add("active");
@@ -235,6 +235,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     displayScheduleForDay("Monday");
   }
-  
+
   setInterval(updateHeroDJ, 60000);
 });
