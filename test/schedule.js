@@ -1,4 +1,67 @@
 const schedule = [
+
+// --- MONDAY ---
+  {
+    day: "Monday",
+    dj: "Free Slot",
+    start: "12am",
+    end: "2am",
+    image: "/images/default-dj.jpg"
+  },
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "2am",
+    end: "4am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "4am",
+    end: "6am",
+    image: "/images/default-dj.jpg"
+  },
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "6am",
+    end: "8am",
+    image: "/images/default-dj.jpg"
+  },
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "8am",
+    end: "10am",
+    image: "/images/default-dj.jpg"
+  },
+
+{
+    day: "Monday",
+    dj: "Free Slot",
+    start: "10am",
+    end: "11am",
+    image: "/images/default-dj.jpg"
+  },
+
+
+{
+    day: "Monday",
+    dj: "HotShotDj",
+    start: "11am",
+    end: "12pm",
+    image: "/images/graham.jpg"
+  },
+
+{
+    day: "Monday",
+    dj: "DJ States",
+    start: "12pm",
+    end: "14:00",
+    image: "/images/default-dj.jpg"
+  },
   // --- TUESDAY ---
   {
     day: "Tuesday",
