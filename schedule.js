@@ -59,7 +59,7 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/flincho.jpg";
       } else if (djName.includes("dj nala")) {
         djImage = "/images/djnala.jpg";
-      } else if (djName.includes("dj spara")) { // Fixed closing quote here!
+      } else if (djName.includes("dj spara")) { 
         djImage = "/images/spara.jpeg";
       } else if (djName.includes("dj tom")) {
         djImage = "/images/tom.jpeg";
@@ -108,16 +108,15 @@ function updateHeroDJ() {
   const heroDJ = document.getElementById("heroDJ");
   if (!heroShowName || !heroShowTime || !heroDJ) return;
 
-  // Force the script to read the exact current time in London/UK timezone
   const now = new Date();
-  
+
+  // Hardcode UK timezone strings so your phone matches your server's logic perfectly!
   const optionsTime = { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit", hour12: false };
-  const currentTime = now.toLocaleTimeString("en-GB", optionsTime); // Returns exact UK time like "23:05"
+  const currentTime = now.toLocaleTimeString("en-GB", optionsTime); 
 
   const optionsDay = { timeZone: "Europe/London", weekday: "long" };
-  const today = now.toLocaleDateString("en-GB", optionsDay); // Returns exact UK day like "Thursday"
+  const today = now.toLocaleDateString("en-GB", optionsDay); 
 
-  // Scan your spreadsheet data for a DJ playing right now in the UK
   const currentShow = schedule.find(show => 
     show.day.toLowerCase() === today.toLowerCase() && 
     currentTime >= show.start && 
@@ -131,12 +130,10 @@ function updateHeroDJ() {
     return;
   }
 
-  // Display the DJ currently broadcasting live
   heroShowName.textContent = currentShow.dj;
   heroShowTime.textContent = `${currentShow.start} - ${currentShow.end}`;
   heroDJ.src = currentShow.image || "/images/wildy.png";
 }
-
 
 // 3. Builds and filters the schedule grid depending on the chosen day
 function displayScheduleForDay(dayName) {
@@ -209,7 +206,6 @@ function updateWildyRecommendation() {
 document.addEventListener("DOMContentLoaded", async () => {
   setupDayTabs();
 
-  // Mobile Menu Navigation Drawer Toggle
   const menuBtn = document.getElementById("mobileMenuBtn");
   const leftSidebar = document.querySelector(".sidebar");
 
@@ -226,21 +222,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Load information from sheet
   const success = await loadScheduleFromGoogle();
 
   if (success && schedule.length > 0) {
     updateHeroDJ();
     updateWildyRecommendation();
 
-    // Automatically match viewport view to today's current weekday name
-    const currentDay = DAY_ORDER[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
-    const activeBtn = Array.from(document.querySelectorAll(".day-tabs button")).find(b => b.textContent.trim() === currentDay);
+    // Use UK Timezone for selecting the initial tab default state too!
+    const optionsDay = { timeZone: "Europe/London", weekday: "long" };
+    const currentDay = new Date().toLocaleDateString("en-GB", optionsDay);
+
+    const activeBtn = Array.from(document.querySelectorAll(".day-tabs button")).find(b => b.textContent.trim().toLowerCase() === currentDay.toLowerCase());
 
     if (activeBtn) {
       document.querySelector(".day-tabs button.active")?.classList.remove("active");
       activeBtn.classList.add("active");
-      displayScheduleForDay(currentDay);
+      displayScheduleForDay(activeBtn.textContent.trim());
     } else {
       displayScheduleForDay("Monday");
     }
