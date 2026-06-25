@@ -30,7 +30,7 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("echofalls")) {
         djImage = "/images/echo1.png";
       } else if (djName.includes("hotshot")) {
-        djImage = "/images/graham.jpg";
+        djImage = "/images/hotshot.jpg";
       } else if (djName.includes("mouse") || djName.includes("free")) {
         djImage = "/images/mouse.jpeg";
       } else if (djName.includes("micky")) {
