@@ -166,22 +166,22 @@ function parseCSV(line) {
    RESPONSIVE NAV / BURGER
 ========================================= */
 
-// Global Application Initializer
 document.addEventListener("DOMContentLoaded", () => {
-  
+  // 1. Safe Schedule Tabs check
+  if (typeof setupDayTabs === "function" && document.querySelector(".day-tabs")) {
+    setupDayTabs();
+  }
+
+  // 2. Mobile Burger Logic
   const menuBtn = document.getElementById("mobileMenuBtn");
   const leftSidebar = document.querySelector(".sidebar");
 
-  // Only run the toggle logic if the burger button and sidebar exist on the current page
   if (menuBtn && leftSidebar) {
-    
-    // 1. Open/Toggle the menu when clicking the burger button
     menuBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevents the document click listener below from immediately closing it
+      e.stopPropagation();
       leftSidebar.classList.toggle("mobile-active");
     });
 
-    // 2. Close the menu if the user clicks anywhere outside the sidebar while it's open
     document.addEventListener("click", (e) => {
       if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
         leftSidebar.classList.remove("mobile-active");
@@ -189,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
@@ -548,9 +549,9 @@ function bindCoreUI() {
   detectDesktopModeOnMobile();
   window.addEventListener('resize', detectDesktopModeOnMobile);
 
-  if (els.burger) els.burger.addEventListener('click', openMenu);
+  //if (els.burger) els.burger.addEventListener('click', openMenu);
   if (els.navClose) els.navClose.addEventListener('click', closeMenu);
-  if (els.navBackdrop) els.navBackdrop.addEventListener('click', closeMenu);
+  //if (els.navBackdrop) els.navBackdrop.addEventListener('click', closeMenu);
 
   bindAuthUI();
   bindSidebarButtons();
