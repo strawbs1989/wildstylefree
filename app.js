@@ -166,16 +166,25 @@ function parseCSV(line) {
    RESPONSIVE NAV / BURGER
 ========================================= */
 
-document.addEventListener('DOMContentLoaded', () => {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const sidebar = document.querySelector('.sidebar');
+// Initialization Async Runner
+document.addEventListener("DOMContentLoaded", async () => {
+  setupDayTabs();
 
-      mobileMenuBtn.addEventListener('click', () => {
-        // This toggles an 'active' class on both the sidebar and the button
-        sidebar.classList.toggle('active');
-        mobileMenuBtn.classList.toggle('active');
-      });
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const leftSidebar = document.querySelector(".sidebar");
+
+  if (menuBtn && leftSidebar) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      leftSidebar.classList.toggle("mobile-active");
     });
+
+    document.addEventListener("click", (e) => {
+      if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
+        leftSidebar.classList.remove("mobile-active");
+      }
+    });
+  }
 
 
 
