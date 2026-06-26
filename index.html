@@ -253,27 +253,29 @@ Current Show
       Tell us what music you love and we'll find your Wildstyle Tribe.
     </p>
 
+    <!-- Fixed: Added explicit value attributes matching data array casing -->
     <select id="genreSelect">
       <option value="">Choose Genre</option>
-      <option>Dance</option>
-      <option>House</option>
-      <option>Hip-Hop</option>
-      <option>R&B</option>
-      <option>Rock</option>
-      <option>Pop</option>
-      <option>Indie</option>
+      <option value="Dance">Dance</option>
+      <option value="House">House</option>
+      <option value="Hip-Hop">Hip-Hop</option>
+      <option value="R&B">R&B</option>
+      <option value="Rock">Rock</option>
+      <option value="Pop">Pop</option>
+      <option value="Indie">Indie</option>
     </select>
 
+    <!-- Fixed: Added explicit value attributes matching data array casing -->
     <select id="eraSelect">
       <option value="">Choose Era</option>
-      <option>80s</option>
-      <option>90s</option>
-      <option>00s</option>
-      <option>10s</option>
-      <option>Today</option>
+      <option value="80s">80s</option>
+      <option value="90s">90s</option>
+      <option value="00s">00s</option>
+      <option value="10s">10s</option>
+      <option value="Today">Today</option>
     </select>
 
-    <button id="findTribeBtn" class="btn-primary">
+    <button id="findTribeBtn" class="btn-primary" style="margin-top: 15px; width: 100%;">
       Find My Tribe
     </button>
 
@@ -282,6 +284,7 @@ Current Show
   </div>
 
 </section>
+
 
 <article class="card">
 
