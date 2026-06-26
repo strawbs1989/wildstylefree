@@ -584,19 +584,28 @@
   </div>
 
   <script type="module" src="https://wildstyle.vip/social/app.js"></script>
-  <script src="https://wildstyle.vip/script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const sidebar = document.querySelector('.sidebar');
+ 
+<script>
+ // Initialization Async Runner
+document.addEventListener("DOMContentLoaded", async () => {
+  setupDayTabs();
 
-      mobileMenuBtn.addEventListener('click', () => {
-        // This toggles an 'active' class on both the sidebar and the button
-        sidebar.classList.toggle('active');
-        mobileMenuBtn.classList.toggle('active');
-      });
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const leftSidebar = document.querySelector(".sidebar");
+
+  if (menuBtn && leftSidebar) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      leftSidebar.classList.toggle("mobile-active");
     });
-  </script>
+
+    document.addEventListener("click", (e) => {
+      if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
+        leftSidebar.classList.remove("mobile-active");
+      }
+    });
+  }
+</script>
 
 </body>
 </html> 
