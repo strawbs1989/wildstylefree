@@ -688,5 +688,37 @@ document.getElementById("findTribeBtn").addEventListener("click", () => {
 });
 </script>
 
+// Function to fetch real-time listener counts from Live365
+async function updateLiveListeners() {
+  const stationId = "a50378"; // Your station's public API handle
+  const endpoint = `https://api.live365.com/v1/station/${stationId}`;
+
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error('Network error pulling Live365 data');
+    
+    const data = await response.json();
+    
+    // Live365 returns current listener metrics inside data.listeners
+    if (data && typeof data.listeners !== 'undefined') {
+      const countElement = document.getElementById('liveListenerCount');
+      if (countElement) {
+        countElement.innerText = data.listeners;
+      }
+    }
+  } catch (error) {
+    console.error('Failed to update live listener metric:', error);
+  }
+}
+
+// 1. Run it immediately when the page finishes loading
+document.addEventListener('DOMContentLoaded', () => {
+  updateLiveListeners();
+  
+  // 2. Refresh the listener count automatically every 30 seconds
+  setInterval(updateLiveListeners, 30000); 
+});
+
+
 </body>
 </html> 
