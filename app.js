@@ -545,19 +545,26 @@ loadNoticeboard();
    INITIAL BINDING
 ========================================= */
 
+/* =========================================
+   INITIAL BINDING
+========================================= */
+
 function bindCoreUI() {
   detectDesktopModeOnMobile();
   window.addEventListener('resize', detectDesktopModeOnMobile);
 
-  //if (els.burger) els.burger.addEventListener('click', openMenu);
-  if (els.navClose) els.navClose.addEventListener('click', closeMenu);
-  //if (els.navBackdrop) els.navBackdrop.addEventListener('click', closeMenu);
+  // Removals: The old 'els.burger', 'els.navClose', and 'els.navBackdrop' lines 
+  // are gone because your new DOMContentLoaded logic handles them cleanly.
 
+  // KEEP THESE: They make your Firebase login modals and post submissions work!
   bindAuthUI();
   bindSidebarButtons();
 
-  if (els.createPostBtn) els.createPostBtn.addEventListener('click', createPost);
+  if (els.createPostBtn) {
+    els.createPostBtn.addEventListener('click', createPost);
+  }
 }
+
 
 /* =========================================
    AUTH STATE / STARTUP
