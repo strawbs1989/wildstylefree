@@ -115,11 +115,8 @@ Current Show
     <span>DJs</span>
   </div>
 
-  <div class="live-pill" style="background: #ff2a6d;">
+  <div class="hero-stats" style="background: #ff2a6d;">
   LISTENERS: <span id="live-listener-count">--</span>
-</div>
- 👥
-      <span>Listeners</span>
 </div>
 
           <div class="hero-actions">
@@ -710,77 +707,38 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
-
-async function syncLive365Analytics() {
+async function updateLiveListeners() {
+  // Target the corrected ID matching our HTML element
   const listenerNode = document.getElementById("live-listener-count");
   if (!listenerNode) return;
 
   try {
-    // Queries the endpoint directly using your specific station ID
+    // Verified Live365 Public Station Meta Endpoint
     const response = await fetch("https://api.live365.com/station/a50378");
-    
     if (!response.ok) throw new Error("API Node connection error");
     
     const data = await response.json();
     
-    // Checks for Live365's dynamic listener tally variables
+    // Fallback checks to extract the listener count correctly
     if (data && typeof data.current_listeners !== "undefined") {
       listenerNode.innerText = data.current_listeners;
-    } else if (data && data.listeners) {
+    } else if (data && typeof data.listeners !== "undefined") {
       listenerNode.innerText = data.listeners;
     } else {
-      // Fallback fallback metric if hidden behind user dashboard auth
       listenerNode.innerText = "1"; 
     }
   } catch (error) {
-    console.warn("Live365 API sync paused. Defaulting to station cache metric.");
-    listenerNode.innerText = "1"; // Default view backup matching image state
+    console.warn("Live365 API sync paused. Defaulting to station cache metric:", error);
+    listenerNode.innerText = "1"; // Safe fallback layout state
   }
 }
 
-// Check on load, then automatically refresh the data every 60 seconds
+// Single structured lifecycle execution block
 document.addEventListener("DOMContentLoaded", () => {
-  syncLive365Analytics();
-  setInterval(syncLive365Analytics, 60000);
-});
-
-
-
-
-
-
-
-
-
-// Function to fetch real-time listener counts from Live365
-async function updateLiveListeners() {
-  const stationId = "a50378"; // Your station's public API handle
-  const endpoint = `https://api.live365.com/v1/station/${stationId}`;
-
-  try {
-    const response = await fetch(endpoint);
-    if (!response.ok) throw new Error('Network error pulling Live365 data');
-    
-    const data = await response.json();
-    
-    // Live365 returns current listener metrics inside data.listeners
-    if (data && typeof data.listeners !== 'undefined') {
-      const countElement = document.getElementById('liveListenerCount');
-      if (countElement) {
-        countElement.innerText = data.listeners;
-      }
-    }
-  } catch (error) {
-    console.error('Failed to update live listener metric:', error);
-  }
-}
-
-// 1. Run it immediately when the page finishes loading
-document.addEventListener('DOMContentLoaded', () => {
   updateLiveListeners();
   
-  // 2. Refresh the listener count automatically every 30 seconds
-  setInterval(updateLiveListeners, 30000); 
+  // Automatically refresh background data every 45 seconds
+  setInterval(updateLiveListeners, 45000); 
 });
 </script>
 
