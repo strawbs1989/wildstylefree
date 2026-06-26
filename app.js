@@ -166,30 +166,29 @@ function parseCSV(line) {
    RESPONSIVE NAV / BURGER
 ========================================= */
 
-// Initialization Async Runner
-document.addEventListener("DOMContentLoaded", async () => {
+// Global Application Initializer
+document.addEventListener("DOMContentLoaded", () => {
   
-  // ONLY run schedule tabs if they exist on the current page
-  if (typeof setupDayTabs === "function" && document.querySelector(".day-tabs")) {
-    setupDayTabs();
-  }
-
   const menuBtn = document.getElementById("mobileMenuBtn");
   const leftSidebar = document.querySelector(".sidebar");
 
+  // Only run the toggle logic if the burger button and sidebar exist on the current page
   if (menuBtn && leftSidebar) {
+    
+    // 1. Open/Toggle the menu when clicking the burger button
     menuBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      leftSidebar.classList.toggle("mobile-active"); // Toggles 'mobile-active'
+      e.stopPropagation(); // Prevents the document click listener below from immediately closing it
+      leftSidebar.classList.toggle("mobile-active");
     });
 
+    // 2. Close the menu if the user clicks anywhere outside the sidebar while it's open
     document.addEventListener("click", (e) => {
       if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
         leftSidebar.classList.remove("mobile-active");
       }
     });
   }
-}); // Added missing closing brackets for the event listener!
+});
 
 
 
