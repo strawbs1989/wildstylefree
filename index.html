@@ -640,54 +640,70 @@ const tribes = [
 /* =================
 MATCHING LOGIC
 ================== */
-document.getElementById("findTribeBtn").addEventListener("click", () => {
-  const genre = document.getElementById("genreSelect").value;
-  const era = document.getElementById("eraSelect").value;
-  const result = document.getElementById("tribeResult");
+document.addEventListener("DOMContentLoaded", () => {
+  const findBtn = document.getElementById("findTribeBtn");
+  
+  // Guard clause to make sure we are on the page that actually has this button
+  if (!findBtn) return;
 
-  if (!genre || !era) {
-    result.innerHTML = `
-      <div style="margin-top: 15px; color: #ff4d4d; font-family: 'Inter', sans-serif;">
-        <p>Please select both a genre and an era!</p>
-      </div>
-    `;
-    return;
-  }
+  findBtn.addEventListener("click", () => {
+    const genre = document.getElementById("genreSelect").value;
+    const era = document.getElementById("eraSelect").value;
+    const result = document.getElementById("tribeResult");
 
-  let bestMatch = null;
-  let bestScore = 0;
+    if (!result) return;
 
-  tribes.forEach(tribe => {
-    let score = 0;
-
-    if (tribe.genres.includes(genre)) score += 50;
-    if (tribe.eras.includes(era)) score += 50;
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = tribe;
+    if (!genre || !era) {
+      result.innerHTML = `
+        <div style="margin-top: 15px; color: #ff2a6d; font-family: 'Inter', sans-serif; font-weight: 700;">
+          <p><i class="fa-solid fa-triangle-exclamation me-2"></i> Please select both a genre and an era!</p>
+        </div>
+      `;
+      return;
     }
-  });
 
-  if (!bestMatch || bestScore === 0) {
+    let bestMatch = null;
+    let bestScore = 0;
+
+    tribes.forEach(tribe => {
+      let score = 0;
+
+      if (tribe.genres.includes(genre)) score += 50;
+      if (tribe.eras.includes(era)) score += 50;
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = tribe;
+      }
+    });
+
+    if (!bestMatch || bestScore === 0) {
+      result.innerHTML = `
+        <div class="mini-card" style="margin-top: 15px; text-align: center;">
+          <h4 style="font-family: 'Oswald', sans-serif; color: var(--muted);">No Match Found</h4>
+          <p style="margin: 0; font-size: 0.95rem;">Try different choices to find your crew.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Displays the perfect layout matching your post/mini-card classes
     result.innerHTML = `
-      <div style="margin-top: 15px; font-family: 'Inter', sans-serif;">
-        <h3>No Match Found</h3>
-        <p>Try different choices.</p>
+      <div class="mini-card post animate-fade-in" style="margin-top: 20px; border: 1px solid var(--line); background: rgba(255,255,255,0.04);">
+        <h3 style="font-family: 'Oswald', sans-serif; text-transform: uppercase; margin: 0 0 8px 0; color: #fff; font-size: 1.5rem; letter-spacing: 0.04em;">
+          ${bestMatch.name}
+        </h3>
+        <p style="color: #ff2a6d; margin: 0 0 12px 0; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em;">
+          <strong>${bestScore}% Match</strong>
+        </p>
+        <p style="margin: 0; font-size: 0.95rem; color: #e6dcfb; line-height: 1.6;">
+          ${bestMatch.description}
+        </p>
       </div>
     `;
-    return;
-  }
-
-  result.innerHTML = `
-    <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-family: 'Inter', sans-serif;">
-      <h3 style="font-family: 'Oswald', sans-serif; text-transform: uppercase; margin: 0 0 5px 0;">${bestMatch.name}</h3>
-      <p style="color: #ff4d4d; margin: 0 0 10px 0;"><strong>${bestScore}% Match</strong></p>
-      <p style="margin: 0; font-size: 0.95rem; opacity: 0.85;">${bestMatch.description}</p>
-    </div>
-  `;
+  });
 });
-</script>
+
 
 // Function to fetch real-time listener counts from Live365
 async function updateLiveListeners() {
