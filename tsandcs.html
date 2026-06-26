@@ -3,34 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wildstyle Radio | Terms & Conditions</title>
+  <title>Wildstyle Radio | Rules & Regulations</title>
 
-  <!-- Styles -->
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=2026">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- Bootstrap JS (needed for mobile nav) -->
+  <!-- Bootstrap JS (Needed for mobile nav toggle) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
 
-<!-- Header -->
-<header class="dj-card header-wrapper text-center">
+<!-- Header Banner -->
+<header class="dj-card header-wrapper text-center py-4">
   <div class="container header-container">
-    <h1>WildStyle Radio</h1>
-    <p>Online & Mobile</p>
+    <h1 class="display-4 fw-bold text-uppercase">WildStyle Radio</h1>
+    <p class="lead tracking-widest text-neon">Online & Mobile</p>
   </div>
 </header>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg neon-nav">
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg neon-nav sticky-top">
   <div class="container">
     <a class="navbar-brand neon-logo" href="/index.html">WILDSTYLE RADIO</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -42,70 +42,114 @@
         <li class="nav-item"><a class="nav-link" href="/shoutout.html">Shoutouts</a></li>
         <li class="nav-item"><a class="nav-link" href="/chat.html">Chat</a></li>
         <li class="nav-item"><a class="nav-link" href="/merch.html">Merch</a></li>
-        <li class="nav-item"><a class="nav-link active" href="#">Rules</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Rules</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- Hero -->
-<section class="hero text-center">
-  <h2>Station Rules & Guidelines</h2>
+<!-- Hero Display Section -->
+<section class="hero text-center py-5">
+  <div class="container">
+    <h2 class="text-uppercase fw-bold text-neon-pink">Station Rules & Guidelines</h2>
+    <p class="text-muted">Standard procedures for all DJs, presenters, and crew members.</p>
+  </div>
 </section>
 
-<!-- RULES -->
-<section class="rules-section container py-5 text-center">
-
-  <h2 class="text-danger mb-4">🎧 Wildstyle Radio Rules & Regulations</h2>
-
-  <div class="rule mb-4">
-    <h4>1. General Conduct</h4>
-    <p>All DJs, presenters, and team members must behave respectfully and professionally at all times. Turning up on time is a MUST. No discrimination, hate speech, or toxic behaviour.</p>
+<!-- Rules Cards Grid -->
+<main class="rules-section container py-5">
+  
+  <!-- Critical Warning Banner -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card dj-card border-danger bg-dark text-center p-4">
+        <h3 class="text-danger text-uppercase fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i> Important Zero-Tolerance Note</h3>
+        <p class="lead mb-0 text-white"><strong>No drunk DJs on air.</strong> Keep it clean, keep it crisp, and keep it professional.</p>
+      </div>
+    </div>
   </div>
 
-  <div class="rule mb-4">
-    <h4>2. Broadcast Guidelines</h4>
-    <p>Shows must start and end on time. Explicit content must be clearly marked. No illegal activity or misinformation.</p>
+  <!-- Rules Grid -->
+  <div class="row g-4">
+    
+    <!-- Rule 1 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">01.</span> General Conduct</h4>
+        <p class="text-light mb-0">All DJs, presenters, and team members must behave respectfully and professionally at all times. Turning up on time is a <strong>MUST</strong>. Absolutely zero discrimination, hate speech, or toxic behavior will be tolerated.</p>
+      </div>
+    </div>
+
+    <!-- Rule 2 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">02.</span> Broadcast Guidelines</h4>
+        <p class="text-light mb-0">Shows must start and end precisely on time to ensure smooth handovers. Explicit content must be clearly marked. No promotion of illegal activities or misinformation.</p>
+      </div>
+    </div>
+
+    <!-- Rule 3 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">03.</span> Music & Content</h4>
+        <p class="text-light mb-0">We are fully licensed to play signed and unsigned tracks. Actively support upcoming artists, keep your music selection varied, and never distribute or download copyrighted tracks illegally.</p>
+      </div>
+    </div>
+
+    <!-- Rule 4 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">04.</span> Technical Duties</h4>
+        <p class="text-light mb-0">Test your audio levels, bitrates, and hardware setup before going live. Do not alter core stream settings. Always keep a backup local playlist ready in case connection drops.</p>
+      </div>
+    </div>
+
+    <!-- Rule 5 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">05.</span> Promotion & Branding</h4>
+        <p class="text-light mb-0">Always utilize current official Wildstyle assets. Drop regular station liners and link back to the hub. Management approval is strictly required before promoting external brands or merchandise.</p>
+      </div>
+    </div>
+
+    <!-- Rule 6 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">06.</span> Schedule & Cover</h4>
+        <p class="text-light mb-0">Commit strictly to your assigned time slots. Provide at least 24 hours notice in the crew channels if you need show coverage. No sudden ghosting or unannounced absences.</p>
+      </div>
+    </div>
+
+    <!-- Rule 7 -->
+    <div class="col-md-6 col-lg-2 d-none d-lg-block"><!-- Grid Spacer for Layout Balance --></div>
+
+    <!-- Rule 7 Content Container -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">07.</span> Crew & Fan Interaction</h4>
+        <p class="text-light mb-0">Treat listeners with patience and respect across all chat interactions. Keep room banter light and engaging. Never share confidential personal information or internal management issues publicly.</p>
+      </div>
+    </div>
+
+    <!-- Rule 8 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card dj-card h-100 bg-dark p-4 border-secondary">
+        <h4 class="text-neon fw-bold mb-3"><span class="text-muted">08.</span> Management Rights</h4>
+        <p class="text-light mb-0">Station management reserves the full right to monitor broadcasts, audit logs, and remove contributors from rotation if any of these regulations are continuously ignored.</p>
+      </div>
+    </div>
+
   </div>
+</main>
 
-  <div class="rule mb-4">
-    <h4>3. Music & Content</h4>
-    <p>We are licensed to play signed and unsigned music. Support new artists, keep variety, and don’t distribute music illegally.</p>
+<!-- Footer Base -->
+<footer class="text-center py-4 bg-black border-top border-secondary mt-5">
+  <div class="container text-muted small">
+    &copy; 2026 Wildstyle Radio VIP. All Rights Reserved.
   </div>
+</footer>
 
-  <div class="rule mb-4">
-    <h4>4. Technical Responsibilities</h4>
-    <p>Test your setup before going live. No messing with stream settings. Always have backup playlists ready.</p>
-  </div>
-
-  <div class="rule mb-4">
-    <h4>5. Promotion & Branding</h4>
-    <p>Use official branding. Link back to Wildstyle. Get approval before promoting external stuff.</p>
-  </div>
-
-  <div class="rule mb-4">
-    <h4>6. Scheduling & Communication</h4>
-    <p>Stick to your slot. Give 24 hours notice if you’re off. No ghosting.</p>
-  </div>
-
-  <div class="rule mb-4">
-    <h4>7. Listener Interaction</h4>
-    <p>Respect listeners. Keep it friendly. No personal info sharing.</p>
-  </div>
-
-  <div class="rule mb-4">
-    <h4>8. Management Rights</h4>
-    <p>We can review shows and remove DJs if rules are broken.</p>
-  </div>
-
-  <div class="rule mb-4">
-    <h4>9. Important Note</h4>
-    <p><strong>No drunk DJs on air.</strong> Keep it professional.</p>
-  </div>
-
-</section>
-
-<!-- Scripts -->
+<!-- Production App Modules -->
 <script type="module" src="https://wildstyle.vip/app.js?v=10"></script>
 <script type="module" src="https://wildstyle.vip/shout.js?v=1"></script>
 <script src="https://wildstyle.vip/theme.js"></script>
