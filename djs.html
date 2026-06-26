@@ -1,52 +1,58 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio — DJs</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css">
+  <title>Wildstyle Radio - Schedule</title>
+  <link rel="stylesheet" href="/test/style.css">
+  <link rel="stylesheet" href="/test/schedule.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="shell">
+  <!-- Left Sidebar (Desktop Navigation Panel) -->
+  <aside class="sidebar">
+    <div class="logo-area">
+      <img src="/images/wildy.png" alt="Wildstyle Logo" class="nav-logo">
+      <span class="brand-name">Wildstyle Radio</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html">Home</a>
+      <a href="djs.html">DJs</a>
+      <a class="active" href="schedule.html">Schedule</a>
+      <a href="noticeboard.html">Noticeboard</a>
+      <a href="chat.html">Chat</a>
+      <a href="fans.html">Fans Of Wildstyle</a>
+      <a href="support.html">Support Wildstyle</a>
+      <a href="map.html">Map</a>
+      <a href="about.html">About Us</a>
+    </nav>
+  </aside>
+
+  <!-- Main Grid Content Wrapper -->
+  <main class="content">
+
+    <!-- Top Navigation Utility Bar -->
     <header class="topbar">
-      <a class="brand" href="/index.html">
-        <div class="brand-badge">WS</div>
-        <div class="brand-copy">
-          <strong>WILDSTYLE RADIO</strong>
-          <small>The Wildstyle Crew</small>
-        </div>
-      </a>
+      <!-- Mobile View Hamburger Menu Trigger Button -->
+      <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
 
-      <nav class="nav desktop-nav">
-  <a href="/index.html">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html">Chat</a>
-  <a href="/map.html" class="active">Map</a>
-</nav> 
-
-      <button class="burger" id="burger" aria-label="Open menu">☰</button>
-    </header>
-
-    <div class="nav-backdrop" id="navBackdrop" hidden></div>
-
-    <aside class="mobile-nav" id="mobileNav">
-      <div class="mobile-nav-top">
-        <strong>Menu</strong>
-        <button id="navClose" aria-label="Close menu">✕</button>
+      <div class="search-box">
+        <input type="text" placeholder="Search DJs, Shows...">
       </div>
-      <a href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a>
-      <a href="/schedule.html">Schedule</a>
-      <a href="/chat.html">Chat</a>
-      <a href="/request.html">Request</a>
-      <a href="/map.html" class="active">Map</a>
-    </aside>
+
+      <div class="socials">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+      </div>
+
+      <a href="listen.html" class="listen-btn">Listen Live</a>
+    </header>
 
     <section class="hero">
       <div class="hero-head">
