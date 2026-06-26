@@ -3,171 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio - Schedule</title>
+  <title>Wildstyle Radio - Rules & Regulations</title>
+  
+  <!-- Consistent CSS styling pathways -->
   <link rel="stylesheet" href="/test/style.css">
   <link rel="stylesheet" href="/test/schedule.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Left Sidebar (Desktop Navigation Panel) -->
-  <aside class="sidebar">
-    <div class="logo-area">
-      <img src="/images/wildy.png" alt="Wildstyle Logo" class="nav-logo">
-      <span class="brand-name">Wildstyle Radio</span>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="index.html">Home</a>
-      <a href="djs.html">DJs</a>
-      <a class="active" href="schedule.html">Schedule</a>
-      <a href="noticeboard.html">Noticeboard</a>
-      <a href="chat.html">Chat</a>
-      <a href="fans.html">Fans Of Wildstyle</a>
-      <a href="support.html">Support Wildstyle</a>
-      <a href="map.html">Map</a>
-      <a href="about.html">About Us</a>
-    </nav>
-  </aside>
-
-  <!-- Main Grid Content Wrapper -->
-  <main class="content">
-
-    <!-- Top Navigation Utility Bar -->
-    <header class="dj-card header-wrapper text-center py-4 mb-0">
-  <div class="container header-container">
-    <h1 class="display-4 fw-bold text-uppercase text-white">WildStyle Radio</h1>
-    <p class="lead tracking-widest text-neon text-danger">Online & Mobile</p>
-  </div>
-</header>
-
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg neon-nav sticky-top navbar-dark bg-black">
-  <div class="container">
-    <a class="navbar-brand neon-logo" href="/index.html">WILDSTYLE RADIO</a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="/djs.html">DJs</a></li>
-        <li class="nav-item"><a class="nav-link" href="/schedule.html">Schedule</a></li>
-        <li class="nav-item"><a class="nav-link" href="/shoutout.html">Shoutouts</a></li>
-        <li class="nav-item"><a class="nav-link" href="/chat.html">Chat</a></li>
-        <li class="nav-item"><a class="nav-link" href="/merch.html">Merch</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Rules</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<!-- Hero Display Section -->
-<section class="hero text-center py-5 bg-dark-subtle border-bottom border-secondary">
-  <div class="container">
-    <h2 class="text-uppercase fw-bold text-danger">Station Rules & Guidelines</h2>
-    <p class="text-muted">Standard procedures for all DJs, presenters, and crew members.</p>
-  </div>
-</section>
-
-<!-- Rules Content Wrapper -->
-<main class="rules-section container py-5">
-
-  <!-- Critical Warning Banner -->
-  <div class="row mb-5">
-    <div class="col-12">
-      <div class="card dj-card border-danger bg-black text-center p-4 shadow">
-        <h3 class="text-danger text-uppercase fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i> Important Zero-Tolerance Note</h3>
-        <p class="lead mb-0 text-white"><strong>No drunk DJs on air.</strong> Keep it clean, keep it crisp, and keep it professional.</p>
+  <div class="shell main">
+    
+    <!-- Left Sidebar Nav Panel -->
+    <aside class="sidebar">
+      <div class="brand-badge" style="width:100%; height:auto; aspect-ratio:1/1; border-radius:24px; margin-bottom:10px;">
+        <span style="font-family:Oswald; font-size:2rem;">WSR</span>
       </div>
-    </div>
-  </div>
-
-  <!-- Rules Grid -->
-  <div class="row g-4">
-
-    <!-- Rule 1 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">01.</span> General Conduct</h4>
-        <p class="mb-0">All DJs, presenters, and team members must behave respectfully and professionally at all times. Turning up on time is a <strong>MUST</strong>. Absolutely zero discrimination, hate speech, or toxic behavior will be tolerated.</p>
+      <div class="brand-copy" style="text-align: center; margin-bottom: 20px;">
+        <strong>Wildstyle Radio</strong>
+        <small>Online & Mobile</small>
       </div>
-    </div>
+      
+      <nav class="nav" style="flex-direction: column; justify-content: start; align-items: stretch; width: 100%;">
+        <a href="index.html">Home</a>
+        <a href="djs.html">DJs</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="noticeboard.html">Noticeboard</a>
+        <a href="chat.html">Chat</a>
+        <a href="fans.html">Fans Of Wildstyle</a>
+        <a href="support.html">Support Wildstyle</a>
+        <a href="map.html">Map</a>
+        <a href="about.html">About Us</a>
+        <a class="active" href="tsandcs.html">Rules</a>
+      </nav>
+    </aside>
 
-    <!-- Rule 2 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">02.</span> Broadcast Guidelines</h4>
-        <p class="mb-0">Shows must start and end precisely on time to ensure smooth handovers. Explicit content must be clearly marked. No promotion of illegal activities or misinformation.</p>
-      </div>
-    </div>
+    <!-- Main Right Panel Content Panel -->
+    <main class="main-left">
+      
+      <!-- Top Neon Header Notification Bar -->
+      <header class="hero-head" style="border-radius: 22px;">
+        <span style="font-size: 1.4rem;">🎧 STATION POLICY HUB</span>
+        <div class="live-pill" style="background: #ff2a6d;">SYSTEM ACTIVE</div>
+      </header>
 
-    <!-- Rule 3 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">03.</span> Music & Content</h4>
-        <p class="mb-0">We are fully licensed to play signed and unsigned tracks. Actively support upcoming artists, keep your music selection varied, and never distribute or download copyrighted tracks illegally.</p>
-      </div>
-    </div>
+      <!-- Critical Notice Area -->
+      <section class="post" style="border: 2px solid #ff2a6d; background: rgba(255, 42, 109, 0.05);">
+        <div class="post-top">
+          <div class="author">
+            <div class="avatar" style="background: #ff2a6d;">!</div>
+            <div>
+              <strong>Zero-Tolerance Regulation</strong>
+              <small>Effective Immediately</small>
+            </div>
+          </div>
+          <span class="notice-tag live">CRITICAL</span>
+        </div>
+        <p style="font-size: 1.2rem; font-weight: 700; color: #fff;">
+          <strong>No drunk DJs on air.</strong> Keep it clean, keep it crisp, and maintain professionalism at all times.
+        </p>
+      </section>
 
-    <!-- Rule 4 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">04.</span> Technical Duties</h4>
-        <p class="mb-0">Test your audio levels, bitrates, and hardware setup before going live. Do not alter core stream settings. Always keep a backup local playlist ready in case connection drops.</p>
-      </div>
-    </div>
+      <!-- Rules Cards Grid Container -->
+      <section class="card">
+        <div class="card-head">
+          <h2>Official Crew & Presenter Terms</h2>
+        </div>
+        <div class="card-body">
+          <div id="rules-dynamic-grid" class="mini-row" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+            <!-- Generated dynamically by tsandcs.js -->
+          </div>
+        </div>
+      </section>
 
-    <!-- Rule 5 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">05.</span> Promotion & Branding</h4>
-        <p class="mb-0">Always utilize current official Wildstyle assets. Drop regular station liners and link back to the hub. Management approval is strictly required before promoting external brands or merchandise.</p>
-      </div>
-    </div>
+      <!-- Site Footer Footer -->
+      <footer class="footer" style="grid-template-columns: 1fr; text-align: center; padding: 20px; border-radius: 22px;">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--muted);">
+          &copy; 2026 Wildstyle Radio VIP. Layout Node Engine Verified.
+        </p>
+      </footer>
 
-    <!-- Rule 6 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">06.</span> Schedule & Cover</h4>
-        <p class="mb-0">Commit strictly to your assigned time slots. Provide at least 24 hours notice in the crew channels if you need show coverage. No sudden ghosting or unannounced absences.</p>
-      </div>
-    </div>
-
-    <!-- Layout Spacers for Balance -->
-    <div class="col-md-6 col-lg-2 d-none d-lg-block"></div>
-
-    <!-- Rule 7 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">07.</span> Crew & Fan Interaction</h4>
-        <p class="mb-0">Treat listeners with patience and respect across all chat interactions. Keep room banter light and engaging. Never share confidential personal information or internal management issues publicly.</p>
-      </div>
-    </div>
-
-    <!-- Rule 8 -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card dj-card h-100 bg-black p-4 border-secondary text-white shadow">
-        <h4 class="text-danger fw-bold mb-3"><span class="text-muted">08.</span> Management Rights</h4>
-        <p class="mb-0">Station management reserves the full right to monitor broadcasts, audit logs, and remove contributors from rotation if any of these regulations are continuously ignored.</p>
-      </div>
-    </div>
+    </main>
 
   </div>
-</main>
 
-<!-- Footer Base -->
-<footer class="text-center py-4 bg-black border-top border-secondary mt-5">
-  <div class="container text-muted small">
-    &copy; 2026 Wildstyle Radio VIP. All Rights Reserved.
-  </div>
-</footer>
-
-<!-- Scripts -->
-<script type="module" src="https://wildstyle.vip/app.js?v=10"></script>
-<script type="module" src="https://wildstyle.vip/shout.js?v=1"></script>
-<script src="https://wildstyle.vip/theme.js"></script>
-
+  <!-- Component Scripts Loading Links -->
+  <script src="https://wildstyle.vip/tsandcs.js"></script>
+  <script type="module" src="https://wildstyle.vip/app.js?v=10"></script>
+  <script src="https://wildstyle.vip/theme.js"></script>
 </body>
 </html>
