@@ -585,5 +585,18 @@
 
   <script type="module" src="https://wildstyle.vip/social/app.js"></script>
   <script src="https://wildstyle.vip/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebar = document.querySelector('.sidebar');
+
+      mobileMenuBtn.addEventListener('click', () => {
+        // This toggles an 'active' class on both the sidebar and the button
+        sidebar.classList.toggle('active');
+        mobileMenuBtn.classList.toggle('active');
+      });
+    });
+  </script>
+
 </body>
 </html> 
