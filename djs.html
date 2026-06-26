@@ -55,11 +55,7 @@
       <a href="listen.html" class="listen-btn">Listen Live</a>
     </header>
 
-    <!-- YOUR DJ CONTENT GOES HERE -->
-    <section class="dj-profile-section">
-      <h1>Our DJs</h1>
-      <p>Content for the DJ page will load nicely right here.</p>
-    </section>
+    
 
   </main> <!-- Added missing closing main tag -->
 
@@ -585,27 +581,7 @@
 
   <script type="module" src="https://wildstyle.vip/social/app.js"></script>
  
-<script>
- // Initialization Async Runner
-document.addEventListener("DOMContentLoaded", async () => {
-  setupDayTabs();
 
-  const menuBtn = document.getElementById("mobileMenuBtn");
-  const leftSidebar = document.querySelector(".sidebar");
-
-  if (menuBtn && leftSidebar) {
-    menuBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      leftSidebar.classList.toggle("mobile-active");
-    });
-
-    document.addEventListener("click", (e) => {
-      if (!leftSidebar.contains(e.target) && leftSidebar.classList.contains("mobile-active")) {
-        leftSidebar.classList.remove("mobile-active");
-      }
-    });
-  }
-</script>
 
 </body>
 </html> 
