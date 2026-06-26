@@ -166,31 +166,16 @@ function parseCSV(line) {
    RESPONSIVE NAV / BURGER
 ========================================= */
 
-function openMenu() {
-  if (els.mobileNav) els.mobileNav.classList.add('active');
-  if (els.navBackdrop) els.navBackdrop.hidden = false;
-}
+document.addEventListener('DOMContentLoaded', () => {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebar = document.querySelector('.sidebar');
 
-function closeMenu() {
-  if (els.mobileNav) els.mobileNav.classList.remove('active');
-  if (els.navBackdrop) els.navBackdrop.hidden = true;
-}
-
-function detectDesktopModeOnMobile() {
-  const ua = navigator.userAgent || '';
-  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
-  const looksDesktopUA =
-    !/Android|iPhone|iPad|iPod|Mobile/i.test(ua) ||
-    ua.includes('X11') ||
-    ua.includes('Windows NT') ||
-    ua.includes('Macintosh');
-
-  if (isTouchDevice && looksDesktopUA) {
-    document.documentElement.classList.add('force-desktop-nav');
-  } else {
-    document.documentElement.classList.remove('force-desktop-nav');
-  }
-}
+      mobileMenuBtn.addEventListener('click', () => {
+        // This toggles an 'active' class on both the sidebar and the button
+        sidebar.classList.toggle('active');
+        mobileMenuBtn.classList.toggle('active');
+      });
+    });
 
 
 
