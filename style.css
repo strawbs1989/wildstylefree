@@ -1095,60 +1095,75 @@ NOW PLAYING
 ========================================= */
 @media (max-width: 980px) {
   
-  /* 1. Force the layout out of a desktop side-by-side grid */
-  body {
+  /* 1. COMPLETELY blow away any desktop side-by-side grids or flexes */
+  html, body {
     display: block !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
+  /* 2. Break the main container into a standalone vertical stack */
   .content {
+    display: block !important;
     width: 100% !important;
     margin: 0 !important;
-    padding: 15px !important;
-    box-sizing: border-box;
+    padding: 10px !important;
+    box-sizing: border-box !important;
   }
 
-  /* 2. Fix the header container to stretch full width */
+  /* 3. Force the white top bar header to span 100% width across the screen */
   .topbar {
     display: flex !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    left: 0 !important;
+    right: 0 !important;
     justify-content: space-between !important;
     align-items: center !important;
-    width: 100% !important;
-    background: #111; /* fallback dark background */
-    padding: 10px 15px;
-    box-sizing: border-box;
+    background: #ffffff !important; /* Kept your white bar style */
+    padding: 15px !important;
+    margin: 0 0 15px 0 !important;
+    border-radius: 12px !important; /* Matches your screenshot curves */
+    box-sizing: border-box !important;
   }
 
-  /* Hide elements that squish the layout on small viewports */
+  /* 4. Hide search and social links instantly on mobile so they don't squish */
   .topbar .search-box,
   .topbar .socials {
     display: none !important;
   }
 
-  /* 3. Make the Burger Button pop into view */
+  /* 5. Force your gradient burger button to draw clearly inside the topbar */
   .mobile-menu-toggle {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
-  /* 4. Transform the sidebar into a hidden off-canvas drawer */
+  /* 6. Lock down the mobile hidden slide-out drawer layout */
   .sidebar {
     position: fixed !important;
-    top: 0;
-    right: -320px; /* Hidden offscreen to the right */
-    width: 300px;
-    height: 100%;
-    background: var(--grad-soft, #18181c) !important;
-    border-left: 1px solid rgba(255, 255, 255, .08);
-    box-shadow: var(--shadow);
-    z-index: 9999 !important;
-    padding: 20px;
-    box-sizing: border-box;
+    top: 0 !important;
+    right: -320px !important; /* Offscreen right */
+    left: auto !important; /* Prevent desktop left settings from locking it down */
+    width: 300px !important;
+    height: 100vh !important;
+    background: #18181c !important;
+    border-left: 1px solid rgba(255, 255, 255, .08) !important;
+    z-index: 99999 !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
     display: flex !important;
-    flex-direction: column;
-    gap: 12px;
-    transition: right .25s ease !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    transition: right .25s ease-in-out !important;
   }
 
-  /* 5. The Trigger: When JS applies this class, slide it in! */
+  /* When JS adds this, slide out perfectly */
   .sidebar.mobile-active {
     right: 0 !important;
   }
