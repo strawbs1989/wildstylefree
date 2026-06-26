@@ -168,7 +168,11 @@ function parseCSV(line) {
 
 // Initialization Async Runner
 document.addEventListener("DOMContentLoaded", async () => {
-  setupDayTabs();
+  
+  // ONLY run schedule tabs if they exist on the current page
+  if (typeof setupDayTabs === "function" && document.querySelector(".day-tabs")) {
+    setupDayTabs();
+  }
 
   const menuBtn = document.getElementById("mobileMenuBtn");
   const leftSidebar = document.querySelector(".sidebar");
@@ -176,7 +180,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (menuBtn && leftSidebar) {
     menuBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      leftSidebar.classList.toggle("mobile-active");
+      leftSidebar.classList.toggle("mobile-active"); // Toggles 'mobile-active'
     });
 
     document.addEventListener("click", (e) => {
@@ -185,6 +189,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
+}); // Added missing closing brackets for the event listener!
+
 
 
 
