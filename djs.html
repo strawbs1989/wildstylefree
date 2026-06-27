@@ -583,6 +583,25 @@
 
   <script src="schedule.js?v=4"></script>
  
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 1. Count how many .dj-card elements are actually inside the grid
+    const totalDjs = document.querySelectorAll("#djGrid .dj-card").length;
+
+    // 2. Update the header text on the DJs page (changes "13 DJs" to "24 DJs")
+    const pageCounter = document.getElementById("djCount");
+    if (pageCounter) {
+      pageCounter.innerText = `${totalDjs} DJs`;
+    }
+
+    // 3. Update the homepage stat box (the one circled in 1000033973.png)
+    const homepageCounter = document.getElementById("homepageDjCount");
+    if (homepageCounter) {
+      // This will display "24+" automatically
+      homepageCounter.innerText = `${totalDjs}+`; 
+    }
+  });
+</script>
 
 
 </body>
