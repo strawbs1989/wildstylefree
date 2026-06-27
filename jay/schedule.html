@@ -1,142 +1,111 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio — Schedule</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="/style.css">
+  <title>Wildstyle Radio - Schedule</title>
+  <link rel="stylesheet" href="/test/style.css">
+  <link rel="stylesheet" href="/test/schedule.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="shell">
+  <!-- Left Sidebar (Desktop Navigation Panel) -->
+  <aside class="sidebar">
+    <div class="logo-area">
+      <img src="/images/wildy.png" alt="Wildstyle Logo" class="nav-logo">
+      <span class="brand-name">Wildstyle Radio</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="active" href="/index.html">Home</a>
+      <!-- Changed active class to this page -->
+      <a href="/djs.html">DJs</a> 
+      <a href="/schedule.html">Schedule</a>
+      <!-- <a href="/noticeboard.html">Noticeboard</a> -->
+      <a href="/chat.html">Chat</a>
+     <!-- <a href="/fans.html">Fans Of Wildstyle</a> -->
+     <!-- <a href="/support.html">Support Wildstyle</a> -->
+      <a href="/map.html">Map</a>
+     <!-- <a href="/about.html">About Us</a> -->
+    </nav>
+  </aside>
+
+  <!-- Main Grid Content Wrapper -->
+  <main class="content">
+
+    <!-- Top Navigation Utility Bar -->
     <header class="topbar">
-      <a class="brand" href="/index.html">
-        <div class="brand-badge">WS</div>
-        <div class="brand-copy">
-          <strong>WILDSTYLE RADIO</strong>
-          <small>The Wildstyle Crew</small>
-        </div>
-      </a>
+      <!-- Mobile View Hamburger Menu Trigger Button -->
+      <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
 
-         <nav class="nav desktop-nav">
-  <a href="/index.html">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html">Chat</a>
-  <a href="/request.html">Request</a>
-  <a href="/map.html" class="active">Map</a>
-</nav>  
+      <div class="search-box">
+        <input type="text" placeholder="Search DJs, Shows...">
+      </div>
 
-      <button class="burger" id="burger" aria-label="Open menu">☰</button>
+      <div class="socials">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+      </div>
+
+      <a href="listen.html" class="listen-btn">Listen Live</a>
     </header>
 
-    <div class="nav-backdrop" id="navBackdrop" hidden></div>
-
-    <aside class="mobile-nav" id="mobileNav">
-      <div class="mobile-nav-top">
-        <strong>Menu</strong>
-        <button id="navClose" aria-label="Close menu">✕</button>
-      </div>
-      <a href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a>
-      <a href="/schedule.html">Schedule</a>
-      <a href="/chat.html">Chat</a>
-      <a href="/request.html">Request</a>
-      <a href="/map.html" class="active">Map</a>
-    </aside>
 
     <section class="hero">
       <div class="hero-head">
-        <span>WILDSTYLE ON-AIR SCHEDULE</span>
-        <span class="hero-pill">Live Shows • UK Station Time</span>
+        <span>Wildstyle Schedule</span>
+        <span class="hero-pill">Live Shows • Weekly Timetable</span>
       </div>
-
-      <div class="hero-body">
-        <div class="hero-copy">
-          <h1>Who’s On & When</h1>
-          <p>
-            Check out the full Wildstyle Radio live schedule. See what’s on today,
-            who’s currently live, and what’s coming up next.
-          </p>
-
-          <div class="hero-actions">
-            <a href="chat.html" class="btn-primary">Join Chat</a>
-            <a href="djs.html" class="btn-secondary">Meet The DJs</a>
-          </div>
-        </div>
-
-        <div class="hero-card">
-          <h3>Station Status</h3>
-          <!-- NOW ON -->
-  <section class="now-on-stage">
-    <div class="container now-on-stage-inner">
-      <div class="now-on-left">
-        <span class="live-dot"></span>
-        <span class="nowOn">Now On</span>
+      <div class="hero-copy">
+        <span class="hero-kicker">🎧 WHAT'S ON AIR</span>
+        <h1 id="heroShowName">Loading...</h1>
+        <p id="heroShowTime">Loading...</p>
       </div>
-      <div class="nowOnShow" id="nowon">Loading…</div>
-    </div>
-  </section>
-              <span>Up Next</span>
-            </div>
-            <div class="hero-stat">
-              <strong>Live Only</strong>
-              <span>No pre-records</span>
-            </div>
-            <div class="hero-stat">
-            <strong>UK Station Time</strong>
-           <span>All shows listed in UK time</span>
-           </div>
-          </div>
-        </div>
+      <div class="hero-card">
+        <img id="heroDJ" src="/images/wildy.png" alt="Current DJ" class="schedule-hero-image">
       </div>
+    </section>
+
+    <section class="day-tabs">
+      <button class="active">Monday</button>
+      <button>Tuesday</button>
+      <button>Wednesday</button>
+      <button>Thursday</button>
+      <button>Friday</button>
+      <button>Saturday</button>
+      <button>Sunday</button>
     </section>
 
     <section class="section">
       <div class="section-head">
         <h2>Weekly Schedule</h2>
-        <span id="scheduleCount">Loading...</span>
+        <span>Live Shows & Open Slots</span>
       </div>
-
       <div class="section-body">
-        <div class="schedule-grid" id="scheduleGrid">
-          Loading schedule...
+        <div id="liveSchedulelist" class="schedule-grid-wrapper"></div>
+      </div>
+    </section>
+
+    <section class="featured-dj">
+      <div class="featured-dj-card">
+        <img id="wildyDjImage" src="/images/wildy.png" alt="Recommended DJ">
+        <div class="featured-dj-content">
+          <span class="featured-tag">🐺 WILDY RECOMMENDS</span>
+          <h2 id="wildyDjName">Loading...</h2>
+          <p id="wildyDjText">Loading recommendation...</p>
+          <div id="wildyDjTime" class="featured-meta">Loading...</div>
         </div>
       </div>
     </section>
 
-    <footer class="footer">
-      <div>
-        <h3>Wildstyle Radio</h3>
-        <p>United by beats. Powered by volunteer passion.</p>
-      </div>
+  </main>
 
-      <div>
-        <h3>Quick Links</h3>
-        <ul>
-          <li>Home</li>
-          <li>DJs</li>
-          <li>Chat</li>
-          <li>Requests</li>
-        </ul>
-      </div>
+  <script src="schedule.js?v=4"></script>
 
-      <div>
-        <h3>Station Info</h3>
-        <ul>
-          <li>Live shows only</li>
-          <li>Worldwide community</li>
-          <li>Multi-genre station</li>
-          <li>Fully licensed</li>
-        </ul>
-      </div>
-    </footer>
-  </div>
-<link rel="stylesheet" href="/jay/schedule.css?v=2">
-<script src="/jay/schedule.js?v=2" defer></script> 
 </body>
-</html> 
+</html>
