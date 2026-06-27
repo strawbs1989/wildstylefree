@@ -707,46 +707,45 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
-async function updateLiveListeners() {
+function updateLiveListeners() {
   const listenerNode = document.getElementById("live-listener-count");
   if (!listenerNode) return;
 
-  try {
-    // This public metadata statistics endpoint is free from CORS security locks
-    const response = await fetch("https://page.live365.com/b/a50378/stats");
-    if (!response.ok) throw new Error("Station stream node offline");
+  // Clean up any old script instances still sitting in the DOM
+  const oldScript = document.getElementById("live365-jsonp-node");
+  if (oldScript) oldScript.remove();
 
-    const data = await response.json();
-    
-    // Checks Live365's public tracking metrics
+  // Create a global function name that Live365 will send data back to
+  window.handleLive365Stats = function(data) {
     if (data && typeof data.current_listeners !== "undefined") {
       listenerNode.innerText = data.current_listeners;
-    } else if (data && typeof data.listeners !== "undefined") {
-      listenerNode.innerText = data.listeners;
     } else {
       listenerNode.innerText = "0";
     }
-  } catch (error) {
-    console.warn("Public statistics channel busy, trying backup index:", error);
-    
-    // Fallback script backup method
-    try {
-      const response = await fetch("https://api.live365.com/station/a50378");
-      const data = await response.json();
-      listenerNode.innerText = data.current_listeners || "0";
-    } catch (fallbackError) {
-      listenerNode.innerText = "1"; 
-    }
-  }
+  };
+
+  // Inject a temporary script tag to bypass security blocks completely
+  const script = document.createElement("script");
+  script.id = "live365-jsonp-node";
+  script.src = "https://api.live365.com/station/a50378?callback=handleLive365Stats";
+  
+  script.onerror = function() {
+    console.warn("Live365 signal dropped. Defaulting metric stream.");
+    listenerNode.innerText = "0";
+  };
+
+  document.body.appendChild(script);
 }
 
-// Initialize monitoring routines smoothly
+// Single structured execution engine block
 document.addEventListener("DOMContentLoaded", () => {
   updateLiveListeners();
-  // Queries for background updates every 45 seconds to stay live
-  setInterval(updateLiveListeners, 45000);
+  
+  // Refresh tracking seamlessly every 40 seconds
+  setInterval(updateLiveListeners, 40000);
 });
 </script>
+
 
 
 
