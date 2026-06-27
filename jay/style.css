@@ -1028,4 +1028,974 @@ NOW PLAYING
     box-sizing: border-box !important;
   }
 
-  /* 3. Fo
+  /* 3. Force the white top bar header to span 100% width across the screen */
+  .topbar {
+    display: flex !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: #ffffff !important; /* Kept your white bar style */
+    padding: 15px !important;
+    margin: 0 0 15px 0 !important;
+    border-radius: 12px !important; /* Matches your screenshot curves */
+    box-sizing: border-box !important;
+  }
+
+  /* 4. Hide search and social links instantly on mobile so they don't squish */
+  .topbar .search-box,
+  .topbar .socials {
+    display: none !important;
+  }
+
+  /* 5. Force your gradient burger button to draw clearly inside the topbar */
+  .mobile-menu-toggle {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* 6. Lock down the mobile hidden slide-out drawer layout */
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    right: -320px !important; /* Offscreen right */
+    left: auto !important; /* Prevent desktop left settings from locking it down */
+    width: 300px !important;
+    height: 100vh !important;
+    background: #18181c !important;
+    border-left: 1px solid rgba(255, 255, 255, .08) !important;
+    z-index: 99999 !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    transition: right .25s ease-in-out !important;
+  }
+
+  /* When JS adds this, slide out perfectly */
+  .sidebar.mobile-active {
+    right: 0 !important;
+  }
+}
+
+
+/* =========================================
+   DESKTOP ONLY VIEWS (Screens 981px and up)
+========================================= */
+@media (min-width: 981px) {
+  .mobile-menu-toggle {
+    display: none !important;
+  }
+
+  /* Ensure the sidebar behaves like a normal desktop column */
+  .sidebar {
+    position: relative !important;
+    right: 0 !important;
+    display: block !important;
+  }
+}
+
+
+/* =========================
+   Map Page
+========================= */
+
+
+.map-panel{
+  display:grid;
+  gap:18px;
+}
+
+.map-header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+
+.map-title{
+  margin:0;
+  color:#fff;
+  font-family:Oswald,sans-serif;
+  font-size:1.6rem;
+  letter-spacing:.03em;
+}
+
+.map-subtitle{
+  margin:6px 0 0;
+  color:#cfc1ea;
+  line-height:1.6;
+}
+
+.map-top-country{
+  min-width:120px;
+  text-align:right;
+  color:#fff;
+}
+
+.map-top-country strong{
+  display:block;
+  font-size:1.1rem;
+}
+
+.map-top-country span{
+  display:block;
+  margin-top:4px;
+  color:#b9abd7;
+  font-weight:700;
+}
+
+.map-wrap{
+  position:relative;
+  min-height:460px;
+  border-radius:22px;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg, rgba(15,11,24,.92), rgba(10,7,18,.96)),
+    radial-gradient(circle at 20% 30%, rgba(255,42,109,.08), transparent 25%),
+    radial-gradient(circle at 80% 30%, rgba(42,123,255,.08), transparent 25%);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.map-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.22;
+}
+
+.listener-dot{
+  position:absolute;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(125,247,255,1) 0%, rgba(125,247,255,.6) 45%, rgba(125,247,255,0) 75%);
+  box-shadow:0 0 18px rgba(125,247,255,.75);
+  pointer-events:none;
+}
+
+.listener-dot::after{
+  content:attr(data-label);
+  position:absolute;
+  left:50%;
+  bottom:130%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  background:rgba(8,8,18,.88);
+  color:#fff;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:.78rem;
+  border:1px solid rgba(255,255,255,.12);
+  opacity:0;
+  transition:opacity .18s ease;
+}
+
+.listener-dot:hover::after{
+  opacity:1;
+}
+
+.listener-dot-new{
+  animation:listenerPulse 1.6s ease-in-out infinite;
+}
+
+.country-list{
+  display:grid;
+  gap:12px;
+}
+
+.country-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  color:#fff;
+}
+
+.country-row small{
+  color:#b9abd7;
+}
+
+.trend-up{
+  color:#7dffd5 !important;
+}
+
+.activity-feed{
+  display:grid;
+  gap:12px;
+}
+
+.feed-item{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  color:#fff;
+}
+
+.feed-item span{
+  color:#b9abd7;
+  line-height:1.5;
+}
+
+.error{
+  color:#ffd7df;
+  background:rgba(255,77,109,.12);
+  border:1px solid rgba(255,77,109,.28);
+  padding:14px;
+  border-radius:16px;
+}
+
+@keyframes listenerPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.22);}
+}
+
+@media (max-width:980px){
+  .desktop-nav{display:none}
+  .burger{display:block}
+}
+
+@media (max-width:720px){
+  .map-header-row{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .map-top-country{
+    text-align:left;
+  }
+
+  .map-wrap{
+    min-height:320px;
+  }
+} 
+
+/* =========================================
+   GLOBAL MOBILE RESPONSIVE FIXES
+========================================= */
+
+html, body {
+  overflow-x: hidden;
+}
+
+img,
+iframe,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+.shell {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 18px 40px;
+}
+
+.main,
+.hero-body,
+.footer {
+  min-width: 0;
+}
+
+.main-left,
+.sidebar,
+.card,
+.hero-copy,
+.hero-card,
+.section,
+.section-body,
+.card-body {
+  min-width: 0;
+}
+
+/* Tablets */
+@media (max-width: 1100px) {
+  .hero-body,
+  .main,
+  .footer {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dj-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .schedule-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .quick-grid,
+  .hero-stats,
+  .profile-stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* Phones */
+@media (max-width: 720px) {
+  .shell {
+    padding: 14px 12px 28px !important;
+  }
+
+  .topbar {
+    padding: 12px !important;
+    border-radius: 22px !important;
+    gap: 14px !important;
+  }
+
+  .brand {
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  .brand-badge {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 16px !important;
+    font-size: 1.15rem !important;
+    flex: none !important;
+  }
+
+  .brand-copy strong {
+    font-size: 1.2rem !important;
+    line-height: 1 !important;
+  }
+
+  .brand-copy small {
+    font-size: 0.9rem !important;
+  }
+
+  .nav {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .nav a,
+  .nav button {
+    padding: 10px 14px !important;
+    border-radius: 14px !important;
+    font-size: 0.92rem !important;
+    flex: 0 0 auto !important;
+  }
+
+  .hero {
+    border-radius: 24px !important;
+  }
+
+  .hero-head,
+  .card-head,
+  .section-head {
+    padding: 14px 16px !important;
+  }
+
+  .hero-body,
+  .card-body,
+  .section-body {
+    padding: 16px !important;
+  }
+
+  .hero-copy h1 {
+    font-size: 2.35rem !important;
+    line-height: 0.95 !important;
+  }
+
+  .hero-copy p,
+  .mini-card p,
+  .profile-bio,
+  .spotlight p,
+  .list-item small {
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .hero-actions,
+  .composer-tools,
+  .profile-actions,
+  .cta-actions,
+  .filter-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .small-btn,
+  .request-submit-btn,
+  .chat-form button {
+    width: 100% !important;
+  }
+
+  .main,
+  .hero-body,
+  .footer,
+  .mini-row,
+  .quick-grid,
+  .profile-stats,
+  .dj-grid,
+  .schedule-grid,
+  .request-grid,
+  .chat-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .card,
+  .section,
+  .hero,
+  .footer {
+    border-radius: 24px !important;
+  }
+
+  .dj-card,
+  .post,
+  .mini-card,
+  .list-item,
+  .country-row,
+  .feed-item,
+  .user-item,
+  .quick-link {
+    border-radius: 18px !important;
+  }
+
+  .dj-body h3,
+  .section-head h2,
+  .card-head h2,
+  .hero-card h3 {
+    font-size: 1.3rem !important;
+  }
+
+  .search,
+  .request-grid input,
+  .chat-form input,
+  .composer textarea,
+  .auth-form input {
+    width: 100% !important;
+    font-size: 1rem !important;
+  }
+
+  .request-grid {
+    gap: 12px !important;
+  }
+
+  .chat-form {
+    grid-template-columns: 1fr !important;
+  }
+
+  .chat-messages {
+    padding: 16px !important;
+  }
+
+  .message-content {
+    max-width: 100% !important;
+  }
+
+  .map-wrap,
+  .listener-map-stage,
+  .map-placeholder,
+  .chat-frame iframe,
+  .map-frame-wrap iframe {
+    min-height: 320px !important;
+    height: 320px !important;
+  }
+
+  .player-frame-wrap iframe {
+    width: 100% !important;
+    height: 240px !important;
+  }
+
+  .footer {
+    gap: 14px !important;
+  }
+
+  .footer h3 {
+    font-size: 1.15rem !important;
+  }
+}
+
+.mobile-login-btn {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff2a6d, #2a7bff);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.mobile-login-btn:hover {
+  opacity: 0.9;
+} 
+
+/* Extra small phones */
+@media (max-width: 480px) {
+  .hero-copy h1 {
+    font-size: 2rem !important;
+  }
+
+  .brand-copy strong {
+    font-size: 1.05rem !important;
+  }
+
+  .nav a,
+  .nav button {
+    font-size: 0.88rem !important;
+    padding: 9px 12px !important;
+  }
+
+  .hero-pill,
+  .badge,
+  .tag,
+  .filter-btn {
+    font-size: 0.8rem !important;
+  }
+} 
+
+/* =========================
+   RESPONSIVE NAV
+   Desktop = full nav
+   Tablet/Mobile = burger
+========================= */
+
+.desktop-nav{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.burger{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  background:linear-gradient(135deg,#ff2a6d,#8a46ff,#2a7bff);
+  color:#fff;
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  font-size:1.5rem;
+  cursor:pointer;
+  flex:none;
+  box-shadow:0 10px 24px rgba(159,46,255,.28);
+}
+
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:40;
+}
+
+.mobile-nav{
+  position:fixed;
+  top:0;
+  right:-320px;
+  width:300px;
+  max-width:85vw;
+  height:100%;
+  background:var(--grad-soft);
+  border-left:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow);
+  z-index:50;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  transition:right .25s ease;
+}
+
+.mobile-nav.active{
+  right:0;
+}
+
+.mobile-nav-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.mobile-nav-top button{
+  border:none;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border-radius:12px;
+  padding:8px 12px;
+  cursor:pointer;
+}
+
+.mobile-nav a,
+.mobile-nav button{
+  display:block;
+  width:100%;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:#fff;
+  font-weight:800;
+  text-align:left;
+  cursor:pointer;
+}
+
+.mobile-nav a.active,
+.mobile-nav button.active{
+  background:var(--grad);
+}
+
+.mobile-login-btn{
+  background:linear-gradient(135deg,#ff2a6d,#2a7bff) !important;
+  text-align:center !important;
+}
+
+/* Tablet + Mobile = burger */
+@media (max-width:768px){
+  .desktop-nav{
+    display:none !important;
+  }
+
+  .burger{
+    display:flex !important;
+  }
+
+  .topbar{
+    flex-wrap:nowrap;
+    align-items:center;
+  }
+
+  .brand-copy strong{
+    font-size:1.18rem;
+  }
+
+  .brand-copy small{
+    font-size:.88rem;
+  }
+}
+
+/* Desktop = full nav */
+@media (min-width:981px){
+  .desktop-nav{
+    display:flex !important;
+  }
+
+  .burger{
+    display:none !important;
+  }
+
+  .mobile-nav,
+  .nav-backdrop{
+    display:none !important;
+  }
+} 
+/* Mobile + small tablets */
+@media (max-width:768px){
+  .desktop-nav{
+    display:none !important;
+  }
+
+  .burger{
+    display:flex !important;
+  }
+}
+
+/* Desktop + large screens */
+@media (min-width:769px){
+  .desktop-nav{
+    display:flex !important;
+  }
+
+  .burger{
+    display:none !important;
+  }
+
+  .mobile-nav,
+  .nav-backdrop{
+    display:none !important;
+  }
+}
+
+/* Force full nav when phone is in desktop-mode style browsing */
+html.force-desktop-nav .desktop-nav{
+  display:flex !important;
+}
+
+html.force-desktop-nav .burger{
+  display:none !important;
+}
+
+html.force-desktop-nav .mobile-nav,
+html.force-desktop-nav .nav-backdrop{
+  display:none !important;
+} 
+
+/* =========================
+   SEASONAL THEMES
+   ========================= */
+
+.season-banner{
+  width:calc(100% - 24px);
+  margin:0 auto 18px;
+  padding:12px 18px;
+  border-radius:16px;
+  text-align:center;
+  font-weight:800;
+  letter-spacing:.04em;
+  box-shadow:0 10px 25px rgba(0,0,0,.12);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(10px);
+} 
+
+/* Default smooth transitions */
+html,
+body,
+.navbar,
+.portal-panel,
+.schedule-day,
+.dj-card,
+.request-box,
+.chat-box,
+.hero,
+section{
+  transition:background .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+/* ===== EASTER ===== */
+.theme-easter body{
+  background:
+    radial-gradient(circle at top left, rgba(255,183,227,.28), transparent 35%),
+    radial-gradient(circle at top right, rgba(151,224,255,.22), transparent 35%),
+    linear-gradient(180deg,#f7eef7 0%, #efe4f5 100%);
+}
+
+.theme-easter .season-banner{
+  background:linear-gradient(135deg,#ffb6df,#9ae7ff);
+  color:#40234f;
+}
+
+.theme-easter .portal-panel,
+.theme-easter .schedule-day,
+.theme-easter .dj-card,
+.theme-easter .quick-card,
+.theme-easter .status-card{
+  border-color:rgba(255,255,255,.35);
+  box-shadow:0 10px 30px rgba(255,182,223,.18);
+}
+
+.theme-easter .portal-head{
+  background:linear-gradient(90deg,#ff9ed8,#8ddfff);
+}
+
+/* ===== VALENTINES ===== */
+.theme-valentines body{
+  background:
+    radial-gradient(circle at top left, rgba(255,77,136,.25), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(255,181,213,.25), transparent 38%),
+    linear-gradient(180deg,#fff0f6 0%, #f8e3ee 100%);
+}
+
+.theme-valentines .season-banner{
+  background:linear-gradient(135deg,#ff2a6d,#ff7ab6);
+  color:#fff;
+}
+
+.theme-valentines .portal-head{
+  background:linear-gradient(90deg,#ff2a6d,#ff7ab6);
+}
+
+/* ===== XMAS ===== */
+.theme-xmas body{
+  background:
+    radial-gradient(circle at top left, rgba(33,186,120,.22), transparent 38%),
+    radial-gradient(circle at top right, rgba(255,59,59,.18), transparent 38%),
+    linear-gradient(180deg,#edf7f0 0%, #e4efe9 100%);
+}
+
+.theme-xmas .season-banner{
+  background:linear-gradient(135deg,#0f9d58,#d62828);
+  color:#fff;
+}
+
+.theme-xmas .portal-head{
+  background:linear-gradient(90deg,#0f9d58,#d62828);
+}
+
+/* ===== NEW YEAR ===== */
+.theme-newyear body{
+  background:
+    radial-gradient(circle at top left, rgba(80,120,255,.22), transparent 38%),
+    radial-gradient(circle at top right, rgba(255,215,0,.18), transparent 38%),
+    linear-gradient(180deg,#eef2ff 0%, #e8e6f8 100%);
+}
+
+.theme-newyear .season-banner{
+  background:linear-gradient(135deg,#3a86ff,#8338ec,#ffbe0b);
+  color:#fff;
+}
+
+.theme-newyear .portal-head{
+  background:linear-gradient(90deg,#3a86ff,#8338ec,#ffbe0b);
+}
+
+/* ===== HALLOWEEN ===== */
+.theme-halloween body{
+  background:
+    radial-gradient(circle at top left, rgba(255,136,0,.22), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(108,44,145,.24), transparent 38%),
+    linear-gradient(180deg,#1a1022 0%, #130b1c 100%);
+}
+
+.theme-halloween .season-banner{
+  background:linear-gradient(135deg,#ff7b00,#6c2c91);
+  color:#fff;
+}
+
+.theme-halloween .portal-head{
+  background:linear-gradient(90deg,#ff7b00,#6c2c91);
+}
+
+/* ===== SUMMER ===== */
+.theme-summer body{
+  background:
+    radial-gradient(circle at top left, rgba(0,209,255,.22), transparent 38%),
+    radial-gradient(circle at top right, rgba(255,190,11,.20), transparent 38%),
+    linear-gradient(180deg,#eefcff 0%, #f9f3dd 100%);
+}
+
+.theme-summer .season-banner{
+  background:linear-gradient(135deg,#00d1ff,#ffbe0b,#ff4d6d);
+  color:#1f1f1f;
+}
+
+.theme-summer .portal-head{
+  background:linear-gradient(90deg,#00d1ff,#ffbe0b,#ff4d6d);
+} 
+
+/* =========================
+   FIX: SOCIAL NOW ON BADGE
+========================= */
+
+.social-home .hero-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.social-home .hero-head > span{
+  flex:1;
+  min-width:0;
+}
+
+.social-home .nowOnShow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  min-width:140px;
+  padding:12px 18px;
+  border-radius:999px;
+  text-align:center;
+  line-height:1;
+  flex-shrink:0;
+} 
+
+*/ ============
+TRIBE
+============= */
+
+.tribe-card select{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:12px;
+  border:none;
+}
+
+#tribeResult{
+margin-top:20px;
+padding:15px;
+border-radius:12px;
+background:#1d1730;
+border:1px solid #ff2f92;
+display:block;
+}
+
+#tribeResult h3{
+margin:0 0 10px;
+color:#fff;
+}
+
+#tribeResult p{
+color:#ddd;
+margin:5px 0;
+}
+
+.tribe-name{
+  font-size:1.4rem;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.tribe-score{
+  color:#00ff99;
+  font-weight:700;
+}
+
+.tribe-description{
+  opacity:.9;
+}
+
+
+/* =====================
+   DJ COUNTER BOX
+   ================== */
+   .dj-counter-box {
+  background-color: rgba(20, 18, 24, 0.85); /* Dark theme background matching the image */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Very subtle border around the box */
+  padding: 12px 16px;
+  border-radius: 4px;
+  display: inline-block;
+  min-width: 70px;
+  text-align: left;
+  font-family: sans-serif; /* Fallback, will adapt to your site's font */
+}
+
+.dj-counter-box span {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff; /* Crisp white for the number */
+  line-height: 1.1;
+}
+
+.dj-counter-box p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8a8594; /* Light grey/purple tint for the "DJs" text */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
