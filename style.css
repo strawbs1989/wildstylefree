@@ -532,6 +532,25 @@ button,input,textarea{font:inherit}
 }
 .list-item small{color:#b9abd7;display:block;margin-top:4px}
 
+.request-ticker-wrap{
+  overflow:hidden;
+  width:100%;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+}
+.request-ticker{
+  display:flex;
+  white-space:nowrap;
+  width:max-content;
+  animation:scrollTicker 90s linear infinite;
+}
+.request-ticker div{padding:14px 22px;font-weight:800;color:#fff}
+.request-ticker-wrap:hover .request-ticker{animation-play-state:paused}
+@keyframes scrollTicker{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
 
 .auth-overlay{
   position:fixed;
@@ -964,7 +983,73 @@ NOW PLAYING
   }
 } 
 
+/* =========================
+   Request Page
+========================= */
 
+.request-form-page{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.request-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.request-grid input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  outline:none;
+}
+
+.request-grid input::placeholder{
+  color:#b8a9d6;
+}
+
+.request-submit-btn{
+  width:100%;
+}
+
+.request-success{
+  margin-top:14px;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(46, 204, 113, .12);
+  border:1px solid rgba(46, 204, 113, .28);
+  color:#dfffea;
+  font-weight:700;
+}
+
+.player-frame-wrap{
+  width:100%;
+}
+
+.hidden{
+  display:none !important;
+}
+
+@media (max-width:720px){
+  .request-grid{
+    grid-template-columns:1fr;
+  }
+} 
+.request-closed{
+  margin-top:14px;
+  padding:16px;
+  border-radius:16px;
+  background:rgba(255, 77, 109, .12);
+  border:1px solid rgba(255, 77, 109, .28);
+  color:#ffd7df;
+  font-weight:700;
+  text-align:center;
+} 
 
 /* =========================================
    GLOBAL / BASE MOBILE NAV LOOKS
@@ -1009,7 +1094,7 @@ NOW PLAYING
    TABLET + MOBILE VIEWS (Screens under 980px)
 ========================================= */
 @media (max-width: 980px) {
-  
+
   /* 1. COMPLETELY blow away any desktop side-by-side grids or flexes */
   html, body {
     display: block !important;
@@ -1018,7 +1103,7 @@ NOW PLAYING
     margin: 0 !important;
     padding: 0 !important;
   }
-  
+
   /* 2. Break the main container into a standalone vertical stack */
   .content {
     display: block !important;
@@ -1922,9 +2007,10 @@ section{
   flex-shrink:0;
 } 
 
-/* ============
-   TRIBE
+*/ ============
+TRIBE
 ============= */
+
 .tribe-card select{
   width:100%;
   padding:12px;
@@ -1932,7 +2018,6 @@ section{
   border-radius:12px;
   border:none;
 }
-
 
 #tribeResult{
 margin-top:20px;
