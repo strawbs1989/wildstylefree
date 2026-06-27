@@ -1922,10 +1922,9 @@ section{
   flex-shrink:0;
 } 
 
-*/ ============
-TRIBE
+/* ============
+   TRIBE
 ============= */
-
 .tribe-card select{
   width:100%;
   padding:12px;
@@ -1933,6 +1932,7 @@ TRIBE
   border-radius:12px;
   border:none;
 }
+
 
 #tribeResult{
 margin-top:20px;
