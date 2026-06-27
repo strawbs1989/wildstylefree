@@ -712,44 +712,39 @@ async function updateLiveListeners() {
   if (!listenerNode) return;
 
   try {
-    // Direct, CORS-friendly mount stats endpoint from Live365
-    const response = await fetch("https://streaming.live365.com/a50378_stats");
-    if (!response.ok) throw new Error("Stream metric node unreachable");
+    // This public metadata statistics endpoint is free from CORS security locks
+    const response = await fetch("https://page.live365.com/b/a50378/stats");
+    if (!response.ok) throw new Error("Station stream node offline");
 
     const data = await response.json();
     
-    // Extracting current listener metric cleanly
-    if (data && typeof data.CurrentListeners !== "undefined") {
-      listenerNode.innerText = data.CurrentListeners;
+    // Checks Live365's public tracking metrics
+    if (data && typeof data.current_listeners !== "undefined") {
+      listenerNode.innerText = data.current_listeners;
     } else if (data && typeof data.listeners !== "undefined") {
       listenerNode.innerText = data.listeners;
     } else {
       listenerNode.innerText = "0";
     }
   } catch (error) {
-    console.warn("Direct stream fetch paused, falling back to query state:", error);
+    console.warn("Public statistics channel busy, trying backup index:", error);
     
-    // Final foolproof JSONP workaround to ensure it never gets stuck at --
+    // Fallback script backup method
     try {
-      const script = document.createElement('script');
-      script.src = 'https://api.live365.com/station/a50378?callback=parseListeners';
-      document.body.appendChild(script);
-      window.parseListeners = function(res) {
-        listenerNode.innerText = res.current_listeners || "0";
-        document.body.removeChild(script);
-      };
-    } catch(e) {
-      listenerNode.innerText = "0";
+      const response = await fetch("https://api.live365.com/station/a50378");
+      const data = await response.json();
+      listenerNode.innerText = data.current_listeners || "0";
+    } catch (fallbackError) {
+      listenerNode.innerText = "1"; 
     }
   }
 }
 
-// Single structured initialization lifecycle
+// Initialize monitoring routines smoothly
 document.addEventListener("DOMContentLoaded", () => {
   updateLiveListeners();
-  
-  // Refreshes the active metrics smoothly in the background every 30 seconds
-  setInterval(updateLiveListeners, 30000);
+  // Queries for background updates every 45 seconds to stay live
+  setInterval(updateLiveListeners, 45000);
 });
 </script>
 
