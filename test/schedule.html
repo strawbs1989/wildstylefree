@@ -10,75 +10,327 @@
 </head>
 <body>
 
-  <!-- Left Sidebar (Desktop Navigation Panel) -->
-  <aside class="sidebar">
-    <div class="logo-area">
-      <img src="/images/wildy.png" alt="Wildstyle Logo" class="nav-logo">
-      <span class="brand-name">Wildstyle Radio</span>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="index.html">Home</a>
-      <a href="djs.html">DJs</a>
-      <a class="active" href="schedule.html">Schedule</a>
-      <a href="noticeboard.html">Noticeboard</a>
-      <a href="chat.html">Chat</a>
-      <a href="fans.html">Fans Of Wildstyle</a>
-      <a href="support.html">Support Wildstyle</a>
-      <a href="map.html">Map</a>
-      <a href="about.html">About Us</a>
-    </nav>
-  </aside>
+<div class="shell">
 
-  <!-- Main Grid Content Wrapper -->
-  <main class="content">
+<header class="topbar">
 
-    <!-- Top Navigation Utility Bar -->
-    <header class="topbar">
-      <!-- Mobile View Hamburger Menu Trigger Button -->
-      <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+<a class="brand" href="/test/index.html">
 
-       <div class="search-box">
-        <input type="text" placeholder="Search DJs, Shows...">
-      </div>
+<div class="brand-badge">WS</div>
 
-      <div class="socials">
-        <a href="#">Facebook</a>
-        <a href="#">Instagram</a>
-        <a href="#">TikTok</a>
-      </div>
+<div class="brand-copy">
+<strong>WILDSTYLE RADIO</strong>
+<small>Live Schedule</small>
+</div>
 
-      <a href="listen.html" class="listen-btn">Listen Live</a> 
-    </header>
+</a>
+
+<nav class="nav desktop-nav">
+
+<a href="/test/index.html">Home</a>
+
+<a href="/test/djs.html">DJs</a>
+
+<a href="/test/schedule.html" class="active">
+Schedule
+</a>
+
+<a href="/test/chat.html">
+Chat
+</a>
+
+<a href="/test/map.html">
+Map
+</a>
+
+</nav>
+
+<button
+id="burger"
+class="burger"
+aria-label="Menu">
+
+☰
+
+</button>
+
+</header>
+
+<div
+class="nav-backdrop"
+id="navBackdrop"
+hidden>
+</div>
+
+<aside
+class="mobile-nav"
+id="mobileNav">
+
+<div class="mobile-nav-top">
+
+<strong>Menu</strong>
+
+<button
+id="navClose">
+
+✕
+
+</button>
+
+</div>
+
+<a href="/test/index.html">
+Home
+</a>
+
+<a href="/test/djs.html">
+DJs
+</a>
+
+<a
+href="/test/schedule.html"
+class="active">
+
+Schedule
+
+</a>
+
+<a href="/test/chat.html">
+Chat
+</a>
+
+<a href="/test/map.html">
+Map
+</a>
+
+</aside>
 
 
-   <section class="hero">
-      <div class="hero-head">
-        <span>Wildstyle Schedule</span>
-        <span class="hero-pill">Live Shows • Weekly Timetable</span>
-      </div>
-      <div class="hero-copy">
-        <span class="hero-kicker">🎧 WHAT'S ON AIR</span>
-        <h1 id="heroShowName">Loading...</h1>
-        <p id="heroShowTime">Loading...</p>
-      </div>
-      <div class="hero-card">
-        <img id="heroDJ" src="/images/wildy.png" alt="Current DJ" class="schedule-hero-image">
-      </div>
-    </section> 
+<!-- HERO -->
 
-    <section class="day-tabs">
-      <button class="active">Monday</button>
-      <button>Tuesday</button>
-      <button>Wednesday</button>
-      <button>Thursday</button>
-      <button>Friday</button>
-      <button>Saturday</button>
-      <button>Sunday</button>
-    </section>
+<section class="schedule-hero">
+
+<div class="hero-overlay">
+
+<div class="hero-copy">
+
+<span class="hero-tag">
+
+🔴 LIVE NOW
+
+</span>
+
+<h1 id="heroShowName">
+
+Loading Current Show...
+
+</h1>
+
+<p id="heroShowTime">
+
+Checking Schedule...
+
+</p>
+
+<div class="hero-buttons">
+
+<a
+href="/listen.html"
+class="btn-primary">
+
+▶ Listen Live
+
+</a>
+
+<a
+href="#scheduleGrid"
+class="btn-secondary">
+
+📅 Weekly Schedule
+
+</a>
+
+</div>
+
+</div>
+
+<div class="hero-image">
+
+<img
+
+id="heroDJ"
+
+src="/images/wildy.png"
+
+alt="Current DJ"
+
+>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- NOW ON -->
+
+<section class="now-show-card">
+
+<div class="live-dot"></div>
+
+<div>
+
+<span class="live-label">
+
+NOW ON AIR
+
+</span>
+
+<h2 id="nowon">
+
+Loading...
+
+</h2>
+
+</div>
+
+</section>
+
+
+<!-- UP NEXT -->
+
+<section class="up-next-card">
+
+<div class="card-head">
+
+<h2>
+
+⏭ Up Next
+
+</h2>
+
+</div>
+
+<div class="card-body">
+
+<h3 id="upnextName">
+
+Loading...
+
+</h3>
+
+<p id="upnextTime">
+
+Loading...
+
+</p>
+
+<span
+id="upnextCountdown">
+
+Finding next show...
+
+</span>
+
+</div>
+
+</section>
+
+
+<!-- DAY TABS -->
+
+<section class="day-tabs">
+
+<button
+class="day-btn active"
+data-day="Monday">
+
+Monday
+
+</button>
+
+<button
+class="day-btn"
+data-day="Tuesday">
+
+Tuesday
+
+</button>
+
+<button
+class="day-btn"
+data-day="Wednesday">
+
+Wednesday
+
+</button>
+
+<button
+class="day-btn"
+data-day="Thursday">
+
+Thursday
+
+</button>
+
+<button
+class="day-btn"
+data-day="Friday">
+
+Friday
+
+</button>
+
+<button
+class="day-btn"
+data-day="Saturday">
+
+Saturday
+
+</button>
+
+<button
+class="day-btn"
+data-day="Sunday">
+
+Sunday
+
+</button>
+
+</section>
+
+
+<!-- WEEKLY SCHEDULE STARTS HERE -->
+
+<section
+class="schedule-section">
+
+<div class="section-head">
+
+<h2>
+
+📅 Weekly Schedule
+
+</h2>
+
+<p>
+
+Every live Wildstyle Radio show in one place.
+
+</p>
+
+</div>
+
+<div
+id="scheduleGrid"
+class="schedule-grid">
+
+<!-- Generated by schedule.js -->
+
+</div>
+
+</section>
 
     <section class="section">
       <div class="section-head">
