@@ -14,40 +14,85 @@
 </head>
 <body>
 
-  <div class="container">
+<header class="topbar">
 
-    <header class="hero-head">
-      <h1>🎧 Wildstyle Social</h1>
-      <div class="live-pill">LIVE NOW</div>
-    </header>
+  <button class="burger" id="burger">☰</button>
 
-    <section class="intro-block">
-      <h2>DJ Don (Asian Club Mixes)</h2>
-      <div class="time-slot">12:00 - 14:00</div>
-      <p class="description">
-        Join DJs, listeners, requests, shoutouts, competitions, events and the Wildstyle community in one place.
-      </p>
-    </section>
+  <div class="search-box">
+    <input type="text" placeholder="Search DJs, Shows...">
+  </div>
 
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <strong>24/7</strong>
-        <span>Live Radio</span>
-      </div>
-      
-      <div class="hero-stat">
-        <strong>20+</strong>
-        <span>DJs</span>
-      </div>
+  <div class="social-links">
+    <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+  </div>
 
-      <div class="live-tracker-panel">
-        LISTENERS: <span id="live-listener-count">--</span>
-      </div>
-    </div>
+  <a href="/listen.html" class="btn-primary">
+    Listen Live
+  </a>
 
-    <div class="hero-actions">
-      <a href="chat.html" class="btn-secondary">Open Live Chat</a>
-    </div>
+</header>
+
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav">
+
+  <div class="mobile-nav-top">
+    <h3>Wildstyle</h3>
+    <button id="navClose">✕</button>
+  </div>
+
+  <a href="/index.html">Home</a>
+  <a href="/djs.html" class="active">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/chat.html">Chat</a>
+  <a href="/map.html">Map</a>
+  <a href="/support.html">Support</a>
+
+</nav>
+
+<div class="container">
+
+<header class="hero-head">
+  <h1>🎧 Wildstyle Social</h1>
+  <div class="live-pill">LIVE NOW</div>
+</header>
+
+<section class="intro-block">
+  <h2>DJ Don (Asian Club Mixes)</h2>
+  <div class="time-slot">12:00 - 14:00</div>
+
+  <p class="description">
+    Join DJs, listeners, requests, shoutouts, competitions,
+    events and the Wildstyle community in one place.
+  </p>
+</section>
+
+<div class="hero-stats">
+
+  <div class="hero-stat">
+    <strong>24/7</strong>
+    <span>Live Radio</span>
+  </div>
+
+  <div class="hero-stat">
+    <strong>20+</strong>
+    <span>DJs</span>
+  </div>
+
+  <div class="live-tracker-panel">
+    LISTENERS:
+    <span id="live-listener-count">--</span>
+  </div>
+
+</div>
+
+<div class="hero-actions">
+  <a href="chat.html" class="btn-secondary">
+    Open Live Chat
+  </a>
+</div>
 
     <section class="cards-section">
       <h2 class="section-title">Community Quick Access</h2>
