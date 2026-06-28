@@ -4,108 +4,134 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wildstyle Radio - Schedule</title>
-  <link rel="stylesheet" href="/test/style.css">
-  <link rel="stylesheet" href="/test/schedule.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=4">
+  <link rel="stylesheet" href="/test/schedule.css?v=2">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Left Sidebar (Desktop Navigation Panel) -->
-  <aside class="sidebar">
-    <div class="logo-area">
-      <img src="/images/wildy.png" alt="Wildstyle Logo" class="nav-logo">
-      <span class="brand-name">Wildstyle Radio</span>
+  <header class="topbar">
+    <button class="burger" id="burger">☰</button>
+
+    <div class="search-box">
+      <input type="text" placeholder="Search DJs, Shows...">
     </div>
-    <nav class="sidebar-nav">
-      <a class="active" href="/index.html">Home</a>
-      <!-- Changed active class to this page -->
-      <a href="/djs.html">DJs</a> 
-      <a href="/schedule.html">Schedule</a>
-      <!-- <a href="/noticeboard.html">Noticeboard</a> -->
-      <a href="/chat.html">Chat</a>
-     <!-- <a href="/fans.html">Fans Of Wildstyle</a> -->
-     <!-- <a href="/support.html">Support Wildstyle</a> -->
-      <a href="/map.html">Map</a>
-     <!-- <a href="/about.html">About Us</a> -->
-    </nav>
-  </aside>
 
-  <!-- Main Grid Content Wrapper -->
-  <main class="content">
+    <div class="social-links">
+      <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+    </div>
 
-    <!-- Top Navigation Utility Bar -->
-    <header class="topbar">
-      <!-- Mobile View Hamburger Menu Trigger Button -->
-      <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+    <a href="/listen.html" class="btn-primary">Listen Live</a>
+  </header>
 
-      <div class="search-box">
-        <input type="text" placeholder="Search DJs, Shows...">
-      </div>
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <h3>Wildstyle Navigation</h3>
+      <button id="navClose">✕</button>
+    </div>
+    <a href="/index.html">Home</a>
+    <a href="/djs.html">DJs</a>
+    <a href="/schedule.html" class="active">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/map.html">Map</a>
+    <a href="/support.html">Support</a>
+  </nav>
 
-      <div class="socials">
-        <a href="#">Facebook</a>
-        <a href="#">Instagram</a>
-        <a href="#">TikTok</a>
-      </div>
-
-      <a href="listen.html" class="listen-btn">Listen Live</a>
-    </header>
-
-
-    <section class="hero">
-      <div class="hero-head">
-        <span>Wildstyle Schedule</span>
-        <span class="hero-pill">Live Shows • Weekly Timetable</span>
-      </div>
-      <div class="hero-copy">
-        <span class="hero-kicker">🎧 WHAT'S ON AIR</span>
-        <h1 id="heroShowName">Loading...</h1>
-        <p id="heroShowTime">Loading...</p>
-      </div>
-      <div class="hero-card">
-        <img id="heroDJ" src="/images/wildy.png" alt="Current DJ" class="schedule-hero-image">
-      </div>
-    </section>
-
-    <section class="day-tabs">
-      <button class="active">Monday</button>
-      <button>Tuesday</button>
-      <button>Wednesday</button>
-      <button>Thursday</button>
-      <button>Friday</button>
-      <button>Saturday</button>
-      <button>Sunday</button>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>Weekly Schedule</h2>
-        <span>Live Shows & Open Slots</span>
-      </div>
-      <div class="section-body">
-        <div id="liveSchedulelist" class="schedule-grid-wrapper"></div>
-      </div>
-    </section>
-
-    <section class="featured-dj">
-      <div class="featured-dj-card">
-        <img id="wildyDjImage" src="/images/wildy.png" alt="Recommended DJ">
-        <div class="featured-dj-content">
-          <span class="featured-tag">🐺 WILDY RECOMMENDS</span>
-          <h2 id="wildyDjName">Loading...</h2>
-          <p id="wildyDjText">Loading recommendation...</p>
-          <div id="wildyDjTime" class="featured-meta">Loading...</div>
+  <div class="dashboard-v2 app-container">
+    
+    <main class="main-content">
+      
+      <section class="hero-banner card">
+        <div class="hero-intro" style="display: flex; gap: 20px; align-items: center; width: 100%; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 200px;">
+            <span class="live-badge" style="color: #ff2a6d; font-weight: bold; font-size: 0.85rem; display: block; margin-bottom: 5px;">🎧 WHAT'S ON AIR</span>
+            <h1 id="heroShowName" style="margin: 0 0 5px 0; font-family: 'Oswald', sans-serif; font-size: 2rem;">Loading...</h1>
+            <p id="heroShowTime" style="margin: 0; opacity: 0.7; font-size: 0.95rem;">Loading...</p>
+          </div>
+          <div class="hero-img-wrap" style="width: 90px; height: 90px;">
+            <img id="heroDJ" src="/images/wildy.png" alt="Current DJ" style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid #ff2a6d; object-fit: cover;">
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-  </main>
+      <section class="card day-tabs" style="padding: 15px; display: flex; gap: 8px; flex-wrap: wrap; background: #161126;">
+        <button class="active">Monday</button>
+        <button>Tuesday</button>
+        <button>Wednesday</button>
+        <button>Thursday</button>
+        <button>Friday</button>
+        <button>Saturday</button>
+        <button>Sunday</button>
+      </section>
 
-  <script src="schedule.js?v=4"></script>
+      <section class="card">
+        <div class="card-head">
+          <h2>Weekly Schedule</h2>
+          <span class="badge">Live & Open Slots</span>
+        </div>
+        <div class="card-body">
+          <div id="liveSchedulelist" class="schedule-grid-wrapper"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <aside class="right-sidebar">
+      
+      <article class="card">
+        <div class="card-head">
+          <h2>🐾 Wildy's Pick</h2>
+          <span class="badge">Recommended</span>
+        </div>
+        <div class="card-body">
+          <div class="spotlight" style="display: flex; gap: 15px; align-items: center;">
+            <img id="wildyDjImage" src="/images/wildy.png" alt="Recommended DJ" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover;">
+            <div>
+              <strong class="spotlight-title" id="wildyDjName" style="display: block; font-size: 1.1rem;">Loading...</strong>
+              <p id="wildyDjText" style="margin: 4px 0 0 0; font-size: 0.85rem; opacity: 0.8;">Loading recommendation...</p>
+              <div id="wildyDjTime" style="color: #ff2a6d; font-size: 0.8rem; font-weight: bold; margin-top: 5px;"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </aside>
+
+  </div>
+
+  <script src="/schedule.js?v=2"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const burger = document.getElementById("burger");
+      const mobileNav = document.getElementById("mobileNav");
+      const navBackdrop = document.getElementById("navBackdrop");
+      const navClose = document.getElementById("navClose");
+
+      function openMenu() {
+        mobileNav.classList.add("active");
+        if (navBackdrop) navBackdrop.removeAttribute("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeMenu() {
+        mobileNav.classList.remove("active");
+        if (navBackdrop) navBackdrop.setAttribute("hidden", "");
+        document.body.style.overflow = "";
+      }
+
+      if (burger) burger.addEventListener("click", openMenu);
+      if (navClose) navClose.addEventListener("click", closeMenu);
+      if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
+
+      document.querySelectorAll(".mobile-nav a").forEach(link => {
+        link.addEventListener("click", closeMenu);
+      });
+    });
+  </script>
 
 </body>
 </html>
