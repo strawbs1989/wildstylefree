@@ -76,28 +76,32 @@
 
       <!-- Now Playing Radio Deck Panel -->
       <article class="card">
-        <div class="card-head">
-          <h2>Tune In</h2>
-          <span class="badge">Wildstyle Radio Live</span>
-        </div>
-        <div class="card-body">
-          <div class="wild-player">
-            <div class="player-cover">
-              <span class="onair-badge">🔴 ON AIR NOW</span>
-              <img id="playerArtwork" src="/images/default-dj.jpg" alt="Current DJ">
-            </div>
-            <div class="player-meta">
-              <h3 id="playerDJ">Current Show</h3>
-              <p id="playerTime">00:00 - 00:00</p>
-            </div>
-            <div class="player-controls">
-              <button id="playBtn">▶️</button>
-              <input type="range" id="volumeSlider" min="0" max="100" value="80">
-            </div>
-            <audio id="radioPlayer" preload="none"></audio>
-          </div>
-        </div>
-      </article>
+  <div class="card-head">
+    <h2>Tune In</h2>
+    <span class="badge">Wildstyle Radio Live</span>
+  </div>
+  <div class="card-body">
+    <div class="wild-player">
+      <div class="player-cover">
+        <span class="onair-badge">🔴 ON AIR NOW</span>
+        <img id="playerArtwork" src="/images/default-dj.jpg" alt="Current DJ">
+      </div>
+      <div class="player-meta">
+        <h3 id="playerDJ">Current Show</h3>
+        <p id="playerTime">00:00 - 00:00</p>
+      </div>
+      <div class="player-controls">
+        <button id="playBtn">▶️</button>
+        <input type="range" id="volumeSlider" min="0" max="100" value="80">
+      </div>
+      
+      <audio id="radioPlayer" preload="none"></audio>
+      <iframe width="0" height="0" frameborder="0" src="https://live365.com/embeds/v1/player/a50378?s=md&m=dark&c=mp3" style="display: none;"></iframe>
+      
+    </div>
+  </div>
+</article>
+
 
       <!-- Music Matcher Core Feature -->
       <section class="card tribe-card">
