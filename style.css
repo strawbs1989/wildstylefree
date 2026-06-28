@@ -123,26 +123,15 @@ html, body {
 }
 
 /* ==========================================================
-   MOBILE NAV SHEET DRAWER
+   MOBILE NAV SHEET DRAWER FIXES
 ========================================================== */
-.nav-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 998;
-}
-
 .mobile-nav {
     position: fixed;
     top: 0;
-    left: -280px;
+    left: -280px; /* Fully off-screen by default */
     width: 280px;
     height: 100vh;
-    background: #110c1e;
+    background: #161126; /* Make sure it uses your panel color */
     border-right: 1px solid var(--line);
     padding: 24px;
     display: flex;
@@ -152,38 +141,14 @@ html, body {
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.mobile-nav.active {
-    left: 0;
-}
-
-.mobile-nav-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 15px;
-}
-
-.mobile-nav-top h3 {
-    margin: 0;
-    font-family: 'Oswald', sans-serif;
-}
-
-#navClose {
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
+/* Force links in the drawer to stack cleanly and be easily readable */
 .mobile-nav a {
     color: var(--muted);
     text-decoration: none;
     padding: 12px 16px;
     border-radius: 8px;
     font-weight: 500;
+    display: block; /* Stacks links vertically */
 }
 
 .mobile-nav a.active, .mobile-nav a:hover {
@@ -219,21 +184,12 @@ html, body {
    CARDS & PANELS ARCHITECTURE
 ========================================================== */
 .card {
-    background: var(--panel);
+    background: #161126 !important; /* Explicitly forces your panel color */
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 24px;
+    margin-bottom: 20px; /* Gives structural spacing down the mobile page */
     box-shadow: var(--shadow);
-    transition: background .35s ease, border-color .35s ease, box-shadow .35s ease;
-}
-
-.card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 12px;
 }
 
 .card-head h2 {
@@ -241,7 +197,9 @@ html, body {
     font-family: 'Oswald', sans-serif;
     font-size: 1.4rem;
     letter-spacing: 0.5px;
+    color: #ffffff; /* Ensures heading text is completely white */
 }
+
 
 /* ==========================================================
    HERO BANNER MODULE STYLES
