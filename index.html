@@ -7,178 +7,108 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=2">
-<!--  <link rel="stylesheet" href="https://wildstyle.vip/test/schedule.css?v=1"> -->
+  <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=3">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
-<header class="topbar">
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <button class="burger" id="burger">☰</button>
 
-  <button class="burger" id="burger">☰</button>
+    <div class="search-box">
+      <input type="text" placeholder="Search DJs, Shows...">
+    </div>
 
-  <div class="search-box">
-    <input type="text" placeholder="Search DJs, Shows...">
-  </div>
+    <div class="social-links">
+      <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+    </div>
 
-  <div class="social-links">
-    <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
-    <a href="#">Instagram</a>
-    <a href="#">TikTok</a>
-  </div>
+    <a href="/listen.html" class="btn-primary">Listen Live</a>
+  </header>
 
-  <a href="/listen.html" class="btn-primary">
-    Listen Live
-  </a>
+  <!-- Mobile Overlay Drawer Navigation -->
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <h3>Wildstyle</h3>
+      <button id="navClose">✕</button>
+    </div>
+    <a href="/index.html" class="active">Home</a>
+    <a href="/djs.html">DJs</a>
+    <a href="/schedule.html">Schedule</a>
+    <a href="/chat.html">Chat</a>
+    <a href="/map.html">Map</a>
+    <a href="/support.html">Support</a>
+  </nav>
 
-</header>
+  <!-- Master Content Wrapper Grid Layout -->
+  <div class="dashboard-v2 app-container">
+    
+    <!-- Left/Center Main Dashboard Feed -->
+    <main class="main-content">
 
-<div class="nav-backdrop" id="navBackdrop" hidden></div>
-
-<nav class="mobile-nav" id="mobileNav">
-
-  <div class="mobile-nav-top">
-    <h3>Wildstyle</h3>
-    <button id="navClose">✕</button>
-  </div>
-
-  <a href="/index.html">Home</a>
-  <a href="/djs.html" class="active">DJs</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html">Chat</a>
-  <a href="/map.html">Map</a>
-  <a href="/support.html">Support</a>
-
-</nav>
-
-<div class="container">
-
-<header class="hero-head">
-  <h1>🎧 Wildstyle Social</h1>
-  <div class="live-pill">LIVE NOW</div>
-</header>
-
-<section class="intro-block">
-  
-
-  <p class="description">
-    Join DJs, listeners, requests, shoutouts, competitions,
-    events and the Wildstyle community in one place.
-  </p>
-</section>
-
-<div class="hero-stats">
-
-  <div class="hero-stat">
-    <strong>24/7</strong>
-    <span>Live Radio</span>
-  </div>
-
-  <div class="hero-stat">
-    <strong>20+</strong>
-    <span>DJs</span>
-  </div>
-
-  <div class="live-tracker-panel">
-    LISTENERS:
-    <span id="live-listener-count">--</span>
-  </div>
-
-</div>
-
-<div class="hero-actions">
-  <a href="chat.html" class="btn-secondary">
-    Open Live Chat
-  </a>
-</div>
-
-      <a href="listen.html" class="listen-btn">Listen Live</a>
-    </header>
-
-    <section class="hero">
-      <div class="hero-head">
-        <span>Wildstyle Social Beta</span>
-        <section class="now-on-stage">
-          <div class="container now-on-stage-inner">
-            <div class="now-on-left">
-              <span class="live-dot"></span>
-              <span class="nowOn">Now On</span>
-            </div>
-            <div class="nowOnShow" id="nowon">Loading…</div>
-          </div>
-        </section>
-      </div>
-      <div class="hero-body">
-        <div class="hero-copy">
-          <div class="hero-intro">
-            <img id="heroDJ" class="hero-dj" src="/images/default-dj.jpg">
-            <div>
-              <h1>🎧 Wildstyle Social</h1>
-              <div class="live-badge">🔴 LIVE NOW</div>
-              <div id="heroShowName" class="hero-show-name">Current Show</div>
-              <div id="heroShowTime" class="hero-show-time">00:00 - 00:00</div>
-              <p>
-                Join DJs, listeners, requests, shoutouts, competitions, events and the Wildstyle community in one place.
-              </p>
-            </div>
-          </div>
-
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <strong>24/7</strong>
-              <span>Live Radio</span>
-            </div>
-            <div class="hero-stat">
-              <strong>20+</strong>
-              <span>DJs</span>
-            </div>
-            <div class="hero-stat">
-              <strong>1000+</strong>
-              <span id="liveListenerCount">0</span> <span>Listeners</span>
-            </div>
-          </div>
-          <div class="hero-actions">
-            <a href="wildstyle.vip/chat.html" class="btn-secondary">Open Live Chat</a>
+      <!-- Hero Broadcast Header -->
+      <section class="hero-banner card">
+        <div class="hero-intro" style="display: flex; gap: 20px; align-items: center;">
+          <img id="heroDJ" class="hero-dj" src="/images/default-dj.jpg" style="width:100px; height:100px; border-radius:50%; border:2px solid #ff2a6d; object-fit:cover;">
+          <div>
+            <span class="live-badge" style="color: #ff2a6d; font-weight: bold; font-size: 0.85rem;">🔴 LIVE NOW</span>
+            <h1 style="margin: 5px 0; font-family: 'Oswald', sans-serif;">Wildstyle Social Beta</h1>
+            <div id="heroShowName" class="hero-show-name" style="font-weight: 600;">Current Show</div>
+            <div id="heroShowTime" class="hero-show-time" style="opacity: 0.7; font-size:0.9rem;">00:00 - 00:00</div>
           </div>
         </div>
-      </div>
-    </section>
+        
+        <p style="margin-top: 15px; opacity: 0.85;">
+          Join DJs, listeners, requests, shoutouts, competitions, events and the Wildstyle community in one place.
+        </p>
 
-    <div class="dashboard-v2">
-      <main class="main-content">
+        <!-- Stats Counter Container -->
+        <div class="hero-stats" style="display: flex; gap: 25px; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08);">
+          <div class="hero-stat"><strong>24/7</strong> <span>Radio</span></div>
+          <div class="hero-stat"><strong>20+</strong> <span>DJs</span></div>
+          <div class="hero-stat"><strong id="liveListenerCount">0</strong> <span>Listeners</span></div>
+        </div>
+      </section>
 
-        <article class="card">
-          <div class="card-head">
-            <h2>Tune In</h2>
-            <span class="badge">Wildstyle Radio Live</span>
-          </div>
-          <div class="card-body">
-            <div class="wild-player">
-              <div class="player-cover">
-                <span class="onair-badge">🔴 ON AIR NOW</span>
-                <img id="playerArtwork" src="/images/default-dj.jpg" alt="Current DJ">
-              </div>
-              <div class="player-meta">
-                <h3 id="playerDJ">Current Show</h3>
-                <p id="playerTime">00:00 - 00:00</p>
-              </div>
-              <div class="player-controls">
-                <button id="playBtn">▶️</button>
-                <input type="range" id="volumeSlider" min="0" max="100" value="80">
-              </div>
-              <audio id="radioPlayer" preload="none"></audio>
+      <!-- Now Playing Radio Deck Panel -->
+      <article class="card">
+        <div class="card-head">
+          <h2>Tune In</h2>
+          <span class="badge">Wildstyle Radio Live</span>
+        </div>
+        <div class="card-body">
+          <div class="wild-player">
+            <div class="player-cover">
+              <span class="onair-badge">🔴 ON AIR NOW</span>
+              <img id="playerArtwork" src="/images/default-dj.jpg" alt="Current DJ">
             </div>
+            <div class="player-meta">
+              <h3 id="playerDJ">Current Show</h3>
+              <p id="playerTime">00:00 - 00:00</p>
+            </div>
+            <div class="player-controls">
+              <button id="playBtn">▶️</button>
+              <input type="range" id="volumeSlider" min="0" max="100" value="80">
+            </div>
+            <audio id="radioPlayer" preload="none"></audio>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <section class="card tribe-card">
-          <div class="card-head">
-            <h2>🎧 Find Your Wildstyle Tribe</h2>
-            <span class="badge">Music Matcher</span>
-          </div>
-          <div class="card-body">
-            <p>Tell us what music you love and we'll find your Wildstyle Tribe.</p>
-            <select id="genreSelect">
+      <!-- Music Matcher Core Feature -->
+      <section class="card tribe-card">
+        <div class="card-head">
+          <h2>🎧 Find Your Wildstyle Tribe</h2>
+          <span class="badge">Music Matcher</span>
+        </div>
+        <div class="card-body">
+          <p>Tell us what music you love and we'll find your Wildstyle Tribe.</p>
+          <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+            <select id="genreSelect" style="background:#110c1e; color:white; border:1px solid rgba(255,255,255,0.1); padding:10px; border-radius:6px; flex:1; min-width:140px;">
               <option value="">Choose Genre</option>
               <option>Dance</option>
               <option>House</option>
@@ -188,7 +118,7 @@
               <option>Pop</option>
               <option>Indie</option>
             </select>
-            <select id="eraSelect">
+            <select id="eraSelect" style="background:#110c1e; color:white; border:1px solid rgba(255,255,255,0.1); padding:10px; border-radius:6px; flex:1; min-width:140px;">
               <option value="">Choose Era</option>
               <option>80s</option>
               <option>90s</option>
@@ -196,176 +126,192 @@
               <option>10s</option>
               <option>Today</option>
             </select>
-            <button id="findTribeBtn" class="btn-primary">Find My Tribe</button>
-            <div id="tribeResult"></div>
           </div>
-        </section>
-
-        <article class="card">
-          <div class="card-head"><h2>Trend-List</h2></div>
-          <div class="card-body">
-            <ul class="trend-list">
-              <li>🎵 Most Requested: Summer Vibes</li>
-              <li>🔥 DJ Of The Week: DJ Nala</li>
-              <li>🎪 Wildstyle Festival 2026</li>
-              <li>📅 Next Big Event Coming Soon</li>
-            </ul>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head"><h2>DJ Spotlight</h2></div>
-          <div class="card-body">
-            <div class="spotlight">
-              <img src="https://wildstyle.vip/images/djnala.jpg" alt="DJ spotlight">
-              <div>
-                <strong class="spotlight-title">DJ Nala</strong>
-                <p>Bringing the hottest Genres every week with proper community energy.</p>
-                <div id="wildyDjTime" class="wildy-time">Live Soon</div>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head">
-            <h2>DJ Noticeboard</h2>
-            <span class="badge">Station Updates</span>
-          </div>
-          <div class="card-body" id="noticeboard">
-            <div class="notice-item"><span class="notice-tag live">LIVE</span> DJ Stormzy live Sunday 2PM–4PM</div>
-            <div class="notice-item"><span class="notice-tag event">EVENT</span> Wildstyle Festival 2026 tickets now available</div>
-            <div class="notice-item"><span class="notice-tag recruit">JOIN</span> We're recruiting volunteer DJs</div>
-            <div class="notice-item"><span class="notice-tag award">AWARD</span> DJ Nala wins DJ Of The Week</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head"><h2>💜 Epilepsy Support</h2></div>
-          <div class="card-body">
-            <div class="portal-box-body">
-              <div class="spotlight">
-                <img src="https://wildstyle.vip/images/epilepsy.jpg" alt="Epilepsy">
-                <div><p>Bringing the hottest multi-genre mixes every week with proper community energy.</p></div>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head"><h2>🧩 Autism Support</h2></div>
-          <div class="card-body">
-            <div class="spotlight">
-              <img src="https://wildstyle.vip/images/Autism.jpg" alt="Autism Support">
-              <div><p>Celebrating neurodiversity, inclusion, understanding, support, and awareness for autistic people everywhere 💙</p></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head"><h2>🎧 Fans Of Wildstyle</h2></div>
-          <div class="card-body">
-            <div class="spotlight">
-              <img src="https://wildstyle.vip/images/fans.jpg" alt="fans">
-              <div><p>Join the Wildstyle DJ fan community on Facebook 💜</p></div>
-              <a href="https://www.facebook.com/share/g/1AMAzU53Bf/" target="_blank" class="fans-link"></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head">
-            <h2>🎵 Recently Played</h2>
-            <span class="badge">Live365</span>
-          </div>
-          <div class="card-body">
-            <iframe width="100%" height="511" frameborder="0" src="https://live365.com/embeds/v1/played/a50378?s=md&m=dark"></iframe>
-          </div>
-        </article>
-      </main>
-
-      <aside class="right-sidebar">
-        <article class="card profile-card">
-          <div class="card-head">
-            <h2>Your Profile</h2>
-            <span class="badge">Beta Wiring</span>
-          </div>
-          <div class="card-body">
-            <div class="profile-top">
-              <div class="profile-avatar" id="profileAvatar">WL</div>
-              <div>
-                <strong class="profile-name" id="profileName">Guest Listener</strong>
-                <div class="profile-role" id="profileRole">Listener • Not signed in</div>
-              </div>
-            </div>
-            <p class="profile-bio" id="profileBio">Log in to post, comment, like, and build your Wildstyle profile.</p>
-            <div class="profile-stats">
-              <div><strong id="profilePosts">0</strong><span>Posts</span></div>
-              <div><strong>0</strong><span>Followers</span></div>
-              <div><strong>0</strong><span>Following</span></div>
-            </div>
-            <div class="profile-actions" id="profileActions">
-              <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
-              <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head">
-            <h2>🐾 Wildy's Recommendation</h2>
-            <span class="badge">Today's Pick</span>
-          </div>
-          <div class="card-body">
-            <div class="spotlight">
-              <img id="wildyDjImage" src="/images/djnala.jpg" alt="DJ">
-              <div>
-                <strong class="spotlight-title" id="wildyDjName">DJ Nala</strong>
-                <p id="wildyDjText">Bringing the hottest genres every week with proper community energy.</p>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head"><h2>Events</h2></div>
-          <div class="card-body list">
-            <div class="event-card">
-              <h3>🎪 Wildstyle Festival 2026</h3>
-              <p>Tickets available now.</p>
-              <a href="https://www.skiddle.com/whats-on/Slough/Higginson-Park-/WildStyle-Radio-Festival/42472290/" target="_blank" class="btn-primary">Buy Tickets</a>
-            </div>
-          </div>
-        </article>
-      </aside>
-
-      <footer class="footer">
-        <div>
-          <h3>Wildstyle Social Beta</h3>
-          <p>United by beats. Powered by volunteer passion. Built to bring the station and community together in one social home.</p>
+          <button id="findTribeBtn" class="btn-primary" style="border:none; cursor:pointer; width:100%;">Find My Tribe</button>
+          <div id="tribeResult"></div>
         </div>
-        <div>
-          <h3>Beta Modules</h3>
-          <ul>
-            <li>Live player</li>
-            <li>Community feed</li>
-            <li>Schedule + requests</li>
-            <li>DJ spotlight</li>
+      </section>
+
+      <!-- Trending Board -->
+      <article class="card">
+        <div class="card-head"><h2>Trend-List</h2></div>
+        <div class="card-body">
+          <ul class="trend-list" style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;">
+            <li>🎵 Most Requested: Summer Vibes</li>
+            <li>🔥 DJ Of The Week: DJ Nala</li>
+            <li>🎪 Wildstyle Festival 2026</li>
+            <li>📅 Next Big Event Coming Soon</li>
           </ul>
         </div>
-        <div>
-          <h3>Next Up</h3>
-          <ul>
-            <li>Real comments</li>
-            <li>Real likes</li>
-            <li>Profile editing</li>
-            <li>DJ verified badges</li>
-          </ul>
+      </article>
+
+      <!-- DJ Spotlight Feature -->
+      <article class="card">
+        <div class="card-head"><h2>DJ Spotlight</h2></div>
+        <div class="card-body">
+          <div class="spotlight" style="display:flex; gap:15px; align-items:center;">
+            <img src="https://wildstyle.vip/images/djnala.jpg" alt="DJ spotlight" style="width:70px; height:70px; border-radius:8px; object-fit:cover;">
+            <div>
+              <strong class="spotlight-title">DJ Nala</strong>
+              <p style="margin:5px 0 0 0; font-size:0.9rem; opacity:0.8;">Bringing the hottest Genres every week with proper community energy.</p>
+              <div id="wildyDjTime" class="wildy-time" style="color:#ff2a6d; font-size:0.8rem; margin-top:4px; font-weight:bold;">Live Soon</div>
+            </div>
+          </div>
         </div>
-      </footer>
+      </article>
+
+      <!-- Noticeboard Panel -->
+      <article class="card">
+        <div class="card-head">
+          <h2>DJ Noticeboard</h2>
+          <span class="badge">Station Updates</span>
+        </div>
+        <div class="card-body" id="noticeboard">
+          <div class="notice-item" style="margin-bottom:10px;"><span class="notice-tag live" style="background:#ff2a6d; padding:2px 6px; border-radius:4px; font-size:0.75rem; margin-right:8px;">LIVE</span> DJ Stormzy live Sunday 2PM–4PM</div>
+          <div class="notice-item" style="margin-bottom:10px;"><span class="notice-tag event" style="background:#2a7bff; padding:2px 6px; border-radius:4px; font-size:0.75rem; margin-right:8px;">EVENT</span> Wildstyle Festival 2026 tickets now available</div>
+          <div class="notice-item" style="margin-bottom:10px;"><span class="notice-tag recruit" style="background:#8a46ff; padding:2px 6px; border-radius:4px; font-size:0.75rem; margin-right:8px;">JOIN</span> We're recruiting volunteer DJs</div>
+          <div class="notice-item"><span class="notice-tag award" style="background:#00b4d8; padding:2px 6px; border-radius:4px; font-size:0.75rem; margin-right:8px;">AWARD</span> DJ Nala wins DJ Of The Week</div>
+        </div>
+      </article>
+
+      <!-- Health Support Cards -->
+      <article class="card">
+        <div class="card-head"><h2>💜 Epilepsy Support</h2></div>
+        <div class="card-body">
+          <div class="spotlight" style="display:flex; gap:15px; align-items:center;">
+            <img src="https://wildstyle.vip/images/epilepsy.jpg" alt="Epilepsy" style="width:60px; height:60px; border-radius:8px; object-fit:cover;">
+            <div><p style="margin:0; font-size:0.9rem;">Bringing the hottest multi-genre mixes every week with proper community energy.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h2>🧩 Autism Support</h2></div>
+        <div class="card-body">
+          <div class="spotlight" style="display:flex; gap:15px; align-items:center;">
+            <img src="https://wildstyle.vip/images/Autism.jpg" alt="Autism Support" style="width:60px; height:60px; border-radius:8px; object-fit:cover;">
+            <div><p style="margin:0; font-size:0.9rem;">Celebrating neurodiversity, inclusion, understanding, support, and awareness for autistic people everywhere 💙</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Fan Box Link Panel -->
+      <article class="card">
+        <div class="card-head"><h2>🎧 Fans Of Wildstyle</h2></div>
+        <div class="card-body">
+          <div class="spotlight" style="display:flex; gap:15px; align-items:center; position:relative;">
+            <img src="https://wildstyle.vip/images/fans.jpg" alt="fans" style="width:60px; height:60px; border-radius:8px; object-fit:cover;">
+            <div>
+              <p style="margin:0; font-size:0.9rem;">Join the Wildstyle DJ fan community on Facebook 💜</p>
+              <a href="https://www.facebook.com/share/g/1AMAzU53Bf/" target="_blank" class="btn-secondary small-btn" style="display:inline-block; margin-top:8px; font-size:0.8rem; text-decoration:none;">Go to Group</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Recently Played Widget Tracklist Stream -->
+      <article class="card">
+        <div class="card-head">
+          <h2>🎵 Recently Played</h2>
+          <span class="badge">Live365</span>
+        </div>
+        <div class="card-body">
+          <iframe width="100%" height="511" frameborder="0" src="https://live365.com/embeds/v1/played/a50378?s=md&m=dark" style="border-radius:8px;"></iframe>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Right Column Sticky Profile Sidebar Area -->
+    <aside class="right-sidebar">
+      
+      <!-- Account Info panel -->
+      <article class="card profile-card">
+        <div class="card-head">
+          <h2>Your Profile</h2>
+          <span class="badge">Beta Wiring</span>
+        </div>
+        <div class="card-body">
+          <div class="profile-top" style="display:flex; gap:12px; align-items:center; margin-bottom:15px;">
+            <div class="profile-avatar" id="profileAvatar" style="width:45px; height:45px; background:#ff2a6d; color:white; border-radius:50%; display:grid; place-items:center; font-weight:bold;">WL</div>
+            <div>
+              <strong class="profile-name" id="profileName">Guest Listener</strong>
+              <div class="profile-role" id="profileRole" style="font-size:0.8rem; opacity:0.7;">Listener • Not signed in</div>
+            </div>
+          </div>
+          <p class="profile-bio" id="profileBio" style="font-size:0.9rem; margin-bottom:15px;">Log in to post, comment, like, and build your Wildstyle profile.</p>
+          <div class="profile-stats" style="display:flex; gap:15px; font-size:0.85rem; margin-bottom:15px; border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
+            <div><strong id="profilePosts">0</strong> <span style="opacity:0.7;">Posts</span></div>
+            <div><strong>0</strong> <span style="opacity:0.7;">Followers</span></div>
+            <div><strong>0</strong> <span style="opacity:0.7;">Following</span></div>
+          </div>
+          <div class="profile-actions" id="profileActions" style="display:flex; gap:10px;">
+            <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn" style="flex:1; text-align:center; font-size:0.85rem; padding:8px 0; text-decoration:none;">Login</a>
+            <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn" style="flex:1; text-align:center; font-size:0.85rem; padding:8px 0; text-decoration:none; border:1px solid rgba(255,255,255,0.2); border-radius:20px; color:white;">Sign Up</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- System recommendations curation widget -->
+      <article class="card">
+        <div class="card-head">
+          <h2>🐾 Wildy's Recommendation</h2>
+          <span class="badge">Today's Pick</span>
+        </div>
+        <div class="card-body">
+          <div class="spotlight" style="display:flex; gap:12px; align-items:center;">
+            <img id="wildyDjImage" src="/images/djnala.jpg" alt="DJ" style="width:50px; height:50px; border-radius:6px; object-fit:cover;">
+            <div>
+              <strong class="spotlight-title" id="wildyDjName">DJ Nala</strong>
+              <p id="wildyDjText" style="margin:3px 0 0 0; font-size:0.85rem; opacity:0.8;">Bringing the hottest genres every week with proper community energy.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Ticket Event Bookings box -->
+      <article class="card">
+        <div class="card-head"><h2>Events</h2></div>
+        <div class="card-body list">
+          <div class="event-card" style="background:rgba(255,255,255,0.03); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+            <h3 style="margin:0 0 5px 0; font-size:1.1rem; font-family:'Oswald',sans-serif;">🎪 Wildstyle Festival 2026</h3>
+            <p style="margin:0 0 12px 0; font-size:0.9rem; opacity:0.8;">Tickets available now.</p>
+            <a href="https://www.skiddle.com/whats-on/Slough/Higginson-Park-/WildStyle-Radio-Festival/42472290/" target="_blank" class="btn-primary" style="display:block; text-align:center; text-decoration:none;">Buy Tickets</a>
+          </div>
+        </div>
+      </article>
+
+    </aside>
+
+  </div> <!-- End of Master Layout Grid Wrapper -->
+
+  <!-- Layout Site Footer Section -->
+  <footer class="footer" style="background:#110c1e; border-top:1px solid rgba(255,255,255,0.08); padding:40px 24px; display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:30px; clear:both;">
+    <div>
+      <h3 style="font-family:'Oswald',sans-serif; margin-top:0;">Wildstyle Social Beta</h3>
+      <p style="font-size:0.9rem; opacity:0.8; line-height:1.5;">United by beats. Powered by volunteer passion. Built to bring the station and community together in one social home.</p>
     </div>
-  </main>
+    <div>
+      <h3 style="font-family:'Oswald',sans-serif; margin-top:0;">Beta Modules</h3>
+      <ul style="list-style:none; padding:0; line-height:1.8; font-size:0.9rem; opacity:0.8;">
+        <li>Live player</li>
+        <li>Community feed</li>
+        <li>Schedule + requests</li>
+        <li>DJ spotlight</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family:'Oswald',sans-serif; margin-top:0;">Next Up</h3>
+      <ul style="list-style:none; padding:0; line-height:1.8; font-size:0.9rem; opacity:0.8;">
+        <li>Real comments</li>
+        <li>Real likes</li>
+        <li>Profile editing</li>
+        <li>DJ verified badges</li>
+      </ul>
+    </div>
+  </footer>
 
+  <!-- Auth Verification Overlay Modal popup -->
   <div class="auth-overlay" id="authOverlay"></div>
   <section class="auth-modal" id="authModal" aria-hidden="true">
     <div class="auth-head">
@@ -391,6 +337,7 @@
     <p class="auth-note" id="authStatus">Login/Sign-Up.</p>
   </section>
 
+  <!-- All Global Station JavaScript Modules Engine assets -->
   <script type="module" src="/app.js?v=32"></script>
   <script src="/test/nowon.js?v=99"></script>
   <script src="/upnext.js?v=1"></script>
@@ -398,6 +345,7 @@
   <script src="/schedule.js"></script>
   <script src="/test/player.js"></script>
 
+  <!-- Matcher Logic Engine Script -->
   <script>
     const tribes = [
       { name: "🎧 Dancefloor Addicts", genres: ["Dance", "House"], eras: ["00s", "10s", "Today"], description: "You love big beats, club anthems and weekend party vibes." },
@@ -440,38 +388,35 @@
     });
   </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+  <!-- Mobile Menu Navigation Trigger Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const burger = document.getElementById("burger");
+      const mobileNav = document.getElementById("mobileNav");
+      const navBackdrop = document.getElementById("navBackdrop");
+      const navClose = document.getElementById("navClose");
 
-  const burger = document.getElementById("burger");
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  const navClose = document.getElementById("navClose");
+      function openMenu() {
+        mobileNav.classList.add("active");
+        navBackdrop.hidden = false;
+        document.body.style.overflow = "hidden";
+      }
 
-  function openMenu() {
-    mobileNav.classList.add("active");
-    navBackdrop.hidden = false;
-    document.body.style.overflow = "hidden";
-  }
+      function closeMenu() {
+        mobileNav.classList.remove("active");
+        navBackdrop.hidden = true;
+        document.body.style.overflow = "";
+      }
 
-  function closeMenu() {
-    mobileNav.classList.remove("active");
-    navBackdrop.hidden = true;
-    document.body.style.overflow = "";
-  }
+      if (burger) burger.addEventListener("click", openMenu);
+      if (navClose) navClose.addEventListener("click", closeMenu);
+      if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
 
-  burger.addEventListener("click", openMenu);
-  navClose.addEventListener("click", closeMenu);
-  navBackdrop.addEventListener("click", closeMenu);
-
-  document.querySelectorAll(".mobile-nav a").forEach(link=>{
-    link.addEventListener("click", closeMenu);
-  });
-
-});
-</script>
-
-
+      document.querySelectorAll(".mobile-nav a").forEach(link => {
+        link.addEventListener("click", closeMenu);
+      });
+    });
+  </script>
 
 </body>
 </html>
