@@ -480,3 +480,23 @@ html, body {
         display: block;
     }
 }
+
+/*
+=======================================
+===========
+IFRAME CROPPER
+=======================================
+=========== */
+
+.iframe-cropper {
+  width: 450px;       /* Matches your iframe width */
+  height: 215px;      /* Shorter height to cut off the bottom control bar */
+  overflow: hidden;   /* Hides their play/pause and volume slider */
+  position: relative;
+}
+
+.iframe-cropper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
