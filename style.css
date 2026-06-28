@@ -188,18 +188,16 @@ img, iframe, video {
 /* =========================================
    DASHBOARD AND HUGE TUNE IN BANNER FIX
 ========================================= */
-.dashboard-v2 {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 22px;
-  margin-top: 22px;
+.dashboard-v2{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:22px;
 }
 
-.main-content, .right-sidebar {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 22px !important;
-  width: 100% !important;
+@media(max-width:900px){
+.dashboard-v2{
+grid-template-columns:1fr;
+}
 }
 
 .card {
@@ -244,13 +242,14 @@ img, iframe, video {
 }
 
 .player-cover img {
-  width: 100% !important;
-  height: auto !important;
-  max-height: 480px !important; /* Huge artwork height */
-  object-fit: cover !important;
-  border-radius: 16px !important;
+    width: 100%;
+    max-width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+    margin: 0 auto;
 }
-
 .onair-badge {
   position: absolute;
   top: 12px;
@@ -339,5 +338,8 @@ img, iframe, video {
   .hero-copy h1 { font-size: 2.4rem !important; }
 }
 
-.sidebar { display: none !important; } /* Keeps layout inline without left side bar conflict */
-.hidden { display: none !important; }
+@media(max-width:900px){
+.sidebar{
+display:none;
+}
+}
