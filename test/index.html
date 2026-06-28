@@ -7,90 +7,69 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css?v=999">
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <link rel="stylesheet" href="https://wildstyle.vip/test/style.css?v=2">
+  <link rel="stylesheet" href="https://wildstyle.vip/test/schedule.css?v=1">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
-  <div class="shell">
-    <header class="topbar">
-      <a class="brand" href="/test/index.html">
-        <div class="brand-badge">WS</div>
-        <div class="brand-copy">
-          <strong>WILDSTYLE RADIO</strong>
-          <small>Social Beta</small>
-        </div>
-      </a>
+<header class="topbar">
 
-      <nav class="nav desktop-nav">
-  <a href="/test/index.html" class="active">Home</a>
-  <a href="/test/djs.html">DJs</a>
+  <button class="burger" id="burger">☰</button>
+
+  <div class="search-box">
+    <input type="text" placeholder="Search DJs, Shows...">
+  </div>
+
+  <div class="social-links">
+    <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+  </div>
+
+  <a href="/listen.html" class="btn-primary">
+    Listen Live
+  </a>
+
+</header>
+
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav">
+
+  <div class="mobile-nav-top">
+    <h3>Wildstyle</h3>
+    <button id="navClose">✕</button>
+  </div>
+
+  <a href="/index.html">Home</a>
+  <a href="/djs.html" class="active">DJs</a>
   <a href="/schedule.html">Schedule</a>
   <a href="/chat.html">Chat</a>
   <a href="/map.html">Map</a>
-  <button id="openAuthBtn">Login</button>
+  <a href="/support.html">Support</a>
+
 </nav>
 
-      <button class="burger" id="burger" aria-label="Open menu">☰</button>
-    </header>
+<div class="container">
 
-    <div class="nav-backdrop" id="navBackdrop" hidden></div>
+<header class="hero-head">
+  <h1>🎧 Wildstyle Social</h1>
+  <div class="live-pill">LIVE NOW</div>
+</header>
 
-    <aside class="mobile-nav" id="mobileNav" aria-hidden="true">
-  <div class="mobile-nav-top">
-    <strong>Menu</strong>
-    <button id="navClose" aria-label="Close menu">✕</button>
-  </div>
-  <button id="openAuthBtnMobile" class="mobile-login-btn">Login</button>
-  <a href="/index.html" class="active">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html">Chat</a>
+<section class="intro-block">
+  <h2>DJ Don (Asian Club Mixes)</h2>
+  <div class="time-slot">12:00 - 14:00</div>
 
-  <a href="/map.html">Map</a>
-</aside>
-
-    <section class="hero">
-      <div class="hero-head">
-        <span>Wildstyle Social Beta</span>
-         <!-- NOW ON -->
-  <section class="now-on-stage">
-    <div class="container now-on-stage-inner">
-      <div class="now-on-left">
-        <span class="live-dot"></span>
-        <span class="nowOn">Now On</span>
-      </div>
-      <div class="nowOnShow" id="nowon">Loading…</div>
-    </div>
-  </section>
-      </div>
-      <div class="hero-body">
-        <div class="hero-copy">
-
-  <div class="hero-intro">
-
-    <img id="heroDJ" class="hero-dj" src="/images/default-dj.jpg">
-
-    <div>
-      <h1>🎧 Wildstyle Social</h1>
-      <div class="live-badge">
-🔴 LIVE NOW
-</div>
-<div id="heroShowName" class="hero-show-name">
-Current Show
-</div>
-<div id="heroShowTime" class="hero-show-time">
-00:00 - 00:00
-</div>
-      <p>
-      Join DJs, listeners, requests, shoutouts,
-      competitions, events and the Wildstyle community in one place.
-      </p>
-    </div>
-
-  </div>
+  <p class="description">
+    Join DJs, listeners, requests, shoutouts, competitions,
+    events and the Wildstyle community in one place.
+  </p>
+</section>
 
 <div class="hero-stats">
+
   <div class="hero-stat">
     <strong>24/7</strong>
     <span>Live Radio</span>
@@ -101,162 +80,141 @@ Current Show
     <span>DJs</span>
   </div>
 
-  <div class="hero-stat">
-    <strong>1000+</strong>
-    <span>Listeners</span>
+  <div class="live-tracker-panel">
+    LISTENERS:
+    <span id="live-listener-count">--</span>
   </div>
-</div>
-          <div class="hero-actions">
 
-            <a href="#" class="btn-secondary">Open Live Chat</a>
+</div>
+
+<div class="hero-actions">
+  <a href="chat.html" class="btn-secondary">
+    Open Live Chat
+  </a>
+</div>
+
+      <a href="listen.html" class="listen-btn">Listen Live</a>
+    </header>
+
+    <section class="hero">
+      <div class="hero-head">
+        <span>Wildstyle Social Beta</span>
+        <section class="now-on-stage">
+          <div class="container now-on-stage-inner">
+            <div class="now-on-left">
+              <span class="live-dot"></span>
+              <span class="nowOn">Now On</span>
+            </div>
+            <div class="nowOnShow" id="nowon">Loading…</div>
+          </div>
+        </section>
+      </div>
+      <div class="hero-body">
+        <div class="hero-copy">
+          <div class="hero-intro">
+            <img id="heroDJ" class="hero-dj" src="/images/default-dj.jpg">
+            <div>
+              <h1>🎧 Wildstyle Social</h1>
+              <div class="live-badge">🔴 LIVE NOW</div>
+              <div id="heroShowName" class="hero-show-name">Current Show</div>
+              <div id="heroShowTime" class="hero-show-time">00:00 - 00:00</div>
+              <p>
+                Join DJs, listeners, requests, shoutouts, competitions, events and the Wildstyle community in one place.
+              </p>
+            </div>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <strong>24/7</strong>
+              <span>Live Radio</span>
+            </div>
+            <div class="hero-stat">
+              <strong>20+</strong>
+              <span>DJs</span>
+            </div>
+            <div class="hero-stat">
+              <strong>1000+</strong>
+              <span id="liveListenerCount">0</span> <span>Listeners</span>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a href="wildstyle.vip/chat.html" class="btn-secondary">Open Live Chat</a>
           </div>
         </div>
-
-
-
-
-        <div class="hero-status">
-          <div class="live-schedule-card">
-
-  <div class="live-schedule-header">
-    <h3>📅 Live Schedule</h3>
-    <a href="/schedule.html" class="schedule-btn">
-      View Full Schedule
-    </a>
-  </div>
-
-  <div id="liveScheduleList"></div>
-
-</div>
-        </div>
       </div>
     </section>
 
-    <div class="auth-overlay" id="authOverlay"></div>
+    <div class="dashboard-v2">
+      <main class="main-content">
 
-    <section class="auth-modal" id="authModal" aria-hidden="true">
-      <div class="auth-head">
-        <h2>Wildstyle Login</h2>
-        <button class="auth-close" id="closeAuthBtn" type="button">✕</button>
-      </div>
+        <article class="card">
+          <div class="card-head">
+            <h2>Tune In</h2>
+            <span class="badge">Wildstyle Radio Live</span>
+          </div>
+          <div class="card-body">
+            <div class="wild-player">
+              <div class="player-cover">
+                <span class="onair-badge">🔴 ON AIR NOW</span>
+                <img id="playerArtwork" src="/images/default-dj.jpg" alt="Current DJ">
+              </div>
+              <div class="player-meta">
+                <h3 id="playerDJ">Current Show</h3>
+                <p id="playerTime">00:00 - 00:00</p>
+              </div>
+              <div class="player-controls">
+                <button id="playBtn">▶️</button>
+                <input type="range" id="volumeSlider" min="0" max="100" value="80">
+              </div>
+              <audio id="radioPlayer" preload="none"></audio>
+            </div>
+          </div>
+        </article>
 
-      <div class="auth-tabs">
-        <button class="auth-tab active" data-auth-tab="login" type="button">Login</button>
-        <button class="auth-tab" data-auth-tab="signup" type="button">Sign Up</button>
-      </div>
+        <section class="card tribe-card">
+          <div class="card-head">
+            <h2>🎧 Find Your Wildstyle Tribe</h2>
+            <span class="badge">Music Matcher</span>
+          </div>
+          <div class="card-body">
+            <p>Tell us what music you love and we'll find your Wildstyle Tribe.</p>
+            <select id="genreSelect">
+              <option value="">Choose Genre</option>
+              <option>Dance</option>
+              <option>House</option>
+              <option>Hip-Hop</option>
+              <option>R&B</option>
+              <option>Rock</option>
+              <option>Pop</option>
+              <option>Indie</option>
+            </select>
+            <select id="eraSelect">
+              <option value="">Choose Era</option>
+              <option>80s</option>
+              <option>90s</option>
+              <option>00s</option>
+              <option>10s</option>
+              <option>Today</option>
+            </select>
+            <button id="findTribeBtn" class="btn-primary">Find My Tribe</button>
+            <div id="tribeResult"></div>
+          </div>
+        </section>
 
+        <article class="card">
+          <div class="card-head"><h2>Trend-List</h2></div>
+          <div class="card-body">
+            <ul class="trend-list">
+              <li>🎵 Most Requested: Summer Vibes</li>
+              <li>🔥 DJ Of The Week: DJ Nala</li>
+              <li>🎪 Wildstyle Festival 2026</li>
+              <li>📅 Next Big Event Coming Soon</li>
+            </ul>
+          </div>
+        </article>
 
-
-      <form class="auth-form active" id="loginForm" data-auth-panel="login">
-        <input id="loginEmail" type="email" placeholder="Email address" required>
-        <input id="loginPassword" type="password" placeholder="Password" required>
-        <button type="submit" class="btn-primary">Login to Wildstyle</button>
-      </form>
-
-      <form class="auth-form" id="signupForm" data-auth-panel="signup">
-        <input id="signupDisplayName" type="text" placeholder="Display name" required>
-        <input id="signupEmail" type="email" placeholder="Email address" required>
-        <input id="signupPassword" type="password" placeholder="Create password" required>
-
-<div
-  class="g-recaptcha"
-  data-sitekey="6Lc-_BstAAAAAPobxrOVVTfYmILrHtnxO8Nx6Rm3">
-</div>
-
-
-        <button type="submit" class="btn-primary">Create account</button>
-      </form>
-
-      <p class="auth-note" id="authStatus">Login/Sign-Up.</p>
-    </section>
-<div class="dashboard-v2">
-
-  <main class="main-content">
-
-
-<article class="card">
-
-  <div class="card-head">
-    <h2>Tune In</h2>
-    <span class="badge">Wildstyle Radio Live</span>
-  </div>
-
-  <div class="card-body">
-
-    <div class="wild-player">
-
-      <div class="player-cover">
-
-        <span class="onair-badge">
-          🔴 ON AIR NOW
-        </span>
-
-        <img
-          id="playerArtwork"
-          src="/images/default-dj.jpg"
-          alt="Current DJ">
-
-      </div>
-
-      <div class="player-meta">
-
-        <h3 id="playerDJ">
-          Current Show
-        </h3>
-
-        <p id="playerTime">
-          00:00 - 00:00
-        </p>
-
-      </div>
-
-      <div class="player-controls">
-
-        <button id="playBtn">
-          ▶️
-        </button>
-
-        <input
-          type="range"
-          id="volumeSlider"
-          min="0"
-          max="100"
-          value="80">
-
-      </div>
-
-      <audio
-        id="radioPlayer"
-        preload="none">
-      </audio>
-
-    </div>
-
-  </div>
-
-</article>
-
-                
-
-<article class="card">
-
-  <div class="card-head">
-    <h2>Trend-List</h2>
-  </div>
-
-  <div class="card-body">
-
-    <ul class="trend-list">
-      <li>🎵 Most Requested: Summer Vibes</li>
-      <li>🔥 DJ Of The Week: DJ Nala</li>
-      <li>🎪 Wildstyle Festival 2026</li>
-      <li>📅 Next Big Event Coming Soon</li>
-    </ul>
-
-  </div>
-
-</article>
-          <article class="card">
+        <article class="card">
           <div class="card-head"><h2>DJ Spotlight</h2></div>
           <div class="card-body">
             <div class="spotlight">
@@ -264,464 +222,257 @@ Current Show
               <div>
                 <strong class="spotlight-title">DJ Nala</strong>
                 <p>Bringing the hottest Genres every week with proper community energy.</p>
-<div id="wildyDjTime" class="wildy-time">
-  Live Soon
-</div>
+                <div id="wildyDjTime" class="wildy-time">Live Soon</div>
               </div>
             </div>
           </div>
         </article>
 
-<section class="card tribe-card">
-
-  <div class="card-head">
-    <h2>🎧 Find Your Wildstyle Tribe</h2>
-    <span class="badge">Music Matcher</span>
-  </div>
-
-  <div class="card-body">
-
-    <p>
-      Tell us what music you love and we'll find your Wildstyle Tribe.
-    </p>
-
-    <select id="genreSelect">
-      <option value="">Choose Genre</option>
-      <option>Dance</option>
-      <option>House</option>
-      <option>Hip-Hop</option>
-      <option>R&B</option>
-      <option>Rock</option>
-      <option>Pop</option>
-      <option>Indie</option>
-    </select>
-
-    <select id="eraSelect">
-      <option value="">Choose Era</option>
-      <option>80s</option>
-      <option>90s</option>
-      <option>00s</option>
-      <option>10s</option>
-      <option>Today</option>
-    </select>
-
-    <button id="findTribeBtn" class="btn-primary">
-      Find My Tribe
-    </button>
-
-    <div id="tribeResult"></div>
-
-  </div>
-
-</section>
-
-
-
-
-
-
-<article class="card">
-  <div class="card-head">
-    <h2>DJ Noticeboard</h2>
-    <span class="badge">Station Updates</span>
-  </div>
-
-  <div class="card-body" id="noticeboard">
-
-  <div class="notice-item">
-  <span class="notice-tag live">LIVE</span>
-  DJ Stormzy live Sunday 2PM–4PM
-</div>
-
-<div class="notice-item">
-  <span class="notice-tag event">EVENT</span>
-  Wildstyle Festival 2026 tickets now available
-</div>
-
-<div class="notice-item">
-  <span class="notice-tag recruit">JOIN</span>
-  We're recruiting volunteer DJs
-</div>
-
-<div class="notice-item">
-  <span class="notice-tag award">AWARD</span>
-  DJ Nala wins DJ Of The Week
-</div>
-
-</div>
-</article>
-
-                <!-- Epilepsy Support -->
-<article class="card">
-<div class="card-head"><h2>💜 Epilepsy Support</h2></div>
-<div class="card-body">
-  <div class="spotlight">
-
-  <div class="portal-box-body">
-    <div class="spotlight">
-      <img src="https://wildstyle.vip/images/epilepsy.jpg" alt="Epilepsy">
-      <div>
-          <p>Bringing the hottest multi-genre mixes every week with proper community energy.</p>
-        </div>
-  </div>
- </div>
- </div>
-  </div>
- </article>
-
-
-
-
-
-
-
-<!-- Autism Support -->
-<article class="card">
-<div class="card-head"><h2>🧩 Autism Support</h2></div>
-  <div class="card-body">
-    <div class="spotlight">
-      <img src="https://wildstyle.vip/images/Autism.jpg" alt="Autism Support">
-      <div>
-        <p>Celebrating neurodiversity, inclusion, understanding, support, and awareness for autistic people everywhere 💙</p>
-      </div>
-
-    </div>
-  </div>
-  </article>
-
-
-
-
-
-<!-- Fans Section -->
-<article class="card">
-  <div class="card-head"><h2>🎧 Fans Of Wildstyle</h2></div>
-    <div class="card-body">
-      <div class="spotlight">
-            <img src="https://wildstyle.vip/images/fans.jpg" alt="fans">
-                <div>
-                <p>Join the Wildstyle DJ fan community on Facebook 💜</p>
+        <article class="card">
+          <div class="card-head">
+            <h2>DJ Noticeboard</h2>
+            <span class="badge">Station Updates</span>
           </div>
-
-    <a href="https://www.facebook.com/share/g/1AMAzU53Bf/" target="_blank" class="fans-link"></a>
-
-  </div>
-</div>
-</article>
+          <div class="card-body" id="noticeboard">
+            <div class="notice-item"><span class="notice-tag live">LIVE</span> DJ Stormzy live Sunday 2PM–4PM</div>
+            <div class="notice-item"><span class="notice-tag event">EVENT</span> Wildstyle Festival 2026 tickets now available</div>
+            <div class="notice-item"><span class="notice-tag recruit">JOIN</span> We're recruiting volunteer DJs</div>
+            <div class="notice-item"><span class="notice-tag award">AWARD</span> DJ Nala wins DJ Of The Week</div>
+          </div>
+        </article>
 
         <article class="card">
-  <div class="card-head">
-    <h2>🎵 Recently Played</h2>
-    <span class="badge">Live365</span>
-  </div>
+          <div class="card-head"><h2>💜 Epilepsy Support</h2></div>
+          <div class="card-body">
+            <div class="portal-box-body">
+              <div class="spotlight">
+                <img src="https://wildstyle.vip/images/epilepsy.jpg" alt="Epilepsy">
+                <div><p>Bringing the hottest multi-genre mixes every week with proper community energy.</p></div>
+              </div>
+            </div>
+          </div>
+        </article>
 
-  <div class="card-body">
+        <article class="card">
+          <div class="card-head"><h2>🧩 Autism Support</h2></div>
+          <div class="card-body">
+            <div class="spotlight">
+              <img src="https://wildstyle.vip/images/Autism.jpg" alt="Autism Support">
+              <div><p>Celebrating neurodiversity, inclusion, understanding, support, and awareness for autistic people everywhere 💙</p></div>
+            </div>
+          </div>
+        </article>
 
-    <iframe
-      width="100%"
-      height="511"
-      frameborder="0"
-      src="https://live365.com/embeds/v1/played/a50378?s=md&m=dark">
-    </iframe>
+        <article class="card">
+          <div class="card-head"><h2>🎧 Fans Of Wildstyle</h2></div>
+          <div class="card-body">
+            <div class="spotlight">
+              <img src="https://wildstyle.vip/images/fans.jpg" alt="fans">
+              <div><p>Join the Wildstyle DJ fan community on Facebook 💜</p></div>
+              <a href="https://www.facebook.com/share/g/1AMAzU53Bf/" target="_blank" class="fans-link"></a>
+            </div>
+          </div>
+        </article>
 
-  </div>
-</article>
-</main>
+        <article class="card">
+          <div class="card-head">
+            <h2>🎵 Recently Played</h2>
+            <span class="badge">Live365</span>
+          </div>
+          <div class="card-body">
+            <iframe width="100%" height="511" frameborder="0" src="https://live365.com/embeds/v1/played/a50378?s=md&m=dark"></iframe>
+          </div>
+        </article>
+      </main>
 
-  
       <aside class="right-sidebar">
-        <article class="card profile-card">  <div class="card-head">
-    <h2>🏆 Artist Of The Week</h2>
-    <span class="badge">Wildstyle Choice</span>
-  </div>  <div class="card-body"><div class="profile-top">
-
-  <img
-    src="/images/"
-    alt="Artist Of The Week"
-    class="spotlight-avatar"
-  >
-
-  <div>
-    <strong class="profile-name">
-      DJ Nala
-    </strong>
-
-    <div class="profile-role">
-      Multi-Genre Specialist
-    </div>
-  </div>
-
-</div>
-
-<p class="profile-bio">
-  Bringing energy, great music and community vibes to Wildstyle Radio every week. Tune in and show your support.
-</p>
-
-<div class="profile-stats">
-
-  <div>
-    <strong>5★</strong>
-    <span>Rating</span>
-  </div>
-
-  <div>
-    <strong>Top</strong>
-    <span>DJ</span>
-  </div>
-
-  <div>
-    <strong>2026</strong>
-    <span>Featured</span>
-  </div>
-
-</div>
-
-<div class="profile-actions">
-
-  <a href="/djs.html" class="btn-primary small-btn">
-    View DJs
-  </a>
-
-  <a href="/schedule.html" class="btn-secondary small-btn">
-    Schedule
-  </a>
-
-</div>
-
-  </div></article>
-
-
-<article class="card">
-  <div class="card-head">
-    <h2>🐾 Wildy's Recommendation</h2>
-    <span class="badge">Today's Pick</span>
-  </div>
-
-  <div class="card-body">
-    <div class="spotlight">
-      <img id="wildyDjImage" src="/images/djnala.jpg" alt="DJ">
-      <div>
-        <strong class="spotlight-title" id="wildyDjName">
-          DJ Nala
-        </strong>
-        <p id="wildyDjText">
-          Bringing the hottest genres every week with proper community energy.
-        </p>
-      </div>
-    </div>
-  </div>
-</article>
-
+        <article class="card profile-card">
+          <div class="card-head">
+            <h2>Your Profile</h2>
+            <span class="badge">Beta Wiring</span>
+          </div>
+          <div class="card-body">
+            <div class="profile-top">
+              <div class="profile-avatar" id="profileAvatar">WL</div>
+              <div>
+                <strong class="profile-name" id="profileName">Guest Listener</strong>
+                <div class="profile-role" id="profileRole">Listener • Not signed in</div>
+              </div>
+            </div>
+            <p class="profile-bio" id="profileBio">Log in to post, comment, like, and build your Wildstyle profile.</p>
+            <div class="profile-stats">
+              <div><strong id="profilePosts">0</strong><span>Posts</span></div>
+              <div><strong>0</strong><span>Followers</span></div>
+              <div><strong>0</strong><span>Following</span></div>
+            </div>
+            <div class="profile-actions" id="profileActions">
+              <a href="#" class="btn-primary small-btn" id="sidebarLoginBtn">Login</a>
+              <a href="#" class="btn-secondary small-btn" id="sidebarSignupBtn">Sign Up</a>
+            </div>
+          </div>
+        </article>
 
         <article class="card">
-  <div class="card-head">
-    <h2>Events</h2>
-  </div>
+          <div class="card-head">
+            <h2>🐾 Wildy's Recommendation</h2>
+            <span class="badge">Today's Pick</span>
+          </div>
+          <div class="card-body">
+            <div class="spotlight">
+              <img id="wildyDjImage" src="/images/djnala.jpg" alt="DJ">
+              <div>
+                <strong class="spotlight-title" id="wildyDjName">DJ Nala</strong>
+                <p id="wildyDjText">Bringing the hottest genres every week with proper community energy.</p>
+              </div>
+            </div>
+          </div>
+        </article>
 
-  <div class="card-body list">
+        <article class="card">
+          <div class="card-head"><h2>Events</h2></div>
+          <div class="card-body list">
+            <div class="event-card">
+              <h3>🎪 Wildstyle Festival 2026</h3>
+              <p>Tickets available now.</p>
+              <a href="https://www.skiddle.com/whats-on/Slough/Higginson-Park-/WildStyle-Radio-Festival/42472290/" target="_blank" class="btn-primary">Buy Tickets</a>
+            </div>
+          </div>
+        </article>
+      </aside>
 
-    <div class="event-card">
-      <h3>🎪 Wildstyle Festival 2026</h3>
-      <p>Tickets available now.</p>
-
-      <a href="https://www.skiddle.com/whats-on/Slough/Higginson-Park-/WildStyle-Radio-Festival/42472290/"
-         target="_blank"
-         class="btn-primary">
-         Buy Tickets
-      </a>
+      <footer class="footer">
+        <div>
+          <h3>Wildstyle Social Beta</h3>
+          <p>United by beats. Powered by volunteer passion. Built to bring the station and community together in one social home.</p>
+        </div>
+        <div>
+          <h3>Beta Modules</h3>
+          <ul>
+            <li>Live player</li>
+            <li>Community feed</li>
+            <li>Schedule + requests</li>
+            <li>DJ spotlight</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Next Up</h3>
+          <ul>
+            <li>Real comments</li>
+            <li>Real likes</li>
+            <li>Profile editing</li>
+            <li>DJ verified badges</li>
+          </ul>
+        </div>
+      </footer>
     </div>
+  </main>
 
-  </div>
+  <div class="auth-overlay" id="authOverlay"></div>
+  <section class="auth-modal" id="authModal" aria-hidden="true">
+    <div class="auth-head">
+      <h2>Wildstyle Login</h2>
+      <button class="auth-close" id="closeAuthBtn" type="button">✕</button>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth-tab="login" type="button">Login</button>
+      <button class="auth-tab" data-auth-tab="signup" type="button">Sign Up</button>
+    </div>
+    <form class="auth-form active" id="loginForm" data-auth-panel="login">
+      <input id="loginEmail" type="email" placeholder="Email address" required>
+      <input id="loginPassword" type="password" placeholder="Password" required>
+      <button type="submit" class="btn-primary">Login to Wildstyle</button>
+    </form>
+    <form class="auth-form" id="signupForm" data-auth-panel="signup">
+      <input id="signupDisplayName" type="text" placeholder="Display name" required>
+      <input id="signupEmail" type="email" placeholder="Email address" required>
+      <input id="signupPassword" type="password" placeholder="Create password" required>
+      <div class="g-recaptcha" data-sitekey="6Lc-_BstAAAAAPobxrOVVTfYmILrHtnxO8Nx6Rm3"></div>
+      <button type="submit" class="btn-primary">Create account</button>
+    </form>
+    <p class="auth-note" id="authStatus">Login/Sign-Up.</p>
+  </section>
 
-</article>
-</aside>
+  <script type="module" src="/app.js?v=32"></script>
+  <script src="/test/nowon.js?v=99"></script>
+  <script src="/upnext.js?v=1"></script>
+  <script src="/theme.js"></script>
+  <script src="/schedule.js"></script>
+  <script src="/test/player.js"></script>
 
-    <footer class="footer">
-      <div>
-        <h3>Wildstyle Social Beta</h3>
-        <p>United by beats. Powered by volunteer passion. Built to bring the station and community together in one social home.</p>
-      </div>
-      <div>
-        <h3>Beta Modules</h3>
-        <ul>
-          <li>Live player</li>
-          <li>Community feed</li>
-          <li>Schedule + requests</li>
-          <li>DJ spotlight</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Next Up</h3>
-        <ul>
-          <li>Real comments</li>
-          <li>Real likes</li>
-          <li>Profile editing</li>
-          <li>DJ verified badges</li>
-        </ul>
-      </div>
-    </footer>
-  </div>
+  <script>
+    const tribes = [
+      { name: "🎧 Dancefloor Addicts", genres: ["Dance", "House"], eras: ["00s", "10s", "Today"], description: "You love big beats, club anthems and weekend party vibes." },
+      { name: "🔥 Urban Legends", genres: ["Hip-Hop", "R&B"], eras: ["90s", "00s", "10s"], description: "Hip-Hop, R&B and urban classics are your thing." },
+      { name: "🎸 Rock Revolution", genres: ["Rock", "Indie"], eras: ["80s", "90s", "00s"], description: "You live for guitars, alternative sounds and rock anthems." },
+      { name: "🌈 Feel Good Vibes", genres: ["Pop"], eras: ["80s", "90s", "Today"], description: "You enjoy singalong hits and feel-good music." }
+    ];
 
-  
-<script type="module" src="/app.js?v=32"></script>
-<script src="/test/nowon.js?v=99"></script>
-<script src="/upnext.js?v=1"></script>
-<script src="/theme.js"></script>
-<script src="/test/schedule.js"></script>
-<script src="/test/player.js"></script>
+    document.getElementById("findTribeBtn").addEventListener("click", () => {
+      const genre = document.getElementById("genreSelect").value;
+      const era = document.getElementById("eraSelect").value;
+      const result = document.getElementById("tribeResult");
 
+      if (!genre || !era) {
+        result.innerHTML = `<div style="margin-top: 15px; color: #ff4d4d; font-family: 'Inter', sans-serif;"><p>Please select both a genre and an era!</p></div>`;
+        return;
+      }
 
+      let bestMatch = null;
+      let bestScore = 0;
 
+      tribes.forEach(tribe => {
+        let score = 0;
+        if (tribe.genres.includes(genre)) score += 50;
+        if (tribe.eras.includes(era)) score += 50;
+        if (score > bestScore) { bestScore = score; bestMatch = tribe; }
+      });
 
+      if (!bestMatch || bestScore === 0) {
+        result.innerHTML = `<div style="margin-top: 15px; font-family: 'Inter', sans-serif;"><h3>No Match Found</h3><p>Try different choices.</p></div>`;
+        return;
+      }
+
+      result.innerHTML = `
+        <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-family: 'Inter', sans-serif;">
+          <h3 style="font-family: 'Oswald', sans-serif; text-transform: uppercase; margin: 0 0 5px 0;">${bestMatch.name}</h3>
+          <p style="color: #ff4d4d; margin: 0 0 10px 0;"><strong>${bestScore}% Match</strong></p>
+          <p style="margin: 0; font-size: 0.95rem; opacity: 0.85;">${bestMatch.description}</p>
+        </div>`;
+    });
+  </script>
 
 <script>
-const burger = document.getElementById('burger');
-const mobileNav = document.getElementById('mobileNav');
-const navBackdrop = document.getElementById('navBackdrop');
-const navClose = document.getElementById('navClose');
-const openAuthBtn = document.getElementById('openAuthBtn');
-const openAuthBtnMobile = document.getElementById('openAuthBtnMobile');
-const authOverlay = document.getElementById('authOverlay');
-const authModal = document.getElementById('authModal');
-const closeAuthBtn = document.getElementById('closeAuthBtn');
+document.addEventListener("DOMContentLoaded", () => {
 
-function openMenu() {
-  mobileNav?.classList.add('active');
-  if (navBackdrop) navBackdrop.hidden = false;
-  document.body.classList.add('menu-open');
-  burger?.setAttribute('aria-expanded', 'true');
-  mobileNav?.setAttribute('aria-hidden', 'false');
-}
+  const burger = document.getElementById("burger");
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  const navClose = document.getElementById("navClose");
 
-function closeMenu() {
-  mobileNav?.classList.remove('active');
-  if (navBackdrop) navBackdrop.hidden = true;
-  document.body.classList.remove('menu-open');
-  burger?.setAttribute('aria-expanded', 'false');
-  mobileNav?.setAttribute('aria-hidden', 'true');
-}
-
-function openAuthModal() {
-  authOverlay?.classList.add('open');
-  authModal?.classList.add('open');
-  authModal?.setAttribute('aria-hidden', 'false');
-}
-
-function closeAuthModal() {
-  authOverlay?.classList.remove('open');
-  authModal?.classList.remove('open');
-  authModal?.setAttribute('aria-hidden', 'true');
-}
-
-if (burger) burger.addEventListener('click', openMenu);
-if (navClose) navClose.addEventListener('click', closeMenu);
-if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
-
-if (openAuthBtn) {
-  openAuthBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    openAuthModal();
-  });
-}
-
-if (openAuthBtnMobile) {
-  openAuthBtnMobile.addEventListener('click', (e) => {
-    e.preventDefault();
-    closeMenu();
-    openAuthModal();
-  });
-}
-
-if (closeAuthBtn) closeAuthBtn.addEventListener('click', closeAuthModal);
-if (authOverlay) authOverlay.addEventListener('click', closeAuthModal);
-
-window.addEventListener('resize', () => {
-  if (window.innerWidth > 900) {
-    closeMenu();
-  }
-});
-
-/* =================
-TRIBES DATA
-================== */
-const tribes = [
-  {
-    name: "🎧 Dancefloor Addicts",
-    genres: ["Dance", "House"],
-    eras: ["00s", "10s", "Today"],
-    description: "You love big beats, club anthems and weekend party vibes."
-  },
-  {
-    name: "🔥 Urban Legends",
-    genres: ["Hip-Hop", "R&B"],
-    eras: ["90s", "00s", "10s"],
-    description: "Hip-Hop, R&B and urban classics are your thing."
-  },
-  {
-    name: "🎸 Rock Revolution",
-    genres: ["Rock", "Indie"],
-    eras: ["80s", "90s", "00s"],
-    description: "You live for guitars, alternative sounds and rock anthems."
-  },
-  {
-    name: "🌈 Feel Good Vibes",
-    genres: ["Pop"],
-    eras: ["80s", "90s", "Today"],
-    description: "You enjoy singalong hits and feel-good music."
-  }
-];
-
-/* =================
-MATCHING LOGIC
-================== */
-document.getElementById("findTribeBtn").addEventListener("click", () => {
-  const genre = document.getElementById("genreSelect").value;
-  const era = document.getElementById("eraSelect").value;
-  const result = document.getElementById("tribeResult");
-
-  if (!genre || !era) {
-    result.innerHTML = `
-      <div style="margin-top: 15px; color: #ff4d4d; font-family: 'Inter', sans-serif;">
-        <p>Please select both a genre and an era!</p>
-      </div>
-    `;
-    return;
+  function openMenu() {
+    mobileNav.classList.add("active");
+    navBackdrop.hidden = false;
+    document.body.style.overflow = "hidden";
   }
 
-  let bestMatch = null;
-  let bestScore = 0;
+  function closeMenu() {
+    mobileNav.classList.remove("active");
+    navBackdrop.hidden = true;
+    document.body.style.overflow = "";
+  }
 
-  tribes.forEach(tribe => {
-    let score = 0;
+  burger.addEventListener("click", openMenu);
+  navClose.addEventListener("click", closeMenu);
+  navBackdrop.addEventListener("click", closeMenu);
 
-    if (tribe.genres.includes(genre)) score += 50;
-    if (tribe.eras.includes(era)) score += 50;
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = tribe;
-    }
+  document.querySelectorAll(".mobile-nav a").forEach(link=>{
+    link.addEventListener("click", closeMenu);
   });
 
-  if (!bestMatch || bestScore === 0) {
-    result.innerHTML = `
-      <div style="margin-top: 15px; font-family: 'Inter', sans-serif;">
-        <h3>No Match Found</h3>
-        <p>Try different choices.</p>
-      </div>
-    `;
-    return;
-  }
-
-  result.innerHTML = `
-    <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-family: 'Inter', sans-serif;">
-      <h3 style="font-family: 'Oswald', sans-serif; text-transform: uppercase; margin: 0 0 5px 0;">${bestMatch.name}</h3>
-      <p style="color: #ff4d4d; margin: 0 0 10px 0;"><strong>${bestScore}% Match</strong></p>
-      <p style="margin: 0; font-size: 0.95rem; opacity: 0.85;">${bestMatch.description}</p>
-    </div>
-  `;
 });
 </script>
+
+
 
 </body>
 </html>
