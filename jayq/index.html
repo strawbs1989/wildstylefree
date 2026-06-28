@@ -1,435 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wildstyle Radio | Home</title>
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="https://wildstyle.vip/style.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script defer src="https://wildstyle.vip/script.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  
+<title>Wildstyle Social Beta</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- Header -->
-  <header class="dj-card header-wrapper">
-    <div class="container header-container">
-      <h1>WildStyle Radio</h1>
-	  <p>Online & Mobile</p>
-	  
-      <div class="now-playing">
-        <div id="NowOn" onclick="NowON()">Click For Now On WILDSTYLE</div>
-		<iframe src="//player.radioforge.com/v2/icecast.html?radiolink=https%3A%2F%2Fstreaming.live365.com%2Fa50378&radiotype=icecast&bcolor=&image=https://wildstyle.vip/images/logo.png&facebook=https://www.facebook.com/wildstyleuk&twitter=&title=WildstyleRadio&artist=" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" allow="autoplay" style="border:none;overflow:hidden;" width="100%" height="200" ></iframe>
-        <!-- 🎧 Wildstyle Listener Shout-Out Ticker -->
-        <div class="shoutout-ticker">
-        <div id="tickerContent">Loading shout-outs…</div>
-       </div>
-	  </div>
-    </div>
-  </header>
-    <!-- Now Playing Script -->
-<script>
-const DH = Array.from({ length: 7 }, () => Array(24).fill(null))
+<link rel="stylesheet" href="/jayq/style.css">
+<link rel="stylesheet" href="/home.css">
 
-// MONDAY
-DH[1][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
-DH[1][12] = { show: "7am – 8am<br>DJ Keeks", duration: 2 }
-DH[1][10] = { show: "8am – 10am<br>Coll", duration: 2 }
-DH[1][12] = { show: "12pm – 2pm<br>James-Wizard Of Rock", duration: 2 }
-DH[1][14] = { show: "2pm – 4pm<br>Auto", duration: 2 }
-DH[1][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
-DH[1][17] = { show: "5pm – 7pm<br>Lewis", duration: 2 }
-DH[1][19] = { show: "7pm – 10pm<br>Auto", duration: 3 }
-DH[1][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
-
-// TUESDAY
-DH[2][1] = { show: "1am – 2am<br>James - Wizard Of Rock", duration: 1 }
-DH[2][3] = { show: "3am – 6am<br>Dani - DJ Queen Dani", duration: 3 }
-DH[2][6] = { show: "6am – 8am<br>Auto", duration: 2 }
-DH[2][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
-DH[2][15] = { show: "6pm – 8pm<br>DJ Squeek", duration: 2 }
-DH[2][20] = { show: "8pm – 10pm<br>Dj Lewis", duration: 2 }
-DH[2][10] = { show: "10am – 12pm<br>HothotDJ", duration: 2 }
-
-// WEDNESDAY
-DH[3][10] = { show: "8am – 10am<br>Coll", duration: 2 }
-DH[3][10] = { show: "10am – 12pm<br>DJ Mark", duration: 2 }
-DH[3][15] = { show: "3pm – 5pm<br>Jon Fisk", duration: 2 }
-DH[3][18] = { show: "6pm – 7pm<br>Auto", duration: 1 }
-DH[3][20] = { show: "8pm – 10pm<br>Steve DJ Smith", duration: 2 }
-DH[3][22] = { show: "10pm – 12am<br>Auto", duration: 2 }
-
-// THURSDAY
-DH[4][8] = { show: "8am – 10am<br>Coll", duration: 2 }
-DH[4][0] = { show: "12am – 4am<br>Auto", duration: 4 }
-DH[4][10] = { show: "10am – 12pm<br>Gordan", duration: 2 }
-DH[4][03] = { show: "1pm – 3pm<br>Christina", duration: 2 }
-DH[4][15] = { show: "3pm – 4pm<br>Auto", duration: 1 }
-DH[4][19] = { show: "7pm – 8pm<br>Echofalls(DJ Strawbs)", duration: 1 }
-DH[4][20] = { show: "8pm – 10pm<br>Russ", duration: 2 }
-DH[4][22] = { show: "10pm – 11pm<br>MottMuzik", duration: 1 }
-
-// FRIDAY
-DH[5][0] = { show: "12am – 4am<br>SteveG", duration: 4 }
-DH[5][10] = { show: "10am – 12pm<br>Dani - DJ Queen Dani", duration: 2 }
-DH[5][15] = { show: "3pm – 5pm<br>James Stephen", duration: 2 }
-DH[5][16] = { show: "4pm – 8pm<br>StevenD", duration: 4 }
-DH[5][20] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
-DH[5][22] = { show: "10pm – 11pm<br>Rebecca - DJ Mix&Match", duration: 1 }
-
-// SATURDAY
-DH[6][0] = { show: "12am – 2am<br>Auto", duration: 2 }
-DH[6][2] = { show: "2am – 4am<br>DJ AJ", duration: 2 }
-DH[6][2] = { show: "4am – 6am<br>Wendell", duration: 2 }
-DH[6][16] = { show: "4pm – 6pm<br>The Byrdman", duration: 2 }
-DH[6][18] = { show: "6pm –8pm<br>DJ LiL Devil", duration: 2 }
-DH[6][19] = { show: "7pm – 8pm<br>Sonic-Recorded", duration: 1 }
-DH[6][19] = { show: "8pm – 10pm<br>DJ indigo Riz", duration: 2 }
-DH[6][6] = { show: "6am – 10am<br>Cam", duration: 4 }
-DH[6][10] = { show: "10am – 12pm<br>DJ Nitro", duration: 2 }
-DH[6][20] = { show: "8pm – 9pm<br>Daniel", duration: 1 }
-
-// SUNDAY
-DH[0][8] = { show: "8am – 10am<br>Dani - DJ Queen Dani", duration: 2 }
-DH[0][11] = { show: "11am – 12pm<br>HotShot - 80's 90's", duration: 1 }
-DH[0][12] = { show: "12pm – 1pm<br>Dutch", duration: 1 }
-DH[0][13] = { show: "1pm – 3pm<br>Christina", duration: 2 }
-DH[0][15] = { show: "3pm – 5pm<br>DJ Fraser", duration: 2 }
-DH[0][17] = { show: "5pm – 7pm<br>DJ Lewis", duration: 2 }
-DH[0][19] = { show: "7pm - 8pm<br>Auto", duration: 1 }
-DH[0][20] = { show: "8pm - 9pm<br>BIG BOSS Dj Echofalls", duration: 1 }
-DH[0][21] = { show: "9pm - 12am<br>Popped Radio", duration: 3 }
-
-function NowON() {
-  const now = new Date()
-  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }))
-  const localHour = ukTime.getHours()
-  const day = ukTime.getDay()
-  const prevDay = (day - 1 + 7) % 7
- 
-  const isInShow = (startHour, slot, hour) => {
-    const start = parseInt(startHour)
-    const end = (start + slot.duration) % 24
-    return start <= hour && hour < end || (end < start && (hour >= start || hour < end))
-  }
- 
-  // Check current day's shows
-  const currentShow = Object.entries(DH[day])
-    .filter(([, slot]) => slot !== null)
-    .find(([startHour, slot]) => isInShow(startHour, slot, localHour))
- 
-  // If no show found, check if a show from previous day is still running
-  const prevDayShow = !currentShow ? Object.entries(DH[prevDay])
-    .filter(([, slot]) => slot !== null)
-    .find(([startHour, slot]) => {
-      const start = parseInt(startHour)
-      const end = start + slot.duration
-      return end >= 24 && localHour < end - 24
-    }) : null
- 
-  const show = (currentShow?.[1] || prevDayShow?.[1])?.show || "🕓 Off Air<br>No current broadcast."
-  document.getElementById("NowOn").innerHTML = show
-}
-
-// Optional: auto-refresh every 60 seconds
-setInterval(NowON, 60000);</script>
 </head>
 
-<body onload="NowON()">
-  <div id="NowOn" style="font-weight:bold;color:#fff;text-align:center;"></div>
-</body>
-  <!-- TrustPilot -->
-  <!-- TrustBox script -->
-<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
-<!-- End TrustBox script -->
-<!-- TrustPilot -->
+<body class="social-home">
 
-  
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg neon-nav">
-    <div class="container d-flex align-items-center justify-content-between">
-      <a class="navbar-brand neon-logo" href="/index.html">WILDSTYLE RADIO</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link active" href="/index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/djs.html">DJs</a></li>
-          <li class="nav-item"><a class="nav-link" href="/schedule.html">Schedule</a></li>
-          <li class="nav-item"><a class="nav-link" href="/shoutout.html">Shoutouts</a></li>
-          <li class="nav-item"><a class="nav-link" href="/chat.html">Chat</a></li>
-          <li class="nav-item"><a class="nav-link" href="/merch.html">Merch</a></li>
-          <li class="nav-item"><a class="nav-link" href="/shows.html">Shows</a></li>
-          <li class="nav-item"><a class="nav-link" href="/aboutus.html">About</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<header class="topbar">
 
+    <button class="burger" id="burger">
+        ☰
+    </button>
 
-
-  <!-- Hero Section -->
-  <section id="banner" class="banner">
-    <div class="container text-center">
-      <img src="https://wildstyle.vip/images/banner.png" width="303" height="140" alt="Banner Image">
-    </div>
-  </section>
-
-  <center><p style="color:DodgerBlue;"><b>Welcome To Wildstyle Radio</p></b></center>
-  <center><p>Welcome To WildstyleRadio, Where</p>
-  <p>Signed And Unsigned Music Shines!</p>
-  <p>Our Mission Is To Spotlight Talent and Bring Top-Notch Music</p>
-  <p>Round The Clock.</p></center>
-
-
-<section>
-<h1>Forums</h1>
-<img src="https://wildstyle.vip/images/sticker.png" width="212" height="200">
-<a class="btn" href="https://wildstyle.vip/forums/index.html" target="_blank">Our Community Forums →</a>
-</section>
-
-
-
-  <!-- ⭐ UNSIGNED ARTIST SPOTLIGHT ⭐ -->
-<section id="unsigned" class="unsigned-section">
-  <div class="container">
-
-    <div class="section-title">
-      <h3>Unsigned Artist Spotlight</h3>
-      <a class="btn" href="https://forms.gle/YOURFORMID" target="_blank">Submit your demo →</a>
+    <div class="search-box">
+        <input
+            type="search"
+            placeholder="Search DJs, Shows..."
+            id="searchBox">
     </div>
 
-    <p class="unsigned-desc">
-      Got beats that deserve airtime? 🔥
-      Whether you’re a new producer, rapper, or vocalist — Wildstyle Radio is all about
-      giving unsigned talent a real platform.
-    </p>
+    <div class="social-links">
 
-    <section class="unsigned-spotlight">
-  <h2 class="section-title">Unsigned Artist Spotlight</h2>
+        <a href="https://facebook.com/wildstyleuk" target="_blank">
+            Facebook
+        </a>
 
-  <div class="unsigned-grid">
+        <a href="#">
+            Instagram
+        </a>
 
-    <div class="unsigned-card">
-      <img src="https://wildstyle.vip/unsigned/VictoriaTyler.jpg" alt="Victoria Tyler">
-      <h4>Victoria Tyler</h4>
-      <p>Pop</p>
+        <a href="#">
+            TikTok
+        </a>
+
     </div>
 
-    <div class="unsigned-card">
-      <img src="https://wildstyle.vip/unsigned/theword66.jpg" alt="The Word66">
-      <h4>The Word66</h4>
-      <p>Pop</p>
+    <a href="/listen.html" class="listen-btn">
+        Listen Live
+    </a>
+
+</header>
+
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav">
+
+    <div class="mobile-nav-top">
+
+        <h3>Wildstyle</h3>
+
+        <button id="navClose">
+            ✕
+        </button>
+
     </div>
 
-    <div class="unsigned-card">
-      <img src="https://wildstyle.vip/unsigned/long.jpg" alt="Long">
-      <h4>Long</h4>
-      <p>Country</p>
-    </div>
+    <a href="/index.html" class="active">
+        🏠 Home
+    </a>
 
-    <div class="unsigned-card">
-      <img src="https://wildstyle.vip/unsigned/wayne.jpg" alt="Wayne">
-      <h4>Wayne</h4>
-      <p>Pop</p>
-    </div>
+    <a href="/djs.html">
+        🎧 DJs
+    </a>
 
-    <div class="unsigned-card">
-      <img src="https://wildstyle.vip/unsigned/christina.jpg" alt="Christina">
-      <h4>Christina</h4>
-      <p>Millennium Jukebox</p>
-    </div>
+    <a href="/schedule.html">
+        📅 Schedule
+    </a>
 
-  </div>
-</section> 
+    <a href="/chat.html">
+        💬 Chat
+    </a>
 
+    <a href="/map.html">
+        🌍 Listener Map
+    </a>
 
+</nav>
 
-  
-  
-  <section class="container py-5" id="djs">
-    <h2 class="text-danger text-center mb-4">Give us A Review</h2>
-    <div class="container my-4">
-  <div class="row g-3">
-  
-    <!-- TrustPilot Section -->
-  <!-- TrustBox widget - Review Collector -->
-<center><div class="trustpilot-widget" data-locale="en-GB" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="642774c3d7de1fa1a2d81306" data-style-height="52px" data-style-width="100%">
-  <a href="https://uk.trustpilot.com/review/coolvibes-reloaded.com" target="_blank" rel="noopener">Trustpilot</a>
-</div></center>
-<!-- End TrustBox widget -->
-  </section>
-  
-  <!-- Events Section -->
-  <center>
-<section id="events" class="events-section">
-  <div class="container">
-    <div class="section-title">
-      <h2>Events We Attend</h2>
-      <a class="btn" href="https://wildstyle.vip/events/about.html" target="_blank">
-        About Our Events →
-      </a>
-    </div>
-
-    <p class="section-desc">
-      Wildstyle Radio isn’t just online — we’re out there in the real world too!
-      From retro gigs to festival stages, we bring the beats, the vibes, and the energy.
-      Catch a glimpse of the madness below 👇
-    </p>
-
-    <div class="event-gallery">
-      <article class="event-card">
-        <img src="https://wildstyle.vip/events/images/deloran.jpg" alt="Deloran Event">
-      </article>
-
-      <article class="event-card">
-        <img src="https://wildstyle.vip/events/images/band.jpg" alt="Live Band Event">
-      </article>
-
-      <article class="event-card">
-        <img src="https://wildstyle.vip/events/images/elvis.jpg" alt="Elvis Tribute Event">
-      </article>
-    </div>
-  </div>
-</section>
-</center>
-
-  
-  <center><section class="container py-5" id="djs">
-    <h2 class="text-danger text-center mb-4">Friends Of WildStyle Radio</h2>
-    <div class="container my-4">
-  <div class="row g-3">
-  
-    <!-- FOWR Section -->
-  
-<p>if you would like the chance to have you're image here
-  please let us know</p>
-  <div class="col-6 col-md-4 col-lg-3">
-      <img src="https://wildstyle.vip/unsigned/pete.jpg" alt="Omari" class="img-fluid rounded shadow-sm">
-<!-- End FOWR -->
-  </section></center>
-  
-  <center><section class="request-section" id="requests">
-  <h2>Requests</h2>
-  <p>Want to request a tune? Pop it in — your DJ will play it!</p>
-
-  <h3 style="color:#2a2a2a; margin-bottom:10px;">
-    🎵 Request a Song
-  </h3>
-
-  <form action="https://script.google.com/macros/s/AKfycbz_DpOgEO3Wcid-7MTv22arYiLZh5wLDNlwlPHjJxfUYo6nhqZnXsAU0xLXofogMyg/exec" method="post" class="request-form">
-
-    <input type="text" name="yourname" placeholder="Your Name">
-    <input type="text" name="songtitle" placeholder="Song Title">
-    <input type="text" name="artistname" placeholder="Artist Name">
-    <input type="text" name="shoutout" placeholder="Dedication / Shout-out">
-
-    <button type="submit" class="send-btn">Send Request</button>
-  </form>
-</section></center>
-  
-  
-  <center><section class="container py-5" id="djs">
-    <h2 class="text-danger text-center mb-4">Up And Comings DJ'S</h2>
-    <div class="container my-4">
-  <div class="row g-3">
-  
-  <div class="col-6 col-md-4 col-lg-3">
-      <img src="https://wildstyle.vip/unsigned/logo.png" alt="Omari" class="img-fluid rounded shadow-sm">
-	  
-    </div>
-    
-  </section></center>
-  <!-- DJ of the Week -->
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <h2 class="section-title">DJ of the Week</h2>
-    </div>
-    <div class="dj-week glass">
-      <img src="./images/gordon.jpg" alt="DJ EchoFalls" class="dj-photo" />
-      <div class="dj-week-info">
-        <h3>Gordon</h3>
-        <p><strong>Show:</strong> Remixes</p>
-        <p><strong>Times:</strong> Thurs 7–8 PM / Sun 8–9 PM</p>
-        <a href="./djs.html" class="btn primary">View Profile</a>
-      </div>
-    </div>
-  </div>
-</section>
-<center><section id="birthdays" class="birthdays">
 <div class="container">
 
-<center><section id="birthday" class="birthday">
-    <div class="container">
-	</div>
-	</section></center>
-	  <center><h2>Birthdays& Shoutouts</h2>
-	  <p>Want A Shoutout And a Request? Enter Youre Birthday Below!</p></center>
-      <form action="mailto:wildstyleradioo@gmail.com" method="post" enctype="text/plain">
-<p style="color:black;">Name:<br></p>
-<input type="text" name="name"><br>
-<p style="color:black;">Shoutout&Request:<br></p>
-<input type="text" name="shoutout&request"><br>
-<p style="color:black;">Email:<br></p>
-<input type="text" name="mail"><br>
+<section class="hero">
 
-<input type="submit" value="Send">
+<div class="hero-head">
 
-</form>
-    </div>
-  </section></center>
+<div class="hero-title">
+🎧 Wildstyle Social
+</div>
 
+<div class="live-pill">
+🔴 LIVE NOW
+</div>
 
+</div>
 
-  <!-- Footer -->
-  <footer class="footer py-5 mt-5">
-    <div class="container">
-      <div class="row text-center text-md-start">
-        <div class="col-md-4 mb-4">
-         <h5 class="text-danger">Ways of Tuning In</h5>
-          <p>Download the Get Me Radio! Roku TV App <a href="https://channelstore.roku.com/en-gb/details/b97490a8fb5758527be0396e43422e42/get-me-radio" target="_blank">here</a>.</p>
-          <p>Download the Get Me Radio! Android App <a href="https://play.google.com/store/apps/details?id=com.getmeradio.gmr" target="_blank">from here</a>.</p>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5 class="text-danger">Contact Us</h5>
-          <p><i class="fa-brands fa-discord"></i> <a href="https://discord.gg/86kUtUTSXQ" target="_blank">Discord Message</a></p>
-          <p><i class="fas fa-envelope me-2 text-danger"></i>wildstyleradio1@gmail.com</p>
-        </div>
-        <div class="col-md-4 mb-4">
-         <h5 class="text-danger">Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="/tsandcs.html">Ts&Cs</a></li>
-            <li><a href="/djs.html">Our DJs</a></li>
-            <li><a href="/schedule.html">Schedule</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5 class="text-danger">Follow Us</h5>
-          <div class="d-flex justify-content-center justify-content-md-start gap-3">
-         <a href="https://facebook.com/wildstyleuk" class="text-light"><i class="fab fa-facebook fa-lg"></i></a>
-            <a href="https://instagram.com/wildstyle_radio" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
-            <a href="https://discord.gg/86kUtUTSXQ" class="text-light"><i class="fa-brands fa-discord"></i></a>
-          </div>
-          <div class="mt-3">
-            <img src="images/logo.png" alt="Wildstyle Logo" style="height: 60px;">
-            <img src="images/license.png" alt="License" style="height: 60px; margin-left: 10px;">
-			<img src="images/license.jpg" alt="License" style="height: 60px; margin-left: 10px;">
-          </div>
-          <p class="mt-3">&copy; Wildstyle 2025 | 2029</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+<div class="hero-banner">
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="hero-now">
+
+<div class="hero-now-left">
+
+<strong>
+Wildstyle Social Beta
+</strong>
+
+</div>
+
+<div class="hero-now-centre">
+
+<div class="now-label">
+Now On
+</div>
+
+<div id="heroShowName">
+Loading...
+</div>
+
+<div id="heroShowTime">
+--:-- - --:--
+</div>
+
+</div>
+
+<div class="season-banner">
+
+☀️ Summer Festival Season at Wildstyle
+
+</div>
+
+</div>
+
+</div>
+
+<div class="hero-content">
+
+<div class="hero-image">
+
+<img
+id="heroDJ"
+src="/images/default-dj.jpg"
+alt="Current DJ">
+
+</div>
+
+<div class="hero-info">
+
+<h1>
+Wildstyle Social
+</h1>
+
+<div class="hero-live">
+
+🔴 LIVE NOW
+
+</div>
+
+<h2 id="currentDJ">
+
+Loading DJ...
+
+</h2>
+
+<div id="currentTime">
+
+--:-- - --:--
+
+</div>
+
+<p>
+
+Join DJs, listeners, requests, shoutouts,
+competitions, events and the Wildstyle
+community in one place.
+
+</p>
+
+<div class="hero-stats">
+
+<div class="hero-stat">
+
+<strong>24/7</strong>
+
+<span>LIVE RADIO</span>
+
+</div>
+
+<div class="hero-stat">
+
+<strong>20+</strong>
+
+<span>DJS</span>
+
+</div>
+
+<div class="hero-stat">
+
+<strong id="listenerCount">
+0
+</strong>
+
+<span>LISTENERS</span>
+
+</div>
+
+</div>
+
+<div class="hero-buttons">
+
+<a href="/chat.html"
+class="btn-secondary">
+
+Open Live Chat
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
 </body>
 </html>
