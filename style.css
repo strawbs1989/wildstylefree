@@ -1,8 +1,9 @@
 /* ==========================================================
-   WILDSTYLE RADIO - CORE STYLESHEET
+   WILDSTYLE RADIO - MASTER STYLESHEET
 ========================================================== */
 
 :root {
+    /* FIXED: Swapped light purple background out for your clean neon dark background */
     --bg: #0d0915;
     --panel: #161126;
     --text: #ffffff;
@@ -25,9 +26,12 @@ html, body {
     font-family: 'Inter', system-ui, sans-serif;
     background-color: var(--bg);
     color: var(--text);
+    transition: background .35s ease, color .35s ease;
 }
 
-/* Header & Top Bar */
+/* ==========================================================
+   HEADER & TOPBAR NAVIGATION
+========================================================== */
 .topbar {
     display: flex;
     align-items: center;
@@ -56,6 +60,7 @@ html, body {
     border-radius: 20px;
     color: var(--text);
     outline: none;
+    font-family: inherit;
 }
 
 .social-links a {
@@ -63,12 +68,16 @@ html, body {
     text-decoration: none;
     margin-right: 15px;
     font-size: 0.9rem;
+    transition: color 0.2s;
 }
 
 .social-links a:hover {
     color: #ff2a6d;
 }
 
+/* ==========================================================
+   BUTTONS & BADGES
+========================================================== */
 .btn-primary {
     background: var(--grad);
     color: white;
@@ -76,135 +85,434 @@ html, body {
     border-radius: 25px;
     text-decoration: none;
     font-weight: bold;
+    display: inline-block;
+    border: none;
     box-shadow: 0 4px 15px rgba(255, 42, 109, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Master Page Layout wrapper */
-.app-container {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    min-height: calc(100vh - 75px);
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 42, 109, 0.6);
 }
 
-/* Sidebar Styling */
-.sidebar {
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    border: 1px solid var(--line);
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.badge {
+    background: rgba(255, 42, 109, 0.15);
+    color: #ff2a6d;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* ==========================================================
+   MOBILE NAV SHEET DRAWER
+========================================================== */
+.nav-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+}
+
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
     background: #110c1e;
     border-right: 1px solid var(--line);
     padding: 24px;
-}
-
-.sidebar-logo {
     display: flex;
     flex-direction: column;
-    margin-bottom: 30px;
+    gap: 12px;
+    z-index: 999;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar-logo h2 {
+.mobile-nav.active {
+    left: 0;
+}
+
+.mobile-nav-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+}
+
+.mobile-nav-top h3 {
     margin: 0;
     font-family: 'Oswald', sans-serif;
-    letter-spacing: 1px;
 }
 
-.sidebar-logo span {
-    font-size: 0.8rem;
-    color: #ff2a6d;
+#navClose {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
-.nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.nav-item {
+.mobile-nav a {
     color: var(--muted);
     text-decoration: none;
     padding: 12px 16px;
     border-radius: 8px;
     font-weight: 500;
-    transition: all 0.2s ease;
 }
 
-.nav-item:hover, .nav-item.active {
+.mobile-nav a.active, .mobile-nav a:hover {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text);
 }
 
-.nav-item.active {
-    border-left: 3px solid #ff2a6d;
+/* ==========================================================
+   MASTER CORE LAYOUT STRUCTURE
+========================================================== */
+.dashboard-v2 {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
 }
 
-/* Main Dashboard Layout Content Area */
 .main-content {
-    padding: 30px;
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-/* Hero Panels & Cards */
-.hero-banner {
-    background: var(--grad-soft);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 30px;
+.right-sidebar {
     display: flex;
-    align-items: center;
-    gap: 30px;
-    box-shadow: var(--shadow);
-}
-
-.hero-img-wrap img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid #ff2a6d;
-    object-fit: cover;
-}
-
-.portal-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    flex-direction: column;
     gap: 30px;
 }
 
-.portal-panel {
+/* ==========================================================
+   CARDS & PANELS ARCHITECTURE
+========================================================== */
+.card {
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 24px;
     box-shadow: var(--shadow);
+    transition: background .35s ease, border-color .35s ease, box-shadow .35s ease;
 }
 
-.portal-panel h2 {
-    margin-top: 0;
-    font-family: 'Oswald', sans-serif;
+.card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
     border-bottom: 1px solid var(--line);
-    padding-bottom: 10px;
+    padding-bottom: 12px;
 }
 
-/* Player section wrapper styling */
-.audio-player-box {
-    background: rgba(255, 255, 255, 0.03);
+.card-head h2 {
+    margin: 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================================
+   HERO BANNER MODULE STYLES
+========================================================== */
+.hero-banner {
+    background: var(--grad-soft);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,42,109,0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-stat strong {
+    display: block;
+    font-size: 1.8rem;
+    font-family: 'Oswald', sans-serif;
+    color: #ff2a6d;
+}
+
+.hero-stat span {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+/* ==========================================================
+   WILD AUDIO PLAYER WIDGET INTERFACES
+========================================================== */
+.wild-player {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--line);
+    padding: 15px;
     border-radius: 12px;
-    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.player-cover {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.player-cover img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.onair-badge {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: red;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.player-meta {
+    flex: 1;
+    min-width: 150px;
+}
+
+.player-meta h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+}
+
+.player-meta p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#playBtn {
+    background: var(--grad);
+    border: none;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: grid;
+    place-items: center;
+}
+
+#volumeSlider {
+    accent-color: #ff2a6d;
+    cursor: pointer;
+    width: 100px;
+}
+
+/* ==========================================================
+   WIDGET COMPONENTS (SPOTLIGHT, TRENDS, NOTICEBOARD)
+========================================================== */
+.spotlight p {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.4;
+}
+
+.trend-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.95rem;
+}
+
+.trend-list li:last-child {
+    border-bottom: none;
+}
+
+.notice-item {
+    font-size: 0.9rem;
+    padding: 6px 0;
+}
+
+/* ==========================================================
+   ACCOUNT INTERACTIVE PROFILE MODULE
+========================================================== */
+.profile-card {
+    border-top: 4px solid #8a46ff;
+}
+
+/* ==========================================================
+   AUTHENTICATION OVERLAY & MODAL WINDOWS
+========================================================== */
+.auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(5, 3, 10, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: none;
+}
+
+.auth-overlay.active {
+    display: block;
+}
+
+.auth-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 420px;
+    z-index: 1001;
+    box-shadow: var(--shadow);
+    display: none;
+}
+
+.auth-modal.active {
+    display: block;
+}
+
+.auth-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.auth-head h2 {
+    margin: 0;
+    font-family: 'Oswald', sans-serif;
+}
+
+.auth-close {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.auth-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 20px;
+}
+
+.auth-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--muted);
+    padding: 10px 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    border-bottom: 2px solid transparent;
+}
+
+.auth-tab.active {
+    color: #ff2a6d;
+    border-bottom-color: #ff2a6d;
+}
+
+.auth-form {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-form.active {
+    display: flex;
+}
+
+.auth-form input {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line);
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    font-family: inherit;
+}
+
+.auth-form input:focus {
+    border-color: #8a46ff;
+}
+
+.auth-note {
     text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
     margin-top: 15px;
 }
 
-/* Responsive Overrides */
+/* ==========================================================
+   RESPONSIVE LAYOUT RESPONSIVENESS OVERRIDES
+========================================================== */
 @media (max-width: 992px) {
-    .app-container {
+    .dashboard-v2 {
         grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 20px;
     }
-    .sidebar {
-        display: none;
-    }
+    
     .burger {
         display: block;
-    }
-    .portal-grid {
-        grid-template-columns: 1fr;
     }
 }
