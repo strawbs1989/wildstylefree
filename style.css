@@ -167,8 +167,8 @@ html, body {
 ========================================================== */
 .dashboard-v2 {
     display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 30px;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
     max-width: 1400px;
     margin: 0 auto;
     padding: 30px;
@@ -179,6 +179,12 @@ html, body {
     flex-direction: column;
     gap: 30px;
 }
+
+/* Mobile view - stack them up! */
+@media (max-width: 768px) {
+    .dashboard-v2 {
+        grid-template-columns: 1fr; /* Turns into a single column */
+    }
 
 .right-sidebar {
     display: flex;
@@ -495,11 +501,12 @@ IFRAME CROPPER
   position: relative;
 }
 
+/* Prevent the Live365 player from breaking layout on small screens */
 .iframe-cropper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
+    max-width: 100% !important;
+    width: 100% !important;
 }
+
 
 
 /*
