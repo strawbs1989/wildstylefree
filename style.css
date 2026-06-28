@@ -855,3 +855,179 @@ text-align:center;
 justify-content:center;
 }
 }
+
+/* ======================================================
+WILDSTYLE RADIO V3
+PART 3 - DJs PAGE
+Append below Parts 1 & 2
+====================================================== */
+
+/* PAGE HEADER */
+.djs-hero{
+padding:40px 30px;
+text-align:center;
+border-radius:24px;
+background:linear-gradient(180deg,#17122d,#0d0918);
+border:1px solid rgba(255,255,255,.08);
+margin-bottom:30px;
+}
+
+.djs-hero h1{
+font-size:3rem;
+margin-bottom:10px;
+}
+
+.djs-hero p{
+max-width:700px;
+margin:auto;
+color:#b8afd6;
+}
+
+/* FILTERS */
+.dj-filters{
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+margin:30px 0;
+}
+
+.dj-filter{
+padding:10px 18px;
+border-radius:999px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+transition:.3s;
+cursor:pointer;
+}
+
+.dj-filter:hover,
+.dj-filter.active{
+background:linear-gradient(90deg,#ff2a6d,#9146ff,#2d7dff);
+}
+
+/* GRID */
+.dj-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:24px;
+}
+
+/* CARD */
+.dj-card{
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+border-radius:22px;
+overflow:hidden;
+transition:.35s;
+box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+.dj-card:hover{
+transform:translateY(-8px);
+border-color:#9146ff;
+}
+
+.dj-banner{
+height:120px;
+background:linear-gradient(90deg,#ff2a6d,#9146ff,#2d7dff);
+}
+
+.dj-avatar{
+width:120px;
+height:120px;
+margin:-60px auto 15px;
+border-radius:50%;
+object-fit:cover;
+border:5px solid #141026;
+}
+
+.dj-content{
+padding:0 20px 24px;
+text-align:center;
+}
+
+.dj-name{
+font-size:1.5rem;
+margin-bottom:6px;
+}
+
+.dj-role{
+color:#ffcb45;
+font-weight:700;
+margin-bottom:12px;
+}
+
+.dj-bio{
+color:#b8afd6;
+margin-bottom:18px;
+min-height:72px;
+}
+
+.dj-tags{
+display:flex;
+justify-content:center;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:18px;
+}
+
+.dj-tags span{
+padding:6px 12px;
+border-radius:999px;
+background:rgba(255,255,255,.06);
+font-size:.85rem;
+}
+
+.dj-socials{
+display:flex;
+justify-content:center;
+gap:12px;
+margin-top:18px;
+}
+
+.dj-socials a{
+width:42px;
+height:42px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+background:rgba(255,255,255,.06);
+transition:.3s;
+}
+
+.dj-socials a:hover{
+transform:scale(1.12);
+background:#9146ff;
+}
+
+/* FEATURED */
+.featured-dj{
+border:2px solid #ffcb45;
+position:relative;
+}
+
+.featured-dj::before{
+content:"★ Featured DJ";
+position:absolute;
+top:15px;
+right:15px;
+background:#ffcb45;
+color:#111;
+padding:6px 12px;
+border-radius:999px;
+font-weight:700;
+font-size:.8rem;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.djs-hero h1{font-size:2.2rem;}
+.dj-avatar{
+width:100px;
+height:100px;
+margin-top:-50px;
+}
+}
+
