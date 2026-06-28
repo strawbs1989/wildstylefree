@@ -13,42 +13,85 @@
 </head>
 <body>
 
-  <aside class="sidebar">
-    <div class="logo-area">
-      <img src="/images/wildy.png" alt="Wildstyle Logo" class="nav-logo">
-      <span class="brand-name">Wildstyle Radio</span>
-    </div>
-    <nav class="sidebar-nav">
-      <a class="active" href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a> 
-      <a href="/schedule.html">Schedule</a>
-      <a href="/noticeboard.html">Noticeboard</a>
-      <a href="/chat.html">Chat</a>
-      <a href="/fans.html">Fans Of Wildstyle</a>
-      <a href="/support.html">Support Wildstyle</a>
-      <a href="/map.html">Map</a>
-      <a href="/about.html">About Us</a>
-    </nav>
-  </aside>
+<header class="topbar">
 
-  <main class="content">
+  <button class="burger" id="burger">☰</button>
 
-    <header class="topbar">
-      <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+  <div class="search-box">
+    <input type="text" placeholder="Search DJs, Shows...">
+  </div>
 
-      <div class="search-box">
-        <input type="text" placeholder="Search DJs, Shows...">
-      </div>
+  <div class="social-links">
+    <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+  </div>
 
-      <div class="socials">
-        <a href="#">Facebook</a>
-        <a href="#">Instagram</a>
-        <a href="#">TikTok</a>
-      </div>
+  <a href="/listen.html" class="btn-primary">
+    Listen Live
+  </a>
+
+</header>
+
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav">
+
+  <div class="mobile-nav-top">
+    <h3>Wildstyle</h3>
+    <button id="navClose">✕</button>
+  </div>
+
+  <a href="/index.html">Home</a>
+  <a href="/djs.html" class="active">DJs</a>
+  <a href="/schedule.html">Schedule</a>
+  <a href="/chat.html">Chat</a>
+  <a href="/map.html">Map</a>
+  <a href="/support.html">Support</a>
+
+</nav>
+
+<div class="container">
+
+<header class="hero-head">
+  <h1>🎧 Wildstyle Social</h1>
+  <div class="live-pill">LIVE NOW</div>
+</header>
+
+<section class="intro-block">
+  <h2>DJ Don (Asian Club Mixes)</h2>
+  <div class="time-slot">12:00 - 14:00</div>
+
+  <p class="description">
+    Join DJs, listeners, requests, shoutouts, competitions,
+    events and the Wildstyle community in one place.
+  </p>
+</section>
+
+<div class="hero-stats">
+
+  <div class="hero-stat">
+    <strong>24/7</strong>
+    <span>Live Radio</span>
+  </div>
+
+  <div class="hero-stat">
+    <strong>20+</strong>
+    <span>DJs</span>
+  </div>
+
+  <div class="live-tracker-panel">
+    LISTENERS:
+    <span id="live-listener-count">--</span>
+  </div>
+
+</div>
+
+<div class="hero-actions">
+  <a href="chat.html" class="btn-secondary">
+    Open Live Chat
+  </a>
+</div>
 
       <a href="listen.html" class="listen-btn">Listen Live</a>
     </header>
@@ -397,5 +440,39 @@
         </div>`;
     });
   </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const burger = document.getElementById("burger");
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  const navClose = document.getElementById("navClose");
+
+  function openMenu() {
+    mobileNav.classList.add("active");
+    navBackdrop.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMenu() {
+    mobileNav.classList.remove("active");
+    navBackdrop.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  burger.addEventListener("click", openMenu);
+  navClose.addEventListener("click", closeMenu);
+  navBackdrop.addEventListener("click", closeMenu);
+
+  document.querySelectorAll(".mobile-nav a").forEach(link=>{
+    link.addEventListener("click", closeMenu);
+  });
+
+});
+</script>
+
+
+
 </body>
 </html>
