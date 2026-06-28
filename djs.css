@@ -1,0 +1,1018 @@
+/* ==========================================
+   WILDSTYLE DJs PAGE
+   PART 1 - Layout & Hero
+========================================== */
+
+:root{
+    --bg:#0f0b18;
+    --panel:#171123;
+    --panel2:#221738;
+    --text:#ffffff;
+    --muted:#cdbfe8;
+    --line:rgba(255,255,255,.08);
+
+    --pink:#ff2a6d;
+    --purple:#8a46ff;
+    --blue:#2a7bff;
+
+    --grad:linear-gradient(90deg,#ff2a6d 0%,#8a46ff 50%,#2a7bff 100%);
+    --shadow:0 20px 40px rgba(0,0,0,.35);
+}
+
+body{
+    margin:0;
+    font-family:Inter,sans-serif;
+    background:#0f0b18;
+    color:#fff;
+
+    background-image:
+    radial-gradient(circle at top left,rgba(255,42,109,.12),transparent 30%),
+    radial-gradient(circle at top right,rgba(42,123,255,.10),transparent 35%);
+}
+
+.container{
+    width:min(1400px,94%);
+    margin:auto;
+    padding:25px 0 50px;
+}
+
+/* ==========================================
+   HERO
+========================================== */
+
+.hero-head{
+
+    background:var(--grad);
+
+    border-radius:22px 22px 0 0;
+
+    padding:16px 25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:var(--shadow);
+
+}
+
+.hero-head h1{
+
+    margin:0;
+
+    font-family:Oswald,sans-serif;
+
+    font-size:2rem;
+
+    letter-spacing:.05em;
+
+}
+
+.live-pill{
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.18);
+
+    font-weight:800;
+
+    backdrop-filter:blur(8px);
+
+}
+
+/* ==========================================
+   INTRO
+========================================== */
+
+.intro-block{
+
+    background:#15101f;
+
+    padding:35px;
+
+    border-radius:0 0 22px 22px;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    box-shadow:var(--shadow);
+
+}
+
+.intro-block h2{
+
+    margin:0;
+
+    font-family:Oswald;
+
+    font-size:3rem;
+
+    line-height:1;
+
+}
+
+.time-slot{
+
+    margin-top:12px;
+
+    display:inline-block;
+
+    background:rgba(255,255,255,.06);
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    font-weight:700;
+
+}
+
+.description{
+
+    margin-top:20px;
+
+    color:#d5c8ef;
+
+    line-height:1.8;
+
+    max-width:700px;
+
+}
+
+/* ==========================================
+   STATS
+========================================== */
+
+.hero-stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:16px;
+
+    margin:30px 0;
+
+}
+
+.hero-stat,
+
+.live-tracker-panel{
+
+    background:#1a1327;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.hero-stat strong{
+
+    display:block;
+
+    font-size:2rem;
+
+    font-family:Oswald;
+
+}
+
+.hero-stat span{
+
+    color:#c8bbdf;
+
+}
+
+.live-tracker-panel{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:700;
+
+    font-size:1.1rem;
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.hero-actions{
+
+    margin-bottom:35px;
+
+}
+
+.btn-secondary{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:14px 22px;
+
+    border-radius:18px;
+
+    background:white;
+
+    color:#1a1327;
+
+    text-decoration:none;
+
+    font-weight:800;
+
+    transition:.25s;
+
+}
+
+.btn-secondary:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   SECTION TITLE
+========================================== */
+
+.section-title{
+
+    margin:30px 0 18px;
+
+    font-family:Oswald;
+
+    font-size:2rem;
+
+    letter-spacing:.03em;
+
+}
+
+/* ==========================================
+   PART 2 - Search, Filters & DJ Grid
+========================================== */
+
+/* Search & Filters */
+
+.filters{
+    margin:30px 0;
+    background:#171123;
+    border-radius:22px;
+    padding:18px;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:var(--shadow);
+}
+
+.filter-header{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.search-box{
+    flex:1;
+}
+
+.search-box input{
+    width:100%;
+    padding:14px 18px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.08);
+    background:#221738;
+    color:#fff;
+    outline:none;
+    font-size:1rem;
+}
+
+.search-box input::placeholder{
+    color:#bbaed7;
+}
+
+.filter-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.filter-btn{
+    padding:12px 18px;
+    border:none;
+    border-radius:999px;
+    background:#221738;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.filter-btn:hover{
+    transform:translateY(-2px);
+    background:#2c2143;
+}
+
+.filter-btn.active{
+    background:var(--grad);
+}
+
+/* ==========================================
+   OUR DJs HEADER
+========================================== */
+
+.dj-section{
+
+    margin-top:35px;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+}
+
+.dj-section-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:16px 22px;
+
+    background:var(--grad);
+
+    color:#fff;
+
+}
+
+.dj-section-head h2{
+
+    margin:0;
+
+    font-family:Oswald,sans-serif;
+
+    font-size:1.7rem;
+
+    letter-spacing:.04em;
+
+}
+
+.dj-section-head span{
+
+    font-weight:700;
+
+    opacity:.9;
+
+}
+
+/* ==========================================
+   DJ GRID
+========================================== */
+
+.grid-layout{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+    gap:22px;
+
+    background:#171123;
+
+    padding:24px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-top:none;
+
+}
+
+/* ==========================================
+   CARD BASE
+========================================== */
+
+.dj-card{
+
+    background:#24193a;
+
+    border-radius:22px;
+
+    padding:24px;
+
+    position:relative;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    transition:.3s ease;
+
+    overflow:hidden;
+
+}
+
+.dj-card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#8a46ff;
+
+    box-shadow:
+        0 0 20px rgba(138,70,255,.25),
+        0 20px 35px rgba(0,0,0,.35);
+
+}
+
+.dj-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(135deg,
+    rgba(255,42,109,.05),
+    transparent 40%,
+    rgba(42,123,255,.05));
+
+    pointer-events:none;
+
+}
+
+/* ==========================================
+   RESPONSIVE GRID
+========================================== */
+
+@media(max-width:1100px){
+
+.grid-layout{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:700px){
+
+.grid-layout{
+
+grid-template-columns:1fr;
+
+padding:18px;
+
+}
+
+.filter-header{
+
+flex-direction:column;
+
+align-items:stretch;
+
+}
+
+.filter-buttons{
+
+justify-content:center;
+
+}
+
+}
+
+/* ==========================================
+   PART 3 - DJ Cards
+========================================== */
+
+/* Badge Row */
+
+.badge-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:15px;
+}
+
+/* Badges */
+
+.dj-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:.8rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+}
+
+.dj-badge.featured{
+    background:linear-gradient(90deg,#ff2a6d,#ff7c4d);
+    color:#fff;
+}
+
+.dj-badge.rotation{
+    background:linear-gradient(90deg,#2a7bff,#00c3ff);
+    color:#fff;
+}
+
+.dj-badge.live{
+    background:linear-gradient(90deg,#ff3d3d,#ff8a00);
+    color:#fff;
+}
+
+.dj-badge.new{
+    background:linear-gradient(90deg,#00d084,#6bffb5);
+    color:#111;
+}
+
+/* ==========================================
+   Avatar
+========================================== */
+
+.avatar-container{
+    width:130px;
+    height:130px;
+    margin:0 auto 22px;
+    border-radius:50%;
+    overflow:hidden;
+    position:relative;
+
+    border:5px solid #ff2a6d;
+
+    box-shadow:
+        0 0 25px rgba(255,42,109,.45),
+        0 0 50px rgba(138,70,255,.25);
+}
+
+.avatar-container img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.avatar-fallback{
+    display:none;
+    width:100%;
+    height:100%;
+    align-items:center;
+    justify-content:center;
+    font-size:2rem;
+    font-weight:800;
+    font-family:Oswald,sans-serif;
+    color:#fff;
+    background:var(--grad);
+}
+
+/* ==========================================
+   DJ Name
+========================================== */
+
+.dj-title{
+
+    margin:0;
+
+    text-align:center;
+
+    font-family:Oswald,sans-serif;
+
+    font-size:1.8rem;
+
+    letter-spacing:.03em;
+
+    color:#fff;
+
+}
+
+.dj-subtitle{
+
+    text-align:center;
+
+    margin-top:6px;
+
+    color:#cdbfe8;
+
+    font-size:.95rem;
+
+    font-weight:700;
+
+}
+
+/* ==========================================
+   Tags
+========================================== */
+
+.tags-row{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin:20px 0;
+
+}
+
+.meta-tag{
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:#31214d;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    font-size:.8rem;
+
+    font-weight:700;
+
+    color:#fff;
+
+}
+
+.meta-tag.hot{
+
+    background:linear-gradient(90deg,#ff2a6d,#ff7c4d);
+
+}
+
+/* ==========================================
+   Bio
+========================================== */
+
+.dj-bio{
+
+    color:#d8cdf1;
+
+    text-align:center;
+
+    line-height:1.7;
+
+    font-size:.95rem;
+
+    min-height:90px;
+
+    margin-bottom:22px;
+
+}
+
+/* ==========================================
+   Schedule Box
+========================================== */
+
+.schedule-box{
+
+    margin-top:auto;
+
+    background:#181221;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:16px;
+
+    text-align:center;
+
+    font-weight:700;
+
+    color:#fff;
+
+}
+
+.schedule-box small{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#bbaed7;
+
+    line-height:1.5;
+
+}
+
+/* ==========================================
+   Hover Animation
+========================================== */
+
+.dj-card{
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+
+}
+
+.dj-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:#ff2a6d;
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.35),
+        0 0 35px rgba(255,42,109,.35);
+
+}
+
+.dj-card:hover .avatar-container{
+
+    transform:scale(1.05);
+
+}
+
+.avatar-container{
+
+    transition:transform .3s ease;
+
+}
+
+/* ==========================================
+   PART 4 - Feature Cards & Final Polish
+========================================== */
+
+/* Community Cards */
+
+.cards-section{
+    margin-top:50px;
+}
+
+.cards-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:22px;
+}
+
+.feature-card{
+
+    background:#171123;
+
+    border-radius:22px;
+
+    padding:26px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.3s ease;
+
+    box-shadow:var(--shadow);
+
+}
+
+.feature-card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#8a46ff;
+
+    box-shadow:
+        0 0 30px rgba(138,70,255,.25),
+        0 18px 40px rgba(0,0,0,.35);
+
+}
+
+.card-num{
+
+    display:inline-block;
+
+    margin-bottom:18px;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:var(--grad);
+
+    color:#fff;
+
+    font-size:.8rem;
+
+    font-weight:800;
+
+    letter-spacing:.06em;
+
+}
+
+.feature-card h3{
+
+    margin:0 0 12px;
+
+    font-family:Oswald,sans-serif;
+
+    font-size:1.5rem;
+
+}
+
+.feature-card p{
+
+    margin:0;
+
+    color:#d6caef;
+
+    line-height:1.7;
+
+}
+
+/* ==========================================
+   Smooth Animations
+========================================== */
+
+.hero-head,
+.intro-block,
+.dj-card,
+.feature-card,
+.hero-stat,
+.live-tracker-panel{
+
+    animation:fadeUp .55s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* ==========================================
+   Buttons
+========================================== */
+
+.btn-secondary{
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+.btn-secondary:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 12px 28px rgba(255,255,255,.18);
+
+}
+
+/* ==========================================
+   Scrollbar
+========================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#110c19;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:linear-gradient(#ff2a6d,#8a46ff);
+
+    border-radius:999px;
+
+}
+
+/* ==========================================
+   Mobile
+========================================== */
+
+@media(max-width:900px){
+
+.hero-head{
+
+flex-direction:column;
+
+text-align:center;
+
+gap:15px;
+
+}
+
+.intro-block{
+
+padding:25px;
+
+text-align:center;
+
+}
+
+.intro-block h2{
+
+font-size:2.3rem;
+
+}
+
+.hero-stats{
+
+grid-template-columns:1fr;
+
+}
+
+.cards-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+@media(max-width:700px){
+
+.container{
+
+width:94%;
+
+}
+
+.hero-head h1{
+
+font-size:1.6rem;
+
+}
+
+.live-pill{
+
+font-size:.8rem;
+
+padding:8px 14px;
+
+}
+
+.intro-block h2{
+
+font-size:2rem;
+
+}
+
+.dj-title{
+
+font-size:1.5rem;
+
+}
+
+.avatar-container{
+
+width:110px;
+
+height:110px;
+
+}
+
+.schedule-box{
+
+font-size:.92rem;
+
+}
+
+.feature-card{
+
+padding:20px;
+
+}
+
+}
+
+/* ==========================================
+   Footer Space
+========================================== */
+
+body{
+
+padding-bottom:60px;
+
+}
