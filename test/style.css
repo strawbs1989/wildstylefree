@@ -2201,3 +2201,127 @@ margin:5px 0;
       color: var(--muted);
       line-height: 1.5;
     }
+
+/* =================
+   DJCARD
+  ================ */
+
+/* DJ Card Framing Layout */
+.dj-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.badge-row {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  margin-bottom: 10px;
+}
+
+.dj-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.1);
+}
+.dj-badge.featured { background: rgba(255, 42, 109, 0.15); color: var(--accent-pink); border: 1px solid rgba(255, 42, 109, 0.3); }
+.dj-badge.rotation { background: rgba(5, 117, 230, 0.15); color: #0575e6; border: 1px solid rgba(5, 117, 230, 0.3); }
+
+/* Perfect Circle Avatar Layout Setup */
+.avatar-container {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-pink);
+  overflow: hidden;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #140e22;
+  position: relative;
+}
+
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image does not squeeze or distort */
+  display: block;
+}
+
+/* Fallback UI if your image file pathway drops or breaks */
+.avatar-fallback {
+  display: none;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--muted);
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.dj-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.dj-subtitle {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.tags-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.meta-tag {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--line);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.dj-bio {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 15px 0;
+}
+
+.schedule-box {
+  margin-top: auto;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.schedule-box small {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 3px;
+}
