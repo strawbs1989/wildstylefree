@@ -541,9 +541,7 @@ async function loadNoticeboard() {
 
 loadNoticeboard();
 
-/* =========================================
-   INITIAL BINDING
-========================================= */
+
 
 /* =========================================
    INITIAL BINDING
