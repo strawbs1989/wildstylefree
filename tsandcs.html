@@ -70,25 +70,29 @@
 
   <div class="shell main">
     
-    <!-- Left Sidebar (Desktop Navigation Panel) -->
-  <aside class="sidebar">
-    <div class="logo-area">
-      <img src="/images/wildy.png" alt="Wildstyle Logo" class="nav-logo">
-      <span class="brand-name">Wildstyle Radio</span>
-    </div>
-    <nav class="sidebar-nav">
-      <a class="active" href="/index.html">Home</a>
-      <!-- Changed active class to this page -->
-      <a href="/djs.html">DJs</a> 
-      <a href="/schedule.html">Schedule</a>
-      <!-- <a href="/noticeboard.html">Noticeboard</a> -->
-      <a href="/chat.html">Chat</a>
-     <!-- <a href="/fans.html">Fans Of Wildstyle</a> -->
-     <!-- <a href="/support.html">Support Wildstyle</a> -->
-      <a href="/map.html">Map</a>
-     <!-- <a href="/about.html">About Us</a> -->
-    </nav>
-  </aside>
+    <!-- Left Sidebar Nav Panel (Hidden on Desktop/Tablet breakpoints via style.css rules) -->
+    <aside class="sidebar">
+      <div class="brand-badge" style="width:100%; height:auto; aspect-ratio:1/1; border-radius:24px; margin-bottom:10px;">
+        <span style="font-family:Oswald; font-size:2rem;">WSR</span>
+      </div>
+      <div class="brand-copy" style="text-align: center; margin-bottom: 20px;">
+        <strong>Wildstyle Radio</strong>
+        <small>Online & Mobile</small>
+      </div>
+      
+      <nav class="nav" style="flex-direction: column; justify-content: start; align-items: stretch; width: 100%;">
+        <a href="index.html">Home</a>
+        <a href="djs.html">DJs</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="noticeboard.html">Noticeboard</a>
+        <a href="chat.html">Chat</a>
+        <a href="fans.html">Fans Of Wildstyle</a>
+        <a href="support.html">Support Wildstyle</a>
+        <a href="map.html">Map</a>
+        <a href="about.html">About Us</a>
+        <a class="active" href="tsandcs.html">Rules</a>
+      </nav>
+    </aside>
 
     <!-- Main Right Content Panel -->
     <main class="main-left">
@@ -173,6 +177,6 @@
   <!-- Component Scripts Loading Links -->
   <script src="tsandcs.js"></script>
   <script type="module" src="https://wildstyle.vip/app.js?v=10"></script>
-  
+  <script src="https://wildstyle.vip/theme.js"></script>
 </body>
 </html>
