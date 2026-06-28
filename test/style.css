@@ -2000,3 +2000,204 @@ margin:5px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* =============
+   DJS
+   ============ "/
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 15px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Gradient Neon Utility Heading Banner */
+    .hero-head {
+      background: var(--grad);
+      border-radius: 18px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(255, 42, 109, 0.2);
+    }
+
+    .hero-head h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      margin: 0;
+      letter-spacing: 0.05em;
+    }
+
+    .live-pill {
+      background: var(--accent-pink);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    /* Info Focus Block */
+    .intro-block {
+      text-align: center;
+      padding: 10px 10px;
+    }
+
+    .intro-block h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0 0 5px 0;
+    }
+
+    .time-slot {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .description {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    /* Core Metrics Layout Component Rows */
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .hero-stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 20px;
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .hero-stat span {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .live-tracker-panel {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    #live-listener-count {
+      color: var(--accent-pink);
+      font-weight: 800;
+    }
+
+    /* Action Links Layout */
+    .hero-actions {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #000000;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 30px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      transform: scale(1.03);
+    }
+
+    /* Dynamic Grid Cards */
+    .cards-section {
+      background: var(--panel);
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      padding: 20px;
+    }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #fff;
+      border-left: 4px solid var(--accent-pink);
+      padding-left: 10px;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      transition: border-color 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(255, 42, 109, 0.4);
+    }
+
+    .card-num {
+      color: var(--accent-pink);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .feature-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
