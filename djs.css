@@ -544,8 +544,8 @@ justify-content:center;
 ========================================== */
 
 .avatar-container{
-    width:130px;
-    height:130px;
+    width:150px;
+    height:150px;
     margin:0 auto 22px;
     border-radius:50%;
     overflow:hidden;
