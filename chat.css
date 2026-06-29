@@ -1,51 +1,826 @@
-/* ==========================================================================
-   Wildstyle Radio - Minnit Chat Integration Style
-   ========================================================================== */
+/* ==========================================================
+   WILDSTYLE RADIO
+   CHAT PAGE CSS
+   PART 1
+   Hero • Background • Buttons • Hero Stats
+========================================================== */
 
-.chat-container {
-  margin-top: 22px;
-  background: var(--grad-soft);
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255, 255, 255, .08);
+:root{
+  --chat-grad:linear-gradient(135deg,#ff2d95 0%,#9b4dff 55%,#22d3ee 100%);
+  --glass:rgba(255,255,255,.06);
+  --glass-2:rgba(255,255,255,.08);
+  --border:rgba(255,255,255,.10);
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+  --radius:28px;
 }
 
-.chat-header {
-  padding: 16px 20px;
-  background: var(--grad);
-  color: #fff;
+/* --------------------------------------------------
+   Animated Background
+---------------------------------------------------*/
+
+body{
+    overflow-x:hidden;
 }
 
-.chat-header h2 {
-  margin: 0;
-  font-family: Oswald, sans-serif;
-  font-size: 1.6rem;
+.chat-hero{
+    position:relative;
+    overflow:hidden;
+    padding:90px 35px;
+    margin-top:24px;
+    border-radius:32px;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,45,149,.25),transparent 45%),
+        radial-gradient(circle at 80% 20%,rgba(34,211,238,.20),transparent 45%),
+        radial-gradient(circle at 50% 100%,rgba(155,77,255,.25),transparent 50%),
+        var(--glass);
+    backdrop-filter:blur(18px);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
 }
 
-.chat-header span {
-  display: block;
-  margin-top: 4px;
-  font-size: .9rem;
-  opacity: .9;
+.chat-hero::before{
+    content:"";
+    position:absolute;
+    width:420px;
+    height:420px;
+    border-radius:50%;
+    background:#ff2d95;
+    filter:blur(120px);
+    opacity:.15;
+    top:-180px;
+    left:-120px;
+    animation:floatGlow1 18s ease-in-out infinite;
 }
 
-.chat-frame {
-  padding: 10px;
+.chat-hero::after{
+    content:"";
+    position:absolute;
+    width:450px;
+    height:450px;
+    border-radius:50%;
+    background:#22d3ee;
+    filter:blur(120px);
+    opacity:.12;
+    bottom:-200px;
+    right:-120px;
+    animation:floatGlow2 20s ease-in-out infinite;
 }
 
-.chat-frame iframe {
-  width: 100%;
-  height: 600px;
-  border: none;
-  border-radius: 20px;
-  background: #000;
-  display: block;
+.chat-hero-content{
+    position:relative;
+    z-index:2;
+    max-width:760px;
 }
 
-/* Mobile Responsiveness Viewport Adjustments */
-@media (max-width: 720px) {
-  .chat-frame iframe {
-    height: 75vh;
-  }
+.chat-hero h1{
+    font-family:Oswald,sans-serif;
+    font-size:clamp(2.5rem,5vw,4.6rem);
+    line-height:1.05;
+    margin:20px 0;
+    color:#fff;
+}
+
+.chat-hero p{
+    font-size:1.15rem;
+    color:rgba(255,255,255,.82);
+    line-height:1.8;
+    max-width:620px;
+}
+
+/* --------------------------------------------------
+   LIVE Badge
+---------------------------------------------------*/
+
+.live-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 22px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(10px);
+    font-weight:700;
+    letter-spacing:1px;
+    color:#fff;
+}
+
+.live-dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#00ff7b;
+    box-shadow:0 0 15px #00ff7b;
+    animation:pulse 1.4s infinite;
+}
+
+/* --------------------------------------------------
+   Buttons
+---------------------------------------------------*/
+
+.hero-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin-top:35px;
+}
+
+.hero-buttons .btn-primary,
+.hero-buttons .btn-secondary{
+    text-decoration:none;
+    padding:15px 34px;
+    border-radius:999px;
+    font-weight:700;
+    transition:.35s;
+}
+
+.hero-buttons .btn-primary{
+    color:#fff;
+    background:var(--chat-grad);
+    box-shadow:0 15px 40px rgba(255,45,149,.35);
+}
+
+.hero-buttons .btn-primary:hover{
+    transform:translateY(-5px);
+    box-shadow:0 25px 60px rgba(255,45,149,.45);
+}
+
+.hero-buttons .btn-secondary{
+    color:#fff;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.10);
+    backdrop-filter:blur(10px);
+}
+
+.hero-buttons .btn-secondary:hover{
+    background:rgba(255,255,255,.12);
+    transform:translateY(-5px);
+}
+
+/* --------------------------------------------------
+   Hero Stats
+---------------------------------------------------*/
+
+.hero-stats{
+    margin-top:55px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+}
+
+.hero-stat{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+    backdrop-filter:blur(12px);
+    border-radius:22px;
+    padding:28px;
+    text-align:center;
+    transition:.35s;
+}
+
+.hero-stat:hover{
+    transform:translateY(-8px);
+    background:rgba(255,255,255,.08);
+    border-color:#ff2d95;
+}
+
+.hero-stat strong{
+    display:block;
+    font-size:2rem;
+    color:#fff;
+    font-weight:800;
+}
+
+.hero-stat span{
+    display:block;
+    margin-top:8px;
+    color:rgba(255,255,255,.72);
+    font-size:.95rem;
+}
+
+/* --------------------------------------------------
+   Animations
+---------------------------------------------------*/
+
+@keyframes pulse{
+
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    50%{
+        transform:scale(1.35);
+        opacity:.55;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+@keyframes floatGlow1{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(60px,40px);
+    }
+
+}
+
+@keyframes floatGlow2{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(-60px,-35px);
+    }
+
+}
+
+/* --------------------------------------------------
+   Responsive
+---------------------------------------------------*/
+
+@media(max-width:900px){
+
+.chat-hero{
+    padding:70px 25px;
+}
+
+.hero-stats{
+    grid-template-columns:1fr;
+}
+
+.chat-hero h1{
+    font-size:2.8rem;
+}
+
+.hero-buttons{
+    flex-direction:column;
+}
+
+.hero-buttons a{
+    text-align:center;
+}
+
+}
+
+/* ==========================================================
+   WILDSTYLE RADIO
+   CHAT PAGE CSS
+   PART 2
+   Features • Live Chat • Chat Window
+========================================================== */
+
+/* --------------------------------------------------
+   Feature Cards
+---------------------------------------------------*/
+
+.chat-features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:25px;
+    margin:50px 0;
+}
+
+.feature-card{
+    position:relative;
+    padding:40px 30px;
+    text-align:center;
+    border-radius:28px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.08);
+    overflow:hidden;
+    transition:.35s;
+}
+
+.feature-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        135deg,
+        rgba(255,45,149,.12),
+        rgba(34,211,238,.08)
+    );
+    opacity:0;
+    transition:.35s;
+}
+
+.feature-card:hover::before{
+    opacity:1;
+}
+
+.feature-card:hover{
+    transform:translateY(-10px);
+    border-color:#ff2d95;
+    box-shadow:0 20px 50px rgba(255,45,149,.18);
+}
+
+.feature-card i{
+    font-size:3rem;
+    margin-bottom:20px;
+    background:linear-gradient(135deg,#ff2d95,#9b4dff,#22d3ee);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.feature-card h3{
+    margin:0 0 15px;
+    font-size:1.4rem;
+    color:#fff;
+    font-family:Oswald,sans-serif;
+}
+
+.feature-card p{
+    margin:0;
+    color:rgba(255,255,255,.75);
+    line-height:1.8;
+}
+
+/* --------------------------------------------------
+   Chat Section
+---------------------------------------------------*/
+
+.live-chat-section{
+    margin:70px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.section-title h2{
+    font-family:Oswald,sans-serif;
+    font-size:2.6rem;
+    color:#fff;
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:rgba(255,255,255,.72);
+    font-size:1.05rem;
+}
+
+/* --------------------------------------------------
+   Chat Wrapper
+---------------------------------------------------*/
+
+.chat-wrapper{
+    border-radius:30px;
+    overflow:hidden;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+}
+
+/* --------------------------------------------------
+   Studio Header
+---------------------------------------------------*/
+
+.chat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    padding:18px 30px;
+    background:linear-gradient(
+        90deg,
+        #ff2d95,
+        #9b4dff,
+        #22d3ee
+    );
+    color:#fff;
+    font-weight:700;
+}
+
+.chat-top div{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.online-dot{
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:#00ff80;
+    box-shadow:0 0 12px #00ff80;
+    animation:pulse 1.5s infinite;
+}
+
+/* --------------------------------------------------
+   Chat Frame
+---------------------------------------------------*/
+
+.chat-frame{
+    padding:18px;
+    background:rgba(0,0,0,.20);
+}
+
+.chat-frame iframe{
+    display:block;
+    width:100%;
+    height:750px;
+    border:none;
+    border-radius:22px;
+    background:#111;
+}
+
+/* --------------------------------------------------
+   Decorative Glow
+---------------------------------------------------*/
+
+.chat-wrapper{
+    position:relative;
+}
+
+.chat-wrapper::before{
+    content:"";
+    position:absolute;
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    background:#ff2d95;
+    filter:blur(110px);
+    opacity:.08;
+    top:-120px;
+    right:-120px;
+    pointer-events:none;
+}
+
+.chat-wrapper::after{
+    content:"";
+    position:absolute;
+    width:250px;
+    height:250px;
+    border-radius:50%;
+    background:#22d3ee;
+    filter:blur(110px);
+    opacity:.08;
+    bottom:-120px;
+    left:-120px;
+    pointer-events:none;
+}
+
+/* --------------------------------------------------
+   Hover Effect
+---------------------------------------------------*/
+
+.chat-wrapper:hover{
+    border-color:#ff2d95;
+    box-shadow:
+        0 35px 80px rgba(255,45,149,.18),
+        0 10px 30px rgba(0,0,0,.45);
+}
+
+/* --------------------------------------------------
+   Responsive
+---------------------------------------------------*/
+
+@media(max-width:900px){
+
+.chat-features{
+    grid-template-columns:1fr;
+}
+
+.chat-top{
+    flex-direction:column;
+    text-align:center;
+}
+
+.chat-frame{
+    padding:10px;
+}
+
+.chat-frame iframe{
+    height:78vh;
+    min-height:600px;
+}
+
+.section-title h2{
+    font-size:2rem;
+}
+
+}
+
+/* ==========================================================
+   WILDSTYLE RADIO
+   CHAT PAGE CSS
+   PART 3
+   Community • Rules • CTA • Animations • Mobile
+========================================================== */
+
+/* --------------------------------------------------
+   Community
+---------------------------------------------------*/
+
+.community{
+    margin:80px 0;
+}
+
+.community h2{
+    text-align:center;
+    font-family:Oswald,sans-serif;
+    font-size:2.5rem;
+    color:#fff;
+    margin-bottom:40px;
+}
+
+.community-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+}
+
+.community-card{
+    position:relative;
+    padding:35px 25px;
+    border-radius:26px;
+    text-align:center;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.08);
+    transition:.35s;
+    overflow:hidden;
+}
+
+.community-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        135deg,
+        rgba(255,45,149,.12),
+        rgba(34,211,238,.10)
+    );
+    opacity:0;
+    transition:.35s;
+}
+
+.community-card:hover::before{
+    opacity:1;
+}
+
+.community-card:hover{
+    transform:translateY(-10px);
+    border-color:#ff2d95;
+    box-shadow:0 20px 60px rgba(255,45,149,.18);
+}
+
+.community-card h3{
+    position:relative;
+    z-index:2;
+    margin-bottom:15px;
+    color:#fff;
+    font-family:Oswald,sans-serif;
+    font-size:1.3rem;
+}
+
+.community-card p{
+    position:relative;
+    z-index:2;
+    color:rgba(255,255,255,.72);
+    line-height:1.8;
+}
+
+/* --------------------------------------------------
+   Rules
+---------------------------------------------------*/
+
+.rules{
+    margin:80px 0;
+    padding:50px;
+    border-radius:30px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(18px);
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+.rules h2{
+    text-align:center;
+    font-family:Oswald,sans-serif;
+    font-size:2.3rem;
+    color:#fff;
+    margin-bottom:35px;
+}
+
+.rules ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:grid;
+    gap:18px;
+}
+
+.rules li{
+    padding:18px 22px;
+    border-radius:18px;
+    background:rgba(255,255,255,.04);
+    border-left:4px solid #22d3ee;
+    color:rgba(255,255,255,.85);
+    transition:.3s;
+}
+
+.rules li:hover{
+    transform:translateX(8px);
+    border-left-color:#ff2d95;
+    background:rgba(255,255,255,.08);
+}
+
+/* --------------------------------------------------
+   Join CTA
+---------------------------------------------------*/
+
+.join-us{
+    position:relative;
+    overflow:hidden;
+    margin:90px 0;
+    padding:70px 40px;
+    text-align:center;
+    border-radius:32px;
+    background:linear-gradient(
+        135deg,
+        #ff2d95,
+        #9b4dff,
+        #22d3ee
+    );
+    color:#fff;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+
+.join-us::before{
+    content:"";
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    background:rgba(255,255,255,.18);
+    filter:blur(120px);
+    top:-150px;
+    right:-100px;
+}
+
+.join-us h2{
+    position:relative;
+    z-index:2;
+    font-family:Oswald,sans-serif;
+    font-size:3rem;
+    margin-bottom:20px;
+}
+
+.join-us p{
+    position:relative;
+    z-index:2;
+    max-width:650px;
+    margin:0 auto 35px;
+    line-height:1.9;
+    font-size:1.08rem;
+}
+
+.join-us .btn-primary{
+    position:relative;
+    z-index:2;
+    display:inline-block;
+    padding:18px 40px;
+    border-radius:999px;
+    text-decoration:none;
+    font-weight:700;
+    color:#111;
+    background:#fff;
+    transition:.35s;
+}
+
+.join-us .btn-primary:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 40px rgba(255,255,255,.35);
+}
+
+/* --------------------------------------------------
+   Fade In Animation
+---------------------------------------------------*/
+
+.chat-features,
+.live-chat-section,
+.community,
+.rules,
+.join-us{
+    animation:fadeUp .8s ease both;
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(35px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* --------------------------------------------------
+   Scrollbar
+---------------------------------------------------*/
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#120b20;
+}
+
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(
+        #ff2d95,
+        #9b4dff,
+        #22d3ee
+    );
+    border-radius:50px;
+}
+
+/* --------------------------------------------------
+   Responsive
+---------------------------------------------------*/
+
+@media(max-width:1100px){
+
+.community-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.community-grid{
+    grid-template-columns:1fr;
+}
+
+.rules{
+    padding:30px 20px;
+}
+
+.join-us{
+    padding:55px 25px;
+}
+
+.join-us h2{
+    font-size:2.2rem;
+}
+
+.rules h2,
+.community h2{
+    font-size:2rem;
+}
+
+.rules li{
+    font-size:.95rem;
+}
+
+}
+
+@media(max-width:500px){
+
+.chat-hero{
+    padding:55px 20px;
+}
+
+.chat-hero h1{
+    font-size:2.2rem;
+}
+
+.hero-buttons a{
+    width:100%;
+}
+
+.hero-stat{
+    padding:20px;
+}
+
+.community-card,
+.feature-card{
+    padding:28px 20px;
+}
+
+.chat-frame iframe{
+    height:70vh;
+}
+
 }
