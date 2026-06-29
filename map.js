@@ -97,7 +97,8 @@ function renderMap(data) {
   const countryList = document.getElementById("countryList");
   const totalListenersBadge = document.getElementById("totalListenersBadge");
   const countryCountBadge = document.getElementById("countryCountBadge");
-  const topCountryName = document.getElementById("topCountryName");
+  const heroTopCountry = document.getElementById("topCountryName");
+const mapTopCountry = document.getElementById("mapTopCountryName");
   const topCountryCount = document.getElementById("topCountryCount");
   const lastUpdated = document.getElementById("lastUpdated");
 
@@ -118,9 +119,13 @@ function renderMap(data) {
     countryCountBadge.textContent = `${sorted.length} countries`;
   }
 
-  if (topCountryName) {
-    topCountryName.textContent = topCountry ? topCountry.country : "No data";
-  }
+  if (heroTopCountry) {
+  heroTopCountry.textContent = topCountry ? topCountry.country : "No data";
+}
+
+if (mapTopCountry) {
+  mapTopCountry.textContent = topCountry ? topCountry.country : "No data";
+}
 
   if (topCountryCount) {
     topCountryCount.textContent = topCountry ? formatNumber(topCountry.count) : "0";
