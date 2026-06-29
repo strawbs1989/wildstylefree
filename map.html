@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,13 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://wildstyle.vip/style.css">
+  <link rel="stylesheet" href="https://wildstyle.vip/social/style.css">
 </head>
 <body>
 
   <div class="shell">
+    <!-- Topbar matching 1000034072.png theme -->
     <header class="topbar">
-      <a class="brand" href="/index.html">
+      <a class="brand" href="/social/index.html">
         <div class="brand-badge">WS</div>
         <div class="brand-copy">
           <strong>WILDSTYLE RADIO</strong>
@@ -23,15 +25,17 @@
       </a>
 
       <nav class="nav desktop-nav">
-        <a href="/index.html">Home</a>
-        <a href="/djs.html">DJs</a>
-        <a href="/schedule.html">Schedule</a>
-        <a href="/chat.html">Chat</a>
-        
+        <a href="/social/index.html">Home</a>
+        <a href="/social/djs.html">DJs</a>
+        <a href="/social/schedule.html">Schedule</a>
+        <a href="/social/chat.html">Chat</a>
+        <a href="/social/request.html">Request</a>
         <a href="/social/map.html" class="active">Map</a>
       </nav>
 
-      <button class="burger" id="burger" aria-label="Open menu">☰</button>
+      <div class="topbar-actions">
+        <button class="burger" id="burger" aria-label="Open menu">☰</button>
+      </div>
     </header>
 
     <div class="nav-backdrop" id="navBackdrop" hidden></div>
@@ -41,76 +45,53 @@
         <strong>Menu</strong>
         <button id="navClose" aria-label="Close menu">✕</button>
       </div>
-      <a href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a>
-      <a href="/schedule.html">Schedule</a>
-      <a href="/chat.html">Chat</a>
-      <a href="/request.html">Request</a>
-      <a href="/map.html" class="active">Map</a>
+      <a href="/social/index.html">Home</a>
+      <a href="/social/djs.html">DJs</a>
+      <a href="/social/schedule.html">Schedule</a>
+      <a href="/social/chat.html">Chat</a>
+      <a href="/social/request.html">Request</a>
+      <a href="/social/map.html" class="active">Map</a>
     </aside>
 
-    <section class="hero">
-      <div class="hero-head">
-        <span>WILDSTYLE LISTENER MAP</span>
-        <span class="hero-pill">Live • Global • Real-Time</span>
-      </div>
-
-      <div class="hero-body">
-        <div class="hero-copy">
-          <h1>See Where Wildstyle Is Being Heard</h1>
-          <p>
-            Watch the Wildstyle audience spread across the globe. Track top countries,
-            logged listener activity, and station reach in real time.
-          </p>
-
-          <div class="hero-actions">
-            <a href="/chat.html" class="btn-primary">Join Live Chat</a>
-            <a href="/request.html" class="btn-secondary">Send A Request</a>
-          </div>
+    <!-- Social Beta Style Header block adapted for the Map page -->
+    <section class="hero-profile-header">
+      <div class="profile-header-main">
+        <div class="profile-badge-status">
+          <span class="status-dot-live"></span> MAP ACTIVE
         </div>
-
-        <div class="hero-card">
-          <h3>Listener Snapshot</h3>
-          <p>
-            Live listener activity is pulled from your Wildstyle geo worker and updated automatically.
-          </p>
-
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <strong id="totalListenersBadge">0 total</strong>
-              <span>Total Logged</span>
-            </div>
-            <div class="hero-stat">
-              <strong id="countryCountBadge">0 countries</strong>
-              <span>Countries Active</span>
-            </div>
-            <div class="hero-stat">
-              <strong id="lastUpdated">Updated --:--</strong>
-              <span>Last Refresh</span>
-            </div>
-          </div>
-        </div>
+        <h1>Wildstyle Listener Map</h1>
+        <p class="station-meta">24/7 Radio • 20+ DJs • Global Listeners</p>
+        <p class="profile-description">
+          Watch the Wildstyle audience spread across the globe. Track top countries, 
+          logged listener activity, and station reach in real time.
+        </p>
       </div>
     </section>
 
-    <main class="main">
-      <section class="main-left">
-        <article class="card">
-          <div class="card-head">
+    <!-- Content layout matching the main page split -->
+    <main class="main-layout-grid">
+      
+      <!-- Main Column Content (Map and Activity Feed) -->
+      <section class="main-content-stream">
+        
+        <!-- Map Card Section -->
+        <article class="content-card">
+          <div class="card-header-row">
             <h2>Live Listener Map</h2>
-            <span class="badge">Wildstyle Worldwide</span>
+            <span class="pill-badge-purple" id="lastUpdated">Updated --:--</span>
           </div>
 
-          <div class="card-body">
+          <div class="card-inner-body">
             <div class="map-panel">
               <div class="map-header-row">
                 <div>
                   <h3 class="map-title">Global Audience View</h3>
                   <p class="map-subtitle">Live listener dots appear where Wildstyle is being heard</p>
                 </div>
-                <div class="map-top-country">
+                <div class="map-top-country-display">
+                  <small>Top Country</small>
                   <strong id="topCountryName">No data</strong>
-                  <span id="topCountryCount">0</span>
+                  <span id="topCountryCount" class="badge-count">0</span>
                 </div>
               </div>
 
@@ -126,13 +107,14 @@
           </div>
         </article>
 
-        <article class="card">
-          <div class="card-head">
-            <h2>Live Activity</h2>
-            <span class="badge">Auto Refresh</span>
+        <!-- Live Activity Section -->
+        <article class="content-card">
+          <div class="card-header-row">
+            <h2>Live Activity Feed</h2>
+            <span class="pill-badge-live">Auto Refresh</span>
           </div>
 
-          <div class="card-body">
+          <div class="card-inner-body">
             <div class="activity-feed" id="activityFeed">
               <div class="feed-item">
                 <strong>Loading activity</strong>
@@ -141,74 +123,66 @@
             </div>
           </div>
         </article>
+
       </section>
 
-      <aside class="sidebar">
-        <article class="card">
-          <div class="card-head">
-            <h2>Top Countries</h2>
-          </div>
-          <div class="card-body">
-            <div class="country-list" id="countryList">
-              <div class="country-row">
-                <div>
-                  <b>Loading...</b><br>
-                  <small>Fetching listener data</small>
-                </div>
-                <span class="badge">--</span>
-              </div>
+      <!-- Sidebar Column (Profile, Stats, Top Countries, Links) -->
+      <aside class="sidebar-layout-panel">
+        
+        <!-- Snapshot Stats Sidebar Widget -->
+        <article class="sidebar-card-widget">
+          <h3>Listener Snapshot</h3>
+          <p class="widget-context-text">Live listener activity pulled from your Wildstyle geo worker.</p>
+          
+          <div class="snapshot-stats-vertical">
+            <div class="snapshot-stat-row">
+              <span>Total Logged:</span>
+              <strong id="totalListenersBadge" class="gradient-text-accent">0 total</strong>
+            </div>
+            <div class="snapshot-stat-row">
+              <span>Countries Active:</span>
+              <strong id="countryCountBadge">0 countries</strong>
             </div>
           </div>
         </article>
 
-        <article class="card">
-          <div class="card-head">
-            <h2>Quick Links</h2>
-          </div>
-          <div class="card-body quick-grid">
-            <a class="quick-link" href="/social/index.html">Home</a>
-            <a class="quick-link" href="/social/djs.html">DJs</a>
-            <a class="quick-link" href="/social/schedule.html">Schedule</a>
-            <a class="quick-link" href="/social/chat.html">Chat</a>
+        <!-- Top Countries Sidebar Widget -->
+        <article class="sidebar-card-widget">
+          <h3>Top Countries</h3>
+          <div class="country-list-wrapper" id="countryList">
+            <div class="country-row-item">
+              <div>
+                <b>Loading...</b><br>
+                <small>Fetching listener data</small>
+              </div>
+              <span class="badge-count">--</span>
+            </div>
           </div>
         </article>
 
-        <article class="card">
-          <div class="card-head">
-            <h2>About This Map</h2>
-          </div>
-          <div class="card-body list">
-            <div class="list-item">
-              <div>
-                <strong>Live Worker Data</strong>
-                <small>Powered by your Wildstyle geo worker</small>
-              </div>
-            </div>
-            <div class="list-item">
-              <div>
-                <strong>30 Second Refresh</strong>
-                <small>Updates automatically in the background</small>
-              </div>
-            </div>
-            <div class="list-item">
-              <div>
-                <strong>Country Tracking</strong>
-                <small>Shows logged station activity worldwide</small>
-              </div>
-            </div>
+        <!-- Quick Links Widget -->
+        <article class="sidebar-card-widget">
+          <h3>Quick Links</h3>
+          <div class="quick-links-grid-menu">
+            <a class="quick-grid-link" href="/social/index.html">Home</a>
+            <a class="quick-grid-link" href="/social/chat.html">Chat</a>
+            <a class="quick-grid-link" href="/social/request.html">Requests</a>
+            <a class="quick-grid-link" href="/social/schedule.html">Schedule</a>
           </div>
         </article>
+
       </aside>
     </main>
 
-    <footer class="footer">
-      <div>
+    <!-- Footer mirroring standard layout structure -->
+    <footer class="footer-global">
+      <div class="footer-brand-section">
         <h3>Wildstyle Radio</h3>
         <p>United by beats. Powered by volunteer passion.</p>
       </div>
 
-      <div>
-        <h3>Quick Links</h3>
+      <div class="footer-links-column">
+        <h3>Navigation</h3>
         <ul>
           <li><a href="/social/index.html">Home</a></li>
           <li><a href="/social/djs.html">DJs</a></li>
@@ -217,7 +191,7 @@
         </ul>
       </div>
 
-      <div>
+      <div class="footer-links-column">
         <h3>Community</h3>
         <ul>
           <li>Listener Map</li>
