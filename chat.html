@@ -1,121 +1,94 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Radio — Live Chat</title>
+  <title>Wildstyle Social — Live Chat</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- Main Site Style -->
-  <link rel="stylesheet" href="/style.css">
-
-  <!-- Chat Page Style -->
-  <link rel="stylesheet" href="/chat.css">
+  <link rel="stylesheet" href="/test/style.css">
+  
+  <link rel="stylesheet" href="/chat.css?v=1">
 </head>
 <body>
 
-<div class="shell">
+<header class="topbar">
+  <button class="burger" id="burger">☰</button>
 
-  <!-- HEADER -->
-  <header class="topbar">
-    <a class="brand" href="/index.html">
-      <div class="brand-badge">WS</div>
-      <div class="brand-copy">
-        <strong>WILDSTYLE RADIO</strong>
-        <small>Live Chat</small>
-      </div>
-    </a>
+  <div class="search-box">
+    <input type="text" placeholder="Search DJs, Shows...">
+  </div>
 
-       <nav class="nav desktop-nav">
+  <div class="social-links">
+    <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+  </div>
+
+  <a href="/listen.html" class="btn-primary">
+    Listen Live
+  </a>
+</header>
+
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-top">
+    <h3>Wildstyle</h3>
+    <button id="navClose">✕</button>
+  </div>
   <a href="/index.html">Home</a>
   <a href="/djs.html">DJs</a>
   <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html">Chat</a>
-  
-  <a href="/map.html" class="active">Map</a>
-</nav>  
+  <a href="/chat.html" class="active">Chat</a>
+  <a href="/map.html">Map</a>
+  <a href="/support.html">Support</a>
+</nav>
 
-      <button class="burger" id="burger" aria-label="Open menu">☰</button>
-    </header>
+<div class="container">
 
-    <div class="nav-backdrop" id="navBackdrop" hidden></div>
+  <header class="hero-head">
+    <h1>🎧 Wildstyle Social</h1>
+    <div class="live-pill">LIVE NOW</div>
+  </header>
 
-    <aside class="mobile-nav" id="mobileNav">
-      <div class="mobile-nav-top">
-        <strong>Menu</strong>
-        <button id="navClose" aria-label="Close menu">✕</button>
-      </div>
-      <a href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a>
-      <a href="/schedule.html">Schedule</a>
-      <a href="/chat.html">Chat</a>
-      <a href="/request.html">Request</a>
-      <a href="/map.html" class="active">Map</a>
-    </aside>
-  
-  
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-head">
-      <span>Wildstyle Live Chat</span>
-      <span class="hero-pill">Live • Community • Real-Time</span>
-	
-    </div>
-	
-	   
-
-    <div class="hero-body">
-      <div class="hero-copy">
-        <h1>Join The Conversation</h1>
-        <p>
-          Connect with listeners, talk to DJs, send shout-outs, and vibe with the Wildstyle community live.
-        </p>
-
-        <div class="hero-actions">
-          <a href="requests.html" class="btn-primary">Send A Request</a>
-          <a href="schedule.html" class="btn-secondary">View Schedule</a>
-        </div>
-      </div>
-
-      <div class="hero-card">
-        <h3>Chat Info</h3>
-        <p>
-          Be respectful, have fun, and enjoy the music 🎧 
-          DJs may pop in while live on air!
-        </p>
-
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <strong>Live</strong>
-            <span>24/7 Chat</span>
-          </div>
-          <div class="hero-stat">
-            <strong>Global</strong>
-            <span>Listeners</span>
-          </div>
-          <div class="hero-stat">
-            <strong>Real-Time</strong>
-            <span>Messages</span>
-          </div>
-        </div>
-      </div>
-    </div>
+  <section class="intro-block">
+    <p class="description">
+      Connect with listeners, talk to DJs, send shout-outs, and vibe with the Wildstyle community live.
+    </p>
   </section>
-  
 
-  <!-- CHAT SECTION -->
-  <section class="chat-container">
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <strong>24/7</strong>
+      <span>Live Chat</span>
+    </div>
+    <div class="hero-stat">
+      <strong>Global</strong>
+      <span>Listeners</span>
+    </div>
+    <div class="live-tracker-panel">
+      LISTENERS:
+      <span id="live-listener-count">--</span>
+    </div>
+  </div>
 
-    <div class="chat-header">
+  <div class="hero-actions">
+    <a href="requests.html" class="btn-primary">Send A Request</a>
+    <a href="schedule.html" class="btn-secondary">View Schedule</a>
+  </div>
+
+  <section class="chat-section">
+    <div class="filter-header">
       <h2>Wildstyle Live Chat Room</h2>
       <span>Jump in and say hello 👋</span>
     </div>
 
-    <div class="chat-frame">
+    <div class="chat-frame-container">
       <iframe
         src="https://minnit.chat/c/WildstyleRadio?embed&nickname="
         title="Wildstyle Live Chat"
@@ -124,38 +97,71 @@
         data-minnitchatembed="1">
       </iframe>
     </div>
-
   </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div>
-      <h3>Wildstyle Radio</h3>
-      <p>United by beats • Powered by passion</p>
-    </div>
-
-    <div>
-      <h3>Quick Links</h3>
-      <ul>
-        <li>Home</li>
-        <li>DJs</li>
-        <li>Schedule</li>
-        <li>Requests</li>
-      </ul>
-    </div>
-
-    <div>
-      <h3>Community</h3>
-      <ul>
-        <li>Live Chat</li>
-        <li>Shoutouts</li>
-        <li>Events</li>
-        <li>Listener Map</li>
-      </ul>
-    </div>
-  </footer>
-
 </div>
-<script type="module" src="https://wildstyle.vip/social/app.js"></script>
+
+<script>
+  function updateLiveListeners() {
+    const listenerNode = document.getElementById("live-listener-count");
+    if (!listenerNode) return;
+
+    const oldScript = document.getElementById("live365-jsonp-node");
+    if (oldScript) oldScript.remove();
+
+    window.handleLive365Stats = function(data) {
+      if (data && typeof data.current_listeners !== "undefined") {
+        listenerNode.innerText = data.current_listeners;
+      } else {
+        listenerNode.innerText = "0";
+      }
+    };
+
+    const script = document.createElement("script");
+    script.id = "live365-jsonp-node";
+    script.src = "https://api.live365.com/station/a50378?callback=handleLive365Stats";
+    
+    script.onerror = function() {
+      listenerNode.innerText = "0";
+    };
+
+    document.body.appendChild(script);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateLiveListeners();
+    setInterval(updateLiveListeners, 40000);
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const mobileNav = document.getElementById("mobileNav");
+  const navBackdrop = document.getElementById("navBackdrop");
+  const navClose = document.getElementById("navClose");
+
+  function openMenu() {
+    mobileNav.classList.add("active");
+    navBackdrop.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMenu() {
+    mobileNav.classList.remove("active");
+    navBackdrop.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  burger.addEventListener("click", openMenu);
+  navClose.addEventListener("click", closeMenu);
+  navBackdrop.addEventListener("click", closeMenu);
+
+  document.querySelectorAll(".mobile-nav a").forEach(link=>{
+    link.addEventListener("click", closeMenu);
+  });
+});
+</script>
+
 </body>
-</html> 
+</html>
