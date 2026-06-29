@@ -16,41 +16,37 @@
 </head>
 <body>
 
-<div class="shell">
-
+<!-- Top Navigation Header -->
   <header class="topbar">
-    <a class="brand" href="/index.html">
-      <div class="brand-badge">WS</div>
-      <div class="brand-copy">
-        <strong>WILDSTYLE RADIO</strong>
-        <small>Live Chat</small>
-      </div>
-    </a>
+    <button class="burger" id="burger">☰</button>
 
-    <nav class="nav desktop-nav">
-      <a href="/index.html">Home</a>
-      <a href="/djs.html">DJs</a>
-      <a href="/schedule.html">Schedule</a>
-      <a href="/chat.html" class="active">Chat</a>
-      <a href="/map.html">Map</a>
-    </nav>  
+    <div class="search-box">
+      <input type="text" placeholder="Search DJs, Shows...">
+    </div>
 
-    <button class="burger" id="burger" aria-label="Open menu">☰</button>
+    <div class="social-links">
+      <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+    </div>
+
+    <a href="/listen.html" class="btn-primary">Listen Live</a>
   </header>
 
+  <!-- Mobile Overlay Drawer Navigation -->
   <div class="nav-backdrop" id="navBackdrop" hidden></div>
-
-  <aside class="mobile-nav" id="mobileNav">
+  <nav class="mobile-nav" id="mobileNav">
     <div class="mobile-nav-top">
-      <strong>Menu</strong>
-      <button id="navClose" aria-label="Close menu">✕</button>
+      <h3>Wildstyle</h3>
+      <button id="navClose">✕</button>
     </div>
-    <a href="/index.html">Home</a>
+    <a href="/index.html" class="active">Home</a>
     <a href="/djs.html">DJs</a>
     <a href="/schedule.html">Schedule</a>
-    <a href="/chat.html" class="active">Chat</a>
+    <a href="/chat.html">Chat</a>
     <a href="/map.html">Map</a>
-  </aside>
+    <a href="/support.html">Support</a>
+  </nav>
 
   <!-- HERO -->
 <section class="chat-hero">
