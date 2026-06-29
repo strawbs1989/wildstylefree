@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wildstyle Social — Live Chat</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Fonts & Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Style Cascades -->
   <link rel="stylesheet" href="/test/style.css">
-  
-  <link rel="stylesheet" href="/chat.css?v=1">
+  <link rel="stylesheet" href="/chat.css?v=2">
 </head>
 <body>
 
@@ -29,9 +28,7 @@
     <a href="#">TikTok</a>
   </div>
 
-  <a href="/listen.html" class="btn-primary">
-    Listen Live
-  </a>
+  <a href="/listen.html" class="btn-primary">Listen Live</a>
 </header>
 
 <div class="nav-backdrop" id="navBackdrop" hidden></div>
@@ -52,12 +49,12 @@
 <div class="container">
 
   <header class="hero-head">
-    <h1>🎧 Wildstyle Social</h1>
+    <h1>🎧 Wildstyle Chat</h1>
     <div class="live-pill">LIVE NOW</div>
   </header>
 
   <section class="intro-block">
-    <p class="description">
+    <p class="description chat-fix-text">
       Connect with listeners, talk to DJs, send shout-outs, and vibe with the Wildstyle community live.
     </p>
   </section>
@@ -72,8 +69,7 @@
       <span>Listeners</span>
     </div>
     <div class="live-tracker-panel">
-      LISTENERS:
-      <span id="live-listener-count">--</span>
+      LISTENERS: <span id="live-listener-count">--</span>
     </div>
   </div>
 
@@ -82,13 +78,14 @@
     <a href="schedule.html" class="btn-secondary">View Schedule</a>
   </div>
 
-  <section class="chat-section">
+  <!-- CHAT WINDOW OBJECT -->
+  <section class="cards-section chat-wrapper-layout">
     <div class="filter-header">
       <h2>Wildstyle Live Chat Room</h2>
       <span>Jump in and say hello 👋</span>
     </div>
 
-    <div class="chat-frame-container">
+    <div class="grid-layout chat-body-frame">
       <iframe
         src="https://minnit.chat/c/WildstyleRadio?embed&nickname="
         title="Wildstyle Live Chat"
@@ -105,7 +102,6 @@
   function updateLiveListeners() {
     const listenerNode = document.getElementById("live-listener-count");
     if (!listenerNode) return;
-
     const oldScript = document.getElementById("live365-jsonp-node");
     if (oldScript) oldScript.remove();
 
@@ -120,14 +116,9 @@
     const script = document.createElement("script");
     script.id = "live365-jsonp-node";
     script.src = "https://api.live365.com/station/a50378?callback=handleLive365Stats";
-    
-    script.onerror = function() {
-      listenerNode.innerText = "0";
-    };
-
+    script.onerror = function() { listenerNode.innerText = "0"; };
     document.body.appendChild(script);
   }
-
   document.addEventListener("DOMContentLoaded", () => {
     updateLiveListeners();
     setInterval(updateLiveListeners, 40000);
@@ -141,25 +132,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const navBackdrop = document.getElementById("navBackdrop");
   const navClose = document.getElementById("navClose");
 
-  function openMenu() {
+  burger.addEventListener("click", () => {
     mobileNav.classList.add("active");
     navBackdrop.hidden = false;
     document.body.style.overflow = "hidden";
-  }
+  });
 
-  function closeMenu() {
+  const closeMenu = () => {
     mobileNav.classList.remove("active");
     navBackdrop.hidden = true;
     document.body.style.overflow = "";
-  }
+  };
 
-  burger.addEventListener("click", openMenu);
   navClose.addEventListener("click", closeMenu);
   navBackdrop.addEventListener("click", closeMenu);
-
-  document.querySelectorAll(".mobile-nav a").forEach(link=>{
-    link.addEventListener("click", closeMenu);
-  });
 });
 </script>
 
