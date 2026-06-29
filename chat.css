@@ -1,69 +1,95 @@
 /* ==========================================================================
-   Wildstyle Social - Chat Page Extension
+   Wildstyle Social - Chat Page Fixes (Matches djs.html layout definitions)
    ========================================================================== */
 
-.chat-section {
-  margin-top: 30px;
-  margin-bottom: 40px;
+/* Fix Text Contrast visibility seen in 1000034065.png */
+.chat-fix-text {
+  color: #111111 !important; /* Forces dark readable text against the light pink/grey gradient background */
+  font-weight: 600;
 }
 
-/* Header Panel matching the DJ section look */
-.chat-section .filter-header {
-  background: var(--grad); 
-  border-radius: 14px 14px 0 0; 
-  padding: 16px 20px; 
-  display: flex; 
-  justify-content: space-between; 
+.hero-stats .hero-stat span {
+  color: #333333 !important;
+}
+
+/* Fix Mobile Topbar Overlap / Layout Squishing */
+@media (max-width: 768px) {
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .topbar .search-box {
+    flex: 1;
+    min-width: 140px;
+    order: 2;
+  }
+  
+  .topbar .social-links {
+    display: none; /* Hides desktop links on mobile view to stop ugly title overlap text stacking */
+  }
+  
+  .topbar .btn-primary {
+    order: 3;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Chat container card architecture styling exactly matching standard DJ card blocks */
+.chat-wrapper-layout {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.chat-wrapper-layout .filter-header {
+  background: var(--grad) !important;
+  border-radius: 14px 14px 0 0 !important;
+  padding: 12px 20px !important;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.chat-section .filter-header h2 {
-  font-family: 'Oswald', sans-serif; 
-  text-transform: uppercase; 
-  margin: 0; 
-  font-size: 1.3rem; 
+.chat-wrapper-layout .filter-header h2 {
+  font-family: 'Oswald', sans-serif !important;
+  text-transform: uppercase;
+  margin: 0;
+  font-size: 1.2rem;
   letter-spacing: 0.04em;
-  color: #fff;
+  color: #ffffff;
 }
 
-.chat-section .filter-header span {
-  font-size: 0.85rem; 
-  font-weight: 700; 
+.chat-wrapper-layout .filter-header span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
   opacity: 0.9;
-  color: #fff;
 }
 
-/* Chat Canvas Body matching the grid background */
-.chat-frame-container {
-  padding: 20px; 
-  background: var(--panel); 
-  border-radius: 0 0 14px 14px; 
-  border: 1px solid var(--line); 
-  border-top: none;
+.chat-body-frame {
+  padding: 20px !important;
+  background: var(--panel) !important;
+  border-radius: 0 0 14px 14px !important;
+  border: 1px solid var(--line) !important;
+  border-top: none !important;
+  display: block !important;
 }
 
-.chat-frame-container iframe {
+.chat-body-frame iframe {
   width: 100%;
   height: 600px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #000;
-  display: block;
 }
 
-/* Responsive adjustment for small screens */
 @media (max-width: 720px) {
-  .chat-section .filter-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-  
-  .chat-frame-container {
-    padding: 10px;
-  }
-  
-  .chat-frame-container iframe {
-    height: 70vh;
+  .chat-body-frame iframe {
+    height: 65vh;
   }
 }
