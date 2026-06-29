@@ -1,50 +1,69 @@
-/* =========================
-   Minnit Chat Styling
-========================= */
+/* ==========================================================================
+   Wildstyle Social - Chat Page Extension
+   ========================================================================== */
 
-.chat-container{
-  margin-top:22px;
-  background:var(--grad-soft);
-  border-radius:28px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  border:1px solid rgba(255,255,255,.08);
+.chat-section {
+  margin-top: 30px;
+  margin-bottom: 40px;
 }
 
-.chat-header{
-  padding:16px 20px;
-  background:var(--grad);
-  color:#fff;
+/* Header Panel matching the DJ section look */
+.chat-section .filter-header {
+  background: var(--grad); 
+  border-radius: 14px 14px 0 0; 
+  padding: 16px 20px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
 }
 
-.chat-header h2{
-  margin:0;
-  font-family:Oswald,sans-serif;
-  font-size:1.6rem;
+.chat-section .filter-header h2 {
+  font-family: 'Oswald', sans-serif; 
+  text-transform: uppercase; 
+  margin: 0; 
+  font-size: 1.3rem; 
+  letter-spacing: 0.04em;
+  color: #fff;
 }
 
-.chat-header span{
-  display:block;
-  margin-top:4px;
-  font-size:.9rem;
-  opacity:.9;
+.chat-section .filter-header span {
+  font-size: 0.85rem; 
+  font-weight: 700; 
+  opacity: 0.9;
+  color: #fff;
 }
 
-.chat-frame{
-  padding:10px;
+/* Chat Canvas Body matching the grid background */
+.chat-frame-container {
+  padding: 20px; 
+  background: var(--panel); 
+  border-radius: 0 0 14px 14px; 
+  border: 1px solid var(--line); 
+  border-top: none;
 }
 
-.chat-frame iframe{
-  width:100%;
-  height:600px;
-  border:none;
-  border-radius:20px;
-  background:#000;
+.chat-frame-container iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+  border-radius: 10px;
+  background: #000;
+  display: block;
 }
 
-/* Mobile */
-@media (max-width:720px){
-  .chat-frame iframe{
-    height:75vh;
+/* Responsive adjustment for small screens */
+@media (max-width: 720px) {
+  .chat-section .filter-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
-} 
+  
+  .chat-frame-container {
+    padding: 10px;
+  }
+  
+  .chat-frame-container iframe {
+    height: 70vh;
+  }
+}
