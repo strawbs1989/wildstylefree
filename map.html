@@ -14,75 +14,40 @@
 </head>
 <body>
 
-<div class="shell">
+<!-- Top Navigation Header -->
+  <header class="topbar">
+    <button class="burger" id="burger">☰</button>
 
-<header class="topbar">
-
-    <a href="/index.html" class="brand">
-
-        <div class="brand-badge">
-            WS
-        </div>
-
-       <!-- <div class="brand-copy">
-            <strong>WILDSTYLE RADIO</strong>
-            <small>Worldwide Listener Map</small>
-        </div> -->
-
-    </a>
-
-   <!-- <nav class="nav desktop-nav">
-
-        <a href="/index.html">Home</a>
-        <a href="/djs.html">DJs</a>
-        <a href="/schedule.html">Schedule</a>
-        <a href="/chat.html">Chat</a>
-        <a href="/map.html" class="active">Map</a>
-
-    </nav> -->
-
-    <button
-        class="burger"
-        id="burger"
-        aria-label="Open Navigation">
-
-        ☰
-
-    </button>
-
-</header>
-
-<div
-    class="nav-backdrop"
-    id="navBackdrop"
-    hidden>
-</div>
-
-<aside
-    class="mobile-nav"
-    id="mobileNav">
-
-    <div class="mobile-nav-top">
-
-        <strong>Navigation</strong>
-
-        <button
-            id="navClose"
-            aria-label="Close">
-
-            ✕
-
-        </button>
-
+    <div class="search-box">
+      <input type="text" placeholder="Search DJs, Shows...">
     </div>
 
-    <a href="/index.html">Home</a>
+    <div class="social-links">
+      <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+    </div>
+
+    <a href="/listen.html" class="btn-primary">Listen Live</a>
+  </header>
+
+  <!-- Mobile Overlay Drawer Navigation -->
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-top">
+      <h3>Wildstyle</h3>
+      <button id="navClose">✕</button>
+    </div>
+    <a href="/index.html" class="active">Home</a>
     <a href="/djs.html">DJs</a>
     <a href="/schedule.html">Schedule</a>
     <a href="/chat.html">Chat</a>
-    <a href="/map.html" class="active">Listener Map</a>
+    <a href="/map.html">Map</a>
+    <a href="/support.html">Support</a>
+  </nav>
 
-</aside>
+
+    
 
 <section class="hero">
 
