@@ -3,89 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Social — Live Chat</title>
+  <title>Wildstyle Radio — Live Chat</title>
 
-  <!-- Fonts & Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Style Cascades -->
-  <link rel="stylesheet" href="/test/style.css"> 
+  <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/chat.css?v=3">
 </head>
 <body>
 
-<header class="topbar">
-  <button class="burger" id="burger">☰</button>
+  <div class="chat-custom-layout">
+    <div class="chat-main-card">
+      
+      <div class="chat-card-status">
+        <span class="live-dot">•</span> LIVE NOW
+      </div>
 
-  <div class="search-box">
-    <input type="text" placeholder="Search DJs, Shows...">
-  </div>
+      <h1 class="chat-card-title">Wildstyle Social Chat</h1>
+      <div class="chat-card-meta">Free</div>
 
-  <div class="social-links">
-    <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
-    <a href="#">Instagram</a>
-    <a href="#">TikTok</a>
-  </div>
+      <p class="chat-card-desc">
+        Join DJs, listeners, chatbox for requests & shoutouts, competitions, events and the Wildstyle community in one place.
+      </p>
 
-  <a href="/listen.html" class="btn-primary">Listen Live</a>
-</header>
+      <div class="chat-stats-row">
+        <div class="chat-stat-item">
+          <strong class="highlight-pink">24/7</strong>
+          <span>Radio</span>
+        </div>
+        <div class="chat-stat-item">
+          <strong class="highlight-pink">20+</strong>
+          <span>DJs</span>
+        </div>
+        <div class="chat-stat-item">
+          <strong class="highlight-pink" id="live-listener-count">0</strong>
+          <span>Listeners</span>
+        </div>
+      </div>
 
-<div class="nav-backdrop" id="navBackdrop" hidden></div>
-
-<nav class="mobile-nav" id="mobileNav">
-  <div class="mobile-nav-top">
-    <h3>Wildstyle</h3>
-    <button id="navClose">✕</button>
-  </div>
-  <a href="/index.html">Home</a>
-  <a href="/djs.html">DJs</a>
-  <a href="/schedule.html">Schedule</a>
-  <a href="/chat.html" class="active">Chat</a>
-  <a href="/map.html">Map</a>
-  <a href="/support.html">Support</a>
-</nav>
-
-<div class="container">
-
-  <header class="hero-head">
-    <h1>🎧 Wildstyle Chat</h1>
-    <div class="live-pill">LIVE NOW</div>
-  </header>
-
-  <section class="intro-block">
-    <p class="description chat-fix-text">
-      Connect with listeners, talk to DJs, send shout-outs, and vibe with the Wildstyle community live.
-    </p>
-  </section>
-
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <strong>24/7</strong>
-      <span>Live Chat</span>
-    </div>
-    <div class="hero-stat">
-      <strong>Global</strong>
-      <span>Listeners</span>
-    </div>
-    <div class="live-tracker-panel">
-      LISTENERS: <span id="live-listener-count">--</span>
-    </div>
-  </div>
-
-  <div class="hero-actions">
-    <a href="requests.html" class="btn-primary">Send A Request</a>
-    <a href="schedule.html" class="btn-secondary">View Schedule</a>
-  </div>
-
-  <!-- CHAT WINDOW OBJECT -->
-  <section class="cards-section chat-wrapper-layout">
-    <div class="filter-header">
-      <h2>Wildstyle Live Chat Room</h2>
-      <span>Jump in and say hello 👋</span>
     </div>
 
-    <div class="grid-layout chat-body-frame">
+    <div class="chat-embed-panel">
       <iframe
         src="https://minnit.chat/c/WildstyleRadio?embed&nickname="
         title="Wildstyle Live Chat"
@@ -94,14 +53,13 @@
         data-minnitchatembed="1">
       </iframe>
     </div>
-  </section>
-
-</div>
+  </div>
 
 <script>
   function updateLiveListeners() {
     const listenerNode = document.getElementById("live-listener-count");
     if (!listenerNode) return;
+
     const oldScript = document.getElementById("live365-jsonp-node");
     if (oldScript) oldScript.remove();
 
@@ -116,37 +74,18 @@
     const script = document.createElement("script");
     script.id = "live365-jsonp-node";
     script.src = "https://api.live365.com/station/a50378?callback=handleLive365Stats";
-    script.onerror = function() { listenerNode.innerText = "0"; };
+    
+    script.onerror = function() {
+      listenerNode.innerText = "0";
+    };
+
     document.body.appendChild(script);
   }
+
   document.addEventListener("DOMContentLoaded", () => {
     updateLiveListeners();
     setInterval(updateLiveListeners, 40000);
   });
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const burger = document.getElementById("burger");
-  const mobileNav = document.getElementById("mobileNav");
-  const navBackdrop = document.getElementById("navBackdrop");
-  const navClose = document.getElementById("navClose");
-
-  burger.addEventListener("click", () => {
-    mobileNav.classList.add("active");
-    navBackdrop.hidden = false;
-    document.body.style.overflow = "hidden";
-  });
-
-  const closeMenu = () => {
-    mobileNav.classList.remove("active");
-    navBackdrop.hidden = true;
-    document.body.style.overflow = "";
-  };
-
-  navClose.addEventListener("click", closeMenu);
-  navBackdrop.addEventListener("click", closeMenu);
-});
 </script>
 
 </body>
