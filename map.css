@@ -4,8 +4,9 @@
 
 .hero{
     position:relative;
-    overflow:hidden;
+    overflow:visible;
     margin-bottom:32px;
+    padding:40px;
 }
 
 .hero::before{
