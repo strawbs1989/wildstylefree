@@ -13,138 +13,552 @@
 </head>
 <body>
 
-  <div class="shell">
-    <!-- Header Navigation Capsule matching 1000034073.png -->
-    <header class="topbar">
-      <a class="brand" href="/social/index.html">
-        <div class="brand-badge">WS</div>
-        <div class="brand-copy">
-          <strong>WILDSTYLE RADIO</strong>
-          <small>Listener Map</small>
-        </div>
-      </a>
+<div class="shell">
 
-      <nav class="nav desktop-nav">
+<header class="topbar">
+
+    <a href="/social/index.html" class="brand">
+
+        <div class="brand-badge">
+            WS
+        </div>
+
+        <div class="brand-copy">
+            <strong>WILDSTYLE RADIO</strong>
+            <small>Worldwide Listener Map</small>
+        </div>
+
+    </a>
+
+    <nav class="nav desktop-nav">
+
         <a href="/social/index.html">Home</a>
         <a href="/social/djs.html">DJs</a>
         <a href="/social/schedule.html">Schedule</a>
         <a href="/social/chat.html">Chat</a>
         <a href="/social/request.html">Request</a>
         <a href="/social/map.html" class="active">Map</a>
-      </nav>
 
-      <button class="burger" id="burger" aria-label="Open menu">☰</button>
-    </header>
+    </nav>
 
-    <div class="nav-backdrop" id="navBackdrop" hidden></div>
+    <button
+        class="burger"
+        id="burger"
+        aria-label="Open Navigation">
 
-    <aside class="mobile-nav" id="mobileNav">
-      <div class="mobile-nav-top">
-        <strong>Menu</strong>
-        <button id="navClose" aria-label="Close menu">✕</button>
-      </div>
-      <a href="/social/index.html">Home</a>
-      <a href="/social/djs.html">DJs</a>
-      <a href="/social/schedule.html">Schedule</a>
-      <a href="/social/chat.html">Chat</a>
-      <a href="/social/request.html">Request</a>
-      <a href="/social/map.html" class="active">Map</a>
+        ☰
+
+    </button>
+
+</header>
+
+<div
+    class="nav-backdrop"
+    id="navBackdrop"
+    hidden>
+</div>
+
+<aside
+    class="mobile-nav"
+    id="mobileNav">
+
+    <div class="mobile-nav-top">
+
+        <strong>Navigation</strong>
+
+        <button
+            id="navClose"
+            aria-label="Close">
+
+            ✕
+
+        </button>
+
+    </div>
+
+    <a href="/social/index.html">Home</a>
+    <a href="/social/djs.html">DJs</a>
+    <a href="/social/schedule.html">Schedule</a>
+    <a href="/social/chat.html">Chat</a>
+    <a href="/social/request.html">Request</a>
+    <a href="/social/map.html" class="active">Listener Map</a>
+
+</aside>
+
+<section class="hero">
+
+    <div class="hero-head">
+
+        <span class="hero-label">
+            🌍 LIVE LISTENER MAP
+        </span>
+
+        <span class="hero-pill">
+            Updating Every 30 Seconds
+        </span>
+
+    </div>
+
+    <div class="hero-body">
+
+        <div class="hero-copy">
+
+            <h1>
+
+                Discover The World
+                <br>
+                Listening To
+                <span>Wildstyle Radio</span>
+
+            </h1>
+
+            <p>
+
+                Follow Wildstyle's worldwide reach in real time.
+
+                Every marker on the map represents genuine listener
+                activity collected from around the globe.
+
+            </p>
+
+            <div class="hero-actions">
+
+                <a
+                    href="/social/chat.html"
+                    class="btn-primary">
+
+                    Join Live Chat
+
+                </a>
+
+                <a
+                    href="/social/request.html"
+                    class="btn-secondary">
+
+                    Request A Track
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-card">
+
+            <h3>Live Audience Snapshot</h3>
+
+            <p>
+
+                Updated automatically using the
+                Wildstyle Geo Worker.
+
+            </p>
+
+            <div class="hero-stats">
+
+                <div class="hero-stat">
+
+                    <strong id="totalListenersBadge">
+
+                        0
+
+                    </strong>
+
+                    <span>Total Listeners</span>
+
+                </div>
+
+                <div class="hero-stat">
+
+                    <strong id="countryCountBadge">
+
+                        0
+
+                    </strong>
+
+                    <span>Countries Online</span>
+
+                </div>
+
+                <div class="hero-stat">
+
+                    <strong id="topCountryName">
+
+                        Loading...
+
+                    </strong>
+
+                    <span>Top Country</span>
+
+                </div>
+
+                <div class="hero-stat">
+
+                    <strong id="lastUpdated">
+
+                        --:--
+
+                    </strong>
+
+                    <span>Last Updated</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+   <main class="main">
+
+    <section class="main-left">
+
+        <!-- ================= MAP ================= -->
+
+        <article class="card map-card">
+
+            <div class="card-head">
+
+                <div>
+
+                    <h2>🌍 Live Listener Map</h2>
+
+                    <p>
+                        Wildstyle Radio's audience around the world.
+                    </p>
+
+                </div>
+
+                <span class="badge">
+                    LIVE
+                </span>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="map-toolbar">
+
+                    <div class="toolbar-left">
+
+                        <h3>Global Audience</h3>
+
+                        <small>
+                            Real-time listener locations
+                        </small>
+
+                    </div>
+
+                    <div class="toolbar-right">
+
+                        <div class="top-country">
+
+                            <span>Top Country</span>
+
+                            <strong id="topCountryName">
+                                Loading...
+                            </strong>
+
+                            <small id="topCountryCount">
+                                0 listeners
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="map-wrap"
+                    id="mapWrap">
+
+                    <img
+                        src="https://wildstyle.vip/assets/worldmap.png"
+                        class="map-image"
+                        alt="World Map"
+                        onerror="this.style.display='none'">
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- ================= ACTIVITY ================= -->
+
+        <article class="card">
+
+            <div class="card-head">
+
+                <div>
+
+                    <h2>⚡ Live Activity</h2>
+
+                    <p>
+                        Latest listener updates
+                    </p>
+
+                </div>
+
+                <span class="badge">
+                    AUTO REFRESH
+                </span>
+
+            </div>
+
+            <div class="card-body">
+
+                <div
+                    class="activity-feed"
+                    id="activityFeed">
+
+                    <div class="feed-item">
+
+                        <strong>
+                            Loading...
+                        </strong>
+
+                        <span>
+
+                            Fetching worldwide listener activity.
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </section>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <article class="card">
+
+            <div class="card-head">
+
+                <h2>🏆 Top Countries</h2>
+
+            </div>
+
+            <div class="card-body">
+
+                <div
+                    class="country-list"
+                    id="countryList">
+
+                    <div class="country-row">
+
+                        <div>
+
+                            <b>Loading...</b>
+
+                            <br>
+
+                            <small>
+                                Retrieving listener data...
+                            </small>
+
+                        </div>
+
+                        <span class="badge">
+                            --
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <article class="card">
+
+            <div class="card-head">
+
+                <h2>📡 Station Status</h2>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="status-grid">
+
+                    <div class="status-box">
+
+                        <strong>
+                            LIVE
+                        </strong>
+
+                        <span>
+                            Geo Worker
+                        </span>
+
+                    </div>
+
+                    <div class="status-box">
+
+                        <strong>
+                            30s
+                        </strong>
+
+                        <span>
+                            Refresh
+                        </span>
+
+                    </div>
+
+                    <div class="status-box">
+
+                        <strong>
+                            24/7
+                        </strong>
+
+                        <span>
+                            Monitoring
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <article class="card">
+
+            <div class="card-head">
+
+                <h2>🔗 Quick Links</h2>
+
+            </div>
+
+            <div class="card-body quick-grid">
+
+                <a
+                    href="/social/index.html"
+                    class="quick-link">
+
+                    🏠 Home
+
+                </a>
+
+                <a
+                    href="/social/djs.html"
+                    class="quick-link">
+
+                    🎧 DJs
+
+                </a>
+
+                <a
+                    href="/social/schedule.html"
+                    class="quick-link">
+
+                    📅 Schedule
+
+                </a>
+
+                <a
+                    href="/social/chat.html"
+                    class="quick-link">
+
+                    💬 Chat
+
+                </a>
+
+                <a
+                    href="/social/request.html"
+                    class="quick-link">
+
+                    🎵 Request
+
+                </a>
+
+            </div>
+
+        </article>
+
+        <article class="card">
+
+            <div class="card-head">
+
+                <h2>ℹ About This Map</h2>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="list">
+
+                    <div class="list-item">
+
+                        <div>
+
+                            <strong>
+                                Live Geo Worker
+                            </strong>
+
+                            <small>
+                                Tracks worldwide listener activity.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="list-item">
+
+                        <div>
+
+                            <strong>
+                                Automatic Refresh
+                            </strong>
+
+                            <small>
+                                Updates every 30 seconds.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="list-item">
+
+                        <div>
+
+                            <strong>
+                                Global Coverage
+                            </strong>
+
+                            <small>
+                                See where Wildstyle is reaching across the globe.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
     </aside>
 
-    <!-- Main Content Stream Flow -->
-    <main class="main-content-flow">
-      
-      <!-- Page Header Intro Block -->
-      <section class="page-intro-section">
-        <h1>Wildstyle Listener Map</h1>
-        <p class="sub-headline">24/7 Radio • Live • Global • Real-Time</p>
-        <p class="description-text">
-          Watch the Wildstyle audience spread across the globe. Track top countries, logged listener activity, and station reach in real time.
-        </p>
-      </section>
-
-      <!-- Live Listener Map Panel -->
-      <section class="map-container-block">
-        <div class="map-meta-header">
-          <h2>Live Listener Map</h2>
-          <span class="refresh-badge" id="lastUpdated">Updated --:--</span>
-        </div>
-
-        <div class="map-view-details">
-          <div>
-            <h3>Global Audience View</h3>
-            <p class="map-hint">Live listener dots appear where Wildstyle is being heard</p>
-          </div>
-          <div class="top-country-badge-display">
-            <span class="label">Top Country:</span>
-            <strong id="topCountryName">No data</strong>
-            <span id="topCountryCount" class="count-pill">0</span>
-          </div>
-        </div>
-
-        <!-- The Glowing Map Card Viewport -->
-        <div class="glowing-map-viewport">
-          <div class="map-wrap" id="mapWrap">
-            <img
-              src="https://wildstyle.vip/assets/worldmap.png"
-              alt="World map"
-              class="map-image"
-              onerror="this.style.display='none'"
-            >
-          </div>
-        </div>
-      </section>
-
-      <!-- Live Activity Feed Section -->
-      <section class="activity-feed-block">
-        <h2>Live Activity Feed</h2>
-        <span class="feed-status-badge">Auto Refresh</span>
-        
-        <div class="activity-feed-list" id="activityFeed">
-          <div class="feed-item">
-            <strong>Loading activity</strong>
-            <span>Please wait while listener data is fetched.</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Listener Snapshot Summary Widget -->
-      <section class="snapshot-summary-block">
-        <h3>Listener Snapshot</h3>
-        <p class="snapshot-subtext">Live listener activity is pulled from your Wildstyle geo worker and updated automatically.</p>
-        <div class="snapshot-metrics">
-          <span id="totalListenersBadge">0 total</span>
-          <span id="countryCountBadge">0 countries</span>
-        </div>
-      </section>
-
-      <!-- Top Countries Leaderboard Section -->
-      <section class="countries-leaderboard-block">
-        <h3>Top Countries</h3>
-        <div class="country-list" id="countryList">
-          <div class="country-row">
-            <div>
-              <b>Loading...</b><br>
-              <small>Fetching listener data</small>
-            </div>
-            <span class="badge">--</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Quick Links Section -->
-      <section class="quick-links-section">
-        <h3>Quick Links</h3>
-        <div class="quick-links-row">
-          <a class="quick-link" href="/social/index.html">Home</a>
-          <a class="quick-link" href="/social/djs.html">DJs</a>
-          <a class="quick-link" href="/social/schedule.html">Schedule</a>
-          <a class="quick-link" href="/social/chat.html">Chat</a>
-        </div>
-      </section>
-
-    </main>
-
+</main>
     <!-- Global Footer -->
     <footer class="footer">
       <div class="footer-brand">
