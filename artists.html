@@ -20,35 +20,60 @@
 
 <!-- Top Navigation Header -->
   <header class="topbar">
-    <button class="burger" id="burger">☰</button>
 
-    <div class="search-box">
-      <input type="text" placeholder="Search DJs, Shows...">
+    <button class="burger" id="burger">
+        ☰
+    </button>
+
+    <a href="/index.html" class="logo">
+        Wildstyle
+    </a>
+
+    <div class="header-right">
+
+        <input
+            type="search"
+            placeholder="Search artists..."
+            id="artistSearch">
+
+        <a href="https://streaming.live365.com/a50378"
+           target="_blank"
+           class="listen-btn">
+
+            ● Listen Live
+
+        </a>
+
     </div>
 
-    <div class="social-links">
-      <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-    </div>
+</header>
 
+<div class="nav-backdrop" id="navBackdrop"></div>
 
-  </header>
+<nav class="mobile-nav" id="mobileNav">
 
-  <!-- Mobile Overlay Drawer Navigation -->
-  <div class="nav-backdrop" id="navBackdrop" hidden></div>
-  <nav class="mobile-nav" id="mobileNav">
     <div class="mobile-nav-top">
-      <h3>Wildstyle</h3>
-      <button id="navClose">✕</button>
+
+        <h2>Wildstyle</h2>
+
+        <button id="navClose">✕</button>
+
     </div>
-    <a href="/index.html">Home</a>
-    <a href="/djs.html">DJs</a>
-    <a href="/schedule.html">Schedule</a>
-    <a href="/chat.html" class="active">Chat</a>
 
-  </nav>
+    <a href="/index.html">🏠 Home</a>
+    <a href="/artists.html" class="active">🎧 Artists</a>
+    <a href="/djs.html">🎙 DJs</a>
+    <a href="/schedule.html">📅 Schedule</a>
+    <a href="/chat.html">💬 Community</a>
+    <a href="/map.html">🗺 Listener Map</a>
 
+    <hr>
+
+    <a href="https://facebook.com/wildstyleuk">Facebook</a>
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+
+</nav>
     <div class="header-right">
 
         <input
