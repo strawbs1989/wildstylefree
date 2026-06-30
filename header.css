@@ -1,70 +1,75 @@
 /*==================================================
-WILDSTYLE SHARED HEADER
-header.css
+  WILDSTYLE HEADER v3
 ==================================================*/
 
 :root{
 
-    --pink:#ff2a6d;
-    --purple:#8b5cf6;
-    --blue:#2a7bff;
+    --ws-bg:#090613;
+    --ws-panel:#141021;
 
-    --bg:#090613;
-    --panel:#141021;
-    --panel2:#1c1730;
+    --ws-pink:#ff2a6d;
+    --ws-blue:#2a7bff;
 
-    --border:rgba(255,255,255,.08);
+    --ws-text:#ffffff;
+    --ws-muted:#bdb8ca;
 
-    --text:#ffffff;
-    --muted:#b8b3c7;
+    --ws-border:rgba(255,255,255,.08);
 
 }
 
-/*==================================================
-TOP BAR
-==================================================*/
+/*==============================
+HEADER
+==============================*/
 
-.topbar{
+.ws-header{
 
     position:sticky;
     top:0;
 
-    z-index:1000;
-
-    height:72px;
+    z-index:5000;
 
     display:flex;
     align-items:center;
     justify-content:space-between;
 
-    padding:0 28px;
+    height:72px;
 
-    background:rgba(9,6,19,.92);
+    padding:0 24px;
 
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
+    background:rgba(9,6,19,.96);
 
-    border-bottom:1px solid var(--border);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--ws-border);
 
 }
 
+/*==============================
+LEFT
+==============================*/
 
-/*==================================================
-LOGO
-==================================================*/
-
-.logo{
+.ws-left{
 
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:18px;
+
+}
+
+.ws-logo{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
 
     text-decoration:none;
+
     color:#fff;
 
 }
 
-.logo-image{
+.ws-logo img{
 
     width:42px;
     height:42px;
@@ -73,53 +78,76 @@ LOGO
 
 }
 
-.logo-text{
+.ws-logo span{
 
-    font-family:"Oswald",sans-serif;
+    font-family:Oswald,sans-serif;
 
-    font-size:1.45rem;
-
-    letter-spacing:1px;
+    font-size:1.4rem;
 
     font-weight:600;
 
 }
 
-/*==================================================
-DESKTOP NAVIGATION
-==================================================*/
+/*==============================
+BURGER
+==============================*/
 
-.desktop-nav{
+.ws-burger{
+
+    display:none;
+
+    font-size:2rem;
+
+    color:#fff;
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+}
+
+/*==============================
+DESKTOP NAV
+==============================*/
+
+.ws-nav{
 
     display:flex;
     align-items:center;
-    gap:30px;
+    gap:28px;
 
 }
 
-.desktop-nav a{
+.ws-nav a{
 
-    position:relative;
-
-    color:var(--muted);
+    color:var(--ws-muted);
 
     text-decoration:none;
 
-    font-size:.95rem;
+    transition:.25s;
 
     font-weight:500;
 
-    transition:.3s;
+    position:relative;
 
 }
 
-.desktop-nav a:hover{
+.ws-nav a:hover,
+.ws-nav a.active{
 
     color:#fff;
 
 }
 
-.desktop-nav a::after{
+.ws-nav a.active{
+
+    color:var(--ws-pink);
+
+}
+
+.ws-nav a::after{
 
     content:"";
 
@@ -134,76 +162,52 @@ DESKTOP NAVIGATION
 
     background:linear-gradient(
         90deg,
-        var(--pink),
-        var(--blue)
+        var(--ws-pink),
+        var(--ws-blue)
     );
 
     transition:.3s;
 
 }
 
-.desktop-nav a:hover::after,
-.desktop-nav a.active::after{
+.ws-nav a:hover::after,
+.ws-nav a.active::after{
 
     width:100%;
 
 }
 
-.desktop-nav a.active{
+/*==============================
+LIVE BUTTON
+==============================*/
 
-    color:var(--pink);
-
-}
-
-/*==================================================
-HEADER ACTIONS
-==================================================*/
-
-.header-actions{
-
-    display:flex;
-    align-items:center;
-    gap:18px;
-
-}
-
-.listen-live{
+.ws-live{
 
     display:flex;
     align-items:center;
     gap:10px;
 
-    padding:11px 22px;
-
-    border-radius:30px;
-
-    background:linear-gradient(
-        135deg,
-        var(--pink),
-        #d80063
-    );
+    text-decoration:none;
 
     color:#fff;
 
-    text-decoration:none;
+    background:linear-gradient(
+        135deg,
+        var(--ws-pink),
+        #d50062
+    );
+
+    padding:11px 22px;
+
+    border-radius:40px;
 
     font-weight:600;
 
-    transition:.3s;
-
-    box-shadow:0 0 20px rgba(255,42,109,.28);
+    box-shadow:0 0 20px rgba(255,42,109,.3);
 
 }
 
-.listen-live:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:0 0 30px rgba(255,42,109,.45);
-
-}
-
-.live-dot{
+.ws-live span{
 
     width:9px;
     height:9px;
@@ -212,53 +216,33 @@ HEADER ACTIONS
 
     background:#fff;
 
-    animation:pulse 1.2s infinite;
+    animation:livePulse 1.2s infinite;
 
 }
 
-@keyframes pulse{
+@keyframes livePulse{
 
     0%,100%{
 
-        transform:scale(1);
         opacity:1;
+        transform:scale(1);
 
     }
 
     50%{
 
-        transform:scale(.55);
         opacity:.45;
+        transform:scale(.6);
 
     }
 
 }
 
-/*==================================================
-BURGER
-==================================================*/
+/*==============================
+OVERLAY
+==============================*/
 
-.burger{
-
-    display:none;
-
-    background:none;
-
-    border:none;
-
-    color:#fff;
-
-    font-size:2rem;
-
-    cursor:pointer;
-
-}
-
-/*==================================================
-BACKDROP
-==================================================*/
-
-.nav-backdrop{
+.ws-overlay{
 
     position:fixed;
 
@@ -270,13 +254,13 @@ BACKDROP
 
     visibility:hidden;
 
-    transition:.35s;
+    transition:.3s;
 
-    z-index:999;
+    z-index:4998;
 
 }
 
-.nav-backdrop.show{
+.ws-overlay.show{
 
     opacity:1;
 
@@ -284,11 +268,11 @@ BACKDROP
 
 }
 
-/*==================================================
-MOBILE NAV
-==================================================*/
+/*==============================
+MOBILE MENU
+==============================*/
 
-.mobile-nav{
+.ws-mobile{
 
     position:fixed;
 
@@ -299,45 +283,36 @@ MOBILE NAV
 
     height:100vh;
 
-    background:var(--panel);
+    background:var(--ws-panel);
 
     transition:.35s;
 
-    z-index:1001;
-
     display:flex;
-
     flex-direction:column;
+
+    z-index:4999;
 
 }
 
-.mobile-nav.open{
+.ws-mobile.open{
 
     left:0;
 
 }
 
-.mobile-header{
+.ws-mobile-top{
 
     display:flex;
-
+    justify-content:space-between;
     align-items:center;
 
-    justify-content:space-between;
+    padding:24px;
 
-    padding:22px;
-
-    border-bottom:1px solid var(--border);
+    border-bottom:1px solid var(--ws-border);
 
 }
 
-.mobile-logo{
-
-    width:42px;
-
-}
-
-#navClose{
+#wsClose{
 
     background:none;
 
@@ -351,103 +326,86 @@ MOBILE NAV
 
 }
 
-.mobile-links{
+.ws-mobile-links{
 
     display:flex;
-
     flex-direction:column;
 
     padding:20px;
 
 }
 
-.mobile-links a{
+.ws-mobile-links a{
 
     padding:15px 0;
 
-    text-decoration:none;
-
     color:#fff;
+
+    text-decoration:none;
 
     border-bottom:1px solid rgba(255,255,255,.05);
 
-    transition:.3s;
-
 }
 
-.mobile-links a.active{
+.ws-mobile-links a.active{
 
-    color:var(--pink);
+    color:var(--ws-pink);
 
     font-weight:600;
 
+}
+
+.ws-mobile-links a:hover{
+
+    color:var(--ws-pink);
+
     padding-left:10px;
 
 }
 
-.mobile-links a:hover{
+.ws-social{
 
-    color:var(--pink);
-
-    padding-left:10px;
-
-}
-
-.mobile-divider{
-
-    margin:10px 20px;
-
-    border-top:1px solid var(--border);
-
-}
-
-.mobile-social{
+    margin-top:20px;
 
     padding:0 20px;
 
 }
 
-.mobile-social a{
+.ws-social a{
 
     display:block;
 
     padding:12px 0;
 
-    color:var(--muted);
+    color:var(--ws-muted);
 
     text-decoration:none;
 
 }
 
-.mobile-footer{
+.ws-live.mobile{
 
-    margin-top:auto;
+    margin:24px;
 
-    padding:20px;
+    justify-content:center;
 
 }
 
-/*==================================================
+/*==============================
 RESPONSIVE
-==================================================*/
+==============================*/
 
 @media(max-width:960px){
 
-    .burger{
+    .ws-burger{
 
         display:block;
 
     }
 
-    .desktop-nav{
+    .ws-nav{
 
         display:none;
-
-    }
-
-    .header-actions{
-
-        margin-left:auto;
 
     }
 
@@ -455,19 +413,19 @@ RESPONSIVE
 
 @media(max-width:700px){
 
-    .topbar{
+    .ws-header{
 
         padding:0 18px;
 
     }
 
-    .logo-text{
+    .ws-logo span{
 
-        font-size:1.15rem;
+        display:none;
 
     }
 
-    .listen-live{
+    .ws-live{
 
         padding:10px 16px;
 
@@ -479,17 +437,9 @@ RESPONSIVE
 
 @media(max-width:520px){
 
-    .logo-text{
+    .ws-live{
 
         display:none;
-
-    }
-
-    .listen-live{
-
-        padding:10px 14px;
-
-        font-size:.8rem;
 
     }
 
