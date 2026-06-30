@@ -64,6 +64,62 @@ img{
 TOP BAR
 ==================================================*/
 
+.topbar{
+
+    position:sticky;
+    top:0;
+
+    z-index:1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    height:70px;
+
+    padding:0 20px;
+
+    background:#090613;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.header-actions{
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+}
+
+.desktop-nav{
+
+    display:flex;
+    align-items:center;
+    gap:28px;
+
+}
+
+.desktop-nav a{
+
+    color:#fff;
+    text-decoration:none;
+
+}
+
+@media(max-width:900px){
+
+    .desktop-nav{
+
+        display:none;
+
+    }
+
+}
+
+
+
 .logo{
 
     font-family:Oswald,sans-serif;
