@@ -1,355 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Featured Artists | Wildstyle Social Beta</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    /* ── Reset & Base ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:          #0a0514;
-      --bg-card:     #110920;
-      --bg-surface:  #160b28;
-      --pink:        #ff2a6d;
-      --blue:        #2a7bff;
-      --pink-glow:   rgba(255, 42, 109, 0.35);
-      --blue-glow:   rgba(42, 123, 255, 0.35);
-      --text:        #e8e0f4;
-      --text-muted:  #8878a8;
-      --border:      rgba(255, 255, 255, 0.08);
-      --radius:      12px;
-      --topbar-h:    64px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    html { scroll-behavior: smooth; }
+<title>Featured Artists | Wildstyle Radio</title>
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
-    button { cursor: pointer; font-family: inherit; border: none; background: none; }
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    /* ── Scrollbar ────────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 3px; }
+<link rel="stylesheet" href="artists.css">
 
-    /* ── TOPBAR ──────────────────────────────────────────────── */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      height: var(--topbar-h);
-      background: rgba(10, 5, 20, 0.92);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0 24px;
-    }
-
-    .topbar__logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .topbar__logo-icon {
-      width: 34px; height: 34px; border-radius: 8px;
-      background: linear-gradient(135deg, var(--pink), var(--blue));
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Oswald', sans-serif; font-weight: 700; color: #fff;
-    }
-    .topbar__logo-text {
-      font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 17px;
-      letter-spacing: 1px; background: linear-gradient(90deg, var(--pink), var(--blue));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .topbar__nav { display: flex; align-items: center; gap: 4px; margin-left: 8px; }
-    .topbar__nav a {
-      font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px;
-      color: var(--text-muted); transition: all 0.2s;
-    }
-    .topbar__nav a:hover, .topbar__nav a.active { color: var(--text); background: rgba(255, 255, 255, 0.06); }
-    .topbar__nav a.active { color: var(--pink); }
-
-    .topbar__spacer { flex: 1; }
-
-    .search-box { position: relative; display: flex; align-items: center; }
-    .search-box input {
-      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border);
-      border-radius: 20px; padding: 7px 36px 7px 14px; font-size: 13px;
-      color: var(--text); width: 200px; transition: all 0.3s; outline: none;
-    }
-    .search-box input:focus { border-color: var(--blue); width: 240px; }
-    .search-box__icon { position: absolute; right: 12px; color: var(--text-muted); font-size: 14px; }
-
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px;
-      border-radius: 20px; background: linear-gradient(135deg, var(--pink), #d4005c);
-      color: #fff; font-family: 'Oswald', sans-serif; font-weight: 600;
-      font-size: 13px; text-transform: uppercase; box-shadow: 0 0 18px var(--pink-glow);
-    }
-    .btn-primary .pulse-dot {
-      width: 7px; height: 7px; border-radius: 50%; background: #fff;
-      animation: pulse 1.4s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
-
-    /* ── PAGE HERO ────────────────────────────────────────────── */
-    .page-hero { position: relative; padding: 60px 24px 48px; text-align: center; }
-    .page-hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 20% 50%, rgba(255,42,109,0.1) 0%, transparent 70%),
-                  radial-gradient(ellipse at 80% 50%, rgba(42,123,255,0.1) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .page-hero__tag {
-      display: inline-flex; align-items: center; gap: 7px; padding: 5px 14px;
-      border-radius: 20px; border: 1px solid var(--pink-glow);
-      background: rgba(255, 42, 109, 0.08); font-size: 11px; font-weight: 600;
-      text-transform: uppercase; color: var(--pink); margin-bottom: 18px;
-    }
-    .page-hero h1 {
-      font-family: 'Oswald', sans-serif; font-size: clamp(36px, 6vw, 64px);
-      text-transform: uppercase; margin-bottom: 14px;
-    }
-    .page-hero h1 span { background: linear-gradient(90deg, var(--pink), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .page-hero p { color: var(--text-muted); font-size: 15px; max-width: 480px; margin: 0 auto; }
-
-    /* ── ARTISTS GRID ─────────────────────────────────────────── */
-    .main-content { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 24px 64px; }
-    .artists-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-
-    .artist-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden; display: flex;
-      flex-direction: column; transition: all 0.25s; position: relative;
-    }
-    .artist-card:hover {
-      transform: translateY(-6px); border-color: rgba(255, 42, 109, 0.4);
-      box-shadow: 0 16px 48px rgba(255, 42, 109, 0.15);
-    }
-    
-    .artist-card__img-wrap { position: relative; width: 100%; padding-top: 100%; overflow: hidden; background: var(--bg-surface); }
-    .artist-placeholder {
-      position: absolute; inset: 0; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; background: var(--bg-surface);
-    }
-    .artist-placeholder__icon { font-size: 48px; }
-    .artist-placeholder__initials { font-family: 'Oswald', sans-serif; font-size: 32px; font-weight: 700; color: rgba(255,255,255,0.4); }
-
-    .artist-card__badge {
-      position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 20px;
-      font-size: 10px; font-weight: 600; text-transform: uppercase;
-    }
-    .badge--live { background: #ff2a6d; color: #fff; box-shadow: 0 0 10px var(--pink-glow); }
-    .badge--featured { background: #2a7bff; color: #fff; }
-
-    .artist-card__body { padding: 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-    .artist-card__name { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600; }
-    .artist-card__genre { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-
-    .btn-view-profile {
-      display: block; width: 100%; padding: 10px; border-radius: 8px;
-      font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13px;
-      text-transform: uppercase; text-align: center; border: 1px solid var(--pink);
-      color: var(--pink); transition: all 0.2s; margin-top: auto;
-    }
-    .btn-view-profile:hover { background: var(--pink); color: #fff; }
-
-    /* ── FOOTER ──────────────────────────────────────────────── */
-    .footer { background: var(--bg-surface); border-top: 1px solid var(--border); padding: 48px 24px; margin-top: auto; }
-    .footer__inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; }
-    .footer__col h3 { font-family: 'Oswald', sans-serif; font-size: 14px; text-transform: uppercase; margin-bottom: 16px; color: #fff; }
-    .footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--text-muted); }
-
-    /* Responsive */
-    @media (max-width: 1200px) { .artists-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 900px) { .artists-grid { grid-template-columns: repeat(2, 1fr); } .footer__inner { grid-template-columns: 1fr; } }
-    @media (max-width: 500px) { .artists-grid { grid-template-columns: 1fr; } }
-  </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <a href="index.html" class="topbar__logo">
-      <div class="topbar__logo-icon">W</div>
-      <span class="topbar__logo-text">WILDSTYLE</span>
+
+<!-- ===================================================
+HEADER
+=================================================== -->
+
+<header class="topbar">
+
+    <a href="index.html" class="logo">
+
+        <div class="logo-icon">
+            W
+        </div>
+
+        <div class="logo-text">
+            WILDSTYLE
+        </div>
+
     </a>
-    <nav class="topbar__nav">
-      <a href="index.html">Home</a>
-      <a href="artists.html" class="active">Artists</a>
-      <a href="#">Schedule</a>
-      <a href="#">Community</a>
+
+    <nav>
+
+        <a href="index.html">Home</a>
+        <a href="artists.html" class="active">Artists</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="community.html">Community</a>
+
     </nav>
-    <div class="topbar__spacer"></div>
-    <div class="search-box">
-      <input type="text" id="artistSearch" placeholder="Search artists..." />
-      <span class="search-box__icon">⌕</span>
+
+    <div class="header-right">
+
+        <input
+            type="search"
+            placeholder="Search artists..."
+            id="artistSearch">
+
+        <a href="https://streaming.live365.com/a50378"
+           class="listen-btn"
+           target="_blank">
+
+            ● Listen Live
+
+        </a>
+
     </div>
-    <a href="#" class="btn-primary"><span class="pulse-dot"></span> Listen Live</a>
-  </header>
 
-  <section class="page-hero">
-    <div class="page-hero__tag"><span class="dot"></span> Wildstyle Roster</div>
-    <h1>Our <span>Artists</span></h1>
-    <p>The sounds of the underground. Discover the DJs and producers pushing the Wildstyle movement forward.</p>
-  </section>
+</header>
 
-  <main class="main-content">
-    <div class="artists-grid" id="artistGrid">
-      <!-- Artist 1 -->
-      <article class="artist-card">
-        <div class="artist-card__img-wrap">
-          <div class="artist-placeholder">
-            <span class="artist-placeholder__icon">🎧</span>
-            <span class="artist-placeholder__initials">DE</span>
-          </div>
-          <div class="artist-card__badge badge--live">● LIVE</div>
-        </div>
-        <div class="artist-card__body">
-          <h3 class="artist-card__name">DJ EchoFalls</h3>
-          <span class="artist-card__genre">Drum & Bass / Jungle</span>
-          <a href="#" class="btn-view-profile">View Profile</a>
-        </div>
-      </article>
+<!-- ===================================================
+PAGE HERO
+=================================================== -->
 
-      <!-- Artist 2 -->
-      <article class="artist-card">
-        <div class="artist-card__img-wrap">
-          <div class="artist-placeholder" style="background: linear-gradient(135deg, #050d30, #0a1f60);">
-            <span class="artist-placeholder__icon">⚡</span>
-            <span class="artist-placeholder__initials">NP</span>
-          </div>
-          <div class="artist-card__badge badge--featured">★ FEATURED</div>
-        </div>
-        <div class="artist-card__body">
-          <h3 class="artist-card__name">Neon Pulse</h3>
-          <span class="artist-card__genre">Electro / Techno</span>
-          <a href="#" class="btn-view-profile">View Profile</a>
-        </div>
-      </article>
+<section class="hero">
 
-      <!-- Artist 3 -->
-      <article class="artist-card">
-        <div class="artist-card__img-wrap">
-          <div class="artist-placeholder" style="background: linear-gradient(135deg, #200516, #400a2c);">
-            <span class="artist-placeholder__icon">🔊</span>
-            <span class="artist-placeholder__initials">BU</span>
-          </div>
-        </div>
-        <div class="artist-card__body">
-          <h3 class="artist-card__name">Bassline UK</h3>
-          <span class="artist-card__genre">UK Bass / Grime</span>
-          <a href="#" class="btn-view-profile">View Profile</a>
-        </div>
-      </article>
+    <span class="hero-tag">
 
-      <!-- Artist 4 -->
-      <article class="artist-card">
-        <div class="artist-card__img-wrap">
-          <div class="artist-placeholder" style="background: linear-gradient(135deg, #061520, #0c2840);">
-            <span class="artist-placeholder__icon">🎤</span>
-            <span class="artist-placeholder__initials">WC</span>
-          </div>
-        </div>
-        <div class="artist-card__body">
-          <h3 class="artist-card__name">Wildstyle Crew</h3>
-          <span class="artist-card__genre">Multi-Genre / Social</span>
-          <a href="#" class="btn-view-profile">View Profile</a>
-        </div>
-      </article>
+        FEATURED ARTISTS
 
-      <!-- Artist 5 -->
-      <article class="artist-card">
-        <div class="artist-card__img-wrap">
-          <div class="artist-placeholder" style="background: linear-gradient(135deg, #180520, #300a40);">
-            <span class="artist-placeholder__icon">🌙</span>
-            <span class="artist-placeholder__initials">DN</span>
-          </div>
-          <div class="artist-card__badge badge--live">● LIVE</div>
-        </div>
-        <div class="artist-card__body">
-          <h3 class="artist-card__name">DJ Nala</h3>
-          <span class="artist-card__genre">Afrobeats / House</span>
-          <a href="#" class="btn-view-profile">View Profile</a>
-        </div>
-      </article>
+    </span>
 
-      <!-- Artist 6 -->
-      <article class="artist-card">
-        <div class="artist-card__img-wrap">
-          <div class="artist-placeholder">
-            <span class="artist-placeholder__icon">✨</span>
-            <span class="artist-placeholder__initials">DS</span>
-          </div>
-        </div>
-        <div class="artist-card__body">
-          <h3 class="artist-card__name">DJ Suzy</h3>
-          <span class="artist-card__genre">House / Deep House</span>
-          <a href="#" class="btn-view-profile">View Profile</a>
-        </div>
-      </article>
+    <h1>
+
+        Discover
+        <span>Wildstyle Artists</span>
+
+    </h1>
+
+    <p>
+
+        Browse DJs, producers and creators from the
+        Wildstyle community.
+
+        Click any artist to visit their profile.
+
+    </p>
+
+</section>
+
+<!-- ===================================================
+SEARCH BAR
+=================================================== -->
+
+<section class="search-section">
+
+    <div class="search-wrap">
+
+        <input
+            type="search"
+            id="liveSearch"
+            placeholder="Search artists...">
+
     </div>
-  </main>
 
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__col">
-        <h3>Wildstyle Social Beta</h3>
-        <p style="font-size: 13px; color: var(--text-muted);">United by beats. Powered by passion. The home of underground radio and community culture.</p>
-      </div>
-      <div class="footer__col">
-        <h3>Modules</h3>
-        <ul>
-          <li>Live Stream</li>
-          <li>Schedule</li>
-          <li>Artists</li>
-          <li>Chat</li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h3>Next Up</h3>
-        <ul>
-          <li>Real Likes</li>
-          <li>DJ Badges</li>
-          <li>Profiles</li>
-        </ul>
-      </div>
+</section>
+
+<!-- ===================================================
+FEATURED ARTISTS
+=================================================== -->
+
+<main class="artists-page">
+
+<section class="artists-grid">
+
+<!-- Artist -->
+
+<a href="#" class="artist-card">
+
+    <div class="artist-image">
+
+        <img src="images/artists/djechofalls.jpg"
+             alt="DJ EchoFalls">
+
+        <span class="live-badge">
+            LIVE
+        </span>
+
     </div>
-  </footer>
 
-  <script>
-    // Live Search Logic
-    const searchInput = document.getElementById('artistSearch');
-    const cards = document.querySelectorAll('.artist-card');
+    <h3>
 
-    searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      cards.forEach(card => {
-        const name = card.querySelector('.artist-card__name').textContent.toLowerCase();
-        card.style.display = name.includes(term) ? 'flex' : 'none';
-      });
+        DJ EchoFalls
+
+    </h3>
+
+</a>
+
+<!-- Artist -->
+
+<a href="#" class="artist-card">
+
+    <div class="artist-image">
+
+        <img src="images/artists/neonpulse.jpg"
+             alt="Neon Pulse">
+
+    </div>
+
+    <h3>
+
+        Neon Pulse
+
+    </h3>
+
+</a>
+
+<!-- Artist -->
+
+<a href="#" class="artist-card">
+
+    <div class="artist-image">
+
+        <img src="images/artists/basslineuk.jpg"
+             alt="Bassline UK">
+
+    </div>
+
+    <h3>
+
+        Bassline UK
+
+    </h3>
+
+</a>
+
+<!-- Artist -->
+
+<a href="#" class="artist-card">
+
+    <div class="artist-image">
+
+        <img src="images/artists/wildstylecrew.jpg"
+             alt="Wildstyle Crew">
+
+    </div>
+
+    <h3>
+
+        Wildstyle Crew
+
+    </h3>
+
+</a>
+
+<!-- Artist -->
+
+<a href="#" class="artist-card">
+
+    <div class="artist-image">
+
+        <img src="images/artists/djsuzy.jpg"
+             alt="DJ Suzy">
+
+    </div>
+
+    <h3>
+
+        DJ Suzy
+
+    </h3>
+
+</a>
+</section>
+
+<!-- ===================================================
+JOIN THE ROSTER
+=================================================== -->
+
+<section class="join-section">
+
+    <div class="join-card">
+
+        <span class="join-tag">
+            JOIN WILDSTYLE
+        </span>
+
+        <h2>
+            Want to become a Featured Artist?
+        </h2>
+
+        <p>
+
+            Whether you're a DJ, producer, presenter or unsigned artist,
+            we'd love to hear from you.
+
+            Join the Wildstyle family and share your music with listeners
+            around the world.
+
+        </p>
+
+        <div class="join-buttons">
+
+            <a href="signup.html" class="btn-primary">
+                Join Now
+            </a>
+
+            <a href="contact.html" class="btn-secondary">
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+<!-- ===================================================
+FOOTER
+=================================================== -->
+
+<footer class="footer">
+
+    <div class="footer-grid">
+
+        <div>
+
+            <h3>Wildstyle Radio</h3>
+
+            <p>
+
+                The home of underground music,
+                DJs, presenters and unsigned artists.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>Explore</h3>
+
+            <ul>
+
+                <li><a href="index.html">Home</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="artists.html">Artists</a></li>
+
+            </ul>
+
+        </div>
+
+        <div>
+
+            <h3>Community</h3>
+
+            <ul>
+
+                <li><a href="#">Become an Artist</a></li>
+                <li><a href="#">Upload Music</a></li>
+                <li><a href="#">Volunteer</a></li>
+                <li><a href="#">Contact</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 Wildstyle Radio • Built with ❤️ for the community.
+
+    </div>
+
+</footer>
+
+<!-- ===================================================
+LIVE SEARCH
+=================================================== -->
+
+<script>
+
+const searchBox = document.getElementById("liveSearch");
+
+const artistCards = document.querySelectorAll(".artist-card");
+
+searchBox.addEventListener("keyup", function(){
+
+    const value = this.value.toLowerCase();
+
+    artistCards.forEach(card=>{
+
+        const artist = card.innerText.toLowerCase();
+
+        if(artist.includes(value)){
+
+            card.style.display="block";
+
+        }else{
+
+            card.style.display="none";
+
+        }
+
     });
-  </script>
+
+});
+
+</script>
+
 </body>
 </html>
+
+<!-- Artist -->
+
+<a href="#" class="artist-card">
+
+    <div class="artist-image">
+
+        <img src="images/artists/more.jpg"
+             alt="More Artists">
+
+    </div>
+
+    <h3>
+
+        View All
+
+    </h3>
+
+</a>
