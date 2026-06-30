@@ -379,13 +379,15 @@ searchBox.addEventListener("keyup", function(){
 
 <script>
 fetch("/header.html")
-  .then(response => response.text())
-  .then(data => {
+  .then(res => res.text())
+  .then(html => {
 
-    document.getElementById("header").innerHTML = data;
+    document.getElementById("header").innerHTML = html;
 
+    // NOW load the header JS
     const script = document.createElement("script");
     script.src = "/header.js";
+
     document.body.appendChild(script);
 
   });
