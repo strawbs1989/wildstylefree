@@ -2,7 +2,7 @@
 BURGER
 ==================== */
 
-<!-- const burger = document.getElementById("burger");
+/* const burger = document.getElementById("burger");
 const nav = document.getElementById("mobileNav");
 const backdrop = document.getElementById("navBackdrop");
 const closeBtn = document.getElementById("navClose");
@@ -43,4 +43,4 @@ document.addEventListener("keydown",(e)=>{
 
     }
 
-}); -->
+}); */
