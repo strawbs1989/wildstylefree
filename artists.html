@@ -15,63 +15,13 @@
 <link rel="stylesheet" href="/artists.css"> 
 <link rel="stylesheet" href="/style.css">
 <link rel="stylesheet" href="/header.css">
+<script src="/header.js" defer></script>
 
 
 </head>
 <body>
-<!-- Top Navigation Header -->
-  <div id="header"></div>
+<div id="site-header"></div>
 
-  <!--  <button class="burger" id="burger">
-        ☰
-    </button>
-
-    <a href="/index.html" class="logo">
-        
-    </a>
-
-    <div class="header-right">
-
-       
-
-      <!--  <a href="https://streaming.live365.com/a50378"
-           target="_blank"
-           class="listen-btn">
-
-            
-
-        </a> -->
-
-    </div>
-
-</header> -->
-
-<!-- <div class="nav-backdrop" id="navBackdrop"></div>
-
-<nav class="mobile-nav" id="mobileNav">
-
-    <div class="mobile-nav-top">
-
-        <h2>Wildstyle</h2>
-
-        <button id="navClose">✕</button>
-
-    </div>
-
-    <a href="/index.html"> Home</a>
-    <a href="/artists.html" class="active">🎧 Artists</a>
-    <a href="/djs.html">DJs</a>
-    <a href="/schedule.html"> Schedule</a>
-    <a href="/chat.html">Community</a>
-    <a href="/map.html"> Listener Map</a>
-
-    <hr>
-
-    <a href="https://facebook.com/wildstyleuk">Facebook</a>
-    <a href="#">Instagram</a>
-    <a href="#">TikTok</a>
-
-</nav> -->
     <div class="header-right">
 
       
@@ -379,19 +329,6 @@ searchBox.addEventListener("keyup", function(){
 
 
 
-<script>
-fetch("/header.html")
-  .then(res => res.text())
-  .then(html => {
-
-    document.getElementById("header").innerHTML = html;
-
-    const script = document.createElement("script");
-    script.src = "/header.js";
-    document.body.appendChild(script);
-
-  });
-</script>
 
 
 
