@@ -7,17 +7,28 @@ const nav = document.getElementById("mobileNav");
 const backdrop = document.getElementById("navBackdrop");
 const closeBtn = document.getElementById("navClose");
 
-burger.onclick = () => {
+if (burger && nav && backdrop && closeBtn) {
 
-    nav.classList.add("open");
-    backdrop.classList.add("show");
+    burger.onclick = () => {
 
-};
+        nav.classList.add("open");
+        backdrop.classList.add("show");
 
-function closeMenu(){
+    };
 
-    nav.classList.remove("open");
-    backdrop.classList.remove("show");
+    closeBtn.onclick = () => {
+
+        nav.classList.remove("open");
+        backdrop.classList.remove("show");
+
+    };
+
+    backdrop.onclick = () => {
+
+        nav.classList.remove("open");
+        backdrop.classList.remove("show");
+
+    };
 
 }
 
