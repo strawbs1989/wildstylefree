@@ -393,6 +393,20 @@ fetch("/header.html")
   });
 </script>
 
+<script>
+fetch("/header.html")
+  .then(res => res.text())
+  .then(html => {
+
+    document.getElementById("header").innerHTML = html;
+
+    const script = document.createElement("script");
+    script.src = "/header.js";
+    document.body.appendChild(script);
+
+  });
+</script>
+
 
 
 </body>
