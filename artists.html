@@ -46,7 +46,7 @@
 
 </header> -->
 
-<div class="nav-backdrop" id="navBackdrop"></div>
+<!-- <div class="nav-backdrop" id="navBackdrop"></div>
 
 <nav class="mobile-nav" id="mobileNav">
 
@@ -71,7 +71,7 @@
     <a href="#">Instagram</a>
     <a href="#">TikTok</a>
 
-</nav> 
+</nav> -->
     <div class="header-right">
 
       
@@ -377,21 +377,7 @@ searchBox.addEventListener("keyup", function(){
 </script>
 
 
-<script>
-fetch("/header.html")
-  .then(res => res.text())
-  .then(html => {
 
-    document.getElementById("header").innerHTML = html;
-
-    // NOW load the header JS
-    const script = document.createElement("script");
-    script.src = "/header.js";
-
-    document.body.appendChild(script);
-
-  });
-</script>
 
 <script>
 fetch("/header.html")
