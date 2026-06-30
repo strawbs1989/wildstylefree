@@ -630,3 +630,59 @@ font-size:2rem;
 
 }
 
+/* Featured Artists Section */
+.artists-card .card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns for that classic grid feel */
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.artist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.artist:hover {
+  transform: translateY(-3px);
+}
+
+.artist img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.artist:hover img {
+  border-color: #ff2a6d;
+  box-shadow: 0 0 15px rgba(255, 42, 109, 0.4);
+}
+
+.artist span {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+}
+
+.view-all {
+  font-size: 0.7rem;
+  color: #ff2a6d;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
