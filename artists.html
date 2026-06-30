@@ -14,12 +14,13 @@
 
 <link rel="stylesheet" href="/artists.css">
 <link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/header.css">
 
 
 </head>
 
 <!-- Top Navigation Header -->
-  <header class="topbar">
+  <div id="header"></div>
 
     <button class="burger" id="burger">
         ☰
@@ -374,6 +375,18 @@ searchBox.addEventListener("keyup", function(){
 });
 
 </script>
+
+
+<script>
+fetch("/header.html")
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById("header").innerHTML = data;
+  });
+</script>
+
+<script src="/header.js"></script>
+
 
 </body>
 </html>
