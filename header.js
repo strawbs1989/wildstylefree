@@ -5,52 +5,22 @@ header.js
 
 document.addEventListener("DOMContentLoaded", () => {
 
-
-const burger = document.getElementById("burger");
-const nav = document.getElementById("mobileNav");
-const backdrop = document.getElementById("navBackdrop");
-const closeBtn = document.getElementById("navClose");
-
-if (burger && nav && backdrop && closeBtn) {
-
-    burger.onclick = () => {
-
-        nav.classList.add("open");
-        backdrop.classList.add("show");
-
-    };
-
-    closeBtn.onclick = () => {
-
-        nav.classList.remove("open");
-        backdrop.classList.remove("show");
-
-    };
-
-    backdrop.onclick = () => {
-
-        nav.classList.remove("open");
-        backdrop.classList.remove("show");
-
-    };
-
-}
-
-closeBtn.onclick = closeMenu;
-backdrop.onclick = closeMenu;
-
-document.addEventListener("keydown",(e)=>{
-
-    if(e.key==="Escape"){
-
-        closeMenu();
-
-    }
-
-});
+    const burger = document.getElementById("burger");
+    const mobileNav = document.getElementById("mobileNav");
+    const navBackdrop = document.getElementById("navBackdrop");
+    const navClose = document.getElementById("navClose");
 
     /*==========================================
-    OPEN MENU
+      Make sure header exists
+    ==========================================*/
+
+    if (!burger || !mobileNav || !navBackdrop || !navClose) {
+        console.warn("Header not found.");
+        return;
+    }
+
+    /*==========================================
+      Open Menu
     ==========================================*/
 
     function openMenu() {
@@ -65,7 +35,7 @@ document.addEventListener("keydown",(e)=>{
     }
 
     /*==========================================
-    CLOSE MENU
+      Close Menu
     ==========================================*/
 
     function closeMenu() {
@@ -80,26 +50,18 @@ document.addEventListener("keydown",(e)=>{
     }
 
     /*==========================================
-    EVENTS
+      Button Events
     ==========================================*/
 
-    if (burger) {
+    burger.addEventListener("click", openMenu);
 
-        burger.addEventListener("click", openMenu);
+    navClose.addEventListener("click", closeMenu);
 
-    }
+    navBackdrop.addEventListener("click", closeMenu);
 
-    if (navClose) {
-
-        navClose.addEventListener("click", closeMenu);
-
-    }
-
-    if (navBackdrop) {
-
-        navBackdrop.addEventListener("click", closeMenu);
-
-    }
+    /*==========================================
+      Close on ESC
+    ==========================================*/
 
     document.addEventListener("keydown", (e) => {
 
@@ -112,7 +74,7 @@ document.addEventListener("keydown",(e)=>{
     });
 
     /*==========================================
-    CLOSE AFTER CLICKING A LINK
+      Close after clicking a menu link
     ==========================================*/
 
     document.querySelectorAll(".mobile-nav a").forEach(link => {
@@ -122,25 +84,27 @@ document.addEventListener("keydown",(e)=>{
     });
 
     /*==========================================
-    ACTIVE PAGE HIGHLIGHT
+      Active Page
     ==========================================*/
 
-    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+    const currentPage =
+        window.location.pathname.split("/").pop() || "index.html";
 
-    document.querySelectorAll(".desktop-nav a, .mobile-links a").forEach(link => {
+    document.querySelectorAll(".desktop-nav a, .mobile-links a")
+        .forEach(link => {
 
-        const href = link.getAttribute("href");
+            const href = link.getAttribute("href");
 
-        if (!href) return;
+            if (!href) return;
 
-        const page = href.split("/").pop();
+            const page = href.split("/").pop();
 
-        if (page === currentPage) {
+            if (page === currentPage) {
 
-            link.classList.add("active");
+                link.classList.add("active");
 
-        }
+            }
 
-    });
+        });
 
 });
