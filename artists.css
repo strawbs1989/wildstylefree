@@ -64,124 +64,128 @@ img{
 TOP BAR
 ==================================================*/
 
-.topbar{
-
-    position:sticky;
-    top:0;
-
-    z-index:999;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:18px 40px;
-
-    background:rgba(9,6,19,.94);
-
-    backdrop-filter:blur(18px);
-
-    border-bottom:1px solid var(--border);
-
-}
-
 .logo{
 
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-}
-
-.logo-icon{
-
-    width:42px;
-    height:42px;
-
-    border-radius:12px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
+    font-family:Oswald,sans-serif;
+    font-size:1.5rem;
+    color:#fff;
+    text-decoration:none;
     font-weight:700;
 
-    background:linear-gradient(135deg,var(--pink),var(--blue));
+}
+
+.burger{
+
+    font-size:30px;
+    color:#fff;
+    background:none;
+    border:none;
+    cursor:pointer;
 
 }
 
-.logo-text{
+.nav-backdrop{
 
-    font-family:Oswald,sans-serif;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
 
-    font-size:1.3rem;
-
-    letter-spacing:2px;
-
-}
-
-nav{
-
-    display:flex;
-    gap:24px;
-
-}
-
-nav a{
-
-    opacity:.7;
+    opacity:0;
+    visibility:hidden;
 
     transition:.3s;
 
+    z-index:998;
+
 }
 
-nav a:hover,
-nav a.active{
-
-    color:var(--pink);
+.nav-backdrop.show{
 
     opacity:1;
+    visibility:visible;
 
 }
 
-.header-right{
+.mobile-nav{
+
+    position:fixed;
+
+    top:0;
+    left:-300px;
+
+    width:280px;
+    height:100vh;
+
+    background:#141021;
 
     display:flex;
-    align-items:center;
-    gap:16px;
+    flex-direction:column;
+
+    transition:.35s;
+
+    z-index:999;
+
+    padding:20px;
 
 }
 
-.header-right input{
+.mobile-nav.open{
 
-    width:230px;
+    left:0;
 
-    padding:10px 16px;
+}
 
-    border-radius:30px;
+.mobile-nav-top{
 
-    border:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-    background:var(--panel);
+    margin-bottom:25px;
+
+}
+
+.mobile-nav-top button{
+
+    color:#fff;
+    font-size:28px;
+    background:none;
+    border:none;
+
+}
+
+.mobile-nav a{
+
+    padding:15px 0;
 
     color:#fff;
 
-}
-
-.listen-btn{
-
-    background:linear-gradient(135deg,var(--pink),#d60061);
-
-    padding:12px 22px;
-
-    border-radius:30px;
-
-    font-weight:600;
-
-    box-shadow:0 0 25px rgba(255,42,109,.35);
+    border-bottom:1px solid rgba(255,255,255,.08);
 
 }
 
+.mobile-nav a.active{
+
+    color:#ff2a6d;
+
+}
+
+@media(min-width:900px){
+
+    .burger{
+
+        display:none;
+
+    }
+
+    .mobile-nav,
+    .nav-backdrop{
+
+        display:none;
+
+    }
+
+}
 /*==================================================
 HERO
 ==================================================*/
