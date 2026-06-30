@@ -1,296 +1,59 @@
 /*==================================================
-  WILDSTYLE HEADER v3
+MOBILE NAVIGATION
 ==================================================*/
-
-:root{
-
-    --ws-bg:#090613;
-    --ws-panel:#141021;
-
-    --ws-pink:#ff2a6d;
-    --ws-blue:#2a7bff;
-
-    --ws-text:#ffffff;
-    --ws-muted:#bdb8ca;
-
-    --ws-border:rgba(255,255,255,.08);
-
-}
-
-/*==============================
-HEADER
-==============================*/
-
-.ws-header{
-
-    position:sticky;
-    top:0;
-
-    z-index:5000;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    height:72px;
-
-    padding:0 24px;
-
-    background:rgba(9,6,19,.96);
-
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-
-    border-bottom:1px solid var(--ws-border);
-
-}
-
-/*==============================
-LEFT
-==============================*/
-
-.ws-left{
-
-    display:flex;
-    align-items:center;
-    gap:18px;
-
-}
-
-.ws-logo{
-
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    text-decoration:none;
-
-    color:#fff;
-
-}
-
-.ws-logo img{
-
-    width:42px;
-    height:42px;
-
-    object-fit:contain;
-
-}
-
-.ws-logo span{
-
-    font-family:Oswald,sans-serif;
-
-    font-size:1.4rem;
-
-    font-weight:600;
-
-}
-
-/*==============================
-BURGER
-==============================*/
-
-.ws-burger{
-
-    display:none;
-
-    font-size:2rem;
-
-    color:#fff;
-
-    background:none;
-
-    border:none;
-
-    cursor:pointer;
-
-}
-
-/*==============================
-DESKTOP NAV
-==============================*/
-
-.ws-nav{
-
-    display:flex;
-    align-items:center;
-    gap:28px;
-
-}
-
-.ws-nav a{
-
-    color:var(--ws-muted);
-
-    text-decoration:none;
-
-    transition:.25s;
-
-    font-weight:500;
-
-    position:relative;
-
-}
-
-.ws-nav a:hover,
-.ws-nav a.active{
-
-    color:#fff;
-
-}
-
-.ws-nav a.active{
-
-    color:var(--ws-pink);
-
-}
-
-.ws-nav a::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    bottom:-8px;
-
-    width:0;
-
-    height:2px;
-
-    background:linear-gradient(
-        90deg,
-        var(--ws-pink),
-        var(--ws-blue)
-    );
-
-    transition:.3s;
-
-}
-
-.ws-nav a:hover::after,
-.ws-nav a.active::after{
-
-    width:100%;
-
-}
-
-/*==============================
-LIVE BUTTON
-==============================*/
-
-.ws-live{
-
-    display:flex;
-    align-items:center;
-    gap:10px;
-
-    text-decoration:none;
-
-    color:#fff;
-
-    background:linear-gradient(
-        135deg,
-        var(--ws-pink),
-        #d50062
-    );
-
-    padding:11px 22px;
-
-    border-radius:40px;
-
-    font-weight:600;
-
-    box-shadow:0 0 20px rgba(255,42,109,.3);
-
-}
-
-.ws-live span{
-
-    width:9px;
-    height:9px;
-
-    border-radius:50%;
-
-    background:#fff;
-
-    animation:livePulse 1.2s infinite;
-
-}
-
-@keyframes livePulse{
-
-    0%,100%{
-
-        opacity:1;
-        transform:scale(1);
-
-    }
-
-    50%{
-
-        opacity:.45;
-        transform:scale(.6);
-
-    }
-
-}
-
-/*==============================
-OVERLAY
-==============================*/
 
 .ws-overlay{
 
     position:fixed;
-
     inset:0;
 
     background:rgba(0,0,0,.65);
 
-    opacity:0;
+    backdrop-filter:blur(3px);
 
+    opacity:0;
     visibility:hidden;
 
-    transition:.3s;
+    transition:.35s;
 
-    z-index:4998;
+    z-index:9998;
 
 }
 
 .ws-overlay.show{
 
     opacity:1;
-
     visibility:visible;
 
 }
-
-/*==============================
-MOBILE MENU
-==============================*/
 
 .ws-mobile{
 
     position:fixed;
 
     top:0;
-    left:-320px;
+    left:-290px;
 
-    width:300px;
+    width:280px;
+    max-width:85vw;
 
     height:100vh;
 
-    background:var(--ws-panel);
-
-    transition:.35s;
+    background:linear-gradient(
+        180deg,
+        #171127,
+        #0d0818
+    );
 
     display:flex;
     flex-direction:column;
 
-    z-index:4999;
+    transition:left .35s ease;
+
+    z-index:9999;
+
+    box-shadow:
+    15px 0 40px rgba(0,0,0,.55);
 
 }
 
@@ -300,6 +63,10 @@ MOBILE MENU
 
 }
 
+/*==================================================
+TOP
+==================================================*/
+
 .ws-mobile-top{
 
     display:flex;
@@ -308,66 +75,108 @@ MOBILE MENU
 
     padding:24px;
 
-    border-bottom:1px solid var(--ws-border);
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.ws-mobile-top strong{
+
+    font-family:Oswald,sans-serif;
+    font-size:1.5rem;
+    color:#fff;
 
 }
 
 #wsClose{
 
-    background:none;
+    width:42px;
+    height:42px;
 
     border:none;
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
 
     color:#fff;
 
-    font-size:2rem;
+    font-size:1.5rem;
 
     cursor:pointer;
 
+    transition:.25s;
+
 }
+
+#wsClose:hover{
+
+    background:#ff2a6d;
+
+}
+
+/*==================================================
+LINKS
+==================================================*/
 
 .ws-mobile-links{
 
-    display:flex;
-    flex-direction:column;
+    flex:1;
 
-    padding:20px;
+    padding:18px 0;
 
 }
 
 .ws-mobile-links a{
 
-    padding:15px 0;
+    display:flex;
+    align-items:center;
 
-    color:#fff;
+    gap:14px;
+
+    padding:16px 26px;
+
+    color:#ddd;
 
     text-decoration:none;
 
-    border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:1rem;
 
-}
+    border-left:4px solid transparent;
 
-.ws-mobile-links a.active{
-
-    color:var(--ws-pink);
-
-    font-weight:600;
+    transition:.25s;
 
 }
 
 .ws-mobile-links a:hover{
 
-    color:var(--ws-pink);
+    background:rgba(255,42,109,.08);
 
-    padding-left:10px;
+    color:#fff;
+
+    border-left-color:#ff2a6d;
 
 }
 
+.ws-mobile-links a.active{
+
+    color:#ff2a6d;
+
+    background:rgba(255,42,109,.10);
+
+    border-left-color:#ff2a6d;
+
+    font-weight:600;
+
+}
+
+/*==================================================
+SOCIAL
+==================================================*/
+
 .ws-social{
 
-    margin-top:20px;
+    padding:20px 26px;
 
-    padding:0 20px;
+    border-top:1px solid rgba(255,255,255,.08);
 
 }
 
@@ -375,72 +184,30 @@ MOBILE MENU
 
     display:block;
 
-    padding:12px 0;
+    padding:10px 0;
 
-    color:var(--ws-muted);
+    color:#9f97b8;
 
     text-decoration:none;
 
+    transition:.25s;
+
 }
+
+.ws-social a:hover{
+
+    color:#fff;
+
+}
+
+/*==================================================
+BOTTOM BUTTON
+==================================================*/
 
 .ws-live.mobile{
 
-    margin:24px;
+    margin:20px;
 
     justify-content:center;
-
-}
-
-/*==============================
-RESPONSIVE
-==============================*/
-
-@media(max-width:960px){
-
-    .ws-burger{
-
-        display:block;
-
-    }
-
-    .ws-nav{
-
-        display:none;
-
-    }
-
-}
-
-@media(max-width:700px){
-
-    .ws-header{
-
-        padding:0 18px;
-
-    }
-
-    .ws-logo span{
-
-        display:none;
-
-    }
-
-    .ws-live{
-
-        padding:10px 16px;
-
-        font-size:.85rem;
-
-    }
-
-}
-
-@media(max-width:520px){
-
-    .ws-live{
-
-        display:none;
-
-    }
 
 }
