@@ -1,10 +1,277 @@
 /*==================================================
-MOBILE NAVIGATION
+WILDSTYLE HEADER v3
+==================================================*/
+
+:root{
+
+    --ws-bg:#090613;
+    --ws-panel:#151022;
+
+    --ws-pink:#ff2a6d;
+    --ws-blue:#4b6fff;
+
+    --ws-text:#ffffff;
+    --ws-muted:#b8b4c8;
+
+    --ws-border:rgba(255,255,255,.08);
+
+}
+
+/*==================================================
+HEADER
+==================================================*/
+
+.ws-header{
+
+    position:sticky;
+    top:0;
+
+    z-index:5000;
+
+    width:100%;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 24px;
+
+    background:rgba(9,6,19,.96);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    border-bottom:1px solid var(--ws-border);
+
+}
+
+/*==================================================
+LEFT
+==================================================*/
+
+.ws-left{
+
+    display:flex;
+    align-items:center;
+
+    gap:18px;
+
+}
+
+/*==================================================
+BURGER
+==================================================*/
+
+.ws-burger{
+
+    display:none;
+
+    width:46px;
+    height:46px;
+
+    border:none;
+    background:none;
+
+    color:#fff;
+
+    font-size:2rem;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.ws-burger:hover{
+
+    color:var(--ws-pink);
+
+}
+
+/*==================================================
+LOGO
+==================================================*/
+
+.ws-logo{
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    text-decoration:none;
+
+    color:#fff;
+
+}
+
+.ws-logo img{
+
+    width:42px;
+    height:42px;
+
+    object-fit:contain;
+
+}
+
+.ws-logo span{
+
+    font-family:"Oswald",sans-serif;
+
+    font-size:1.45rem;
+
+    font-weight:600;
+
+    letter-spacing:.5px;
+
+}
+
+/*==================================================
+DESKTOP NAV
+==================================================*/
+
+.ws-nav{
+
+    display:flex;
+    align-items:center;
+
+    gap:30px;
+
+}
+
+.ws-nav a{
+
+    position:relative;
+
+    text-decoration:none;
+
+    color:var(--ws-muted);
+
+    font-size:.96rem;
+
+    transition:.25s;
+
+}
+
+.ws-nav a:hover{
+
+    color:#fff;
+
+}
+
+.ws-nav a.active{
+
+    color:var(--ws-pink);
+
+}
+
+.ws-nav a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:-8px;
+
+    width:0;
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        var(--ws-pink),
+        var(--ws-blue)
+    );
+
+    transition:.25s;
+
+}
+
+.ws-nav a:hover::after,
+.ws-nav a.active::after{
+
+    width:100%;
+
+}
+
+/*==================================================
+LISTEN LIVE BUTTON
+==================================================*/
+
+.ws-live{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:11px 22px;
+
+    border-radius:40px;
+
+    background:linear-gradient(
+        135deg,
+        var(--ws-pink),
+        #d50062
+    );
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    box-shadow:0 0 20px rgba(255,42,109,.30);
+
+}
+
+.ws-live:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 0 28px rgba(255,42,109,.45);
+
+}
+
+.ws-live span{
+
+    width:9px;
+    height:9px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    animation:wsPulse 1.2s infinite;
+
+}
+
+@keyframes wsPulse{
+
+    0%,100%{
+
+        opacity:1;
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        opacity:.45;
+        transform:scale(.6);
+
+    }
+
+}
+
+/*==================================================
+OVERLAY
 ==================================================*/
 
 .ws-overlay{
 
     position:fixed;
+
     inset:0;
 
     background:rgba(0,0,0,.65);
@@ -16,7 +283,7 @@ MOBILE NAVIGATION
 
     transition:.35s;
 
-    z-index:9998;
+    z-index:4998;
 
 }
 
@@ -26,6 +293,10 @@ MOBILE NAVIGATION
     visibility:visible;
 
 }
+
+/*==================================================
+MOBILE DRAWER
+==================================================*/
 
 .ws-mobile{
 
@@ -50,10 +321,9 @@ MOBILE NAVIGATION
 
     transition:left .35s ease;
 
-    z-index:9999;
+    z-index:4999;
 
-    box-shadow:
-    15px 0 40px rgba(0,0,0,.55);
+    box-shadow:15px 0 40px rgba(0,0,0,.55);
 
 }
 
@@ -82,7 +352,9 @@ TOP
 .ws-mobile-top strong{
 
     font-family:Oswald,sans-serif;
-    font-size:1.5rem;
+
+    font-size:1.45rem;
+
     color:#fff;
 
 }
@@ -93,13 +365,14 @@ TOP
     height:42px;
 
     border:none;
+
     border-radius:50%;
 
     background:rgba(255,255,255,.08);
 
     color:#fff;
 
-    font-size:1.5rem;
+    font-size:1.6rem;
 
     cursor:pointer;
 
@@ -109,7 +382,7 @@ TOP
 
 #wsClose:hover{
 
-    background:#ff2a6d;
+    background:var(--ws-pink);
 
 }
 
@@ -120,6 +393,9 @@ LINKS
 .ws-mobile-links{
 
     flex:1;
+
+    display:flex;
+    flex-direction:column;
 
     padding:18px 0;
 
@@ -132,13 +408,11 @@ LINKS
 
     gap:14px;
 
-    padding:16px 26px;
+    padding:16px 24px;
 
     color:#ddd;
 
     text-decoration:none;
-
-    font-size:1rem;
 
     border-left:4px solid transparent;
 
@@ -150,19 +424,21 @@ LINKS
 
     background:rgba(255,42,109,.08);
 
+    border-left-color:var(--ws-pink);
+
     color:#fff;
 
-    border-left-color:#ff2a6d;
+    padding-left:30px;
 
 }
 
 .ws-mobile-links a.active{
 
-    color:#ff2a6d;
+    color:var(--ws-pink);
 
     background:rgba(255,42,109,.10);
 
-    border-left-color:#ff2a6d;
+    border-left-color:var(--ws-pink);
 
     font-weight:600;
 
@@ -174,7 +450,7 @@ SOCIAL
 
 .ws-social{
 
-    padding:20px 26px;
+    padding:18px 24px;
 
     border-top:1px solid rgba(255,255,255,.08);
 
@@ -186,9 +462,9 @@ SOCIAL
 
     padding:10px 0;
 
-    color:#9f97b8;
-
     text-decoration:none;
+
+    color:var(--ws-muted);
 
     transition:.25s;
 
@@ -209,5 +485,199 @@ BOTTOM BUTTON
     margin:20px;
 
     justify-content:center;
+
+}
+
+/*==================================================
+RESPONSIVE
+==================================================*/
+
+@media (max-width:1100px){
+
+    .ws-nav{
+
+        gap:20px;
+
+    }
+
+    .ws-nav a{
+
+        font-size:.9rem;
+
+    }
+
+}
+
+/*==================================================
+TABLET
+==================================================*/
+
+@media (max-width:900px){
+
+    .ws-header{
+
+        padding:0 18px;
+
+    }
+
+    .ws-burger{
+
+        display:flex;
+
+        align-items:center;
+        justify-content:center;
+
+    }
+
+    .ws-nav{
+
+        display:none;
+
+    }
+
+    .ws-live{
+
+        display:flex;
+
+        padding:10px 18px;
+
+        font-size:.9rem;
+
+    }
+
+}
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media (max-width:700px){
+
+    .ws-header{
+
+        height:68px;
+
+        padding:0 16px;
+
+    }
+
+    .ws-logo{
+
+        gap:10px;
+
+    }
+
+    .ws-logo img{
+
+        width:36px;
+        height:36px;
+
+    }
+
+    .ws-logo span{
+
+        font-size:1.15rem;
+
+    }
+
+    .ws-live{
+
+        padding:10px 16px;
+
+        border-radius:999px;
+
+    }
+
+}
+
+/*==================================================
+SMALL PHONES
+==================================================*/
+
+@media (max-width:520px){
+
+    .ws-header{
+
+        padding:0 12px;
+
+    }
+
+    .ws-logo span{
+
+        display:none;
+
+    }
+
+    .ws-live{
+
+        display:none;
+
+    }
+
+    .ws-mobile{
+
+        width:280px;
+        max-width:82vw;
+
+    }
+
+}
+
+/*==================================================
+VERY SMALL PHONES
+==================================================*/
+
+@media (max-width:380px){
+
+    .ws-mobile{
+
+        width:260px;
+
+    }
+
+    .ws-mobile-links a{
+
+        padding:14px 20px;
+
+        font-size:.95rem;
+
+    }
+
+    .ws-social{
+
+        padding:18px 20px;
+
+    }
+
+}
+
+/*==================================================
+SMOOTH TRANSITIONS
+==================================================*/
+
+.ws-header,
+.ws-mobile,
+.ws-overlay,
+.ws-nav a,
+.ws-mobile-links a,
+.ws-live{
+
+    transition:all .25s ease;
+
+}
+
+/*==================================================
+ACCESSIBILITY
+==================================================*/
+
+.ws-burger:focus,
+#wsClose:focus,
+.ws-nav a:focus,
+.ws-mobile-links a:focus,
+.ws-live:focus{
+
+    outline:2px solid var(--ws-pink);
+
+    outline-offset:3px;
 
 }
