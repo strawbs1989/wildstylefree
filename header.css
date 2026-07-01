@@ -1,35 +1,31 @@
 /*==================================================
-WILDSTYLE SHARED HEADER
-Part 1 - Base + Desktop
+WILDSTYLE HEADER v4
+PART 2
 ==================================================*/
 
 :root{
-    --header-bg:#0d0818;
-    --panel:#171127;
-    --border:rgba(255,255,255,.08);
 
-    --pink:#ff2a6d;
-    --blue:#6c63ff;
+    --ws-bg:#0d0818;
+    --ws-panel:#171127;
 
-    --text:#ffffff;
-    --muted:#9f97b8;
-}
+    --ws-pink:#ff2a6d;
+    --ws-blue:#6d6cff;
 
-/*==================================================
-RESET
-==================================================*/
+    --ws-text:#ffffff;
+    --ws-muted:#b8b4c8;
 
-*{
-    box-sizing:border-box;
+    --ws-border:rgba(255,255,255,.08);
+
 }
 
 /*==================================================
 HEADER
 ==================================================*/
 
-.topbar{
+.ws-header{
 
     position:sticky;
+
     top:0;
 
     z-index:5000;
@@ -44,10 +40,18 @@ HEADER
 
     background:rgba(13,8,24,.96);
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    backdrop-filter:blur(16px);
 
-    border-bottom:1px solid var(--border);
+    border-bottom:1px solid var(--ws-border);
+
+}
+
+.ws-left{
+
+    display:flex;
+    align-items:center;
+
+    gap:18px;
 
 }
 
@@ -55,7 +59,7 @@ HEADER
 BURGER
 ==================================================*/
 
-.burger{
+.ws-burger{
 
     display:none;
 
@@ -63,6 +67,7 @@ BURGER
     height:48px;
 
     border:none;
+
     background:none;
 
     color:#fff;
@@ -75,9 +80,9 @@ BURGER
 
 }
 
-.burger:hover{
+.ws-burger:hover{
 
-    color:var(--pink);
+    color:var(--ws-pink);
 
 }
 
@@ -85,9 +90,10 @@ BURGER
 LOGO
 ==================================================*/
 
-.logo{
+.ws-logo{
 
     display:flex;
+
     align-items:center;
 
     gap:14px;
@@ -96,7 +102,7 @@ LOGO
 
 }
 
-.logo-image{
+.ws-logo-image{
 
     width:44px;
     height:44px;
@@ -105,14 +111,32 @@ LOGO
 
 }
 
-.logo-text{
+.ws-logo-text{
 
-    font-family:"Oswald",sans-serif;
+    display:flex;
+    flex-direction:column;
 
-    font-size:1.45rem;
-    font-weight:600;
+}
+
+.ws-logo-text strong{
 
     color:#fff;
+
+    font-family:Oswald,sans-serif;
+
+    font-size:1.35rem;
+
+    line-height:1;
+
+}
+
+.ws-logo-text span{
+
+    color:var(--ws-muted);
+
+    font-size:.72rem;
+
+    margin-top:4px;
 
 }
 
@@ -120,20 +144,21 @@ LOGO
 DESKTOP NAV
 ==================================================*/
 
-.desktop-nav{
+.ws-nav{
 
     display:flex;
+
     align-items:center;
 
     gap:30px;
 
 }
 
-.desktop-nav a{
+.ws-nav a{
 
     position:relative;
 
-    color:var(--muted);
+    color:var(--ws-muted);
 
     text-decoration:none;
 
@@ -141,19 +166,19 @@ DESKTOP NAV
 
 }
 
-.desktop-nav a:hover{
+.ws-nav a:hover{
 
     color:#fff;
 
 }
 
-.desktop-nav a.active{
+.ws-nav a.active{
 
-    color:var(--pink);
+    color:var(--ws-pink);
 
 }
 
-.desktop-nav a::after{
+.ws-nav a::after{
 
     content:"";
 
@@ -163,33 +188,23 @@ DESKTOP NAV
     bottom:-8px;
 
     width:0;
+
     height:2px;
 
     background:linear-gradient(
         90deg,
-        var(--pink),
-        var(--blue)
+        var(--ws-pink),
+        var(--ws-blue)
     );
 
     transition:.25s;
 
 }
 
-.desktop-nav a:hover::after,
-.desktop-nav a.active::after{
+.ws-nav a:hover::after,
+.ws-nav a.active::after{
 
     width:100%;
-
-}
-
-/*==================================================
-RIGHT SIDE
-==================================================*/
-
-.header-actions{
-
-    display:flex;
-    align-items:center;
 
 }
 
@@ -197,9 +212,10 @@ RIGHT SIDE
 LISTEN BUTTON
 ==================================================*/
 
-.listen-live{
+.ws-live{
 
     display:flex;
+
     align-items:center;
 
     gap:10px;
@@ -215,24 +231,22 @@ LISTEN BUTTON
     font-weight:600;
 
     background:linear-gradient(
-        135deg,
-        var(--pink),
-        #ff006a
+        90deg,
+        var(--ws-pink),
+        #d60066
     );
 
-    box-shadow:0 0 20px rgba(255,42,109,.30);
-
-    transition:.25s;
+    box-shadow:0 0 20px rgba(255,42,109,.35);
 
 }
 
-.listen-live:hover{
+.ws-live:hover{
 
     transform:translateY(-2px);
 
 }
 
-.live-dot{
+.ws-live .dot{
 
     width:8px;
     height:8px;
@@ -241,33 +255,36 @@ LISTEN BUTTON
 
     background:#fff;
 
-    animation:pulse 1.2s infinite;
+    animation:livePulse 1.2s infinite;
 
 }
 
-@keyframes pulse{
+@keyframes livePulse{
 
     0%,100%{
+
         opacity:1;
         transform:scale(1);
+
     }
 
     50%{
-        opacity:.4;
-        transform:scale(.7);
+
+        opacity:.45;
+        transform:scale(.65);
+
     }
 
 }
 
 /*==================================================
-PART 2 - MOBILE NAVIGATION
+OVERLAY
 ==================================================*/
 
-/* Overlay */
-
-.nav-backdrop{
+.ws-overlay{
 
     position:fixed;
+
     inset:0;
 
     background:rgba(0,0,0,.65);
@@ -275,6 +292,7 @@ PART 2 - MOBILE NAVIGATION
     backdrop-filter:blur(4px);
 
     opacity:0;
+
     visibility:hidden;
 
     transition:.3s;
@@ -283,56 +301,64 @@ PART 2 - MOBILE NAVIGATION
 
 }
 
-.nav-backdrop.show{
+.ws-overlay.show{
 
     opacity:1;
+
     visibility:visible;
 
 }
 
-/* Drawer */
+/*==================================================
+MOBILE DRAWER
+==================================================*/
 
-.mobile-nav{
+.ws-mobile{
 
     position:fixed;
 
     top:0;
-    left:-300px;
+    left:-320px;
 
     width:290px;
+
     max-width:86vw;
 
     height:100vh;
 
     background:linear-gradient(
         180deg,
-        #171127 0%,
-        #120d23 50%,
-        #0d0818 100%
+        #1a1330,
+        #0d0818
     );
 
     display:flex;
+
     flex-direction:column;
 
     transition:left .35s ease;
 
-    box-shadow:15px 0 40px rgba(0,0,0,.55);
-
     z-index:9999;
+
+    box-shadow:18px 0 45px rgba(0,0,0,.55);
 
 }
 
-.mobile-nav.open{
+.ws-mobile.open{
 
     left:0;
 
 }
 
 /*==================================================
-TOP
+HEADER V4 - PART 3
 ==================================================*/
 
-.mobile-header{
+/*=========================================
+MOBILE TOP
+=========================================*/
+
+.ws-mobile-top{
 
     display:flex;
     justify-content:space-between;
@@ -344,21 +370,62 @@ TOP
 
 }
 
-.mobile-logo{
+.ws-brand{
 
-    width:46px;
-    height:46px;
+    display:flex;
+    align-items:center;
 
-    object-fit:contain;
+    gap:14px;
 
 }
 
-#navClose{
+.ws-brand-logo{
+
+    width:54px;
+    height:54px;
+
+    border-radius:14px;
+
+    object-fit:cover;
+
+    box-shadow:0 0 18px rgba(255,42,109,.25);
+
+}
+
+.ws-brand-text{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.ws-brand-text strong{
+
+    color:#fff;
+
+    font-family:Oswald,sans-serif;
+
+    font-size:1.15rem;
+
+}
+
+.ws-brand-text span{
+
+    color:#9e96b6;
+
+    font-size:.72rem;
+
+    margin-top:4px;
+
+}
+
+#wsClose{
 
     width:42px;
     height:42px;
 
     border:none;
+
     border-radius:50%;
 
     background:rgba(255,255,255,.08);
@@ -373,39 +440,38 @@ TOP
 
 }
 
-#navClose:hover{
+#wsClose:hover{
 
     background:#ff2a6d;
 
 }
 
-/*==================================================
-MENU LINKS
-==================================================*/
+/*=========================================
+MOBILE LINKS
+=========================================*/
 
-.mobile-links{
+.ws-mobile-links{
 
     flex:1;
-
-    display:flex;
-    flex-direction:column;
 
     padding:18px 0;
 
 }
 
-.mobile-links a{
+.ws-mobile-links a{
 
     display:flex;
     align-items:center;
 
-    gap:14px;
+    gap:16px;
 
     padding:16px 24px;
 
-    color:#d8d8d8;
+    color:#d7d3e3;
 
     text-decoration:none;
+
+    font-size:1rem;
 
     border-left:4px solid transparent;
 
@@ -413,61 +479,61 @@ MENU LINKS
 
 }
 
-.mobile-links a:hover{
+.ws-mobile-links a:hover{
 
-    background:rgba(255,42,109,.08);
-
-    color:#fff;
+    background:rgba(255,42,109,.10);
 
     border-left-color:#ff2a6d;
+
+    color:#fff;
 
     padding-left:30px;
 
 }
 
-.mobile-links a.active{
-
-    background:rgba(255,42,109,.12);
+.ws-mobile-links a.active{
 
     color:#ff2a6d;
 
-    border-left-color:#ff2a6d;
-
     font-weight:600;
 
-}
+    background:rgba(255,42,109,.12);
 
-/*==================================================
-DIVIDER
-==================================================*/
-
-.mobile-divider{
-
-    height:1px;
-
-    margin:0 24px;
-
-    background:rgba(255,255,255,.08);
+    border-left-color:#ff2a6d;
 
 }
 
-/*==================================================
+/*=========================================
 SOCIAL
-==================================================*/
+=========================================*/
 
-.mobile-social{
+.ws-social{
 
     padding:20px 24px;
 
+    border-top:1px solid rgba(255,255,255,.08);
+
 }
 
-.mobile-social a{
+.ws-social h4{
+
+    color:#fff;
+
+    font-size:.82rem;
+
+    letter-spacing:1px;
+
+    margin-bottom:14px;
+
+}
+
+.ws-social a{
 
     display:block;
 
     padding:10px 0;
 
-    color:#9f97b8;
+    color:#a9a3bd;
 
     text-decoration:none;
 
@@ -475,23 +541,25 @@ SOCIAL
 
 }
 
-.mobile-social a:hover{
+.ws-social a:hover{
 
     color:#fff;
 
+    padding-left:6px;
+
 }
 
-/*==================================================
+/*=========================================
 BOTTOM BUTTON
-==================================================*/
+=========================================*/
 
-.mobile-footer{
+.ws-mobile-footer{
 
     padding:20px;
 
 }
 
-.mobile-footer .listen-live{
+.ws-live.mobile{
 
     width:100%;
 
@@ -499,181 +567,91 @@ BOTTOM BUTTON
 
 }
 
-/*==================================================
-PART 3 - RESPONSIVE + FINAL POLISH
-==================================================*/
+/*=========================================
+RESPONSIVE
+=========================================*/
 
-/* Desktop */
+@media(max-width:900px){
 
-@media (min-width:901px){
-
-    .burger{
-        display:none;
-    }
-
-    .mobile-nav,
-    .nav-backdrop{
-        display:none;
-    }
-
-}
-
-/* Tablet */
-
-@media (max-width:900px){
-
-    .topbar{
-
-        height:68px;
-
-        padding:0 18px;
-
-    }
-
-    .burger{
+    .ws-burger{
 
         display:flex;
-
         align-items:center;
         justify-content:center;
 
     }
 
-    .desktop-nav{
+    .ws-nav{
 
         display:none;
 
     }
 
-    .header-actions{
-
-        margin-left:auto;
-
-    }
-
-    .listen-live{
-
-        padding:10px 18px;
-
-        font-size:.9rem;
-
-    }
-
 }
 
-/* Mobile */
+@media(min-width:901px){
 
-@media (max-width:650px){
-
-    .topbar{
-
-        padding:0 14px;
-
-    }
-
-    .logo-image{
-
-        width:38px;
-        height:38px;
-
-    }
-
-    .logo-text{
-
-        font-size:1.15rem;
-
-    }
-
-    .listen-live{
-
-        padding:10px 16px;
-
-        font-size:.85rem;
-
-    }
-
-}
-
-/* Small phones */
-
-@media (max-width:520px){
-
-    .logo-text{
+    .ws-mobile,
+    .ws-overlay{
 
         display:none;
 
     }
 
-    .listen-live{
+}
+
+@media(max-width:600px){
+
+    .ws-logo-text span{
 
         display:none;
 
     }
 
-    .mobile-nav{
+}
 
-        width:280px;
+@media(max-width:520px){
 
-        max-width:84vw;
+    .ws-logo-text{
+
+        display:none;
+
+    }
+
+    .ws-live{
+
+        display:none;
 
     }
 
 }
 
-/* Very small phones */
+/*=========================================
+SMOOTH TRANSITIONS
+=========================================*/
 
-@media (max-width:380px){
+.ws-header,
+.ws-mobile,
+.ws-overlay,
+.ws-live,
+.ws-nav a,
+.ws-mobile-links a{
 
-    .mobile-nav{
-
-        width:260px;
-
-    }
-
-    .mobile-links a{
-
-        padding:14px 20px;
-
-        font-size:.92rem;
-
-    }
-
-    .mobile-social{
-
-        padding:18px 20px;
-
-    }
+    transition:all .25s ease;
 
 }
 
-/*==================================================
+/*=========================================
 ACCESSIBILITY
-==================================================*/
+=========================================*/
 
-.burger:focus,
-#navClose:focus,
-.desktop-nav a:focus,
-.mobile-links a:focus,
-.listen-live:focus{
+.ws-burger:focus,
+#wsClose:focus,
+.ws-nav a:focus,
+.ws-mobile-links a:focus{
 
     outline:2px solid #ff2a6d;
 
     outline-offset:3px;
-
-}
-
-/*==================================================
-SMOOTH ANIMATIONS
-==================================================*/
-
-.topbar,
-.mobile-nav,
-.nav-backdrop,
-.desktop-nav a,
-.mobile-links a,
-.listen-live,
-.burger{
-
-    transition:all .25s ease;
 
 }
