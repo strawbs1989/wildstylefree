@@ -8,13 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=7">
+<link rel="stylesheet" href="/header.css">
 
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
   <!-- Top Navigation Header -->
-  <header class="topbar">
+  <div id="header"></div>
     <button class="burger" id="burger">☰</button>
 
     <div class="search-box">
@@ -453,7 +454,17 @@
     });
   });
 </script>
+<script>
+fetch("/header.html")
+.then(r => r.text())
+.then(html => {
+    document.getElementById("header").innerHTML = html;
 
+    const script = document.createElement("script");
+    script.src = "/header.js";
+    document.body.appendChild(script);
+});
+</script>
 
 </body>
 </html>
