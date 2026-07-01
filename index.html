@@ -15,7 +15,7 @@
 <body>
 
   <!-- Top Navigation Header -->
-  <div id="header"></div>
+  <div id="site-header"></div>
     
 
   <!-- Master Content Wrapper Grid Layout -->
@@ -354,6 +354,7 @@
   <script src="/theme.js"></script>
   <script src="/schedule.js"></script>
   <script src="/test/player.js"></script>
+  <script src="/header.js"></script>
 
   <!-- Matcher Logic Engine Script -->
   <script>
@@ -400,17 +401,7 @@
 
   <!-- Mobile Menu Navigation Trigger Script -->
 
-<script>
-fetch("/header.html")
-.then(r => r.text())
-.then(html => {
-    document.getElementById("header").innerHTML = html;
 
-    const script = document.createElement("script");
-    script.src = "/header.js";
-    document.body.appendChild(script);
-});
-</script>
 
 </body>
 </html>
