@@ -295,7 +295,36 @@ OVERLAY
 }
 
 /*==================================================
-MOBILE DRAWER
+MOBILE NAVIGATION v2
+==================================================*/
+
+.ws-overlay{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.65);
+
+    backdrop-filter:blur(4px);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.35s;
+
+    z-index:9998;
+
+}
+
+.ws-overlay.show{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+/*==================================================
+DRAWER
 ==================================================*/
 
 .ws-mobile{
@@ -303,33 +332,279 @@ MOBILE DRAWER
     position:fixed;
 
     top:0;
-    left:-290px;
+    left:-310px;
 
-    width:280px;
-    max-width:85vw;
+    width:290px;
+    max-width:86vw;
 
     height:100vh;
-
-    background:linear-gradient(
-        180deg,
-        #171127,
-        #0d0818
-    );
 
     display:flex;
     flex-direction:column;
 
+    background:linear-gradient(
+        180deg,
+        #1b1430 0%,
+        #120d23 45%,
+        #0c0818 100%
+    );
+
+    box-shadow:
+        18px 0 45px rgba(0,0,0,.55);
+
     transition:left .35s ease;
 
-    z-index:4999;
-
-    box-shadow:15px 0 40px rgba(0,0,0,.55);
+    z-index:9999;
 
 }
 
 .ws-mobile.open{
 
     left:0;
+
+}
+
+/*==================================================
+TOP
+==================================================*/
+
+.ws-mobile-top{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:22px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+/*==================================================
+BRAND
+==================================================*/
+
+.ws-brand{
+
+    display:flex;
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.ws-brand-icon{
+
+    width:52px;
+    height:52px;
+
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:1.6rem;
+
+    background:linear-gradient(
+        135deg,
+        #ff2a6d,
+        #6c63ff
+    );
+
+    box-shadow:
+        0 0 18px rgba(255,42,109,.30);
+
+}
+
+.ws-brand-text{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.ws-brand-text strong{
+
+    color:#fff;
+
+    font-size:1.1rem;
+
+    font-family:Oswald,sans-serif;
+
+    font-weight:600;
+
+}
+
+.ws-brand-text span{
+
+    color:#aaa;
+
+    font-size:.72rem;
+
+    margin-top:3px;
+
+}
+
+/*==================================================
+CLOSE BUTTON
+==================================================*/
+
+#wsClose{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:1.5rem;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+#wsClose:hover{
+
+    background:#ff2a6d;
+
+}
+
+/*==================================================
+LINKS
+==================================================*/
+
+.ws-mobile-links{
+
+    flex:1;
+
+    padding:18px 0;
+
+}
+
+.ws-mobile-links a{
+
+    display:flex;
+    align-items:center;
+
+    gap:16px;
+
+    padding:16px 24px;
+
+    color:#ddd;
+
+    text-decoration:none;
+
+    font-size:.98rem;
+
+    border-left:4px solid transparent;
+
+    transition:.25s;
+
+}
+
+.ws-mobile-links span{
+
+    width:22px;
+
+    text-align:center;
+
+}
+
+.ws-mobile-links a:hover{
+
+    background:rgba(255,42,109,.10);
+
+    border-left-color:#ff2a6d;
+
+    color:#fff;
+
+    padding-left:30px;
+
+}
+
+.ws-mobile-links a.active{
+
+    color:#ff2a6d;
+
+    background:rgba(255,42,109,.12);
+
+    border-left-color:#ff2a6d;
+
+    font-weight:600;
+
+}
+
+/*==================================================
+SOCIAL
+==================================================*/
+
+.ws-social{
+
+    padding:20px 24px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.ws-social h4{
+
+    color:#fff;
+
+    font-size:.82rem;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:12px;
+
+}
+
+.ws-social a{
+
+    display:block;
+
+    padding:10px 0;
+
+    color:#aaa;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+}
+
+.ws-social a:hover{
+
+    color:#fff;
+
+    padding-left:6px;
+
+}
+
+/*==================================================
+FOOTER
+==================================================*/
+
+.ws-mobile-footer{
+
+    padding:20px;
+
+}
+
+.ws-live.mobile{
+
+    width:100%;
+
+    justify-content:center;
 
 }
 
