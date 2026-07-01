@@ -6,39 +6,13 @@
   <title>Wildstyle Radio - Schedule</title>
   <link rel="stylesheet" href="https://wildstyle.vip/style.css?v=4">
   <link rel="stylesheet" href="/test/schedule.css?v=2">
+<link rel="stylesheet" href="/header.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <header class="topbar">
-    <button class="burger" id="burger">☰</button>
-
-    <div class="search-box">
-      <input type="text" placeholder="Search DJs, Shows...">
-    </div>
-
-    <div class="social-links">
-      <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-    </div>
-
-    <a href="/listen.html" class="btn-primary">Listen Live</a>
-  </header>
-
-  <div class="nav-backdrop" id="navBackdrop" hidden></div>
-  <nav class="mobile-nav" id="mobileNav">
-    <div class="mobile-nav-top">
-      <h3>Wildstyle Navigation</h3>
-      <button id="navClose">✕</button>
-    </div>
-    <a href="/index.html">Home</a>
-    <a href="/djs.html">DJs</a>
-    <a href="/schedule.html" class="active">Schedule</a>
-    <a href="/chat.html">Chat</a>
-    <a href="/map.html">Map</a>
-    <a href="/support.html">Support</a>
-  </nav>
+    <!-- Top Navigation Header -->
+    <div id="header"></div>
 
   <div class="dashboard-v2 app-container">
     
@@ -105,35 +79,9 @@
   </div>
 
   <script src="/schedule.js?v=2"></script>
+  <script src="/header.js"></script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const burger = document.getElementById("burger");
-      const mobileNav = document.getElementById("mobileNav");
-      const navBackdrop = document.getElementById("navBackdrop");
-      const navClose = document.getElementById("navClose");
-
-      function openMenu() {
-        mobileNav.classList.add("active");
-        if (navBackdrop) navBackdrop.removeAttribute("hidden");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeMenu() {
-        mobileNav.classList.remove("active");
-        if (navBackdrop) navBackdrop.setAttribute("hidden", "");
-        document.body.style.overflow = "";
-      }
-
-      if (burger) burger.addEventListener("click", openMenu);
-      if (navClose) navClose.addEventListener("click", closeMenu);
-      if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
-
-      document.querySelectorAll(".mobile-nav a").forEach(link => {
-        link.addEventListener("click", closeMenu);
-      });
-    });
-  </script>
+  
 
 </body>
 </html>
