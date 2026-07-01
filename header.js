@@ -4,8 +4,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-const mount = document.getElementById("site-header");
-
+const mount = document.getElementById("header");
 if(!mount) return;
 
 mount.innerHTML = `
