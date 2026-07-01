@@ -1,13 +1,14 @@
 /*==================================================
-  WILDSTYLE HEADER v3
+  WILDSTYLE HEADER v4
 ==================================================*/
 
 document.addEventListener("DOMContentLoaded", () => {
 
-const mount = document.getElementById("header");
-if(!mount) return;
+    const mount = document.getElementById("header");
 
-mount.innerHTML = `
+    if (!mount) return;
+
+    mount.innerHTML = `
 
 <header class="ws-header">
 
@@ -27,13 +28,16 @@ mount.innerHTML = `
 
             <img
                 src="/images/logo.png"
-                alt="Wildstyle Radio">
+                alt="Wildstyle Radio Logo"
+                class="ws-logo-image">
 
-            <span>
+            <div class="ws-logo-text">
 
-                Wildstyle Radio
+                <strong>Wildstyle Radio</strong>
 
-            </span>
+                <span>Underground Music Community</span>
+
+            </div>
 
         </a>
 
@@ -57,52 +61,41 @@ mount.innerHTML = `
 
     </nav>
 
-    <a
-        href="https://streaming.live365.com/a50378"
-        target="_blank"
-        class="ws-live">
+    <div class="header-actions">
 
-        <span></span>
+        <a
+            href="https://streaming.live365.com/a50378"
+            target="_blank"
+            class="ws-live">
 
-        Listen Live
+            <span class="dot"></span>
 
-    </a>
+            Listen Live
+
+        </a>
+
+    </div>
 
 </header>
 
-<div
-    class="ws-overlay"
-    id="wsOverlay">
+<div class="ws-overlay" id="wsOverlay"></div>
 
-</div>
-
-<aside
-    class="ws-mobile"
-    id="wsMobile">
+<aside class="ws-mobile" id="wsMobile">
 
     <div class="ws-mobile-top">
 
         <div class="ws-brand">
 
-            <div class="ws-brand-icon">
-
-                🎧
-
-            </div>
+            <img
+                src="/images/logo.png"
+                class="ws-brand-logo"
+                alt="Wildstyle Radio">
 
             <div class="ws-brand-text">
 
-                <strong>
+                <strong>Wildstyle Radio</strong>
 
-                    Wildstyle Radio
-
-                </strong>
-
-                <span>
-
-                    Underground Music Community
-
-                </span>
+                <span>Underground Music Community</span>
 
             </div>
 
@@ -120,90 +113,36 @@ mount.innerHTML = `
 
     <nav class="ws-mobile-links">
 
-        <a href="/index.html">
+        <a href="/index.html">🏠 Home</a>
 
-            <span>🏠</span>
+        <a href="/djs.html">🎙 DJs</a>
 
-            Home
+        <a href="/artists.html">🎧 Artists</a>
 
-        </a>
+        <a href="/schedule.html">📅 Schedule</a>
 
-        <a href="/djs.html">
+        <a href="/chat.html">💬 Community</a>
 
-            <span>🎙</span>
+        <a href="/map.html">🗺 Listener Map</a>
 
-            DJs
-
-        </a>
-
-        <a href="/artists.html">
-
-            <span>🎧</span>
-
-            Artists
-
-        </a>
-
-        <a href="/schedule.html">
-
-            <span>📅</span>
-
-            Schedule
-
-        </a>
-
-        <a href="/chat.html">
-
-            <span>💬</span>
-
-            Community
-
-        </a>
-
-        <a href="/map.html">
-
-            <span>🗺</span>
-
-            Listener Map
-
-        </a>
-
-        <a href="/shop.html">
-
-            <span>🛍</span>
-
-            Shop
-
-        </a>
+        <a href="/shop.html">🛍 Shop</a>
 
     </nav>
 
     <div class="ws-social">
 
-        <h4>
+        <h4>FOLLOW WILDSTYLE</h4>
 
-            Follow Wildstyle
-
-        </h4>
-
-        <a
-            href="https://facebook.com/wildstyleuk"
-            target="_blank">
-
+        <a href="https://facebook.com/wildstyleuk" target="_blank">
             🌐 Facebook
-
         </a>
 
         <a href="#">
-
             📷 Instagram
-
         </a>
 
         <a href="#">
-
             🎵 TikTok
-
         </a>
 
     </div>
@@ -215,7 +154,7 @@ mount.innerHTML = `
             target="_blank"
             class="ws-live mobile">
 
-            <span></span>
+            <span class="dot"></span>
 
             Listen Live
 
@@ -227,92 +166,68 @@ mount.innerHTML = `
 
 `;
 
-const burger=document.getElementById("wsBurger");
-const menu=document.getElementById("wsMobile");
-const overlay=document.getElementById("wsOverlay");
-const close=document.getElementById("wsClose");
+    const burger = document.getElementById("wsBurger");
+    const mobile = document.getElementById("wsMobile");
+    const overlay = document.getElementById("wsOverlay");
+    const close = document.getElementById("wsClose");
 
-function openMenu(){
+    function openMenu() {
 
-    menu.classList.add("open");
-    overlay.classList.add("show");
+        mobile.classList.add("open");
+        overlay.classList.add("show");
 
-    burger.setAttribute(
-        "aria-expanded",
-        "true"
-    );
+        burger.setAttribute("aria-expanded", "true");
 
-    document.body.style.overflow="hidden";
-
-}
-
-function closeMenu(){
-
-    menu.classList.remove("open");
-    overlay.classList.remove("show");
-
-    burger.setAttribute(
-        "aria-expanded",
-        "false"
-    );
-
-    document.body.style.overflow="";
-
-}
-
-burger.addEventListener("click",openMenu);
-
-close.addEventListener("click",closeMenu);
-
-overlay.addEventListener("click",closeMenu);
-
-document.addEventListener("keydown",e=>{
-
-    if(e.key==="Escape"){
-
-        closeMenu();
+        document.body.style.overflow = "hidden";
 
     }
 
-});
+    function closeMenu() {
 
-document
-.querySelectorAll(".ws-mobile-links a")
-.forEach(link=>{
+        mobile.classList.remove("open");
+        overlay.classList.remove("show");
 
-    link.addEventListener(
-        "click",
-        closeMenu
-    );
+        burger.setAttribute("aria-expanded", "false");
 
-});
-
-/*=================================
-ACTIVE PAGE
-=================================*/
-
-const page=
-window.location.pathname
-.split("/")
-.pop()||"index.html";
-
-document
-.querySelectorAll(
-".ws-nav a,.ws-mobile-links a"
-)
-.forEach(link=>{
-
-    const href=
-    link.getAttribute("href");
-
-    if(!href) return;
-
-    if(href.endsWith(page)){
-
-        link.classList.add("active");
+        document.body.style.overflow = "";
 
     }
 
-});
+    burger.addEventListener("click", openMenu);
+
+    close.addEventListener("click", closeMenu);
+
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+
+        if (e.key === "Escape") {
+
+            closeMenu();
+
+        }
+
+    });
+
+    document.querySelectorAll(".ws-mobile-links a")
+        .forEach(link => {
+
+            link.addEventListener("click", closeMenu);
+
+        });
+
+    const page =
+        window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll(".ws-nav a, .ws-mobile-links a")
+        .forEach(link => {
+
+            if (link.getAttribute("href").endsWith(page)) {
+
+                link.classList.add("active");
+
+            }
+
+        });
 
 });
