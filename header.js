@@ -83,14 +83,35 @@ mount.innerHTML = `
 
     <div class="ws-mobile-top">
 
-        <strong>
+        <div class="ws-brand">
 
-            Wildstyle
+            <div class="ws-brand-icon">
 
-        </strong>
+                🎧
+
+            </div>
+
+            <div class="ws-brand-text">
+
+                <strong>
+
+                    Wildstyle Radio
+
+                </strong>
+
+                <span>
+
+                    Underground Music Community
+
+                </span>
+
+            </div>
+
+        </div>
 
         <button
-            id="wsClose">
+            id="wsClose"
+            aria-label="Close Menu">
 
             ✕
 
@@ -100,56 +121,108 @@ mount.innerHTML = `
 
     <nav class="ws-mobile-links">
 
-        <a href="/index.html">🏠 Home</a>
+        <a href="/index.html">
 
-        <a href="/djs.html">🎙 DJs</a>
+            <span>🏠</span>
 
-        <a href="/artists.html">🎧 Artists</a>
+            Home
 
-        <a href="/schedule.html">📅 Schedule</a>
+        </a>
 
-        <a href="/chat.html">💬 Community</a>
+        <a href="/djs.html">
 
-        <a href="/map.html">🗺 Listener Map</a>
+            <span>🎙</span>
 
-        <a href="/shop.html">🛍 Shop</a>
+            DJs
+
+        </a>
+
+        <a href="/artists.html">
+
+            <span>🎧</span>
+
+            Artists
+
+        </a>
+
+        <a href="/schedule.html">
+
+            <span>📅</span>
+
+            Schedule
+
+        </a>
+
+        <a href="/chat.html">
+
+            <span>💬</span>
+
+            Community
+
+        </a>
+
+        <a href="/map.html">
+
+            <span>🗺</span>
+
+            Listener Map
+
+        </a>
+
+        <a href="/shop.html">
+
+            <span>🛍</span>
+
+            Shop
+
+        </a>
 
     </nav>
 
     <div class="ws-social">
 
+        <h4>
+
+            Follow Wildstyle
+
+        </h4>
+
         <a
-        href="https://facebook.com/wildstyleuk"
-        target="_blank">
+            href="https://facebook.com/wildstyleuk"
+            target="_blank">
 
-            Facebook
-
-        </a>
-
-        <a href="#">
-
-            Instagram
+            🌐 Facebook
 
         </a>
 
         <a href="#">
 
-            TikTok
+            📷 Instagram
+
+        </a>
+
+        <a href="#">
+
+            🎵 TikTok
 
         </a>
 
     </div>
 
-    <a
-        href="https://streaming.live365.com/a50378"
-        target="_blank"
-        class="ws-live mobile">
+    <div class="ws-mobile-footer">
 
-        <span></span>
+        <a
+            href="https://streaming.live365.com/a50378"
+            target="_blank"
+            class="ws-live mobile">
 
-        Listen Live
+            <span></span>
 
-    </a>
+            Listen Live
+
+        </a>
+
+    </div>
 
 </aside>
 
