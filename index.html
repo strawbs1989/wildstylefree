@@ -16,34 +16,7 @@
 
   <!-- Top Navigation Header -->
   <div id="header"></div>
-    <!-- <button class="burger" id="burger">☰</button>
-
-    <div class="search-box">
-      <input type="text" placeholder="Search DJs, Shows...">
-    </div>
-
-    <div class="social-links">
-      <a href="https://facebook.com/wildstyleuk" target="_blank">Facebook</a>
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-    </div>
-
-    <a href="/listen.html" class="btn-primary">Listen Live</a>
-  </header>
-
-  <!-- Mobile Overlay Drawer Navigation -->
-  <div class="nav-backdrop" id="navBackdrop" hidden></div>
-  <nav class="mobile-nav" id="mobileNav">
-    <div class="mobile-nav-top">
-      <h3>Wildstyle</h3>
-      <button id="navClose">✕</button>
-    </div>
-    <a href="/index.html" class="active">Home</a>
-    <a href="/djs.html">DJs</a>
-    <a href="/schedule.html">Schedule</a>
-    <a href="/chat.html">Chat</a>
-    <a href="/map.html">Map</a>
-  </nav> -->
+    
 
   <!-- Master Content Wrapper Grid Layout -->
   <div class="dashboard-v2 app-container">
@@ -426,34 +399,7 @@
   </script>
 
   <!-- Mobile Menu Navigation Trigger Script -->
-<!--  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const burger = document.getElementById("burger");
-    const mobileNav = document.getElementById("mobileNav");
-    const navBackdrop = document.getElementById("navBackdrop");
-    const navClose = document.getElementById("navClose");
 
-    function openMenu() {
-      mobileNav.classList.add("active");
-      if (navBackdrop) navBackdrop.removeAttribute("hidden");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeMenu() {
-      mobileNav.classList.remove("active");
-      if (navBackdrop) navBackdrop.setAttribute("hidden", "");
-      document.body.style.overflow = "";
-    }
-
-    if (burger) burger.addEventListener("click", openMenu);
-    if (navClose) navClose.addEventListener("click", closeMenu);
-    if (navBackdrop) navBackdrop.addEventListener("click", closeMenu);
-
-    document.querySelectorAll(".mobile-nav a").forEach(link => {
-      link.addEventListener("click", closeMenu);
-    });
-  });
-</script> -->
 <script>
 fetch("/header.html")
 .then(r => r.text())
