@@ -1,34 +1,39 @@
 /*==================================================
-WILDSTYLE HEADER v3
+WILDSTYLE SHARED HEADER
+Part 1 - Base + Desktop
 ==================================================*/
 
 :root{
+    --header-bg:#0d0818;
+    --panel:#171127;
+    --border:rgba(255,255,255,.08);
 
-    --ws-bg:#090613;
-    --ws-panel:#151022;
+    --pink:#ff2a6d;
+    --blue:#6c63ff;
 
-    --ws-pink:#ff2a6d;
-    --ws-blue:#4b6fff;
+    --text:#ffffff;
+    --muted:#9f97b8;
+}
 
-    --ws-text:#ffffff;
-    --ws-muted:#b8b4c8;
+/*==================================================
+RESET
+==================================================*/
 
-    --ws-border:rgba(255,255,255,.08);
-
+*{
+    box-sizing:border-box;
 }
 
 /*==================================================
 HEADER
 ==================================================*/
 
-.ws-header{
+.topbar{
 
     position:sticky;
     top:0;
 
     z-index:5000;
 
-    width:100%;
     height:72px;
 
     display:flex;
@@ -37,25 +42,12 @@ HEADER
 
     padding:0 24px;
 
-    background:rgba(9,6,19,.96);
+    background:rgba(13,8,24,.96);
 
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
 
-    border-bottom:1px solid var(--ws-border);
-
-}
-
-/*==================================================
-LEFT
-==================================================*/
-
-.ws-left{
-
-    display:flex;
-    align-items:center;
-
-    gap:18px;
+    border-bottom:1px solid var(--border);
 
 }
 
@@ -63,12 +55,12 @@ LEFT
 BURGER
 ==================================================*/
 
-.ws-burger{
+.burger{
 
     display:none;
 
-    width:46px;
-    height:46px;
+    width:48px;
+    height:48px;
 
     border:none;
     background:none;
@@ -83,9 +75,9 @@ BURGER
 
 }
 
-.ws-burger:hover{
+.burger:hover{
 
-    color:var(--ws-pink);
+    color:var(--pink);
 
 }
 
@@ -93,37 +85,34 @@ BURGER
 LOGO
 ==================================================*/
 
-.ws-logo{
+.logo{
 
     display:flex;
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
     text-decoration:none;
 
-    color:#fff;
-
 }
 
-.ws-logo img{
+.logo-image{
 
-    width:42px;
-    height:42px;
+    width:44px;
+    height:44px;
 
     object-fit:contain;
 
 }
 
-.ws-logo span{
+.logo-text{
 
     font-family:"Oswald",sans-serif;
 
     font-size:1.45rem;
-
     font-weight:600;
 
-    letter-spacing:.5px;
+    color:#fff;
 
 }
 
@@ -131,7 +120,7 @@ LOGO
 DESKTOP NAV
 ==================================================*/
 
-.ws-nav{
+.desktop-nav{
 
     display:flex;
     align-items:center;
@@ -140,33 +129,31 @@ DESKTOP NAV
 
 }
 
-.ws-nav a{
+.desktop-nav a{
 
     position:relative;
 
+    color:var(--muted);
+
     text-decoration:none;
-
-    color:var(--ws-muted);
-
-    font-size:.96rem;
 
     transition:.25s;
 
 }
 
-.ws-nav a:hover{
+.desktop-nav a:hover{
 
     color:#fff;
 
 }
 
-.ws-nav a.active{
+.desktop-nav a.active{
 
-    color:var(--ws-pink);
+    color:var(--pink);
 
 }
 
-.ws-nav a::after{
+.desktop-nav a::after{
 
     content:"";
 
@@ -180,125 +167,105 @@ DESKTOP NAV
 
     background:linear-gradient(
         90deg,
-        var(--ws-pink),
-        var(--ws-blue)
+        var(--pink),
+        var(--blue)
     );
 
     transition:.25s;
 
 }
 
-.ws-nav a:hover::after,
-.ws-nav a.active::after{
+.desktop-nav a:hover::after,
+.desktop-nav a.active::after{
 
     width:100%;
 
 }
 
 /*==================================================
-LISTEN LIVE BUTTON
+RIGHT SIDE
 ==================================================*/
 
-.ws-live{
+.header-actions{
 
     display:flex;
     align-items:center;
+
+}
+
+/*==================================================
+LISTEN BUTTON
+==================================================*/
+
+.listen-live{
+
+    display:flex;
+    align-items:center;
+
     gap:10px;
 
     padding:11px 22px;
 
-    border-radius:40px;
-
-    background:linear-gradient(
-        135deg,
-        var(--ws-pink),
-        #d50062
-    );
-
-    color:#fff;
+    border-radius:999px;
 
     text-decoration:none;
 
+    color:#fff;
+
     font-weight:600;
+
+    background:linear-gradient(
+        135deg,
+        var(--pink),
+        #ff006a
+    );
 
     box-shadow:0 0 20px rgba(255,42,109,.30);
 
+    transition:.25s;
+
 }
 
-.ws-live:hover{
+.listen-live:hover{
 
     transform:translateY(-2px);
 
-    box-shadow:0 0 28px rgba(255,42,109,.45);
-
 }
 
-.ws-live span{
+.live-dot{
 
-    width:9px;
-    height:9px;
+    width:8px;
+    height:8px;
 
     border-radius:50%;
 
     background:#fff;
 
-    animation:wsPulse 1.2s infinite;
+    animation:pulse 1.2s infinite;
 
 }
 
-@keyframes wsPulse{
+@keyframes pulse{
 
     0%,100%{
-
         opacity:1;
         transform:scale(1);
-
     }
 
     50%{
-
-        opacity:.45;
-        transform:scale(.6);
-
+        opacity:.4;
+        transform:scale(.7);
     }
 
 }
 
 /*==================================================
-OVERLAY
+PART 2 - MOBILE NAVIGATION
 ==================================================*/
 
-.ws-overlay{
+/* Overlay */
 
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.65);
-
-    backdrop-filter:blur(3px);
-
-    opacity:0;
-    visibility:hidden;
-
-    transition:.35s;
-
-    z-index:4998;
-
-}
-
-.ws-overlay.show{
-
-    opacity:1;
-    visibility:visible;
-
-}
-
-/*==================================================
-MOBILE NAVIGATION v2
-==================================================*/
-
-.ws-overlay{
+.nav-backdrop{
 
     position:fixed;
     inset:0;
@@ -310,55 +277,52 @@ MOBILE NAVIGATION v2
     opacity:0;
     visibility:hidden;
 
-    transition:.35s;
+    transition:.3s;
 
     z-index:9998;
 
 }
 
-.ws-overlay.show{
+.nav-backdrop.show{
 
     opacity:1;
     visibility:visible;
 
 }
 
-/*==================================================
-DRAWER
-==================================================*/
+/* Drawer */
 
-.ws-mobile{
+.mobile-nav{
 
     position:fixed;
 
     top:0;
-    left:-310px;
+    left:-300px;
 
     width:290px;
     max-width:86vw;
 
     height:100vh;
 
+    background:linear-gradient(
+        180deg,
+        #171127 0%,
+        #120d23 50%,
+        #0d0818 100%
+    );
+
     display:flex;
     flex-direction:column;
 
-    background:linear-gradient(
-        180deg,
-        #1b1430 0%,
-        #120d23 45%,
-        #0c0818 100%
-    );
-
-    box-shadow:
-        18px 0 45px rgba(0,0,0,.55);
-
     transition:left .35s ease;
+
+    box-shadow:15px 0 40px rgba(0,0,0,.55);
 
     z-index:9999;
 
 }
 
-.ws-mobile.open{
+.mobile-nav.open{
 
     left:0;
 
@@ -368,7 +332,7 @@ DRAWER
 TOP
 ==================================================*/
 
-.ws-mobile-top{
+.mobile-header{
 
     display:flex;
     justify-content:space-between;
@@ -380,83 +344,21 @@ TOP
 
 }
 
-/*==================================================
-BRAND
-==================================================*/
+.mobile-logo{
 
-.ws-brand{
+    width:46px;
+    height:46px;
 
-    display:flex;
-    align-items:center;
-
-    gap:14px;
+    object-fit:contain;
 
 }
 
-.ws-brand-icon{
-
-    width:52px;
-    height:52px;
-
-    border-radius:14px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:1.6rem;
-
-    background:linear-gradient(
-        135deg,
-        #ff2a6d,
-        #6c63ff
-    );
-
-    box-shadow:
-        0 0 18px rgba(255,42,109,.30);
-
-}
-
-.ws-brand-text{
-
-    display:flex;
-    flex-direction:column;
-
-}
-
-.ws-brand-text strong{
-
-    color:#fff;
-
-    font-size:1.1rem;
-
-    font-family:Oswald,sans-serif;
-
-    font-weight:600;
-
-}
-
-.ws-brand-text span{
-
-    color:#aaa;
-
-    font-size:.72rem;
-
-    margin-top:3px;
-
-}
-
-/*==================================================
-CLOSE BUTTON
-==================================================*/
-
-#wsClose{
+#navClose{
 
     width:42px;
     height:42px;
 
     border:none;
-
     border-radius:50%;
 
     background:rgba(255,255,255,.08);
@@ -471,201 +373,17 @@ CLOSE BUTTON
 
 }
 
-#wsClose:hover{
+#navClose:hover{
 
     background:#ff2a6d;
 
 }
 
 /*==================================================
-LINKS
+MENU LINKS
 ==================================================*/
 
-.ws-mobile-links{
-
-    flex:1;
-
-    padding:18px 0;
-
-}
-
-.ws-mobile-links a{
-
-    display:flex;
-    align-items:center;
-
-    gap:16px;
-
-    padding:16px 24px;
-
-    color:#ddd;
-
-    text-decoration:none;
-
-    font-size:.98rem;
-
-    border-left:4px solid transparent;
-
-    transition:.25s;
-
-}
-
-.ws-mobile-links span{
-
-    width:22px;
-
-    text-align:center;
-
-}
-
-.ws-mobile-links a:hover{
-
-    background:rgba(255,42,109,.10);
-
-    border-left-color:#ff2a6d;
-
-    color:#fff;
-
-    padding-left:30px;
-
-}
-
-.ws-mobile-links a.active{
-
-    color:#ff2a6d;
-
-    background:rgba(255,42,109,.12);
-
-    border-left-color:#ff2a6d;
-
-    font-weight:600;
-
-}
-
-/*==================================================
-SOCIAL
-==================================================*/
-
-.ws-social{
-
-    padding:20px 24px;
-
-    border-top:1px solid rgba(255,255,255,.08);
-
-}
-
-.ws-social h4{
-
-    color:#fff;
-
-    font-size:.82rem;
-
-    text-transform:uppercase;
-
-    letter-spacing:1px;
-
-    margin-bottom:12px;
-
-}
-
-.ws-social a{
-
-    display:block;
-
-    padding:10px 0;
-
-    color:#aaa;
-
-    text-decoration:none;
-
-    transition:.25s;
-
-}
-
-.ws-social a:hover{
-
-    color:#fff;
-
-    padding-left:6px;
-
-}
-
-/*==================================================
-FOOTER
-==================================================*/
-
-.ws-mobile-footer{
-
-    padding:20px;
-
-}
-
-.ws-live.mobile{
-
-    width:100%;
-
-    justify-content:center;
-
-}
-
-/*==================================================
-TOP
-==================================================*/
-
-.ws-mobile-top{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:24px;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-}
-
-.ws-mobile-top strong{
-
-    font-family:Oswald,sans-serif;
-
-    font-size:1.45rem;
-
-    color:#fff;
-
-}
-
-#wsClose{
-
-    width:42px;
-    height:42px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.08);
-
-    color:#fff;
-
-    font-size:1.6rem;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-#wsClose:hover{
-
-    background:var(--ws-pink);
-
-}
-
-/*==================================================
-LINKS
-==================================================*/
-
-.ws-mobile-links{
+.mobile-links{
 
     flex:1;
 
@@ -676,7 +394,7 @@ LINKS
 
 }
 
-.ws-mobile-links a{
+.mobile-links a{
 
     display:flex;
     align-items:center;
@@ -685,7 +403,7 @@ LINKS
 
     padding:16px 24px;
 
-    color:#ddd;
+    color:#d8d8d8;
 
     text-decoration:none;
 
@@ -695,27 +413,41 @@ LINKS
 
 }
 
-.ws-mobile-links a:hover{
+.mobile-links a:hover{
 
     background:rgba(255,42,109,.08);
 
-    border-left-color:var(--ws-pink);
-
     color:#fff;
+
+    border-left-color:#ff2a6d;
 
     padding-left:30px;
 
 }
 
-.ws-mobile-links a.active{
+.mobile-links a.active{
 
-    color:var(--ws-pink);
+    background:rgba(255,42,109,.12);
 
-    background:rgba(255,42,109,.10);
+    color:#ff2a6d;
 
-    border-left-color:var(--ws-pink);
+    border-left-color:#ff2a6d;
 
     font-weight:600;
+
+}
+
+/*==================================================
+DIVIDER
+==================================================*/
+
+.mobile-divider{
+
+    height:1px;
+
+    margin:0 24px;
+
+    background:rgba(255,255,255,.08);
 
 }
 
@@ -723,29 +455,27 @@ LINKS
 SOCIAL
 ==================================================*/
 
-.ws-social{
+.mobile-social{
 
-    padding:18px 24px;
-
-    border-top:1px solid rgba(255,255,255,.08);
+    padding:20px 24px;
 
 }
 
-.ws-social a{
+.mobile-social a{
 
     display:block;
 
     padding:10px 0;
 
-    text-decoration:none;
+    color:#9f97b8;
 
-    color:var(--ws-muted);
+    text-decoration:none;
 
     transition:.25s;
 
 }
 
-.ws-social a:hover{
+.mobile-social a:hover{
 
     color:#fff;
 
@@ -755,47 +485,52 @@ SOCIAL
 BOTTOM BUTTON
 ==================================================*/
 
-.ws-live.mobile{
+.mobile-footer{
 
-    margin:20px;
+    padding:20px;
+
+}
+
+.mobile-footer .listen-live{
+
+    width:100%;
 
     justify-content:center;
 
 }
 
 /*==================================================
-RESPONSIVE
+PART 3 - RESPONSIVE + FINAL POLISH
 ==================================================*/
 
-@media (max-width:1100px){
+/* Desktop */
 
-    .ws-nav{
+@media (min-width:901px){
 
-        gap:20px;
-
+    .burger{
+        display:none;
     }
 
-    .ws-nav a{
-
-        font-size:.9rem;
-
+    .mobile-nav,
+    .nav-backdrop{
+        display:none;
     }
 
 }
 
-/*==================================================
-TABLET
-==================================================*/
+/* Tablet */
 
 @media (max-width:900px){
 
-    .ws-header{
+    .topbar{
+
+        height:68px;
 
         padding:0 18px;
 
     }
 
-    .ws-burger{
+    .burger{
 
         display:flex;
 
@@ -803,416 +538,6 @@ TABLET
         justify-content:center;
 
     }
-
-    .ws-nav{
-
-        display:none;
-
-    }
-
-    .ws-live{
-
-        display:flex;
-
-        padding:10px 18px;
-
-        font-size:.9rem;
-
-    }
-
-}
-
-/*==================================================
-MOBILE
-==================================================*/
-
-@media (max-width:700px){
-
-    .ws-header{
-
-        height:68px;
-
-        padding:0 16px;
-
-    }
-
-    .ws-logo{
-
-        gap:10px;
-
-    }
-
-    .ws-logo img{
-
-        width:36px;
-        height:36px;
-
-    }
-
-    .ws-logo span{
-
-        font-size:1.15rem;
-
-    }
-
-    .ws-live{
-
-        padding:10px 16px;
-
-        border-radius:999px;
-
-    }
-
-}
-
-/*==================================================
-SMALL PHONES
-==================================================*/
-
-@media (max-width:520px){
-
-    .ws-header{
-
-        padding:0 12px;
-
-    }
-
-    .ws-logo span{
-
-        display:none;
-
-    }
-
-    .ws-live{
-
-        display:none;
-
-    }
-
-    .ws-mobile{
-
-        width:280px;
-        max-width:82vw;
-
-    }
-
-}
-
-/*==================================================
-VERY SMALL PHONES
-==================================================*/
-
-@media (max-width:380px){
-
-    .ws-mobile{
-
-        width:260px;
-
-    }
-
-    .ws-mobile-links a{
-
-        padding:14px 20px;
-
-        font-size:.95rem;
-
-    }
-
-    .ws-social{
-
-        padding:18px 20px;
-
-    }
-
-}
-
-/*==================================================
-SMOOTH TRANSITIONS
-==================================================*/
-
-.ws-header,
-.ws-mobile,
-.ws-overlay,
-.ws-nav a,
-.ws-mobile-links a,
-.ws-live{
-
-    transition:all .25s ease;
-
-}
-
-/*==================================================
-ACCESSIBILITY
-==================================================*/
-
-.ws-burger:focus,
-#wsClose:focus,
-.ws-nav a:focus,
-.ws-mobile-links a:focus,
-.ws-live:focus{
-
-    outline:2px solid var(--ws-pink);
-
-    outline-offset:3px;
-
-}
-
-
-/*==================================================
-PART 3
-FINAL POLISH
-==================================================*/
-
-/* Burger Button */
-
-.ws-burger{
-
-    width:48px;
-    height:48px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:transparent;
-
-    border:none;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-.ws-burger:hover{
-
-    background:rgba(255,255,255,.06);
-
-    border-radius:12px;
-
-}
-
-.ws-burger svg{
-
-    width:28px;
-    height:28px;
-
-    stroke:#ffffff;
-    stroke-width:2.5;
-
-    transition:.3s;
-
-}
-
-/* Logo */
-
-.ws-logo{
-
-    display:flex;
-    align-items:center;
-
-    gap:14px;
-
-    text-decoration:none;
-
-}
-
-.ws-logo img{
-
-    width:42px;
-    height:42px;
-
-    object-fit:contain;
-
-}
-
-.ws-logo-text{
-
-    display:flex;
-    flex-direction:column;
-
-}
-
-.ws-logo-text strong{
-
-    font-family:Oswald,sans-serif;
-
-    font-size:1.2rem;
-
-    color:#fff;
-
-    line-height:1;
-
-}
-
-.ws-logo-text span{
-
-    color:#8d84a8;
-
-    font-size:.72rem;
-
-    margin-top:4px;
-
-}
-
-/* Desktop Navigation */
-
-.desktop-nav{
-
-    display:flex;
-    align-items:center;
-
-    gap:28px;
-
-    margin-left:40px;
-
-}
-
-.desktop-nav a{
-
-    color:#cfc9dd;
-
-    text-decoration:none;
-
-    font-size:.95rem;
-
-    transition:.25s;
-
-    position:relative;
-
-}
-
-.desktop-nav a:hover{
-
-    color:#fff;
-
-}
-
-.desktop-nav a.active{
-
-    color:#ff2a6d;
-
-}
-
-.desktop-nav a.active::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:-10px;
-
-    height:2px;
-
-    background:#ff2a6d;
-
-}
-
-/* Listen Button */
-
-.ws-live{
-
-    display:inline-flex;
-
-    align-items:center;
-    justify-content:center;
-
-    gap:10px;
-
-    padding:12px 22px;
-
-    border-radius:999px;
-
-    background:linear-gradient(
-        90deg,
-        #ff2a6d,
-        #ff006a
-    );
-
-    color:#fff;
-
-    text-decoration:none;
-
-    font-weight:600;
-
-    box-shadow:
-        0 0 20px rgba(255,42,109,.30);
-
-    transition:.25s;
-
-}
-
-.ws-live:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 10px 28px rgba(255,42,109,.40);
-
-}
-
-.ws-live .dot{
-
-    width:8px;
-    height:8px;
-
-    border-radius:50%;
-
-    background:#fff;
-
-    animation:livePulse 1.2s infinite;
-
-}
-
-@keyframes livePulse{
-
-    0%{
-
-        opacity:1;
-        transform:scale(1);
-
-    }
-
-    50%{
-
-        opacity:.45;
-        transform:scale(.65);
-
-    }
-
-    100%{
-
-        opacity:1;
-        transform:scale(1);
-
-    }
-
-}
-
-/* Desktop */
-
-@media(min-width:901px){
-
-    .ws-burger{
-
-        display:none;
-
-    }
-
-    .ws-mobile,
-    .ws-overlay{
-
-        display:none;
-
-    }
-
-}
-
-/* Mobile */
-
-@media(max-width:900px){
 
     .desktop-nav{
 
@@ -1226,9 +551,42 @@ FINAL POLISH
 
     }
 
-    .ws-live{
+    .listen-live{
 
         padding:10px 18px;
+
+        font-size:.9rem;
+
+    }
+
+}
+
+/* Mobile */
+
+@media (max-width:650px){
+
+    .topbar{
+
+        padding:0 14px;
+
+    }
+
+    .logo-image{
+
+        width:38px;
+        height:38px;
+
+    }
+
+    .logo-text{
+
+        font-size:1.15rem;
+
+    }
+
+    .listen-live{
+
+        padding:10px 16px;
 
         font-size:.85rem;
 
@@ -1236,26 +594,86 @@ FINAL POLISH
 
 }
 
-@media(max-width:600px){
+/* Small phones */
 
-    .ws-logo-text span{
+@media (max-width:520px){
+
+    .logo-text{
 
         display:none;
 
     }
 
-    .ws-logo-text strong{
+    .listen-live{
 
-        font-size:1rem;
+        display:none;
+
+    }
+
+    .mobile-nav{
+
+        width:280px;
+
+        max-width:84vw;
 
     }
 
-    .ws-live{
+}
 
-        padding:10px 16px;
+/* Very small phones */
 
-        font-size:.8rem;
+@media (max-width:380px){
+
+    .mobile-nav{
+
+        width:260px;
 
     }
+
+    .mobile-links a{
+
+        padding:14px 20px;
+
+        font-size:.92rem;
+
+    }
+
+    .mobile-social{
+
+        padding:18px 20px;
+
+    }
+
+}
+
+/*==================================================
+ACCESSIBILITY
+==================================================*/
+
+.burger:focus,
+#navClose:focus,
+.desktop-nav a:focus,
+.mobile-links a:focus,
+.listen-live:focus{
+
+    outline:2px solid #ff2a6d;
+
+    outline-offset:3px;
+
+}
+
+/*==================================================
+SMOOTH ANIMATIONS
+==================================================*/
+
+.topbar,
+.mobile-nav,
+.nav-backdrop,
+.desktop-nav a,
+.mobile-links a,
+.listen-live,
+.burger{
+
+    transition:all .25s ease;
 
 }
