@@ -327,6 +327,56 @@ html, body {
     width: 100px;
 }
 
+/*==================================================
+DESKTOP TUNE IN
+Desktop only
+==================================================*/
+
+@media (min-width: 901px){
+
+    .wild-player{
+
+        display:grid;
+
+        grid-template-columns:100px 1fr auto;
+
+        align-items:center;
+
+        gap:24px;
+
+        flex-wrap:unset;
+
+    }
+
+    .player-cover{
+
+        width:100px;
+        height:100px;
+
+    }
+
+    .player-meta{
+
+        min-width:0;
+
+    }
+
+    .player-controls{
+
+        justify-content:flex-end;
+
+        white-space:nowrap;
+
+    }
+
+    #volumeSlider{
+
+        width:140px;
+
+    }
+
+}
+
 /* ==========================================================
    WIDGET COMPONENTS (SPOTLIGHT, TRENDS, NOTICEBOARD)
 ========================================================== */
