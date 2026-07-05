@@ -19,7 +19,7 @@ async function loadScheduleFromGoogle() {
     schedule = fetchedSlots.map(slot => {
       const djName = (slot.dj || "Free Slot").trim().toLowerCase();
       let djImage = "/images/default-dj.jpg"; // Default fallback image
-console.log("DJ Name:", djName);
+       console.log("DJ Name:", djName);
       // Check the text from your "DJ" column and map it to your local filenames
       if (djName.includes("mystic")) {
         djImage = "/images/joanne.jpeg";
