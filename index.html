@@ -375,64 +375,30 @@
   <!-- Matcher Logic Engine Script -->
   <script>
     const tribes = [
-
-{
-    name: "🔥 Dance Classics",
-
-    genres: ["Dance"],
-
-    eras: ["80s"],
-
-    description: "You love dance classics, club anthems and feel-good floor fillers.",
-
-    dj: "HotshotDJ",
-
-    djImage: "/images/djs/hotshotdj.jpg",
-
-    artist: "Wildstyle Crew",
-
-    artistImage: "/images/artists/wildstylecrew.jpg"
-
-},
-
-{
+  {
+    name: "🎧 Dancefloor Addicts",
+    genres: ["Dance", "House"],
+    eras: ["00s", "10s", "Today"],
+    description: "You love big beats, club anthems and weekend party vibes."
+  },
+  {
     name: "🔥 Urban Legends",
-
-    genres: ["Hip-Hop","R&B"],
-
-    eras: ["80s","90s"],
-
-    description: "Hip-Hop, R&B and urban classics are your thing.",
-
-    dj: "DJ Nala",
-
-    djImage: "/images/djs/djnala.jpg",
-
-    artist: "Neon Pulse",
-
-    artistImage: "/images/artists/neonpulse.jpg"
-
-},
-
-{
+    genres: ["Hip-Hop", "R&B"],
+    eras: ["90s", "00s", "10s"],
+    description: "Hip-Hop, R&B and urban classics are your thing."
+  },
+  {
+    name: "🎸 Rock Revolution",
+    genres: ["Rock", "Indie"],
+    eras: ["80s", "90s", "00s"],
+    description: "You live for guitars, alternative sounds and rock anthems."
+  },
+  {
     name: "🌈 Feel Good Vibes",
-
     genres: ["Pop"],
-
-    eras: ["80s","90s","Today"],
-
-    description: "You enjoy singalong hits and feel-good music.",
-
-    dj: "DJ Sarah",
-
-    djImage: "/images/djs/djsarah.jpg",
-
-    artist: "Pop Star",
-
-    artistImage: "/images/artists/popstar.jpg"
-
-}
-
+    eras: ["80s", "90s", "Today"],
+    description: "You enjoy singalong hits and feel-good music."
+  }
 ];
     document.getElementById("findTribeBtn").addEventListener("click", () => {
       const genre = document.getElementById("genreSelect").value;
@@ -455,97 +421,44 @@
       });
 
       if (!bestMatch || bestScore === 0) {
-
-    result.innerHTML = `
-    <div style="margin-top:15px">
-        <h3>No Match Found</h3>
-        <p>Try different choices.</p>
+  result.innerHTML = `
+    <div style="margin-top:15px; font-family:'Inter',sans-serif;">
+      <h3>No Match Found</h3>
+      <p>Try different choices.</p>
     </div>
-    `;
-
-    return;
-
+  `;
+  return;
 }
+
 result.innerHTML = `
-<div class="tribe-result-card">
+<div style="
+    margin-top:20px;
+    padding:15px;
+    border-radius:8px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    font-family:'Inter',sans-serif;
+">
+    <h3 style="
+        font-family:'Oswald',sans-serif;
+        text-transform:uppercase;
+        margin:0 0 5px 0;
+    ">
+        ${bestMatch.name}
+    </h3>
 
-    <div class="tribe-header">
-
-        <span class="tribe-icon">🎧</span>
-
-        <div>
-
-            <small>YOUR WILDSTYLE MATCH</small>
-
-            <h3>${bestMatch.name}</h3>
-
-            <span class="tribe-score">${bestScore}% Match</span>
-
-        </div>
-
-    </div>
-
-    <p class="tribe-description">
-
-        ${bestMatch.description}
-
+    <p style="color:#ff4d4d;margin:0 0 10px 0;">
+        <strong>${bestScore}% Match</strong>
     </p>
 
-    <div class="tribe-divider"></div>
-
-    <div class="tribe-section">
-
-        <h4>🎙 Meet Your DJ</h4>
-
-        <div class="tribe-profile">
-
-            <img
-                src="${bestMatch.djImage}"
-                alt="${bestMatch.dj}">
-
-            <div>
-
-                <strong>
-
-                    ${bestMatch.dj}
-
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="tribe-divider"></div>
-
-    <div class="tribe-section">
-
-        <h4>🎵 Featured Artist</h4>
-
-        <div class="tribe-profile">
-
-            <img
-                src="${bestMatch.artistImage}"
-                alt="${bestMatch.artist}">
-
-            <div>
-
-                <strong>
-
-                    ${bestMatch.artist}
-
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
+    <p style="
+        margin:0;
+        font-size:.95rem;
+        opacity:.85;
+    ">
+        ${bestMatch.description}
+    </p>
 </div>
-`;
-
 `;
   </script>
 
