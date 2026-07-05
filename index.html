@@ -402,16 +402,87 @@
       });
 
       if (!bestMatch || bestScore === 0) {
-        result.innerHTML = `<div style="margin-top: 15px; font-family: 'Inter', sans-serif;"><h3>No Match Found</h3><p>Try different choices.</p></div>`;
-        return;
-      }
+        result.innerHTML = `
+<div class="tribe-result-card">
 
-      result.innerHTML = `
-        <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-family: 'Inter', sans-serif;">
-          <h3 style="font-family: 'Oswald', sans-serif; text-transform: uppercase; margin: 0 0 5px 0;">${bestMatch.name}</h3>
-          <p style="color: #ff4d4d; margin: 0 0 10px 0;"><strong>${bestScore}% Match</strong></p>
-          <p style="margin: 0; font-size: 0.95rem; opacity: 0.85;">${bestMatch.description}</p>
-        </div>`;
+    <div class="tribe-header">
+
+        <span class="tribe-icon">🎧</span>
+
+        <div>
+
+            <small>YOUR WILDSTYLE MATCH</small>
+
+            <h3>${bestMatch.name}</h3>
+
+            <span class="tribe-score">${bestScore}% Match</span>
+
+        </div>
+
+    </div>
+
+    <p class="tribe-description">
+
+        ${bestMatch.description}
+
+    </p>
+
+    <div class="tribe-divider"></div>
+
+    <div class="tribe-section">
+
+        <h4>🎙 Meet Your DJ</h4>
+
+        <div class="tribe-profile">
+
+            <img
+                src="/images/default-dj.jpg"
+                alt="Recommended DJ"
+                id="tribeDjImage">
+
+            <div>
+
+                <strong id="tribeDjName">
+
+                    Coming Soon
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="tribe-divider"></div>
+
+    <div class="tribe-section">
+
+        <h4>🎵 Featured Artist</h4>
+
+        <div class="tribe-profile">
+
+            <img
+                src="/images/default-artist.jpg"
+                alt="Featured Artist"
+                id="tribeArtistImage">
+
+            <div>
+
+                <strong id="tribeArtistName">
+
+                    Coming Soon
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+`;
     });
   </script>
 
