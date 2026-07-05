@@ -375,12 +375,65 @@
   <!-- Matcher Logic Engine Script -->
   <script>
     const tribes = [
-      { name: "🎧 Dancefloor Addicts", genres: ["Dance", "House"], eras: ["00s", "10s", "Today"], description: "You love big beats, club anthems and weekend party vibes." },
-      { name: "🔥 Urban Legends", genres: ["Hip-Hop", "R&B"], eras: ["90s", "00s", "10s"], description: "Hip-Hop, R&B and urban classics are your thing." },
-      { name: "🎸 Rock Revolution", genres: ["Rock", "Indie"], eras: ["80s", "90s", "00s"], description: "You live for guitars, alternative sounds and rock anthems." },
-      { name: "🌈 Feel Good Vibes", genres: ["Pop"], eras: ["80s", "90s", "Today"], description: "You enjoy singalong hits and feel-good music." }
-    ];
 
+{
+    name: "🔥 Dance Classics",
+
+    genres: ["Dance"],
+
+    eras: ["80s"],
+
+    description: "You love dance classics, club anthems and feel-good floor fillers.",
+
+    dj: "HotshotDJ",
+
+    djImage: "/images/djs/hotshotdj.jpg",
+
+    artist: "Wildstyle Crew",
+
+    artistImage: "/images/artists/wildstylecrew.jpg"
+
+},
+
+{
+    name: "🔥 Urban Legends",
+
+    genres: ["Hip-Hop","R&B"],
+
+    eras: ["80s","90s"],
+
+    description: "Hip-Hop, R&B and urban classics are your thing.",
+
+    dj: "DJ Nala",
+
+    djImage: "/images/djs/djnala.jpg",
+
+    artist: "Neon Pulse",
+
+    artistImage: "/images/artists/neonpulse.jpg"
+
+},
+
+{
+    name: "🌈 Feel Good Vibes",
+
+    genres: ["Pop"],
+
+    eras: ["80s","90s","Today"],
+
+    description: "You enjoy singalong hits and feel-good music.",
+
+    dj: "DJ Sarah",
+
+    djImage: "/images/djs/djsarah.jpg",
+
+    artist: "Pop Star",
+
+    artistImage: "/images/artists/popstar.jpg"
+
+}
+
+];
     document.getElementById("findTribeBtn").addEventListener("click", () => {
       const genre = document.getElementById("genreSelect").value;
       const era = document.getElementById("eraSelect").value;
@@ -402,7 +455,18 @@
       });
 
       if (!bestMatch || bestScore === 0) {
-        result.innerHTML = `
+
+    result.innerHTML = `
+    <div style="margin-top:15px">
+        <h3>No Match Found</h3>
+        <p>Try different choices.</p>
+    </div>
+    `;
+
+    return;
+
+}
+result.innerHTML = `
 <div class="tribe-result-card">
 
     <div class="tribe-header">
@@ -436,15 +500,14 @@
         <div class="tribe-profile">
 
             <img
-                src="/images/default-dj.jpg"
-                alt="Recommended DJ"
-                id="tribeDjImage">
+                src="${bestMatch.djImage}"
+                alt="${bestMatch.dj}">
 
             <div>
 
-                <strong id="tribeDjName">
+                <strong>
 
-                    Coming Soon
+                    ${bestMatch.dj}
 
                 </strong>
 
@@ -463,15 +526,14 @@
         <div class="tribe-profile">
 
             <img
-                src="/images/default-artist.jpg"
-                alt="Featured Artist"
-                id="tribeArtistImage">
+                src="${bestMatch.artistImage}"
+                alt="${bestMatch.artist}">
 
             <div>
 
-                <strong id="tribeArtistName">
+                <strong>
 
-                    Coming Soon
+                    ${bestMatch.artist}
 
                 </strong>
 
@@ -483,7 +545,8 @@
 
 </div>
 `;
-    });
+
+`;
   </script>
 
   <!-- Mobile Menu Navigation Trigger Script -->
