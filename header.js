@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <a href="/map.html">Listener Map</a>
 
-        <a href="/shop.html">Shop</a>
+        <a href="/tsandcs.html">Terms</a>
 
     </nav>
 
