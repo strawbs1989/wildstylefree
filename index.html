@@ -420,6 +420,8 @@
         if (score > bestScore) { bestScore = score; bestMatch = tribe; }
       });
 
+      const recommendation =       recommendations[bestMatch.name];
+
       if (!bestMatch || bestScore === 0) {
   result.innerHTML = `
     <div style="margin-top:15px; font-family:'Inter',sans-serif;">
