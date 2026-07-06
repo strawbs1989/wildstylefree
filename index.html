@@ -441,6 +441,7 @@ result.innerHTML = `
     border:1px solid rgba(255,255,255,.1);
     font-family:'Inter',sans-serif;
 ">
+
     <h3 style="
         font-family:'Oswald',sans-serif;
         text-transform:uppercase;
@@ -460,20 +461,19 @@ result.innerHTML = `
     ">
         ${bestMatch.description}
     </p>
+
+    <hr style="margin:15px 0;border:none;border-top:1px solid rgba(255,255,255,.1);">
+
+    <p style="margin:0;font-weight:bold;color:#fff;">
+        🎙 Meet Your DJ
+    </p>
+
+    <p style="margin-top:6px;color:var(--muted);">
+        ${recommendation.dj}
+    </p>
+
 </div>
 `;
-<hr style="margin:15px 0;border:none;border-top:1px solid rgba(255,255,255,.1);">
-
-<p style="margin:0;font-weight:bold;color:#fff;">
-    🎙 Meet Your DJ
-</p>
-
-<p style="margin-top:6px;color:var(--muted);">
-    ${recommendation.dj}
-</p>
-
-
-
 
 
 });
