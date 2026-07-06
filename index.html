@@ -374,7 +374,8 @@
 
   <!-- Matcher Logic Engine Script -->
   <script>
-    const tribes = [
+
+const tribes = [
   {
     name: "🎧 Dancefloor Addicts",
     genres: ["Dance", "House"],
@@ -405,16 +406,16 @@ const recommendations = {
 
   "🎧 Dancefloor Addicts": {
     dj: "HotshotDJ",
-    image: "/images/djs/hotshotdj.jpg",
+    image: "/images/hotshot.jpg",
     artist: "Wildstyle Crew",
-    artistImage: "/images/artists/wildstylecrew.jpg"
+    artistImage: "/images/default-artist.jpg"
   },
 
   "🔥 Urban Legends": {
     dj: "DJ Nala",
-    image: "/images/djs/djnala.jpg",
+    image: "/images/djnala.jpg",
     artist: "Neon Pulse",
-    artistImage: "/images/artists/neonpulse.jpg"
+    artistImage: "/images/default-artist.jpg"
   },
 
   "🎸 Rock Revolution": {
@@ -433,83 +434,112 @@ const recommendations = {
 
 };
 
-    document.getElementById("findTribeBtn").addEventListener("click", () => {
-      const genre = document.getElementById("genreSelect").value;
-      const era = document.getElementById("eraSelect").value;
-      const result = document.getElementById("tribeResult");
+document.getElementById("findTribeBtn").addEventListener("click", () => {
 
-      if (!genre || !era) {
-        result.innerHTML = `<div style="margin-top: 15px; color: #ff4d4d; font-family: 'Inter', sans-serif;"><p>Please select both a genre and an era!</p></div>`;
+    const genre = document.getElementById("genreSelect").value;
+    const era = document.getElementById("eraSelect").value;
+    const result = document.getElementById("tribeResult");
+
+    if (!genre || !era) {
+        result.innerHTML = `
+        <div style="margin-top:15px;color:#ff4d4d;font-family:'Inter',sans-serif;">
+            Please select both a genre and an era.
+        </div>`;
         return;
-      }
+    }
 
-      let bestMatch = null;
-      let bestScore = 0;
+    let bestMatch = null;
+    let bestScore = 0;
 
-      tribes.forEach(tribe => {
+    tribes.forEach(tribe => {
+
         let score = 0;
+
         if (tribe.genres.includes(genre)) score += 50;
         if (tribe.eras.includes(era)) score += 50;
-        if (score > bestScore) { bestScore = score; bestMatch = tribe; }
-      });
 
-      const recommendation =       recommendations[bestMatch.name];
+        if (score > bestScore) {
+            bestScore = score;
+            bestMatch = tribe;
+        }
 
-      if (!bestMatch || bestScore === 0) {
-  result.innerHTML = `
-    <div style="margin-top:15px; font-family:'Inter',sans-serif;">
-      <h3>No Match Found</h3>
-      <p>Try different choices.</p>
-    </div>
-  `;
-  return;
-}
+    });
 
-result.innerHTML = `
+    if (!bestMatch) {
+
+        result.innerHTML = `
+        <div style="margin-top:15px;">
+            No match found.
+        </div>`;
+
+        return;
+
+    }
+
+    const recommendation =
+        recommendations[bestMatch.name] || {
+
+            dj: "Coming Soon",
+            image: "/images/default-dj.jpg",
+            artist: "Coming Soon",
+            artistImage: "/images/default-artist.jpg"
+
+        };
+
+    result.innerHTML = `
+
 <div style="
-    margin-top:20px;
-    padding:15px;
-    border-radius:8px;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.1);
-    font-family:'Inter',sans-serif;
+margin-top:20px;
+padding:20px;
+border-radius:14px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.1);
+font-family:'Inter',sans-serif;
 ">
 
-    <h3 style="
-        font-family:'Oswald',sans-serif;
-        text-transform:uppercase;
-        margin:0 0 5px 0;
-    ">
-        ${bestMatch.name}
-    </h3>
+<h3 style="
+font-family:'Oswald',sans-serif;
+margin:0;
+text-transform:uppercase;
+">
+${bestMatch.name}
+</h3>
 
-    <p style="color:#ff4d4d;margin:0 0 10px 0;">
-        <strong>${bestScore}% Match</strong>
-    </p>
+<p style="color:#ff4d4d;margin:10px 0;">
+<strong>${bestScore}% Match</strong>
+</p>
 
-    <p style="
-        margin:0;
-        font-size:.95rem;
-        opacity:.85;
-    ">
-        ${bestMatch.description}
-    </p>
+<p style="margin:0 0 18px 0;opacity:.85;">
+${bestMatch.description}
+</p>
 
-  <!--  <hr style="margin:15px 0;border:none;border-top:1px solid rgba(255,255,255,.1);">
+<hr style="border:none;border-top:1px solid rgba(255,255,255,.1);margin:18px 0;">
 
-    <p style="margin:0;font-weight:bold;color:#fff;">
-        🎙 Meet Your DJ
-    </p>
+<p style="margin:0;font-weight:bold;">
+🎙 Meet Your DJ
+</p>
 
-    <p style="margin-top:6px;color:var(--muted);">
-        ${recommendation.dj}
-    </p> -->
+<p style="margin:6px 0 18px 0;color:#d9d9d9;">
+${recommendation.dj}
+</p>
+
+<hr style="border:none;border-top:1px solid rgba(255,255,255,.1);margin:18px 0;">
+
+<p style="margin:0;font-weight:bold;">
+🎵 Featured Artist
+</p>
+
+<p style="margin:6px 0;color:#d9d9d9;">
+${recommendation.artist}
+</p>
 
 </div>
+
 `;
 
 });
-  </script>
+
+</script>
 
   <!-- Mobile Menu Navigation Trigger Script -->
 
