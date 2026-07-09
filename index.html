@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=7">
 <link rel="stylesheet" href="/header.css">
+<link rel="stylesheet" href"/spotlight.css">
 
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
@@ -94,6 +95,78 @@
           </ul>
         </div>
       </article>
+
+<!-- ======================================================
+     LISTENER SPOTLIGHT
+====================================================== -->
+
+<section class="card listener-spotlight">
+
+  <div class="card-head">
+    <h2>🏆 Listener Spotlight</h2>
+    <span class="badge">Latest Nomination</span>
+  </div>
+
+  <div class="card-body">
+
+    <!-- Latest Nomination -->
+    <div id="latestNomination" class="spotlight-card">
+
+      <div class="spotlight-avatar">
+        👤
+      </div>
+
+      <div class="spotlight-info">
+
+        <h3 id="spotlightName">
+          No nominations yet
+        </h3>
+
+        <p id="spotlightReason">
+          Be the first to nominate someone who deserves recognition in the Wildstyle community.
+        </p>
+
+        <small id="spotlightBy">
+          Waiting for the first nomination...
+        </small>
+
+      </div>
+
+    </div>
+
+    <hr>
+
+    <!-- Nomination Form -->
+
+    <h3>Nominate a Listener</h3>
+
+    <p>
+      Tell us who deserves recognition and why.
+    </p>
+
+    <input
+      type="text"
+      id="nomineeName"
+      placeholder="Listener name">
+
+    <textarea
+      id="nomineeReason"
+      rows="4"
+      placeholder="Why should they be nominated?"></textarea>
+
+    <input
+      type="text"
+      id="nominatedBy"
+      placeholder="Your name (optional)">
+
+    <button id="submitNomination"
+            class="btn-primary">
+      Submit Nomination
+    </button>
+
+  </div>
+
+</section>
 
     
 <!-- <section class="now-playing">
@@ -396,6 +469,7 @@
   <script src="/schedule.js"></script>
   <script src="/test/player.js"></script>
   <script src="/header.js"></script>
+  <script sec="/spotlight.js></script>
 
   <!-- Matcher Logic Engine Script -->
   <script>
