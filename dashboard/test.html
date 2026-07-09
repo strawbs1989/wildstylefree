@@ -1,637 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>WildstyleRadio – Listener Hall of Fame</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg-gradient: radial-gradient(circle at top,
-        #ff8a3c 0%, #ff3c7d 30%, #3c7dff 60%, #120024 100%);
-      --electric-blue: #3c7dff;
-      --sunset-orange: #ff8a3c;
-      --neon-pink: #ff3c7d;
-      --dark: #05030a;
-      --text: #fdfdfd;
-      --card-bg: rgba(5, 3, 10, 0.9);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    body {
-      background: var(--bg-gradient);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .logo {
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-    }
-
-    .logo span {
-      color: var(--electric-blue);
-    }
-
-    .nav {
-      display: flex;
-      gap: 16px;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      opacity: 0.8;
-    }
-
-    .nav a {
-      color: var(--text);
-      text-decoration: none;
-      position: relative;
-    }
-
-    .nav a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -4px;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--electric-blue), var(--neon-pink));
-      transition: width 0.2s ease-out;
-    }
-
-    .nav a:hover::after {
-      width: 100%;
-    }
-
-    /* HERO */
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
-      gap: 32px;
-      align-items: center;
-      margin-bottom: 40px;
-    }
-
-    @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .hero-text h1 {
-      font-size: clamp(2.4rem, 4vw, 3.2rem);
-      line-height: 1.05;
-      margin-bottom: 12px;
-    }
-
-    .hero-text h1 span {
-      background: linear-gradient(90deg, var(--electric-blue), var(--neon-pink));
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .hero-text p {
-      max-width: 520px;
-      font-size: 0.98rem;
-      opacity: 0.85;
-      margin-bottom: 20px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .btn-primary {
-      background: radial-gradient(circle at 20% 0,
-        var(--electric-blue), var(--neon-pink));
-      border: none;
-      color: var(--text);
-      padding: 12px 22px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      box-shadow: 0 0 18px rgba(60, 125, 255, 0.9);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-primary::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 60%);
-      mix-blend-mode: screen;
-      opacity: 0;
-      transition: opacity 0.2s ease-out;
-    }
-
-    .btn-primary:hover::after {
-      opacity: 1;
-    }
-
-    .hero-note {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.7;
-    }
-
-    .hero-visual {
-      position: relative;
-      height: 260px;
-      border-radius: 24px;
-      background: radial-gradient(circle at 20% 0,
-        rgba(60, 125, 255, 0.4),
-        rgba(255, 138, 60, 0.1),
-        rgba(5, 3, 10, 0.9));
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
-      overflow: hidden;
-    }
-
-    .hall-orbit {
-      position: absolute;
-      inset: 18px;
-      border-radius: 24px;
-      border: 1px dashed rgba(255, 255, 255, 0.12);
-      box-shadow: 0 0 18px rgba(60, 125, 255, 0.6);
-    }
-
-    .hall-core {
-      position: absolute;
-      inset: 50px;
-      border-radius: 18px;
-      background: radial-gradient(circle,
-        rgba(60, 125, 255, 0.9),
-        rgba(255, 138, 60, 0.2),
-        transparent 70%);
-      filter: blur(2px);
-    }
-
-    .hall-plaque {
-      position: absolute;
-      inset: 80px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 12px;
-      box-shadow: 0 0 22px rgba(60, 125, 255, 0.8);
-    }
-
-    .hall-plaque h2 {
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      margin-bottom: 6px;
-    }
-
-    .hall-plaque p {
-      font-size: 0.8rem;
-      opacity: 0.8;
-    }
-
-    /* SECTIONS */
-
-    .section {
-      margin-bottom: 32px;
-    }
-
-    .section-title {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      opacity: 0.8;
-      margin-bottom: 10px;
-    }
-
-    .section-title span {
-      color: var(--electric-blue);
-    }
-
-    .filters-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-      font-size: 0.8rem;
-    }
-
-    .filter-chip {
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 6px 12px;
-      background: rgba(5, 3, 10, 0.85);
-      cursor: pointer;
-      opacity: 0.85;
-    }
-
-    .filter-chip.active {
-      border-color: var(--electric-blue);
-      box-shadow: 0 0 16px rgba(60, 125, 255, 0.8);
-    }
-
-    .card-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 18px;
-      padding: 14px 14px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at 0 0,
-        rgba(60, 125, 255, 0.25),
-        transparent 60%);
-      opacity: 0;
-      transition: opacity 0.2s ease-out;
-      mix-blend-mode: screen;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 22px rgba(60, 125, 255, 0.7);
-      border-color: rgba(60, 125, 255, 0.6);
-    }
-
-    .card:hover::before {
-      opacity: 1;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      background: radial-gradient(circle,
-        rgba(60, 125, 255, 0.8),
-        rgba(255, 138, 60, 0.4),
-        rgba(5, 3, 10, 1));
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 0 14px rgba(60, 125, 255, 0.8);
-    }
-
-    .listener-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .listener-tagline {
-      font-size: 0.75rem;
-      opacity: 0.8;
-    }
-
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 8px 0;
-      font-size: 0.7rem;
-    }
-
-    .badge {
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 3px 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.8;
-    }
-
-    .badge.primary {
-      border-color: var(--electric-blue);
-      color: var(--electric-blue);
-    }
-
-    .card-desc {
-      font-size: 0.8rem;
-      opacity: 0.85;
-      margin-bottom: 8px;
-    }
-
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      opacity: 0.75;
-    }
-
-    .card-meta span.highlight {
-      color: var(--sunset-orange);
-    }
-
-    .crown-tag {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      opacity: 0.8;
-    }
-
-    .crown-tag span {
-      color: var(--electric-blue);
-    }
-
-    /* NOMINATION PANEL */
-
-    .nominate-panel {
-      margin-top: 10px;
-      background: rgba(5, 3, 10, 0.9);
-      border-radius: 18px;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-      font-size: 0.8rem;
-    }
-
-    .nominate-title {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      opacity: 0.8;
-      margin-bottom: 6px;
-    }
-
-    .nominate-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .nominate-input {
-      flex: 1 1 220px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(5, 3, 10, 0.95);
-      color: var(--text);
-      font-size: 0.8rem;
-    }
-
-    .nominate-btn {
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: none;
-      background: radial-gradient(circle at 20% 0,
-        var(--electric-blue), var(--neon-pink));
-      color: var(--text);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-      box-shadow: 0 0 16px rgba(60, 125, 255, 0.8);
-    }
-
-    /* FOOTER */
-
-    footer {
-      margin-top: 40px;
-      padding: 18px 24px 28px;
-      font-size: 0.75rem;
-      opacity: 0.7;
-      text-align: center;
-    }
-  </style>
-</head>
+<html>
 <body>
-  <div class="page">
-    <header>
-      <div class="logo">
-        WILDSTYLE<span>RADIO</span>
-      </div>
-      <nav class="nav">
-        <a href="#">Shows</a>
-        <a href="#">DJs</a>
-        <a href="#">Hall of Fame</a>
-        <a href="#">Graffiti Wall</a>
-      </nav>
-    </header>
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-text">
-        <h1>
-          Listener <span>Hall of Fame</span>
-        </h1>
-        <p>
-          The wildest, most loyal, most creative listeners in the Wildstyle universe.
-          Monthly crowns for shoutouts, support, graffiti tags, and pure energy.
-        </p>
-        <div class="hero-actions">
-          <button class="btn-primary">
-            Nominate a Listener
-          </button>
-          <div class="hero-note">
-            Most Active • Funniest Shoutout • Best Tag • DJ Superfan
-          </div>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hall-orbit"></div>
-        <div class="hall-core"></div>
-        <div class="hall-plaque">
-          <h2>Hall of Fame</h2>
-          <p>
-            Every month, new crowns.  
-            Every crown, a story written in neon.
-          </p>
-        </div>
-      </div>
-    </section>
+<!-- ======================================================
+     LISTENER SPOTLIGHT
+====================================================== -->
 
-    <!-- FILTERS -->
-    <section class="section">
-      <div class="section-title">
-        <span>Categories</span> — This Month’s Crowns
-      </div>
-      <div class="filters-row">
-        <div class="filter-chip active">Most Active Listener</div>
-        <div class="filter-chip">Funniest Shoutout</div>
-        <div class="filter-chip">Best Graffiti Tag</div>
-        <div class="filter-chip">DJ Superfan</div>
-        <div class="filter-chip">Community MVP</div>
-      </div>
-    </section>
+<section class="card listener-spotlight">
 
-    <!-- HALL OF FAME GRID -->
-    <section class="section">
-      <div class="section-title">
-        <span>Hall</span> — Featured Legends
-      </div>
-      <div class="card-row">
-        <!-- Most Active Listener -->
-        <div class="card">
-          <div class="crown-tag"><span>🏆</span> Most Active</div>
-          <div class="card-header">
-            <div class="avatar"></div>
-            <div>
-              <div class="listener-name">NeonNod_93</div>
-              <div class="listener-tagline">“Never missed a Wildstyle sunset set.”</div>
-            </div>
-          </div>
-          <div class="badge-row">
-            <div class="badge primary">Most Active Listener</div>
-            <div class="badge">Chat Regular</div>
-            <div class="badge">Playlist Sharer</div>
-          </div>
-          <div class="card-desc">
-            Checked in to 27 shows this month, dropped positive energy in every chat,
-            and welcomed new listeners like family.
-          </div>
-          <div class="card-meta">
-            <span><span class="highlight">27</span> shows</span>
-            <span><span class="highlight">143</span> messages</span>
-          </div>
-        </div>
-
-        <!-- Funniest Shoutout -->
-        <div class="card">
-          <div class="crown-tag"><span>🏆</span> Funniest</div>
-          <div class="card-header">
-            <div class="avatar"></div>
-            <div>
-              <div class="listener-name">BassJester</div>
-              <div class="listener-tagline">“I came for the bass, stayed for the chaos.”</div>
-            </div>
-          </div>
-          <div class="badge-row">
-            <div class="badge primary">Funniest Shoutout</div>
-            <div class="badge">Clip of the Week</div>
-          </div>
-          <div class="card-desc">
-            Won the weekly shoutout clip three times in a row with legendary one‑liners
-            and perfectly timed chaos in the chat.
-          </div>
-          <div class="card-meta">
-            <span><span class="highlight">3</span> shoutout wins</span>
-            <span>Featured on air</span>
-          </div>
-        </div>
-
-        <!-- Best Graffiti Tag -->
-        <div class="card">
-          <div class="crown-tag"><span>🏆</span> Best Tag</div>
-          <div class="card-header">
-            <div class="avatar"></div>
-            <div>
-              <div class="listener-name">TagQueen</div>
-              <div class="listener-tagline">“Walls are temporary. Neon is forever.”</div>
-            </div>
-          </div>
-          <div class="badge-row">
-            <div class="badge primary">Best Graffiti Tag</div>
-            <div class="badge">Wall Artist</div>
-          </div>
-          <div class="card-desc">
-            Dropped a Wildstyle wolf tag that became the background for the station’s
-            promo poster this month.
-          </div>
-          <div class="card-meta">
-            <span><span class="highlight">12</span> tags</span>
-            <span>1 featured artwork</span>
-          </div>
-        </div>
-
-        <!-- DJ Superfan -->
-        <div class="card">
-          <div class="crown-tag"><span>🏆</span> Superfan</div>
-          <div class="card-header">
-            <div class="avatar"></div>
-            <div>
-              <div class="listener-name">EchoFalls_Rider</div>
-              <div class="listener-tagline">“If Echo’s live, I’m locked.”</div>
-            </div>
-          </div>
-          <div class="badge-row">
-            <div class="badge primary">DJ Superfan</div>
-            <div class="badge">EchoFalls Supporter</div>
-          </div>
-          <div class="card-desc">
-            Shared every EchoFalls set, tagged WildstyleRadio in stories,
-            and brought new listeners into the stream.
-          </div>
-          <div class="card-meta">
-            <span><span class="highlight">9</span> shares</span>
-            <span><span class="highlight">6</span> new listeners</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- NOMINATION PANEL -->
-    <section class="section">
-      <div class="section-title">
-        <span>Nominate</span> — Put Someone in the Hall
-      </div>
-      <div class="nominate-panel">
-        <div class="nominate-title">Nominate a Listener</div>
-        <div>
-          Tell us who deserves a crown and why — we review nominations at the end of every month.
-        </div>
-        <div class="nominate-row">
-          <input class="nominate-input" type="text" placeholder="Listener name or handle" />
-          <input class="nominate-input" type="text" placeholder="Why they deserve it" />
-          <button class="nominate-btn">Submit Nomination</button>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      WildstyleRadio • Listener Hall of Fame mockup.  
-      Hook this into real stats, chat logs, graffiti wall data, and DJ shoutouts to make it fully live.
-    </footer>
+  <div class="card-head">
+    <h2>🏆 Listener Spotlight</h2>
+    <span class="badge">Latest Nomination</span>
   </div>
-</body>
+
+  <div class="card-body">
+
+    <!-- Latest Nomination -->
+    <div id="latestNomination" class="spotlight-card">
+
+      <div class="spotlight-avatar">
+        👤
+      </div>
+
+      <div class="spotlight-info">
+
+        <h3 id="spotlightName">
+          No nominations yet
+        </h3>
+
+        <p id="spotlightReason">
+          Be the first to nominate someone who deserves recognition in the Wildstyle community.
+        </p>
+
+        <small id="spotlightBy">
+          Waiting for the first nomination...
+        </small>
+
+      </div>
+
+    </div>
+
+    <hr>
+
+    <!-- Nomination Form -->
+
+    <h3>Nominate a Listener</h3>
+
+    <p>
+      Tell us who deserves recognition and why.
+    </p>
+
+    <input
+      type="text"
+      id="nomineeName"
+      placeholder="Listener name">
+
+    <textarea
+      id="nomineeReason"
+      rows="4"
+      placeholder="Why should they be nominated?"></textarea>
+
+    <input
+      type="text"
+      id="nominatedBy"
+      placeholder="Your name (optional)">
+
+    <button id="submitNomination"
+            class="btn-primary">
+      Submit Nomination
+    </button>
+
+  </div>
+
+</section>
+
 </html>
+</body>
