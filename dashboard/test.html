@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>WildstyleRadio – DNA Generator</title>
+  <title>WildstyleRadio – Listener Hall of Fame</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -13,9 +13,7 @@
       --neon-pink: #ff3c7d;
       --dark: #05030a;
       --text: #fdfdfd;
-      --accent: #3c7dff;
-      --card-bg: rgba(5, 3, 10, 0.85);
-      --border-neon: 0 0 12px rgba(60, 125, 255, 0.9);
+      --card-bg: rgba(5, 3, 10, 0.9);
     }
 
     * {
@@ -115,7 +113,7 @@
     }
 
     .hero-text p {
-      max-width: 480px;
+      max-width: 520px;
       font-size: 0.98rem;
       opacity: 0.85;
       margin-bottom: 20px;
@@ -178,18 +176,18 @@
       overflow: hidden;
     }
 
-    .wolf-orbit {
+    .hall-orbit {
       position: absolute;
       inset: 18px;
-      border-radius: 999px;
+      border-radius: 24px;
       border: 1px dashed rgba(255, 255, 255, 0.12);
       box-shadow: 0 0 18px rgba(60, 125, 255, 0.6);
     }
 
-    .wolf-core {
+    .hall-core {
       position: absolute;
       inset: 50px;
-      border-radius: 999px;
+      border-radius: 18px;
       background: radial-gradient(circle,
         rgba(60, 125, 255, 0.9),
         rgba(255, 138, 60, 0.2),
@@ -197,10 +195,10 @@
       filter: blur(2px);
     }
 
-    .wolf-head {
+    .hall-plaque {
       position: absolute;
       inset: 80px;
-      border-radius: 24px;
+      border-radius: 18px;
       border: 1px solid rgba(255, 255, 255, 0.18);
       backdrop-filter: blur(10px);
       display: flex;
@@ -209,17 +207,17 @@
       align-items: center;
       text-align: center;
       padding: 12px;
-      box-shadow: var(--border-neon);
+      box-shadow: 0 0 22px rgba(60, 125, 255, 0.8);
     }
 
-    .wolf-head h2 {
+    .hall-plaque h2 {
       font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
       margin-bottom: 6px;
     }
 
-    .wolf-head p {
+    .hall-plaque p {
       font-size: 0.8rem;
       opacity: 0.8;
     }
@@ -242,9 +240,31 @@
       color: var(--electric-blue);
     }
 
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-size: 0.8rem;
+    }
+
+    .filter-chip {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 6px 12px;
+      background: rgba(5, 3, 10, 0.85);
+      cursor: pointer;
+      opacity: 0.85;
+    }
+
+    .filter-chip.active {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 16px rgba(60, 125, 255, 0.8);
+    }
+
     .card-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
     }
 
@@ -256,7 +276,6 @@
       box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
       position: relative;
       overflow: hidden;
-      cursor: pointer;
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out;
     }
 
@@ -282,125 +301,101 @@
       opacity: 1;
     }
 
-    .card-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      opacity: 0.7;
-      margin-bottom: 6px;
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
     }
 
-    .card-title {
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle,
+        rgba(60, 125, 255, 0.8),
+        rgba(255, 138, 60, 0.4),
+        rgba(5, 3, 10, 1));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 0 14px rgba(60, 125, 255, 0.8);
+    }
+
+    .listener-name {
       font-size: 0.95rem;
       font-weight: 600;
-      margin-bottom: 4px;
+    }
+
+    .listener-tagline {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+      font-size: 0.7rem;
+    }
+
+    .badge {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 3px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.8;
+    }
+
+    .badge.primary {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
     }
 
     .card-desc {
       font-size: 0.8rem;
-      opacity: 0.8;
-    }
-
-    .card-tag {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      opacity: 0.7;
-    }
-
-    .card-tag span {
-      color: var(--electric-blue);
-    }
-
-    .card.selected {
-      border-color: var(--electric-blue);
-      box-shadow: 0 0 26px rgba(60, 125, 255, 0.9);
-    }
-
-    /* DNA CARD */
-
-    .dna-card {
-      margin-top: 10px;
-      background: linear-gradient(135deg,
-        rgba(5, 3, 10, 0.95),
-        rgba(60, 125, 255, 0.25),
-        rgba(255, 138, 60, 0.18));
-      border-radius: 22px;
-      padding: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 0 26px rgba(0, 0, 0, 0.8);
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
-      gap: 18px;
-    }
-
-    @media (max-width: 800px) {
-      .dna-card {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .dna-main-title {
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
+      opacity: 0.85;
       margin-bottom: 8px;
     }
 
-    .dna-main-title span {
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      opacity: 0.75;
+    }
+
+    .card-meta span.highlight {
+      color: var(--sunset-orange);
+    }
+
+    .crown-tag {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.8;
+    }
+
+    .crown-tag span {
       color: var(--electric-blue);
     }
 
-    .dna-sub {
-      font-size: 0.8rem;
-      opacity: 0.8;
-      margin-bottom: 12px;
-    }
+    /* NOMINATION PANEL */
 
-    .dna-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      font-size: 0.8rem;
-    }
-
-    .dna-pill {
+    .nominate-panel {
+      margin-top: 10px;
       background: rgba(5, 3, 10, 0.9);
-      border-radius: 999px;
-      padding: 8px 10px;
+      border-radius: 18px;
+      padding: 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .dna-pill-label {
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.7rem;
-      opacity: 0.7;
-    }
-
-    .dna-pill-value {
-      font-weight: 600;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
       font-size: 0.8rem;
     }
 
-    .dna-visual {
-      position: relative;
-      border-radius: 18px;
-      background: radial-gradient(circle,
-        rgba(60, 125, 255, 0.6),
-        rgba(255, 138, 60, 0.2),
-        rgba(5, 3, 10, 0.95));
-      padding: 14px;
-      overflow: hidden;
-    }
-
-    .dna-avatar-title {
+    .nominate-title {
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
@@ -408,43 +403,35 @@
       margin-bottom: 6px;
     }
 
-    .dna-avatar-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .dna-avatar-desc {
-      font-size: 0.8rem;
-      opacity: 0.85;
-      margin-bottom: 10px;
-    }
-
-    .dna-badge {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      opacity: 0.8;
-    }
-
-    .dna-badge span {
-      color: var(--electric-blue);
-    }
-
-    .share-row {
-      margin-top: 10px;
+    .nominate-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      font-size: 0.75rem;
-      opacity: 0.8;
+      gap: 10px;
+      margin-top: 8px;
     }
 
-    .share-chip {
+    .nominate-input {
+      flex: 1 1 220px;
+      padding: 8px 10px;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 4px 10px;
-      background: rgba(5, 3, 10, 0.9);
+      background: rgba(5, 3, 10, 0.95);
+      color: var(--text);
+      font-size: 0.8rem;
+    }
+
+    .nominate-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      background: radial-gradient(circle at 20% 0,
+        var(--electric-blue), var(--neon-pink));
+      color: var(--text);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(60, 125, 255, 0.8);
     }
 
     /* FOOTER */
@@ -467,7 +454,7 @@
       <nav class="nav">
         <a href="#">Shows</a>
         <a href="#">DJs</a>
-        <a href="#">DNA Generator</a>
+        <a href="#">Hall of Fame</a>
         <a href="#">Graffiti Wall</a>
       </nav>
     </header>
@@ -476,309 +463,174 @@
     <section class="hero">
       <div class="hero-text">
         <h1>
-          Who Are You In The <span>Wildstyle Universe?</span>
+          Listener <span>Hall of Fame</span>
         </h1>
         <p>
-          Scan your Wildstyle DNA, unlock your neon avatar, and claim your badge.
-          Built for listeners who live in colour, bass, and graffiti‑energy.
+          The wildest, most loyal, most creative listeners in the Wildstyle universe.
+          Monthly crowns for shoutouts, support, graffiti tags, and pure energy.
         </p>
         <div class="hero-actions">
           <button class="btn-primary">
-            Start DNA Scan
+            Nominate a Listener
           </button>
           <div class="hero-note">
-            Smooth Sunset • Electric Blue • 140 BPM • Cyber Wolf
+            Most Active • Funniest Shoutout • Best Tag • DJ Superfan
           </div>
         </div>
       </div>
       <div class="hero-visual">
-        <div class="wolf-orbit"></div>
-        <div class="wolf-core"></div>
-        <div class="wolf-head">
-          <h2>Neon Dusk Cyberwolf.exe</h2>
+        <div class="hall-orbit"></div>
+        <div class="hall-core"></div>
+        <div class="hall-plaque">
+          <h2>Hall of Fame</h2>
           <p>
-            A sunset‑soul, electric‑blue, 140BPM, dreamy Cyber Wolf
-            running through the Wildstyle universe.
+            Every month, new crowns.  
+            Every crown, a story written in neon.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- VIBE -->
+    <!-- FILTERS -->
     <section class="section">
       <div class="section-title">
-        <span>Step 1</span> — Choose Your Vibe
+        <span>Categories</span> — This Month’s Crowns
+      </div>
+      <div class="filters-row">
+        <div class="filter-chip active">Most Active Listener</div>
+        <div class="filter-chip">Funniest Shoutout</div>
+        <div class="filter-chip">Best Graffiti Tag</div>
+        <div class="filter-chip">DJ Superfan</div>
+        <div class="filter-chip">Community MVP</div>
+      </div>
+    </section>
+
+    <!-- HALL OF FAME GRID -->
+    <section class="section">
+      <div class="section-title">
+        <span>Hall</span> — Featured Legends
       </div>
       <div class="card-row">
-        <div class="card selected">
-          <div class="card-label">Vibe</div>
-          <div class="card-title">Smooth Sunset</div>
-          <div class="card-desc">
-            Warm, melodic, hypnotic — the glow when the sky melts into orange and pink.
-          </div>
-          <div class="card-tag"><span>Selected</span></div>
-        </div>
+        <!-- Most Active Listener -->
         <div class="card">
-          <div class="card-label">Vibe</div>
-          <div class="card-title">Neon Chaos</div>
+          <div class="crown-tag"><span>🏆</span> Most Active</div>
+          <div class="card-header">
+            <div class="avatar"></div>
+            <div>
+              <div class="listener-name">NeonNod_93</div>
+              <div class="listener-tagline">“Never missed a Wildstyle sunset set.”</div>
+            </div>
+          </div>
+          <div class="badge-row">
+            <div class="badge primary">Most Active Listener</div>
+            <div class="badge">Chat Regular</div>
+            <div class="badge">Playlist Sharer</div>
+          </div>
           <div class="card-desc">
-            Glitchy, loud, unpredictable — pure graffiti‑energy in motion.
+            Checked in to 27 shows this month, dropped positive energy in every chat,
+            and welcomed new listeners like family.
+          </div>
+          <div class="card-meta">
+            <span><span class="highlight">27</span> shows</span>
+            <span><span class="highlight">143</span> messages</span>
           </div>
         </div>
+
+        <!-- Funniest Shoutout -->
         <div class="card">
-          <div class="card-label">Vibe</div>
-          <div class="card-title">Bass Warrior</div>
+          <div class="crown-tag"><span>🏆</span> Funniest</div>
+          <div class="card-header">
+            <div class="avatar"></div>
+            <div>
+              <div class="listener-name">BassJester</div>
+              <div class="listener-tagline">“I came for the bass, stayed for the chaos.”</div>
+            </div>
+          </div>
+          <div class="badge-row">
+            <div class="badge primary">Funniest Shoutout</div>
+            <div class="badge">Clip of the Week</div>
+          </div>
           <div class="card-desc">
-            Heavy, relentless, sub‑driven — built for sound system soldiers.
+            Won the weekly shoutout clip three times in a row with legendary one‑liners
+            and perfectly timed chaos in the chat.
+          </div>
+          <div class="card-meta">
+            <span><span class="highlight">3</span> shoutout wins</span>
+            <span>Featured on air</span>
           </div>
         </div>
+
+        <!-- Best Graffiti Tag -->
         <div class="card">
-          <div class="card-label">Vibe</div>
-          <div class="card-title">Graffiti Dreamer</div>
+          <div class="crown-tag"><span>🏆</span> Best Tag</div>
+          <div class="card-header">
+            <div class="avatar"></div>
+            <div>
+              <div class="listener-name">TagQueen</div>
+              <div class="listener-tagline">“Walls are temporary. Neon is forever.”</div>
+            </div>
+          </div>
+          <div class="badge-row">
+            <div class="badge primary">Best Graffiti Tag</div>
+            <div class="badge">Wall Artist</div>
+          </div>
           <div class="card-desc">
-            Floaty, colourful, imaginative — like sketching beats on city walls.
+            Dropped a Wildstyle wolf tag that became the background for the station’s
+            promo poster this month.
+          </div>
+          <div class="card-meta">
+            <span><span class="highlight">12</span> tags</span>
+            <span>1 featured artwork</span>
+          </div>
+        </div>
+
+        <!-- DJ Superfan -->
+        <div class="card">
+          <div class="crown-tag"><span>🏆</span> Superfan</div>
+          <div class="card-header">
+            <div class="avatar"></div>
+            <div>
+              <div class="listener-name">EchoFalls_Rider</div>
+              <div class="listener-tagline">“If Echo’s live, I’m locked.”</div>
+            </div>
+          </div>
+          <div class="badge-row">
+            <div class="badge primary">DJ Superfan</div>
+            <div class="badge">EchoFalls Supporter</div>
+          </div>
+          <div class="card-desc">
+            Shared every EchoFalls set, tagged WildstyleRadio in stories,
+            and brought new listeners into the stream.
+          </div>
+          <div class="card-meta">
+            <span><span class="highlight">9</span> shares</span>
+            <span><span class="highlight">6</span> new listeners</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- COLOUR -->
+    <!-- NOMINATION PANEL -->
     <section class="section">
       <div class="section-title">
-        <span>Step 2</span> — Colour Energy
+        <span>Nominate</span> — Put Someone in the Hall
       </div>
-      <div class="card-row">
-        <div class="card selected">
-          <div class="card-label">Colour</div>
-          <div class="card-title">Electric Blue</div>
-          <div class="card-desc">
-            Cool, crisp, futuristic — the neon aura that cuts through the night.
-          </div>
-          <div class="card-tag"><span>Selected</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Colour</div>
-          <div class="card-title">Toxic Green</div>
-          <div class="card-desc">
-            Wild, rebellious, glitchy — the colour of digital mischief.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Colour</div>
-          <div class="card-title">Hot Pink</div>
-          <div class="card-desc">
-            Bold, playful, nightlife energy — pure club neon.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Colour</div>
-          <div class="card-title">Sunset Orange</div>
-          <div class="card-desc">
-            Warm, radiant, hypnotic — the last light before the bass drops.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TEMPO -->
-    <section class="section">
-      <div class="section-title">
-        <span>Step 3</span> — Tempo
-      </div>
-      <div class="card-row">
-        <div class="card">
-          <div class="card-label">Tempo</div>
-          <div class="card-title">Chill 90 BPM</div>
-          <div class="card-desc">
-            Mellow, drifting, hypnotic — slow motion in neon.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Tempo</div>
-          <div class="card-title">Groove 110 BPM</div>
-          <div class="card-desc">
-            Smooth, head‑nod, sunset cruise — perfect for warm blends.
-          </div>
-        </div>
-        <div class="card selected">
-          <div class="card-label">Tempo</div>
-          <div class="card-title">Madness 140 BPM</div>
-          <div class="card-desc">
-            Fast, explosive, rave‑ready — the heartbeat of the Cyber Wolf.
-          </div>
-          <div class="card-tag"><span>Selected</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Tempo</div>
-          <div class="card-title">Bounce 128 BPM</div>
-          <div class="card-desc">
-            Club energy, neon pulse — built for dancefloor loops.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MOOD -->
-    <section class="section">
-      <div class="section-title">
-        <span>Step 4</span> — Mood
-      </div>
-      <div class="card-row">
-        <div class="card">
-          <div class="card-label">Mood</div>
-          <div class="card-title">Hype</div>
-          <div class="card-desc">
-            Explosive, loud, unstoppable — all caps energy.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Mood</div>
-          <div class="card-title">Smooth</div>
-          <div class="card-desc">
-            Silky, confident, effortless — glide through every transition.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Mood</div>
-          <div class="card-title">Reckless</div>
-          <div class="card-desc">
-            Chaotic, unpredictable, neon‑wild — no rules, just vibes.
-          </div>
-        </div>
-        <div class="card selected">
-          <div class="card-label">Mood</div>
-          <div class="card-title">Dreamy</div>
-          <div class="card-desc">
-            Floaty, cosmic, hypnotic — like raving inside a sunset cloud.
-          </div>
-          <div class="card-tag"><span>Selected</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SPIRIT ANIMAL -->
-    <section class="section">
-      <div class="section-title">
-        <span>Step 5</span> — Wildstyle Spirit Animal
-      </div>
-      <div class="card-row">
-        <div class="card selected">
-          <div class="card-label">Spirit Animal</div>
-          <div class="card-title">Cyber Wolf</div>
-          <div class="card-desc">
-            Instinctive, loyal, fast — a neon wolf built from circuitry and bass.
-          </div>
-          <div class="card-tag"><span>Selected</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Spirit Animal</div>
-          <div class="card-title">Graffiti Panther</div>
-          <div class="card-desc">
-            Stealth, elegance, street energy — moves like shadow on brick.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Spirit Animal</div>
-          <div class="card-title">Bass Dragon</div>
-          <div class="card-desc">
-            Mythical, powerful, bass‑breathing — ancient sub‑frequency guardian.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Spirit Animal</div>
-          <div class="card-title">Neon Fox</div>
-          <div class="card-desc">
-            Clever, playful, glowing mischief — always one step ahead.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DNA CARD RESULT -->
-    <section class="section">
-      <div class="section-title">
-        <span>Result</span> — Your Wildstyle DNA
-      </div>
-      <div class="dna-card">
+      <div class="nominate-panel">
+        <div class="nominate-title">Nominate a Listener</div>
         <div>
-          <div class="dna-main-title">
-            Wildstyle DNA: <span>Neon Dusk Cyberwolf.exe</span>
-          </div>
-          <div class="dna-sub">
-            A sunset‑soul, electric‑blue, 140BPM, dreamy Cyber Wolf
-            running through the Wildstyle universe.
-          </div>
-          <div class="dna-grid">
-            <div class="dna-pill">
-              <div class="dna-pill-label">Vibe</div>
-              <div class="dna-pill-value">Smooth Sunset</div>
-            </div>
-            <div class="dna-pill">
-              <div class="dna-pill-label">Colour</div>
-              <div class="dna-pill-value">Electric Blue</div>
-            </div>
-            <div class="dna-pill">
-              <div class="dna-pill-label">Tempo</div>
-              <div class="dna-pill-value">140 BPM</div>
-            </div>
-            <div class="dna-pill">
-              <div class="dna-pill-label">Mood</div>
-              <div class="dna-pill-value">Dreamy</div>
-            </div>
-            <div class="dna-pill">
-              <div class="dna-pill-label">Spirit</div>
-              <div class="dna-pill-value">Cyber Wolf</div>
-            </div>
-          </div>
+          Tell us who deserves a crown and why — we review nominations at the end of every month.
         </div>
-        <div class="dna-visual">
-          <div class="dna-avatar-title">Avatar</div>
-          <div class="dna-avatar-name">Neon Dusk Cyberwolf.exe</div>
-          <div class="dna-avatar-desc">
-            A glowing electric‑blue wolf with sunset gradients, glitch sparks,
-            and a heartbeat synced to 140BPM. Calm face, chaotic heart,
-            drifting through neon dusk.
-          </div>
-          <div class="dna-badge">
-            Badge: <span>Electric Dreamrunner</span>
-          </div>
-          <div class="share-row">
-            <div class="share-chip">Share to TikTok</div>
-            <div class="share-chip">Share to Instagram</div>
-            <div class="share-chip">Share to Discord</div>
-            <div class="share-chip">Add to Wildstyle Profile</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PLAYLIST + FORECAST (TEXT MOCKUP) -->
-    <section class="section">
-      <div class="section-title">
-        <span>Extras</span> — Playlist & Forecast
-      </div>
-      <div class="card-row">
-        <div class="card">
-          <div class="card-label">Playlist</div>
-          <div class="card-title">Neon Dusk Cyberwolf.exe Mix</div>
-          <div class="card-desc">
-            Dreamy DnB, liquid rave, sunset trance, neon wave, and
-            140BPM melodic rollers — fast but floaty, rave energy with sunset emotion.
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Forecast</div>
-          <div class="card-title">Wildstyle Energy Today</div>
-          <div class="card-desc">
-            Calm mind, fast heart, neon instincts. You move softly but strike electrically.
-          </div>
+        <div class="nominate-row">
+          <input class="nominate-input" type="text" placeholder="Listener name or handle" />
+          <input class="nominate-input" type="text" placeholder="Why they deserve it" />
+          <button class="nominate-btn">Submit Nomination</button>
         </div>
       </div>
     </section>
 
     <footer>
-      WildstyleRadio • Wildstyle DNA Generator mockup for Neon Dusk Cyberwolf.exe.  
-      This layout can be wired to real inputs, animations, and user accounts.
+      WildstyleRadio • Listener Hall of Fame mockup.  
+      Hook this into real stats, chat logs, graffiti wall data, and DJ shoutouts to make it fully live.
     </footer>
   </div>
 </body>
