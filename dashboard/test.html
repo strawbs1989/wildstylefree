@@ -1,4 +1,182 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<style>
+/*==================================================
+  LISTENER SPOTLIGHT
+==================================================*/
+
+.listener-spotlight{
+    background:#161126;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 18px 50px rgba(0,0,0,.35);
+}
+
+.listener-spotlight .card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 24px;
+    background:linear-gradient(90deg,#ff2a6d,#8b5cf6,#3b82f6);
+}
+
+.listener-spotlight .card-head h2{
+    margin:0;
+    color:#fff;
+    font-family:'Oswald',sans-serif;
+    font-size:1.7rem;
+}
+
+.listener-spotlight .badge{
+    background:rgba(255,255,255,.18);
+    color:#fff;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:.8rem;
+    font-weight:700;
+    text-transform:uppercase;
+}
+
+.listener-spotlight .card-body{
+    padding:24px;
+}
+
+.spotlight-card{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    padding:20px;
+    border-radius:18px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    margin-bottom:24px;
+}
+
+.spotlight-avatar{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#ff2a6d,#3b82f6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2rem;
+    flex-shrink:0;
+}
+
+.spotlight-info h3{
+    margin:0 0 10px;
+    color:#fff;
+    font-family:'Oswald',sans-serif;
+    font-size:1.5rem;
+}
+
+.spotlight-info p{
+    margin:0 0 12px;
+    color:#d6d6e8;
+    line-height:1.6;
+}
+
+.spotlight-info small{
+    color:#8ba4ff;
+    font-weight:600;
+}
+
+.listener-spotlight hr{
+    border:none;
+    border-top:1px solid rgba(255,255,255,.08);
+    margin:28px 0;
+}
+
+.listener-spotlight h3{
+    color:#fff;
+    margin-bottom:10px;
+    font-family:'Oswald',sans-serif;
+}
+
+.listener-spotlight p{
+    color:#bfbfd4;
+}
+
+.listener-spotlight input,
+.listener-spotlight textarea{
+    width:100%;
+    margin-top:14px;
+    padding:16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.08);
+    background:#0f0b18;
+    color:#fff;
+    font-size:1rem;
+    transition:.25s;
+}
+
+.listener-spotlight input:focus,
+.listener-spotlight textarea:focus{
+    outline:none;
+    border-color:#ff2a6d;
+    box-shadow:0 0 20px rgba(255,42,109,.25);
+}
+
+.listener-spotlight textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+.btn-primary{
+    margin-top:18px;
+    width:100%;
+    border:none;
+    border-radius:999px;
+    padding:18px;
+    background:linear-gradient(90deg,#ff2a6d,#8b5cf6,#3b82f6);
+    color:#fff;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+    box-shadow:0 0 28px rgba(255,42,109,.35);
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 35px rgba(255,42,109,.45);
+}
+
+@media(max-width:768px){
+
+    .listener-spotlight .card-head{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .spotlight-card{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+    }
+
+    .spotlight-avatar{
+        width:90px;
+        height:90px;
+        font-size:2.5rem;
+    }
+
+}
+</style>
+
+
+
+
+<title>Wildstyle DJ Dashboard Demo</title>
+
+</head>
 <body>
 
 <!-- ======================================================
@@ -72,6 +250,13 @@
   </div>
 
 </section>
+
+
+
+<html>
+<body>
+
+
 
 <script>
 
