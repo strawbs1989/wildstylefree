@@ -116,6 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="/index.html">🏠 Home</a>
 
         <a href="/djs.html">🎙 DJs</a>
+        
+        <a href="/djservices.html"> 💿 DJServices</a>
 
         <a href="/artists.html">🎧 Artists</a>
 
