@@ -65,3 +65,123 @@ body{
     line-height:1.8;
     color:var(--muted);
 }
+
+/*==================================================
+  SOFTWARE SUPPORT GRID
+==================================================*/
+
+.service-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+    margin-top:30px;
+}
+
+.service-item{
+    display:block;
+    text-decoration:none;
+    color:#fff;
+    background:var(--panel-light);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:26px;
+    transition:.3s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.service-item::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        135deg,
+        rgba(255,42,109,.08),
+        rgba(59,130,246,.08)
+    );
+    opacity:0;
+    transition:.3s;
+}
+
+.service-item:hover{
+    transform:translateY(-6px);
+    border-color:#3b82f6;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.service-item:hover::before{
+    opacity:1;
+}
+
+.service-item h2{
+    position:relative;
+    z-index:2;
+    margin:0 0 12px;
+    font-family:"Oswald",sans-serif;
+    color:#6db8ff;
+    font-size:1.45rem;
+}
+
+.service-item span{
+    position:relative;
+    z-index:2;
+    display:block;
+    color:var(--muted);
+    line-height:1.7;
+    font-size:.95rem;
+}
+
+.service-item::after{
+    content:"➜";
+    position:absolute;
+    top:22px;
+    right:24px;
+    color:#ff2a6d;
+    font-size:1.4rem;
+    font-weight:bold;
+}
+
+/*==================================================
+  MOBILE RESPONSIVE
+==================================================*/
+
+@media (max-width:768px){
+
+    .services-card{
+        padding:22px;
+        border-radius:18px;
+    }
+
+    .services-card h1{
+        font-size:2rem;
+        text-align:center;
+    }
+
+    .services-card p{
+        text-align:center;
+        font-size:1rem;
+    }
+
+    .service-list{
+        grid-template-columns:1fr;
+        gap:18px;
+    }
+
+    .service-item{
+        padding:22px;
+    }
+
+    .service-item h2{
+        font-size:1.3rem;
+    }
+
+}
+
+@media (min-width:1200px){
+
+    .services-card{
+        max-width:1100px;
+        margin:40px auto;
+    }
+
+}
