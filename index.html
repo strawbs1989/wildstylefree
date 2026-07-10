@@ -45,7 +45,10 @@
         <!-- Stats Counter Container -->
         <div class="hero-stats" style="display: flex; gap: 25px; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08);">
           <div class="hero-stat"><strong>24/7</strong> <span>Radio</span></div>
-          <div class="hero-stat"><strong>20+</strong> <span>DJs</span></div>
+          <div class="hero-stat">
+    <strong id="dj-count">0</strong>
+    <span>DJs</span>
+</div>
           <div class="hero-stat"><strong id="liveListenerCount">0</strong> <span>Listeners</span></div>
         </div>
       </section>
@@ -468,6 +471,15 @@
   <script src="/theme.js"></script>
   <script src="/schedule.js"></script>
   <script src="/test/player.js"></script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const totalDjs = document.querySelectorAll(".dj-card").length;
+
+    document.getElementById("dj-count").textContent = totalDjs;
+
+});
+</script>
   <script src="/header.js"></script>
   <script sec="/spotlight.js></script>
 
