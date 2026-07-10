@@ -40,9 +40,9 @@
   </div>
 
   <div class="hero-stat">
-    <strong>20+</strong>
+    <strong id="dj-count">0</strong>
     <span>DJs</span>
-  </div>
+</div>
 
   <div class="live-tracker-panel">
     LISTENERS:
@@ -652,6 +652,16 @@
       setInterval(updateLiveListeners, 40000);
     });
   </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const totalDjs = document.querySelectorAll(".dj-card").length;
+
+    document.getElementById("dj-count").textContent = totalDjs;
+
+});
+</script>
 
   <!-- Mobile Menu Navigation Trigger Script -->
   <script src="/header.js"></script>
