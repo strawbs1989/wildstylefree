@@ -185,3 +185,23 @@ body{
     }
 
 }
+
+.faq-item{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.faq-item h3{
+    margin:0 0 10px;
+    color:#6db8ff;
+    font-family:"Oswald",sans-serif;
+}
+
+.faq-item p{
+    margin:0;
+    color:var(--muted);
+    line-height:1.7;
+}
