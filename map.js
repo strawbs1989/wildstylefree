@@ -206,6 +206,9 @@ if (mapTopCountry) {
 }
 
 async function loadMapData() {
+
+console.log("Refreshing...", new Date().toLocaleTimeString());
+
   const countryList = document.getElementById("countryList");
 
   try {
