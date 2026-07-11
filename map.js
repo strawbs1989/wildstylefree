@@ -1,17 +1,15 @@
 async function registerVisitor() {
   try {
     // Ask the Worker which country this visitor is in
-    const response = await fetch(WORKER_URL + "/country", {
-      cache: "no-store"
-    });
+    const response = await fetch(WORKER_URL + "/country");
 
-    if (!response.ok) {
-      throw new Error(`Country lookup failed: ${response.status}`);
-    }
+if (!response.ok) {
+  throw new Error(`Country lookup failed: ${response.status}`);
+}
 
     const data = await response.json();
 
-    console.log("Country lookup returned:", data);
+    console.log("Country endpoint returned:", data);
 
     const register = await fetch(WORKER_URL, {
       method: "POST",
@@ -230,7 +228,7 @@ console.log("Refreshing...", new Date().toLocaleTimeString());
     cache: "no-store"
 });
     const data = await res.json();
-    console.log("Country lookup returned:", data);
+    
 
     if (!Array.isArray(data) || !data.length) {
       if (countryList) {
