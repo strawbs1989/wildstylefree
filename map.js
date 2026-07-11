@@ -7,7 +7,7 @@ async function registerVisitor() {
       throw new Error(`Country lookup failed: ${response.status}`);
     }
 
-    const data = await response.json();
+    console.log("Country lookup returned:", data);
 
 const register = await fetch(WORKER_URL, {
   method: "POST",
@@ -15,8 +15,7 @@ const register = await fetch(WORKER_URL, {
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    country: data.country
-  })
+  country: data.country || ""
 });
 
 const text = await register.text();
@@ -226,6 +225,7 @@ console.log("Refreshing...", new Date().toLocaleTimeString());
     cache: "no-store"
 });
     const data = await res.json();
+    console.log("Country lookup returned:", data);
 
     if (!Array.isArray(data) || !data.length) {
       if (countryList) {
