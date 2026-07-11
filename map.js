@@ -19,16 +19,13 @@ const register = await fetch(WORKER_URL, {
   })
 });
 
-console.log(
-  "POST status:",
-  register.status,
-  await register.text()
-);
+const text = await register.text();
 
-    if (!register.ok) {
-      const text = await register.text();
-      throw new Error(`Register failed (${register.status}): ${text}`);
-    }
+console.log("POST status:", register.status, text);
+
+if (!register.ok) {
+  throw new Error(`Register failed (${register.status}): ${text}`);
+}
 
     console.log("Visitor registered:", data.country);
 
