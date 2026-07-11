@@ -1,3 +1,31 @@
+async function registerVisitor() {
+  try {
+    // Ask the Worker which country this visitor is in
+    const response = await fetch(WORKER_URL + "/country");
+    const data = await response.json();
+
+    // Tell the Worker to increment that country
+    await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        country: data.country
+      })
+    });
+
+    console.log("Visitor registered:", data.country);
+
+  } catch (err) {
+    console.error("Could not register visitor:", err);
+  }
+}
+
+
+
+
+
 const WORKER_URL = "https://wildstyle-geo.jayaubs89.workers.dev/";
 
 const countryPositions = {
