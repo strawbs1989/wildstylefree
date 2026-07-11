@@ -2,10 +2,14 @@ async function registerVisitor() {
   try {
     // Ask the Worker which country this visitor is in
     const response = await fetch(WORKER_URL + "/country");
+
+    if (!response.ok) {
+      throw new Error(`Country lookup failed: ${response.status}`);
+    }
+
     const data = await response.json();
 
-    // Tell the Worker to increment that country
-    await fetch(WORKER_URL, {
+    const register = await fetch(WORKER_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -15,14 +19,17 @@ async function registerVisitor() {
       })
     });
 
+    if (!register.ok) {
+      const text = await register.text();
+      throw new Error(`Register failed (${register.status}): ${text}`);
+    }
+
     console.log("Visitor registered:", data.country);
 
   } catch (err) {
     console.error("Could not register visitor:", err);
   }
 }
-
-
 
 
 
