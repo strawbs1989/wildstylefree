@@ -9,15 +9,21 @@ async function registerVisitor() {
 
     const data = await response.json();
 
-    const register = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        country: data.country
-      })
-    });
+const register = await fetch(WORKER_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    country: data.country
+  })
+});
+
+console.log(
+  "POST status:",
+  register.status,
+  await register.text()
+);
 
     if (!register.ok) {
       const text = await register.text();
