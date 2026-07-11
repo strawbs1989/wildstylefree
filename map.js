@@ -250,5 +250,8 @@ document.addEventListener("DOMContentLoaded", () => {
   registerVisitor();
 loadMapData();
 
-setInterval(loadMapData, 30000);
+setInterval(() => {
+    registerVisitor();
+    loadMapData();
+}, 30000);
 }); 
