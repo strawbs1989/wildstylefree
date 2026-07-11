@@ -222,7 +222,9 @@ console.log("Refreshing...", new Date().toLocaleTimeString());
   const countryList = document.getElementById("countryList");
 
   try {
-    const res = await fetch(WORKER_URL + "?t=" + Date.now());
+    const res = await fetch(WORKER_URL + "?t=" + Date.now(), {
+    cache: "no-store"
+});
     const data = await res.json();
 
     if (!Array.isArray(data) || !data.length) {
