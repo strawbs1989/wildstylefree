@@ -237,6 +237,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (navClose) navClose.onclick = closeMenu;
   if (navBackdrop) navBackdrop.onclick = closeMenu;
 
-  loadMapData();
-  setInterval(loadMapData, 30000);
+  registerVisitor();
+loadMapData();
+
+setInterval(loadMapData, 30000);
 }); 
