@@ -1,30 +1,35 @@
 async function registerVisitor() {
   try {
     // Ask the Worker which country this visitor is in
-    const response = await fetch(WORKER_URL + "/country");
+    const response = await fetch(WORKER_URL + "/country", {
+      cache: "no-store"
+    });
 
     if (!response.ok) {
       throw new Error(`Country lookup failed: ${response.status}`);
     }
 
+    const data = await response.json();
+
     console.log("Country lookup returned:", data);
 
-const register = await fetch(WORKER_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-  country: data.country || ""
-});
+    const register = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        country: data.country || ""
+      })
+    });
 
-const text = await register.text();
+    const text = await register.text();
 
-console.log("POST status:", register.status, text);
+    console.log("POST status:", register.status, text);
 
-if (!register.ok) {
-  throw new Error(`Register failed (${register.status}): ${text}`);
-}
+    if (!register.ok) {
+      throw new Error(`Register failed (${register.status}): ${text}`);
+    }
 
     console.log("Visitor registered:", data.country);
 
