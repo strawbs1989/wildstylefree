@@ -41,27 +41,52 @@ if (!response.ok) {
 const WORKER_URL = "https://wildstyle-geo.jayaubs89.workers.dev/";
 
 const countryPositions = {
-  "United Kingdom": { x: 48, y: 22 },
-  "Ireland": { x: 46, y: 23 },
-  "Spain": { x: 46, y: 29 },
-  "Germany": { x: 52, y: 24 },
-  "Switzerland": { x: 51, y: 27 },
-  "Sweden": { x: 53, y: 18 },
-  "Norway": { x: 51, y: 16 },
-  "Finland": { x: 56, y: 16 },
-  "Malta": { x: 53, y: 33 },
-  "Nigeria": { x: 49, y: 44 },
-  "South Africa": { x: 53, y: 62 },
-  "Kenya": { x: 56, y: 48 },
-  "India": { x: 66, y: 36 },
-  "Malaysia": { x: 72, y: 46 },
-  "Australia": { x: 81, y: 64 },
-  "Canada": { x: 20, y: 22 },
-  "United States": { x: 21, y: 30 },
-  "Puerto Rico": { x: 29, y: 40 },
-  "Trinidad and Tobago": { x: 30, y: 44 }
-};
+  "United Kingdom": { x: 46.5, y: 26.5 },
+  "Ireland": { x: 44.8, y: 27.0 },
+  "France": { x: 47.2, y: 30.5 },
+  "Germany": { x: 50.0, y: 27.8 },
+  "Spain": { x: 45.0, y: 35.0 },
+  "Italy": { x: 50.5, y: 34.2 },
+  "Netherlands": { x: 48.2, y: 26.8 },
+  "Belgium": { x: 47.7, y: 28.5 },
+  "Sweden": { x: 54.8, y: 18.5 },
+  "Norway": { x: 50.5, y: 15.5 },
+  "Finland": { x: 58.0, y: 17.5 },
 
+  "United States": { x: 20.0, y: 31.5 },
+  "Canada": { x: 18.5, y: 18.5 },
+  "Mexico": { x: 18.8, y: 41.5 },
+
+  "Brazil": { x: 31.0, y: 60.0 },
+  "Argentina": { x: 30.5, y: 79.0 },
+
+  "Australia": { x: 85.8, y: 74.5 },
+  "New Zealand": { x: 92.8, y: 82.5 },
+
+  "India": { x: 66.0, y: 41.0 },
+  "Pakistan": { x: 63.5, y: 38.0 },
+  "China": { x: 73.5, y: 31.5 },
+  "Japan": { x: 84.8, y: 31.2 },
+  "South Korea": { x: 81.8, y: 30.0 },
+
+  "Malaysia": { x: 72.5, y: 52.8 },
+  "Singapore": { x: 73.0, y: 55.2 },
+  "Indonesia": { x: 76.8, y: 59.0 },
+  "Philippines": { x: 79.5, y: 47.5 },
+
+  "South Africa": { x: 55.0, y: 78.0 },
+  "Kenya": { x: 58.5, y: 55.5 },
+  "Nigeria": { x: 50.0, y: 48.5 },
+  "Ghana": { x: 48.0, y: 49.5 },
+
+  "Trinidad and Tobago": { x: 28.5, y: 46.0 },
+  "Bahamas": { x: 22.8, y: 38.5 },
+
+  "Turkey": { x: 55.0, y: 32.0 },
+  "Russia": { x: 63.0, y: 17.5 },
+  "Ukraine": { x: 54.5, y: 25.5 },
+  "Poland": { x: 50.8, y: 24.5 }
+};
 let previousData = new Map();
 
 function openMenu() {
