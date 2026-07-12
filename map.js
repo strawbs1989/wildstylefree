@@ -143,3 +143,402 @@ async function fetchListenerData(){
     return await response.json();
 
 }
+
+/*==================================================
+  PART 6B
+  MAP RENDERING ENGINE
+==================================================*/
+
+function clearMarkers(){
+
+    UI.map
+        .querySelectorAll(".listener-dot")
+        .forEach(dot => dot.remove());
+
+}
+
+function updateDashboard(data){
+
+    const total = data.reduce(
+        (sum,item)=>sum + (item.count || 0),
+        0
+    );
+
+    UI.total.textContent = formatNumber(total);
+
+    UI.countries.textContent = data.length;
+
+    if(data.length){
+
+        UI.topCountry.textContent = data[0].country;
+
+    }else{
+
+        UI.topCountry.textContent = "No Data";
+
+    }
+
+    UI.updated.textContent =
+        formatTime(new Date());
+
+}
+
+function drawMarkers(data){
+
+    clearMarkers();
+
+    data.forEach(item=>{
+
+        const pos =
+            countryPositions[item.country];
+
+        if(!pos) return;
+
+        const dot =
+            document.createElement("div");
+
+        dot.className="listener-dot";
+
+        if(
+            previousData.has(item.country) &&
+            item.count >
+            previousData.get(item.country)
+        ){
+
+            dot.classList.add(
+                "listener-dot-new"
+            );
+
+        }
+
+        const size =
+            bubbleSize(item.count);
+
+        dot.style.width=size+"px";
+
+        dot.style.height=size+"px";
+
+        dot.style.left=pos.x+"%";
+
+        dot.style.top=pos.y+"%";
+
+        dot.dataset.label=
+            item.country +
+            " • " +
+            formatNumber(item.count) +
+            " listeners";
+
+        UI.map.appendChild(dot);
+
+    });
+
+}
+
+function updateCountryList(data){
+
+    UI.countryList.innerHTML="";
+
+    data
+        .slice(0,10)
+        .forEach(item=>{
+
+            const row =
+                document.createElement("div");
+
+            row.className="country-row";
+
+            row.innerHTML=`
+
+<div>
+
+<b>${item.country}</b><br>
+
+<small>
+
+${formatNumber(item.count)} listeners
+
+</small>
+
+</div>
+
+<span class="badge">
+
+${formatNumber(item.count)}
+
+</span>
+
+`;
+
+            UI.countryList.appendChild(row);
+
+        });
+
+}
+
+function updateActivity(data){
+
+    UI.activityFeed.innerHTML="";
+
+    data
+        .slice(0,8)
+        .forEach(item=>{
+
+            const old =
+                previousData.get(item.country) || 0;
+
+            const diff =
+                item.count-old;
+
+            const feed =
+                document.createElement("div");
+
+            feed.className="feed-item";
+
+            feed.innerHTML=`
+
+<strong>
+
+${item.country}
+
+</strong>
+
+<span>
+
+${
+diff>0
+?
+"+"+diff+" new listener(s)"
+:
+"Live audience"
+
+}
+
+</span>
+
+`;
+
+            UI.activityFeed.appendChild(feed);
+
+        });
+
+}
+
+function rememberCounts(data){
+
+    previousData.clear();
+
+    data.forEach(item=>{
+
+        previousData.set(
+            item.country,
+            item.count
+        );
+
+    });
+
+}
+
+/*==================================================
+  PART 6C
+  APPLICATION ENGINE
+==================================================*/
+
+async function refreshDashboard(){
+
+    try{
+
+        const data = await fetchListenerData();
+
+        if(!Array.isArray(data)){
+
+            throw new Error(
+                "Invalid listener data."
+            );
+
+        }
+
+        data.sort(
+            (a,b)=>b.count-a.count
+        );
+
+        updateDashboard(data);
+
+        drawMarkers(data);
+
+        updateCountryList(data);
+
+        updateActivity(data);
+
+        rememberCounts(data);
+
+    }catch(err){
+
+        console.error(err);
+
+        UI.activityFeed.innerHTML=`
+
+<div class="feed-item">
+
+<strong>
+
+Unable to load listener data
+
+</strong>
+
+<span>
+
+Please try again shortly.
+
+</span>
+
+</div>
+
+`;
+
+    }
+
+}
+
+function startRefresh(){
+
+    if(refreshTimer){
+
+        clearInterval(refreshTimer);
+
+    }
+
+    refreshTimer = setInterval(
+
+        refreshDashboard,
+
+        REFRESH_INTERVAL
+
+    );
+
+}
+
+
+/*==================================================
+  PART 7
+  LIVE VISITOR REGISTRATION
+==================================================*/
+
+async function registerVisitor(){
+
+    try{
+
+        const response = await fetch(
+
+            WORKER_URL + "/country",
+
+            {
+                cache:"no-store"
+            }
+
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                "Country lookup failed."
+            );
+
+        }
+
+        const data = await response.json();
+
+        if(!data.country){
+
+            throw new Error(
+                "No country returned."
+            );
+
+        }
+
+        const register = await fetch(
+
+            WORKER_URL,
+
+            {
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+
+                    country:data.country
+
+                })
+
+            }
+
+        );
+
+        if(!register.ok){
+
+            throw new Error(
+                "Visitor registration failed."
+            );
+
+        }
+
+        console.log(
+            "Visitor registered:",
+            data.country
+        );
+
+    }
+    catch(err){
+
+        console.error(err);
+
+    }
+
+}
+
+/*==================================================
+  SMART REFRESH
+==================================================*/
+
+async function updateEverything(){
+
+    await registerVisitor();
+
+    await refreshDashboard();
+
+}
+
+/*==================================================
+  START APPLICATION
+==================================================*/
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    async ()=>{
+
+        cacheElements();
+
+        await updateEverything();
+
+        if(refreshTimer){
+
+            clearInterval(refreshTimer);
+
+        }
+
+        refreshTimer = setInterval(
+
+            updateEverything,
+
+            REFRESH_INTERVAL
+
+        );
+
+    }
+
+);
