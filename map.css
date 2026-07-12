@@ -536,22 +536,15 @@
 
 }
 
-.map-wrap{
-
-    position:relative;
-
-    overflow:hidden;
-
-    border-radius:20px;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    background:#081018;
-
-    padding:15px;
-
-    min-height:420px;
-
+.map-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: #081018 url("/assets/map.png") center center no-repeat;
+    background-size: contain;
+    padding: 15px;
+    min-height: 420px;
 }
 
 .map-image{
