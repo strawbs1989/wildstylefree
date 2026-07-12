@@ -522,3 +522,314 @@
     font-weight:600;
 
 }
+
+/*==================================================
+  PART 5
+  PROFESSIONAL POLISH
+==================================================*/
+
+/* ---------- Animated Grid ---------- */
+
+.map-wrap::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+
+    background-size:40px 40px;
+
+    opacity:.45;
+
+    pointer-events:none;
+
+    z-index:1;
+
+}
+
+/* ---------- Ocean Glow ---------- */
+
+.map-wrap::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-40%;
+
+    background:
+
+        radial-gradient(circle,
+        rgba(138,43,226,.18),
+        transparent 65%);
+
+    animation:oceanGlow 18s linear infinite;
+
+    pointer-events:none;
+
+    z-index:0;
+
+}
+
+@keyframes oceanGlow{
+
+0%{
+
+transform:rotate(0deg);
+
+}
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/* ---------- World SVG ---------- */
+
+.map-svg{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:2;
+
+}
+
+.map-svg svg{
+
+    width:95%;
+
+    height:auto;
+
+}
+
+.map-svg path{
+
+    fill:#17233d;
+
+    stroke:#00d4ff;
+
+    stroke-width:1.1;
+
+    filter:
+
+        drop-shadow(0 0 6px rgba(0,212,255,.25));
+
+    transition:.35s;
+
+}
+
+.map-svg path:hover{
+
+    fill:#233863;
+
+    stroke:#53e2ff;
+
+}
+
+/* ---------- Listener Dots ---------- */
+
+.listener-dot{
+
+    z-index:50;
+
+}
+
+.listener-dot::before{
+
+    z-index:-1;
+
+}
+
+/* ---------- Dashboard Cards ---------- */
+
+.hero-card,
+
+.dashboard-card,
+
+.map-panel{
+
+    transition:
+
+        transform .35s,
+
+        box-shadow .35s,
+
+        border-color .35s;
+
+}
+
+.hero-card:hover,
+
+.dashboard-card:hover,
+
+.map-panel:hover{
+
+    transform:translateY(-4px);
+
+    border-color:rgba(255,42,109,.4);
+
+    box-shadow:
+
+        0 18px 45px rgba(0,0,0,.45),
+
+        0 0 30px rgba(255,42,109,.12);
+
+}
+
+/* ---------- Scrollbars ---------- */
+
+.country-list,
+
+.activity-feed{
+
+    max-height:520px;
+
+    overflow:auto;
+
+}
+
+.country-list::-webkit-scrollbar,
+
+.activity-feed::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.country-list::-webkit-scrollbar-thumb,
+
+.activity-feed::-webkit-scrollbar-thumb{
+
+    background:#8a2be2;
+
+    border-radius:20px;
+
+}
+
+/* ---------- Live Status ---------- */
+
+.live-pill{
+
+    box-shadow:
+
+        0 0 20px rgba(255,42,109,.25);
+
+}
+
+/* ---------- Loading ---------- */
+
+.loading{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    height:100%;
+
+    color:var(--muted);
+
+    font-weight:600;
+
+    font-size:1rem;
+
+}
+
+/* ---------- Fade ---------- */
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+transform:translateY(12px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+.hero-card,
+
+.dashboard-card,
+
+.map-panel{
+
+    animation:fadeIn .6s ease both;
+
+}
+
+.hero-card:nth-child(2){
+
+animation-delay:.08s;
+
+}
+
+.hero-card:nth-child(3){
+
+animation-delay:.16s;
+
+}
+
+.hero-card:nth-child(4){
+
+animation-delay:.24s;
+
+}
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:768px){
+
+.map-wrap{
+
+height:420px;
+
+}
+
+.country-list,
+
+.activity-feed{
+
+max-height:none;
+
+}
+
+.panel-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
+
+}
