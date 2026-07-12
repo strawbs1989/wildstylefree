@@ -141,11 +141,18 @@
 /* ================= MAP ================= */
 
 .map-wrap{
+
     position:relative;
+
     height:620px;
+
     overflow:hidden;
+
+    border-radius:24px;
+
     background:
-        radial-gradient(circle at top,#1c1440 0%,#0b0d18 75%);
+        radial-gradient(circle at top,#241742 0%,#090c18 100%);
+
 }
 
 /* ================= LOWER GRID ================= */
