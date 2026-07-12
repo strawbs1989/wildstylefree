@@ -143,349 +143,121 @@
 
 </section>
 
-   <main class="main">
+   <main class="listener-dashboard">
 
-    <section class="main-left">
+  <!-- ================= HERO ================= -->
 
-        <!-- ================= MAP ================= -->
+  <section class="hero-banner">
 
-        <article class="card map-card">
+    <div class="hero-left">
+      <span class="live-pill">
+        <span class="live-dot"></span>
+        LIVE
+      </span>
 
-            <div class="card-head">
+      <h1>Global Audience Map</h1>
 
-                <div>
+      <p>
+        Real-time listener activity from around the world.
+        Powered by the Wildstyle Geo Network.
+      </p>
+    </div>
 
-                    <h2>🌍 Live Listener Map</h2>
+    <div class="hero-right">
 
-                    <p>
-                        Wildstyle Radio's audience around the world.
-                    </p>
+      <div class="hero-card">
+        <span class="hero-label">Total Listeners</span>
+        <h2 id="totalListenersBadge">0</h2>
+      </div>
 
-                </div>
+      <div class="hero-card">
+        <span class="hero-label">Countries Online</span>
+        <h2 id="countryCountBadge">0</h2>
+      </div>
 
-                <span class="badge">
-                    LIVE
-                </span>
+      <div class="hero-card">
+        <span class="hero-label">Top Country</span>
+        <h2 id="topCountryName">Loading...</h2>
+      </div>
 
-            </div>
+      <div class="hero-card">
+        <span class="hero-label">Last Updated</span>
+        <h2 id="lastUpdated">--:--</h2>
+      </div>
 
-            <div class="card-body">
+    </div>
 
-                <div class="map-toolbar">
+  </section>
 
-                    <div class="toolbar-left">
+  <!-- ================= MAP ================= -->
 
-                        <h3>Global Audience</h3>
+  <section class="map-section">
 
-                        <small>
-                            Real-time listener locations
-                        </small>
+    <div class="map-panel">
 
-                    </div>
+      <div class="panel-header">
 
-                    <div class="toolbar-right">
+        <div>
+          <h2>Live World Map</h2>
+          <p>Audience locations updating every 30 seconds</p>
+        </div>
 
-                        <div class="top-country">
+        <span class="live-pill">
+          <span class="live-dot"></span>
+          LIVE
+        </span>
 
-                            <span>Top Country</span>
+      </div>
 
-                            <strong id="mapTopCountryName">Loading...</strong>
+      <div id="mapWrap" class="map-wrap">
 
-                            <small id="topCountryCount">
-                                0 listeners
-                            </small>
+        <!-- World SVG goes here in Part 4 -->
 
-                        </div>
+      </div>
 
-                    </div>
+    </div>
 
-                </div>
+  </section>
 
-                <div
-                    class="map-wrap"
-                    id="mapWrap">
+  <!-- ================= LOWER GRID ================= -->
 
-                    <img
-                        src="https://wildstyle.vip/assets/worldmap.png"
-                        class="map-image"
-                        alt="World Map"
-                        onerror="this.style.display='none'">
+  <section class="dashboard-grid">
 
-                </div>
+    <!-- Top Countries -->
 
-            </div>
+    <div class="dashboard-card">
 
-        </article>
+      <div class="card-header">
 
-        <!-- ================= ACTIVITY ================= -->
+        <h3>🏆 Top Countries</h3>
 
-        <article class="card">
+      </div>
 
-            <div class="card-head">
+      <div
+        id="countryList"
+        class="country-list">
+      </div>
 
-                <div>
+    </div>
 
-                    <h2>⚡ Live Activity</h2>
+    <!-- Live Activity -->
 
-                    <p>
-                        Latest listener updates
-                    </p>
+    <div class="dashboard-card">
 
-                </div>
+      <div class="card-header">
 
-                <span class="badge">
-                    AUTO REFRESH
-                </span>
+        <h3>⚡ Live Activity</h3>
 
-            </div>
+      </div>
 
-            <div class="card-body">
+      <div
+        id="activityFeed"
+        class="activity-feed">
+      </div>
 
-                <div
-                    class="activity-feed"
-                    id="activityFeed">
+    </div>
 
-                    <div class="feed-item">
-
-                        <strong>
-                            Loading...
-                        </strong>
-
-                        <span>
-
-                            Fetching worldwide listener activity.
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </article>
-
-    </section>
-
-    <!-- ================= SIDEBAR ================= -->
-
-    <aside class="sidebar">
-
-        <article class="card">
-
-            <div class="card-head">
-
-                <h2>🏆 Top Countries</h2>
-
-            </div>
-
-            <div class="card-body">
-
-                <div
-                    class="country-list"
-                    id="countryList">
-
-                    <div class="country-row">
-
-                        <div>
-
-                            <b>Loading...</b>
-
-                            <br>
-
-                            <small>
-                                Retrieving listener data...
-                            </small>
-
-                        </div>
-
-                        <span class="badge">
-                            --
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </article>
-
-        <article class="card">
-
-            <div class="card-head">
-
-                <h2>📡 Station Status</h2>
-
-            </div>
-
-            <div class="card-body">
-
-                <div class="status-grid">
-
-                    <div class="status-box">
-
-                        <strong>
-                            LIVE
-                        </strong>
-
-                        <span>
-                            Geo Worker
-                        </span>
-
-                    </div>
-
-                    <div class="status-box">
-
-                        <strong>
-                            30s
-                        </strong>
-
-                        <span>
-                            Refresh
-                        </span>
-
-                    </div>
-
-                    <div class="status-box">
-
-                        <strong>
-                            24/7
-                        </strong>
-
-                        <span>
-                            Monitoring
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </article>
-
-        <article class="card">
-
-            <div class="card-head">
-
-                <h2>🔗 Quick Links</h2>
-
-            </div>
-
-            <div class="card-body quick-grid">
-
-                <a
-                    href="/social/index.html"
-                    class="quick-link">
-
-                    🏠 Home
-
-                </a>
-
-                <a
-                    href="/social/djs.html"
-                    class="quick-link">
-
-                    🎧 DJs
-
-                </a>
-
-                <a
-                    href="/social/schedule.html"
-                    class="quick-link">
-
-                    📅 Schedule
-
-                </a>
-
-                <a
-                    href="/social/chat.html"
-                    class="quick-link">
-
-                    💬 Chat
-
-                </a>
-
-                <a
-                    href="/social/request.html"
-                    class="quick-link">
-
-                    🎵 Request
-
-                </a>
-
-            </div>
-
-        </article>
-
-        <article class="card">
-
-            <div class="card-head">
-
-                <h2>ℹ About This Map</h2>
-
-            </div>
-
-            <div class="card-body">
-
-                <div class="list">
-
-                    <div class="list-item">
-
-                        <div>
-
-                            <strong>
-                                Live Geo Worker
-                            </strong>
-
-                            <small>
-                                Tracks worldwide listener activity.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <div class="list-item">
-
-                        <div>
-
-                            <strong>
-                                Automatic Refresh
-                            </strong>
-
-                            <small>
-                                Updates every 30 seconds.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <div class="list-item">
-
-                        <div>
-
-                            <strong>
-                                Global Coverage
-                            </strong>
-
-                            <small>
-                                See where Wildstyle is reaching across the globe.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </article>
-
-    </aside>
+  </section>
 
 </main>
     <!-- Global Footer -->
