@@ -73,7 +73,7 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("simon")) {
         djImage = "/images/simon.jpg";
       } else if (djName.includes("bitrate")) {
-        djImage = "/images/.jpg";
+        djImage = "/images/default-dj.jpg";
       } else if (djName.includes("truth")) {
         djImage = "/images/truth.jpeg";
       } else if (djName.includes("Aaron Bennett")) {
