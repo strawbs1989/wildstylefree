@@ -77,7 +77,7 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("truth")) {
         djImage = "/images/truth.jpeg";
       } else if (djName.includes("Aaron Bennett")) {
-        djImage = "/images/.jpeg";
+        djImage = "/images/aron.jpg";
       } else if (djName.includes("DJ Supa                   Blvck")) {
         djImage = "/images/supa.jpeg";
       }
