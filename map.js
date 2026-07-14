@@ -10,37 +10,44 @@ const REFRESH_INTERVAL = 30000;
 
 const countryPositions = {
 
-    "United Kingdom": { x:46.5, y:26.5 },
-    "Ireland": { x:44.8, y:27.0 },
-    "France": { x:47.2, y:30.5 },
-    "Germany": { x:50.0, y:27.8 },
-    "Spain": { x:45.0, y:35.0 },
-    "Italy": { x:50.5, y:34.2 },
-    "Netherlands": { x:48.2, y:26.8 },
-    "Belgium": { x:47.7, y:28.5 },
-
-    "Norway": { x:50.5, y:15.5 },
-    "Sweden": { x:54.8, y:18.5 },
-    "Finland": { x:58.0, y:17.5 },
-
-    "United States": { x:20.0, y:31.5 },
+    // North America
     "Canada": { x:18.5, y:18.5 },
-    "Mexico": { x:18.8, y:41.5 },
+    "United States": { x:20.5, y:30.5 },
+    "Mexico": { x:21.5, y:42.5 },
+    "Puerto Rico": { x:30.0, y:43.5 },
 
-    "Brazil": { x:31.0, y:60.0 },
-    "Argentina": { x:30.5, y:79.0 },
+    // South America
+    "Brazil": { x:31.5, y:60.5 },
+    "Argentina": { x:30.0, y:79.0 },
+    "Trinidad and Tobago": { x:31.5, y:48.5 },
 
-    "Nigeria": { x:50.0, y:48.5 },
-    "Kenya": { x:58.5, y:55.5 },
-    "South Africa": { x:55.0, y:78.0 },
+    // Europe
+    "Iceland": { x:41.5, y:11.5 },
+    "Ireland": { x:44.8, y:24.0 },
+    "United Kingdom": { x:46.8, y:23.0 },
+    "Spain": { x:45.5, y:33.0 },
+    "France": { x:48.0, y:29.0 },
+    "Germany": { x:50.5, y:25.5 },
+    "Netherlands": { x:49.2, y:24.0 },
+    "Belgium": { x:48.6, y:25.0 },
+    "Switzerland": { x:50.0, y:29.0 },
+    "Italy": { x:51.8, y:34.0 },
+    "Norway": { x:50.5, y:13.5 },
+    "Sweden": { x:54.0, y:16.5 },
+    "Finland": { x:57.5, y:15.5 },
 
-    "India": { x:66.0, y:41.0 },
-    "Malaysia": { x:72.5, y:52.8 },
+    // Africa
+    "Nigeria": { x:50.5, y:48.0 },
+    "Kenya": { x:58.5, y:56.0 },
+    "South Africa": { x:54.5, y:79.0 },
 
-    "Australia": { x:85.8, y:74.5 },
+    // Asia
+    "India": { x:61.0, y:50.0 },
+    "Malaysia": { x:69.5, y:60.0 },
 
-    "Puerto Rico": { x:28.8, y:44.2 },
-    "Trinidad and Tobago": { x:29.5, y:47.2 }
+    // Oceania
+    "Australia": { x:82.5, y:72.5 },
+    "New Zealand": { x:91.5, y:81.0 }
 
 };
 
@@ -104,7 +111,9 @@ function formatTime(date){
 
 function bubbleSize(count){
 
-    if(count >= 1000) return 42;
+    if(count >= 2000) return 46;
+
+    if(count >= 1000) return 40;
 
     if(count >= 500) return 34;
 
@@ -159,76 +168,81 @@ function clearMarkers(){
 
 function updateDashboard(data){
 
-    const total = data.reduce(
-        (sum,item)=>sum + (item.count || 0),
+    if(!Array.isArray(data)) return;
+
+    const totalListeners = data.reduce(
+        (total,item)=>total + (item.count || 0),
         0
     );
 
-    UI.total.textContent = formatNumber(total);
+    const countryCount = data.length;
 
-    UI.countries.textContent = data.length;
+    const topCountry = data[0] || null;
 
-    if(data.length){
-
-        UI.topCountry.textContent = data[0].country;
-
-    }else{
-
-        UI.topCountry.textContent = "No Data";
-
+    if(UI.total){
+        UI.total.textContent = formatNumber(totalListeners);
     }
 
-    UI.updated.textContent =
-        formatTime(new Date());
+    if(UI.countries){
+        UI.countries.textContent = formatNumber(countryCount);
+    }
+
+    if(UI.topCountry){
+        UI.topCountry.textContent = topCountry
+            ? topCountry.country
+            : "No Data";
+    }
+
+    if(UI.updated){
+        UI.updated.textContent = formatTime(new Date());
+    }
 
 }
+    
+
+    
 
 function drawMarkers(data){
 
-    clearMarkers();
+    if(!UI.map) return;
+
+    UI.map
+        .querySelectorAll(".listener-dot")
+        .forEach(dot=>dot.remove());
 
     data.forEach(item=>{
 
-        const pos =
-            countryPositions[item.country];
+        const pos = countryPositions[item.country];
 
         if(!pos) return;
 
-        const dot =
-            document.createElement("div");
+        const marker = document.createElement("div");
 
-        dot.className="listener-dot";
+        marker.className = "listener-dot";
 
         if(
             previousData.has(item.country) &&
-            item.count >
-            previousData.get(item.country)
+            item.count > previousData.get(item.country)
         ){
 
-            dot.classList.add(
-                "listener-dot-new"
-            );
+            marker.classList.add("listener-dot-new");
 
         }
 
-        const size =
-            bubbleSize(item.count);
+        const size = bubbleSize(item.count);
 
-        dot.style.width=size+"px";
+        marker.style.width = size + "px";
+        marker.style.height = size + "px";
 
-        dot.style.height=size+"px";
+        marker.style.left = pos.x + "%";
+        marker.style.top = pos.y + "%";
 
-        dot.style.left=pos.x+"%";
+        marker.setAttribute(
+            "data-label",
+            `${item.country}\n${formatNumber(item.count)} listeners`
+        );
 
-        dot.style.top=pos.y+"%";
-
-        dot.dataset.label=
-            item.country +
-            " • " +
-            formatNumber(item.count) +
-            " listeners";
-
-        UI.map.appendChild(dot);
+        UI.map.appendChild(marker);
 
     });
 
@@ -277,24 +291,49 @@ ${formatNumber(item.count)}
 
 function updateActivity(data){
 
-    UI.activityFeed.innerHTML="";
+    if(!UI.activityFeed) return;
+
+    UI.activityFeed.innerHTML = "";
 
     data
         .slice(0,8)
         .forEach(item=>{
 
-            const old =
+            const previous =
                 previousData.get(item.country) || 0;
 
-            const diff =
-                item.count-old;
+            const difference =
+                item.count - previous;
 
-            const feed =
+            const card =
                 document.createElement("div");
 
-            feed.className="feed-item";
+            card.className = "feed-item";
 
-            feed.innerHTML=`
+            let status = "No change";
+            let css = "";
+
+            if(difference > 0){
+
+                status =
+                    "+" + difference + " new listener" +
+                    (difference > 1 ? "s" : "");
+
+                css = "trend-up";
+
+            }else if(difference < 0){
+
+                status =
+                    Math.abs(difference) +
+                    " listener left";
+
+                css = "trend-down";
+
+            }
+
+            card.innerHTML = `
+
+<div class="feed-left">
 
 <strong>
 
@@ -302,22 +341,23 @@ ${item.country}
 
 </strong>
 
+<small class="${css}">
+
+${status}
+
+</small>
+
+</div>
+
 <span>
 
-${
-diff>0
-?
-"+"+diff+" new listener(s)"
-:
-"Live audience"
-
-}
+${formatNumber(item.count)}
 
 </span>
 
 `;
 
-            UI.activityFeed.appendChild(feed);
+            UI.activityFeed.appendChild(card);
 
         });
 
@@ -351,15 +391,11 @@ async function refreshDashboard(){
 
         if(!Array.isArray(data)){
 
-            throw new Error(
-                "Invalid listener data."
-            );
+            throw new Error("Invalid listener data.");
 
         }
 
-        data.sort(
-            (a,b)=>b.count-a.count
-        );
+        data.sort((a,b)=>b.count-a.count);
 
         updateDashboard(data);
 
@@ -371,49 +407,15 @@ async function refreshDashboard(){
 
         rememberCounts(data);
 
-    }catch(err){
+    }
+    catch(err){
 
-        console.error(err);
-
-        UI.activityFeed.innerHTML=`
-
-<div class="feed-item">
-
-<strong>
-
-Unable to load listener data
-
-</strong>
-
-<span>
-
-Please try again shortly.
-
-</span>
-
-</div>
-
-`;
+        console.error(
+            "Dashboard refresh failed:",
+            err
+        );
 
     }
-
-}
-
-function startRefresh(){
-
-    if(refreshTimer){
-
-        clearInterval(refreshTimer);
-
-    }
-
-    refreshTimer = setInterval(
-
-        refreshDashboard,
-
-        REFRESH_INTERVAL
-
-    );
 
 }
 
