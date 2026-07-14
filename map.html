@@ -97,46 +97,591 @@
     <div class="map-svg">
 
         <svg
+            id="worldSVG"
             viewBox="0 0 1000 500"
-            xmlns="http://www.w3.org/2000/svg">
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid meet">
+<!-- Background Grid -->
 
-            <!-- North America -->
+<defs>
 
-            <path d="M118 70 L150 55 L205 62 L242 95 L255 135 L215 175 L175 165 L140 145 L118 112 Z"/>
+<pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse">
 
-            <!-- South America -->
+<path
+d="M25 0 L0 0 0 25"
+fill="none"
+stroke="#30244b"
+stroke-width="0.4"/>
 
-            <path d="M250 220 L280 245 L296 290 L288 340 L272 390 L248 430 L230 385 L238 325 L228 272 Z"/>
+</pattern>
 
-            <!-- Europe -->
+<filter id="mapGlow">
 
-            <path d="M455 82 L480 70 L510 74 L520 90 L500 106 L468 102 Z"/>
+<feDropShadow
+dx="0"
+dy="0"
+stdDeviation="3"
+flood-color="#00cfff"
+flood-opacity=".35"/>
 
-            <!-- Africa -->
+</filter>
 
-            <path d="M495 120 L525 148 L540 205 L532 272 L505 322 L470 248 L472 178 Z"/>
+</defs>
 
-            <!-- Asia -->
+<rect
+width="100%"
+height="100%"
+fill="url(#grid)"/>
 
-            <path d="M535 72 L625 60 L720 82 L780 120 L775 178 L735 205 L680 180 L620 150 L570 118 Z"/>
+<!-- ===================================================== -->
+<!-- NORTH AMERICA -->
+<!-- ===================================================== -->
 
-            <!-- Australia -->
+<path
+class="continent"
+d="
+M93 103
+L116 79
+L161 64
+L220 67
+L262 84
+L300 115
+L331 157
+L337 202
+L302 236
+L255 234
+L212 214
+L182 197
+L160 171
+L132 166
+L106 144
+Z"/>
 
-            <path d="M760 320 L820 334 L846 368 L812 392 L748 378 L732 345 Z"/>
+<!-- Alaska -->
 
-            <!-- Greenland -->
+<path
+class="continent"
+d="
+M63 86
+L87 71
+L108 74
+L122 90
+L111 106
+L79 105
+Z"/>
 
-            <path d="M255 20 L300 8 L330 32 L305 58 L262 48 Z"/>
+<!-- Mexico -->
 
-        </svg>
+<path
+class="continent"
+d="
+M247 233
+L278 252
+L302 278
+L292 318
+L269 354
+L244 385
+L224 343
+L230 286
+L218 250
+Z"/>
 
-    </div>
+<!-- ===================================================== -->
+<!-- SOUTH AMERICA -->
+<!-- ===================================================== -->
+
+<path
+class="continent"
+d="
+M295 285
+L316 304
+L330 330
+L340 362
+L334 401
+L322 439
+L308 474
+L291 490
+L276 464
+L264 431
+L265 390
+L258 350
+L265 318
+L279 294
+Z"/>
+
+<!-- Falkland Islands -->
+
+<circle
+class="continent"
+cx="316"
+cy="486"
+r="2"/>
+
+<!-- Caribbean -->
+
+<circle class="continent" cx="286" cy="238" r="2"/>
+<circle class="continent" cx="296" cy="230" r="2"/>
+<circle class="continent" cx="308" cy="225" r="2"/>
+<circle class="continent" cx="319" cy="221" r="2"/>
+
+
+
+
+
+<!-- Greenland -->
+
+<path
+class="continent"
+d="
+M260 22
+L305 10
+L348 20
+L365 48
+L345 77
+L303 73
+L272 58
+L252 39
+Z"/>
+
+<!-- ===================================================== -->
+<!-- EUROPE -->
+<!-- ===================================================== -->
+
+<!-- Iceland -->
+
+<path
+class="continent"
+d="
+M405 55
+L418 50
+L432 54
+L428 66
+L412 68
+L401 61
+Z"/>
+
+<!-- British Isles -->
+
+<path
+class="continent"
+d="
+M446 86
+L452 80
+L460 83
+L461 93
+L454 100
+L446 96
+Z"/>
+
+<path
+class="continent"
+d="
+M438 95
+L444 90
+L448 97
+L444 104
+L437 101
+Z"/>
+
+<!-- Mainland Europe -->
+
+<path
+class="continent"
+d="
+M455 82
+L478 70
+L505 71
+L528 78
+L547 92
+L551 108
+L540 121
+L522 128
+L503 126
+L488 117
+L474 114
+L463 104
+L452 95
+Z"/>
+
+<!-- Scandinavia -->
+
+<path
+class="continent"
+d="
+M503 44
+L522 30
+L542 36
+L549 56
+L542 82
+L528 104
+L515 93
+L510 70
+Z"/>
+
+<!-- Italy -->
+
+<path
+class="continent"
+d="
+M503 126
+L510 138
+L514 152
+L508 168
+L500 159
+L499 144
+Z"/>
+
+<!-- Greece -->
+
+<path
+class="continent"
+d="
+M522 146
+L530 150
+L529 160
+L520 162
+L516 154
+Z"/>
+
+<!-- Mediterranean Islands -->
+
+<circle class="continent" cx="498" cy="176" r="1.8"/>
+<circle class="continent" cx="515" cy="171" r="1.8"/>
+<circle class="continent" cx="534" cy="169" r="1.8"/>
+
+<!-- ===================================================== -->
+<!-- AFRICA -->
+<!-- ===================================================== -->
+
+<!-- North Africa -->
+
+<path
+class="continent"
+d="
+M486 148
+L512 146
+L538 154
+L556 172
+L561 196
+L552 220
+L530 234
+L506 230
+L488 210
+L480 183
+Z"/>
+
+<!-- Mainland Africa -->
+
+<path
+class="continent"
+d="
+M505 228
+L526 236
+L546 255
+L556 284
+L554 322
+L542 360
+L520 398
+L498 420
+L478 396
+L470 360
+L468 316
+L474 274
+L486 244
+Z"/>
+
+<!-- Horn of Africa -->
+
+<path
+class="continent"
+d="
+M553 255
+L573 260
+L586 276
+L578 288
+L560 284
+L550 270
+Z"/>
+
+<!-- Madagascar -->
+
+<path
+class="continent"
+d="
+M566 347
+L575 362
+L572 385
+L562 402
+L554 382
+L556 360
+Z"/>
+
+<!-- Canary Islands -->
+
+<circle class="continent" cx="468" cy="172" r="1.6"/>
+
+<!-- Cape Verde -->
+
+<circle class="continent" cx="455" cy="214" r="1.6"/>
+
+<!-- Seychelles -->
+
+<circle class="continent" cx="585" cy="332" r="1.4"/>
+
+<!-- Mauritius -->
+
+<circle class="continent" cx="582" cy="366" r="1.5"/>
+
+<!-- ===================================================== -->
+<!-- ASIA -->
+<!-- ===================================================== -->
+
+<!-- Middle East -->
+
+<path
+class="continent"
+d="
+M552 148
+L572 145
+L592 152
+L604 166
+L601 182
+L584 192
+L563 186
+L548 172
+Z"/>
+
+<!-- Russia -->
+
+<path
+class="continent"
+d="
+M540 54
+L590 44
+L646 42
+L704 50
+L760 68
+L812 86
+L846 108
+L838 124
+L794 126
+L738 118
+L688 112
+L632 108
+L584 96
+L548 82
+Z"/>
+
+<!-- China -->
+
+<path
+class="continent"
+d="
+M630 150
+L662 140
+L700 146
+L724 166
+L724 194
+L700 212
+L666 214
+L638 198
+L620 174
+Z"/>
+
+<!-- India -->
+
+<path
+class="continent"
+d="
+M606 182
+L622 194
+L632 216
+L624 238
+L608 256
+L596 236
+L594 210
+Z"/>
+
+<!-- South East Asia -->
+
+<path
+class="continent"
+d="
+M676 218
+L696 226
+L710 244
+L706 262
+L692 274
+L676 262
+L668 244
+Z"/>
+
+<!-- Korean Peninsula -->
+
+<path
+class="continent"
+d="
+M730 162
+L738 174
+L734 188
+L724 182
+Z"/>
+
+<!-- Japan -->
+
+<circle class="continent" cx="758" cy="170" r="3"/>
+<circle class="continent" cx="764" cy="184" r="2.2"/>
+<circle class="continent" cx="770" cy="198" r="2"/>
+
+<!-- Taiwan -->
+
+<circle class="continent" cx="722" cy="214" r="2"/>
+
+<!-- Philippines -->
+
+<circle class="continent" cx="742" cy="244" r="2"/>
+<circle class="continent" cx="748" cy="258" r="2"/>
+<circle class="continent" cx="754" cy="272" r="2"/>
+
+<!-- Malaysia -->
+
+<circle class="continent" cx="688" cy="266" r="2"/>
+
+<!-- Singapore -->
+
+<circle class="continent" cx="692" cy="278" r="1.5"/>
+
+<!-- Indonesia -->
+
+<path
+class="continent"
+d="
+M704 286
+L724 290
+L744 292
+L764 294
+L784 298
+L790 306
+L772 308
+L748 306
+L724 302
+L706 296
+Z"/>
+
+<!-- Sri Lanka -->
+
+<circle class="continent" cx="610" cy="264" r="2"/>
+
+<!-- ===================================================== -->
+<!-- AUSTRALIA & OCEANIA -->
+<!-- ===================================================== -->
+
+<!-- Australia -->
+
+<path
+class="continent"
+d="
+M785 322
+L814 316
+L848 322
+L874 338
+L882 362
+L874 384
+L852 396
+L822 394
+L796 382
+L782 360
+L778 338
+Z"/>
+
+<!-- Tasmania -->
+
+<circle
+class="continent"
+cx="842"
+cy="408"
+r="3"/>
+
+<!-- New Zealand -->
+
+<circle
+class="continent"
+cx="914"
+cy="396"
+r="3"/>
+
+<circle
+class="continent"
+cx="924"
+cy="418"
+r="2.6"/>
+
+<!-- Papua New Guinea -->
+
+<path
+class="continent"
+d="
+M792 286
+L812 284
+L826 292
+L820 304
+L802 304
+L790 296
+Z"/>
+
+<!-- Fiji -->
+
+<circle
+class="continent"
+cx="902"
+cy="338"
+r="2"/>
+
+<!-- Samoa -->
+
+<circle
+class="continent"
+cx="922"
+cy="324"
+r="1.8"/>
+
+<!-- Hawaii -->
+
+<circle
+class="continent"
+cx="128"
+cy="206"
+r="2"/>
+
+<!-- ===================================================== -->
+<!-- ANTARCTICA -->
+<!-- ===================================================== -->
+
+<path
+class="continent"
+opacity=".45"
+d="
+M120 474
+L220 466
+L330 470
+L448 480
+L570 476
+L682 472
+L796 474
+L900 482
+L940 490
+L120 490
+Z"/>
+
+</svg>
+
+</div>
 
     <!-- JavaScript inserts listener dots here -->
 
 </div>
 
-        <!-- World SVG goes here in Part 4 -->
+        
 
       </div>
 
