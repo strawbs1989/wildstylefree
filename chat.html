@@ -219,44 +219,37 @@ Meet Our DJs
 
 </div>
 
-*/ <script>
-  function updateLiveListeners() {
-    const listenerNode = document.querySelector(".hero-stat strong:not(:contains('Live'))"); 
-    // Targets the correct text container inside your custom stats architecture
-    const targetSpan = document.getElementById("live-listener-value") || (() => {
-      const parent = document.querySelectorAll(".hero-stat")[1];
-      if(parent) {
-        parent.innerHTML = `<strong id="live-listener-value">--</strong><span>Listeners</span>`;
-        return document.getElementById("live-listener-value");
-      }
-      return null;
-    })();
+ <script>
+async function updateLiveListeners() {
+  try {
+    const response = await fetch("realtime.csv?" + Date.now());
+    const csv = await response.text();
 
-    if (!targetSpan) return;
-    const oldScript = document.getElementById("live365-jsonp-node");
-    if (oldScript) oldScript.remove();
+    const rows = csv.trim().split("\n");
+    const headers = rows[0].split(",");
 
-    window.handleLive365Stats = function(data) {
-      if (data && typeof data.current_listeners !== "undefined") {
-        targetSpan.innerText = data.current_listeners;
-      } else {
-        targetSpan.innerText = "0";
-      }
-    };
+    const index = headers.indexOf("active_session_count");
 
-    const script = document.createElement("script");
-    script.id = "live365-jsonp-node";
-    script.src = "https://api.live365.com/station/a50378?callback=handleLive365Stats";
-    script.onerror = function() { targetSpan.innerText = "0"; };
-    document.body.appendChild(script);
+    let listeners = 0;
+
+    for (let i = 1; i < rows.length; i++) {
+      const cols = rows[i].split(",");
+      listeners += parseInt(cols[index] || 0, 10);
+    }
+
+    document.getElementById("live-listener-value").textContent = listeners;
+
+  } catch (err) {
+    console.error("Listener count error:", err);
+    document.getElementById("live-listener-value").textContent = "--";
   }
+}
 
-  document.addEventListener("DOMContentLoaded", () => {
-    updateLiveListeners();
-    setInterval(updateLiveListeners, 40000);
-  });
-</script> /*
-
+document.addEventListener("DOMContentLoaded", () => {
+  updateLiveListeners();
+  setInterval(updateLiveListeners, 30000);
+});
+</script>
 
 <script type="module" src="https://wildstyle.vip/social/app.js"></script>
 <script src="/header.js"></script>
