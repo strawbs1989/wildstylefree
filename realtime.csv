@@ -1,0 +1,3 @@
+country,region,city,platform,duration,active_session_count,started_session_count,perc_total,ip
+GB,Aberdeen City,Aberdeen,Chrome,16751,1,1,0.5,aafda73367d465471f3a6133f6a0f06750da328f
+GB,Surrey,Redhill,ExoPlayer (Android),574,1,1,0.5,d988bd8df3bd6798313977afa547d51e0891617d
