@@ -1,30 +1,92 @@
-const submitBtn = document.getElementById("submitNomination");
+const API_URL = "https://script.google.com/macros/s/AKfycbyWFHpE9pO2Bc-PjLTumzuKmBrwbRKZWHu1vVrxdJQxF_uyO32WMLCsXeXLJuCpuwI/exec";
 
-submitBtn.addEventListener("click", () => {
+/* Load latest approved spotlight */
 
-    const nominee =
+async function loadSpotlight() {
+
+    try {
+
+        const response = await fetch(API_URL);
+
+        const data = await response.json();
+
+        document.getElementById("spotlightName").textContent = data.listener;
+        document.getElementById("spotlightReason").textContent = data.reason;
+
+        document.getElementById("spotlightBy").textContent =
+            data.nominatedBy
+                ? "Nominated by " + data.nominatedBy
+                : "";
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+}
+
+/* Submit nomination */
+
+document.getElementById("submitNomination").addEventListener("click", async () => {
+
+    const listener =
         document.getElementById("nomineeName").value.trim();
 
     const reason =
         document.getElementById("nomineeReason").value.trim();
 
-    const by =
+    const nominatedBy =
         document.getElementById("nominatedBy").value.trim() || "Anonymous";
 
-    if (!nominee || !reason) {
-        alert("Please enter a listener name and reason.");
+    if (!listener || !reason) {
+
+        alert("Please complete all required fields.");
+
         return;
+
     }
 
-    document.getElementById("spotlightName").textContent = nominee;
+    try {
 
-    document.getElementById("spotlightReason").textContent = reason;
+        await fetch(API_URL, {
 
-    document.getElementById("spotlightBy").textContent =
-        "Nominated by " + by;
+            method: "POST",
 
-    document.getElementById("nomineeName").value = "";
-    document.getElementById("nomineeReason").value = "";
-    document.getElementById("nominatedBy").value = "";
+            headers: {
+
+                "Content-Type": "text/plain;charset=utf-8"
+
+            },
+
+            body: JSON.stringify({
+
+                listener,
+                reason,
+                nominatedBy
+
+            })
+
+        });
+
+        alert("🎉 Thank you! Your nomination has been submitted for review.");
+
+        document.getElementById("nomineeName").value = "";
+        document.getElementById("nomineeReason").value = "";
+        document.getElementById("nominatedBy").value = "";
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Unable to submit nomination.");
+
+    }
 
 });
+
+loadSpotlight();
+
+/* Refresh every 30 seconds */
+
+setInterval(loadSpotlight, 30000);
