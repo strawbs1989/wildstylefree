@@ -30,61 +30,42 @@ async function loadSpotlight() {
 
 document.getElementById("submitNomination").addEventListener("click", async () => {
 
-    const listener =
-        document.getElementById("nomineeName").value.trim();
-
-    const reason =
-        document.getElementById("nomineeReason").value.trim();
-
-    const nominatedBy =
-        document.getElementById("nominatedBy").value.trim() || "Anonymous";
+    const listener = document.getElementById("nomineeName").value.trim();
+    const reason = document.getElementById("nomineeReason").value.trim();
+    const nominatedBy = document.getElementById("nominatedBy").value.trim() || "Anonymous";
 
     if (!listener || !reason) {
-
         alert("Please complete all required fields.");
-
         return;
-
     }
+
+    const form = new URLSearchParams();
+    form.append("listener", listener);
+    form.append("reason", reason);
+    form.append("nominatedBy", nominatedBy);
 
     try {
 
-        await fetch(API_URL, {
-
+        const response = await fetch(API_URL, {
             method: "POST",
-
-            headers: {
-
-                "Content-Type": "text/plain;charset=utf-8"
-
-            },
-
-            body: JSON.stringify({
-
-                listener,
-                reason,
-                nominatedBy
-
-            })
-
+            body: form
         });
 
-        alert("🎉 Thank you! Your nomination has been submitted for review.");
+        const text = await response.text();
+        console.log(text);
+
+        alert("🎉 Thank you! Your nomination has been submitted.");
 
         document.getElementById("nomineeName").value = "";
         document.getElementById("nomineeReason").value = "";
         document.getElementById("nominatedBy").value = "";
 
     } catch (err) {
-
         console.error(err);
-
-        alert("Unable to submit nomination.");
-
+        alert("Submission failed.");
     }
 
 });
-
 loadSpotlight();
 
 /* Refresh every 30 seconds */
