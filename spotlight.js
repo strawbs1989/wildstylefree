@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyWFHpE9pO2Bc-PjLTumzuKmBrwbRKZWHu1vVrxdJQxF_uyO32WMLCsXeXLJuCpuwI/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzE54N_JaeEvGO6A1Q0t2VI1oAY1_FpTnMiyO-qabzL0op1QS4p4nF4tdKh2OalWw/exec";
 
 /* Load latest approved spotlight */
 
