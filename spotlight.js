@@ -30,3 +30,15 @@ loadSpotlight();
 /* Refresh every 30 seconds */
 
 setInterval(loadSpotlight, 30000);
+
+window.addEventListener("message", function (event) {
+
+    if (event.data === "submitted") {
+
+        alert("🎉 Thank you! Your nomination has been submitted.");
+
+        document.getElementById("nominationForm").reset();
+
+    }
+
+});
