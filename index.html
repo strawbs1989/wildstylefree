@@ -654,6 +654,26 @@ ${recommendation.artist}
 
 </script>
 
+<script>
+window.addEventListener("message", function (event) {
+
+    if (event.data === "submitted") {
+
+        alert("🎉 Thank you! Your nomination has been submitted for review.");
+
+        document.getElementById("nominationForm").reset();
+
+    }
+
+    if (event.data === "error") {
+
+        alert("Please complete all required fields.");
+
+    }
+
+});
+</script>
+
 
 
 
