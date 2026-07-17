@@ -655,23 +655,38 @@ ${recommendation.artist}
 </script>
 
 <script>
-window.addEventListener("message", function (event) {
 
-    if (event.data === "submitted") {
+const submitBtn = document.getElementById("submitNomination");
 
-        alert("🎉 Thank you! Your nomination has been submitted for review.");
+submitBtn.addEventListener("click", () => {
 
-        document.getElementById("nominationForm").reset();
+    const nominee =
+        document.getElementById("nomineeName").value.trim();
 
+    const reason =
+        document.getElementById("nomineeReason").value.trim();
+
+    const by =
+        document.getElementById("nominatedBy").value.trim() || "Anonymous";
+
+    if (!nominee || !reason) {
+        alert("Please enter a listener name and reason.");
+        return;
     }
 
-    if (event.data === "error") {
+    document.getElementById("spotlightName").textContent = nominee;
 
-        alert("Please complete all required fields.");
+    document.getElementById("spotlightReason").textContent = reason;
 
-    }
+    document.getElementById("spotlightBy").textContent =
+        "Nominated by " + by;
+
+    document.getElementById("nomineeName").value = "";
+    document.getElementById("nomineeReason").value = "";
+    document.getElementById("nominatedBy").value = "";
 
 });
+
 </script>
 
 
