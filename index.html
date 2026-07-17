@@ -123,11 +123,11 @@
         </h3>
 
         <p id="spotlightReason">
-          Be the first to nominate Your Favourite Listener who deserves recognition On Wildstyle
+          Be the first to nominate someone who deserves recognition in the Wildstyle community.
         </p>
 
         <small id="spotlightBy">
-          Waiting for Your Nomination...
+          Waiting for the first nomination...
         </small>
 
       </div>
@@ -144,35 +144,25 @@
       Tell us who deserves recognition and why.
     </p>
 
-    <form id="nominationForm">
+    <input
+      type="text"
+      id="nomineeName"
+      placeholder="Listener name">
 
-  <input
-    type="text"
-    id="listener"
-    placeholder="Listener name"
-    required>
+    <textarea
+      id="nomineeReason"
+      rows="4"
+      placeholder="Why should they be nominated?"></textarea>
 
-  <textarea
-    id="reason"
-    rows="4"
-    placeholder="Why should they be nominated?"
-    required></textarea>
+    <input
+      type="text"
+      id="nominatedBy"
+      placeholder="Your name (optional)">
 
-  <input
-    type="text"
-    id="nominatedBy"
-    placeholder="Your name (optional)">
-
-  <button type="submit" class="btn-primary">
+    <button id="submitNomination"
+            class="btn-primary">
       Submit Nomination
-  </button>
-
-</form>
-
-<iframe
-    name="hidden_iframe"
-    style="display:none;">
-</iframe>
+    </button>
 
   </div>
 
