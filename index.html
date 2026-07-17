@@ -144,32 +144,28 @@
       Tell us who deserves recognition and why.
     </p>
 
-    <form id="nominationForm"
-      action="https://script.google.com/macros/s/AKfycbzE54N_JaeEvGO6A1Q0t2VI1oAY1_FpTnMiyO-qabzL0op1QS4p4nF4tdKh2OalWw/exec"
-      method="POST"
-      target="hidden_iframe">
+    <form id="nominationForm">
 
-    <input
-        type="text"
-        name="listener"
-        placeholder="Listener name"
-        required>
+  <input
+    type="text"
+    id="listener"
+    placeholder="Listener name"
+    required>
 
-    <textarea
-        name="reason"
-        rows="4"
-        placeholder="Why should they be nominated?"
-        required></textarea>
+  <textarea
+    id="reason"
+    rows="4"
+    placeholder="Why should they be nominated?"
+    required></textarea>
 
-    <input
-        type="text"
-        name="nominatedBy"
-        placeholder="Your name (optional)">
+  <input
+    type="text"
+    id="nominatedBy"
+    placeholder="Your name (optional)">
 
-        <button id="submitNomination"
-            class="btn-primary">
+  <button type="submit" class="btn-primary">
       Submit Nomination
-    </button>
+  </button>
 
 </form>
 
