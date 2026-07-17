@@ -479,7 +479,7 @@
   <script src="/schedule.js"></script>
   <script src="/test/player.js"></script>
   <script src="/header.js"></script>
-  <script src="/spotlight.js"></script>
+  
   
 
   <!-- Matcher Logic Engine Script -->
@@ -652,37 +652,93 @@ ${recommendation.artist}
 </script>
 
 <script>
+const API_URL = " https://script.google.com/macros/s/AKfycbzE54N_JaeEvGO6A1Q0t2VI1oAY1_FpTnMiyO-qabzL0op1QS4p4nF4tdKh2OalWw/exec  ";
 
-const submitBtn = document.getElementById("submitNomination");
+async function loadSpotlight() {
 
-submitBtn.addEventListener("click", () => {
+    try {
 
-    const nominee =
-        document.getElementById("nomineeName").value.trim();
+        const res = await fetch(API_URL);
+        const data = await res.json();
 
-    const reason =
-        document.getElementById("nomineeReason").value.trim();
+        document.getElementById("spotlightName").textContent =
+            data.listener || "No nominations yet";
 
-    const by =
-        document.getElementById("nominatedBy").value.trim() || "Anonymous";
+        document.getElementById("spotlightReason").textContent =
+            data.reason || "";
 
-    if (!nominee || !reason) {
-        alert("Please enter a listener name and reason.");
-        return;
+        document.getElementById("spotlightBy").textContent =
+            data.nominatedBy
+                ? "Nominated by " + data.nominatedBy
+                : "";
+
+    } catch (err) {
+
+        console.error(err);
+
     }
 
-    document.getElementById("spotlightName").textContent = nominee;
+}
 
-    document.getElementById("spotlightReason").textContent = reason;
+document.getElementById("nominationForm").addEventListener("submit", async function(e){
 
-    document.getElementById("spotlightBy").textContent =
-        "Nominated by " + by;
+    e.preventDefault();
 
-    document.getElementById("nomineeName").value = "";
-    document.getElementById("nomineeReason").value = "";
-    document.getElementById("nominatedBy").value = "";
+    const listener =
+        document.getElementById("listener").value.trim();
+
+    const reason =
+        document.getElementById("reason").value.trim();
+
+    const nominatedBy =
+        document.getElementById("nominatedBy").value.trim() || "Anonymous";
+
+    if(!listener || !reason){
+
+        alert("Please complete all required fields.");
+        return;
+
+    }
+
+    try{
+
+        const res = await fetch(API_URL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                listener,
+                reason,
+                nominatedBy
+            })
+        });
+
+        if(!res.ok){
+
+            throw new Error("Server error");
+
+        }
+
+        alert("🎉 Thank you! Your nomination has been submitted.");
+
+        document.getElementById("nominationForm").reset();
+
+        loadSpotlight();
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Submission failed.");
+
+    }
 
 });
+
+loadSpotlight();
+
+setInterval(loadSpotlight,30000);
 
 </script>
 
