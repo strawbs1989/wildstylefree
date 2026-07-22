@@ -1,4 +1,4 @@
-const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
+,const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycby2xfvFxbHKAizMqHrl-p-JqxsGR5D7n7BMKCZhZblDyAm-VHw6VyaXX8vVl7d27Bs/exec";
 
 const DAY_ORDER = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
@@ -41,6 +41,8 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/kai.jpg";
       } else if (djName.includes("serenity")) {
         djImage = "/images/default-dj.jpg"; 
+      } else if (djName.includes("serenity")) {
+        djImage = "/images/brookstyle.jpeg";
       } else if (djName.includes("ruckus")) {
         djImage = "/images/default-dj.jpg"; 
       } else if (djName.includes("pat")) {
