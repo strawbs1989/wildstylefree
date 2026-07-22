@@ -40,8 +40,8 @@ async function loadScheduleFromGoogle() {
       } else if (djName.includes("kai")) {
         djImage = "/images/kai.jpg";
       } else if (djName.includes("serenity")) {
-        djImage = "/images/default-dj.jpg"; 
-      } else if (djName.includes("serenity")) {
+        djImage = "/images/ally.jpg"; 
+      } else if (djName.includes("brookstyle")) {
         djImage = "/images/brookstyle.jpeg";
       } else if (djName.includes("ruckus")) {
         djImage = "/images/default-dj.jpg"; 
