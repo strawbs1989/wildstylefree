@@ -39,7 +39,7 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/don.jpg";
       } else if (djName.includes("kai")) {
         djImage = "/images/kai.jpg";
-      } else if (djName.includes("serenity")) {
+      } else if (djName.includes("alleybee")) {
         djImage = "/images/ally.jpg"; 
       } else if (djName.includes("brookstyle")) {
         djImage = "/images/brookstyle.jpeg";
@@ -75,8 +75,6 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/katlady.jpeg";
       } else if (djName.includes("simon")) {
         djImage = "/images/simon.jpg";
-      } else if (djName.includes("dj alleybee")) {
-        djImage = "/images/ally.jpeg";
       } else if (djName.includes("bitrate")) {
         djImage = "/images/default-dj.jpg";
       } else if (djName.includes("truth")) {
