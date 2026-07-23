@@ -47,6 +47,8 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/brookstyle.jpeg";
       } else if (djName.includes("ruckus")) {
         djImage = "/images/default-dj.jpg"; 
+      } else if (djName.includes("mr gvo")) {
+        djImage = "/images/gvo.jpg";
       } else if (djName.includes("pat")) {
         djImage = "/images/pat.jpg";
       } else if (djName.includes("gabby")) {
