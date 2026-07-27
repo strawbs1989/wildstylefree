@@ -85,12 +85,10 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/flincho.jpg";
       } else if (djName.includes("dj nala")) {
         djImage = "/images/djnala.jpg";
-      } else if (djName.includes("dj spara")) { 
-        djImage = "/images/spara.jpeg";
+      
       } else if (djName.includes("dj tom")) {
         djImage = "/images/tom.jpeg";
-      } else if (djName.includes("rose")) {
-        djImage = "/images/rose.jpeg";
+      
       } else if (djName.includes("John")) {
         djImage = "/images/john.jpeg"; 
       } else if (djName.includes("kiki")) {
