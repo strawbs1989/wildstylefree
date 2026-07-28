@@ -48,6 +48,7 @@ const djImages = {
   "truth": "/images/truth.jpeg",
   "aaron": "/images/aron.jpg",
   "blvck": "/images/supa.jpeg"
+  
 };
 
 let schedule = [];
