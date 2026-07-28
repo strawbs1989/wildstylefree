@@ -67,18 +67,17 @@ async function loadScheduleFromGoogle() {
     console.log("4. Slots:", slots.length);
 
     schedule = slots.map(slot => {
-      // your existing code...
-    });
+      const djName = (slot.dj || "Free Slot").trim().toLowerCase();
 
-    console.log("5. Schedule:", schedule.length);
+      let djImage = "/images/wildy.png";
 
-    return true;
+      for (const key in djImages) {
+        if (djName.includes(key)) {
+          djImage = djImages[key];
+          break;
+        }
+      }
 
-  } catch (err) {
-    console.error(err);
-    return false;
-  }
-}
       return {
         day: slot.day || "Monday",
         dj: slot.dj || "Free Slot",
@@ -88,6 +87,8 @@ async function loadScheduleFromGoogle() {
       };
     });
 
+    console.log("5. Schedule:", schedule.length);
+
     return true;
 
   } catch (err) {
@@ -95,6 +96,8 @@ async function loadScheduleFromGoogle() {
     return false;
   }
 }
+      
+  
 
 // Helper: Makes sure spreadsheet times like "11am" or "2pm" match our 24hr logic smoothly
 function formatTo24Hour(timeStr) {
