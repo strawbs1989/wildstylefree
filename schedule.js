@@ -52,31 +52,30 @@ const djImages = {
 
 let schedule = [];
 
-      async function loadScheduleFromGoogle() {
-  try {
-    const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
-    const data = await response.json();
+      const data = await response.json();
 
-    schedule = data.map(slot => {
-      const djName = (slot.dj || "Free Slot").trim().toLowerCase();
+const slots = Array.isArray(data) ? data : data.slots || [];
 
-      let djImage = "/images/default-dj.jpg";
+schedule = slots.map(slot => {
+    const djName = (slot.dj || "Free Slot").trim().toLowerCase();
 
-      for (const key in djImages) {
+    let djImage = "/images/wildy.png";
+
+    for (const key in djImages) {
         if (djName.includes(key)) {
-          djImage = djImages[key];
-          break;
+            djImage = djImages[key];
+            break;
         }
-      }
+    }
 
-      return {
+    return {
         day: slot.day || "Monday",
         dj: slot.dj || "Free Slot",
         start: formatTo24Hour(slot.start),
         end: formatTo24Hour(slot.end),
         image: djImage
-      };
-    });
+    };
+});   
 
     return true;
 
