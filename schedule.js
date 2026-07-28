@@ -18,100 +18,60 @@ async function loadScheduleFromGoogle() {
     // Clean up times and automatically match local images based on the DJ name column
     schedule = fetchedSlots.map(slot => {
       const djName = (slot.dj || "Free Slot").trim().toLowerCase();
-      let djImage = "/images/default-dj.jpg"; // Default fallback image
-       console.log("DJ Name:", djName);
-      // Check the text from your "DJ" column and map it to your local filenames
-      if (djName.includes("mystic")) {
-        djImage = "/images/joanne.jpeg";
-      } else if (djName.includes("stephan") || djName.includes("gold")) {
-        djImage = "/images/golds.jpg";
-      } else if (djName.includes("chanel")) {
-        djImage = "/images/chanel.png";
-      } else if (djName.includes("echofalls")) {
-        djImage = "/images/echo1.png";
-      } else if (djName.includes("hotshot")) {
-        djImage = "/images/hotshot.jpg";
-      } else if (djName.includes("mouse") || djName.includes("free")) {
-        djImage = "/images/mouse.jpeg";
-      } else if (djName.includes("micky j")) {
-        djImage = "/images/mickeyjay.jpeg";
-      } else if (djName.includes("headhunter")) {
-        djImage = "/images/headhunter.jpeg";
-      } else if (djName.includes("dj don")) {
-        djImage = "/images/don.jpg";
-      } else if (djName.includes("dj junie")) {
-        djImage = "/images/gary.jpeg";
-      } else if (djName.includes("luic")) {
-        djImage = "/images/luic.jpeg";
-      } else if (djName.includes("andrew")) {
-        djImage = "/images/andrew.jpg";
-      
-      } else if (djName.includes("megan")) {
-        djImage = "/images/megan.jpeg";
-      } else if (djName.includes("kai")) {
-        djImage = "/images/kai.jpg";
-      } else if (djName.includes("simon- djenvy")) {
-        djImage = "/images/envy.jpeg";
-      } else if (djName.includes("alex - djallybee")) {
-        djImage = "/images/ally.jpg"; 
-      } else if (djName.includes("brookstyle")) {
-        djImage = "/images/brookstyle.jpeg";
-      } else if (djName.includes("ruckus")) {
-        djImage = "/images/default-dj.jpg"; 
-      } else if (djName.includes("mr gvo")) {
-        djImage = "/images/gvo.jpg";
-       } else if (djName.includes("sonny")) {
-        djImage = "/images/sonny.jpeg";
-      } else if (djName.includes("pat")) {
-        djImage = "/images/pat.jpg";
-      } else if (djName.includes("Colin - Wake up with DJCoffee")) {
-        djImage = "/images/coffee.jpeg";
-      } else if (djName.includes("tina")) {
-        djImage = "/images/tina.jpeg";
-      } else if (djName.includes("dj muggz")) {
-        djImage = "/images/muggz.jpg";
-      } else if (djName.includes("dj birbal")) {
-        djImage = "/images/birbal.jpg";
-      } else if (djName.includes("donk devil")) {
-        djImage = "/images/donkdevil.jpeg";
-      } else if (djName.includes("gabby")) {
-        djImage = "/images/gabby.jpg";
-      } else if (djName.includes("suzy")) {
-        djImage = "/images/djsuzy.jpg";
-      } else if (djName.includes("alex")) {
-        djImage = "/images/alex.jpeg";
-      } else if (djName.includes("dj 3rd   degree")) {
-        djImage = "/images/tom.jpg";
-      } else if (djName.includes("lewis")) {
-        djImage = "/images/lewis.jpg";
-      } else if (djName.includes("mix&match")) {
-        djImage = "/images/rebecca.jpg";
-      } else if (djName.includes("leslie")) {
-        djImage = "/images/leslie.jpeg";
-      } else if (djName.includes("dj flincho")) {
-        djImage = "/images/flincho.jpg";
-      } else if (djName.includes("dj nala")) {
-        djImage = "/images/djnala.jpg";
-      
-      } else if (djName.includes("dj tom")) {
-        djImage = "/images/tom.jpeg";
-      
-      } else if (djName.includes("john")) {
-        djImage = "/images/john.jpeg"; 
-      } else if (djName.includes("kiki")) {
-        djImage = "/images/keekerz.png";
-      } else if (djName.includes("dj katlady")) {
-        djImage = "/images/katlady.jpeg";
-      
-      } else if (djName.includes("bitrate")) {
-        djImage = "/images/default-dj.jpg";
-      } else if (djName.includes("truth")) {
-        djImage = "/images/truth.jpeg";
-      } else if (djName.includes("aaron bennett")) {
-        djImage = "/images/aron.jpg";
-      } else if (djName.includes("dj supa                   blvck")) {
-        djImage = "/images/supa.jpeg";
-      }
+      let djImage = "/images/default-dj.jpg";
+
+for (const [keyword, image] of Object.entries(djImages)) {
+    if (djName.includes(keyword)) {
+        djImage = image;
+        break;
+    }
+}
+      const djImages = {
+  "mystic": "/images/joanne.jpeg",
+  "stephan": "/images/golds.jpg",
+  "gold": "/images/golds.jpg",
+  "chanel": "/images/chanel.png",
+  "echofalls": "/images/echo1.png",
+  "hotshot": "/images/hotshot.jpg",
+  "mouse": "/images/mouse.jpeg",
+  "free": "/images/mouse.jpeg",
+  "micky j": "/images/mickeyjay.jpeg",
+  "headhunter": "/images/headhunter.jpeg",
+  "dj don": "/images/don.jpg",
+  "dj junie": "/images/gary.jpeg",
+  "luic": "/images/luic.jpeg",
+  "andrew": "/images/andrew.jpg",
+  "megan": "/images/megan.jpeg",
+  "kai": "/images/kai.jpg",
+  "envy": "/images/envy.jpeg",
+  "allybee": "/images/ally.jpg",
+  "brookstyle": "/images/brookstyle.jpeg",
+  "mr gvo": "/images/gvo.jpg",
+  "sonny": "/images/sonny.jpeg",
+  "pat": "/images/pat.jpg",
+  "colin": "/images/coffee.jpeg",
+  "tina": "/images/tina.jpeg",
+  "muggz": "/images/muggz.jpg",
+  "birbal": "/images/birbal.jpg",
+  "donk devil": "/images/donkdevil.jpeg",
+  "gabby": "/images/gabby.jpg",
+  "suzy": "/images/djsuzy.jpg",
+  "alex": "/images/alex.jpeg",
+  "3rd": "/images/tom.jpg",
+  "lewis": "/images/lewis.jpg",
+  "mix&match": "/images/rebecca.jpg",
+  "leslie": "/images/leslie.jpeg",
+  "flincho": "/images/flincho.jpg",
+  "nala": "/images/djnala.jpg",
+  "dj tom": "/images/tom.jpeg",
+  "john": "/images/john.jpeg",
+  "kiki": "/images/keekerz.png",
+  "katlady": "/images/katlady.jpeg",
+  "truth": "/images/truth.jpeg",
+  "aaron": "/images/aron.jpg",
+  "supa": "/images/supa.jpeg",
+  "blvck": "/images/supa.jpeg"
+};
 
       return {
         day: slot.day || "Monday",
