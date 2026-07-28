@@ -101,8 +101,7 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/keekerz.png";
       } else if (djName.includes("dj katlady")) {
         djImage = "/images/katlady.jpeg";
-      } else if (djName.includes("simon")) {
-        djImage = "/images/simon.jpg";
+      
       } else if (djName.includes("bitrate")) {
         djImage = "/images/default-dj.jpg";
       } else if (djName.includes("truth")) {
