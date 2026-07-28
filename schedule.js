@@ -105,9 +105,9 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/default-dj.jpg";
       } else if (djName.includes("truth")) {
         djImage = "/images/truth.jpeg";
-      } else if (djName.includes("Aaron Bennett")) {
+      } else if (djName.includes("aaron bennett")) {
         djImage = "/images/aron.jpg";
-      } else if (djName.includes("DJ Supa                   Blvck")) {
+      } else if (djName.includes("dj supa                   blvck")) {
         djImage = "/images/supa.jpeg";
       }
 
