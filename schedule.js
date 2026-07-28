@@ -43,6 +43,7 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/luic.jpeg";
       } else if (djName.includes("andrew")) {
         djImage = "/images/andrew.jpg";
+      console.log("DJ Name:", djName);
       } else if (djName.includes("Colin - Wake up with DJCoffee")) {
         djImage = "/images/coffee.jpeg";
       } else if (djName.includes("megan")) {
