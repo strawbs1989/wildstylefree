@@ -52,6 +52,23 @@ const djImages = {
 
 let schedule = [];
 
+      async function loadScheduleFromGoogle() {
+  try {
+    const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
+    const data = await response.json();
+
+    schedule = data.map(slot => {
+      const djName = (slot.dj || "Free Slot").trim().toLowerCase();
+
+      let djImage = "/images/default-dj.jpg";
+
+      for (const key in djImages) {
+        if (djName.includes(key)) {
+          djImage = djImages[key];
+          break;
+        }
+      }
+
       return {
         day: slot.day || "Monday",
         dj: slot.dj || "Free Slot",
@@ -62,6 +79,7 @@ let schedule = [];
     });
 
     return true;
+
   } catch (err) {
     console.error("Failed to load live Google Sheet schedule:", err);
     return false;
