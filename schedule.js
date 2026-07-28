@@ -4,29 +4,7 @@ const DAY_ORDER = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ];
 
-// Stores the schedule array after download
-let schedule = [];
-
-// 1. Fetch live data from your Google Sheet API
-async function loadScheduleFromGoogle() {
-  try {
-    const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
-    const data = await response.json();
-
-    const fetchedSlots = data.slots || data.schedule || data || [];
-
-    // Clean up times and automatically match local images based on the DJ name column
-    schedule = fetchedSlots.map(slot => {
-      const djName = (slot.dj || "Free Slot").trim().toLowerCase();
-      let djImage = "/images/default-dj.jpg";
-
-for (const [keyword, image] of Object.entries(djImages)) {
-    if (djName.includes(keyword)) {
-        djImage = image;
-        break;
-    }
-}
-      const djImages = {
+const djImages = {
   "mystic": "/images/joanne.jpeg",
   "stephan": "/images/golds.jpg",
   "gold": "/images/golds.jpg",
@@ -69,9 +47,10 @@ for (const [keyword, image] of Object.entries(djImages)) {
   "katlady": "/images/katlady.jpeg",
   "truth": "/images/truth.jpeg",
   "aaron": "/images/aron.jpg",
-  "supa": "/images/supa.jpeg",
   "blvck": "/images/supa.jpeg"
 };
+
+let schedule = [];
 
       return {
         day: slot.day || "Monday",
