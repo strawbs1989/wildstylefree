@@ -31,7 +31,7 @@ const djImages = {
   "tina": "/images/tina.jpeg",
   "muggz": "/images/muggz.jpg",
   "birbal": "/images/birbal.jpg",
-  "donk devil": "/images/donkdevil.jpeg",
+  "donk devil": "/images/donk.jpeg",
   "gabby": "/images/gabby.jpg",
   "suzy": "/images/djsuzy.jpg",
   "alex": "/images/alex.jpeg",
