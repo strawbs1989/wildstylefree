@@ -7,7 +7,6 @@ const DAY_ORDER = [
 const djImages = {
   "mystic": "/images/joanne.jpeg",
   "stephan": "/images/golds.jpg",
-  "gold": "/images/golds.jpg",
   "chanel": "/images/chanel.png",
   "echofalls": "/images/echo1.png",
   "hotshot": "/images/hotshot.jpg",
