@@ -46,8 +46,8 @@ const djImages = {
   "katlady": "/images/katlady.jpeg",
   "truth": "/images/truth.jpeg",
   "aaron": "/images/aron.jpg",
-  "blvck": "/images/supa.jpeg"
-  "jamy": "/images/jamy.jpeg"
+  "blvck": "/images/supa.jpeg",
+  "jamy": "/images/jamy.jpeg",
   
 };
 
