@@ -55,23 +55,30 @@ let schedule = [];
 
 async function loadScheduleFromGoogle() {
   try {
+    console.log("1. Starting fetch...");
+
     const response = await fetch(`${SCHEDULE_URL}?v=${Date.now()}`);
+    console.log("2. Response:", response.status);
+
     const data = await response.json();
+    console.log("3. Data:", data);
 
     const slots = Array.isArray(data) ? data : data.slots || [];
+    console.log("4. Slots:", slots.length);
 
     schedule = slots.map(slot => {
-      const djName = (slot.dj || "Free Slot").trim().toLowerCase();
+      // your existing code...
+    });
 
-      let djImage = "/images/wildy.png";
+    console.log("5. Schedule:", schedule.length);
 
-      for (const key in djImages) {
-        if (djName.includes(key)) {
-          djImage = djImages[key];
-          break;
-        }
-      }
+    return true;
 
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
       return {
         day: slot.day || "Monday",
         dj: slot.dj || "Free Slot",
