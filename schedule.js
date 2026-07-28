@@ -15,6 +15,7 @@ const djImages = {
   "hotshot": "/images/hotshot.jpg",
   "mouse": "/images/mouse.jpeg",
   "free": "/images/mouse.jpeg",
+  "anthony": "/images/anthony.png",
   "micky j": "/images/mickeyjay.jpeg",
   "headhunter": "/images/headhunter.jpeg",
   "dj don": "/images/don.jpg",
