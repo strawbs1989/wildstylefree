@@ -33,9 +33,9 @@ async function loadScheduleFromGoogle() {
         djImage = "/images/hotshot.jpg";
       } else if (djName.includes("mouse") || djName.includes("free")) {
         djImage = "/images/mouse.jpeg";
-      } else if (djName.includes("micky")) {
+      } else if (djName.includes("micky j")) {
         djImage = "/images/mickeyjay.jpeg";
-      } else if (djName.includes("don")) {
+      } else if (djName.includes("dj don")) {
         djImage = "/images/don.jpg";
       } else if (djName.includes("dj junie")) {
         djImage = "/images/gary.jpeg";
