@@ -52,6 +52,7 @@ const djImages = {
   "aaron": "/images/aron.jpg",
   "blvck": "/images/supa.jpeg",
   "jamy": "/images/jamy.jpeg",
+  "cody": "/images/cody.jpeg",
   
 };
 
