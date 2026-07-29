@@ -22,7 +22,7 @@ const djImages = {
   "dj junie": "/images/gary.jpeg",
   "luic": "/images/luic.jpeg",
   "andrew": "/images/andrew.jpg",
-  "megan": "/images/megan.jpeg",
+  "curator kitty": "/images/megan.jpeg",
   "kai": "/images/kai.jpg",
   "envy": "/images/envy.jpeg",
   "allybee": "/images/ally.jpg",
@@ -46,7 +46,7 @@ const djImages = {
   "nala": "/images/djnala.jpg",
   "dj tom": "/images/tom.jpeg",
   "john": "/images/john.jpeg",
-  "kiki": "/images/keekerz.png",
+  "keekerz": "/images/keekerz.png",
   "katlady": "/images/katlady.jpeg",
   "truth": "/images/truth.jpeg",
   "aaron": "/images/aron.jpg",
@@ -55,6 +55,7 @@ const djImages = {
   "cody": "/images/cody.jpeg",
   "michelle": "/images/michelle.png",
   "rabzza": "/images/rabzza.jpg",
+  "sergey": "/images/sergey.jpg",
 };
 
 let schedule = [];
