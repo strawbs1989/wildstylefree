@@ -501,23 +501,17 @@ async function registerVisitor(){
 
 }
 
-//*==================================================
+/*==================================================
   SMART REFRESH
 ==================================================*/
 
-async function updateEverything() {
+async function updateEverything(){
 
-    try {
-        await registerVisitor();
-    } catch (err) {
-        console.warn("Visitor registration failed:", err);
-    }
+    await registerVisitor();
 
     await refreshDashboard();
 
-}
-
-/*==================================================
+}*==================================================
   START APPLICATION
 ==================================================*/
 
