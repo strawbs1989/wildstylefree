@@ -60,7 +60,7 @@ const djImages = {
   "ivan": "/images/ivan.jpeg",
   "denver": "/images/denver.jpg",
   "yinka": "/images/yinka.jpg",
-  "djwes": "/images/djwes.jpg",
+  "jay-djwes": "/images/djwes.jpg",
 };
 
 let schedule = [];
