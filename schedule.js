@@ -10,6 +10,7 @@ const DAY_ORDER = [
 const djImages = {
   "mystic": "/images/joanne.jpeg",
   "stephan": "/images/golds.jpg",
+  "mouse": "/images/mouse.jpeg",
   "chanel": "/images/chanel.png",
   "echofalls": "/images/echo1.png",
   "hotshot": "/images/hotshot.jpg",
@@ -32,7 +33,7 @@ const djImages = {
   "tina": "/images/tina.jpeg",
   "muggz": "/images/muggz.jpg",
   "birbal": "/images/birbal.jpg",
-  "donk devil": "/images/donk.jpeg",
+  "donk": "/images/donk.jpeg",
   "gabby": "/images/gabby.jpg",
   "suzy": "/images/djsuzy.jpg",
   "alex": "/images/alex.jpeg",
