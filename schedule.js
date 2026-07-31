@@ -54,7 +54,7 @@ const djImages = {
   "jamy": "/images/jamy.jpeg",
   "cody": "/images/cody.jpeg",
   "michelle": "/images/michelle.png",
-  "rabzza": "wildstyle.vip/images/rabzza.jpg",
+  "rabzza": "/images/rabzza.jpg",
   "sergey": "/images/sergey.jpg",
   "tuan": "/images/tuan.jpeg",
   "ivan": "/images/ivan.jpeg",
