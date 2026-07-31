@@ -13,8 +13,6 @@ const djImages = {
   "chanel": "/images/chanel.png",
   "echofalls": "/images/echo1.png",
   "hotshot": "/images/hotshot.jpg",
-  "mouse": "/images/mouse.jpeg",
-  "free": "/images/mouse.jpeg",
   "anthony": "/images/anthony.png",
   "micky j": "/images/mickeyjay.jpeg",
   "headhunter": "/images/headhunter.jpeg",
@@ -60,7 +58,7 @@ const djImages = {
   "ivan": "/images/ivan.jpeg",
   "denver": "/images/denver.jpg",
   "yinka": "/images/yinka.jpg",
-  "jay-djwes": "/images/djwes.jpg",
+  "djwes": "/images/djwes.jpg",
 };
 
 let schedule = [];
