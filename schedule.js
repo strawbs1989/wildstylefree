@@ -154,13 +154,13 @@ function updateHeroDJ() {
   if (!currentShow) {
     heroShowName.textContent = "No Live Show";
     heroShowTime.textContent = "Check Weekly Schedule";
-    heroDJ.src = "/images/wildy.png";
+    heroDJ.src = "/images/mouse.jpeg";
     return;
   }
 
   heroShowName.textContent = currentShow.dj;
   heroShowTime.textContent = `${currentShow.start} - ${currentShow.end}`;
-  heroDJ.src = currentShow.image || "/images/wildy.png";
+  heroDJ.src = currentShow.image || "/images/mouse.jpeg";
 }
 
 // 3. Builds and filters the schedule grid depending on the chosen day
