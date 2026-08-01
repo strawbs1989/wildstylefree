@@ -11,7 +11,7 @@ const djImages = {
   "wendell": "/images/wendell.jpg",
   "aj": "/images/aj.png",
   "stephan": "/images/golds.jpg",
-  "mouse": "/images/default-dj.jpg",
+  "free": "/images/default-dj.jpg",
   "chanel": "/images/chanel.png",
   "echofalls": "/images/echo1.png",
   "hotshot": "/images/hotshot.jpg",
