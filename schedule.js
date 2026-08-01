@@ -8,9 +8,9 @@ const DAY_ORDER = [
 ];
 
 const djImages = {
-  "mystic": "/images/joanne.jpeg",
+  "joanne": "/images/joanne.jpeg",
   "stephan": "/images/golds.jpg",
-  "mouse": "/images/mouse.jpeg",
+  "mouse": "/images/default-dj.jpg",
   "chanel": "/images/chanel.png",
   "echofalls": "/images/echo1.png",
   "hotshot": "/images/hotshot.jpg",
