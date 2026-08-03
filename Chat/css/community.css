@@ -1,1 +1,276 @@
-body{font-family:Arial;background:#111;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}.card{background:#1c1c1c;padding:30px;border-radius:12px;box-shadow:0 0 20px #8a2be2;width:320px}input,button{width:100%;padding:10px;margin:8px 0}button{cursor:pointer}
+/* =====================================================
+   Wildstyle Community
+   ===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    color:#fff;
+    background:#080808;
+}
+
+/* Animated Background */
+
+.background{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at top,#7b2ff7 0%,transparent 35%),
+        radial-gradient(circle at bottom,#00d4ff 0%,transparent 35%),
+        linear-gradient(135deg,#090909,#141414,#090909);
+    animation:bgMove 12s ease-in-out infinite alternate;
+    z-index:-2;
+}
+
+@keyframes bgMove{
+    from{
+        filter:hue-rotate(0deg);
+    }
+    to{
+        filter:hue-rotate(25deg);
+    }
+}
+
+/* Login Card */
+
+.login-container{
+
+    width:95%;
+    max-width:420px;
+
+    padding:35px;
+
+    border-radius:22px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(16px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    box-shadow:
+        0 0 35px rgba(0,212,255,.15),
+        0 0 70px rgba(123,47,247,.20);
+
+}
+
+.logo-area{
+
+    text-align:center;
+    margin-bottom:30px;
+
+}
+
+.logo{
+
+    width:120px;
+    max-width:80%;
+    margin-bottom:15px;
+
+}
+
+.logo-area h1{
+
+    font-size:2rem;
+    margin-bottom:10px;
+
+}
+
+.logo-area p{
+
+    color:#d7d7d7;
+    font-size:.95rem;
+
+}
+
+/* Inputs */
+
+.input-group{
+
+    margin-bottom:20px;
+
+}
+
+.input-group label{
+
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+
+}
+
+..input-group input{
+
+    width:100%;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    border:1px solid rgba(255,255,255,.2);
+
+    background:#111;
+
+    color:#fff;
+
+    font-size:15px;
+
+}
+
+.input-group input:focus{
+
+    outline:none;
+
+    border-color:#00d4ff;
+
+    box-shadow:0 0 15px rgba(0,212,255,.35);
+
+}
+
+/* Options */
+
+.options{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    font-size:.9rem;
+
+}
+
+.options a{
+
+    color:#00d4ff;
+
+    text-decoration:none;
+
+}
+
+.options a:hover{
+
+    text-decoration:underline;
+
+}
+
+.remember{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+}
+
+/* Button */
+
+.login-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    color:#fff;
+
+    background:linear-gradient(90deg,#7b2ff7,#00d4ff);
+
+    transition:.3s;
+
+}
+
+.login-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 0 25px rgba(0,212,255,.4);
+
+}
+
+/* Messages */
+
+.message{
+
+    margin-top:20px;
+
+    text-align:center;
+
+    font-size:.95rem;
+
+    color:#ffb84d;
+
+}
+
+/* Footer */
+
+.bottom-links{
+
+    margin-top:25px;
+
+    text-align:center;
+
+}
+
+.bottom-links a{
+
+    color:#00d4ff;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+}
+
+.bottom-links a:hover{
+
+    text-decoration:underline;
+
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+.login-container{
+
+    padding:25px;
+
+}
+
+.logo{
+
+    width:90px;
+
+}
+
+.logo-area h1{
+
+    font-size:1.6rem;
+
+}
+
+}
