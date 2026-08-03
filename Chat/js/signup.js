@@ -1,0 +1,1 @@
+async function signup(){const {error}=await supabase.auth.signUp({email:email.value,password:password.value});if(error){alert(error.message);return;}alert('Check your email to verify your account.');location='index.html';}
