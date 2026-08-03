@@ -1,34 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wildstyle Community</title>
 
-    <link rel="stylesheet" href="css/community.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Wildstyle Community Chat</title>
+
+<link rel="stylesheet" href="css/community.css">
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 </head>
 <body>
 
 <div class="background"></div>
 
-<div class="login-container">
+<div class="chat-container">
 
-    <div class="logo-area">
-        <img src="../images/logo.png" class="logo" alt="Wildstyle Radio">
-        <h1>Welcome to Wildstyle Community</h1>
-        <p>You are now logged in.</p>
-    </div>
+    <header class="chat-header">
 
-    <button class="login-btn" onclick="logout()">
-        Logout
-    </button>
+        <div class="header-left">
+
+            <img src="../images/logo.png" class="logo" alt="Wildstyle Radio">
+
+            <div>
+
+                <h1>Wildstyle Community</h1>
+
+                <p>Live Community Chat</p>
+
+            </div>
+
+        </div>
+
+        <button id="logoutBtn" class="logout-btn">
+            Logout
+        </button>
+
+    </header>
+
+    <main class="chat-main">
+
+        <aside class="online-users">
+
+            <h3>Online</h3>
+
+            <div id="usersList">
+
+                <div class="user">
+                    🟢 You
+                </div>
+
+            </div>
+
+        </aside>
+
+        <section class="chat-panel">
+
+            <div id="messages" class="messages">
+
+                <div class="system-message">
+                    👋 Welcome to the Wildstyle Community!
+                </div>
+
+            </div>
+
+            <div class="message-box">
+
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Type your message...">
+
+                <button
+                    id="sendBtn">
+                    Send
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
 <script src="js/supabase.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/chat.js"></script>
+
+<script>
+
+document
+.getElementById("messageInput")
+.addEventListener("keypress",function(e){
+
+    if(e.key==="Enter"){
+
+        document
+        .getElementById("sendBtn")
+        .click();
+
+    }
+
+});
+
+</script>
 
 </body>
 </html>
