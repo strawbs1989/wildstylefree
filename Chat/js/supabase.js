@@ -1,2 +1,1 @@
-alert(typeof supabase);
-console.log(supabase);
+alert(Object.keys(supabase).join("\n"));
