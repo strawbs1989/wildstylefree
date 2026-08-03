@@ -1,32 +1,22 @@
 async function signup() {
 
-    const email = document.getElementById("email").value.trim();
+    const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    try {
+    const { data, error } = await client.auth.signUp({
 
-        const { data, error } = await supabase.auth.signUp({
+        email,
+        password
 
-            email: email,
-            password: password
+    });
 
-        });
+    if (error) {
 
-        if (error) {
-
-            alert(error.message);
-            return;
-
-        }
-
-        alert("Success! Check your email to verify your account.");
-
-        window.location.href = "index.html";
-
-    } catch (err) {
-
-        alert(err.message);
+        alert(error.message);
+        return;
 
     }
+
+    alert("Account created! Check your email.");
 
 }
