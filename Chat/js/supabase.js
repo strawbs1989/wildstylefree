@@ -7,4 +7,4 @@ const client = supabase.createClient(
     SUPABASE_KEY
 );
 
-alert(typeof client.auth);
+console.log(client);
