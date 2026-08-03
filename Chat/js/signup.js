@@ -3,9 +3,12 @@ async function signup() {
     const password = document.getElementById("password").value;
 
     const { data, error } = await client.auth.signUp({
-        email,
-        password
-    });
+    email,
+    password,
+    options: {
+        emailRedirectTo: "https://wildstyle.vip/Chat/lobby.html"
+    }
+});
 
     if (error) {
         alert(error.message);
