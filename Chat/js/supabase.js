@@ -1,1 +1,10 @@
-alert(Object.keys(supabase).join("\n"));
+const SUPABASE_URL = "https://pzdjemvogdpbpinixltc.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable__DnIH0oiCtOl9tyBCVb9hg_9vwcrxQr";
+
+const client = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+alert(client ? "Client created successfully" : "Client creation failed");
