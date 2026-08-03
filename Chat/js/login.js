@@ -19,7 +19,7 @@ loginForm.addEventListener("submit", async (e) => {
         return;
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await client.auth.signInWithPassword({
 
         email,
         password
