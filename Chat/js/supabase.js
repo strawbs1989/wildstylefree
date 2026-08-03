@@ -7,4 +7,4 @@ const client = supabase.createClient(
     SUPABASE_KEY
 );
 
-alert(client ? "Client created successfully" : "Client creation failed");
+alert(typeof client.auth);
