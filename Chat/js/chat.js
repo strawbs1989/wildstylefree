@@ -1,176 +1,149 @@
-// ==========================================
+// =====================================================
 // Wildstyle Community Chat
-// ==========================================
+// =====================================================
 
 const messagesDiv = document.getElementById("messages");
-const input = document.getElementById("messageInput");
-const sendBtn = document.getElementById("sendBtn");
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
 
 let currentUser = null;
 
-// ------------------------------------------
-// Get Logged In User
-// ------------------------------------------
+// Get logged in user
+async function init() {
 
-async function getUser() {
+    const {
+        data: { user }
+    } = await supabase.auth.getUser();
 
-    const { data } = await client.auth.getUser();
-
-    if (!data.user) {
-
+    if (!user) {
         window.location.href = "index.html";
         return;
-
     }
 
-    currentUser = data.user;
+    currentUser = user;
+
+    loadMessages();
+
+    listenForMessages();
 
 }
 
-// ------------------------------------------
-// Load Messages
-// ------------------------------------------
+init();
 
+
+// Load previous messages
 async function loadMessages() {
 
-    const { data, error } = await client
+    const { data, error } = await supabase
         .from("messages")
         .select("*")
         .order("created_at", { ascending: true });
 
     if (error) {
-
         console.error(error);
         return;
-
     }
 
     messagesDiv.innerHTML = "";
 
     data.forEach(addMessage);
 
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
 }
 
-// ------------------------------------------
-// Display Message
-// ------------------------------------------
 
+// Display one message
 function addMessage(msg) {
 
     const div = document.createElement("div");
 
-    div.className = "chat-message";
-
-    const time = new Date(msg.created_at).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+    div.className = "message";
 
     div.innerHTML = `
-        <div class="chat-user">
-            👤 ${msg.user_id}
-        </div>
-
-        <div class="chat-text">
-            ${escapeHtml(msg.message)}
-        </div>
-
-        <div class="chat-time">
-            ${time}
-        </div>
+        <strong>${msg.user_id.substring(0,8)}</strong><br>
+        ${msg.message}
     `;
 
     messagesDiv.appendChild(div);
 
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
 }
 
-// ------------------------------------------
-// Send Message
-// ------------------------------------------
+
+// Send message
+sendButton.addEventListener("click", sendMessage);
+
+messageInput.addEventListener("keypress", e => {
+
+    if (e.key === "Enter") {
+
+        e.preventDefault();
+
+        sendMessage();
+
+    }
+
+});
+
 
 async function sendMessage() {
 
-    const text = input.value.trim();
+    const text = messageInput.value.trim();
 
-    if (text === "") return;
+    if (!text) return;
 
-    const { error } = await client
+    const { error } = await supabase
         .from("messages")
-        .insert([{
+        .insert({
 
             user_id: currentUser.id,
+
             message: text
 
-        }]);
+        });
 
     if (error) {
 
-        alert(error.message);
         console.error(error);
+
         return;
 
     }
 
-    input.value = "";
+    messageInput.value = "";
 
 }
 
-// ------------------------------------------
-// Realtime Listener
-// ------------------------------------------
 
-client
-.channel("community-chat")
-.on(
-    "postgres_changes",
-    {
-        event: "INSERT",
-        schema: "public",
-        table: "messages"
-    },
-    payload => {
+// Listen for realtime messages
+function listenForMessages() {
 
-        addMessage(payload.new);
+    supabase
 
-        messagesDiv.scrollTop =
-            messagesDiv.scrollHeight;
+        .channel("public:messages")
 
-    }
-)
-.subscribe();
+        .on(
 
-// ------------------------------------------
-// Escape HTML
-// ------------------------------------------
+            "postgres_changes",
 
-function escapeHtml(text) {
+            {
 
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+                event: "INSERT",
+
+                schema: "public",
+
+                table: "messages"
+
+            },
+
+            payload => {
+
+                addMessage(payload.new);
+
+            }
+
+        )
+
+        .subscribe();
 
 }
-
-// ------------------------------------------
-// Events
-// ------------------------------------------
-
-sendBtn.addEventListener(
-    "click",
-    sendMessage
-);
-
-// ------------------------------------------
-// Start
-// ------------------------------------------
-
-(async () => {
-
-    await getUser();
-
-    await loadMessages();
-
-})();
