@@ -38,8 +38,17 @@ let currentUser = null;
 async function loadMessages() {
 
     const { data, error } = await client
+
         .from("messages")
-        .select("*")
+
+        .select(`
+            *,
+            profiles (
+                display_name,
+                avatar_url
+            )
+        `)
+
         .order("created_at", { ascending: true });
 
     if (error) {
