@@ -4,105 +4,120 @@
 
 const messagesDiv = document.getElementById("messages");
 const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendBtn");
+const sendBtn = document.getElementById("sendBtn");
 
 let currentUser = null;
 
-// Get logged in user
-async function init() {
+// ==========================================
+// START
+// ==========================================
 
-    const {
-        data: { user }
-    } = await supabase.auth.getUser();
+(async function () {
+
+    const { data: { user } } = await client.auth.getUser();
 
     if (!user) {
+
         window.location.href = "index.html";
         return;
+
     }
 
     currentUser = user;
 
-    loadMessages();
+    await loadMessages();
 
-    listenForMessages();
+    enableRealtime();
 
-}
+})();
 
-init();
+// ==========================================
+// LOAD OLD MESSAGES
+// ==========================================
 
-
-// Load previous messages
 async function loadMessages() {
 
-    const { data, error } = await supabase
+    const { data, error } = await client
         .from("messages")
         .select("*")
         .order("created_at", { ascending: true });
 
     if (error) {
+
         console.error(error);
         return;
+
     }
 
     messagesDiv.innerHTML = "";
 
-    data.forEach(addMessage);
+    data.forEach(showMessage);
+
+    scrollBottom();
 
 }
 
+// ==========================================
+// SHOW MESSAGE
+// ==========================================
 
-// Display one message
-function addMessage(msg) {
+function showMessage(msg) {
 
     const div = document.createElement("div");
 
-    div.className = "message";
+    div.className = "chat-message";
+
+    const time = new Date(msg.created_at)
+        .toLocaleTimeString([], {
+
+            hour: "2-digit",
+            minute: "2-digit"
+
+        });
 
     div.innerHTML = `
-        <strong>${msg.user_id.substring(0,8)}</strong><br>
-        ${msg.message}
+
+        <div class="chat-user">
+            👤 ${msg.user_id.substring(0,8)}
+        </div>
+
+        <div class="chat-text">
+            ${escapeHTML(msg.message)}
+        </div>
+
+        <div class="chat-time">
+            ${time}
+        </div>
+
     `;
 
     messagesDiv.appendChild(div);
 
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
 }
 
-
-// Send message
-sendButton.addEventListener("click", sendMessage);
-
-messageInput.addEventListener("keypress", e => {
-
-    if (e.key === "Enter") {
-
-        e.preventDefault();
-
-        sendMessage();
-
-    }
-
-});
-
+// ==========================================
+// SEND MESSAGE
+// ==========================================
 
 async function sendMessage() {
 
     const text = messageInput.value.trim();
 
-    if (!text) return;
+    if (text === "") return;
 
-    const { error } = await supabase
+    const { error } = await client
         .from("messages")
-        .insert({
+        .insert([{
 
             user_id: currentUser.id,
 
             message: text
 
-        });
+        }]);
 
     if (error) {
+
+        alert(error.message);
 
         console.error(error);
 
@@ -114,13 +129,15 @@ async function sendMessage() {
 
 }
 
+// ==========================================
+// REALTIME
+// ==========================================
 
-// Listen for realtime messages
-function listenForMessages() {
+function enableRealtime() {
 
-    supabase
+    client
 
-        .channel("public:messages")
+        .channel("wildstyle-chat")
 
         .on(
 
@@ -138,7 +155,9 @@ function listenForMessages() {
 
             payload => {
 
-                addMessage(payload.new);
+                showMessage(payload.new);
+
+                scrollBottom();
 
             }
 
@@ -147,3 +166,46 @@ function listenForMessages() {
         .subscribe();
 
 }
+
+// ==========================================
+// SCROLL
+// ==========================================
+
+function scrollBottom() {
+
+    messagesDiv.scrollTop =
+        messagesDiv.scrollHeight;
+
+}
+
+// ==========================================
+// SAFE HTML
+// ==========================================
+
+function escapeHTML(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+// ==========================================
+// EVENTS
+// ==========================================
+
+sendBtn.addEventListener("click", sendMessage);
+
+messageInput.addEventListener("keydown", function(e){
+
+    if(e.key==="Enter"){
+
+        e.preventDefault();
+
+        sendMessage();
+
+    }
+
+});
