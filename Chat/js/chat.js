@@ -4,7 +4,7 @@
 
 const messagesDiv = document.getElementById("messages");
 const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
+const sendButton = document.getElementById("sendBtn");
 
 let currentUser = null;
 
