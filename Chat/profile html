@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>My Profile</title>
+
+<link rel="stylesheet" href="css/community.css">
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="login-container">
+
+    <div class="logo-area">
+
+        <img id="avatarPreview"
+             src="/images/default-avatar.png"
+             class="logo">
+
+        <h1>My Profile</h1>
+
+    </div>
+
+    <div class="input-group">
+
+        <label>Display Name</label>
+
+        <input
+            id="displayName"
+            type="text">
+
+    </div>
+
+    <div class="input-group">
+
+        <label>Profile Picture</label>
+
+        <input
+            id="avatar"
+            type="file"
+            accept="image/*">
+
+    </div>
+
+    <button
+        class="login-btn"
+        id="saveBtn">
+
+        Save Profile
+
+    </button>
+
+    <br><br>
+
+    <a href="lobby.html">← Back to Chat</a>
+
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/profile.js"></script>
+
+</body>
+</html>
