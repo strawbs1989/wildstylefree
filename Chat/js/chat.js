@@ -76,6 +76,13 @@ function showMessage(msg) {
 
     div.className = "chat-message";
 
+    const name =
+        msg.profiles?.display_name || "Member";
+
+    const avatar =
+        msg.profiles?.avatar_url ||
+        "/images/default-avatar.png";
+
     const time = new Date(msg.created_at)
         .toLocaleTimeString([], {
 
@@ -86,19 +93,36 @@ function showMessage(msg) {
 
     div.innerHTML = `
 
-        <div class="chat-user">
-            👤 ${msg.user_id.substring(0,8)}
-        </div>
+<div style="display:flex;gap:12px;align-items:flex-start;">
 
-        <div class="chat-text">
-            ${escapeHTML(msg.message)}
-        </div>
+<img
+src="${avatar}"
+style="
+width:48px;
+height:48px;
+border-radius:50%;
+object-fit:cover;
+">
 
-        <div class="chat-time">
-            ${time}
-        </div>
+<div style="flex:1;">
 
-    `;
+<div class="chat-user">
+${name}
+</div>
+
+<div class="chat-text">
+${escapeHTML(msg.message)}
+</div>
+
+<div class="chat-time">
+${time}
+</div>
+
+</div>
+
+</div>
+
+`;
 
     messagesDiv.appendChild(div);
 
