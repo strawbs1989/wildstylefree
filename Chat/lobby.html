@@ -101,7 +101,50 @@
     </main>
 
 </div>
+<!-- OWNER CONTROL PANEL -->
 
+<div id="ownerPanel" class="owner-panel hidden">
+
+    <h2>Owner Control Panel</h2>
+
+    <div class="panel-section">
+        <h3>Lobby Controls</h3>
+
+        <button id="lockLobbyBtn">
+            Lock Lobby
+        </button>
+
+        <button id="unlockLobbyBtn">
+            Unlock Lobby
+        </button>
+    </div>
+
+    <div class="panel-section">
+        <h3>Player Management</h3>
+
+        <input 
+            id="kickPlayerInput" 
+            type="text" 
+            placeholder="Player name">
+
+        <button id="kickPlayerBtn">
+            Kick Player
+        </button>
+    </div>
+
+    <div class="panel-section">
+        <h3>Announcements</h3>
+
+        <textarea 
+            id="announcementInput" 
+            placeholder="Send announcement"></textarea>
+
+        <button id="announcementBtn">
+            Send
+        </button>
+    </div>
+
+</div>
 <script src="js/supabase.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/chat.js"></script>
@@ -122,7 +165,108 @@ document
 
 });
 
-</script>
 
+/* OWNER PANEL SCRIPT */
+
+const ownerPanel = document.getElementById("ownerPanel");
+
+const currentUser = window.currentUser || null;
+
+if(currentUser && currentUser.isOwner){
+
+    ownerPanel.classList.remove("hidden");
+
+}
+
+
+const lockLobbyBtn = document.getElementById("lockLobbyBtn");
+const unlockLobbyBtn = document.getElementById("unlockLobbyBtn");
+
+if(lockLobbyBtn){
+
+    lockLobbyBtn.onclick = function(){
+
+        localStorage.setItem(
+            "lobbyLocked",
+            "true"
+        );
+
+        alert("Lobby locked");
+
+    };
+
+}
+
+
+if(unlockLobbyBtn){
+
+    unlockLobbyBtn.onclick = function(){
+
+        localStorage.setItem(
+            "lobbyLocked",
+            "false"
+        );
+
+        alert("Lobby unlocked");
+
+    };
+
+}
+
+
+const kickPlayerBtn = document.getElementById("kickPlayerBtn");
+
+if(kickPlayerBtn){
+
+    kickPlayerBtn.onclick = function(){
+
+        const player =
+        document.getElementById("kickPlayerInput").value;
+
+        if(player){
+
+            localStorage.setItem(
+                "kickedPlayer",
+                player
+            );
+
+            alert(
+                player + " has been kicked"
+            );
+
+        }
+
+    };
+
+}
+
+
+const announcementBtn =
+document.getElementById("announcementBtn");
+
+
+if(announcementBtn){
+
+    announcementBtn.onclick = function(){
+
+        const message =
+        document.getElementById("announcementInput").value;
+
+        if(message){
+
+            localStorage.setItem(
+                "announcement",
+                message
+            );
+
+            alert("Announcement sent");
+
+        }
+
+    };
+
+}
+
+</script>
 </body>
 </html>
