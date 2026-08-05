@@ -1,6 +1,9 @@
 // =====================================================
 // Wildstyle Community Chat
 // =====================================================
+const emojiBtn = document.getElementById("emojiBtn");
+const emojiPicker = document.getElementById("emojiPicker");
+
 const typingIndicator = document.getElementById("typingIndicator");
 
 let typingTimeout;
@@ -394,6 +397,32 @@ async function deleteMessage(messageId, ownerId) {
     await loadMessages();
 
 }
+// ==========================================
+// EMOJI PICKER
+// ==========================================
+
+emojiBtn.addEventListener("click", () => {
+
+    emojiPicker.classList.toggle("open");
+
+});
+
+emojiPicker.innerHTML = emojiPicker.innerHTML
+    .split(" ")
+    .map(e => `<span>${e}</span>`)
+    .join("");
+
+emojiPicker.querySelectorAll("span").forEach(span => {
+
+    span.addEventListener("click", () => {
+
+        messageInput.value += span.textContent;
+
+        messageInput.focus();
+
+    });
+
+});
 // ==========================================
 // EVENTS
 // ==========================================
