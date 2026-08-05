@@ -1,6 +1,9 @@
 // =====================================================
 // Wildstyle Community Chat
 // =====================================================
+const typingIndicator = document.getElementById("typingIndicator");
+
+let typingTimeout;
 
 const messagesDiv = document.getElementById("messages");
 const messageInput = document.getElementById("messageInput");
@@ -285,6 +288,34 @@ messageInput.addEventListener("keydown", function(e){
         sendMessage();
 
     }
+
+});
+
+// ==========================================
+// TYPING DETECTION
+// ==========================================
+
+messageInput.addEventListener("input", async () => {
+
+    if (!currentUser) return;
+
+    await supabase
+        .from("typing_users")
+        .upsert({
+            user_id: currentUser.id,
+            updated_at: new Date().toISOString()
+        });
+
+    clearTimeout(typingTimeout);
+
+    typingTimeout = setTimeout(async () => {
+
+        await supabase
+            .from("typing_users")
+            .delete()
+            .eq("user_id", currentUser.id);
+
+    }, 2000);
 
 });
 // ==========================================
