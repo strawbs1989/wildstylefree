@@ -490,3 +490,10 @@ body{
     color:white;
 
 }
+.typing-indicator{
+    min-height:24px;
+    padding:0 20px;
+    color:#9ecbff;
+    font-style:italic;
+    font-size:14px;
+}
