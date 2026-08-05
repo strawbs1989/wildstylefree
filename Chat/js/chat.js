@@ -7,6 +7,7 @@ const messageInput = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 
 let currentUser = null;
+const usersList = document.getElementById("usersList");
 
 // ==========================================
 // START
