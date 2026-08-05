@@ -428,6 +428,55 @@ emojiPicker.querySelectorAll("span").forEach(span => {
     });
 
 });
+function enableChatEvents(){
+
+client
+
+.channel("chat-events")
+
+.on(
+
+"postgres_changes",
+
+{
+
+event:"INSERT",
+
+schema:"public",
+
+table:"chat_events"
+
+},
+
+(payload)=>{
+
+const div=document.createElement("div");
+
+div.className="system-message";
+
+div.innerHTML=`
+
+<div class="system-pill">
+
+${payload.new.message}
+
+</div>
+
+`;
+
+messagesDiv.appendChild(div);
+
+scrollBottom();
+
+}
+
+)
+
+.subscribe();
+
+}
+
+
 // ==========================================
 // EVENTS
 // ==========================================
