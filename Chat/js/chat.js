@@ -154,14 +154,6 @@ currentUserRole === "admin"
 
 deleteButton=`
 
-<button
-class="delete-btn"
-onclick="deleteMessage(${msg.id})">
-
-🗑️
-
-</button>
-
 `;
 
 }
@@ -436,31 +428,7 @@ function enableTypingIndicator() {
         .subscribe();
 
 }
-async function deleteMessage(messageId, ownerId) {
 
-    if (ownerId !== currentUser.id) {
-
-        alert("You can only delete your own messages.");
-
-        return;
-
-    }
-
-    const { error } = await client
-        .from("messages")
-        .delete()
-        .eq("id", messageId);
-
-    if (error) {
-
-        alert(error.message);
-        return;
-
-    }
-
-    await loadMessages();
-
-}
 // ==========================================
 // EMOJI PICKER
 // ==========================================
@@ -561,11 +529,15 @@ document.addEventListener("keydown", function(e){
     }
 
 });
-closeOwnerPanel.addEventListener("click",()=>{
+if (closeOwnerPanel) {
 
-    ownerPanel.classList.add("hidden");
+    closeOwnerPanel.addEventListener("click", () => {
 
-});
+        ownerPanel.classList.add("hidden");
+
+    });
+
+}
 
 // ==========================================
 // EVENTS
@@ -592,28 +564,6 @@ document
     .getElementById("logoutBtn")
     .addEventListener("click", logout);
 
-// Typing detection
-messageInput.addEventListener("input", () => {
-
-    if (!typing) {
-
-        typing = true;
-
-        updateTyping(true);
-
-    }
-
-    clearTimeout(typingTimer);
-
-    typingTimer = setTimeout(() => {
-
-        typing = false;
-
-        updateTyping(false);
-
-    }, 1500);
-
-});
 
 // ==========================================
 // TYPING DETECTION
