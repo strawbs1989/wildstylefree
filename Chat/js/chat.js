@@ -41,6 +41,11 @@ const usersList = document.getElementById("usersList");
         user_id: currentUser.id,
         last_seen: new Date().toISOString()
     });
+    await client
+.from("chat_events")
+.insert([{
+    message: "🎉 " + currentUser.email + " joined the chat"
+}]);
 
 loadOnlineUsers();
 
