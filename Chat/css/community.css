@@ -455,3 +455,23 @@ body{
     }
 
 }
+
+/* Online Users */
+
+.user{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    margin-bottom:8px;
+    border-radius:12px;
+    background:rgba(255,255,255,.05);
+}
+
+.online-avatar{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #8d4dff;
+}
