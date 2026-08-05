@@ -165,6 +165,11 @@ ${escapeHTML(msg.message)}
 <div class="chat-time">
 ${time}
 </div>
+<button
+    class="delete-btn"
+    onclick="deleteMessage(${msg.id}, '${msg.user_id}')">
+    🗑️
+</button>
 
 </div>
 
@@ -364,7 +369,31 @@ function enableTypingIndicator() {
         .subscribe();
 
 }
+async function deleteMessage(messageId, ownerId) {
 
+    if (ownerId !== currentUser.id) {
+
+        alert("You can only delete your own messages.");
+
+        return;
+
+    }
+
+    const { error } = await client
+        .from("messages")
+        .delete()
+        .eq("id", messageId);
+
+    if (error) {
+
+        alert(error.message);
+        return;
+
+    }
+
+    await loadMessages();
+
+}
 // ==========================================
 // EVENTS
 // ==========================================
