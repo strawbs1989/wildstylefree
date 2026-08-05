@@ -89,6 +89,29 @@ function showMessage(msg) {
 
     const name =
         msg.profiles?.display_name || "Member";
+    let badge = "";
+
+switch (msg.role) {
+
+    case "owner":
+        badge = "👑 Owner";
+        break;
+
+    case "admin":
+        badge = "🛡️ Admin";
+        break;
+
+    case "dj":
+        badge = "🎧 DJ";
+        break;
+
+    case "vip":
+        badge = "⭐ VIP";
+        break;
+
+    default:
+        badge = "👤 Member";
+}
 
     const avatar =
         msg.profiles?.avatar_url ||
@@ -118,7 +141,13 @@ object-fit:cover;
 <div style="flex:1;">
 
 <div class="chat-user">
-${name}
+
+    ${name}
+
+    <span class="role-badge">
+        ${badge}
+    </span>
+
 </div>
 
 <div class="chat-text">
@@ -151,13 +180,21 @@ async function sendMessage() {
 
     const { error } = await client
         .from("messages")
-        .insert([{
+        const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", currentUser.id)
+    .single();
 
-            user_id: currentUser.id,
+const { error } = await supabase
+    .from("messages")
+    .insert([{
 
-            message: text
+        user_id: currentUser.id,
+        message: text,
+        role: profile?.role || "member"
 
-        }]);
+    }]);
 
     if (error) {
 
