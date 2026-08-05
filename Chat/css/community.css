@@ -515,3 +515,52 @@ body{
     background:#e53935;
 
 }
+/* Emoji Picker */
+
+.emoji-btn{
+
+    font-size:24px;
+    border:none;
+    background:none;
+    cursor:pointer;
+    padding:8px;
+
+}
+
+.emoji-picker{
+
+    display:none;
+
+    background:#202030;
+
+    padding:12px;
+
+    border-top:1px solid rgba(255,255,255,.1);
+
+    font-size:24px;
+
+    line-height:2;
+
+    user-select:none;
+
+}
+
+.emoji-picker.open{
+
+    display:block;
+
+}
+
+.emoji-picker span{
+
+    cursor:pointer;
+
+    padding:6px;
+
+}
+
+.emoji-picker span:hover{
+
+    transform:scale(1.2);
+
+}
