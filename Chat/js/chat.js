@@ -10,6 +10,10 @@ const messageInput = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 
 let currentUser = null;
+const typingIndicator = document.getElementById("typingIndicator");
+
+let typing = false;
+let typingTimer = null;
 const usersList = document.getElementById("usersList");
 
 // ==========================================
@@ -42,6 +46,7 @@ enableOnlineUsers();
     await loadMessages();
 
     enableRealtime();
+    enableTypingIndicator();
 
 })();
 
@@ -210,6 +215,9 @@ const { error } = await supabase
     }
 
     messageInput.value = "";
+    typing = false;
+
+updateTyping(false);
 
 }
 
@@ -272,6 +280,95 @@ function escapeHTML(text) {
     return div.innerHTML;
 
 }
+// ==========================================
+// START / STOP TYPING
+// ==========================================
+
+async function updateTyping(isTyping) {
+
+    if (!currentUser) return;
+
+    if (isTyping) {
+
+        await supabase
+            .from("typing_users")
+            .upsert({
+                user_id: currentUser.id,
+                updated_at: new Date().toISOString()
+            });
+
+    } else {
+
+        await supabase
+            .from("typing_users")
+            .delete()
+            .eq("user_id", currentUser.id);
+
+    }
+
+}
+function enableTypingIndicator() {
+
+    supabase
+
+        .channel("typing")
+
+        .on(
+
+            "postgres_changes",
+
+            {
+
+                event: "*",
+
+                schema: "public",
+
+                table: "typing_users"
+
+            },
+
+            async () => {
+
+                const { data } = await supabase
+
+                    .from("typing_users")
+
+                    .select(`
+                        user_id,
+                        profiles(display_name)
+                    `);
+
+                const others = data.filter(
+                    u => u.user_id !== currentUser.id
+                );
+
+                if (others.length === 0) {
+
+                    typingIndicator.textContent = "";
+
+                    return;
+
+                }
+
+                if (others.length === 1) {
+
+                    typingIndicator.textContent =
+                        `✍️ ${others[0].profiles.display_name} is typing...`;
+
+                } else {
+
+                    typingIndicator.textContent =
+                        `✍️ ${others.length} people are typing...`;
+
+                }
+
+            }
+
+        )
+
+        .subscribe();
+
+}
 
 // ==========================================
 // EVENTS
@@ -295,27 +392,25 @@ messageInput.addEventListener("keydown", function(e){
 // TYPING DETECTION
 // ==========================================
 
-messageInput.addEventListener("input", async () => {
+messageInput.addEventListener("input", () => {
 
-    if (!currentUser) return;
+    if (!typing) {
 
-    await supabase
-        .from("typing_users")
-        .upsert({
-            user_id: currentUser.id,
-            updated_at: new Date().toISOString()
-        });
+        typing = true;
 
-    clearTimeout(typingTimeout);
+        updateTyping(true);
 
-    typingTimeout = setTimeout(async () => {
+    }
 
-        await supabase
-            .from("typing_users")
-            .delete()
-            .eq("user_id", currentUser.id);
+    clearTimeout(typingTimer);
 
-    }, 2000);
+    typingTimer = setTimeout(() => {
+
+        typing = false;
+
+        updateTyping(false);
+
+    }, 1500);
 
 });
 // ==========================================
