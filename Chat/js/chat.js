@@ -10,7 +10,7 @@ const messageInput = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 
 let currentUser = null;
-const typingIndicator = document.getElementById("typingIndicator");
+
 
 let typing = false;
 let typingTimer = null;
@@ -186,38 +186,33 @@ async function sendMessage() {
 
     if (text === "") return;
 
+    const { data: profile } = await client
+        .from("profiles")
+        .select("role")
+        .eq("id", currentUser.id)
+        .single();
+
     const { error } = await client
         .from("messages")
-        const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", currentUser.id)
-    .single();
-
-const { error } = await supabase
-    .from("messages")
-    .insert([{
-
-        user_id: currentUser.id,
-        message: text,
-        role: profile?.role || "member"
-
-    }]);
+        .insert([{
+            user_id: currentUser.id,
+            message: text,
+            role: profile?.role || "member"
+        }]);
 
     if (error) {
 
         alert(error.message);
-
         console.error(error);
-
         return;
 
     }
 
     messageInput.value = "";
+
     typing = false;
 
-updateTyping(false);
+    updateTyping(false);
 
 }
 
@@ -374,8 +369,10 @@ function enableTypingIndicator() {
 // EVENTS
 // ==========================================
 
+// Send button
 sendBtn.addEventListener("click", sendMessage);
 
+// Press Enter to send
 messageInput.addEventListener("keydown", function(e){
 
     if(e.key==="Enter"){
@@ -385,6 +382,34 @@ messageInput.addEventListener("keydown", function(e){
         sendMessage();
 
     }
+
+});
+
+// Logout button
+document
+    .getElementById("logoutBtn")
+    .addEventListener("click", logout);
+
+// Typing detection
+messageInput.addEventListener("input", () => {
+
+    if (!typing) {
+
+        typing = true;
+
+        updateTyping(true);
+
+    }
+
+    clearTimeout(typingTimer);
+
+    typingTimer = setTimeout(() => {
+
+        typing = false;
+
+        updateTyping(false);
+
+    }, 1500);
 
 });
 
