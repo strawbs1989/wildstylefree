@@ -256,12 +256,12 @@ messageInput.addEventListener("keydown", function(e){
 
 async function loadOnlineUsers() {
 
-    const { data, error } = await client
+    const { data, error } = await supabase
 
         .from("online_users")
 
         .select(`
-            *,
+            user_id,
             profiles (
                 display_name,
                 avatar_url
@@ -277,11 +277,27 @@ async function loadOnlineUsers() {
 
     data.forEach(user => {
 
+        const name =
+            user.profiles?.display_name || "Member";
+
+        const avatar =
+            user.profiles?.avatar_url || "";
+
         usersList.innerHTML += `
-            <div class="user">
-                🟢 ${user.profiles?.display_name || "Member"}
-            </div>
-        `;
+
+<div class="user">
+
+    <img
+        src="${avatar}"
+        class="online-avatar">
+
+    <span>
+        🟢 ${name}
+    </span>
+
+</div>
+
+`;
 
     });
 
