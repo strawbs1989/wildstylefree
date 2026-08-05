@@ -30,6 +30,8 @@ let currentUser;
         .single();
 
     if (data) {
+        document.getElementById("status").value =
+    data.status || "Online";
 
         displayName.value = data.display_name || "";
 
@@ -102,11 +104,13 @@ saveBtn.addEventListener("click", async () => {
 
         .update({
 
-            display_name: displayName.value,
+    display_name: displayName.value,
 
-            avatar_url: avatarUrl
+    avatar_url: avatarUrl,
 
-        })
+    status: document.getElementById("status").value
+
+})
 
         .eq("id", currentUser.id);
 
