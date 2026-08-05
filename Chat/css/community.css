@@ -497,3 +497,21 @@ body{
     font-style:italic;
     font-size:14px;
 }
+.delete-btn{
+
+    margin-top:8px;
+    border:none;
+    background:#c62828;
+    color:white;
+    padding:6px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+
+}
+
+.delete-btn:hover{
+
+    background:#e53935;
+
+}
