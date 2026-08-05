@@ -25,6 +25,16 @@ const usersList = document.getElementById("usersList");
     }
 
     currentUser = user;
+    await client
+    .from("online_users")
+    .upsert({
+        user_id: currentUser.id,
+        last_seen: new Date().toISOString()
+    });
+
+loadOnlineUsers();
+
+enableOnlineUsers();
 
     await loadMessages();
 
@@ -240,3 +250,59 @@ messageInput.addEventListener("keydown", function(e){
     }
 
 });
+// ==========================================
+// ONLINE USERS
+// ==========================================
+
+async function loadOnlineUsers() {
+
+    const { data, error } = await client
+
+        .from("online_users")
+
+        .select(`
+            *,
+            profiles (
+                display_name,
+                avatar_url
+            )
+        `);
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    usersList.innerHTML = "";
+
+    data.forEach(user => {
+
+        usersList.innerHTML += `
+            <div class="user">
+                🟢 ${user.profiles?.display_name || "Member"}
+            </div>
+        `;
+
+    });
+
+}
+
+function enableOnlineUsers() {
+
+    client
+
+        .channel("online-users")
+
+        .on(
+            "postgres_changes",
+            {
+                event: "*",
+                schema: "public",
+                table: "online_users"
+            },
+            () => loadOnlineUsers()
+        )
+
+        .subscribe();
+
+}
