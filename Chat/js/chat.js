@@ -509,9 +509,10 @@ async function loadOnlineUsers() {
         .select(`
             user_id,
             profiles (
-                display_name,
-                avatar_url
-            )
+    display_name,
+    avatar_url,
+    status
+)
         `);
 
     if (error) {
@@ -538,7 +539,8 @@ async function loadOnlineUsers() {
         class="online-avatar">
 
     <span>
-        🟢 ${name}
+        ${statusIcon(user.profiles?.status)}
+${name}
     </span>
 
 </div>
