@@ -475,3 +475,18 @@ body{
     object-fit:cover;
     border:2px solid #8d4dff;
 }
+.role-badge{
+
+    display:inline-block;
+    margin-left:8px;
+    padding:4px 10px;
+
+    font-size:.72rem;
+    font-weight:bold;
+
+    border-radius:999px;
+
+    background:#8d4dff;
+    color:white;
+
+}
