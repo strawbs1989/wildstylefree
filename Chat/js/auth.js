@@ -27,6 +27,11 @@ async function logout() {
             .eq("user_id", user.id);
 
     }
+    await supabase
+.from("chat_events")
+.insert([{
+    message: "👋 " + user.email + " left the chat"
+}]);
 
     await supabase.auth.signOut();
 
