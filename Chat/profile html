@@ -37,6 +37,20 @@
             type="text">
 
     </div>
+    <div class="input-group">
+
+    <label>Status</label>
+
+    <select id="status">
+
+        <option>Online</option>
+        <option>Away</option>
+        <option>Busy</option>
+        <option>Be Right Back</option>
+
+    </select>
+
+</div>
 
     <div class="input-group">
 
