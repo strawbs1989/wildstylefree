@@ -1,6 +1,11 @@
 // =====================================================
 // Wildstyle Community Chat
 // =====================================================
+const ownerPanel = document.getElementById("ownerPanel");
+const closeOwnerPanel = document.getElementById("closeOwnerPanel");
+
+let selectedUser = null;
+
 const emojiBtn = document.getElementById("emojiBtn");
 const emojiPicker = document.getElementById("emojiPicker");
 
@@ -547,7 +552,20 @@ async function deleteMessage(id) {
     }
 
 }
+document.addEventListener("keydown", function(e){
 
+    if(e.key==="F10" && currentUserRole==="owner"){
+
+        ownerPanel.classList.remove("hidden");
+
+    }
+
+});
+closeOwnerPanel.addEventListener("click",()=>{
+
+    ownerPanel.classList.add("hidden");
+
+});
 
 // ==========================================
 // EVENTS
