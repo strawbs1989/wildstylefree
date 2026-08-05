@@ -622,3 +622,82 @@ font-weight:600;
 box-shadow:0 0 15px #7d4dff66;
 
 }
+/* OWNER PANEL */
+
+.owner-panel{
+
+    position:fixed;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:340px;
+
+    background:#1b1d2b;
+
+    border:2px solid #7c3aed;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    z-index:9999;
+
+    box-shadow:0 0 35px rgba(124,58,237,.45);
+
+}
+
+.hidden{
+
+    display:none;
+
+}
+
+.owner-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+
+}
+
+.owner-actions{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.owner-actions button{
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#7c3aed;
+
+    color:white;
+
+    font-weight:bold;
+
+}
+
+.owner-actions button:hover{
+
+    background:#9155ff;
+
+}
