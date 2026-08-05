@@ -13,7 +13,7 @@ const messageInput = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 
 let currentUser = null;
-
+let currentUserRole = "member";
 
 let typing = false;
 let typingTimer = null;
@@ -35,6 +35,13 @@ const usersList = document.getElementById("usersList");
     }
 
     currentUser = user;
+    const { data: profile } = await client
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+currentUserRole = profile?.role || "member";
     await client
     .from("online_users")
     .upsert({
@@ -128,6 +135,31 @@ switch (msg.role) {
     default:
         badge = "👤 Member";
 }
+    let deleteButton = "";
+
+if (
+
+currentUser.id === msg.user_id ||
+
+currentUserRole === "owner" ||
+
+currentUserRole === "admin"
+
+){
+
+deleteButton=`
+
+<button
+class="delete-btn"
+onclick="deleteMessage(${msg.id})">
+
+🗑️
+
+</button>
+
+`;
+
+}
 
     const avatar =
         msg.profiles?.avatar_url ||
@@ -173,6 +205,7 @@ ${escapeHTML(msg.message)}
 <div class="chat-time">
 ${time}
 </div>
+${deleteButton}
 <button
     class="delete-btn"
     onclick="deleteMessage(${msg.id}, '${msg.user_id}')">
@@ -260,6 +293,27 @@ function enableRealtime() {
 
             }
         )
+        .on(
+
+    "postgres_changes",
+
+    {
+
+        event: "DELETE",
+
+        schema: "public",
+
+        table: "messages"
+
+    },
+
+    () => {
+
+        loadMessages();
+
+    }
+
+)
         .subscribe();
 
 }
@@ -473,6 +527,24 @@ scrollBottom();
 )
 
 .subscribe();
+
+}
+async function deleteMessage(id) {
+
+    if (!confirm("Delete this message?")) return;
+
+    const { error } = await client
+        .from("messages")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+
+        alert(error.message);
+
+        return;
+
+    }
 
 }
 
