@@ -595,3 +595,30 @@ body{
     box-shadow:0 8px 20px rgba(124,58,237,.45);
 
 }
+.system-message{
+
+display:flex;
+
+justify-content:center;
+
+margin:15px 0;
+
+}
+
+.system-pill{
+
+background:#6c3cff;
+
+padding:8px 18px;
+
+border-radius:30px;
+
+color:white;
+
+font-size:13px;
+
+font-weight:600;
+
+box-shadow:0 0 15px #7d4dff66;
+
+}
