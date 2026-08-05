@@ -179,13 +179,13 @@ function enableRealtime() {
             },
             async (payload) => {
 
-                const { data } = await client
+                const { data: profile } = await client
                     .from("profiles")
                     .select("display_name, avatar_url")
                     .eq("id", payload.new.user_id)
                     .single();
 
-                payload.new.profiles = data;
+                payload.new.profiles = profile;
 
                 showMessage(payload.new);
 
