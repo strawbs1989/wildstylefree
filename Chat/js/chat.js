@@ -4,7 +4,31 @@
 const ownerPanel = document.getElementById("ownerPanel");
 const closeOwnerPanel = document.getElementById("closeOwnerPanel");
 
-let selectedUser = null;
+let selectedUser = {
+
+    id: null,
+
+    name: "",
+
+    avatar: "",
+
+    role: "",
+
+    status: ""
+
+};
+
+const ownerAvatar =
+    document.getElementById("ownerAvatar");
+
+const ownerName =
+    document.getElementById("ownerName");
+
+const ownerRole =
+    document.getElementById("ownerRole");
+
+const ownerStatus =
+    document.getElementById("ownerStatus");
 
 const emojiBtn = document.getElementById("emojiBtn");
 const emojiPicker = document.getElementById("emojiPicker");
@@ -539,6 +563,36 @@ if (closeOwnerPanel) {
 
 }
 
+function openOwnerPanel(
+    id,
+    name,
+    avatar,
+    role,
+    status
+){
+
+    if(currentUserRole !== "owner") return;
+
+    selectedUser.id = id;
+    selectedUser.name = name;
+    selectedUser.avatar = avatar;
+    selectedUser.role = role;
+    selectedUser.status = status;
+
+    ownerAvatar.src = avatar;
+
+    ownerName.textContent = name;
+
+    ownerRole.textContent =
+        "Role: " + role;
+
+    ownerStatus.textContent =
+        "Status: " + status;
+
+    ownerPanel.classList.remove("hidden");
+
+}
+
 // ==========================================
 // EVENTS
 // ==========================================
@@ -605,7 +659,8 @@ async function loadOnlineUsers() {
             profiles (
     display_name,
     avatar_url,
-    status
+    status,
+    role
 )
         `);
 
@@ -626,7 +681,15 @@ async function loadOnlineUsers() {
 
         usersList.innerHTML += `
 
-<div class="user">
+<div
+    class="user"
+    onclick="openOwnerPanel(
+        '${user.user_id}',
+        '${name}',
+        '${avatar}',
+        '${user.profiles?.role || "member"}',
+        '${user.profiles?.status || "Online"}'
+    )">
 
     <img
         src="${avatar}"
