@@ -101,6 +101,7 @@
     </main>
 
 </div>
+<div id="ownerOverlay" class="owner-overlay"></div>
 <!-- OWNER CONTROL PANEL -->
 
 <div id="ownerPanel" class="owner-panel hidden">
@@ -203,6 +204,16 @@ const currentUser = window.currentUser || null;
 if(currentUser && currentUser.isOwner){
 
     ownerPanel.classList.remove("hidden");
+
+requestAnimationFrame(() => {
+
+    ownerPanel.classList.add("open");
+
+});
+
+document
+    .getElementById("ownerOverlay")
+    .classList.add("show");
 
 }
 
