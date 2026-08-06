@@ -557,12 +557,21 @@ if (closeOwnerPanel) {
 
     closeOwnerPanel.addEventListener("click", () => {
 
-        ownerPanel.classList.add("hidden");
+        ownerPanel.classList.remove("open");
+
+        document
+            .getElementById("ownerOverlay")
+            .classList.remove("show");
+
+        setTimeout(() => {
+
+            ownerPanel.classList.add("hidden");
+
+        }, 350);
 
     });
 
 }
-
 function openOwnerPanel(
     id,
     name,
