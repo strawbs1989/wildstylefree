@@ -255,3 +255,7 @@ messageInput.addEventListener(
     }
 
 );
+// Logout button
+document
+    .getElementById("logoutBtn")
+    .addEventListener("click", logout);
