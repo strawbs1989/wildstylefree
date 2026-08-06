@@ -628,31 +628,61 @@ box-shadow:0 0 15px #7d4dff66;
 
     position:fixed;
 
-    top:50%;
+    top:0;
 
-    left:50%;
+    right:-380px;
 
-    transform:translate(-50%,-50%);
+    width:360px;
 
-    width:340px;
+    height:100vh;
 
     background:#1b1d2b;
 
-    border:2px solid #7c3aed;
+    border-left:2px solid #7c3aed;
 
-    border-radius:16px;
+    box-shadow:-10px 0 35px rgba(0,0,0,.55);
 
-    padding:20px;
+    transition:right .35s ease;
 
     z-index:9999;
 
-    box-shadow:0 0 35px rgba(124,58,237,.45);
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.owner-panel.open{
+
+    right:0;
 
 }
 
 .hidden{
 
     display:none;
+
+}
+
+.owner-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    backdrop-filter:blur(3px);
+
+    display:none;
+
+    z-index:9998;
+
+}
+
+.owner-overlay.show{
+
+    display:block;
 
 }
 
@@ -664,29 +694,37 @@ box-shadow:0 0 15px #7d4dff66;
 
     align-items:center;
 
-    margin-bottom:15px;
+    padding:20px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.owner-header h2{
+
+    font-size:22px;
+
+}
+
+#closeOwnerPanel{
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    font-size:24px;
+
+    cursor:pointer;
 
 }
 
 .owner-profile{
 
+    padding:25px;
+
     text-align:center;
-
-    margin:20px 0;
-
-}
-
-.owner-panel::before{
-
-    content:"";
-
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.55);
-
-    z-index:-1;
 
 }
 
@@ -708,50 +746,56 @@ box-shadow:0 0 15px #7d4dff66;
 
 .owner-profile h3{
 
-    margin:10px 0 5px;
+    margin:10px 0;
 
-    color:#fff;
+    font-size:24px;
 
 }
 
 .owner-profile p{
 
-    color:#bdbdbd;
+    color:#cfcfcf;
 
-    margin:4px 0;
+    margin:5px 0;
 
 }
 
 .owner-actions{
 
+    padding:20px;
+
     display:flex;
 
     flex-direction:column;
 
-    gap:10px;
+    gap:12px;
 
 }
 
 .owner-actions button{
 
-    padding:12px;
+    background:#7c3aed;
+
+    color:white;
 
     border:none;
 
     border-radius:10px;
 
+    padding:14px;
+
     cursor:pointer;
 
-    background:#7c3aed;
-
-    color:white;
-
     font-weight:bold;
+
+    transition:.2s;
 
 }
 
 .owner-actions button:hover{
 
-    background:#9155ff;
+    background:#9254ff;
+
+    transform:translateY(-2px);
 
 }
