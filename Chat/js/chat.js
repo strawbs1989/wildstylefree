@@ -90,7 +90,8 @@ enableOnlineUsers();
     await loadMessages();
 
     enableRealtime();
-    enableTypingIndicator();
+enableTypingIndicator();
+enableChatEvents();
 
 })();
 
@@ -733,22 +734,11 @@ async function loadOnlineUsers() {
         return;
     }
 
-    usersList.innerHTML = "";
+ const div = document.createElement("div");
 
-    data.forEach(user => {
+div.className = "user";
 
-        const name =
-            user.profiles?.display_name || "Member";
-
-        const avatar =
-            user.profiles?.avatar_url || "";
-
-        usersList.innerHTML += `
-
-<div
-    class="user"
-    onclick="openOwnerPanel('${user.user_id}')">
-
+div.innerHTML = `
     <img
         src="${avatar}"
         class="online-avatar">
@@ -757,10 +747,15 @@ async function loadOnlineUsers() {
         ${statusIcon(user.profiles?.status)}
         ${name}
     </span>
-
-</div>
-
 `;
+
+div.addEventListener("click", () => {
+
+    openOwnerPanel(user.user_id);
+
+});
+
+usersList.appendChild(div);
 
     });
 
