@@ -576,33 +576,53 @@ if (closeOwnerPanel) {
 
 async function openOwnerPanel(userId){
 
-    if(currentUserRole !== "owner") return;
+    alert("Owner panel clicked!\nUser ID: " + userId);
 
-    const { data } = await client
+    if(currentUserRole !== "owner"){
+
+        alert("You are not the owner!");
+        return;
+
+    }
+
+    const { data, error } = await client
         .from("profiles")
         .select("*")
         .eq("id", userId)
         .single();
 
-    if(!data) return;
+    if(error){
 
-    selectedUser = data.id;
+        console.error(error);
+        alert("Database error: " + error.message);
+        return;
 
-    document.getElementById("ownerAvatar").src =
+    }
+
+    if(!data){
+
+        alert("User not found.");
+        return;
+
+    }
+
+    selectedUser = data;
+
+    ownerAvatar.src =
         data.avatar_url || "/images/default-avatar.png";
 
-    document.getElementById("ownerName").textContent =
+    ownerName.textContent =
         data.display_name || "Unknown";
 
-    document.getElementById("ownerRole").textContent =
+    ownerRole.textContent =
         "Role: " + (data.role || "member");
 
-    document.getElementById("ownerStatus").textContent =
+    ownerStatus.textContent =
         "Status: " + (data.status || "Online");
 
     ownerPanel.classList.remove("hidden");
 
-    requestAnimationFrame(()=>{
+    requestAnimationFrame(() => {
 
         ownerPanel.classList.add("open");
 
@@ -612,7 +632,10 @@ async function openOwnerPanel(userId){
         .getElementById("ownerOverlay")
         .classList.add("show");
 
+    alert("Owner panel should now be open!");
+
 }
+
 window.openOwnerPanel = openOwnerPanel;
 function statusIcon(status){
 
