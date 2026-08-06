@@ -676,6 +676,20 @@ box-shadow:0 0 15px #7d4dff66;
 
 }
 
+.owner-panel::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    z-index:-1;
+
+}
+
 .owner-avatar{
 
     width:90px;
