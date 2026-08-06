@@ -602,6 +602,46 @@ function openOwnerPanel(
 
 }
 
+async function openOwnerPanel(userId){
+
+    if(currentUserRole !== "owner") return;
+
+    const { data } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+    if(!data) return;
+
+    selectedUser = data.id;
+
+    document.getElementById("ownerAvatar").src =
+        data.avatar_url || "/images/default-avatar.png";
+
+    document.getElementById("ownerName").textContent =
+        data.display_name || "Unknown";
+
+    document.getElementById("ownerRole").textContent =
+        "Role: " + (data.role || "member");
+
+    document.getElementById("ownerStatus").textContent =
+        "Status: " + (data.status || "Online");
+
+    ownerPanel.classList.remove("hidden");
+
+    requestAnimationFrame(()=>{
+
+        ownerPanel.classList.add("open");
+
+    });
+
+    document
+        .getElementById("ownerOverlay")
+        .classList.add("show");
+
+}
+
 // ==========================================
 // EVENTS
 // ==========================================
@@ -692,13 +732,7 @@ async function loadOnlineUsers() {
 
 <div
     class="user"
-    onclick="openOwnerPanel(
-        '${user.user_id}',
-        '${name}',
-        '${avatar}',
-        '${user.profiles?.role || "member"}',
-        '${user.profiles?.status || "Online"}'
-    )">
+    onclick="openOwnerPanel('${user.user_id}')">
 
     <img
         src="${avatar}"
@@ -706,7 +740,7 @@ async function loadOnlineUsers() {
 
     <span>
         ${statusIcon(user.profiles?.status)}
-${name}
+        ${name}
     </span>
 
 </div>
