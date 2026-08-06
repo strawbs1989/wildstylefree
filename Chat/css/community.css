@@ -668,6 +668,46 @@ box-shadow:0 0 15px #7d4dff66;
 
 }
 
+.owner-profile{
+
+    text-align:center;
+
+    margin:20px 0;
+
+}
+
+.owner-avatar{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:3px solid #7c3aed;
+
+    margin-bottom:15px;
+
+}
+
+.owner-profile h3{
+
+    margin:10px 0 5px;
+
+    color:#fff;
+
+}
+
+.owner-profile p{
+
+    color:#bdbdbd;
+
+    margin:4px 0;
+
+}
+
 .owner-actions{
 
     display:flex;
