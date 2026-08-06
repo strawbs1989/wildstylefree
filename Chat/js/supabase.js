@@ -7,4 +7,5 @@ const client = supabase.createClient(
     SUPABASE_KEY
 );
 
+console.log("SUPABASE LOADED");
 console.log(client);
