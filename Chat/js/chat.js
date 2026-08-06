@@ -716,57 +716,67 @@ messageInput.addEventListener("input", () => {
 async function loadOnlineUsers() {
 
     const { data, error } = await client
+
         .from("online_users")
+
         .select(`
             user_id,
-            profiles(
-                display_name,
-                avatar_url,
-                status,
-                role
-            )
+            profiles (
+    display_name,
+    avatar_url,
+    status,
+    role
+)
         `);
 
     if (error) {
-
         console.error(error);
         return;
-
     }
 
-    usersList.innerHTML = "";
+ const div = document.createElement("div");
 
-    data.forEach(user => {
+div.className = "user";
 
-        const name =
-            user.profiles?.display_name || "Member";
+div.innerHTML = `
+    <img
+        src="${avatar}"
+        class="online-avatar">
 
-        const avatar =
-            user.profiles?.avatar_url || "/images/default-avatar.png";
+    <span>
+        ${statusIcon(user.profiles?.status)}
+        ${name}
+    </span>
+`;
 
-        const div = document.createElement("div");
+div.addEventListener("click", () => {
 
-        div.className = "user";
+    openOwnerPanel(user.user_id);
 
-        div.innerHTML = `
-            <img
-                src="${avatar}"
-                class="online-avatar">
+});
 
-            <span>
-                ${statusIcon(user.profiles?.status)}
-                ${name}
-            </span>
-        `;
-
-        div.addEventListener("click", () => {
-
-            openOwnerPanel(user.user_id);
-
-        });
-
-        usersList.appendChild(div);
+usersList.appendChild(div);
 
     });
+
+}
+
+function enableOnlineUsers() {
+
+    client
+
+        .channel("online-users")
+
+        .on(
+            "postgres_changes",
+            {
+                event: "*",
+                schema: "public",
+                table: "online_users"
+            },
+            () => loadOnlineUsers()
+        )
+
+        .subscribe();
 
 }
