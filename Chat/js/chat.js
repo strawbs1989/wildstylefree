@@ -373,7 +373,7 @@ async function updateTyping(isTyping) {
 
     if (isTyping) {
 
-        await supabase
+        await client
             .from("typing_users")
             .upsert({
                 user_id: currentUser.id,
@@ -382,7 +382,7 @@ async function updateTyping(isTyping) {
 
     } else {
 
-        await supabase
+        await client
             .from("typing_users")
             .delete()
             .eq("user_id", currentUser.id);
@@ -392,7 +392,7 @@ async function updateTyping(isTyping) {
 }
 function enableTypingIndicator() {
 
-    supabase
+    client
 
         .channel("typing")
 
@@ -412,7 +412,7 @@ function enableTypingIndicator() {
 
             async () => {
 
-                const { data } = await supabase
+                const { data } = await client
 
                     .from("typing_users")
 
@@ -572,35 +572,7 @@ if (closeOwnerPanel) {
     });
 
 }
-function openOwnerPanel(
-    id,
-    name,
-    avatar,
-    role,
-    status
-){
 
-    if(currentUserRole !== "owner") return;
-
-    selectedUser.id = id;
-    selectedUser.name = name;
-    selectedUser.avatar = avatar;
-    selectedUser.role = role;
-    selectedUser.status = status;
-
-    ownerAvatar.src = avatar;
-
-    ownerName.textContent = name;
-
-    ownerRole.textContent =
-        "Role: " + role;
-
-    ownerStatus.textContent =
-        "Status: " + status;
-
-    ownerPanel.classList.remove("hidden");
-
-}
 
 async function openOwnerPanel(userId){
 
@@ -641,6 +613,7 @@ async function openOwnerPanel(userId){
         .classList.add("show");
 
 }
+window.openOwnerPanel = openOwnerPanel;
 
 // ==========================================
 // EVENTS
@@ -699,7 +672,7 @@ messageInput.addEventListener("input", () => {
 
 async function loadOnlineUsers() {
 
-    const { data, error } = await supabase
+    const { data, error } = await client
 
         .from("online_users")
 
