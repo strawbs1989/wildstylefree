@@ -1,40 +1,52 @@
-// Check if user is logged in
+// ==========================================
+// CHECK LOGIN
+// ==========================================
+
 (async () => {
 
     const {
         data: { session }
-    } = await supabase.auth.getSession();
+    } = await client.auth.getSession();
 
     if (!session) {
+
         window.location.href = "index.html";
         return;
+
     }
 
 })();
 
-// Logout
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
 async function logout() {
 
     const {
         data: { user }
-    } = await supabase.auth.getUser();
+    } = await client.auth.getUser();
 
     if (user) {
 
-        await supabase
+        await client
             .from("online_users")
             .delete()
             .eq("user_id", user.id);
 
-    }
-    await supabase
-.from("chat_events")
-.insert([{
-    message: "👋 " + user.email + " left the chat"
-}]);
+        await client
+            .from("chat_events")
+            .insert([{
+                message: "👋 " + user.email + " left the chat"
+            }]);
 
-    await supabase.auth.signOut();
+    }
+
+    await client.auth.signOut();
 
     window.location.href = "index.html";
 
 }
+
+window.logout = logout;
