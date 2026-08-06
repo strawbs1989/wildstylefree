@@ -768,3 +768,22 @@ async function loadOnlineUsers() {
     });
 
 }
+
+function enableOnlineUsers() {
+
+    client
+        .channel("online-users")
+        .on(
+            "postgres_changes",
+            {
+                event: "*",
+                schema: "public",
+                table: "online_users"
+            },
+            () => {
+                loadOnlineUsers();
+            }
+        )
+        .subscribe();
+
+}
