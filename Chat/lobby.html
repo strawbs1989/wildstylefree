@@ -105,32 +105,60 @@
 
 <div id="ownerPanel" class="owner-panel hidden">
 
-    <h2>Owner Control Panel</h2>
+    <div class="owner-header">
 
-    <div class="panel-section">
-        <h3>Lobby Controls</h3>
+        <h2>👑 Owner Panel</h2>
 
-        <button id="lockLobbyBtn">
-            Lock Lobby
-        </button>
+        <button id="closeOwnerPanel">✖</button>
 
-        <button id="unlockLobbyBtn">
-            Unlock Lobby
-        </button>
     </div>
 
-    <div class="panel-section">
-        <h3>Player Management</h3>
+    <div class="owner-profile">
 
-        <input 
-            id="kickPlayerInput" 
-            type="text" 
-            placeholder="Player name">
+        <img
+            id="ownerAvatar"
+            src="/images/default-avatar.png"
+            class="owner-avatar">
 
-        <button id="kickPlayerBtn">
-            Kick Player
-        </button>
+        <h3 id="ownerName">
+            Select a user
+        </h3>
+
+        <p id="ownerRole">
+            -
+        </p>
+
+        <p id="ownerStatus">
+            -
+        </p>
+
     </div>
+
+    <hr>
+
+    <div class="owner-actions">
+
+        <button id="btnMakeDJ">🎧 Make DJ</button>
+
+        <button id="btnMakeAdmin">🛡️ Make Admin</button>
+
+        <button id="btnMakeVIP">⭐ Make VIP</button>
+
+        <button id="btnMember">👤 Make Member</button>
+
+        <hr>
+
+        <button id="btnMute">🔇 Mute</button>
+
+        <button id="btnKick">👢 Kick</button>
+
+        <button id="btnBan">🚫 Ban</button>
+
+        <button id="btnDeleteMessages">🗑 Delete Messages</button>
+
+    </div>
+
+</div>
 
     <div class="panel-section">
         <h3>Announcements</h3>
