@@ -614,6 +614,25 @@ async function openOwnerPanel(userId){
 
 }
 window.openOwnerPanel = openOwnerPanel;
+function statusIcon(status){
+
+    switch(status){
+
+        case "Away":
+            return "🟡 ";
+
+        case "Busy":
+            return "🔴 ";
+
+        case "Be Right Back":
+            return "🟠 ";
+
+        default:
+            return "🟢 ";
+
+    }
+
+}
 
 // ==========================================
 // EVENTS
