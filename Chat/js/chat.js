@@ -882,6 +882,8 @@ async function banUser() {
 
     const { error } = await client
         .from("profiles")
+        alert("Selected User ID:\n" + selectedUser.id);
+console.log(selectedUser);
         .update({
             banned: true,
             ban_reason: reason
