@@ -809,16 +809,15 @@ async function makeAdmin() {
 
     alert(selectedUser.display_name + " is now an Admin.");
 
-    loadOnlineUsers();
+// Reload Laura's profile
+const { data } = await client
+    .from("profiles")
+    .select("*")
+    .eq("id", selectedUser.id)
+    .single();
 
-    ownerPanel.classList.remove("open");
+selectedUser = data;
 
-    document
-        .getElementById("ownerOverlay")
-        .classList.remove("show");
+ownerRole.textContent = "Role: " + data.role;
 
-    setTimeout(() => {
-        ownerPanel.classList.add("hidden");
-    }, 350);
-
-}
+loadOnlineUsers();
