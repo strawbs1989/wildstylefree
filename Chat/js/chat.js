@@ -815,9 +815,21 @@ client
 }
 
 // ==========================================
-// MAKE ADMIN
+// ROLE BUTTONS
 // ==========================================
 
 document
     .getElementById("btnMakeAdmin")
     .addEventListener("click", () => setRole("admin"));
+
+document
+    .getElementById("btnMakeDJ")
+    .addEventListener("click", () => setRole("dj"));
+
+document
+    .getElementById("btnMakeVIP")
+    .addEventListener("click", () => setRole("vip"));
+
+document
+    .getElementById("btnMember")
+    .addEventListener("click", () => setRole("member"));
