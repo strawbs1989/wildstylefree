@@ -879,7 +879,14 @@ async function banUser() {
     const reason = prompt("Reason for banning this user?");
 
     if (reason === null) return;
-
+    
+alert(
+    "Selected User:\n\n" +
+    selectedUser.display_name +
+    "\n\nID:\n" +
+    selectedUser.id
+);
+    
     const { data, error } = await client
     .from("profiles")
     .update({
