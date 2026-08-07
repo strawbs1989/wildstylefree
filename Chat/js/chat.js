@@ -827,3 +827,50 @@ document
 document
     .getElementById("btnMember")
     .addEventListener("click", () => setRole("member"));
+
+document
+    .getElementById("btnDeleteMessages")
+    .addEventListener("click", deleteAllMessages);
+
+// ==========================================
+// DELETE ALL USER MESSAGES
+// ==========================================
+
+async function deleteAllMessages() {
+
+    if (currentUserRole !== "owner" && currentUserRole !== "admin") {
+        alert("You don't have permission.");
+        return;
+    }
+
+    if (!selectedUser || !selectedUser.id) {
+        alert("Select a user first.");
+        return;
+    }
+
+    if (!confirm("Delete ALL messages from " + selectedUser.display_name + "?")) {
+        return;
+    }
+
+    const { error } = await client
+        .from("messages")
+        .delete()
+        .eq("user_id", selectedUser.id);
+
+    if (error) {
+        alert(error.message);
+        console.error(error);
+        return;
+    }
+
+    await client
+        .from("chat_events")
+        .insert([{
+            message: "🗑️ " + selectedUser.display_name + "'s messages were deleted."
+        }]);
+
+    await loadMessages();
+
+    alert("Messages deleted successfully.");
+
+}
