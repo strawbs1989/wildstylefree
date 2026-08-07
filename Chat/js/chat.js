@@ -818,6 +818,42 @@ client
 // ROLE BUTTONS
 // ==========================================
 
+async function setRole(role) {
+
+    if (currentUserRole !== "owner") {
+        alert("Only the owner can change roles.");
+        return;
+    }
+
+    if (!selectedUser || !selectedUser.id) {
+        alert("Select a user first.");
+        return;
+    }
+
+    const { error } = await client
+        .from("profiles")
+        .update({ role: role })
+        .eq("id", selectedUser.id);
+
+    if (error) {
+        alert(error.message);
+        console.error(error);
+        return;
+    }
+
+    selectedUser.role = role;
+
+    ownerRole.textContent =
+        "Role: " +
+        role.charAt(0).toUpperCase() +
+        role.slice(1);
+
+    await loadOnlineUsers();
+
+    alert(selectedUser.display_name + " is now " + role + ".");
+
+}
+
 document
     .getElementById("btnMakeAdmin")
     .addEventListener("click", () => setRole("admin"));
