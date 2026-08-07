@@ -880,15 +880,24 @@ async function banUser() {
 
     if (reason === null) return;
 
-    const { error } = await client
-        .from("profiles")
-        alert("Selected User ID:\n" + selectedUser.id);
-console.log(selectedUser);
-        .update({
-            banned: true,
-            ban_reason: reason
-        })
-        .eq("id", selectedUser.id);
+    const { data, error } = await client
+    .from("profiles")
+    .update({
+        banned: true,
+        ban_reason: reason
+    })
+    .eq("id", selectedUser.id)
+    .select();
+
+console.log(data);
+console.log(error);
+
+alert(
+    "Rows updated: " +
+    (data ? data.length : 0) +
+    "\nError: " +
+    JSON.stringify(error)
+);
 
     if (error) {
         alert(error.message);
