@@ -451,9 +451,9 @@ emojiPicker.classList.toggle("open");
 });
 
 emojiPicker.innerHTML = emojiPicker.innerHTML
-.split(" ")
-.map(e => <span>${e}</span>)
-.join("");
+    .split(" ")
+    .map(e => `<span>${e}</span>`)
+    .join("");
 
 emojiPicker.querySelectorAll("span").forEach(span => {
 
@@ -808,4 +808,13 @@ async function makeAdmin() {
     loadOnlineUsers();
 
     ownerPanel.classList.remove("open");
+
+    document
+        .getElementById("ownerOverlay")
+        .classList.remove("show");
+
+    setTimeout(() => {
+        ownerPanel.classList.add("hidden");
+    }, 350);
+
 }
