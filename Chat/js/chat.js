@@ -873,10 +873,18 @@ async function banUser() {
 
     const { error } = await client
         .from("profiles")
-        .update({
-            banned: true
-        })
-        .eq("id", selectedUser.id);
+        .const reason = prompt("Reason for banning this user?");
+
+if (reason === null) return;
+
+const { error } = await client
+    .from("profiles")
+    .update({
+        banned: true,
+        ban_reason: reason
+    })
+    .eq("id", selectedUser.id);
+     
 
     if (error) {
         alert(error.message);
