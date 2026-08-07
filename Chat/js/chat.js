@@ -574,6 +574,18 @@ if (closeOwnerPanel) {
 
 }
 
+const ownerOverlay = document.getElementById("ownerOverlay");
+
+ownerOverlay.addEventListener("click", () => {
+
+    ownerPanel.classList.remove("open");
+    ownerOverlay.classList.remove("show");
+
+    setTimeout(() => {
+        ownerPanel.classList.add("hidden");
+    }, 350);
+
+});
 
 async function openOwnerPanel(userId){
 
