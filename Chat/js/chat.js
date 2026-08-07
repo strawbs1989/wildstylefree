@@ -825,7 +825,15 @@ async function makeAdmin() {
 
     alert(selectedUser.display_name + " is now an Admin.");
 
-    loadOnlineUsers();
+loadOnlineUsers();
 
-    ownerPanel.classList.remove("open");
-}
+// Close the panel properly
+ownerPanel.classList.remove("open");
+
+document
+    .getElementById("ownerOverlay")
+    .classList.remove("show");
+
+setTimeout(() => {
+    ownerPanel.classList.add("hidden");
+}, 350);
