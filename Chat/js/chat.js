@@ -276,13 +276,15 @@ const { error } = await client
         role: profile?.role || "member"  
     }]);  
 
-if (error) {  
+console.log(error);
 
-    alert(error.message);  
-    console.error(error);  
-    return;  
+if (error) {
+    alert(JSON.stringify(error));
+    console.error(error);
+    return;
+}
 
-}  
+alert("Ban saved successfully!");
 
 messageInput.value = "";  
 
