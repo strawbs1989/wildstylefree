@@ -69,20 +69,23 @@ const {
     error: profileError
 } = await client
     .from("profiles")
-    .select("role, banned")
+    .select("role, banned, ban_reason")
     .eq("id", user.id)
     .single();
 
 if (profile?.banned) {
 
-    alert("Your account has been banned.");
+    alert(
+        "🚫 You have been banned from Wildstyle Community.\n\n" +
+        "Reason:\n" +
+        (profile.ban_reason || "No reason supplied.")
+    );
 
     await client.auth.signOut();
 
     window.location.href = "index.html";
 
     return;
-
 }
 
 if (profileError) {
@@ -895,7 +898,11 @@ const { error } = await client
     await client
         .from("chat_events")
         .insert([{
-            message: "🚫 " + selectedUser.display_name + " has been banned."
+            message:
+"🚫 " +
+selectedUser.display_name +
+" has been banned.\nReason: " +
+reason
         }]);
 
     alert(selectedUser.display_name + " has been banned.");
