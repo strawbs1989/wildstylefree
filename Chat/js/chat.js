@@ -774,7 +774,9 @@ client
 // MAKE ADMIN
 // ==========================================
 
-document.getElementById("btnMakeAdmin").addEventListener("click", makeAdmin);
+document
+    .getElementById("btnMakeAdmin")
+    .addEventListener("click", makeAdmin);
 
 async function makeAdmin() {
 
@@ -796,28 +798,17 @@ async function makeAdmin() {
         .eq("id", selectedUser.id);
 
     if (error) {
-        alert(error.message);
         console.error(error);
+        alert(error.message);
         return;
     }
 
-    await client
-        .from("chat_events")
-        .insert([{
-            message: "🛡️ " + selectedUser.display_name + " is now an Admin!"
-        }]);
+    // Update the panel immediately
+    selectedUser.role = "admin";
+    ownerRole.textContent = "Role: Admin";
+
+    // Refresh online users
+    await loadOnlineUsers();
 
     alert(selectedUser.display_name + " is now an Admin.");
-
-// Reload Laura's profile
-const { data } = await client
-    .from("profiles")
-    .select("*")
-    .eq("id", selectedUser.id)
-    .single();
-
-selectedUser = data;
-
-ownerRole.textContent = "Role: " + data.role;
-
-loadOnlineUsers();
+}
