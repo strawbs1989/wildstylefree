@@ -64,11 +64,22 @@ if (!user) {
 }  
 
 currentUser = user;  
-const { data: profile, error: profileError } = await client
+const { data: profile } = await client
     .from("profiles")
-    .select("role")
+    .select("role, banned")
     .eq("id", user.id)
-    .maybeSingle();
+    .single();
+if (profile?.banned) {
+
+    alert("Your account has been banned.");
+
+    await client.auth.signOut();
+
+    window.location.href = "index.html";
+
+    return;
+
+}
 
 if (profileError) {
     console.error(profileError);
@@ -831,6 +842,55 @@ document
 document
     .getElementById("btnDeleteMessages")
     .addEventListener("click", deleteAllMessages);
+
+document
+    .getElementById("btnBan")
+    .addEventListener("click", banUser);
+
+// ==========================================
+// BAN USER
+// ==========================================
+
+async function banUser() {
+
+    if (currentUserRole !== "owner" && currentUserRole !== "admin") {
+        alert("You don't have permission.");
+        return;
+    }
+
+    if (!selectedUser || !selectedUser.id) {
+        alert("Select a user first.");
+        return;
+    }
+
+    if (!confirm("Ban " + selectedUser.display_name + "?")) {
+        return;
+    }
+
+    const { error } = await client
+        .from("profiles")
+        .update({
+            banned: true
+        })
+        .eq("id", selectedUser.id);
+
+    if (error) {
+        alert(error.message);
+        console.error(error);
+        return;
+    }
+
+    await client
+        .from("chat_events")
+        .insert([{
+            message: "🚫 " + selectedUser.display_name + " has been banned."
+        }]);
+
+    alert(selectedUser.display_name + " has been banned.");
+
+    await loadOnlineUsers();
+
+}
 
 // ==========================================
 // DELETE ALL USER MESSAGES
