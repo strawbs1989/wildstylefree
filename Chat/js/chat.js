@@ -643,6 +643,50 @@ switch(status){
 
 }
 
+
+// ==========================================
+// CHANGE USER ROLE
+// ==========================================
+
+async function setRole(role) {
+
+    if (currentUserRole !== "owner") {
+        alert("Only the owner can change roles.");
+        return;
+    }
+
+    if (!selectedUser || !selectedUser.id) {
+        alert("Select a user first.");
+        return;
+    }
+
+    const { error } = await client
+        .from("profiles")
+        .update({ role })
+        .eq("id", selectedUser.id);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    selectedUser.role = role;
+    ownerRole.textContent =
+        "Role: " +
+        role.charAt(0).toUpperCase() +
+        role.slice(1);
+
+    await loadOnlineUsers();
+
+    alert(selectedUser.display_name + " is now " + role + ".");
+
+}
+
+function statusIcon(status){
+
+    ...
+}
+
 // ==========================================
 // EVENTS
 // ==========================================
@@ -776,39 +820,4 @@ client
 
 document
     .getElementById("btnMakeAdmin")
-    .addEventListener("click", makeAdmin);
-
-async function makeAdmin() {
-
-    if (currentUserRole !== "owner") {
-        alert("Only the owner can do this.");
-        return;
-    }
-
-    if (!selectedUser || !selectedUser.id) {
-        alert("Select a user first.");
-        return;
-    }
-
-    const { error } = await client
-        .from("profiles")
-        .update({
-            role: "admin"
-        })
-        .eq("id", selectedUser.id);
-
-    if (error) {
-        console.error(error);
-        alert(error.message);
-        return;
-    }
-
-    // Update the panel immediately
-    selectedUser.role = "admin";
-    ownerRole.textContent = "Role: Admin";
-
-    // Refresh online users
-    await loadOnlineUsers();
-
-    alert(selectedUser.display_name + " is now an Admin.");
-}
+    .addEventListener("click", () => setRole("admin"));
