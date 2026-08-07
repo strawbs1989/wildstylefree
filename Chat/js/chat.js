@@ -64,11 +64,15 @@ if (!user) {
 }  
 
 currentUser = user;  
-const { data: profile } = await client
+const {
+    data: profile,
+    error: profileError
+} = await client
     .from("profiles")
     .select("role, banned")
     .eq("id", user.id)
     .single();
+
 if (profile?.banned) {
 
     alert("Your account has been banned.");
