@@ -837,8 +837,6 @@ await client
 
 alert(selectedUser.display_name + " is now an Admin.");  
 
-loadOnlineUsers();  
-
-ownerPanel.classList.remove("open");
+alert("Reached end of makeAdmin()");
 
 }
