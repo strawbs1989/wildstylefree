@@ -6,29 +6,29 @@ const closeOwnerPanel = document.getElementById("closeOwnerPanel");
 
 let selectedUser = {
 
-    id: null,
+id: null,  
 
-    name: "",
+name: "",  
 
-    avatar: "",
+avatar: "",  
 
-    role: "",
+role: "",  
 
-    status: ""
+status: ""
 
 };
 
 const ownerAvatar =
-    document.getElementById("ownerAvatar");
+document.getElementById("ownerAvatar");
 
 const ownerName =
-    document.getElementById("ownerName");
+document.getElementById("ownerName");
 
 const ownerRole =
-    document.getElementById("ownerRole");
+document.getElementById("ownerRole");
 
 const ownerStatus =
-    document.getElementById("ownerStatus");
+document.getElementById("ownerStatus");
 
 const emojiBtn = document.getElementById("emojiBtn");
 const emojiPicker = document.getElementById("emojiPicker");
@@ -54,42 +54,43 @@ const usersList = document.getElementById("usersList");
 
 (async function () {
 
-    const { data: { user } } = await client.auth.getUser();
+const { data: { user } } = await client.auth.getUser();  
 
-    if (!user) {
+if (!user) {  
 
-        window.location.href = "index.html";
-        return;
+    window.location.href = "index.html";  
+    return;  
 
-    }
+}  
 
-    currentUser = user;
-    const { data: profile } = await client
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
+currentUser = user;  
+const { data: profile } = await client  
+.from("profiles")  
+.select("role")  
+.eq("id", user.id)  
+.single();
 
 currentUserRole = profile?.role || "member";
-    await client
-    .from("online_users")
-    .upsert({
-        user_id: currentUser.id,
-        last_seen: new Date().toISOString()
-    });
-    await client
+await client
+.from("online_users")
+.upsert({
+user_id: currentUser.id,
+last_seen: new Date().toISOString()
+});
+await client
 .from("chat_events")
 .insert([{
-    message: "🎉 " + currentUser.email + " joined the chat"
+message: "🎉 " + currentUser.email + " joined the chat"
 }]);
 
 loadOnlineUsers();
 
 enableOnlineUsers();
 
-    await loadMessages();
+await loadMessages();  
 
-    enableRealtime();
+enableRealtime();
+
 enableTypingIndicator();
 enableChatEvents();
 
@@ -101,32 +102,32 @@ enableChatEvents();
 
 async function loadMessages() {
 
-    const { data, error } = await client
+const { data, error } = await client  
 
-        .from("messages")
+    .from("messages")  
 
-        .select(`
-            *,
-            profiles (
-                display_name,
-                avatar_url
-            )
-        `)
+    .select(`  
+        *,  
+        profiles (  
+            display_name,  
+            avatar_url  
+        )  
+    `)  
 
-        .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true });  
 
-    if (error) {
+if (error) {  
 
-        console.error(error);
-        return;
+    console.error(error);  
+    return;  
 
-    }
+}  
 
-    messagesDiv.innerHTML = "";
+messagesDiv.innerHTML = "";  
 
-    data.forEach(showMessage);
+data.forEach(showMessage);  
 
-    scrollBottom();
+scrollBottom();
 
 }
 
@@ -136,36 +137,37 @@ async function loadMessages() {
 
 function showMessage(msg) {
 
-    const div = document.createElement("div");
+const div = document.createElement("div");  
 
-    div.className = "chat-message";
+div.className = "chat-message";  
 
-    const name =
-        msg.profiles?.display_name || "Member";
-    let badge = "";
+const name =  
+    msg.profiles?.display_name || "Member";  
+let badge = "";
 
 switch (msg.role) {
 
-    case "owner":
-        badge = "👑 Owner";
-        break;
+case "owner":  
+    badge = "👑 Owner";  
+    break;  
 
-    case "admin":
-        badge = "🛡️ Admin";
-        break;
+case "admin":  
+    badge = "🛡️ Admin";  
+    break;  
 
-    case "dj":
-        badge = "🎧 DJ";
-        break;
+case "dj":  
+    badge = "🎧 DJ";  
+    break;  
 
-    case "vip":
-        badge = "⭐ VIP";
-        break;
+case "vip":  
+    badge = "⭐ VIP";  
+    break;  
 
-    default:
-        badge = "👤 Member";
+default:  
+    badge = "👤 Member";
+
 }
-    let deleteButton = "";
+let deleteButton = "";
 
 if (
 
@@ -183,64 +185,48 @@ deleteButton=`
 
 }
 
-    const avatar =
-        msg.profiles?.avatar_url ||
-        "/images/default-avatar.png";
+const avatar =  
+    msg.profiles?.avatar_url ||  
+    "/images/default-avatar.png";  
 
-    const time = new Date(msg.created_at)
-        .toLocaleTimeString([], {
+const time = new Date(msg.created_at)  
+    .toLocaleTimeString([], {  
 
-            hour: "2-digit",
-            minute: "2-digit"
+        hour: "2-digit",  
+        minute: "2-digit"  
 
-        });
+    });  
 
-    div.innerHTML = `
+div.innerHTML = `
 
-<div style="display:flex;gap:12px;align-items:flex-start;">
-
-<img
-src="${avatar}"
-style="
-width:48px;
-height:48px;
-border-radius:50%;
-object-fit:cover;
+<div style="display:flex;gap:12px;align-items:flex-start;">  <img  
+src="${avatar}"  
+style="  
+width:48px;  
+height:48px;  
+border-radius:50%;  
+object-fit:cover;  
 ">
 
-<div style="flex:1;">
+<div style="flex:1;">  <div class="chat-user">  ${name}  
 
-<div class="chat-user">
+<span class="role-badge">  
+    ${badge}  
+</span>
 
-    ${name}
+</div>  <div class="chat-text">  
+${escapeHTML(msg.message)}  
+</div>  <div class="chat-time">  
+${time}  
+</div>  
+${deleteButton}  
+<button  
+    class="delete-btn"  
+    onclick="deleteMessage(${msg.id}, '${msg.user_id}')">  
+    🗑️  
+</button>  </div>  </div>  `;
 
-    <span class="role-badge">
-        ${badge}
-    </span>
-
-</div>
-
-<div class="chat-text">
-${escapeHTML(msg.message)}
-</div>
-
-<div class="chat-time">
-${time}
-</div>
-${deleteButton}
-<button
-    class="delete-btn"
-    onclick="deleteMessage(${msg.id}, '${msg.user_id}')">
-    🗑️
-</button>
-
-</div>
-
-</div>
-
-`;
-
-    messagesDiv.appendChild(div);
+messagesDiv.appendChild(div);
 
 }
 
@@ -250,37 +236,37 @@ ${deleteButton}
 
 async function sendMessage() {
 
-    const text = messageInput.value.trim();
+const text = messageInput.value.trim();  
 
-    if (text === "") return;
+if (text === "") return;  
 
-    const { data: profile } = await client
-        .from("profiles")
-        .select("role")
-        .eq("id", currentUser.id)
-        .single();
+const { data: profile } = await client  
+    .from("profiles")  
+    .select("role")  
+    .eq("id", currentUser.id)  
+    .single();  
 
-    const { error } = await client
-        .from("messages")
-        .insert([{
-            user_id: currentUser.id,
-            message: text,
-            role: profile?.role || "member"
-        }]);
+const { error } = await client  
+    .from("messages")  
+    .insert([{  
+        user_id: currentUser.id,  
+        message: text,  
+        role: profile?.role || "member"  
+    }]);  
 
-    if (error) {
+if (error) {  
 
-        alert(error.message);
-        console.error(error);
-        return;
+    alert(error.message);  
+    console.error(error);  
+    return;  
 
-    }
+}  
 
-    messageInput.value = "";
+messageInput.value = "";  
 
-    typing = false;
+typing = false;  
 
-    updateTyping(false);
+updateTyping(false);
 
 }
 
@@ -290,53 +276,53 @@ async function sendMessage() {
 
 function enableRealtime() {
 
-    client
-        .channel("wildstyle-chat")
-        .on(
-            "postgres_changes",
-            {
-                event: "INSERT",
-                schema: "public",
-                table: "messages"
-            },
-            async (payload) => {
+client  
+    .channel("wildstyle-chat")  
+    .on(  
+        "postgres_changes",  
+        {  
+            event: "INSERT",  
+            schema: "public",  
+            table: "messages"  
+        },  
+        async (payload) => {  
 
-                const { data: profile } = await client
-                    .from("profiles")
-                    .select("display_name, avatar_url")
-                    .eq("id", payload.new.user_id)
-                    .single();
+            const { data: profile } = await client  
+                .from("profiles")  
+                .select("display_name, avatar_url")  
+                .eq("id", payload.new.user_id)  
+                .single();  
 
-                payload.new.profiles = profile;
+            payload.new.profiles = profile;  
 
-                showMessage(payload.new);
+            showMessage(payload.new);  
 
-                scrollBottom();
+            scrollBottom();  
 
-            }
-        )
-        .on(
+        }  
+    )  
+    .on(  
 
-    "postgres_changes",
+"postgres_changes",  
 
-    {
+{  
 
-        event: "DELETE",
+    event: "DELETE",  
 
-        schema: "public",
+    schema: "public",  
 
-        table: "messages"
+    table: "messages"  
 
-    },
+},  
 
-    () => {
+() => {  
 
-        loadMessages();
+    loadMessages();  
 
-    }
+}
 
 )
-        .subscribe();
+.subscribe();
 
 }
 
@@ -346,8 +332,8 @@ function enableRealtime() {
 
 function scrollBottom() {
 
-    messagesDiv.scrollTop =
-        messagesDiv.scrollHeight;
+messagesDiv.scrollTop =  
+    messagesDiv.scrollHeight;
 
 }
 
@@ -357,11 +343,11 @@ function scrollBottom() {
 
 function escapeHTML(text) {
 
-    const div = document.createElement("div");
+const div = document.createElement("div");  
 
-    div.textContent = text;
+div.textContent = text;  
 
-    return div.innerHTML;
+return div.innerHTML;
 
 }
 // ==========================================
@@ -370,87 +356,87 @@ function escapeHTML(text) {
 
 async function updateTyping(isTyping) {
 
-    if (!currentUser) return;
+if (!currentUser) return;  
 
-    if (isTyping) {
+if (isTyping) {  
 
-        await client
-            .from("typing_users")
-            .upsert({
-                user_id: currentUser.id,
-                updated_at: new Date().toISOString()
-            });
+    await client  
+        .from("typing_users")  
+        .upsert({  
+            user_id: currentUser.id,  
+            updated_at: new Date().toISOString()  
+        });  
 
-    } else {
+} else {  
 
-        await client
-            .from("typing_users")
-            .delete()
-            .eq("user_id", currentUser.id);
+    await client  
+        .from("typing_users")  
+        .delete()  
+        .eq("user_id", currentUser.id);  
 
-    }
+}
 
 }
 function enableTypingIndicator() {
 
-    client
+client  
 
-        .channel("typing")
+    .channel("typing")  
 
-        .on(
+    .on(  
 
-            "postgres_changes",
+        "postgres_changes",  
 
-            {
+        {  
 
-                event: "*",
+            event: "*",  
 
-                schema: "public",
+            schema: "public",  
 
-                table: "typing_users"
+            table: "typing_users"  
 
-            },
+        },  
 
-            async () => {
+        async () => {  
 
-                const { data } = await client
+            const { data } = await client  
 
-                    .from("typing_users")
+                .from("typing_users")  
 
-                    .select(`
-                        user_id,
-                        profiles(display_name)
-                    `);
+                .select(`  
+                    user_id,  
+                    profiles(display_name)  
+                `);  
 
-                const others = data.filter(
-                    u => u.user_id !== currentUser.id
-                );
+            const others = data.filter(  
+                u => u.user_id !== currentUser.id  
+            );  
 
-                if (others.length === 0) {
+            if (others.length === 0) {  
 
-                    typingIndicator.textContent = "";
+                typingIndicator.textContent = "";  
 
-                    return;
+                return;  
 
-                }
+            }  
 
-                if (others.length === 1) {
+            if (others.length === 1) {  
 
-                    typingIndicator.textContent =
-                        `✍️ ${others[0].profiles.display_name} is typing...`;
+                typingIndicator.textContent =  
+                    `✍️ ${others[0].profiles.display_name} is typing...`;  
 
-                } else {
+            } else {  
 
-                    typingIndicator.textContent =
-                        `✍️ ${others.length} people are typing...`;
+                typingIndicator.textContent =  
+                    `✍️ ${others.length} people are typing...`;  
 
-                }
+            }  
 
-            }
+        }  
 
-        )
+    )  
 
-        .subscribe();
+    .subscribe();
 
 }
 
@@ -460,24 +446,24 @@ function enableTypingIndicator() {
 
 emojiBtn.addEventListener("click", () => {
 
-    emojiPicker.classList.toggle("open");
+emojiPicker.classList.toggle("open");
 
 });
 
 emojiPicker.innerHTML = emojiPicker.innerHTML
-    .split(" ")
-    .map(e => `<span>${e}</span>`)
-    .join("");
+.split(" ")
+.map(e => <span>${e}</span>)
+.join("");
 
 emojiPicker.querySelectorAll("span").forEach(span => {
 
-    span.addEventListener("click", () => {
+span.addEventListener("click", () => {  
 
-        messageInput.value += span.textContent;
+    messageInput.value += span.textContent;  
 
-        messageInput.focus();
+    messageInput.focus();  
 
-    });
+});
 
 });
 function enableChatEvents(){
@@ -508,13 +494,9 @@ div.className="system-message";
 
 div.innerHTML=`
 
-<div class="system-pill">
+<div class="system-pill">  ${payload.new.message}
 
-${payload.new.message}
-
-</div>
-
-`;
+</div>  `;
 
 messagesDiv.appendChild(div);
 
@@ -529,144 +511,131 @@ scrollBottom();
 }
 async function deleteMessage(id) {
 
-    if (!confirm("Delete this message?")) return;
+if (!confirm("Delete this message?")) return;  
 
-    const { error } = await client
-        .from("messages")
-        .delete()
-        .eq("id", id);
+const { error } = await client  
+    .from("messages")  
+    .delete()  
+    .eq("id", id);  
 
-    if (error) {
+if (error) {  
 
-        alert(error.message);
+    alert(error.message);  
 
-        return;
+    return;  
 
-    }
+}
 
 }
 document.addEventListener("keydown", function(e){
 
-    if(e.key==="F10" && currentUserRole==="owner"){
+if(e.key==="F10" && currentUserRole==="owner"){  
 
-        ownerPanel.classList.remove("hidden");
+    ownerPanel.classList.remove("hidden");  
 
-    }
+}
 
 });
 if (closeOwnerPanel) {
 
-    closeOwnerPanel.addEventListener("click", () => {
+closeOwnerPanel.addEventListener("click", () => {  
 
-        ownerPanel.classList.remove("open");
+    ownerPanel.classList.remove("open");  
 
-        document
-            .getElementById("ownerOverlay")
-            .classList.remove("show");
+    document  
+        .getElementById("ownerOverlay")  
+        .classList.remove("show");  
 
-        setTimeout(() => {
+    setTimeout(() => {  
 
-            ownerPanel.classList.add("hidden");
+        ownerPanel.classList.add("hidden");  
 
-        }, 350);
-
-    });
-
-}
-
-const ownerOverlay = document.getElementById("ownerOverlay");
-
-ownerOverlay.addEventListener("click", () => {
-
-    ownerPanel.classList.remove("open");
-    ownerOverlay.classList.remove("show");
-
-    setTimeout(() => {
-        ownerPanel.classList.add("hidden");
-    }, 350);
+    }, 350);  
 
 });
 
+}
+
 async function openOwnerPanel(userId){
 
-    alert("Owner panel clicked!\nUser ID: " + userId);
+alert("Owner panel clicked!\nUser ID: " + userId);  
 
-    if(currentUserRole !== "owner"){
+if(currentUserRole !== "owner"){  
 
-        alert("You are not the owner!");
-        return;
+    alert("You are not the owner!");  
+    return;  
 
-    }
+}  
 
-    const { data, error } = await client
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
+const { data, error } = await client  
+    .from("profiles")  
+    .select("*")  
+    .eq("id", userId)  
+    .single();  
 
-    if(error){
+if(error){  
 
-        console.error(error);
-        alert("Database error: " + error.message);
-        return;
+    console.error(error);  
+    alert("Database error: " + error.message);  
+    return;  
 
-    }
+}  
 
-    if(!data){
+if(!data){  
 
-        alert("User not found.");
-        return;
+    alert("User not found.");  
+    return;  
 
-    }
+}  
 
-    selectedUser = data;
+selectedUser = data;  
 
-    ownerAvatar.src =
-        data.avatar_url || "/images/default-avatar.png";
+ownerAvatar.src =  
+    data.avatar_url || "/images/default-avatar.png";  
 
-    ownerName.textContent =
-        data.display_name || "Unknown";
+ownerName.textContent =  
+    data.display_name || "Unknown";  
 
-    ownerRole.textContent =
-        "Role: " + (data.role || "member");
+ownerRole.textContent =  
+    "Role: " + (data.role || "member");  
 
-    ownerStatus.textContent =
-        "Status: " + (data.status || "Online");
+ownerStatus.textContent =  
+    "Status: " + (data.status || "Online");  
 
-    ownerPanel.classList.remove("hidden");
+ownerPanel.classList.remove("hidden");  
 
-    requestAnimationFrame(() => {
+requestAnimationFrame(() => {  
 
-        ownerPanel.classList.add("open");
+    ownerPanel.classList.add("open");  
 
-    });
+});  
 
-    document
-        .getElementById("ownerOverlay")
-        .classList.add("show");
+document  
+    .getElementById("ownerOverlay")  
+    .classList.add("show");  
 
-    alert("Owner panel should now be open!");
+alert("Owner panel should now be open!");
 
 }
 
 window.openOwnerPanel = openOwnerPanel;
 function statusIcon(status){
 
-    switch(status){
+switch(status){  
 
-        case "Away":
-            return "🟡 ";
+    case "Away":  
+        return "🟡 ";  
 
-        case "Busy":
-            return "🔴 ";
+    case "Busy":  
+        return "🔴 ";  
 
-        case "Be Right Back":
-            return "🟠 ";
+    case "Be Right Back":  
+        return "🟠 ";  
 
-        default:
-            return "🟢 ";
+    default:  
+        return "🟢 ";  
 
-    }
+}
 
 }
 
@@ -680,21 +649,20 @@ sendBtn.addEventListener("click", sendMessage);
 // Press Enter to send
 messageInput.addEventListener("keydown", function(e){
 
-    if(e.key==="Enter"){
+if(e.key==="Enter"){  
 
-        e.preventDefault();
+    e.preventDefault();  
 
-        sendMessage();
+    sendMessage();  
 
-    }
+}
 
 });
 
 // Logout button
 document
-    .getElementById("logoutBtn")
-    .addEventListener("click", logout);
-
+.getElementById("logoutBtn")
+.addEventListener("click", logout);
 
 // ==========================================
 // TYPING DETECTION
@@ -702,23 +670,23 @@ document
 
 messageInput.addEventListener("input", () => {
 
-    if (!typing) {
+if (!typing) {  
 
-        typing = true;
+    typing = true;  
 
-        updateTyping(true);
+    updateTyping(true);  
 
-    }
+}  
 
-    clearTimeout(typingTimer);
+clearTimeout(typingTimer);  
 
-    typingTimer = setTimeout(() => {
+typingTimer = setTimeout(() => {  
 
-        typing = false;
+    typing = false;  
 
-        updateTyping(false);
+    updateTyping(false);  
 
-    }, 1500);
+}, 1500);
 
 });
 // ==========================================
@@ -727,74 +695,74 @@ messageInput.addEventListener("input", () => {
 
 async function loadOnlineUsers() {
 
-    const { data, error } = await client
-        .from("online_users")
-        .select(`
-            user_id,
-            profiles (
-                display_name,
-                avatar_url,
-                status,
-                role
-            )
-        `);
+const { data, error } = await client  
+    .from("online_users")  
+    .select(`  
+        user_id,  
+        profiles (  
+            display_name,  
+            avatar_url,  
+            status,  
+            role  
+        )  
+    `);  
 
-    if (error) {
-        console.error(error);
-        return;
-    }
+if (error) {  
+    console.error(error);  
+    return;  
+}  
 
-    usersList.innerHTML = "";
+usersList.innerHTML = "";  
 
-    data.forEach(user => {
+data.forEach(user => {  
 
-        const name =
-            user.profiles?.display_name || "Member";
+    const name =  
+        user.profiles?.display_name || "Member";  
 
-        const avatar =
-            user.profiles?.avatar_url || "/images/default-avatar.png";
+    const avatar =  
+        user.profiles?.avatar_url || "/images/default-avatar.png";  
 
-        const div = document.createElement("div");
+    const div = document.createElement("div");  
 
-        div.className = "user";
+    div.className = "user";  
 
-        div.innerHTML = `
-            <img
-                src="${avatar}"
-                class="online-avatar">
+    div.innerHTML = `  
+        <img  
+            src="${avatar}"  
+            class="online-avatar">  
 
-            <span>
-                ${statusIcon(user.profiles?.status)}
-                ${name}
-            </span>
-        `;
+        <span>  
+            ${statusIcon(user.profiles?.status)}  
+            ${name}  
+        </span>  
+    `;  
 
-        div.addEventListener("click", () => {
-            openOwnerPanel(user.user_id);
-        });
+    div.addEventListener("click", () => {  
+        openOwnerPanel(user.user_id);  
+    });  
 
-        usersList.appendChild(div);
+    usersList.appendChild(div);  
 
-    });
+});
 
 }
 
 function enableOnlineUsers() {
 
-    client
-        .channel("online-users")
-        .on(
-            "postgres_changes",
-            {
-                event: "*",
-                schema: "public",
-                table: "online_users"
-            },
-            () => {
-                loadOnlineUsers();
-            }
-        )
-        .subscribe();
+client  
+    .channel("online-users")  
+    .on(  
+        "postgres_changes",  
+        {  
+            event: "*",  
+            schema: "public",  
+            table: "online_users"  
+        },  
+        () => {  
+            loadOnlineUsers();  
+        }  
+    )  
+    .subscribe();
 
 }
 
@@ -837,6 +805,8 @@ await client
 
 alert(selectedUser.display_name + " is now an Admin.");  
 
-alert("Reached end of makeAdmin()");
+loadOnlineUsers();  
+
+ownerPanel.classList.remove("open");
 
 }
