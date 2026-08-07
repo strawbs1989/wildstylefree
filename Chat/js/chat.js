@@ -874,20 +874,17 @@ async function banUser() {
         return;
     }
 
+    const reason = prompt("Reason for banning this user?");
+
+    if (reason === null) return;
+
     const { error } = await client
         .from("profiles")
-        .const reason = prompt("Reason for banning this user?");
-
-if (reason === null) return;
-
-const { error } = await client
-    .from("profiles")
-    .update({
-        banned: true,
-        ban_reason: reason
-    })
-    .eq("id", selectedUser.id);
-     
+        .update({
+            banned: true,
+            ban_reason: reason
+        })
+        .eq("id", selectedUser.id);
 
     if (error) {
         alert(error.message);
@@ -899,16 +896,15 @@ const { error } = await client
         .from("chat_events")
         .insert([{
             message:
-"🚫 " +
-selectedUser.display_name +
-" has been banned.\nReason: " +
-reason
+                "🚫 " +
+                selectedUser.display_name +
+                " has been banned.\nReason: " +
+                reason
         }]);
 
     alert(selectedUser.display_name + " has been banned.");
 
     await loadOnlineUsers();
-
 }
 
 // ==========================================
