@@ -794,46 +794,39 @@ document.getElementById("btnMakeAdmin").addEventListener("click", makeAdmin);
 
 async function makeAdmin() {
 
-    if (currentUserRole !== "owner") {
-        alert("Only the owner can do this.");
-        return;
-    }
+if (currentUserRole !== "owner") {  
+    alert("Only the owner can do this.");  
+    return;  
+}  
 
-    if (!selectedUser || !selectedUser.id) {
-        alert("Select a user first.");
-        return;
-    }
+if (!selectedUser || !selectedUser.id) {  
+    alert("Select a user first.");  
+    return;  
+}  
 
-    const { error } = await client
-        .from("profiles")
-        .update({
-            role: "admin"
-        })
-        .eq("id", selectedUser.id);
+const { error } = await client  
+    .from("profiles")  
+    .update({  
+        role: "admin"  
+    })  
+    .eq("id", selectedUser.id);  
 
-    if (error) {
-        alert(error.message);
-        console.error(error);
-        return;
-    }
+if (error) {  
+    alert(error.message);  
+    console.error(error);  
+    return;  
+}  
 
-    await client
-        .from("chat_events")
-        .insert([{
-            message: "🛡️ " + selectedUser.display_name + " is now an Admin!"
-        }]);
+await client  
+    .from("chat_events")  
+    .insert([{  
+        message: "🛡️ " + selectedUser.display_name + " is now an Admin!"  
+    }]);  
 
-    alert(selectedUser.display_name + " is now an Admin.");
+alert(selectedUser.display_name + " is now an Admin.");  
 
-loadOnlineUsers();
+loadOnlineUsers();  
 
-// Close the panel properly
 ownerPanel.classList.remove("open");
 
-document
-    .getElementById("ownerOverlay")
-    .classList.remove("show");
-
-setTimeout(() => {
-    ownerPanel.classList.add("hidden");
-}, 350);
+}
