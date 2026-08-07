@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wildstyle Community Chat</title>
+
+<link rel="stylesheet" href="css/community.css">
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="chat-container">
+
+    <header class="chat-header">
+
+        <div class="header-left">
+
+            <img src="../images/logo.png" class="logo" alt="Wildstyle Radio">
+
+            <div>
+
+                <h1>Wildstyle Community</h1>
+
+                <p>Live Community Chat</p>
+
+            </div>
+
+        </div>
+        
+        <button id="logoutBtn" class="logout-btn">
+            Logout
+        </button>
+        <button
+    id="profileBtn"
+    class="profile-btn"
+    onclick="window.location.href='profile.html'">
+
+    👤 Profile
+
+</button>
+
+    </header>
+
+    <main class="chat-main">
+
+        <aside class="online-users">
+
+            <h3>Online</h3>
+
+            <div id="usersList">
+
+                <div class="user">
+                    🟢 You
+                </div>
+
+            </div>
+
+        </aside>
+
+        <section class="chat-panel">
+
+            <div id="messages" class="messages">
+
+                <div class="system-message">
+                    👋 Welcome to the Wildstyle Community!
+                </div>
+
+            </div>
+            <div id="typingIndicator" class="typing-indicator"></div>
+            <div class="message-box">
+
+    <button id="emojiBtn" class="emoji-btn">
+        😊
+    </button>
+
+    <input
+        type="text"
+        id="messageInput"
+        placeholder="Type your message...">
+
+    <button id="sendBtn">
+        Send
+    </button>
+
+</div>
+
+<div id="emojiPicker" class="emoji-picker">
+
+    😀 😁 😂 🤣 😊 😍 😎 🤩 🥳 😢 😡 👍 👎 👏 🙌 ❤️ 💙 💜 🔥 🎵 🎧 🎙️ 📻 🚀
+
+</div>
+        </section>
+
+    </main>
+
+</div>
+<div id="ownerOverlay" class="owner-overlay"></div>
+
+<!-- OWNER CONTROL PANEL -->
+
+<div id="ownerPanel" class="owner-panel hidden">
+
+    <div class="owner-header">
+
+        <h2>👑 Owner Panel</h2>
+
+        <button id="closeOwnerPanel">✖</button>
+
+    </div>
+
+    <div class="owner-profile">
+
+        <img
+            id="ownerAvatar"
+            src="/images/default-avatar.png"
+            class="owner-avatar">
+
+        <h3 id="ownerName">
+            Select a user
+        </h3>
+
+        <p id="ownerRole">
+            -
+        </p>
+
+        <p id="ownerStatus">
+            -
+        </p>
+
+    </div>
+
+    <hr>
+
+    <div class="owner-actions">
+
+        <button id="btnMakeDJ">🎧 Make DJ</button>
+
+        <button id="btnMakeAdmin">🛡️ Make Admin</button>
+
+        <button id="btnMakeVIP">⭐ Make VIP</button>
+
+        <button id="btnMember">👤 Make Member</button>
+
+        <hr>
+
+        <button id="btnMute">🔇 Mute</button>
+
+        <button id="btnKick">👢 Kick</button>
+
+        <button id="btnBan">🚫 Ban</button>
+
+        <button id="btnDeleteMessages">🗑 Delete Messages</button>
+
+    </div>
+
+</div>
+
+    
+<script src="js/supabase.js?v=3"></script>
+<script src="js/auth.js?v=3"></script>
+<script src="js/chat.js?v=3"></script>
+
+<script>
+window.onerror = function(message, source, line, col, error) {
+    alert(
+        "ERROR\n\n" +
+        message +
+        "\n\nFile:\n" + source +
+        "\n\nLine: " + line
+    );
+};
+
+window.onunhandledrejection = function(event) {
+    alert(
+        "PROMISE ERROR\n\n" +
+        event.reason +
+        "\n\n" +
+        (event.reason?.stack || "")
+    );
+};
+</script>
+
+<script>
+document
+.getElementById("messageInput")
+.addEventListener("keypress", function(e){
+
+    if(e.key==="Enter"){
+
+        document
+        .getElementById("sendBtn")
+        .click();
+
+    }
+
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>
+eruda.init();
+</script>
+</body>
+</html>
+
+
+        
