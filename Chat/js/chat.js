@@ -64,11 +64,15 @@ if (!user) {
 }  
 
 currentUser = user;  
-const { data: profile } = await client  
-.from("profiles")  
-.select("role")  
-.eq("id", user.id)  
-.single();
+const { data: profile, error: profileError } = await client
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+if (profileError) {
+    console.error(profileError);
+}
 
 currentUserRole = profile?.role || "member";
 await client
