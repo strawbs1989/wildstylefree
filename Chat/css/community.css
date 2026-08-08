@@ -1426,3 +1426,115 @@ box-shadow:0 0 15px #7d4dff66;
     }
 
 }
+
+
+/* =====================================================
+   MSN STYLE STATUS SELECTOR
+===================================================== */
+
+.status-control {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.status-button {
+    border: none;
+    border-radius: 12px;
+
+    padding: 12px 16px;
+
+    background: #24243a;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.status-button:hover {
+    background: #30304b;
+}
+
+.status-menu {
+    position: absolute;
+
+    top: calc(100% + 8px);
+    right: 0;
+
+    width: 190px;
+
+    background: #1b1d2b;
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    border-radius: 14px;
+
+    padding: 8px;
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.55),
+        0 0 20px rgba(124,58,237,.2);
+
+    display: none;
+
+    z-index: 10000;
+}
+
+.status-menu.open {
+    display: block;
+}
+
+.status-menu button {
+    width: 100%;
+
+    border: none;
+    border-radius: 10px;
+
+    background: transparent;
+    color: white;
+
+    padding: 12px;
+
+    text-align: left;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.status-menu button:hover {
+    background: rgba(124,58,237,.25);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 720px) {
+
+    .status-control {
+        margin-left: 5px;
+    }
+
+    .status-button {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .status-menu {
+        right: 0;
+        width: 180px;
+    }
+
+    .status-menu button {
+        padding: 13px 12px;
+        font-size: 15px;
+    }
+
+}
