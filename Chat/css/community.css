@@ -1114,3 +1114,22 @@ box-shadow:0 0 15px #7d4dff66;
     }
 
 }
+
+
+/* =====================================================
+   USER MESSAGE PROFILE CLICK
+   ===================================================== */
+
+.chat-message{
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.chat-message:active{
+    transform:scale(.985);
+}
+
+/* Don't make delete button look like the whole message */
+.delete-btn{
+    cursor:pointer;
+}
