@@ -128,13 +128,14 @@ const { data, error } = await client
 
     .from("messages")  
 
-    .select(`  
-        *,  
-        profiles (  
-            display_name,  
-            avatar_url  
-        )  
-    `)  
+    .select(`
+    *,
+    profiles (
+        display_name,
+        avatar_url,
+        role
+    )
+`)
 
     .order("created_at", { ascending: true });  
 
@@ -182,7 +183,7 @@ const name =
     msg.profiles?.display_name || "Member";  
 let badge = "";
 
-switch (msg.role) {
+switch (msg.profiles?.role) {
 
 case "owner":  
     badge = "👑 Owner";  
@@ -326,11 +327,11 @@ client
         },  
         async (payload) => {  
 
-            const { data: profile } = await client  
-                .from("profiles")  
-                .select("display_name, avatar_url")  
-                .eq("id", payload.new.user_id)  
-                .single();  
+            const { data: profile } = await client
+    .from("profiles")
+    .select("display_name, avatar_url, role")
+    .eq("id", payload.new.user_id)
+    .single();
 
             payload.new.profiles = profile;  
 
@@ -1028,6 +1029,7 @@ async function setRole(role) {
         role.slice(1);
 
     await loadOnlineUsers();
+    await loadMessages();
 
     alert(selectedUser.display_name + " is now " + role + ".");
 
