@@ -159,10 +159,25 @@ scrollBottom();
 
 function showMessage(msg) {
 
-const div = document.createElement("div");  
+const div = document.createElement("div");
 
-div.className = "chat-message";  
+div.className = "chat-message";
 
+/* ==========================================
+   MOBILE / DESKTOP USER SELECTION
+   ========================================== */
+
+div.addEventListener("click", function(e) {
+
+    // Don't open the owner panel when clicking
+    // the delete button
+    if (e.target.closest(".delete-btn")) {
+        return;
+    }
+
+    openOwnerPanel(msg.user_id);
+
+});
 const name =  
     msg.profiles?.display_name || "Member";  
 let badge = "";
