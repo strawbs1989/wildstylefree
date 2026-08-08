@@ -660,6 +660,182 @@ document
 window.openOwnerPanel = openOwnerPanel;
 function statusIcon(status){
 
+// =====================================================
+// MSN STYLE MOBILE PROFILE
+// =====================================================
+
+const mobileProfileCard =
+    document.getElementById("mobileProfileCard");
+
+const mobileProfileOverlay =
+    document.getElementById("mobileProfileOverlay");
+
+const mobileProfileClose =
+    document.getElementById("mobileProfileClose");
+
+const mobileProfileAvatar =
+    document.getElementById("mobileProfileAvatar");
+
+const mobileProfileName =
+    document.getElementById("mobileProfileName");
+
+const mobileProfileStatus =
+    document.getElementById("mobileProfileStatus");
+
+const mobileProfileRole =
+    document.getElementById("mobileProfileRole");
+
+const mobileModerationTools =
+    document.getElementById("mobileModerationTools");
+
+
+// =====================================================
+// OPEN MOBILE PROFILE
+// =====================================================
+
+async function openMobileProfile(userId){
+
+    const { data, error } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+    if(error){
+
+        console.error(error);
+
+        alert("Could not load user profile.");
+
+        return;
+    }
+
+    if(!data){
+
+        alert("User not found.");
+
+        return;
+    }
+
+    selectedUser = data;
+
+
+    // Avatar
+
+    mobileProfileAvatar.src =
+        data.avatar_url ||
+        "/images/default-avatar.png";
+
+
+    // Name
+
+    mobileProfileName.textContent =
+        data.display_name || "Member";
+
+
+    // Status
+
+    const status =
+        data.status || "Online";
+
+    mobileProfileStatus.textContent =
+        statusIcon(status) + status;
+
+
+    // Role
+
+    let roleBadge = "👤 Member";
+
+    switch(data.role){
+
+        case "owner":
+            roleBadge = "👑 Owner";
+            break;
+
+        case "admin":
+            roleBadge = "🛡️ Admin";
+            break;
+
+        case "dj":
+            roleBadge = "🎧 DJ";
+            break;
+
+        case "vip":
+            roleBadge = "⭐ VIP";
+            break;
+
+    }
+
+    mobileProfileRole.textContent =
+        roleBadge;
+
+
+    // Owner tools
+
+    if(currentUserRole === "owner"){
+
+        mobileModerationTools.style.display =
+            "block";
+
+    } else {
+
+        mobileModerationTools.style.display =
+            "none";
+
+    }
+
+
+    // Show card
+
+    mobileProfileOverlay.classList.add("show");
+
+    mobileProfileCard.classList.add("open");
+
+}
+
+
+// =====================================================
+// CLOSE MOBILE PROFILE
+// =====================================================
+
+function closeMobileProfile(){
+
+    mobileProfileCard.classList.remove("open");
+
+    mobileProfileOverlay.classList.remove("show");
+
+}
+
+
+mobileProfileClose.addEventListener(
+    "click",
+    closeMobileProfile
+);
+
+
+mobileProfileOverlay.addEventListener(
+    "click",
+    closeMobileProfile
+);
+
+
+// =====================================================
+// VIEW PROFILE
+// =====================================================
+
+function mobileViewProfile(){
+
+    if(!selectedUser || !selectedUser.id){
+        return;
+    }
+
+    window.location.href =
+        "profile.html?id=" +
+        encodeURIComponent(selectedUser.id);
+
+}
+
+
 switch(status){  
 
     case "Away":  
@@ -778,9 +954,19 @@ data.forEach(user => {
         </span>  
     `;  
 
-    div.addEventListener("click", () => {  
-        openOwnerPanel(user.user_id);  
-    });  
+    div.addEventListener("click", () => {
+
+    if (window.innerWidth <= 720) {
+
+        openMobileProfile(user.user_id);
+
+    } else {
+
+        openOwnerPanel(user.user_id);
+
+    }
+
+});
 
     usersList.appendChild(div);  
 
