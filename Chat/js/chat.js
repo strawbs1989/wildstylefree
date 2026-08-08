@@ -299,7 +299,7 @@ if (error) {
     return;
 }
 
-alert("Ban saved successfully!");
+
 
 messageInput.value = "";  
 
@@ -597,7 +597,7 @@ closeOwnerPanel.addEventListener("click", () => {
 
 async function openOwnerPanel(userId){
 
-alert("Owner panel clicked!\nUser ID: " + userId);  
+
 
 if(currentUserRole !== "owner"){  
 
@@ -653,7 +653,7 @@ document
     .getElementById("ownerOverlay")  
     .classList.add("show");  
 
-alert("Owner panel should now be open!");
+
 
 }
 
