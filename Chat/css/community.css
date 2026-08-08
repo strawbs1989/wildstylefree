@@ -1226,3 +1226,203 @@ box-shadow:0 0 15px #7d4dff66;
     }
 
 }
+
+
+/* =====================================================
+   MSN STYLE MOBILE PROFILE CARD
+===================================================== */
+
+.mobile-profile-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(7px);
+    display:none;
+    z-index:10000;
+}
+
+.mobile-profile-overlay.show{
+    display:block;
+}
+
+.mobile-profile-card{
+    position:fixed;
+    left:50%;
+    bottom:20px;
+
+    width:calc(100% - 40px);
+    max-width:390px;
+
+    transform:translate(-50%,120%);
+
+    background:#1b1d2b;
+
+    border:2px solid #7c3aed;
+    border-radius:28px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.65),
+        0 0 35px rgba(124,58,237,.35);
+
+    padding:28px 22px;
+
+    text-align:center;
+
+    z-index:10001;
+
+    transition:transform .3s ease;
+
+    max-height:82vh;
+    overflow-y:auto;
+}
+
+.mobile-profile-card.open{
+    transform:translate(-50%,0);
+}
+
+.mobile-profile-close{
+    position:absolute;
+    top:12px;
+    right:14px;
+
+    width:38px;
+    height:38px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#7c3aed;
+    color:white;
+
+    font-size:20px;
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.mobile-profile-avatar{
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+    object-fit:cover;
+
+    border:3px solid #8a46ff;
+
+    box-shadow:
+        0 0 20px rgba(138,70,255,.6);
+
+    margin:10px auto 12px;
+
+    display:block;
+}
+
+.mobile-profile-card h2{
+    margin:5px 0;
+
+    color:white;
+
+    font-size:24px;
+    font-weight:800;
+}
+
+.mobile-profile-status{
+    color:#9cff9c;
+    font-weight:700;
+    margin-top:6px;
+}
+
+.mobile-profile-role{
+    display:inline-block;
+
+    margin-top:8px;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7
+    );
+
+    color:white;
+
+    font-weight:700;
+}
+
+.mobile-profile-button{
+    width:100%;
+
+    margin-top:10px;
+
+    padding:13px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#7c3aed;
+
+    color:white;
+
+    font-size:15px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.mobile-profile-button:active{
+    transform:scale(.97);
+}
+
+.mobile-moderation-tools{
+    margin-top:20px;
+
+    padding-top:18px;
+
+    border-top:1px solid rgba(255,255,255,.12);
+}
+
+.mobile-tools-title{
+    color:#c9a7ff;
+
+    font-size:14px;
+    font-weight:800;
+
+    margin-bottom:8px;
+
+    text-transform:uppercase;
+}
+
+.mobile-ban-button{
+    background:#c62828;
+}
+
+.mobile-delete-button{
+    background:#9e2b2b;
+}
+
+
+/* =====================================================
+   MOBILE ONLY
+===================================================== */
+
+@media (min-width:721px){
+
+    .mobile-profile-card,
+    .mobile-profile-overlay{
+        display:none !important;
+    }
+
+}
+
+@media (max-width:720px){
+
+    .mobile-profile-card{
+        display:block;
+    }
+
+}
