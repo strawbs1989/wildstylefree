@@ -1010,7 +1010,7 @@ box-shadow:0 0 15px #7d4dff66;
 
         width:100%;
         height:auto;
-        max-height:88dvh;
+        max-height:82dvh;
 
         border-left:none;
         border-top:2px solid #7c3aed;
@@ -1086,10 +1086,10 @@ box-shadow:0 0 15px #7d4dff66;
        OWNER BUTTONS
        ----------------------------------------- */
 
-    .owner-actions{
-        padding:12px 15px 25px;
-        gap:9px;
-    }
+    ..owner-actions{
+    padding:10px 15px 30px;
+    gap:7px;
+}
 
     .owner-actions button{
         min-height:48px;
