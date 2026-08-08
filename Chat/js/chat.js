@@ -1122,17 +1122,17 @@ async function loadOnlineUsers() {
 
         div.addEventListener("click", () => {
 
-            if (window.innerWidth <= 720) {
+    if (window.innerWidth <= 720) {
 
-                openMobileProfile(user.user_id);
+        openMobileProfile(user.user_id);
 
-            } else {
+    } else {
 
-                openOwnerPanel(user.user_id);
+        openOwnerPanel(user.user_id);
 
-            }
+    }
 
-        });
+});
 
         usersList.appendChild(div);
 
