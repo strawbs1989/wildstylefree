@@ -69,7 +69,7 @@ const {
     error: profileError
 } = await client
     .from("profiles")
-    .select("role, banned, ban_reason")
+    .select("role, status, banned, ban_reason")
     .eq("id", user.id)
     .single();
 
@@ -93,6 +93,10 @@ if (profileError) {
 }
 
 currentUserRole = profile?.role || "member";
+presenceStatus =
+    profile?.status || "Online";
+
+updateStatusButton(presenceStatus);
 await client
 .from("online_users")
 .upsert({
