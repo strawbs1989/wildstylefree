@@ -893,6 +893,36 @@ async function openMobileProfile(userId){
     mobileProfileRole.textContent =
         roleBadge;
 
+    // Private message button
+
+const privateMessageBtn =
+    document.getElementById("mobilePrivateMessageBtn");
+
+if(privateMessageBtn){
+
+    // Don't show PM button when viewing yourself
+    if(currentUser && userId === currentUser.id){
+
+        privateMessageBtn.style.display = "none";
+
+    } else {
+
+        privateMessageBtn.style.display = "block";
+
+        privateMessageBtn.onclick = () => {
+
+            openPrivateChat(
+                data.id,
+                data.display_name,
+                data.avatar_url
+            );
+
+        };
+
+    }
+
+}
+
 
     // Owner tools
 
