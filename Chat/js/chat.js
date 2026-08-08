@@ -902,28 +902,19 @@ const privateMessageBtn =
 
 if (privateMessageBtn) {
 
-    if (currentUser && userId === currentUser.id) {
+    privateMessageBtn.style.display = "block";
 
-        privateMessageBtn.style.display = "none";
+    privateMessageBtn.onclick = () => {
 
-    } else {
+        openPrivateChat(
+            data.id,
+            data.display_name,
+            data.avatar_url
+        );
 
-        privateMessageBtn.style.display = "block";
-
-        privateMessageBtn.onclick = () => {
-
-            openPrivateChat(
-                data.id,
-                data.display_name,
-                data.avatar_url
-            );
-
-        };
-
-    }
+    };
 
 }
-
 
     // Owner tools
 
