@@ -1538,3 +1538,29 @@ box-shadow:0 0 15px #7d4dff66;
     }
 
 }
+
+.private-message-btn {
+    display: none;
+    width: calc(100% - 40px);
+    margin: 18px 20px;
+    padding: 15px 18px;
+
+    border: 0;
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #6d28d9,
+        #9333ea
+    );
+
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.private-message-btn:active {
+    transform: scale(0.97);
+}
