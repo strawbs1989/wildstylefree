@@ -99,6 +99,30 @@ await client
 user_id: currentUser.id,
 last_seen: new Date().toISOString()
 });
+
+// ==========================================
+// ONLINE HEARTBEAT
+// ==========================================
+
+setInterval(async () => {
+
+    if (!currentUser) return;
+
+    const { error } = await client
+        .from("online_users")
+        .upsert({
+            user_id: currentUser.id,
+            last_seen: new Date().toISOString()
+        });
+
+    if (error) {
+        console.error("Online heartbeat error:", error);
+    }
+
+}, 30000);
+
+
+
 await client
 .from("chat_events")
 .insert([{
@@ -913,86 +937,99 @@ typingTimer = setTimeout(() => {
 
 async function loadOnlineUsers() {
 
-const { data, error } = await client  
-    .from("online_users")  
-    .select(`  
-        user_id,  
-        profiles (  
-            display_name,  
-            avatar_url,  
-            status,  
-            role  
-        )  
-    `);  
+    const { data, error } = await client
+        .from("online_users")
+        .select(`
+            user_id,
+            last_seen,
+            profiles (
+                display_name,
+                avatar_url,
+                status,
+                role
+            )
+        `);
 
-if (error) {  
-    console.error(error);  
-    return;  
-}  
-
-usersList.innerHTML = "";  
-
-data.forEach(user => {  
-
-    const name =  
-        user.profiles?.display_name || "Member";  
-
-    const avatar =  
-        user.profiles?.avatar_url || "/images/default-avatar.png";  
-
-    const div = document.createElement("div");  
-
-    div.className = "user";  
-
-    div.innerHTML = `  
-        <img  
-            src="${avatar}"  
-            class="online-avatar">  
-
-        <span>  
-            ${statusIcon(user.profiles?.status)}  
-            ${name}  
-        </span>  
-    `;  
-
-    div.addEventListener("click", () => {
-
-    if (window.innerWidth <= 720) {
-
-        openMobileProfile(user.user_id);
-
-    } else {
-
-        openOwnerPanel(user.user_id);
-
+    if (error) {
+        console.error("Online users error:", error);
+        return;
     }
 
-});
+    usersList.innerHTML = "";
 
-    usersList.appendChild(div);  
+    const now = Date.now();
 
-});
+    data.forEach(user => {
+
+        const lastSeen =
+            new Date(user.last_seen).getTime();
+
+        const secondsSinceLastSeen =
+            (now - lastSeen) / 1000;
+
+        // Only consider users active
+        // within the last 60 seconds
+        if (secondsSinceLastSeen > 60) {
+            return;
+        }
+
+        const name =
+            user.profiles?.display_name || "Member";
+
+        const avatar =
+            user.profiles?.avatar_url ||
+            "/images/default-avatar.png";
+
+        const status =
+            user.profiles?.status || "Online";
+
+        const div =
+            document.createElement("div");
+
+        div.className = "user";
+
+        div.innerHTML = `
+            <img
+                src="${avatar}"
+                class="online-avatar">
+
+            <span>
+                ${statusIcon(status)}
+                ${name}
+            </span>
+        `;
+
+        div.addEventListener("click", () => {
+
+            if (window.innerWidth <= 720) {
+
+                openMobileProfile(user.user_id);
+
+            } else {
+
+                openOwnerPanel(user.user_id);
+
+            }
+
+        });
+
+        usersList.appendChild(div);
+
+    });
 
 }
 
-function enableOnlineUsers() {
+// ==========================================
+// REFRESH ONLINE USERS
+// ==========================================
 
-client  
-    .channel("online-users")  
-    .on(  
-        "postgres_changes",  
-        {  
-            event: "*",  
-            schema: "public",  
-            table: "online_users"  
-        },  
-        () => {  
-            loadOnlineUsers();  
-        }  
-    )  
-    .subscribe();
+setInterval(() => {
 
-}
+    if (currentUser) {
+        loadOnlineUsers();
+    }
+
+}, 30000);
 
 // ==========================================
 // ROLE BUTTONS
