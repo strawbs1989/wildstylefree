@@ -161,7 +161,93 @@
     </div>
 
 </div>
+<!-- ==========================================
+     MOBILE MSN-STYLE PROFILE CARD
+========================================== -->
 
+<div id="mobileProfileOverlay" class="mobile-profile-overlay"></div>
+
+<div id="mobileProfileCard" class="mobile-profile-card">
+
+    <button
+        id="mobileProfileClose"
+        class="mobile-profile-close">
+        ✕
+    </button>
+
+    <img
+        id="mobileProfileAvatar"
+        src="/images/default-avatar.png"
+        class="mobile-profile-avatar"
+        alt="User avatar">
+
+    <h2 id="mobileProfileName">
+        User
+    </h2>
+
+    <div id="mobileProfileStatus" class="mobile-profile-status">
+        🟢 Online
+    </div>
+
+    <div id="mobileProfileRole" class="mobile-profile-role">
+        👤 Member
+    </div>
+
+    <button
+        class="mobile-profile-button"
+        onclick="mobileViewProfile()">
+        👤 View Profile
+    </button>
+
+    <!-- OWNER / ADMIN TOOLS -->
+
+    <div
+        id="mobileModerationTools"
+        class="mobile-moderation-tools">
+
+        <div class="mobile-tools-title">
+            👑 Owner Tools
+        </div>
+
+        <button
+            class="mobile-profile-button"
+            onclick="setRole('dj')">
+            🎧 Make DJ
+        </button>
+
+        <button
+            class="mobile-profile-button"
+            onclick="setRole('admin')">
+            🛡️ Make Admin
+        </button>
+
+        <button
+            class="mobile-profile-button"
+            onclick="setRole('vip')">
+            ⭐ Make VIP
+        </button>
+
+        <button
+            class="mobile-profile-button"
+            onclick="setRole('member')">
+            👤 Make Member
+        </button>
+
+        <button
+            class="mobile-profile-button mobile-ban-button"
+            onclick="banUser()">
+            🚫 Ban
+        </button>
+
+        <button
+            class="mobile-profile-button mobile-delete-button"
+            onclick="deleteAllMessages()">
+            🗑️ Delete Messages
+        </button>
+
+    </div>
+
+</div>
     
 <script src="js/supabase.js?v=3"></script>
 <script src="js/auth.js?v=3"></script>
