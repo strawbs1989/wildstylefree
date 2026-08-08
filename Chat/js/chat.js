@@ -893,15 +893,16 @@ async function openMobileProfile(userId){
     mobileProfileRole.textContent =
         roleBadge;
 
-    // Private message button
+   // ==========================================
+// PRIVATE MESSAGE BUTTON
+// ==========================================
 
 const privateMessageBtn =
     document.getElementById("mobilePrivateMessageBtn");
 
-if(privateMessageBtn){
+if (privateMessageBtn) {
 
-    // Don't show PM button when viewing yourself
-    if(currentUser && userId === currentUser.id){
+    if (currentUser && userId === currentUser.id) {
 
         privateMessageBtn.style.display = "none";
 
