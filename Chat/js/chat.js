@@ -342,53 +342,77 @@ updateTyping(false);
 
 function enableRealtime() {
 
-client  
-    .channel("wildstyle-chat")  
-    .on(  
-        "postgres_changes",  
-        {  
-            event: "INSERT",  
-            schema: "public",  
-            table: "messages"  
-        },  
-        async (payload) => {  
+    // ==========================================
+    // CHAT MESSAGES REALTIME
+    // ==========================================
 
-            const { data: profile } = await client
-    .from("profiles")
-    .select("display_name, avatar_url, role")
-    .eq("id", payload.new.user_id)
-    .single();
+    client
+        .channel("wildstyle-chat")
 
-            payload.new.profiles = profile;  
+        .on(
+            "postgres_changes",
+            {
+                event: "INSERT",
+                schema: "public",
+                table: "messages"
+            },
+            async (payload) => {
 
-            showMessage(payload.new);  
+                const { data: profile } = await client
+                    .from("profiles")
+                    .select("display_name, avatar_url, role")
+                    .eq("id", payload.new.user_id)
+                    .single();
 
-            scrollBottom();  
+                payload.new.profiles = profile;
 
-        }  
-    )  
-    .on(  
+                showMessage(payload.new);
 
-"postgres_changes",  
+                scrollBottom();
+            }
+        )
 
-{  
+        .on(
+            "postgres_changes",
+            {
+                event: "DELETE",
+                schema: "public",
+                table: "messages"
+            },
+            () => {
 
-    event: "DELETE",  
+                loadMessages();
 
-    schema: "public",  
+            }
+        )
 
-    table: "messages"  
+        .subscribe();
 
-},  
 
-() => {  
+    // ==========================================
+    // TYPING USERS REALTIME
+    // ==========================================
 
-    loadMessages();  
+    client
+        .channel("wildstyle-typing")
 
-}
+        .on(
+            "postgres_changes",
+            {
+                event: "*",
+                schema: "public",
+                table: "typing_users"
+            },
+            (payload) => {
 
-)
-.subscribe();
+                console.log("Typing change:", payload);
+
+                loadTypingUsers();
+
+            }
+        )
+
+        .subscribe();
 
 }
 
