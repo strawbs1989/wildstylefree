@@ -1142,29 +1142,39 @@ box-shadow:0 0 15px #7d4dff66;
 @media (max-width: 768px) {
 
     .owner-panel {
-        width: 100%;
-        max-width: 100%;
-        right: -100%;
-        height: 100dvh;
-        border-left: none;
-        border-top: 3px solid #7c3aed;
-        border-radius: 18px 18px 0 0;
+        width: 90%;
+        max-width: 420px;
+
+        right: -95%;
+
+        height: 92dvh;
+        top: 4dvh;
+
+        border-left: 2px solid #7c3aed;
+        border-top: 2px solid #7c3aed;
+
+        border-radius: 22px 0 0 22px;
+
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+
+        box-shadow:
+            -10px 0 40px rgba(0,0,0,.65),
+            0 0 30px rgba(124,58,237,.25);
     }
 
     .owner-panel.open {
         right: 0;
     }
 
-    /* Header */
-
     .owner-header {
         padding: 18px 20px;
         min-height: 70px;
+
         position: sticky;
         top: 0;
         z-index: 5;
+
         background: #1b1d2b;
     }
 
@@ -1176,37 +1186,25 @@ box-shadow:0 0 15px #7d4dff66;
     #closeOwnerPanel {
         width: 48px;
         height: 48px;
+
         font-size: 30px;
         border-radius: 14px;
-        background: rgba(124, 58, 237, .18);
-    }
 
-    /* Profile */
+        background: rgba(124,58,237,.18);
+    }
 
     .owner-profile {
         padding: 30px 20px 25px;
     }
 
     .owner-avatar {
-        width: 110px;
-        height: 110px;
-        border-width: 4px;
-        margin-bottom: 15px;
-        box-shadow:
-            0 0 0 6px rgba(124, 58, 237, .12),
-            0 0 25px rgba(124, 58, 237, .45);
+        width: 105px;
+        height: 105px;
     }
 
     .owner-profile h3 {
-        font-size: 26px;
-        margin: 8px 0;
+        font-size: 25px;
     }
-
-    .owner-profile p {
-        font-size: 16px;
-    }
-
-    /* Action area */
 
     .owner-actions {
         padding: 20px;
@@ -1217,17 +1215,21 @@ box-shadow:0 0 15px #7d4dff66;
     .owner-actions button {
         width: 100%;
         min-height: 58px;
+
         padding: 16px 18px;
+
         border-radius: 16px;
         font-size: 17px;
         font-weight: 800;
+
         touch-action: manipulation;
-        box-shadow: 0 5px 15px rgba(0,0,0,.25);
     }
 
     .owner-actions button:active {
         transform: scale(.97);
     }
+
+}
 
     .owner-actions hr {
         width: 100%;
