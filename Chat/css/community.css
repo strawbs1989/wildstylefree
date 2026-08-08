@@ -1142,25 +1142,24 @@ box-shadow:0 0 15px #7d4dff66;
 @media (max-width: 768px) {
 
     .owner-panel {
-        width: 90%;
-        max-width: 420px;
+        width: 75%;
+        max-width: 360px;
 
-        right: -95%;
+        right: -80%;
 
-        height: 92dvh;
-        top: 4dvh;
+        height: 88dvh;
+        top: 6dvh;
 
         border-left: 2px solid #7c3aed;
         border-top: 2px solid #7c3aed;
-
         border-radius: 22px 0 0 22px;
 
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
 
         box-shadow:
-            -10px 0 40px rgba(0,0,0,.65),
-            0 0 30px rgba(124,58,237,.25);
+            -10px 0 35px rgba(0,0,0,.7),
+            0 0 25px rgba(124,58,237,.25);
     }
 
     .owner-panel.open {
@@ -1168,62 +1167,50 @@ box-shadow:0 0 15px #7d4dff66;
     }
 
     .owner-header {
-        padding: 18px 20px;
-        min-height: 70px;
-
-        position: sticky;
-        top: 0;
-        z-index: 5;
-
-        background: #1b1d2b;
+        padding: 15px 16px;
+        min-height: 62px;
     }
 
     .owner-header h2 {
-        font-size: 22px;
-        margin: 0;
+        font-size: 19px;
     }
 
     #closeOwnerPanel {
-        width: 48px;
-        height: 48px;
-
-        font-size: 30px;
-        border-radius: 14px;
-
-        background: rgba(124,58,237,.18);
+        width: 44px;
+        height: 44px;
+        font-size: 27px;
+        border-radius: 12px;
     }
 
     .owner-profile {
-        padding: 30px 20px 25px;
+        padding: 22px 15px;
     }
 
     .owner-avatar {
-        width: 105px;
-        height: 105px;
+        width: 85px;
+        height: 85px;
     }
 
     .owner-profile h3 {
-        font-size: 25px;
+        font-size: 21px;
+    }
+
+    .owner-profile p {
+        font-size: 14px;
     }
 
     .owner-actions {
-        padding: 20px;
-        gap: 14px;
-        padding-bottom: 40px;
+        padding: 15px;
+        gap: 10px;
     }
 
     .owner-actions button {
-        width: 100%;
-        min-height: 58px;
-
-        padding: 16px 18px;
-
-        border-radius: 16px;
-        font-size: 17px;
-        font-weight: 800;
-
-        touch-action: manipulation;
+        min-height: 50px;
+        padding: 12px;
+        border-radius: 13px;
+        font-size: 15px;
     }
+}
 
     .owner-actions button:active {
         transform: scale(.97);
