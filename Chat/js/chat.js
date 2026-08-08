@@ -131,8 +131,6 @@ message: "🎉 " + currentUser.email + " joined the chat"
 
 loadOnlineUsers();
 
-enableOnlineUsers();
-
 await loadMessages();  
 
 enableRealtime();
