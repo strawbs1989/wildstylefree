@@ -336,6 +336,79 @@ updateTyping(false);
 
 }
 
+
+// ==========================================
+// LOAD TYPING USERS
+// ==========================================
+
+async function loadTypingUsers() {
+
+    const { data, error } = await client
+        .from("typing_users")
+        .select(`
+            user_id,
+            is_typing,
+            profiles (
+                display_name
+            )
+        `)
+        .eq("is_typing", true);
+
+    if (error) {
+        console.error("Typing users error:", error);
+        return;
+    }
+
+    // Remove old typing indicator
+    const existing = document.getElementById("typing-indicator");
+
+    if (existing) {
+        existing.remove();
+    }
+
+    if (!data || data.length === 0) {
+        return;
+    }
+
+    // Don't show ourselves as typing
+    const otherUsers = data.filter(
+        user => user.user_id !== currentUser?.id
+    );
+
+    if (otherUsers.length === 0) {
+        return;
+    }
+
+    const names = otherUsers.map(
+        user => user.profiles?.display_name || "Someone"
+    );
+
+    const indicator = document.createElement("div");
+
+    indicator.id = "typing-indicator";
+    indicator.className = "typing-indicator";
+
+    indicator.innerHTML = `
+        ✍️ ${names.join(", ")}
+        ${names.length === 1 ? "is" : "are"} typing...
+    `;
+
+    // Put the indicator above the message input
+    const inputArea =
+        document.querySelector(".chat-input") ||
+        document.querySelector(".input-area") ||
+        document.querySelector(".message-input");
+
+    if (inputArea) {
+        inputArea.parentNode.insertBefore(
+            indicator,
+            inputArea
+        );
+    }
+}
+
+
+
 // ==========================================
 // REALTIME
 // ==========================================
