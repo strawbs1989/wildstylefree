@@ -1207,3 +1207,128 @@ async function deleteAllMessages() {
     alert("Messages deleted successfully.");
 
 }
+
+
+
+// =====================================================
+// MSN STYLE STATUS SELECTOR
+// =====================================================
+
+const statusButton =
+    document.getElementById("statusButton");
+
+const statusMenu =
+    document.getElementById("statusMenu");
+
+
+// Open / close menu
+
+statusButton.addEventListener("click", (event) => {
+
+    event.stopPropagation();
+
+    statusMenu.classList.toggle("open");
+
+});
+
+
+// Choose status
+
+statusMenu
+    .querySelectorAll("button[data-status]")
+    .forEach(button => {
+
+        button.addEventListener("click", async () => {
+
+            const status =
+                button.dataset.status;
+
+            await setManualStatus(status);
+
+            statusMenu.classList.remove("open");
+
+        });
+
+    });
+
+
+// Close when clicking elsewhere
+
+document.addEventListener("click", () => {
+
+    statusMenu.classList.remove("open");
+
+});
+
+
+// =====================================================
+// SET MANUAL STATUS
+// =====================================================
+
+async function setManualStatus(status) {
+
+    if (!currentUser) return;
+
+    const { error } = await client
+        .from("profiles")
+        .update({
+            status: status
+        })
+        .eq("id", currentUser.id);
+
+    if (error) {
+
+        console.error(
+            "Status update error:",
+            error
+        );
+
+        alert(error.message);
+
+        return;
+    }
+
+    presenceStatus = status;
+
+    updateStatusButton(status);
+
+    await loadOnlineUsers();
+
+}
+
+
+// =====================================================
+// UPDATE STATUS BUTTON
+// =====================================================
+
+function updateStatusButton(status) {
+
+    let label = "🟢 Online";
+
+    switch (status) {
+
+        case "Online":
+            label = "🟢 Online";
+            break;
+
+        case "Away":
+            label = "🟡 Away";
+            break;
+
+        case "Busy":
+            label = "🔴 Busy";
+            break;
+
+        case "Be Right Back":
+            label = "🟠 Be Right Back";
+            break;
+
+        case "Invisible":
+            label = "⚫ Invisible";
+            break;
+
+    }
+
+    statusButton.textContent = label;
+
+}
