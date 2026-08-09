@@ -1002,6 +1002,703 @@ switch(status){
 
 
 
+/* =====================================================
+   PRIVATE MESSAGING SYSTEM
+===================================================== */
+
+let privateChatRecipient = null;
+let privateChatChannel = null;
+
+
+/* =====================================================
+   OPEN PRIVATE CHAT
+===================================================== */
+
+async function openPrivateChat(
+    userId,
+    displayName,
+    avatarUrl
+){
+
+    console.log(
+        "Opening private chat with:",
+        userId,
+        displayName
+    );
+
+    /* Don't message yourself */
+
+    if(currentUser && userId === currentUser.id){
+
+        alert("You cannot send a private message to yourself.");
+
+        return;
+    }
+
+
+    if(!currentUser){
+
+        alert("Please log in first.");
+
+        return;
+    }
+
+
+    privateChatRecipient = userId;
+
+
+    /* Update header */
+
+    const nameEl =
+        document.getElementById(
+            "privateChatName"
+        );
+
+    const avatarEl =
+        document.getElementById(
+            "privateChatAvatar"
+        );
+
+
+    if(nameEl){
+
+        nameEl.textContent =
+            displayName || "Member";
+
+    }
+
+
+    if(avatarEl){
+
+        avatarEl.src =
+            avatarUrl ||
+            "/images/default-avatar.png";
+
+    }
+
+
+    /* Close the profile card */
+
+    if(typeof closeMobileProfile === "function"){
+
+        closeMobileProfile();
+
+    }
+
+
+    /* Open private chat */
+
+    const overlay =
+        document.getElementById(
+            "privateChatOverlay"
+        );
+
+
+    if(!overlay){
+
+        console.error(
+            "privateChatOverlay not found"
+        );
+
+        return;
+    }
+
+
+    overlay.classList.add("open");
+
+
+    /* Load messages */
+
+    await loadPrivateMessages();
+
+
+    /* Start realtime */
+
+    enablePrivateChatRealtime();
+
+
+    /* Focus input */
+
+    setTimeout(() => {
+
+        document
+            .getElementById("privateChatInput")
+            ?.focus();
+
+    },100);
+
+}
+
+
+/* =====================================================
+   CLOSE PRIVATE CHAT
+===================================================== */
+
+function closePrivateChat(){
+
+    const overlay =
+        document.getElementById(
+            "privateChatOverlay"
+        );
+
+
+    if(overlay){
+
+        overlay.classList.remove("open");
+
+    }
+
+
+    privateChatRecipient = null;
+
+
+    if(privateChatChannel){
+
+        client.removeChannel(
+            privateChatChannel
+        );
+
+        privateChatChannel = null;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD PRIVATE MESSAGES
+===================================================== */
+
+async function loadPrivateMessages(){
+
+    if(!currentUser ||
+       !privateChatRecipient){
+
+        return;
+    }
+
+
+    const container =
+        document.getElementById(
+            "privateChatMessages"
+        );
+
+
+    if(!container){
+
+        return;
+    }
+
+
+    container.innerHTML = `
+        <div class="private-chat-loading">
+            Loading conversation...
+        </div>
+    `;
+
+
+    const { data, error } = await client
+
+        .from("private_messages")
+
+        .select("*")
+
+        .or(
+            `and(sender_id.eq.${currentUser.id},recipient_id.eq.${privateChatRecipient}),and(sender_id.eq.${privateChatRecipient},recipient_id.eq.${currentUser.id})`
+        )
+
+        .order(
+            "created_at",
+            {
+                ascending:true
+            }
+        );
+
+
+    if(error){
+
+        console.error(
+            "Private message load error:",
+            error
+        );
+
+
+        container.innerHTML = `
+            <div class="private-chat-loading">
+                ❌ Could not load messages.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    if(!data || data.length === 0){
+
+        container.innerHTML = `
+            <div class="private-chat-loading">
+                👋 No messages yet.<br>
+                Start the conversation!
+            </div>
+        `;
+
+        return;
+    }
+
+
+    data.forEach(
+        showPrivateMessage
+    );
+
+
+    scrollPrivateMessages();
+
+}
+
+
+/* =====================================================
+   DISPLAY PRIVATE MESSAGE
+===================================================== */
+
+function showPrivateMessage(msg){
+
+    const container =
+        document.getElementById(
+            "privateChatMessages"
+        );
+
+
+    if(!container){
+
+        return;
+    }
+
+
+    const div =
+        document.createElement("div");
+
+
+    const mine =
+        msg.sender_id === currentUser.id;
+
+
+    div.className =
+        "private-message " +
+        (mine ? "mine" : "theirs");
+
+
+    const safeText =
+        escapeHTML(
+            msg.message
+        );
+
+
+    const time =
+        new Date(
+            msg.created_at
+        ).toLocaleTimeString(
+            [],
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+
+    div.innerHTML = `
+        ${safeText}
+
+        <span class="private-message-time">
+            ${time}
+        </span>
+    `;
+
+
+    container.appendChild(div);
+
+}
+
+
+/* =====================================================
+   SEND PRIVATE MESSAGE
+===================================================== */
+
+async function sendPrivateMessage(){
+
+    if(!currentUser){
+
+        alert("Please log in.");
+
+        return;
+    }
+
+
+    if(!privateChatRecipient){
+
+        return;
+    }
+
+
+    const input =
+        document.getElementById(
+            "privateChatInput"
+        );
+
+
+    if(!input){
+
+        return;
+    }
+
+
+    const text =
+        input.value.trim();
+
+
+    if(!text){
+
+        return;
+    }
+
+
+    /* Prevent accidental self-message */
+
+    if(
+        privateChatRecipient ===
+        currentUser.id
+    ){
+
+        return;
+    }
+
+
+    input.disabled = true;
+
+
+    const { data, error } =
+        await client
+
+        .from("private_messages")
+
+        .insert({
+
+            sender_id:
+                currentUser.id,
+
+            recipient_id:
+                privateChatRecipient,
+
+            message:
+                text
+
+        })
+
+        .select()
+
+        .single();
+
+
+    input.disabled = false;
+
+
+    if(error){
+
+        console.error(
+            "Private message send error:",
+            error
+        );
+
+
+        alert(
+            "Could not send private message.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    input.value = "";
+
+
+    /*
+       Realtime normally displays this.
+       But displaying it immediately also
+       makes the interface feel instant.
+    */
+
+    if(data){
+
+        showPrivateMessage(data);
+
+        scrollPrivateMessages();
+
+    }
+
+
+    input.focus();
+
+}
+
+
+/* =====================================================
+   REALTIME PRIVATE MESSAGES
+===================================================== */
+
+function enablePrivateChatRealtime(){
+
+    if(!currentUser ||
+       !privateChatRecipient){
+
+        return;
+    }
+
+
+    /* Remove old channel */
+
+    if(privateChatChannel){
+
+        client.removeChannel(
+            privateChatChannel
+        );
+
+        privateChatChannel = null;
+
+    }
+
+
+    const recipient =
+        privateChatRecipient;
+
+
+    privateChatChannel =
+
+        client
+
+        .channel(
+            "private-chat-" +
+            currentUser.id +
+            "-" +
+            recipient
+        )
+
+        .on(
+
+            "postgres_changes",
+
+            {
+
+                event:"INSERT",
+
+                schema:"public",
+
+                table:"private_messages"
+
+            },
+
+            payload => {
+
+                const msg =
+                    payload.new;
+
+
+                /*
+                   Only show messages belonging
+                   to this conversation.
+                */
+
+                const belongsToChat =
+
+                    (
+                        msg.sender_id ===
+                        currentUser.id &&
+
+                        msg.recipient_id ===
+                        recipient
+                    )
+
+                    ||
+
+                    (
+                        msg.sender_id ===
+                        recipient &&
+
+                        msg.recipient_id ===
+                        currentUser.id
+                    );
+
+
+                if(!belongsToChat){
+
+                    return;
+                }
+
+
+                /*
+                   Don't duplicate our own
+                   message because we already
+                   displayed it immediately.
+                */
+
+                if(
+                    msg.sender_id ===
+                    currentUser.id
+                ){
+
+                    return;
+
+                }
+
+
+                showPrivateMessage(msg);
+
+                scrollPrivateMessages();
+
+            }
+
+        )
+
+        .subscribe();
+
+}
+
+
+/* =====================================================
+   SCROLL PRIVATE CHAT
+===================================================== */
+
+function scrollPrivateMessages(){
+
+    const container =
+        document.getElementById(
+            "privateChatMessages"
+        );
+
+
+    if(!container){
+
+        return;
+    }
+
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+/* =====================================================
+   PRIVATE CHAT EVENTS
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const closeBtn =
+            document.getElementById(
+                "privateChatClose"
+            );
+
+
+        const sendBtn =
+            document.getElementById(
+                "privateChatSend"
+            );
+
+
+        const input =
+            document.getElementById(
+                "privateChatInput"
+            );
+
+
+        const overlay =
+            document.getElementById(
+                "privateChatOverlay"
+            );
+
+
+        if(closeBtn){
+
+            closeBtn.addEventListener(
+                "click",
+                closePrivateChat
+            );
+
+        }
+
+
+        if(sendBtn){
+
+            sendBtn.addEventListener(
+                "click",
+                sendPrivateMessage
+            );
+
+        }
+
+
+        if(input){
+
+            input.addEventListener(
+                "keydown",
+                e => {
+
+                    if(
+                        e.key === "Enter"
+                    ){
+
+                        e.preventDefault();
+
+                        sendPrivateMessage();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /*
+           Clicking the dark background
+           closes the private chat.
+        */
+
+        if(overlay){
+
+            overlay.addEventListener(
+                "click",
+                e => {
+
+                    if(
+                        e.target === overlay
+                    ){
+
+                        closePrivateChat();
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* Make function available to
+   the existing profile button */
+
+window.openPrivateChat =
+    openPrivateChat;
+
+
 // ==========================================
 // EVENTS
 // ==========================================
