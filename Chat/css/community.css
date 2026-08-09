@@ -1631,12 +1631,9 @@ box-shadow:0 0 15px #7d4dff66;
         transform .25s ease;
 }
 
-#privateChatOverlay.open
+.private-chat-overlay.open
 .private-chat-window {
-
-    transform:
-        scale(1)
-        translateY(0);
+    transform: translateY(0);
 }
 
 
