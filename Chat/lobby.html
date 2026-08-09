@@ -300,6 +300,76 @@
     </div>
 
 </div>
+
+
+<!-- ==========================================
+     PRIVATE MESSAGE WINDOW
+========================================== -->
+
+<div id="privateChatOverlay" class="private-chat-overlay">
+
+    <div id="privateChatWindow" class="private-chat-window">
+
+        <div class="private-chat-header">
+
+            <div class="private-chat-user">
+
+                <img
+                    id="privateChatAvatar"
+                    src="/images/default-avatar.png"
+                    alt="">
+
+                <div>
+                    <strong id="privateChatName">
+                        Private Message
+                    </strong>
+
+                    <small>
+                        🔒 Private conversation
+                    </small>
+                </div>
+
+            </div>
+
+            <button
+                id="privateChatClose"
+                type="button">
+                ✕
+            </button>
+
+        </div>
+
+
+        <div
+            id="privateChatMessages"
+            class="private-chat-messages">
+
+            <div class="private-chat-loading">
+                Loading conversation...
+            </div>
+
+        </div>
+
+
+        <div class="private-chat-input-area">
+
+            <input
+                type="text"
+                id="privateChatInput"
+                placeholder="Type a private message..."
+                autocomplete="off">
+
+            <button
+                id="privateChatSend"
+                type="button">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
     
 <script src="js/supabase.js?v=3"></script>
 <script src="js/auth.js?v=3"></script>
