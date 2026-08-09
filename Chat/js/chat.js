@@ -768,7 +768,28 @@ ownerRole.textContent =
     "Role: " + (data.role || "member");  
 
 ownerStatus.textContent =  
-    "Status: " + (data.status || "Online");  
+    "Status: " + (data.status || "Online");
+
+
+const desktopPrivateMessageBtn =
+    document.getElementById("desktopPrivateMessageBtn");
+
+if (desktopPrivateMessageBtn) {
+
+    desktopPrivateMessageBtn.style.display = "block";
+
+    desktopPrivateMessageBtn.onclick = () => {
+
+        openPrivateChat(
+            data.id,
+            data.display_name,
+            data.avatar_url
+        );
+
+    };
+
+}
+  
 
 ownerPanel.classList.remove("hidden");  
 
