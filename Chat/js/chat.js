@@ -784,6 +784,22 @@ document
 window.openOwnerPanel = openOwnerPanel;
 function statusIcon(status){
 
+    switch(status){
+
+        case "Away":
+            return "🟡 ";
+
+        case "Busy":
+            return "🔴 ";
+
+        case "Be Right Back":
+            return "🟠 ";
+
+        default:
+            return "🟢 ";
+    }
+}
+
 // =====================================================
 // MSN STYLE MOBILE PROFILE
 // =====================================================
@@ -982,21 +998,7 @@ function mobileViewProfile(){
 }
 
 
-switch(status){  
 
-    case "Away":  
-        return "🟡 ";  
-
-    case "Busy":  
-        return "🔴 ";  
-
-    case "Be Right Back":  
-        return "🟠 ";  
-
-    default:  
-        return "🟢 ";  
-
-}
 
 }
 
