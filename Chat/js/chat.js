@@ -1805,12 +1805,14 @@ async function loadOnlineUsers() {
 
         div.addEventListener("click", () => {
 
-    if (window.innerWidth <= 720) {
+    if (window.innerWidth <= 768) {
 
+        // 📱 MOBILE
         openMobileProfile(user.user_id);
 
     } else {
 
+        // 💻 DESKTOP
         openOwnerPanel(user.user_id);
 
     }
