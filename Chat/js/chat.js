@@ -996,15 +996,6 @@ function mobileViewProfile(){
         encodeURIComponent(selectedUser.id);
 }
 
-
-/* =====================================================
-   PRIVATE MESSAGING SYSTEM
-===================================================== */
-
-let privateChatRecipient = null;
-let privateChatChannel = null;
-
-
 /* =====================================================
    OPEN PRIVATE CHAT
 ===================================================== */
