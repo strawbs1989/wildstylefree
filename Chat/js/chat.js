@@ -994,14 +994,7 @@ function mobileViewProfile(){
     window.location.href =
         "profile.html?id=" +
         encodeURIComponent(selectedUser.id);
-
 }
-
-
-
-
-}
-
 
 
 /* =====================================================
