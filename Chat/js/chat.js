@@ -1455,3 +1455,625 @@ function updateStatusButton(status) {
     statusButton.textContent = label;
 
 }
+
+// =====================================================
+// PRIVATE MESSAGING
+// =====================================================
+
+let privateChatUser = null;
+let privateChatChannel = null;
+
+
+// =====================================================
+// OPEN PRIVATE CHAT
+// =====================================================
+
+async function openPrivateChat(userId, name, avatar) {
+
+    if (!currentUser) return;
+
+    // Don't message yourself
+    if (userId === currentUser.id) {
+        alert("You can't send a private message to yourself.");
+        return;
+    }
+
+    privateChatUser = {
+        id: userId,
+        name: name || "Member",
+        avatar: avatar || "/images/default-avatar.png"
+    };
+
+    // Close mobile profile
+    if (typeof closeMobileProfile === "function") {
+        closeMobileProfile();
+    }
+
+    createPrivateChatWindow();
+
+    await loadPrivateMessages();
+
+    enablePrivateRealtime();
+
+    document
+        .getElementById("privateMessageInput")
+        ?.focus();
+}
+
+
+// =====================================================
+// CREATE PRIVATE CHAT WINDOW
+// =====================================================
+
+function createPrivateChatWindow() {
+
+    // Already exists
+    if (document.getElementById("privateChatOverlay")) {
+        document
+            .getElementById("privateChatOverlay")
+            .classList.add("open");
+
+        updatePrivateChatHeader();
+        return;
+    }
+
+    const overlay = document.createElement("div");
+
+    overlay.id = "privateChatOverlay";
+
+    overlay.innerHTML = `
+
+        <div class="private-chat-window">
+
+            <div class="private-chat-header">
+
+                <button
+                    id="privateChatBack"
+                    class="private-chat-back">
+                    ←
+                </button>
+
+                <img
+                    id="privateChatAvatar"
+                    src="/images/default-avatar.png"
+                    class="private-chat-avatar">
+
+                <div class="private-chat-user-info">
+
+                    <strong id="privateChatName">
+                        Member
+                    </strong>
+
+                    <span id="privateChatStatus">
+                        🟢 Private Conversation
+                    </span>
+
+                </div>
+
+                <button
+                    id="privateChatClose"
+                    class="private-chat-close">
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div
+                id="privateMessages"
+                class="private-messages">
+
+                <div class="private-chat-loading">
+                    Loading conversation...
+                </div>
+
+            </div>
+
+
+            <div class="private-message-input-area">
+
+                <input
+                    type="text"
+                    id="privateMessageInput"
+                    placeholder="Type a private message..."
+                    autocomplete="off">
+
+                <button
+                    id="privateEmojiBtn"
+                    type="button">
+                    😊
+                </button>
+
+                <button
+                    id="privateSendBtn"
+                    type="button">
+                    Send
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    requestAnimationFrame(() => {
+        overlay.classList.add("open");
+    });
+
+
+    // Close buttons
+
+    document
+        .getElementById("privateChatClose")
+        .addEventListener("click", closePrivateChat);
+
+
+    document
+        .getElementById("privateChatBack")
+        .addEventListener("click", closePrivateChat);
+
+
+    // Send
+
+    document
+        .getElementById("privateSendBtn")
+        .addEventListener(
+            "click",
+            sendPrivateMessage
+        );
+
+
+    // Enter to send
+
+    document
+        .getElementById("privateMessageInput")
+        .addEventListener("keydown", function(e) {
+
+            if (e.key === "Enter") {
+
+                e.preventDefault();
+
+                sendPrivateMessage();
+
+            }
+
+        });
+
+
+    updatePrivateChatHeader();
+}
+
+
+// =====================================================
+// UPDATE HEADER
+// =====================================================
+
+function updatePrivateChatHeader() {
+
+    if (!privateChatUser) return;
+
+    const avatar =
+        document.getElementById("privateChatAvatar");
+
+    const name =
+        document.getElementById("privateChatName");
+
+    if (avatar) {
+        avatar.src =
+            privateChatUser.avatar ||
+            "/images/default-avatar.png";
+    }
+
+    if (name) {
+        name.textContent =
+            privateChatUser.name;
+    }
+
+}
+
+
+// =====================================================
+// LOAD PRIVATE MESSAGES
+// =====================================================
+
+async function loadPrivateMessages() {
+
+    if (!privateChatUser || !currentUser) return;
+
+    const privateMessages =
+        document.getElementById("privateMessages");
+
+    if (!privateMessages) return;
+
+    const { data, error } = await client
+
+        .from("private_messages")
+
+        .select("*")
+
+        .or(
+            `and(sender_id.eq.${currentUser.id},recipient_id.eq.${privateChatUser.id}),and(sender_id.eq.${privateChatUser.id},recipient_id.eq.${currentUser.id})`
+        )
+
+        .order("created_at", {
+            ascending: true
+        });
+
+
+    if (error) {
+
+        console.error(
+            "Private messages error:",
+            error
+        );
+
+        privateMessages.innerHTML = `
+            <div class="private-chat-error">
+                Unable to load private messages.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    privateMessages.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+        privateMessages.innerHTML = `
+            <div class="private-chat-empty">
+                💜 No private messages yet.<br>
+                Start the conversation!
+            </div>
+        `;
+
+        return;
+    }
+
+
+    data.forEach(
+        showPrivateMessage
+    );
+
+
+    scrollPrivateMessages();
+
+    await markPrivateMessagesRead();
+
+}
+
+
+// =====================================================
+// SHOW PRIVATE MESSAGE
+// =====================================================
+
+function showPrivateMessage(msg) {
+
+    const container =
+        document.getElementById("privateMessages");
+
+    if (!container) return;
+
+
+    const mine =
+        msg.sender_id === currentUser.id;
+
+
+    const div =
+        document.createElement("div");
+
+
+    div.className =
+        mine
+            ? "private-message mine"
+            : "private-message received";
+
+
+    const bubble =
+        document.createElement("div");
+
+
+    bubble.className =
+        "private-message-bubble";
+
+
+    bubble.textContent =
+        msg.message;
+
+
+    const time =
+        document.createElement("div");
+
+
+    time.className =
+        "private-message-time";
+
+
+    time.textContent =
+        new Date(
+            msg.created_at
+        ).toLocaleTimeString([], {
+
+            hour: "2-digit",
+
+            minute: "2-digit"
+
+        });
+
+
+    div.appendChild(bubble);
+
+    div.appendChild(time);
+
+    container.appendChild(div);
+
+}
+
+
+// =====================================================
+// SEND PRIVATE MESSAGE
+// =====================================================
+
+async function sendPrivateMessage() {
+
+    if (!currentUser || !privateChatUser) {
+        return;
+    }
+
+
+    const input =
+        document.getElementById(
+            "privateMessageInput"
+        );
+
+
+    if (!input) return;
+
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) return;
+
+
+    const { data, error } =
+        await client
+
+            .from("private_messages")
+
+            .insert({
+
+                sender_id:
+                    currentUser.id,
+
+                recipient_id:
+                    privateChatUser.id,
+
+                message:
+                    text
+
+            })
+
+            .select()
+
+            .single();
+
+
+    if (error) {
+
+        console.error(
+            "Private message send error:",
+            error
+        );
+
+        alert(
+            "Could not send message:\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    input.value = "";
+
+
+    if (data) {
+
+        showPrivateMessage(data);
+
+        scrollPrivateMessages();
+
+    }
+
+}
+
+
+// =====================================================
+// PRIVATE REALTIME
+// =====================================================
+
+function enablePrivateRealtime() {
+
+    if (!currentUser || !privateChatUser) {
+        return;
+    }
+
+
+    // Remove previous channel
+
+    if (privateChatChannel) {
+
+        client.removeChannel(
+            privateChatChannel
+        );
+
+    }
+
+
+    privateChatChannel =
+        client
+
+            .channel(
+                "private-chat-" +
+                currentUser.id +
+                "-" +
+                privateChatUser.id
+            )
+
+            .on(
+
+                "postgres_changes",
+
+                {
+
+                    event: "INSERT",
+
+                    schema: "public",
+
+                    table: "private_messages",
+
+                    filter:
+                        "recipient_id=eq." +
+                        currentUser.id
+
+                },
+
+                async (payload) => {
+
+                    if (
+                        payload.new.sender_id !==
+                        privateChatUser.id
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    showPrivateMessage(
+                        payload.new
+                    );
+
+
+                    scrollPrivateMessages();
+
+
+                    await markPrivateMessagesRead();
+
+                }
+
+            )
+
+            .subscribe();
+
+}
+
+
+// =====================================================
+// MARK MESSAGES AS READ
+// =====================================================
+
+async function markPrivateMessagesRead() {
+
+    if (!currentUser || !privateChatUser) {
+        return;
+    }
+
+
+    const { error } =
+        await client
+
+            .from("private_messages")
+
+            .update({
+                is_read: true
+            })
+
+            .eq(
+                "sender_id",
+                privateChatUser.id
+            )
+
+            .eq(
+                "recipient_id",
+                currentUser.id
+            )
+
+            .eq(
+                "is_read",
+                false
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Private read error:",
+            error
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// SCROLL PRIVATE CHAT
+// =====================================================
+
+function scrollPrivateMessages() {
+
+    const box =
+        document.getElementById(
+            "privateMessages"
+        );
+
+    if (!box) return;
+
+
+    box.scrollTop =
+        box.scrollHeight;
+
+}
+
+
+// =====================================================
+// CLOSE PRIVATE CHAT
+// =====================================================
+
+function closePrivateChat() {
+
+    const overlay =
+        document.getElementById(
+            "privateChatOverlay"
+        );
+
+
+    if (overlay) {
+
+        overlay.classList.remove(
+            "open"
+        );
+
+    }
+
+
+    if (privateChatChannel) {
+
+        client.removeChannel(
+            privateChatChannel
+        );
+
+        privateChatChannel = null;
+
+    }
+
+
+    privateChatUser = null;
+
+}
