@@ -2760,3 +2760,482 @@ function closePrivateChat() {
     privateChatUser = null;
 
 }
+
+
+/* =========================================================
+   WILDSTYLE PRIVATE CHAT - FINAL FIX
+   ========================================================= */
+
+(function () {
+
+    let wsPrivateUser = null;
+    let wsPrivateChannel = null;
+
+    window.openPrivateChat = async function (userId, displayName, avatarUrl) {
+
+        console.log("Wildstyle PM opening:", userId, displayName);
+
+        if (!window.currentUser && typeof currentUser !== "undefined") {
+            window.currentUser = currentUser;
+        }
+
+        if (!currentUser) {
+            alert("Please log in first.");
+            return;
+        }
+
+        if (!userId) {
+            console.error("Private chat: missing user ID");
+            alert("Unable to open private chat.");
+            return;
+        }
+
+        if (userId === currentUser.id) {
+            alert("You cannot message yourself.");
+            return;
+        }
+
+        wsPrivateUser = {
+            id: userId,
+            name: displayName || "Member",
+            avatar: avatarUrl || "/images/default-avatar.png"
+        };
+
+        /* Remove old window */
+        const old = document.getElementById("wsPrivateChatOverlay");
+
+        if (old) {
+            old.remove();
+        }
+
+        /* Remove old realtime channel */
+        if (wsPrivateChannel) {
+            try {
+                await client.removeChannel(wsPrivateChannel);
+            } catch (e) {
+                console.warn(e);
+            }
+
+            wsPrivateChannel = null;
+        }
+
+        /* Create window */
+        const overlay = document.createElement("div");
+
+        overlay.id = "wsPrivateChatOverlay";
+        overlay.className = "private-chat-overlay open";
+
+        overlay.innerHTML = `
+            <div class="private-chat-window">
+
+                <div class="private-chat-header">
+
+                    <button
+                        type="button"
+                        id="wsPrivateBack"
+                        class="private-chat-back">
+                        ←
+                    </button>
+
+                    <img
+                        src="${wsPrivateUser.avatar}"
+                        class="private-chat-avatar"
+                        onerror="this.src='/images/default-avatar.png';">
+
+                    <div class="private-chat-user-info">
+
+                        <strong>
+                            ${escapeHtml(wsPrivateUser.name)}
+                        </strong>
+
+                        <span>
+                            🟢 Private Conversation
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="wsPrivateClose"
+                        class="private-chat-close">
+                        ✕
+                    </button>
+
+                </div>
+
+                <div
+                    id="wsPrivateMessages"
+                    class="private-messages">
+
+                    <div class="private-chat-loading">
+                        Loading conversation...
+                    </div>
+
+                </div>
+
+                <div class="private-message-input-area">
+
+                    <button
+                        type="button"
+                        id="wsPrivateEmoji"
+                        class="private-emoji-btn">
+                        😊
+                    </button>
+
+                    <input
+                        type="text"
+                        id="wsPrivateInput"
+                        placeholder="Type a private message..."
+                        autocomplete="off">
+
+                    <button
+                        type="button"
+                        id="wsPrivateSend"
+                        class="private-send-btn">
+                        Send
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        /* Close */
+        document
+            .getElementById("wsPrivateClose")
+            .onclick = closeWsPrivateChat;
+
+        document
+            .getElementById("wsPrivateBack")
+            .onclick = closeWsPrivateChat;
+
+        /* Send */
+        document
+            .getElementById("wsPrivateSend")
+            .onclick = sendWsPrivateMessage;
+
+        /* Enter */
+        document
+            .getElementById("wsPrivateInput")
+            .addEventListener("keydown", function (e) {
+
+                if (e.key === "Enter") {
+
+                    e.preventDefault();
+
+                    sendWsPrivateMessage();
+
+                }
+
+            });
+
+        /* Load */
+        await loadWsPrivateMessages();
+
+        /* Realtime */
+        startWsPrivateRealtime();
+
+        setTimeout(() => {
+
+            document
+                .getElementById("wsPrivateInput")
+                ?.focus();
+
+        }, 100);
+
+    };
+
+
+    async function loadWsPrivateMessages() {
+
+        const box =
+            document.getElementById("wsPrivateMessages");
+
+        if (!box || !wsPrivateUser || !currentUser) {
+            return;
+        }
+
+        const { data, error } = await client
+            .from("private_messages")
+            .select("*")
+            .or(
+                `and(sender_id.eq.${currentUser.id},recipient_id.eq.${wsPrivateUser.id}),and(sender_id.eq.${wsPrivateUser.id},recipient_id.eq.${currentUser.id})`
+            )
+            .order("created_at", {
+                ascending: true
+            });
+
+        if (error) {
+
+            console.error(
+                "Private message load error:",
+                error
+            );
+
+            box.innerHTML = `
+                <div class="private-chat-error">
+                    Unable to load private messages.
+                </div>
+            `;
+
+            return;
+        }
+
+        box.innerHTML = "";
+
+        if (!data || data.length === 0) {
+
+            box.innerHTML = `
+                <div class="private-chat-empty">
+                    💜 No private messages yet.<br>
+                    Start the conversation!
+                </div>
+            `;
+
+            return;
+        }
+
+        data.forEach(wsShowPrivateMessage);
+
+        box.scrollTop = box.scrollHeight;
+
+    }
+
+
+    function wsShowPrivateMessage(msg) {
+
+        const box =
+            document.getElementById("wsPrivateMessages");
+
+        if (!box) return;
+
+        const mine =
+            msg.sender_id === currentUser.id;
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            mine
+                ? "private-message mine"
+                : "private-message received";
+
+        const bubble =
+            document.createElement("div");
+
+        bubble.className =
+            "private-message-bubble";
+
+        bubble.textContent =
+            msg.message || "";
+
+        const time =
+            document.createElement("div");
+
+        time.className =
+            "private-message-time";
+
+        time.textContent =
+            msg.created_at
+                ? new Date(msg.created_at)
+                    .toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })
+                : "";
+
+        wrapper.appendChild(bubble);
+        wrapper.appendChild(time);
+
+        box.appendChild(wrapper);
+
+    }
+
+
+    async function sendWsPrivateMessage() {
+
+        if (!currentUser || !wsPrivateUser) {
+            return;
+        }
+
+        const input =
+            document.getElementById("wsPrivateInput");
+
+        if (!input) return;
+
+        const text =
+            input.value.trim();
+
+        if (!text) return;
+
+        const { data, error } = await client
+            .from("private_messages")
+            .insert({
+                sender_id: currentUser.id,
+                recipient_id: wsPrivateUser.id,
+                message: text
+            })
+            .select()
+            .single();
+
+        if (error) {
+
+            console.error(
+                "Private message send error:",
+                error
+            );
+
+            alert(
+                "Could not send message:\n" +
+                error.message
+            );
+
+            return;
+        }
+
+        input.value = "";
+
+        if (data) {
+            wsShowPrivateMessage(data);
+
+            const box =
+                document.getElementById(
+                    "wsPrivateMessages"
+                );
+
+            if (box) {
+                box.scrollTop =
+                    box.scrollHeight;
+            }
+        }
+
+        input.focus();
+
+    }
+
+
+    function startWsPrivateRealtime() {
+
+        if (!currentUser || !wsPrivateUser) {
+            return;
+        }
+
+        if (wsPrivateChannel) {
+
+            client.removeChannel(
+                wsPrivateChannel
+            );
+
+            wsPrivateChannel = null;
+        }
+
+        wsPrivateChannel =
+            client
+                .channel(
+                    "wildstyle-private-" +
+                    currentUser.id +
+                    "-" +
+                    wsPrivateUser.id
+                )
+                .on(
+                    "postgres_changes",
+                    {
+                        event: "INSERT",
+                        schema: "public",
+                        table: "private_messages"
+                    },
+                    payload => {
+
+                        const msg =
+                            payload.new;
+
+                        const belongs =
+                            (
+                                msg.sender_id ===
+                                wsPrivateUser.id &&
+                                msg.recipient_id ===
+                                currentUser.id
+                            )
+                            ||
+                            (
+                                msg.sender_id ===
+                                currentUser.id &&
+                                msg.recipient_id ===
+                                wsPrivateUser.id
+                            );
+
+                        if (!belongs) {
+                            return;
+                        }
+
+                        /* Don't duplicate our own message */
+                        if (
+                            msg.sender_id ===
+                            currentUser.id
+                        ) {
+                            return;
+                        }
+
+                        wsShowPrivateMessage(msg);
+
+                        const box =
+                            document.getElementById(
+                                "wsPrivateMessages"
+                            );
+
+                        if (box) {
+                            box.scrollTop =
+                                box.scrollHeight;
+                        }
+
+                    }
+                )
+                .subscribe();
+
+    }
+
+
+    async function closeWsPrivateChat() {
+
+        const overlay =
+            document.getElementById(
+                "wsPrivateChatOverlay"
+            );
+
+        if (overlay) {
+            overlay.remove();
+        }
+
+        if (wsPrivateChannel) {
+
+            try {
+                await client.removeChannel(
+                    wsPrivateChannel
+                );
+            } catch (e) {
+                console.warn(e);
+            }
+
+            wsPrivateChannel = null;
+        }
+
+        wsPrivateUser = null;
+
+    }
+
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value || "";
+
+        return div.innerHTML;
+
+    }
+
+})();
