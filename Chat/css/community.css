@@ -1564,3 +1564,624 @@ box-shadow:0 0 15px #7d4dff66;
 .private-message-btn:active {
     transform: scale(0.97);
 }
+
+/* =====================================================
+   💬 WILDSTYLE PRIVATE MESSAGES
+   MSN-STYLE CONVERSATION
+   ===================================================== */
+
+#privateChatOverlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,0,0,.72);
+    backdrop-filter: blur(8px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    z-index: 20000;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
+
+#privateChatOverlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* =====================================================
+   PRIVATE CHAT WINDOW
+   ===================================================== */
+
+.private-chat-window {
+
+    width: min(520px, calc(100% - 30px));
+    height: min(700px, calc(100vh - 40px));
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            #171526,
+            #0f0f19
+        );
+
+    border: 2px solid #7c3aed;
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.75),
+        0 0 35px rgba(124,58,237,.35);
+
+    transform: scale(.92) translateY(20px);
+
+    transition:
+        transform .25s ease;
+}
+
+#privateChatOverlay.open
+.private-chat-window {
+
+    transform:
+        scale(1)
+        translateY(0);
+}
+
+
+/* =====================================================
+   PRIVATE CHAT HEADER
+   ===================================================== */
+
+.private-chat-header {
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 76px;
+
+    padding: 12px 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #21183b,
+            #171526
+        );
+
+    border-bottom:
+        1px solid rgba(255,255,255,.1);
+
+    flex-shrink: 0;
+}
+
+
+.private-chat-back,
+.private-chat-close {
+
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+
+.private-chat-back:hover,
+.private-chat-close:hover {
+
+    background:
+        rgba(124,58,237,.45);
+
+    transform: scale(1.05);
+}
+
+
+.private-chat-avatar {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border:
+        2px solid #a855f7;
+
+    box-shadow:
+        0 0 15px rgba(168,85,247,.45);
+
+    flex-shrink: 0;
+}
+
+
+.private-chat-user-info {
+
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    text-align: left;
+}
+
+
+.private-chat-user-info strong {
+
+    color: white;
+
+    font-size: 17px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.private-chat-user-info span {
+
+    margin-top: 3px;
+
+    color: #9cff9c;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   PRIVATE MESSAGES AREA
+   ===================================================== */
+
+.private-messages {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(124,58,237,.08),
+            transparent 40%
+        ),
+        #10101b;
+
+    scroll-behavior: smooth;
+}
+
+
+/* Scrollbar */
+
+.private-messages::-webkit-scrollbar {
+
+    width: 7px;
+}
+
+.private-messages::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+.private-messages::-webkit-scrollbar-thumb {
+
+    background: #5b21b6;
+
+    border-radius: 20px;
+}
+
+
+/* =====================================================
+   MESSAGE BUBBLES
+   ===================================================== */
+
+.private-message {
+
+    max-width: 78%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    animation:
+        privateMessageIn .2s ease;
+}
+
+
+@keyframes privateMessageIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+.private-message.mine {
+
+    align-self: flex-end;
+
+    align-items: flex-end;
+}
+
+
+.private-message.received {
+
+    align-self: flex-start;
+
+    align-items: flex-start;
+}
+
+
+.private-message-bubble {
+
+    padding: 11px 15px;
+
+    border-radius: 18px;
+
+    color: white;
+
+    font-size: 15px;
+
+    line-height: 1.45;
+
+    word-break: break-word;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.2);
+}
+
+
+.private-message.mine
+.private-message-bubble {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #9333ea
+        );
+
+    border-bottom-right-radius: 5px;
+}
+
+
+.private-message.received
+.private-message-bubble {
+
+    background:
+        #28283d;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-bottom-left-radius: 5px;
+}
+
+
+.private-message-time {
+
+    margin-top: 4px;
+
+    padding: 0 5px;
+
+    color: #777;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   EMPTY / LOADING / ERROR
+   ===================================================== */
+
+.private-chat-empty,
+.private-chat-loading,
+.private-chat-error {
+
+    margin: auto;
+
+    text-align: center;
+
+    color: #aaa;
+
+    line-height: 1.7;
+
+    font-size: 14px;
+}
+
+
+.private-chat-empty {
+
+    color: #c9a7ff;
+}
+
+
+/* =====================================================
+   PRIVATE MESSAGE INPUT
+   ===================================================== */
+
+.private-message-input-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px;
+
+    background:
+        #171726;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+    flex-shrink: 0;
+}
+
+
+#privateMessageInput {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 46px;
+
+    padding: 0 15px;
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    border-radius: 23px;
+
+    outline: none;
+
+    background:
+        #25253a;
+
+    color: white;
+
+    font-size: 15px;
+}
+
+
+#privateMessageInput::placeholder {
+
+    color: #888;
+}
+
+
+#privateMessageInput:focus {
+
+    border-color:
+        #7c3aed;
+
+    box-shadow:
+        0 0 12px rgba(124,58,237,.25);
+}
+
+
+#privateEmojiBtn {
+
+    width: 44px;
+    height: 44px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        #28283d;
+
+    color: white;
+
+    font-size: 21px;
+
+    cursor: pointer;
+}
+
+
+#privateEmojiBtn:hover {
+
+    background:
+        #3a3155;
+}
+
+
+#privateSendBtn {
+
+    height: 44px;
+
+    padding: 0 17px;
+
+    border: none;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #9333ea
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 15px rgba(124,58,237,.25);
+}
+
+
+#privateSendBtn:active {
+
+    transform: scale(.96);
+}
+
+
+/* =====================================================
+   📱 MOBILE PRIVATE CHAT
+   ===================================================== */
+
+@media (max-width: 720px) {
+
+    #privateChatOverlay {
+
+        align-items: stretch;
+        justify-content: stretch;
+
+        backdrop-filter: none;
+
+    }
+
+
+    .private-chat-window {
+
+        width: 100%;
+        height: 100dvh;
+
+        max-height: none;
+
+        border: none;
+
+        border-radius: 0;
+
+        transform:
+            translateY(100%);
+
+        transition:
+            transform .3s ease;
+    }
+
+
+    #privateChatOverlay.open
+    .private-chat-window {
+
+        transform:
+            translateY(0);
+    }
+
+
+    .private-chat-header {
+
+        min-height:
+            calc(68px + env(safe-area-inset-top));
+
+        padding-top:
+            calc(10px + env(safe-area-inset-top));
+    }
+
+
+    .private-messages {
+
+        padding: 14px;
+
+    }
+
+
+    .private-message {
+
+        max-width: 85%;
+
+    }
+
+
+    .private-message-bubble {
+
+        font-size: 15px;
+
+        padding:
+            10px 14px;
+    }
+
+
+    .private-message-input-area {
+
+        padding:
+            9px;
+
+        padding-bottom:
+            calc(
+                9px +
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    #privateMessageInput {
+
+        height: 42px;
+
+        font-size: 15px;
+
+    }
+
+
+    #privateEmojiBtn {
+
+        width: 42px;
+        height: 42px;
+
+    }
+
+
+    #privateSendBtn {
+
+        height: 42px;
+
+        padding:
+            0 14px;
+
+    }
+
+}
