@@ -485,68 +485,52 @@ if (saveBtn) {
                 avatar?.files?.[0];
 
 
-            // ---------------------------
-            // Upload avatar
-            // ---------------------------
+            // =======================================
+// UPLOAD AVATAR
+// =======================================
 
-            if (file) {
+if (file) {
 
-                const extension =
-                    file.name
-                        .split(".")
-                        .pop();
+    const extension = file.name.split(".").pop().toLowerCase();
 
+    const fileName =
+        currentUser.id + "." + extension;
 
-                const fileName =
-                    currentUser.id +
-                    "." +
-                    extension;
+    // Avatar location inside the Wild bucket
+    const filePath =
+        "Avatars/" + fileName;
 
+    const { error } = await client.storage
+        .from("Wild")
+        .upload(filePath, file, {
+            upsert: true,
+            contentType: file.type
+        });
 
-                const {
-                    error
-                } = await client.storage
+    if (error) {
 
-                    .from("avatars")
+        console.error(
+            "Avatar upload error:",
+            error
+        );
 
-                    .upload(
-                        fileName,
-                        file,
-                        {
-                            upsert: true
-                        }
-                    );
+        alert(
+            "Could not upload profile picture.\n\n" +
+            error.message
+        );
 
+        return;
+    }
 
-                if (error) {
+    // Get public URL
+    const { data } =
+        client.storage
+            .from("Wild")
+            .getPublicUrl(filePath);
 
-                    alert(
-                        error.message
-                    );
-
-                    console.error(
-                        error
-                    );
-
-                    return;
-                }
-
-
-                const {
-                    data
-                } = client.storage
-
-                    .from("avatars")
-
-                    .getPublicUrl(
-                        fileName
-                    );
-
-
-                avatarUrl =
-                    data.publicUrl;
-
-            }
+    avatarUrl =
+        data.publicUrl;
+}
 
 
             // ---------------------------
