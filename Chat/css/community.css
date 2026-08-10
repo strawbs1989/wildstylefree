@@ -2588,3 +2588,201 @@ box-shadow:0 0 15px #7d4dff66;
     }
 
 }
+
+/* =====================================================
+   💬 PRIVATE MESSAGE INPUT — FINAL WILDSTYLE STYLE
+===================================================== */
+
+.private-message-input-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 14px;
+
+    background: #171726;
+
+    border-top: 1px solid rgba(255,255,255,.08);
+
+    flex-shrink: 0;
+}
+
+
+/* MESSAGE INPUT */
+
+#wsPrivateInput {
+    flex: 1;
+    min-width: 0;
+
+    height: 46px;
+
+    padding: 0 16px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 23px;
+
+    outline: none;
+
+    background: #25253a;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+#wsPrivateInput::placeholder {
+    color: #888;
+}
+
+
+#wsPrivateInput:focus {
+    border-color: #8b5cf6;
+
+    box-shadow:
+        0 0 14px rgba(124,58,237,.35);
+}
+
+
+/* EMOJI BUTTON */
+
+.private-emoji-btn {
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #292941;
+
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        transform .15s ease,
+        background .2s ease;
+}
+
+
+.private-emoji-btn:hover {
+    background: #3a3155;
+}
+
+
+.private-emoji-btn:active {
+    transform: scale(.92);
+}
+
+
+/* SEND BUTTON */
+
+.private-send-btn {
+    height: 46px;
+
+    min-width: 76px;
+
+    padding: 0 18px;
+
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: 23px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #9333ea
+        );
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 16px rgba(124,58,237,.30);
+
+    transition:
+        transform .15s ease,
+        box-shadow .2s ease;
+}
+
+
+.private-send-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 20px rgba(124,58,237,.45);
+}
+
+
+.private-send-btn:active {
+    transform: scale(.95);
+}
+
+
+/* =====================================================
+   📱 MOBILE
+===================================================== */
+
+@media (max-width: 720px) {
+
+    .private-message-input-area {
+
+        gap: 8px;
+
+        padding:
+            10px 10px
+            calc(10px + env(safe-area-inset-bottom));
+    }
+
+
+    #wsPrivateInput {
+
+        height: 44px;
+
+        font-size: 15px;
+
+        padding: 0 14px;
+    }
+
+
+    .private-emoji-btn {
+
+        width: 44px;
+        height: 44px;
+
+        font-size: 21px;
+    }
+
+
+    .private-send-btn {
+
+        height: 44px;
+
+        min-width: 68px;
+
+        padding: 0 15px;
+
+        font-size: 14px;
+    }
+
+}
