@@ -239,19 +239,16 @@ default:
 let deleteButton = "";
 
 if (
-
-currentUser.id === msg.user_id ||
-
-currentUserRole === "owner" ||
-
-currentUserRole === "admin"
-
+    currentUser.id === msg.user_id ||
+    currentUserRole === "owner"
 ){
-
-deleteButton=`
-
-`;
-
+    deleteButton = `
+        <button
+            class="delete-btn"
+            onclick="deleteMessage(${msg.id}, '${msg.user_id}')">
+            🗑️ Delete
+        </button>
+    `;
 }
 
 const avatar =  
@@ -677,24 +674,34 @@ scrollBottom();
 .subscribe();
 
 }
-async function deleteMessage(id) {
+async function deleteMessage(id, userId) {
 
-if (!confirm("Delete this message?")) return;  
+    if (!currentUser) return;
 
-const { error } = await client  
-    .from("messages")  
-    .delete()  
-    .eq("id", id);  
+    // Users can delete their own message.
+    // Only the OWNER can delete somebody else's message.
+    if (
+        userId !== currentUser.id &&
+        currentUserRole !== "owner"
+    ) {
+        alert("Only the owner can delete another member's message.");
+        return;
+    }
 
-if (error) {  
+    if (!confirm("Delete this message?")) return;
 
-    alert(error.message);  
+    const { error } = await client
+        .from("messages")
+        .delete()
+        .eq("id", id);
 
-    return;  
-
+    if (error) {
+        alert(error.message);
+        console.error(error);
+        return;
+    }
 }
 
-}
 document.addEventListener("keydown", function(e){
 
 if(e.key==="F10" && currentUserRole==="owner"){  
