@@ -285,12 +285,7 @@ ${escapeHTML(msg.message)}
 </div>  <div class="chat-time">  
 ${time}  
 </div>  
-${deleteButton}  
-<button  
-    class="delete-btn"  
-    onclick="deleteMessage(${msg.id}, '${msg.user_id}')">  
-    🗑️  
-</button>  </div>  </div>  `;
+${deleteButton}  </div>  </div>  `;
 
 messagesDiv.appendChild(div);
 
