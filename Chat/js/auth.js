@@ -10,10 +10,11 @@
 
     if (!session) {
 
-        window.location.href = "index.html";
-        return;
+    alert("APP TEST: NO SUPABASE SESSION");
 
-    }
+    return;
+
+}
 
 })();
 
