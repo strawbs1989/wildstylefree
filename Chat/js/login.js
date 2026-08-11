@@ -19,27 +19,100 @@ loginForm.addEventListener("submit", async (e) => {
         return;
     }
 
-    const { data, error } = await client.auth.signInWithPassword({
+    // Disable login button while processing
+    const loginButton = loginForm.querySelector("button[type='submit']");
 
-        email,
-        password
-
-    });
-
-    if (error) {
-
-        message.textContent = error.message;
-        return;
-
+    if (loginButton) {
+        loginButton.disabled = true;
+        loginButton.textContent = "Logging in...";
     }
 
-    message.style.color = "#00ff99";
-    message.textContent = "Login successful...";
+    try {
 
-    setTimeout(() => {
+        // ==========================================
+        // SIGN IN
+        // ==========================================
 
-        window.location.href = "lobby.html";
+        const { data, error } =
+            await client.auth.signInWithPassword({
+                email,
+                password
+            });
 
-    }, 1000);
+        if (error) {
+            throw error;
+        }
+
+        // ==========================================
+        // CONFIRM SESSION EXISTS
+        // ==========================================
+
+        const {
+            data: sessionData,
+            error: sessionError
+        } = await client.auth.getSession();
+
+        if (sessionError) {
+            throw sessionError;
+        }
+
+        if (!sessionData || !sessionData.session) {
+
+            message.style.color = "#ff4444";
+            message.textContent =
+                "Login succeeded, but the session could not be saved.";
+
+            console.error(
+                "NO SESSION AFTER LOGIN",
+                sessionData
+            );
+
+            if (loginButton) {
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+
+            return;
+        }
+
+        // ==========================================
+        // SESSION CONFIRMED
+        // ==========================================
+
+        console.log(
+            "Wildstyle login session confirmed",
+            sessionData.session.user.id
+        );
+
+        message.style.color = "#00ff99";
+        message.textContent = "Login successful...";
+
+        // Give Supabase a moment to finish its
+        // persistence operation before navigation.
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // ==========================================
+        // GO TO CHAT
+        // ==========================================
+
+        window.location.replace("lobby.html");
+
+    } catch (error) {
+
+        console.error(
+            "LOGIN ERROR:",
+            error
+        );
+
+        message.style.color = "#ff4444";
+        message.textContent =
+            error.message || "Login failed.";
+
+        if (loginButton) {
+            loginButton.disabled = false;
+            loginButton.textContent = "Login";
+        }
+
+    }
 
 });
