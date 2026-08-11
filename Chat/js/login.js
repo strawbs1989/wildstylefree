@@ -11,108 +11,99 @@ loginForm.addEventListener("submit", async (e) => {
 
     message.textContent = "";
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
 
     if (!email || !password) {
-        message.textContent = "Please enter your email and password.";
+
+        message.textContent =
+            "Please enter your email and password.";
+
         return;
     }
 
-    // Disable login button while processing
-    const loginButton = loginForm.querySelector("button[type='submit']");
+    const { data, error } =
+        await client.auth.signInWithPassword({
 
-    if (loginButton) {
-        loginButton.disabled = true;
-        loginButton.textContent = "Logging in...";
+            email,
+            password
+
+        });
+
+    if (error) {
+
+        message.textContent =
+            error.message;
+
+        return;
     }
 
-    try {
+    // ================================================
+    // LOGIN SUCCESSFUL
+    // ================================================
 
-        // ==========================================
-        // SIGN IN
-        // ==========================================
+    const session = data.session;
 
-        const { data, error } =
-            await client.auth.signInWithPassword({
-                email,
-                password
-            });
+    if (!session) {
 
-        if (error) {
-            throw error;
-        }
+        message.textContent =
+            "Login succeeded but no session was returned.";
 
-        // ==========================================
-        // CONFIRM SESSION EXISTS
-        // ==========================================
+        return;
+    }
 
-        const {
-            data: sessionData,
-            error: sessionError
-        } = await client.auth.getSession();
+    message.style.color = "#00ff99";
+    message.textContent =
+        "Login successful...";
 
-        if (sessionError) {
-            throw sessionError;
-        }
+    // ================================================
+    // DETECT MIT APP INVENTOR WEBVIEW
+    // ================================================
 
-        if (!sessionData || !sessionData.session) {
+    const userAgent =
+        navigator.userAgent || "";
 
-            message.style.color = "#ff4444";
-            message.textContent =
-                "Login succeeded, but the session could not be saved.";
+    const isApp =
+        /wv|WebView|; wv\)/i.test(userAgent);
 
-            console.error(
-                "NO SESSION AFTER LOGIN",
-                sessionData
+    // ================================================
+    // APP
+    // ================================================
+
+    if (isApp) {
+
+        const accessToken =
+            encodeURIComponent(
+                session.access_token
             );
 
-            if (loginButton) {
-                loginButton.disabled = false;
-                loginButton.textContent = "Login";
-            }
+        const refreshToken =
+            encodeURIComponent(
+                session.refresh_token
+            );
 
-            return;
-        }
+        window.location.href =
+            "lobby.html?app=1" +
+            "&access_token=" +
+            accessToken +
+            "&refresh_token=" +
+            refreshToken;
 
-        // ==========================================
-        // SESSION CONFIRMED
-        // ==========================================
-
-        console.log(
-            "Wildstyle login session confirmed",
-            sessionData.session.user.id
-        );
-
-        message.style.color = "#00ff99";
-        message.textContent = "Login successful...";
-
-        // Give Supabase a moment to finish its
-        // persistence operation before navigation.
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        // ==========================================
-        // GO TO CHAT
-        // ==========================================
-
-        window.location.replace("lobby.html");
-
-    } catch (error) {
-
-        console.error(
-            "LOGIN ERROR:",
-            error
-        );
-
-        message.style.color = "#ff4444";
-        message.textContent =
-            error.message || "Login failed.";
-
-        if (loginButton) {
-            loginButton.disabled = false;
-            loginButton.textContent = "Login";
-        }
-
+        return;
     }
+
+    // ================================================
+    // NORMAL BROWSER
+    // ================================================
+
+    setTimeout(() => {
+
+        window.location.href =
+            "lobby.html";
+
+    }, 500);
 
 });
