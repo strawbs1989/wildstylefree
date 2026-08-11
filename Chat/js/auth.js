@@ -2,104 +2,166 @@
 // Wildstyle Community Authentication
 // =====================================================
 
-console.log("WILDSTYLE AUTH.JS LOADED");
+console.log("Wildstyle auth.js loaded");
+
 
 // =====================================================
-// CHECK LOGIN
+// RESTORE APP SESSION
 // =====================================================
 
-(async function checkLogin() {
+async function restoreAppSession() {
 
-    try {
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
-        console.log("Checking Supabase session...");
+    const isApp =
+        params.get("app") === "1";
 
-        // Give Supabase/WebView a moment to restore
-        // the persisted session.
-        await new Promise(resolve => setTimeout(resolve, 500));
+    const accessToken =
+        params.get("access_token");
+
+    const refreshToken =
+        params.get("refresh_token");
+
+
+    // ================================================
+    // APP SESSION RECEIVED
+    // ================================================
+
+    if (
+        isApp &&
+        accessToken &&
+        refreshToken
+    ) {
+
+        console.log(
+            "App session tokens received"
+        );
 
         const {
             data,
             error
-        } = await client.auth.getSession();
+        } = await client.auth.setSession({
+
+            access_token:
+                accessToken,
+
+            refresh_token:
+                refreshToken
+
+        });
 
         if (error) {
 
             console.error(
-                "Supabase getSession error:",
+                "Could not restore app session:",
                 error
             );
 
             alert(
-                "SUPABASE SESSION ERROR\n\n" +
+                "APP LOGIN ERROR\n\n" +
                 error.message
             );
 
-            return;
+            return false;
         }
 
-        const session = data?.session;
-
-        console.log(
-            "Supabase session:",
-            session ? "FOUND" : "NOT FOUND"
-        );
-
-        // =================================================
-        // SESSION FOUND
-        // =================================================
-
-        if (session) {
+        if (data.session) {
 
             console.log(
-                "Wildstyle user authenticated:",
-                session.user.email
+                "APP SESSION RESTORED"
             );
 
-            return;
+            // ========================================
+            // REMOVE TOKENS FROM ADDRESS BAR
+            // ========================================
+
+            window.history.replaceState(
+                {},
+                document.title,
+                "lobby.html"
+            );
+
+            return true;
         }
+    }
 
-        // =================================================
-        // NO SESSION
-        // =================================================
 
-        console.warn(
-            "No Supabase session found."
+    // ================================================
+    // NORMAL SESSION CHECK
+    // ================================================
+
+    const {
+        data,
+        error
+    } = await client.auth.getSession();
+
+    if (error) {
+
+        console.error(
+            "Session check error:",
+            error
         );
 
-        // -------------------------------------------------
-        // APP TEST
-        // -------------------------------------------------
+        return false;
+    }
 
-        const isApp =
-            /WebView|wv|; wv\)/i.test(
-                navigator.userAgent
+    if (data.session) {
+
+        console.log(
+            "Existing Supabase session found"
+        );
+
+        return true;
+    }
+
+    return false;
+}
+
+
+// =====================================================
+// START AUTH CHECK
+// =====================================================
+
+(async function () {
+
+    try {
+
+        const authenticated =
+            await restoreAppSession();
+
+        console.log(
+            "Authenticated:",
+            authenticated
+        );
+
+        if (!authenticated) {
+
+            console.warn(
+                "No authenticated session"
             );
 
-        if (isApp) {
-
-            alert(
-                "APP TEST: NO SUPABASE SESSION"
-            );
+            window.location.href =
+                "index.html";
 
             return;
         }
 
-        // =================================================
-        // NORMAL BROWSER
-        // =================================================
-
-        window.location.href = "index.html";
+        console.log(
+            "Wildstyle Community authentication OK"
+        );
 
     } catch (error) {
 
         console.error(
-            "AUTH CHECK ERROR:",
+            "Authentication error:",
             error
         );
 
         alert(
-            "AUTH CHECK ERROR\n\n" +
+            "AUTH ERROR\n\n" +
             error.message
         );
 
@@ -125,7 +187,10 @@ async function logout() {
             await client
                 .from("online_users")
                 .delete()
-                .eq("user_id", user.id);
+                .eq(
+                    "user_id",
+                    user.id
+                );
 
             await client
                 .from("chat_events")
@@ -135,7 +200,6 @@ async function logout() {
                         user.email +
                         " left the chat"
                 }]);
-
         }
 
         await client.auth.signOut();
@@ -152,9 +216,7 @@ async function logout() {
 
         window.location.href =
             "index.html";
-
     }
-
 }
 
 window.logout = logout;
