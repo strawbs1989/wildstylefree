@@ -54,55 +54,82 @@ const usersList = document.getElementById("usersList");
 
 (async function () {
 
-const { data: { user } } = await client.auth.getUser();  
+    // =================================================
+    // WAIT FOR SUPABASE AUTHENTICATION
+    // =================================================
 
-if (!user) {  
-
-    window.location.href = "index.html";  
-    return;  
-
-}  
-
-currentUser = user;  
-const {
-    data: profile,
-    error: profileError
-} = await client
-    .from("profiles")
-    .select("role, status, banned, ban_reason")
-    .eq("id", user.id)
-    .single();
-
-if (profile?.banned) {
-
-    alert(
-        "🚫 You have been banned from Wildstyle Community.\n\n" +
-        "Reason:\n" +
-        (profile.ban_reason || "No reason supplied.")
+    console.log(
+        "Wildstyle Chat: waiting for authentication..."
     );
 
-    await client.auth.signOut();
+    if (window.wildstyleAuthReady) {
 
-    window.location.href = "index.html";
+        try {
 
-    return;
-}
+            await window.wildstyleAuthReady;
 
-if (profileError) {
-    console.error(profileError);
-}
+        } catch (error) {
 
-currentUserRole = profile?.role || "member";
-presenceStatus =
-    profile?.status || "Online";
+            console.error(
+                "Wildstyle Chat: authentication failed:",
+                error
+            );
 
-updateStatusButton(presenceStatus);
-await client
-.from("online_users")
-.upsert({
-user_id: currentUser.id,
-last_seen: new Date().toISOString()
-});
+            return;
+        }
+    }
+
+
+    // =================================================
+    // AUTHENTICATION IS NOW READY
+    // =================================================
+
+    console.log(
+        "Wildstyle Chat: authentication ready."
+    );
+
+
+    const {
+        data: { user },
+        error: userError
+    } = await client.auth.getUser();
+
+
+    if (userError) {
+
+        console.error(
+            "Wildstyle Chat: getUser error:",
+            userError
+        );
+
+        return;
+    }
+
+
+    if (!user) {
+
+        console.error(
+            "Wildstyle Chat: NO USER AFTER AUTH."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+
+    // =================================================
+    // USER CONFIRMED
+    // =================================================
+
+    console.log(
+        "Wildstyle Chat: user confirmed:",
+        user.email
+    );
+
+
+    currentUser = user;
 
 // ==========================================
 // ONLINE HEARTBEAT
