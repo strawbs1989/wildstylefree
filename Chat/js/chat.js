@@ -179,16 +179,13 @@ setInterval(async () => {
         });
 
     if (error) {
-
         console.error(
             "Online heartbeat error:",
             error
         );
-
     }
 
 }, 30000);
-
 
 
 await client
