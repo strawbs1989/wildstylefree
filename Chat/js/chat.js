@@ -129,7 +129,39 @@ const usersList = document.getElementById("usersList");
     );
 
 
-    currentUser = user;
+    // ==========================================
+// LOAD CURRENT USER ROLE
+// ==========================================
+
+const {
+    data: currentProfile,
+    error: currentProfileError
+} = await client
+    .from("profiles")
+    .select("role")
+    .eq("id", currentUser.id)
+    .single();
+
+if (currentProfileError) {
+
+    console.error(
+        "Could not load current user role:",
+        currentProfileError
+    );
+
+} else {
+
+    currentUserRole =
+        currentProfile?.role || "member";
+
+    console.log(
+        "Current user role:",
+        currentUserRole
+    );
+}
+
+
+currentUser = user;
 
 // ==========================================
 // ONLINE HEARTBEAT
@@ -147,7 +179,12 @@ setInterval(async () => {
         });
 
     if (error) {
-        console.error("Online heartbeat error:", error);
+
+        console.error(
+            "Online heartbeat error:",
+            error
+        );
+
     }
 
 }, 30000);
