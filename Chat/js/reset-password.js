@@ -2,23 +2,288 @@
 // Wildstyle Community - Reset Password
 // =====================================================
 
-console.log(
-    "Wildstyle reset password loaded"
-);
+console.log("Wildstyle reset-password.js loaded");
+
+const resetForm = document.getElementById("resetForm");
+const message = document.getElementById("message");
+
+let recoveryReady = false;
 
 
-const resetForm =
-    document.getElementById("resetForm");
+// =====================================================
+// SHOW MESSAGE
+// =====================================================
 
-const message =
-    document.getElementById("message");
+function showMessage(text, color = "") {
 
+    message.textContent = text;
+    message.style.color = color;
+
+}
+
+
+// =====================================================
+// RESTORE PASSWORD RECOVERY SESSION
+// =====================================================
+
+async function restoreRecoverySession() {
+
+    console.log("Checking password recovery session...");
+
+    try {
+
+        // -------------------------------------------------
+        // SUPABASE PASSWORD RESET LINKS USING HASH TOKENS
+        // -------------------------------------------------
+
+        const hash =
+            window.location.hash.substring(1);
+
+        const hashParams =
+            new URLSearchParams(hash);
+
+        const accessToken =
+            hashParams.get("access_token");
+
+        const refreshToken =
+            hashParams.get("refresh_token");
+
+        const type =
+            hashParams.get("type");
+
+
+        if (
+            accessToken &&
+            refreshToken
+        ) {
+
+            console.log(
+                "Recovery tokens found in URL"
+            );
+
+            const {
+                data,
+                error
+            } = await client.auth.setSession({
+
+                access_token:
+                    accessToken,
+
+                refresh_token:
+                    refreshToken
+
+            });
+
+
+            if (error) {
+
+                console.error(
+                    "Recovery session error:",
+                    error
+                );
+
+                showMessage(
+                    "Password reset link is invalid or expired.",
+                    "#ff5555"
+                );
+
+                return false;
+            }
+
+
+            if (data.session) {
+
+                console.log(
+                    "PASSWORD RECOVERY SESSION RESTORED"
+                );
+
+                recoveryReady = true;
+
+
+                // Remove tokens from address bar
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    window.location.pathname
+                );
+
+
+                showMessage(
+                    "You can now choose your new password.",
+                    "#00ff99"
+                );
+
+                return true;
+            }
+        }
+
+
+        // -------------------------------------------------
+        // PKCE STYLE RESET LINK
+        // -------------------------------------------------
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const code =
+            params.get("code");
+
+
+        if (code) {
+
+            console.log(
+                "Recovery code found in URL"
+            );
+
+
+            const {
+                data,
+                error
+            } =
+                await client.auth.exchangeCodeForSession(
+                    code
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Recovery code error:",
+                    error
+                );
+
+                showMessage(
+                    "Password reset link is invalid or expired.",
+                    "#ff5555"
+                );
+
+                return false;
+            }
+
+
+            if (data.session) {
+
+                console.log(
+                    "PASSWORD RECOVERY SESSION RESTORED"
+                );
+
+                recoveryReady = true;
+
+
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    window.location.pathname
+                );
+
+
+                showMessage(
+                    "You can now choose your new password.",
+                    "#00ff99"
+                );
+
+                return true;
+            }
+        }
+
+
+        // -------------------------------------------------
+        // CHECK EXISTING SESSION
+        // -------------------------------------------------
+
+        const {
+            data,
+            error
+        } = await client.auth.getSession();
+
+
+        if (error) {
+
+            console.error(
+                "Session check error:",
+                error
+            );
+
+            showMessage(
+                "Unable to check password reset session.",
+                "#ff5555"
+            );
+
+            return false;
+        }
+
+
+        if (data.session) {
+
+            console.log(
+                "Existing recovery session found"
+            );
+
+            recoveryReady = true;
+
+            showMessage(
+                "You can now choose your new password.",
+                "#00ff99"
+            );
+
+            return true;
+        }
+
+
+        // -------------------------------------------------
+        // NO SESSION
+        // -------------------------------------------------
+
+        console.warn(
+            "No password recovery session found"
+        );
+
+        showMessage(
+            "Password reset link is missing or has expired.",
+            "#ff5555"
+        );
+
+        return false;
+
+    } catch (error) {
+
+        console.error(
+            "Recovery error:",
+            error
+        );
+
+        showMessage(
+            "Password reset session could not be restored.",
+            "#ff5555"
+        );
+
+        return false;
+    }
+}
+
+
+// =====================================================
+// CHANGE PASSWORD
+// =====================================================
 
 resetForm.addEventListener(
     "submit",
     async function (e) {
 
         e.preventDefault();
+
+
+        if (!recoveryReady) {
+
+            showMessage(
+                "Auth session missing! Please use the latest reset email link.",
+                "#ff5555"
+            );
+
+            return;
+        }
 
 
         const password =
@@ -32,20 +297,16 @@ resetForm.addEventListener(
                 .value;
 
 
-        message.textContent = "";
+        // -------------------------------------------------
+        // VALIDATE PASSWORD
+        // -------------------------------------------------
 
+        if (!password || !confirmPassword) {
 
-        // =================================================
-        // CHECK PASSWORDS
-        // =================================================
-
-        if (password !== confirmPassword) {
-
-            message.style.color =
-                "#ff5555";
-
-            message.textContent =
-                "The passwords do not match.";
+            showMessage(
+                "Please enter your new password.",
+                "#ff5555"
+            );
 
             return;
         }
@@ -53,34 +314,43 @@ resetForm.addEventListener(
 
         if (password.length < 6) {
 
-            message.style.color =
-                "#ff5555";
-
-            message.textContent =
-                "Password must be at least 6 characters.";
+            showMessage(
+                "Password must be at least 6 characters.",
+                "#ff5555"
+            );
 
             return;
         }
 
 
-        // =================================================
+        if (password !== confirmPassword) {
+
+            showMessage(
+                "Passwords do not match.",
+                "#ff5555"
+            );
+
+            return;
+        }
+
+
+        // -------------------------------------------------
         // UPDATE PASSWORD
-        // =================================================
+        // -------------------------------------------------
 
-        message.style.color = "";
-
-        message.textContent =
-            "Updating password...";
+        showMessage(
+            "Changing password...",
+            ""
+        );
 
 
         const {
             error
-        } =
-            await client.auth.updateUser({
+        } = await client.auth.updateUser({
 
-                password: password
+            password: password
 
-            });
+        });
 
 
         if (error) {
@@ -90,29 +360,37 @@ resetForm.addEventListener(
                 error
             );
 
-            message.style.color =
-                "#ff5555";
-
-            message.textContent =
-                error.message;
+            showMessage(
+                error.message,
+                "#ff5555"
+            );
 
             return;
         }
 
 
-        // =================================================
+        // -------------------------------------------------
         // SUCCESS
-        // =================================================
+        // -------------------------------------------------
 
-        message.style.color =
-            "#00ff99";
+        console.log(
+            "PASSWORD UPDATED SUCCESSFULLY"
+        );
 
-        message.textContent =
-            "Password changed successfully!";
+
+        showMessage(
+            "Password changed successfully! Redirecting to login...",
+            "#00ff99"
+        );
+
+
+        resetForm.reset();
 
 
         setTimeout(
-            function () {
+            async function () {
+
+                await client.auth.signOut();
 
                 window.location.href =
                     "index.html";
@@ -123,3 +401,10 @@ resetForm.addEventListener(
 
     }
 );
+
+
+// =====================================================
+// START
+// =====================================================
+
+restoreRecoverySession();
