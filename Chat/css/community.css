@@ -2786,3 +2786,26 @@ box-shadow:0 0 15px #7d4dff66;
     }
 
 }
+
+
+/* =====================================================
+   CHAT MESSAGE INPUT - FIX TYPING VISIBILITY
+===================================================== */
+
+#messageInput {
+    color: #ffffff !important;
+    background: #111111 !important;
+    caret-color: #00d9ff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+#messageInput::placeholder {
+    color: #aaaaaa !important;
+    opacity: 1 !important;
+}
+
+#messageInput:focus {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    outline: none;
+}
