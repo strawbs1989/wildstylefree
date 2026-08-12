@@ -160,9 +160,6 @@ if (currentProfileError) {
     );
 }
 
-
-currentUser = user;
-
 // ==========================================
 // ONLINE HEARTBEAT
 // ==========================================
