@@ -120,16 +120,28 @@ const usersList = document.getElementById("usersList");
 
 
     // =================================================
-    // USER CONFIRMED
-    // =================================================
+// USER CONFIRMED
+// =================================================
 
-    console.log(
-        "Wildstyle Chat: user confirmed:",
-        user.email
-    );
+console.log(
+    "Wildstyle Chat: user confirmed:",
+    user.email
+);
 
 
-    // ==========================================
+// ==========================================
+// SET CURRENT USER
+// ==========================================
+
+currentUser = user;
+
+console.log(
+    "Current user set:",
+    currentUser.id
+);
+
+
+// ==========================================
 // LOAD CURRENT USER ROLE
 // ==========================================
 
@@ -149,6 +161,8 @@ if (currentProfileError) {
         currentProfileError
     );
 
+    currentUserRole = "member";
+
 } else {
 
     currentUserRole =
@@ -159,7 +173,6 @@ if (currentProfileError) {
         currentUserRole
     );
 }
-
 // ==========================================
 // ONLINE HEARTBEAT
 // ==========================================
