@@ -1,6 +1,6 @@
 // =====================================================
 // WILDSTYLE COMMUNITY CHAT
-// CLEAN + SECURE CLIENT
+// CLEAN / STABLE CHAT CLIENT
 // =====================================================
 
 "use strict";
@@ -78,7 +78,6 @@ const mobileProfileRole =
 const mobileModerationTools =
     document.getElementById("mobileModerationTools");
 
-
 // =====================================================
 // STATE
 // =====================================================
@@ -94,13 +93,12 @@ let typingTimer = null;
 
 let presenceStatus = "Online";
 
-let privateChatUser = null;
-let privateChatChannel = null;
-
 let chatChannel = null;
 let typingChannel = null;
 let eventsChannel = null;
 
+let privateChatUser = null;
+let privateChatChannel = null;
 
 // =====================================================
 // SECURITY HELPERS
@@ -117,8 +115,6 @@ function escapeHTML(value) {
     return div.innerHTML;
 }
 
-
-// Safely set an image without trusting HTML
 function setSafeImage(img, url) {
 
     if (!img) return;
@@ -130,28 +126,41 @@ function setSafeImage(img, url) {
 
     if (
         typeof url === "string" &&
-        /^https?:\/\//i.test(url)
+        (
+            /^https?:\/\//i.test(url) ||
+            url.startsWith("/")
+        )
     ) {
 
         img.src = url;
 
-    } else if (
-        typeof url === "string" &&
-        url.startsWith("/")
-    ) {
-
-        img.src = url;
     }
 
     img.onerror = () => {
+
         img.src = fallback;
+
     };
 }
-
 
 // =====================================================
 // ROLE HELPERS
 // =====================================================
+
+function isOwner() {
+
+    return currentUserRole === "owner";
+
+}
+
+function isAdmin() {
+
+    return (
+        currentUserRole === "owner" ||
+        currentUserRole === "admin"
+    );
+
+}
 
 function roleBadge(role) {
 
@@ -171,9 +180,10 @@ function roleBadge(role) {
 
         default:
             return "👤 Member";
-    }
-}
 
+    }
+
+}
 
 function statusIcon(status) {
 
@@ -193,32 +203,22 @@ function statusIcon(status) {
 
         default:
             return "🟢 ";
+
     }
+
 }
-
-
-function isOwner() {
-
-    return currentUserRole === "owner";
-}
-
-
-function isAdmin() {
-
-    return (
-        currentUserRole === "owner" ||
-        currentUserRole === "admin"
-    );
-}
-
 
 // =====================================================
-// START APPLICATION
+// START CHAT
 // =====================================================
 
 (async function startChat() {
 
     try {
+
+        console.log(
+            "🔥 Wildstyle Chat starting..."
+        );
 
         if (
             typeof client === "undefined" ||
@@ -226,12 +226,11 @@ function isAdmin() {
         ) {
 
             console.error(
-                "Supabase client is not available."
+                "Supabase client not available."
             );
 
             return;
         }
-
 
         const {
             data: {
@@ -240,7 +239,6 @@ function isAdmin() {
             error: authError
         } =
             await client.auth.getUser();
-
 
         if (authError) {
 
@@ -252,7 +250,6 @@ function isAdmin() {
             return;
         }
 
-
         if (!user) {
 
             window.location.href =
@@ -261,18 +258,19 @@ function isAdmin() {
             return;
         }
 
-
         currentUser =
             user;
 
-
-        // Make available for any existing UI code
         window.currentUser =
             currentUser;
 
+        console.log(
+            "✅ Logged in:",
+            currentUser.email
+        );
 
         // =================================================
-        // LOAD CURRENT PROFILE
+        // LOAD PROFILE
         // =================================================
 
         const {
@@ -280,20 +278,21 @@ function isAdmin() {
             error: profileError
         } =
             await client
-
                 .from("profiles")
-
-                .select(
-                    "id,display_name,avatar_url,role,status,banned,ban_reason"
-                )
-
+                .select(`
+                    id,
+                    display_name,
+                    avatar_url,
+                    role,
+                    status,
+                    banned,
+                    ban_reason
+                `)
                 .eq(
                     "id",
-                    user.id
+                    currentUser.id
                 )
-
                 .single();
-
 
         if (profileError) {
 
@@ -305,7 +304,6 @@ function isAdmin() {
             return;
         }
 
-
         if (!profile) {
 
             console.error(
@@ -315,18 +313,19 @@ function isAdmin() {
             return;
         }
 
-
         currentUserProfile =
             profile;
-
 
         currentUserRole =
             profile.role || "member";
 
-
         presenceStatus =
             profile.status || "Online";
 
+        console.log(
+            "👑 Role:",
+            currentUserRole
+        );
 
         // =================================================
         // BAN CHECK
@@ -351,18 +350,15 @@ function isAdmin() {
             return;
         }
 
-
         updateStatusButton(
             presenceStatus
         );
 
-
         // =================================================
-        // ONLINE STATUS
+        // INITIAL PRESENCE
         // =================================================
 
         await updateOnlinePresence();
-
 
         // =================================================
         // LOAD CHAT
@@ -372,28 +368,30 @@ function isAdmin() {
 
         await loadMessages();
 
-        loadTypingUsers();
+        await loadTypingUsers();
 
         enableRealtime();
 
-        enableTyping();
+        enableTypingRealtime();
 
         enableChatEvents();
 
         setupUI();
 
+        console.log(
+            "✅ Wildstyle Chat ready."
+        );
 
     } catch (error) {
 
         console.error(
-            "Chat startup error:",
+            "❌ Chat startup error:",
             error
         );
 
     }
 
 })();
-
 
 // =====================================================
 // ONLINE PRESENCE
@@ -403,14 +401,11 @@ async function updateOnlinePresence() {
 
     if (!currentUser) return;
 
-
     const {
         error
     } =
         await client
-
             .from("online_users")
-
             .upsert(
                 {
                     user_id:
@@ -425,18 +420,19 @@ async function updateOnlinePresence() {
                 }
             );
 
-
     if (error) {
 
         console.error(
             "Presence error:",
             error
         );
+
     }
+
 }
 
-
 // Heartbeat
+
 setInterval(
     async () => {
 
@@ -448,127 +444,164 @@ setInterval(
     30000
 );
 
-
-// ==========================================
-// LOAD OLD MESSAGES
-// ==========================================
+// =====================================================
+// LOAD MESSAGES
+// =====================================================
 
 async function loadMessages() {
 
-    if (!currentUser) {
-        console.error("Chat: currentUser not ready");
-        return;
-    }
-
-    console.log("Chat: loading messages...");
-
-    // Get messages WITHOUT the profiles join
-    const { data: messages, error } = await client
-        .from("messages")
-        .select("*")
-        .order("created_at", {
-            ascending: true
-        });
-
-    if (error) {
-        console.error("❌ MESSAGE LOAD ERROR:", error);
-        return;
-    }
+    if (!currentUser) return;
 
     console.log(
-        "✅ Messages loaded:",
-        messages?.length || 0
+        "💬 Loading messages..."
     );
+
+    const {
+        data: messages,
+        error
+    } =
+        await client
+            .from("messages")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "❌ MESSAGE LOAD ERROR:",
+            error
+        );
+
+        return;
+    }
+
+    if (!messagesDiv) return;
 
     messagesDiv.innerHTML = "";
 
-    if (!messages || messages.length === 0) {
+    if (
+        !messages ||
+        messages.length === 0
+    ) {
+
         messagesDiv.innerHTML = `
             <div class="chat-empty">
                 💬 No messages yet.<br>
                 Be the first to say hello!
             </div>
         `;
+
         return;
     }
 
-    // Get the users separately
+    // -------------------------------------------------
+    // Load profiles separately.
+    // This avoids the profile relationship breaking
+    // the entire chat query.
+    // -------------------------------------------------
+
     const userIds = [
         ...new Set(
             messages
-                .map(msg => msg.user_id)
+                .map(
+                    message =>
+                        message.user_id
+                )
                 .filter(Boolean)
         )
     ];
 
     let profiles = [];
 
-    if (userIds.length > 0) {
+    if (userIds.length) {
 
-        const { data, error: profileError } = await client
-            .from("profiles")
-            .select(
-                "id, display_name, avatar_url, role"
-            )
-            .in("id", userIds);
+        const {
+            data,
+            error: profileError
+        } =
+            await client
+                .from("profiles")
+                .select(`
+                    id,
+                    display_name,
+                    avatar_url,
+                    role
+                `)
+                .in(
+                    "id",
+                    userIds
+                );
 
         if (profileError) {
+
             console.error(
                 "Profile loading error:",
                 profileError
             );
+
         } else {
-            profiles = data || [];
+
+            profiles =
+                data || [];
+
         }
     }
 
-    // Attach profiles to messages
-    messages.forEach(msg => {
+    messages.forEach(
+        message => {
 
-        msg.profiles =
-            profiles.find(
-                profile =>
-                    profile.id === msg.user_id
-            ) || null;
+            message.profiles =
+                profiles.find(
+                    profile =>
+                        profile.id ===
+                        message.user_id
+                ) || null;
 
-        showMessage(msg);
+            showMessage(
+                message
+            );
 
-    });
+        }
+    );
 
     scrollBottom();
+
 }
+
 // =====================================================
 // SHOW MESSAGE
 // =====================================================
 
 function showMessage(msg) {
 
-    if (!msg) return;
+    if (!messagesDiv || !msg) return;
 
-    const div = document.createElement("div");
+    const div =
+        document.createElement("div");
 
-    div.className = "chat-message";
-
+    div.className =
+        "chat-message";
 
     const profile =
         msg.profiles || {};
 
-
     const name =
         profile.display_name ||
         "Member";
-
 
     const role =
         profile.role ||
         msg.role ||
         "member";
 
-
     const avatar =
         profile.avatar_url ||
         "/images/default-avatar.png";
-
 
     const time =
         msg.created_at
@@ -583,23 +616,24 @@ function showMessage(msg) {
             )
             : "";
 
-
-    // =================================================
-    // USER CLICK
-    // =================================================
+    // -------------------------------------------------
+    // Click user
+    // -------------------------------------------------
 
     div.addEventListener(
         "click",
-        function (event) {
+        event => {
 
             if (
                 event.target.closest(
                     ".delete-btn"
                 )
             ) {
+
                 return;
             }
 
+            if (!msg.user_id) return;
 
             if (
                 window.innerWidth <= 768
@@ -611,18 +645,22 @@ function showMessage(msg) {
 
             } else {
 
-                openOwnerPanel(
-                    msg.user_id
-                );
+                if (isOwner()) {
+
+                    openOwnerPanel(
+                        msg.user_id
+                    );
+
+                }
+
             }
 
         }
     );
 
-
-    // =================================================
-    // MESSAGE LAYOUT
-    // =================================================
+    // -------------------------------------------------
+    // Row
+    // -------------------------------------------------
 
     const row =
         document.createElement("div");
@@ -636,6 +674,9 @@ function showMessage(msg) {
     row.style.alignItems =
         "flex-start";
 
+    // -------------------------------------------------
+    // Avatar
+    // -------------------------------------------------
 
     const img =
         document.createElement("img");
@@ -652,12 +693,14 @@ function showMessage(msg) {
     img.style.objectFit =
         "cover";
 
-
     setSafeImage(
         img,
         avatar
     );
 
+    // -------------------------------------------------
+    // Content
+    // -------------------------------------------------
 
     const content =
         document.createElement("div");
@@ -665,6 +708,7 @@ function showMessage(msg) {
     content.style.flex =
         "1";
 
+    // User
 
     const userLine =
         document.createElement("div");
@@ -672,10 +716,8 @@ function showMessage(msg) {
     userLine.className =
         "chat-user";
 
-
     userLine.textContent =
         name + " ";
-
 
     const badge =
         document.createElement("span");
@@ -686,11 +728,11 @@ function showMessage(msg) {
     badge.textContent =
         roleBadge(role);
 
-
     userLine.appendChild(
         badge
     );
 
+    // Message
 
     const text =
         document.createElement("div");
@@ -698,10 +740,11 @@ function showMessage(msg) {
     text.className =
         "chat-text";
 
-    // textContent = SAFE
+    // SAFE
     text.textContent =
         msg.message || "";
 
+    // Time
 
     const timeDiv =
         document.createElement("div");
@@ -711,7 +754,6 @@ function showMessage(msg) {
 
     timeDiv.textContent =
         time;
-
 
     content.appendChild(
         userLine
@@ -725,10 +767,9 @@ function showMessage(msg) {
         timeDiv
     );
 
-
-    // =================================================
-    // DELETE BUTTON
-    // =================================================
+    // -------------------------------------------------
+    // DELETE
+    // -------------------------------------------------
 
     const canDelete =
         currentUser &&
@@ -738,11 +779,12 @@ function showMessage(msg) {
             isAdmin()
         );
 
-
     if (canDelete) {
 
         const deleteButton =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
 
         deleteButton.type =
             "button";
@@ -753,10 +795,9 @@ function showMessage(msg) {
         deleteButton.textContent =
             "🗑️ Delete";
 
-
         deleteButton.addEventListener(
             "click",
-            function (event) {
+            event => {
 
                 event.stopPropagation();
 
@@ -767,12 +808,11 @@ function showMessage(msg) {
             }
         );
 
-
         content.appendChild(
             deleteButton
         );
-    }
 
+    }
 
     row.appendChild(
         img
@@ -789,8 +829,8 @@ function showMessage(msg) {
     messagesDiv.appendChild(
         div
     );
-}
 
+}
 
 // =====================================================
 // SEND MESSAGE
@@ -802,15 +842,11 @@ async function sendMessage() {
 
     if (!messageInput) return;
 
-
     const text =
         messageInput.value.trim();
 
-
     if (!text) return;
 
-
-    // Basic client-side limit
     if (text.length > 2000) {
 
         alert(
@@ -820,10 +856,12 @@ async function sendMessage() {
         return;
     }
 
+    if (sendBtn) {
 
-    sendBtn.disabled =
-        true;
+        sendBtn.disabled =
+            true;
 
+    }
 
     try {
 
@@ -831,22 +869,17 @@ async function sendMessage() {
             error
         } =
             await client
-
                 .from("messages")
+                .insert({
+                    user_id:
+                        currentUser.id,
 
-                .insert(
-                    {
-                        user_id:
-                            currentUser.id,
+                    message:
+                        text,
 
-                        message:
-                            text,
-
-                        role:
-                            currentUserRole
-                    }
-                );
-
+                    role:
+                        currentUserRole
+                });
 
         if (error) {
 
@@ -863,38 +896,38 @@ async function sendMessage() {
             return;
         }
 
-
         messageInput.value =
             "";
 
-
         typing =
             false;
-
 
         await updateTyping(
             false
         );
 
-
     } finally {
 
-        sendBtn.disabled =
-            false;
+        if (sendBtn) {
+
+            sendBtn.disabled =
+                false;
+
+        }
 
         messageInput.focus();
+
     }
+
 }
 
-
 // =====================================================
-// DELETE MESSAGE
+// DELETE ONE MESSAGE
 // =====================================================
 
 async function deleteMessage(id) {
 
-    if (!id) return;
-
+    if (!currentUser || !id) return;
 
     if (!confirm(
         "Delete this message?"
@@ -903,21 +936,16 @@ async function deleteMessage(id) {
         return;
     }
 
-
     const {
         error
     } =
         await client
-
             .from("messages")
-
             .delete()
-
             .eq(
                 "id",
                 id
             );
-
 
     if (error) {
 
@@ -934,15 +962,12 @@ async function deleteMessage(id) {
         return;
     }
 
-
     await loadMessages();
+
 }
 
-
-// Make available if HTML still calls it
 window.deleteMessage =
     deleteMessage;
-
 
 // =====================================================
 // REALTIME CHAT
@@ -958,10 +983,8 @@ function enableRealtime() {
 
     }
 
-
     chatChannel =
         client
-
             .channel(
                 "wildstyle-chat"
             )
@@ -969,43 +992,39 @@ function enableRealtime() {
             .on(
                 "postgres_changes",
                 {
-                    event: "INSERT",
-                    schema: "public",
-                    table: "messages"
+                    event:
+                        "INSERT",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "messages"
                 },
+
                 async payload => {
 
                     const {
                         data: profile
                     } =
                         await client
-
                             .from("profiles")
-
-                            .select(
-                                "display_name,avatar_url,role"
-                            )
-
+                            .select(`
+                                display_name,
+                                avatar_url,
+                                role
+                            `)
                             .eq(
                                 "id",
                                 payload.new.user_id
                             )
-
                             .single();
 
-
-                    const message =
-                        {
-                            ...payload.new,
-                            profiles:
-                                profile
-                        };
-
-
-                    showMessage(
-                        message
-                    );
-
+                    showMessage({
+                        ...payload.new,
+                        profiles:
+                            profile
+                    });
 
                     scrollBottom();
 
@@ -1015,10 +1034,16 @@ function enableRealtime() {
             .on(
                 "postgres_changes",
                 {
-                    event: "DELETE",
-                    schema: "public",
-                    table: "messages"
+                    event:
+                        "DELETE",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "messages"
                 },
+
                 () => {
 
                     loadMessages();
@@ -1036,8 +1061,8 @@ function enableRealtime() {
 
                 }
             );
-}
 
+}
 
 // =====================================================
 // SCROLL
@@ -1049,8 +1074,8 @@ function scrollBottom() {
 
     messagesDiv.scrollTop =
         messagesDiv.scrollHeight;
-}
 
+}
 
 // =====================================================
 // TYPING
@@ -1062,16 +1087,13 @@ async function updateTyping(
 
     if (!currentUser) return;
 
-
     if (isTyping) {
 
         const {
             error
         } =
             await client
-
                 .from("typing_users")
-
                 .upsert(
                     {
                         user_id:
@@ -1089,61 +1111,41 @@ async function updateTyping(
                     }
                 );
 
-
         if (error) {
 
             console.error(
-                "Typing update error:",
+                "Typing error:",
                 error
             );
-        }
 
+        }
 
     } else {
 
-        const {
-            error
-        } =
-            await client
-
-                .from("typing_users")
-
-                .delete()
-
-                .eq(
-                    "user_id",
-                    currentUser.id
-                );
-
-
-        if (error) {
-
-            console.error(
-                "Typing delete error:",
-                error
+        await client
+            .from("typing_users")
+            .delete()
+            .eq(
+                "user_id",
+                currentUser.id
             );
-        }
+
     }
+
 }
-
-
-// =====================================================
-// LOAD TYPING USERS
-// =====================================================
 
 async function loadTypingUsers() {
 
     if (!currentUser) return;
 
+    if (!typingIndicator) return;
 
     const {
         data,
         error
     } =
         await client
-
             .from("typing_users")
-
             .select(`
                 user_id,
                 is_typing,
@@ -1151,12 +1153,10 @@ async function loadTypingUsers() {
                     display_name
                 )
             `)
-
             .eq(
                 "is_typing",
                 true
             );
-
 
     if (error) {
 
@@ -1168,22 +1168,15 @@ async function loadTypingUsers() {
         return;
     }
 
-
-    if (!typingIndicator) return;
-
-
     const others =
-        (data || []).filter(
-            user =>
-                user.user_id !==
-                currentUser.id
-        );
+        (data || [])
+            .filter(
+                user =>
+                    user.user_id !==
+                    currentUser.id
+            );
 
-
-    if (
-        others.length ===
-        0
-    ) {
+    if (!others.length) {
 
         typingIndicator.textContent =
             "";
@@ -1191,14 +1184,12 @@ async function loadTypingUsers() {
         return;
     }
 
-
     const names =
         others.map(
             user =>
                 user.profiles?.display_name ||
                 "Someone"
         );
-
 
     typingIndicator.textContent =
         `✍️ ${names.join(", ")} ` +
@@ -1208,14 +1199,10 @@ async function loadTypingUsers() {
                 : "are"
         ) +
         " typing...";
+
 }
 
-
-// =====================================================
-// TYPING REALTIME
-// =====================================================
-
-function enableTyping() {
+function enableTypingRealtime() {
 
     if (typingChannel) {
 
@@ -1225,20 +1212,22 @@ function enableTyping() {
 
     }
 
-
     typingChannel =
         client
-
             .channel(
                 "wildstyle-typing"
             )
-
             .on(
                 "postgres_changes",
                 {
-                    event: "*",
-                    schema: "public",
-                    table: "typing_users"
+                    event:
+                        "*",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "typing_users"
                 },
                 () => {
 
@@ -1246,19 +1235,12 @@ function enableTyping() {
 
                 }
             )
-
             .subscribe();
-}
 
+}
 
 // =====================================================
 // CHAT EVENTS
-// =====================================================
-//
-// IMPORTANT:
-// These are displayed as plain text.
-// They are NEVER executed as JavaScript.
-// There is deliberately NO alert() here.
 // =====================================================
 
 function enableChatEvents() {
@@ -1271,25 +1253,26 @@ function enableChatEvents() {
 
     }
 
-
     eventsChannel =
         client
-
             .channel(
                 "wildstyle-chat-events"
             )
-
             .on(
                 "postgres_changes",
                 {
-                    event: "INSERT",
-                    schema: "public",
-                    table: "chat_events"
+                    event:
+                        "INSERT",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "chat_events"
                 },
                 payload => {
 
                     if (!messagesDiv) return;
-
 
                     const div =
                         document.createElement(
@@ -1299,7 +1282,6 @@ function enableChatEvents() {
                     div.className =
                         "system-message";
 
-
                     const pill =
                         document.createElement(
                             "div"
@@ -1308,31 +1290,26 @@ function enableChatEvents() {
                     pill.className =
                         "system-pill";
 
-
-                    // SAFE: never innerHTML
+                    // SAFE
                     pill.textContent =
                         payload.new.message ||
                         "";
-
 
                     div.appendChild(
                         pill
                     );
 
-
                     messagesDiv.appendChild(
                         div
                     );
-
 
                     scrollBottom();
 
                 }
             )
-
             .subscribe();
-}
 
+}
 
 // =====================================================
 // ONLINE USERS
@@ -1342,15 +1319,12 @@ async function loadOnlineUsers() {
 
     if (!usersList) return;
 
-
     const {
         data,
         error
     } =
         await client
-
             .from("online_users")
-
             .select(`
                 user_id,
                 last_seen,
@@ -1362,7 +1336,6 @@ async function loadOnlineUsers() {
                 )
             `);
 
-
     if (error) {
 
         console.error(
@@ -1373,14 +1346,11 @@ async function loadOnlineUsers() {
         return;
     }
 
-
     usersList.innerHTML =
         "";
 
-
     const now =
         Date.now();
-
 
     (data || []).forEach(
         user => {
@@ -1390,78 +1360,60 @@ async function loadOnlineUsers() {
                     user.last_seen
                 ).getTime();
 
-
             const seconds =
                 (
                     now -
                     lastSeen
                 ) / 1000;
 
-
-            if (
-                seconds >
-                60
-            ) {
-
+            if (seconds > 60) {
                 return;
             }
 
-
             const profile =
                 user.profiles || {};
-
 
             const name =
                 profile.display_name ||
                 "Member";
 
-
             const avatar =
                 profile.avatar_url ||
                 "/images/default-avatar.png";
 
-
             const status =
                 profile.status ||
                 "Online";
-
 
             const div =
                 document.createElement(
                     "div"
                 );
 
-
             div.className =
                 "user";
-
 
             const img =
                 document.createElement(
                     "img"
                 );
 
-
             img.className =
                 "online-avatar";
-
 
             setSafeImage(
                 img,
                 avatar
             );
 
-
             const span =
                 document.createElement(
                     "span"
                 );
 
-
             span.textContent =
                 statusIcon(status) +
                 name;
-
 
             div.appendChild(
                 img
@@ -1470,7 +1422,6 @@ async function loadOnlineUsers() {
             div.appendChild(
                 span
             );
-
 
             div.addEventListener(
                 "click",
@@ -1485,16 +1436,18 @@ async function loadOnlineUsers() {
                             user.user_id
                         );
 
-                    } else {
+                    } else if (
+                        isOwner()
+                    ) {
 
                         openOwnerPanel(
                             user.user_id
                         );
+
                     }
 
                 }
             );
-
 
             usersList.appendChild(
                 div
@@ -1502,23 +1455,19 @@ async function loadOnlineUsers() {
 
         }
     );
+
 }
 
-
-// Refresh online list
 setInterval(
     () => {
 
         if (currentUser) {
-
             loadOnlineUsers();
-
         }
 
     },
     30000
 );
-
 
 // =====================================================
 // MOBILE PROFILE
@@ -1530,15 +1479,12 @@ async function openMobileProfile(
 
     if (!userId) return;
 
-
     const {
         data,
         error
     } =
         await client
-
             .from("profiles")
-
             .select(`
                 id,
                 display_name,
@@ -1546,14 +1492,11 @@ async function openMobileProfile(
                 role,
                 status
             `)
-
             .eq(
                 "id",
                 userId
             )
-
             .single();
-
 
     if (error) {
 
@@ -1565,30 +1508,23 @@ async function openMobileProfile(
         return;
     }
 
-
     if (!data) return;
-
 
     selectedUser =
         data;
 
-
-    if (mobileProfileAvatar) {
-
-        setSafeImage(
-            mobileProfileAvatar,
-            data.avatar_url
-        );
-    }
-
+    setSafeImage(
+        mobileProfileAvatar,
+        data.avatar_url
+    );
 
     if (mobileProfileName) {
 
         mobileProfileName.textContent =
             data.display_name ||
             "Member";
-    }
 
+    }
 
     if (mobileProfileStatus) {
 
@@ -1599,8 +1535,8 @@ async function openMobileProfile(
         mobileProfileStatus.textContent =
             statusIcon(status) +
             status;
-    }
 
+    }
 
     if (mobileProfileRole) {
 
@@ -1608,43 +1544,38 @@ async function openMobileProfile(
             roleBadge(
                 data.role
             );
+
     }
 
-
-    // Owner tools
     if (mobileModerationTools) {
 
         mobileModerationTools.style.display =
             isOwner()
                 ? "block"
                 : "none";
-    }
 
+    }
 
     if (mobileProfileOverlay) {
 
         mobileProfileOverlay.classList.add(
             "show"
         );
-    }
 
+    }
 
     if (mobileProfileCard) {
 
         mobileProfileCard.classList.add(
             "open"
         );
-    }
-}
 
+    }
+
+}
 
 window.openMobileProfile =
     openMobileProfile;
-
-
-// =====================================================
-// CLOSE MOBILE PROFILE
-// =====================================================
 
 function closeMobileProfile() {
 
@@ -1653,25 +1584,21 @@ function closeMobileProfile() {
         mobileProfileCard.classList.remove(
             "open"
         );
-    }
 
+    }
 
     if (mobileProfileOverlay) {
 
         mobileProfileOverlay.classList.remove(
             "show"
         );
-    }
-}
 
+    }
+
+}
 
 window.closeMobileProfile =
     closeMobileProfile;
-
-
-// =====================================================
-// VIEW PROFILE
-// =====================================================
 
 function mobileViewProfile() {
 
@@ -1683,18 +1610,16 @@ function mobileViewProfile() {
         return;
     }
 
-
     window.location.href =
         "profile.html?id=" +
         encodeURIComponent(
             selectedUser.id
         );
-}
 
+}
 
 window.mobileViewProfile =
     mobileViewProfile;
-
 
 // =====================================================
 // OWNER PANEL
@@ -1705,22 +1630,17 @@ async function openOwnerPanel(
 ) {
 
     if (!isOwner()) {
-
         return;
     }
 
-
     if (!userId) return;
-
 
     const {
         data,
         error
     } =
         await client
-
             .from("profiles")
-
             .select(`
                 id,
                 display_name,
@@ -1730,14 +1650,11 @@ async function openOwnerPanel(
                 banned,
                 ban_reason
             `)
-
             .eq(
                 "id",
                 userId
             )
-
             .single();
-
 
     if (error) {
 
@@ -1749,30 +1666,23 @@ async function openOwnerPanel(
         return;
     }
 
-
     if (!data) return;
-
 
     selectedUser =
         data;
 
-
-    if (ownerAvatar) {
-
-        setSafeImage(
-            ownerAvatar,
-            data.avatar_url
-        );
-    }
-
+    setSafeImage(
+        ownerAvatar,
+        data.avatar_url
+    );
 
     if (ownerName) {
 
         ownerName.textContent =
             data.display_name ||
             "Unknown";
-    }
 
+    }
 
     if (ownerRole) {
 
@@ -1782,8 +1692,8 @@ async function openOwnerPanel(
                 data.role ||
                 "member"
             );
-    }
 
+    }
 
     if (ownerStatus) {
 
@@ -1793,8 +1703,8 @@ async function openOwnerPanel(
                 data.status ||
                 "Online"
             );
-    }
 
+    }
 
     if (ownerPanel) {
 
@@ -1811,69 +1721,1352 @@ async function openOwnerPanel(
 
             }
         );
-    }
 
+    }
 
     const overlay =
         document.getElementById(
             "ownerOverlay"
         );
-
 
     if (overlay) {
 
         overlay.classList.add(
             "show"
         );
-    }
-}
 
+    }
+
+}
 
 window.openOwnerPanel =
     openOwnerPanel;
 
-
-// =====================================================
-// CLOSE OWNER PANEL
-// =====================================================
-
 function closeOwnerPanelNow() {
 
-    if (!ownerPanel) return;
+    if (ownerPanel) {
 
+        ownerPanel.classList.remove(
+            "open"
+        );
 
-    ownerPanel.classList.remove(
-        "open"
-    );
+        setTimeout(
+            () => {
 
+                ownerPanel.classList.add(
+                    "hidden"
+                );
+
+            },
+            350
+        );
+
+    }
 
     const overlay =
         document.getElementById(
             "ownerOverlay"
         );
 
-
     if (overlay) {
 
         overlay.classList.remove(
             "show"
         );
+
     }
 
-
-    setTimeout(
-        () => {
-
-            ownerPanel.classList.add(
-                "hidden"
-            );
-
-        },
-        350
-    );
 }
 
+// =====================================================
+// ROLE MANAGEMENT
+// =====================================================
 
-if (closeOwnerPanel) {
+async function setRole(
+    role
+) {
 
-    closeOwnerPanel.addEventListener
+    if (!isOwner()) {
+
+        alert(
+            "Only the owner can change roles."
+        );
+
+        return;
+    }
+
+    if (
+        !selectedUser ||
+        !selectedUser.id
+    ) {
+
+        alert(
+            "Select a user first."
+        );
+
+        return;
+    }
+
+    // Never allow the owner account to be
+    // changed through this panel.
+
+    if (
+        selectedUser.id ===
+        currentUser.id
+    ) {
+
+        alert(
+            "You cannot change your own owner role."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await client
+            .from("profiles")
+            .update({
+                role:
+                    role
+            })
+            .eq(
+                "id",
+                selectedUser.id
+            );
+
+    if (error) {
+
+        console.error(
+            "Role update error:",
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    selectedUser.role =
+        role;
+
+    if (ownerRole) {
+
+        ownerRole.textContent =
+            "Role: " +
+            role.charAt(0).toUpperCase() +
+            role.slice(1);
+
+    }
+
+    await loadOnlineUsers();
+
+    await loadMessages();
+
+    alert(
+        selectedUser.display_name +
+        " is now " +
+        role +
+        "."
+    );
+
+}
+
+// =====================================================
+// BAN USER
+// =====================================================
+
+async function banUser() {
+
+    if (!isOwner()) {
+
+        alert(
+            "Only the owner can ban users."
+        );
+
+        return;
+    }
+
+    if (
+        !selectedUser ||
+        !selectedUser.id
+    ) {
+
+        alert(
+            "Select a user first."
+        );
+
+        return;
+    }
+
+    if (
+        selectedUser.id ===
+        currentUser.id
+    ) {
+
+        alert(
+            "You cannot ban yourself."
+        );
+
+        return;
+    }
+
+    if (
+        !confirm(
+            "Ban " +
+            selectedUser.display_name +
+            "?"
+        )
+    ) {
+
+        return;
+    }
+
+    const reason =
+        prompt(
+            "Reason for banning this user?"
+        );
+
+    if (reason === null) return;
+
+    const {
+        error
+    } =
+        await client
+            .from("profiles")
+            .update({
+                banned:
+                    true,
+
+                ban_reason:
+                    reason
+            })
+            .eq(
+                "id",
+                selectedUser.id
+            );
+
+    if (error) {
+
+        console.error(
+            "Ban error:",
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    await client
+        .from("chat_events")
+        .insert({
+            message:
+                "🚫 " +
+                selectedUser.display_name +
+                " has been banned."
+        });
+
+    alert(
+        selectedUser.display_name +
+        " has been banned."
+    );
+
+    await loadOnlineUsers();
+
+}
+
+// =====================================================
+// DELETE ALL USER MESSAGES
+// =====================================================
+
+async function deleteAllMessages() {
+
+    if (!isOwner()) {
+
+        alert(
+            "Only the owner can delete all messages."
+        );
+
+        return;
+    }
+
+    if (
+        !selectedUser ||
+        !selectedUser.id
+    ) {
+
+        alert(
+            "Select a user first."
+        );
+
+        return;
+    }
+
+    if (
+        !confirm(
+            "Delete ALL messages from " +
+            selectedUser.display_name +
+            "?"
+        )
+    ) {
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await client
+            .from("messages")
+            .delete()
+            .eq(
+                "user_id",
+                selectedUser.id
+            );
+
+    if (error) {
+
+        console.error(
+            "Delete all messages error:",
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    await loadMessages();
+
+    alert(
+        "Messages deleted successfully."
+    );
+
+}
+
+// =====================================================
+// STATUS
+// =====================================================
+
+async function setManualStatus(
+    status
+) {
+
+    if (!currentUser) return;
+
+    const {
+        error
+    } =
+        await client
+            .from("profiles")
+            .update({
+                status:
+                    status
+            })
+            .eq(
+                "id",
+                currentUser.id
+            );
+
+    if (error) {
+
+        console.error(
+            "Status update error:",
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    presenceStatus =
+        status;
+
+    updateStatusButton(
+        status
+    );
+
+    await loadOnlineUsers();
+
+}
+
+function updateStatusButton(
+    status
+) {
+
+    if (!statusButton) return;
+
+    let label =
+        "🟢 Online";
+
+    switch (status) {
+
+        case "Online":
+            label =
+                "🟢 Online";
+            break;
+
+        case "Away":
+            label =
+                "🟡 Away";
+            break;
+
+        case "Busy":
+            label =
+                "🔴 Busy";
+            break;
+
+        case "Be Right Back":
+            label =
+                "🟠 Be Right Back";
+            break;
+
+        case "Invisible":
+            label =
+                "⚫ Invisible";
+            break;
+
+    }
+
+    statusButton.textContent =
+        label;
+
+}
+
+// =====================================================
+// PRIVATE MESSAGES
+// =====================================================
+
+async function openPrivateChat(
+    userId,
+    name,
+    avatar
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please log in first."
+        );
+
+        return;
+    }
+
+    if (!userId) return;
+
+    if (
+        userId ===
+        currentUser.id
+    ) {
+
+        alert(
+            "You cannot message yourself."
+        );
+
+        return;
+    }
+
+    privateChatUser = {
+        id:
+            userId,
+
+        name:
+            name ||
+            "Member",
+
+        avatar:
+            avatar ||
+            "/images/default-avatar.png"
+    };
+
+    const overlay =
+        document.getElementById(
+            "privateChatOverlay"
+        );
+
+    if (!overlay) {
+
+        console.error(
+            "privateChatOverlay not found."
+        );
+
+        return;
+    }
+
+    const nameEl =
+        document.getElementById(
+            "privateChatName"
+        );
+
+    const avatarEl =
+        document.getElementById(
+            "privateChatAvatar"
+        );
+
+    if (nameEl) {
+
+        nameEl.textContent =
+            privateChatUser.name;
+
+    }
+
+    setSafeImage(
+        avatarEl,
+        privateChatUser.avatar
+    );
+
+    overlay.classList.add(
+        "open"
+    );
+
+    await loadPrivateMessages();
+
+    enablePrivateRealtime();
+
+    document
+        .getElementById(
+            "privateChatInput"
+        )
+        ?.focus();
+
+}
+
+window.openPrivateChat =
+    openPrivateChat;
+
+// =====================================================
+// LOAD PRIVATE MESSAGES
+// =====================================================
+
+async function loadPrivateMessages() {
+
+    if (
+        !currentUser ||
+        !privateChatUser
+    ) {
+
+        return;
+    }
+
+    const box =
+        document.getElementById(
+            "privateChatMessages"
+        );
+
+    if (!box) return;
+
+    const {
+        data,
+        error
+    } =
+        await client
+            .from("private_messages")
+            .select("*")
+            .or(
+                `and(sender_id.eq.${currentUser.id},recipient_id.eq.${privateChatUser.id}),and(sender_id.eq.${privateChatUser.id},recipient_id.eq.${currentUser.id})`
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:
+                        true
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Private message load error:",
+            error
+        );
+
+        box.innerHTML =
+            `
+            <div class="private-chat-error">
+                Unable to load messages.
+            </div>
+            `;
+
+        return;
+    }
+
+    box.innerHTML =
+        "";
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        box.innerHTML =
+            `
+            <div class="private-chat-empty">
+                💜 No private messages yet.<br>
+                Start the conversation!
+            </div>
+            `;
+
+        return;
+    }
+
+    data.forEach(
+        showPrivateMessage
+    );
+
+    scrollPrivateMessages();
+
+}
+
+// =====================================================
+// SHOW PRIVATE MESSAGE
+// =====================================================
+
+function showPrivateMessage(
+    msg
+) {
+
+    const box =
+        document.getElementById(
+            "privateChatMessages"
+        );
+
+    if (!box) return;
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    const mine =
+        msg.sender_id ===
+        currentUser.id;
+
+    wrapper.className =
+        mine
+            ? "private-message mine"
+            : "private-message received";
+
+    const bubble =
+        document.createElement(
+            "div"
+        );
+
+    bubble.className =
+        "private-message-bubble";
+
+    bubble.textContent =
+        msg.message || "";
+
+    const time =
+        document.createElement(
+            "div"
+        );
+
+    time.className =
+        "private-message-time";
+
+    time.textContent =
+        msg.created_at
+            ? new Date(
+                msg.created_at
+            ).toLocaleTimeString(
+                [],
+                {
+                    hour:
+                        "2-digit",
+
+                    minute:
+                        "2-digit"
+                }
+            )
+            : "";
+
+    wrapper.appendChild(
+        bubble
+    );
+
+    wrapper.appendChild(
+        time
+    );
+
+    box.appendChild(
+        wrapper
+    );
+
+}
+
+// =====================================================
+// SEND PRIVATE MESSAGE
+// =====================================================
+
+async function sendPrivateMessage() {
+
+    if (
+        !currentUser ||
+        !privateChatUser
+    ) {
+
+        return;
+    }
+
+    const input =
+        document.getElementById(
+            "privateChatInput"
+        );
+
+    if (!input) return;
+
+    const text =
+        input.value.trim();
+
+    if (!text) return;
+
+    const {
+        data,
+        error
+    } =
+        await client
+            .from("private_messages")
+            .insert({
+                sender_id:
+                    currentUser.id,
+
+                recipient_id:
+                    privateChatUser.id,
+
+                message:
+                    text
+            })
+            .select()
+            .single();
+
+    if (error) {
+
+        console.error(
+            "Private message send error:",
+            error
+        );
+
+        alert(
+            "Could not send private message.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+    input.value =
+        "";
+
+    if (data) {
+
+        showPrivateMessage(
+            data
+        );
+
+        scrollPrivateMessages();
+
+    }
+
+    input.focus();
+
+}
+
+// =====================================================
+// PRIVATE REALTIME
+// =====================================================
+
+function enablePrivateRealtime() {
+
+    if (
+        !currentUser ||
+        !privateChatUser
+    ) {
+
+        return;
+    }
+
+    if (privateChatChannel) {
+
+        client.removeChannel(
+            privateChatChannel
+        );
+
+    }
+
+    privateChatChannel =
+        client
+            .channel(
+                "wildstyle-private-" +
+                currentUser.id +
+                "-" +
+                privateChatUser.id
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event:
+                        "INSERT",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "private_messages"
+                },
+                payload => {
+
+                    const msg =
+                        payload.new;
+
+                    const belongs =
+                        (
+                            msg.sender_id ===
+                            privateChatUser.id &&
+                            msg.recipient_id ===
+                            currentUser.id
+                        ) ||
+                        (
+                            msg.sender_id ===
+                            currentUser.id &&
+                            msg.recipient_id ===
+                            privateChatUser.id
+                        );
+
+                    if (!belongs) return;
+
+                    if (
+                        msg.sender_id ===
+                        currentUser.id
+                    ) {
+
+                        return;
+                    }
+
+                    showPrivateMessage(
+                        msg
+                    );
+
+                    scrollPrivateMessages();
+
+                }
+            )
+            .subscribe();
+
+}
+
+// =====================================================
+// CLOSE PRIVATE CHAT
+// =====================================================
+
+function closePrivateChat() {
+
+    const overlay =
+        document.getElementById(
+            "privateChatOverlay"
+        );
+
+    if (overlay) {
+
+        overlay.classList.remove(
+            "open"
+        );
+
+    }
+
+    if (privateChatChannel) {
+
+        client.removeChannel(
+            privateChatChannel
+        );
+
+        privateChatChannel =
+            null;
+
+    }
+
+    privateChatUser =
+        null;
+
+}
+
+// =====================================================
+// SCROLL PRIVATE
+// =====================================================
+
+function scrollPrivateMessages() {
+
+    const box =
+        document.getElementById(
+            "privateChatMessages"
+        );
+
+    if (!box) return;
+
+    box.scrollTop =
+        box.scrollHeight;
+
+}
+
+// =====================================================
+// UI SETUP
+// =====================================================
+
+function setupUI() {
+
+    // -------------------------------------------------
+    // SEND
+    // -------------------------------------------------
+
+    if (sendBtn) {
+
+        sendBtn.addEventListener(
+            "click",
+            sendMessage
+        );
+
+    }
+
+    if (messageInput) {
+
+        messageInput.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    sendMessage();
+
+                }
+
+            }
+        );
+
+        messageInput.addEventListener(
+            "input",
+            () => {
+
+                if (!typing) {
+
+                    typing =
+                        true;
+
+                    updateTyping(
+                        true
+                    );
+
+                }
+
+                clearTimeout(
+                    typingTimer
+                );
+
+                typingTimer =
+                    setTimeout(
+                        () => {
+
+                            typing =
+                                false;
+
+                            updateTyping(
+                                false
+                            );
+
+                        },
+                        1500
+                    );
+
+            }
+        );
+
+    }
+
+    // -------------------------------------------------
+    // LOGOUT
+    // -------------------------------------------------
+
+    const logoutBtn =
+        document.getElementById(
+            "logoutBtn"
+        );
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            async () => {
+
+                await client.auth.signOut();
+
+                window.location.href =
+                    "index.html";
+
+            }
+        );
+
+    }
+
+    // -------------------------------------------------
+    // OWNER PANEL
+    // -------------------------------------------------
+
+    if (closeOwnerPanel) {
+
+        closeOwnerPanel.addEventListener(
+            "click",
+            closeOwnerPanelNow
+        );
+
+    }
+
+    const ownerOverlay =
+        document.getElementById(
+            "ownerOverlay"
+        );
+
+    if (ownerOverlay) {
+
+        ownerOverlay.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    ownerOverlay
+                ) {
+
+                    closeOwnerPanelNow();
+
+                }
+
+            }
+        );
+
+    }
+
+    // -------------------------------------------------
+    // ROLE BUTTONS
+    // -------------------------------------------------
+
+    const roleButtons = [
+        [
+            "btnMakeAdmin",
+            "admin"
+        ],
+        [
+            "btnMakeDJ",
+            "dj"
+        ],
+        [
+            "btnMakeVIP",
+            "vip"
+        ],
+        [
+            "btnMember",
+            "member"
+        ]
+    ];
+
+    roleButtons.forEach(
+        ([id, role]) => {
+
+            const button =
+                document.getElementById(
+                    id
+                );
+
+            if (button) {
+
+                button.addEventListener(
+                    "click",
+                    () => setRole(
+                        role
+                    )
+                );
+
+            }
+
+        }
+    );
+
+    // -------------------------------------------------
+    // MODERATION
+    // -------------------------------------------------
+
+    const deleteAllBtn =
+        document.getElementById(
+            "btnDeleteMessages"
+        );
+
+    if (deleteAllBtn) {
+
+        deleteAllBtn.addEventListener(
+            "click",
+            deleteAllMessages
+        );
+
+    }
+
+    const banBtn =
+        document.getElementById(
+            "btnBan"
+        );
+
+    if (banBtn) {
+
+        banBtn.addEventListener(
+            "click",
+            banUser
+        );
+
+    }
+
+    // -------------------------------------------------
+    // STATUS MENU
+    // -------------------------------------------------
+
+    if (
+        statusButton &&
+        statusMenu
+    ) {
+
+        statusButton.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                statusMenu.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+        statusMenu
+            .querySelectorAll(
+                "button[data-status]"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        async () => {
+
+                            await setManualStatus(
+                                button.dataset.status
+                            );
+
+                            statusMenu.classList.remove(
+                                "open"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+        document.addEventListener(
+            "click",
+            () => {
+
+                statusMenu.classList.remove(
+                    "open"
+                );
+
+            }
+        );
+
+    }
+
+    // -------------------------------------------------
+    // MOBILE PROFILE
+    // -------------------------------------------------
+
+    if (mobileProfileClose) {
+
+        mobileProfileClose.addEventListener(
+            "click",
+            closeMobileProfile
+        );
+
+    }
+
+    if (mobileProfileOverlay) {
+
+        mobileProfileOverlay.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    mobileProfileOverlay
+                ) {
+
+                    closeMobileProfile();
+
+                }
+
+            }
+        );
+
+    }
+
+    // -------------------------------------------------
+    // PRIVATE CHAT
+    // -------------------------------------------------
+
+    const privateClose =
+        document.getElementById(
+            "privateChatClose"
+        );
+
+    const privateSend =
+        document.getElementById(
+            "privateChatSend"
+        );
+
+    const privateInput =
+        document.getElementById(
+            "privateChatInput"
+        );
+
+    if (privateClose) {
+
+        privateClose.addEventListener(
+            "click",
+            closePrivateChat
+        );
+
+    }
+
+    if (privateSend) {
+
+        privateSend.addEventListener(
+            "click",
+            sendPrivateMessage
+        );
+
+    }
+
+    if (privateInput) {
+
+        privateInput.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    sendPrivateMessage();
+
+                }
+
+            }
+        );
+
+    }
+
+    // -------------------------------------------------
+    // EMOJI
+    // -------------------------------------------------
+
+    if (
+        emojiBtn &&
+        emojiPicker
+    ) {
+
+        emojiBtn.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                emojiPicker.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+        emojiPicker
+            .querySelectorAll(
+                "span"
+            )
+            .forEach(
+                span => {
+
+                    span.addEventListener(
+                        "click",
+                        () => {
+
+                            if (
+                                messageInput
+                            ) {
+
+                                messageInput.value +=
+                                    span.textContent;
+
+                                messageInput.focus();
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+}
+
+// =====================================================
+// GLOBAL FUNCTIONS FOR HTML
+// =====================================================
+
+window.sendMessage =
+    sendMessage;
+
+window.deleteMessage =
+    deleteMessage;
+
+window.openOwnerPanel =
+    openOwnerPanel;
+
+window.openMobileProfile =
+    openMobileProfile;
+
+window.closeMobileProfile =
+    closeMobileProfile;
+
+window.mobileViewProfile =
+    mobileViewProfile;
+
+window.openPrivateChat =
+    openPrivateChat;
+
+window.closePrivateChat =
+    closePrivateChat;
