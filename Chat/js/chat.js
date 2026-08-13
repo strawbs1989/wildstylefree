@@ -449,85 +449,105 @@ setInterval(
 );
 
 
-// =====================================================
-// LOAD MESSAGES
-// =====================================================
+// ==========================================
+// LOAD OLD MESSAGES
+// ==========================================
 
 async function loadMessages() {
 
-    if (!messagesDiv) return;
-
-
-    const {
-        data,
-        error
-    } =
-        await client
-
-            .from("messages")
-
-            .select(`
-                id,
-                user_id,
-                message,
-                role,
-                created_at,
-                profiles (
-                    display_name,
-                    avatar_url,
-                    role
-                )
-            `)
-
-            .order(
-                "created_at",
-                {
-                    ascending: true
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Load messages error:",
-            error
-        );
-
+    if (!currentUser) {
+        console.error("Chat: currentUser not ready");
         return;
     }
 
+    console.log("Chat: loading messages...");
+
+    // Get messages WITHOUT the profiles join
+    const { data: messages, error } = await client
+        .from("messages")
+        .select("*")
+        .order("created_at", {
+            ascending: true
+        });
+
+    if (error) {
+        console.error("❌ MESSAGE LOAD ERROR:", error);
+        return;
+    }
+
+    console.log(
+        "✅ Messages loaded:",
+        messages?.length || 0
+    );
 
     messagesDiv.innerHTML = "";
 
+    if (!messages || messages.length === 0) {
+        messagesDiv.innerHTML = `
+            <div class="chat-empty">
+                💬 No messages yet.<br>
+                Be the first to say hello!
+            </div>
+        `;
+        return;
+    }
 
-    if (!data) return;
+    // Get the users separately
+    const userIds = [
+        ...new Set(
+            messages
+                .map(msg => msg.user_id)
+                .filter(Boolean)
+        )
+    ];
 
+    let profiles = [];
 
-    data.forEach(
-        showMessage
-    );
+    if (userIds.length > 0) {
 
+        const { data, error: profileError } = await client
+            .from("profiles")
+            .select(
+                "id, display_name, avatar_url, role"
+            )
+            .in("id", userIds);
+
+        if (profileError) {
+            console.error(
+                "Profile loading error:",
+                profileError
+            );
+        } else {
+            profiles = data || [];
+        }
+    }
+
+    // Attach profiles to messages
+    messages.forEach(msg => {
+
+        msg.profiles =
+            profiles.find(
+                profile =>
+                    profile.id === msg.user_id
+            ) || null;
+
+        showMessage(msg);
+
+    });
 
     scrollBottom();
 }
-
-
 // =====================================================
 // SHOW MESSAGE
 // =====================================================
 
 function showMessage(msg) {
 
-    if (!messagesDiv) return;
+    if (!msg) return;
 
+    const div = document.createElement("div");
 
-    const div =
-        document.createElement("div");
-
-
-    div.className =
-        "chat-message";
+    div.className = "chat-message";
 
 
     const profile =
