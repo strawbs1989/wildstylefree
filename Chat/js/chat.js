@@ -211,7 +211,7 @@ await loadMessages();
 enableRealtime();
 
 enableTypingIndicator();
-enableChatEvents();
+// enableChatEvents();
 
 })();
 
