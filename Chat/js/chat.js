@@ -697,47 +697,49 @@ span.addEventListener("click", () => {
 });
 
 });
-function enableChatEvents(){
+function enableChatEvents() {
 
-client
+    client
 
-.channel("chat-events")
+        .channel("chat-events")
 
-.on(
+        .on(
+            "postgres_changes",
+            {
+                event: "INSERT",
+                schema: "public",
+                table: "chat_events"
+            },
+            (payload) => {
 
-"postgres_changes",
+                const div =
+                    document.createElement("div");
 
-{
+                div.className =
+                    "system-message";
 
-event:"INSERT",
+                const pill =
+                    document.createElement("div");
 
-schema:"public",
+                pill.className =
+                    "system-pill";
 
-table:"chat_events"
+                // SECURITY FIX:
+                // Treat database content as TEXT,
+                // never executable HTML.
 
-},
+                pill.textContent =
+                    payload.new.message || "";
 
-(payload)=>{
+                div.appendChild(pill);
 
-const div=document.createElement("div");
+                messagesDiv.appendChild(div);
 
-div.className="system-message";
+                scrollBottom();
+            }
+        )
 
-div.innerHTML=`
-
-<div class="system-pill">  ${payload.new.message}
-
-</div>  `;
-
-messagesDiv.appendChild(div);
-
-scrollBottom();
-
-}
-
-)
-
-.subscribe();
+        .subscribe();
 
 }
 async function deleteMessage(id, userId) {
