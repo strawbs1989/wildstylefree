@@ -1,6 +1,6 @@
 // =====================================================
 // WILDSTYLE COMMUNITY CHAT
-// STABLE CLIENT
+// FINAL STABLE VERSION
 // =====================================================
 
 "use strict";
@@ -30,10 +30,6 @@
     let privateChatChannel = null;
 
     let privateChatUser = null;
-
-    let uiReady = false;
-
-    const renderedMessageIds = new Set();
 
     // =================================================
     // DOM
@@ -69,10 +65,17 @@
     let mobileModerationTools;
 
     // =================================================
-    // GET SUPABASE CLIENT
+    // SUPABASE
     // =================================================
 
     function getClient() {
+
+        if (
+            typeof window.client !== "undefined" &&
+            window.client
+        ) {
+            return window.client;
+        }
 
         if (
             typeof client !== "undefined" &&
@@ -82,52 +85,13 @@
         }
 
         if (
-            window.client
-        ) {
-            return window.client;
-        }
-
-        if (
             window.supabaseClient
         ) {
             return window.supabaseClient;
         }
 
-        if (
-            window.supabase &&
-            window.SUPABASE_URL &&
-            window.SUPABASE_ANON_KEY
-        ) {
-
-            return window.supabase.createClient(
-                window.SUPABASE_URL,
-                window.SUPABASE_ANON_KEY
-            );
-
-        }
-
         return null;
     }
-
-// =================================================
-// SUPABASE CLIENT
-// =================================================
-
-const db = getClient();
-
-if (!db) {
-
-    console.error(
-        "❌ WILDSTYLE: Supabase client could not be found."
-    );
-
-    return;
-
-}
-
-console.log(
-    "✅ WILDSTYLE: Supabase client connected."
-);
 
     // =================================================
     // DOM CACHE
@@ -136,157 +100,106 @@ console.log(
     function cacheDOM() {
 
         ownerPanel =
-            document.getElementById(
-                "ownerPanel"
-            );
+            document.getElementById("ownerPanel");
 
         closeOwnerPanel =
-            document.getElementById(
-                "closeOwnerPanel"
-            );
+            document.getElementById("closeOwnerPanel");
 
         ownerAvatar =
-            document.getElementById(
-                "ownerAvatar"
-            );
+            document.getElementById("ownerAvatar");
 
         ownerName =
-            document.getElementById(
-                "ownerName"
-            );
+            document.getElementById("ownerName");
 
         ownerRole =
-            document.getElementById(
-                "ownerRole"
-            );
+            document.getElementById("ownerRole");
 
         ownerStatus =
-            document.getElementById(
-                "ownerStatus"
-            );
+            document.getElementById("ownerStatus");
 
         messagesDiv =
-            document.getElementById(
-                "messages"
-            );
+            document.getElementById("messages");
 
         messageInput =
-            document.getElementById(
-                "messageInput"
-            );
+            document.getElementById("messageInput");
 
         sendBtn =
-            document.getElementById(
-                "sendBtn"
-            );
+            document.getElementById("sendBtn");
 
         usersList =
-            document.getElementById(
-                "usersList"
-            );
+            document.getElementById("usersList");
 
         emojiBtn =
-            document.getElementById(
-                "emojiBtn"
-            );
+            document.getElementById("emojiBtn");
 
         emojiPicker =
-            document.getElementById(
-                "emojiPicker"
-            );
+            document.getElementById("emojiPicker");
 
         typingIndicator =
-            document.getElementById(
-                "typingIndicator"
-            );
+            document.getElementById("typingIndicator");
 
         statusButton =
-            document.getElementById(
-                "statusButton"
-            );
+            document.getElementById("statusButton");
 
         statusMenu =
-            document.getElementById(
-                "statusMenu"
-            );
+            document.getElementById("statusMenu");
 
         mobileProfileCard =
-            document.getElementById(
-                "mobileProfileCard"
-            );
+            document.getElementById("mobileProfileCard");
 
         mobileProfileOverlay =
-            document.getElementById(
-                "mobileProfileOverlay"
-            );
+            document.getElementById("mobileProfileOverlay");
 
         mobileProfileClose =
-            document.getElementById(
-                "mobileProfileClose"
-            );
+            document.getElementById("mobileProfileClose");
 
         mobileProfileAvatar =
-            document.getElementById(
-                "mobileProfileAvatar"
-            );
+            document.getElementById("mobileProfileAvatar");
 
         mobileProfileName =
-            document.getElementById(
-                "mobileProfileName"
-            );
+            document.getElementById("mobileProfileName");
 
         mobileProfileStatus =
-            document.getElementById(
-                "mobileProfileStatus"
-            );
+            document.getElementById("mobileProfileStatus");
 
         mobileProfileRole =
-            document.getElementById(
-                "mobileProfileRole"
-            );
+            document.getElementById("mobileProfileRole");
 
         mobileModerationTools =
-            document.getElementById(
-                "mobileModerationTools"
-            );
+            document.getElementById("mobileModerationTools");
 
-        console.log(
-            "🔎 DOM:",
-            {
-                messages:
-                    !!messagesDiv,
-
-                input:
-                    !!messageInput,
-
-                send:
-                    !!sendBtn,
-
-                users:
-                    !!usersList,
-
-                status:
-                    !!statusButton
-            }
-        );
+        console.log("🔎 DOM CHECK:", {
+            messages: !!messagesDiv,
+            input: !!messageInput,
+            send: !!sendBtn,
+            users: !!usersList,
+            status: !!statusButton
+        });
     }
 
     // =================================================
     // SECURITY
     // =================================================
 
-    function setSafeImage(
-        img,
-        url
-    ) {
+    function escapeHTML(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value == null ? "" : String(value);
+
+        return div.innerHTML;
+    }
+
+    function setSafeImage(img, url) {
 
         if (!img) return;
 
         const fallback =
             "/images/default-avatar.png";
 
-        img.src =
-            fallback;
+        img.src = fallback;
 
         if (
             typeof url === "string" &&
@@ -295,23 +208,32 @@ console.log(
                 url.startsWith("/")
             )
         ) {
-
-            img.src =
-                url;
+            img.src = url;
         }
 
-        img.onerror =
-            function () {
-
-                img.src =
-                    fallback;
-
-            };
+        img.onerror = function () {
+            img.src = fallback;
+        };
     }
 
     // =================================================
-    // ROLE
+    // ROLES
     // =================================================
+
+    function isOwner() {
+
+        return currentUserRole === "owner";
+
+    }
+
+    function isAdmin() {
+
+        return (
+            currentUserRole === "owner" ||
+            currentUserRole === "admin"
+        );
+
+    }
 
     function roleBadge(role) {
 
@@ -355,50 +277,80 @@ console.log(
         }
     }
 
-    function isOwner() {
+    // =================================================
+    // CHAT ERROR
+    // =================================================
 
-        return (
-            currentUserRole ===
-            "owner"
-        );
-    }
+    function showChatError(message) {
 
-    function isAdmin() {
+        if (!messagesDiv) return;
 
-        return (
-            currentUserRole ===
-            "owner" ||
-            currentUserRole ===
-            "admin"
-        );
+        messagesDiv.innerHTML = "";
+
+        const box =
+            document.createElement("div");
+
+        box.className =
+            "system-message";
+
+        box.style.padding =
+            "20px";
+
+        box.style.color =
+            "#ff6b9d";
+
+        box.textContent =
+            "⚠️ " + message;
+
+        messagesDiv.appendChild(box);
     }
 
     // =================================================
-    // START
+    // START CHAT
     // =================================================
 
-    (async function startChat() {
-    try {
+    async function startChat() {
 
-        if (
-            typeof client === "undefined" ||
-            !client
-        ) {
+        console.log("🚀 STARTING WILDSTYLE CHAT");
+
+        // VERY IMPORTANT
+        // Cache DOM before doing anything else.
+        cacheDOM();
+
+        if (!messagesDiv) {
+
             console.error(
-                "Supabase client is not available."
+                "❌ #messages was not found."
             );
+
             return;
         }
 
-        const {
-            data: {
-                user
-            },
-            error: authError
-        } = await client.auth.getUser();
-            // =========================================
+        const db =
+            getClient();
+
+        if (!db) {
+
+            console.error(
+                "❌ Supabase client not found."
+            );
+
+            showChatError(
+                "Chat could not connect to the server."
+            );
+
+            return;
+        }
+
+        console.log(
+            "✅ Supabase client found."
+        );
+
+        try {
+
+            // =============================================
             // AUTH
-            // =========================================
+            // =============================================
 
             const {
                 data,
@@ -426,7 +378,7 @@ console.log(
             if (!currentUser) {
 
                 console.warn(
-                    "⚠️ No logged-in user"
+                    "⚠️ No logged-in user."
                 );
 
                 window.location.href =
@@ -439,22 +391,21 @@ console.log(
                 currentUser;
 
             console.log(
-                "✅ User:",
+                "✅ USER:",
                 currentUser.id
             );
 
-            // =========================================
+            // =============================================
             // PROFILE
-            // =========================================
+            // =============================================
 
             const {
-    data: profile,
-    error: profileError
-} =
-    await client
-        .from("profiles")
-                    .select(
-                        `
+                data: profile,
+                error: profileError
+            } =
+                await db
+                    .from("profiles")
+                    .select(`
                         id,
                         display_name,
                         avatar_url,
@@ -462,8 +413,7 @@ console.log(
                         status,
                         banned,
                         ban_reason
-                        `
-                    )
+                    `)
                     .eq(
                         "id",
                         currentUser.id
@@ -508,13 +458,17 @@ console.log(
                 profile.status ||
                 "Online";
 
-            // =========================================
-            // BAN
-            // =========================================
+            console.log(
+                "👤 PROFILE:",
+                profile.display_name,
+                currentUserRole
+            );
 
-            if (
-                profile.banned === true
-            ) {
+            // =============================================
+            // BAN CHECK
+            // =============================================
+
+            if (profile.banned === true) {
 
                 alert(
                     "🚫 You have been banned from Wildstyle Community.\n\n" +
@@ -525,7 +479,7 @@ console.log(
                     )
                 );
 
-                await client.auth.signOut();
+                await db.auth.signOut();
 
                 window.location.href =
                     "index.html";
@@ -537,9 +491,9 @@ console.log(
                 presenceStatus
             );
 
-            // =========================================
+            // =============================================
             // PRESENCE
-            // =========================================
+            // =============================================
 
             try {
 
@@ -553,15 +507,15 @@ console.log(
                 );
             }
 
-            // =========================================
-            // CHAT
-            // =========================================
+            // =============================================
+            // LOAD CHAT
+            // =============================================
 
             await loadMessages();
 
-            // =========================================
-            // OPTIONAL FEATURES
-            // =========================================
+            // =============================================
+            // ONLINE USERS
+            // =============================================
 
             try {
 
@@ -575,6 +529,10 @@ console.log(
                 );
             }
 
+            // =============================================
+            // TYPING
+            // =============================================
+
             try {
 
                 await loadTypingUsers();
@@ -587,9 +545,9 @@ console.log(
                 );
             }
 
-            // =========================================
+            // =============================================
             // REALTIME
-            // =========================================
+            // =============================================
 
             enableRealtime();
 
@@ -597,14 +555,11 @@ console.log(
 
             enableChatEvents();
 
-            // =========================================
+            // =============================================
             // UI
-            // =========================================
+            // =============================================
 
             setupUI();
-
-            uiReady =
-                true;
 
             console.log(
                 "🎉 WILDSTYLE CHAT READY"
@@ -624,40 +579,6 @@ console.log(
     }
 
     // =================================================
-    // CHAT ERROR
-    // =================================================
-
-    function showChatError(
-        message
-    ) {
-
-        if (!messagesDiv) return;
-
-        messagesDiv.innerHTML = "";
-
-        const box =
-            document.createElement(
-                "div"
-            );
-
-        box.className =
-            "system-message";
-
-        box.style.padding =
-            "20px";
-
-        box.style.color =
-            "#ff6b9d";
-
-        box.textContent =
-            "⚠️ " + message;
-
-        messagesDiv.appendChild(
-            box
-        );
-    }
-
-    // =================================================
     // PRESENCE
     // =================================================
 
@@ -669,7 +590,9 @@ console.log(
         if (
             !db ||
             !currentUser
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             error
@@ -708,6 +631,7 @@ console.log(
                     .catch(
                         console.error
                     );
+
             }
 
         },
@@ -727,7 +651,9 @@ console.log(
             !db ||
             !currentUser ||
             !messagesDiv
-        ) return;
+        ) {
+            return;
+        }
 
         console.log(
             "💬 Loading messages..."
@@ -756,8 +682,7 @@ console.log(
             );
 
             showChatError(
-                "Messages could not be loaded: " +
-                error.message
+                "Unable to load the community chat."
             );
 
             return;
@@ -766,76 +691,59 @@ console.log(
         messagesDiv.innerHTML =
             "";
 
-        renderedMessageIds.clear();
-
         if (
             !messages ||
             messages.length === 0
         ) {
 
-            const empty =
-                document.createElement(
-                    "div"
-                );
-
-            empty.className =
-                "chat-empty";
-
-            empty.innerHTML =
-                "💬 No messages yet.<br>Be the first to say hello!";
-
-            messagesDiv.appendChild(
-                empty
-            );
+            messagesDiv.innerHTML = `
+                <div class="chat-empty">
+                    💬 No messages yet.<br>
+                    Be the first to say hello!
+                </div>
+            `;
 
             return;
         }
 
-        const userIds =
+        const ids =
             [
                 ...new Set(
                     messages
                         .map(
-                            msg =>
-                                msg.user_id
+                            m =>
+                                m.user_id
                         )
                         .filter(Boolean)
                 )
             ];
 
-        let profiles =
-            [];
+        let profiles = [];
 
-        if (
-            userIds.length
-        ) {
+        if (ids.length) {
 
             const {
                 data,
-                error:
-                    profileError
+                error: profileError
             } =
                 await db
                     .from("profiles")
-                    .select(
-                        `
+                    .select(`
                         id,
                         display_name,
                         avatar_url,
-                        role
-                        `
-                    )
+                        role,
+                        status
+                    `)
                     .in(
                         "id",
-                        userIds
+                        ids
                     );
 
-            if (
-                profileError
-            ) {
+            if (profileError) {
 
-                console.warn(
-                    "Profile lookup failed:",
+                console.error(
+                    "Profile loading error:",
                     profileError
                 );
 
@@ -847,17 +755,18 @@ console.log(
         }
 
         messages.forEach(
-            msg => {
+            function (message) {
 
-                msg.profiles =
+                const profile =
                     profiles.find(
-                        profile =>
-                            profile.id ===
-                            msg.user_id
+                        p =>
+                            p.id ===
+                            message.user_id
                     ) || null;
 
                 showMessage(
-                    msg
+                    message,
+                    profile
                 );
             }
         );
@@ -870,32 +779,19 @@ console.log(
     // =================================================
 
     function showMessage(
-        msg
+        msg,
+        suppliedProfile
     ) {
 
         if (
             !messagesDiv ||
             !msg
-        ) return;
-
-        if (
-            msg.id &&
-            renderedMessageIds.has(
-                msg.id
-            )
         ) {
-
             return;
         }
 
-        if (msg.id) {
-
-            renderedMessageIds.add(
-                msg.id
-            );
-        }
-
         const profile =
+            suppliedProfile ||
             msg.profiles ||
             {};
 
@@ -912,19 +808,19 @@ console.log(
             profile.avatar_url ||
             "/images/default-avatar.png";
 
-        const div =
-            document.createElement(
-                "div"
-            );
+        const wrapper =
+            document.createElement("div");
 
-        div.className =
+        wrapper.className =
             "chat-message";
 
-        // =============================================
-        // CLICK
-        // =============================================
+        if (msg.id) {
 
-        div.addEventListener(
+            wrapper.dataset.messageId =
+                msg.id;
+        }
+
+        wrapper.addEventListener(
             "click",
             function (event) {
 
@@ -936,8 +832,9 @@ console.log(
                     return;
                 }
 
-                if (!msg.user_id)
+                if (!msg.user_id) {
                     return;
+                }
 
                 if (
                     window.innerWidth <=
@@ -959,14 +856,8 @@ console.log(
             }
         );
 
-        // =============================================
-        // ROW
-        // =============================================
-
         const row =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         row.style.display =
             "flex";
@@ -977,14 +868,8 @@ console.log(
         row.style.alignItems =
             "flex-start";
 
-        // =============================================
-        // AVATAR
-        // =============================================
-
         const img =
-            document.createElement(
-                "img"
-            );
+            document.createElement("img");
 
         img.style.width =
             "48px";
@@ -1003,22 +888,14 @@ console.log(
             avatar
         );
 
-        // =============================================
-        // CONTENT
-        // =============================================
-
         const content =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         content.style.flex =
             "1";
 
         const userLine =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         userLine.className =
             "chat-user";
@@ -1027,38 +904,29 @@ console.log(
             name + " ";
 
         const badge =
-            document.createElement(
-                "span"
-            );
+            document.createElement("span");
 
         badge.className =
             "role-badge";
 
         badge.textContent =
-            roleBadge(
-                role
-            );
+            roleBadge(role);
 
         userLine.appendChild(
             badge
         );
 
         const text =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         text.className =
             "chat-text";
 
         text.textContent =
-            msg.message ||
-            "";
+            msg.message || "";
 
         const time =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         time.className =
             "chat-time";
@@ -1072,7 +940,6 @@ console.log(
                     {
                         hour:
                             "2-digit",
-
                         minute:
                             "2-digit"
                     }
@@ -1104,21 +971,21 @@ console.log(
             )
         ) {
 
-            const button =
+            const deleteButton =
                 document.createElement(
                     "button"
                 );
 
-            button.type =
+            deleteButton.type =
                 "button";
 
-            button.className =
+            deleteButton.className =
                 "delete-btn";
 
-            button.textContent =
+            deleteButton.textContent =
                 "🗑️ Delete";
 
-            button.addEventListener(
+            deleteButton.addEventListener(
                 "click",
                 function (event) {
 
@@ -1131,7 +998,7 @@ console.log(
             );
 
             content.appendChild(
-                button
+                deleteButton
             );
         }
 
@@ -1143,12 +1010,12 @@ console.log(
             content
         );
 
-        div.appendChild(
+        wrapper.appendChild(
             row
         );
 
         messagesDiv.appendChild(
-            div
+            wrapper
         );
     }
 
@@ -1165,13 +1032,16 @@ console.log(
             !db ||
             !currentUser ||
             !messageInput
-        ) return;
+        ) {
+            return;
+        }
 
         const text =
             messageInput.value.trim();
 
-        if (!text)
+        if (!text) {
             return;
+        }
 
         if (
             text.length >
@@ -1185,9 +1055,10 @@ console.log(
             return;
         }
 
-        if (sendBtn)
+        if (sendBtn) {
             sendBtn.disabled =
                 true;
+        }
 
         try {
 
@@ -1210,7 +1081,7 @@ console.log(
             if (error) {
 
                 console.error(
-                    "❌ SEND ERROR:",
+                    "Send message error:",
                     error
                 );
 
@@ -1234,24 +1105,21 @@ console.log(
 
         } finally {
 
-            if (sendBtn)
+            if (sendBtn) {
+
                 sendBtn.disabled =
                     false;
+            }
 
             messageInput.focus();
         }
     }
 
-    window.sendMessage =
-        sendMessage;
-
     // =================================================
     // DELETE MESSAGE
     // =================================================
 
-    async function deleteMessage(
-        id
-    ) {
+    async function deleteMessage(id) {
 
         const db =
             getClient();
@@ -1260,13 +1128,17 @@ console.log(
             !db ||
             !currentUser ||
             !id
-        ) return;
+        ) {
+            return;
+        }
 
         if (
             !confirm(
                 "Delete this message?"
             )
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             error
@@ -1297,9 +1169,6 @@ console.log(
         await loadMessages();
     }
 
-    window.deleteMessage =
-        deleteMessage;
-
     // =================================================
     // REALTIME CHAT
     // =================================================
@@ -1309,12 +1178,9 @@ console.log(
         const db =
             getClient();
 
-        if (!db)
-            return;
+        if (!db) return;
 
-        if (
-            chatChannel
-        ) {
+        if (chatChannel) {
 
             db.removeChannel(
                 chatChannel
@@ -1324,65 +1190,56 @@ console.log(
         chatChannel =
             db
                 .channel(
-                    "wildstyle-chat-main"
+                    "wildstyle-chat-" +
+                    Date.now()
                 )
+
                 .on(
                     "postgres_changes",
                     {
                         event:
                             "INSERT",
-
                         schema:
                             "public",
-
                         table:
                             "messages"
                     },
-                    async payload => {
-
-                        console.log(
-                            "📨 New message",
-                            payload.new
-                        );
+                    async function (
+                        payload
+                    ) {
 
                         const {
-                            data:
-                                profile
+                            data: profile
                         } =
                             await db
                                 .from("profiles")
-                                .select(
-                                    `
+                                .select(`
                                     display_name,
                                     avatar_url,
                                     role
-                                    `
-                                )
+                                `)
                                 .eq(
                                     "id",
                                     payload.new.user_id
                                 )
                                 .maybeSingle();
 
-                        showMessage({
-                            ...payload.new,
-                            profiles:
-                                profile ||
-                                null
-                        });
+                        showMessage(
+                            payload.new,
+                            profile
+                        );
 
                         scrollBottom();
                     }
                 )
+
                 .on(
                     "postgres_changes",
                     {
                         event:
                             "DELETE",
-
                         schema:
                             "public",
-
                         table:
                             "messages"
                     },
@@ -1391,11 +1248,12 @@ console.log(
                         loadMessages();
                     }
                 )
+
                 .subscribe(
-                    status => {
+                    function (status) {
 
                         console.log(
-                            "📡 CHAT REALTIME:",
+                            "💬 CHAT REALTIME:",
                             status
                         );
                     }
@@ -1408,8 +1266,9 @@ console.log(
 
     function scrollBottom() {
 
-        if (!messagesDiv)
+        if (!messagesDiv) {
             return;
+        }
 
         messagesDiv.scrollTop =
             messagesDiv.scrollHeight;
@@ -1429,7 +1288,9 @@ console.log(
         if (
             !db ||
             !currentUser
-        ) return;
+        ) {
+            return;
+        }
 
         if (isTyping) {
 
@@ -1447,8 +1308,7 @@ console.log(
                                 true,
 
                             updated_at:
-                                new Date()
-                                    .toISOString()
+                                new Date().toISOString()
                         },
                         {
                             onConflict:
@@ -1466,24 +1326,13 @@ console.log(
 
         } else {
 
-            const {
-                error
-            } =
-                await db
-                    .from("typing_users")
-                    .delete()
-                    .eq(
-                        "user_id",
-                        currentUser.id
-                    );
-
-            if (error) {
-
-                console.warn(
-                    "Typing delete:",
-                    error
+            await db
+                .from("typing_users")
+                .delete()
+                .eq(
+                    "user_id",
+                    currentUser.id
                 );
-            }
         }
     }
 
@@ -1496,7 +1345,9 @@ console.log(
             !db ||
             !currentUser ||
             !typingIndicator
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             data,
@@ -1504,15 +1355,13 @@ console.log(
         } =
             await db
                 .from("typing_users")
-                .select(
-                    `
+                .select(`
                     user_id,
                     is_typing,
                     profiles (
                         display_name
                     )
-                    `
-                )
+                `)
                 .eq(
                     "is_typing",
                     true
@@ -1529,12 +1378,15 @@ console.log(
         }
 
         const others =
-            (data || [])
-                .filter(
-                    user =>
+            (data || []).filter(
+                function (user) {
+
+                    return (
                         user.user_id !==
                         currentUser.id
-                );
+                    );
+                }
+            );
 
         if (!others.length) {
 
@@ -1546,18 +1398,22 @@ console.log(
 
         const names =
             others.map(
-                user =>
-                    user.profiles
-                        ?.display_name ||
-                    "Someone"
+                function (user) {
+
+                    return (
+                        user.profiles?.display_name ||
+                        "Someone"
+                    );
+                }
             );
 
         typingIndicator.textContent =
-            `✍️ ${names.join(", ")} ` +
+            "✍️ " +
+            names.join(", ") +
             (
                 names.length === 1
-                    ? "is"
-                    : "are"
+                    ? " is"
+                    : " are"
             ) +
             " typing...";
     }
@@ -1567,12 +1423,9 @@ console.log(
         const db =
             getClient();
 
-        if (!db)
-            return;
+        if (!db) return;
 
-        if (
-            typingChannel
-        ) {
+        if (typingChannel) {
 
             db.removeChannel(
                 typingChannel
@@ -1582,17 +1435,16 @@ console.log(
         typingChannel =
             db
                 .channel(
-                    "wildstyle-typing-main"
+                    "wildstyle-typing-" +
+                    Date.now()
                 )
                 .on(
                     "postgres_changes",
                     {
                         event:
                             "*",
-
                         schema:
                             "public",
-
                         table:
                             "typing_users"
                     },
@@ -1613,12 +1465,9 @@ console.log(
         const db =
             getClient();
 
-        if (!db)
-            return;
+        if (!db) return;
 
-        if (
-            eventsChannel
-        ) {
+        if (eventsChannel) {
 
             db.removeChannel(
                 eventsChannel
@@ -1628,24 +1477,24 @@ console.log(
         eventsChannel =
             db
                 .channel(
-                    "wildstyle-events-main"
+                    "wildstyle-events-" +
+                    Date.now()
                 )
                 .on(
                     "postgres_changes",
                     {
                         event:
                             "INSERT",
-
                         schema:
                             "public",
-
                         table:
                             "chat_events"
                     },
-                    payload => {
+                    function (payload) {
 
-                        if (!messagesDiv)
+                        if (!messagesDiv) {
                             return;
+                        }
 
                         const div =
                             document.createElement(
@@ -1656,8 +1505,7 @@ console.log(
                             "system-message";
 
                         div.textContent =
-                            payload.new
-                                ?.message ||
+                            payload.new.message ||
                             "";
 
                         messagesDiv.appendChild(
@@ -1682,7 +1530,9 @@ console.log(
         if (
             !db ||
             !usersList
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             data,
@@ -1690,8 +1540,7 @@ console.log(
         } =
             await db
                 .from("online_users")
-                .select(
-                    `
+                .select(`
                     user_id,
                     last_seen,
                     profiles (
@@ -1700,8 +1549,7 @@ console.log(
                         status,
                         role
                     )
-                    `
-                );
+                `);
 
         if (error) {
 
@@ -1719,103 +1567,103 @@ console.log(
         const now =
             Date.now();
 
-        (data || [])
-            .forEach(
-                user => {
+        (data || []).forEach(
+            function (user) {
 
-                    const lastSeen =
-                        new Date(
-                            user.last_seen
-                        ).getTime();
+                const lastSeen =
+                    new Date(
+                        user.last_seen
+                    ).getTime();
 
-                    const age =
-                        (
-                            now -
-                            lastSeen
-                        ) / 1000;
+                const seconds =
+                    (
+                        now -
+                        lastSeen
+                    ) / 1000;
 
-                    if (
-                        age >
-                        60
-                    ) return;
-
-                    const profile =
-                        user.profiles ||
-                        {};
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-                    div.className =
-                        "user";
-
-                    const img =
-                        document.createElement(
-                            "img"
-                        );
-
-                    img.className =
-                        "online-avatar";
-
-                    setSafeImage(
-                        img,
-                        profile.avatar_url
-                    );
-
-                    const span =
-                        document.createElement(
-                            "span"
-                        );
-
-                    span.textContent =
-                        statusIcon(
-                            profile.status ||
-                            "Online"
-                        ) +
-                        (
-                            profile.display_name ||
-                            "Member"
-                        );
-
-                    div.appendChild(
-                        img
-                    );
-
-                    div.appendChild(
-                        span
-                    );
-
-                    div.addEventListener(
-                        "click",
-                        function () {
-
-                            if (
-                                window.innerWidth <=
-                                768
-                            ) {
-
-                                openMobileProfile(
-                                    user.user_id
-                                );
-
-                            } else if (
-                                isOwner()
-                            ) {
-
-                                openOwnerPanel(
-                                    user.user_id
-                                );
-                            }
-                        }
-                    );
-
-                    usersList.appendChild(
-                        div
-                    );
+                if (
+                    seconds >
+                    60
+                ) {
+                    return;
                 }
-            );
+
+                const profile =
+                    user.profiles ||
+                    {};
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "user";
+
+                const img =
+                    document.createElement(
+                        "img"
+                    );
+
+                img.className =
+                    "online-avatar";
+
+                setSafeImage(
+                    img,
+                    profile.avatar_url
+                );
+
+                const span =
+                    document.createElement(
+                        "span"
+                    );
+
+                span.textContent =
+                    statusIcon(
+                        profile.status
+                    ) +
+                    (
+                        profile.display_name ||
+                        "Member"
+                    );
+
+                div.appendChild(
+                    img
+                );
+
+                div.appendChild(
+                    span
+                );
+
+                div.addEventListener(
+                    "click",
+                    function () {
+
+                        if (
+                            window.innerWidth <=
+                            768
+                        ) {
+
+                            openMobileProfile(
+                                user.user_id
+                            );
+
+                        } else if (
+                            isOwner()
+                        ) {
+
+                            openOwnerPanel(
+                                user.user_id
+                            );
+                        }
+                    }
+                );
+
+                usersList.appendChild(
+                    div
+                );
+            }
+        );
     }
 
     setInterval(
@@ -1847,7 +1695,9 @@ console.log(
         if (
             !db ||
             !userId
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             data,
@@ -1855,22 +1705,20 @@ console.log(
         } =
             await db
                 .from("profiles")
-                .select(
-                    `
+                .select(`
                     id,
                     display_name,
                     avatar_url,
                     role,
                     status
-                    `
-                )
+                `)
                 .eq(
                     "id",
                     userId
                 )
                 .maybeSingle();
 
-        if (error) {
+        if (error || !data) {
 
             console.error(
                 "Mobile profile:",
@@ -1880,9 +1728,6 @@ console.log(
             return;
         }
 
-        if (!data)
-            return;
-
         selectedUser =
             data;
 
@@ -1891,33 +1736,26 @@ console.log(
             data.avatar_url
         );
 
-        if (
-            mobileProfileName
-        ) {
+        if (mobileProfileName) {
 
             mobileProfileName.textContent =
                 data.display_name ||
                 "Member";
         }
 
-        if (
-            mobileProfileStatus
-        ) {
-
-            const status =
-                data.status ||
-                "Online";
+        if (mobileProfileStatus) {
 
             mobileProfileStatus.textContent =
                 statusIcon(
-                    status
+                    data.status
                 ) +
-                status;
+                (
+                    data.status ||
+                    "Online"
+                );
         }
 
-        if (
-            mobileProfileRole
-        ) {
+        if (mobileProfileRole) {
 
             mobileProfileRole.textContent =
                 roleBadge(
@@ -1925,9 +1763,7 @@ console.log(
                 );
         }
 
-        if (
-            mobileModerationTools
-        ) {
+        if (mobileModerationTools) {
 
             mobileModerationTools.style.display =
                 isOwner()
@@ -1935,21 +1771,14 @@ console.log(
                     : "none";
         }
 
-        const overlay =
-            document.getElementById(
-                "mobileProfileOverlay"
-            );
+        if (mobileProfileOverlay) {
 
-        if (overlay) {
-
-            overlay.classList.add(
+            mobileProfileOverlay.classList.add(
                 "show"
             );
         }
 
-        if (
-            mobileProfileCard
-        ) {
+        if (mobileProfileCard) {
 
             mobileProfileCard.classList.add(
                 "open"
@@ -1962,18 +1791,14 @@ console.log(
 
     function closeMobileProfile() {
 
-        if (
-            mobileProfileCard
-        ) {
+        if (mobileProfileCard) {
 
             mobileProfileCard.classList.remove(
                 "open"
             );
         }
 
-        if (
-            mobileProfileOverlay
-        ) {
+        if (mobileProfileOverlay) {
 
             mobileProfileOverlay.classList.remove(
                 "show"
@@ -1989,7 +1814,9 @@ console.log(
         if (
             !selectedUser ||
             !selectedUser.id
-        ) return;
+        ) {
+            return;
+        }
 
         window.location.href =
             "profile.html?id=" +
@@ -2016,7 +1843,9 @@ console.log(
             !db ||
             !isOwner() ||
             !userId
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             data,
@@ -2024,8 +1853,7 @@ console.log(
         } =
             await db
                 .from("profiles")
-                .select(
-                    `
+                .select(`
                     id,
                     display_name,
                     avatar_url,
@@ -2033,15 +1861,14 @@ console.log(
                     status,
                     banned,
                     ban_reason
-                    `
-                )
+                `)
                 .eq(
                     "id",
                     userId
                 )
                 .maybeSingle();
 
-        if (error) {
+        if (error || !data) {
 
             console.error(
                 "Owner panel:",
@@ -2051,9 +1878,6 @@ console.log(
             return;
         }
 
-        if (!data)
-            return;
-
         selectedUser =
             data;
 
@@ -2062,26 +1886,32 @@ console.log(
             data.avatar_url
         );
 
-        if (ownerName)
+        if (ownerName) {
+
             ownerName.textContent =
                 data.display_name ||
                 "Unknown";
+        }
 
-        if (ownerRole)
+        if (ownerRole) {
+
             ownerRole.textContent =
                 "Role: " +
                 (
                     data.role ||
                     "member"
                 );
+        }
 
-        if (ownerStatus)
+        if (ownerStatus) {
+
             ownerStatus.textContent =
                 "Status: " +
                 (
                     data.status ||
                     "Online"
                 );
+        }
 
         if (ownerPanel) {
 
@@ -2149,7 +1979,7 @@ console.log(
     }
 
     // =================================================
-    // ROLES
+    // ROLE MANAGEMENT
     // =================================================
 
     async function setRole(
@@ -2159,10 +1989,7 @@ console.log(
         const db =
             getClient();
 
-        if (
-            !db ||
-            !isOwner()
-        ) {
+        if (!db || !isOwner()) {
 
             alert(
                 "Only the owner can change roles."
@@ -2172,7 +1999,8 @@ console.log(
         }
 
         if (
-            !selectedUser?.id
+            !selectedUser ||
+            !selectedUser.id
         ) {
 
             alert(
@@ -2221,6 +2049,7 @@ console.log(
             role;
 
         await loadOnlineUsers();
+
         await loadMessages();
 
         alert(
@@ -2256,7 +2085,8 @@ console.log(
         }
 
         if (
-            !selectedUser?.id
+            !selectedUser ||
+            !selectedUser.id
         ) {
 
             alert(
@@ -2284,7 +2114,9 @@ console.log(
                 selectedUser.display_name +
                 "?"
             )
-        ) return;
+        ) {
+            return;
+        }
 
         const reason =
             prompt(
@@ -2294,7 +2126,9 @@ console.log(
         if (
             reason ===
             null
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             error
@@ -2322,28 +2156,38 @@ console.log(
             return;
         }
 
-        await db
-            .from("chat_events")
-            .insert({
-                message:
-                    "🚫 " +
-                    selectedUser.display_name +
-                    " has been banned."
-            });
+        try {
+
+            await db
+                .from("chat_events")
+                .insert({
+                    message:
+                        "🚫 " +
+                        selectedUser.display_name +
+                        " has been banned."
+                });
+
+        } catch (e) {
+
+            console.warn(
+                "Chat event unavailable:",
+                e
+            );
+        }
+
+        await loadOnlineUsers();
 
         alert(
             selectedUser.display_name +
             " has been banned."
         );
-
-        await loadOnlineUsers();
     }
 
     window.banUser =
         banUser;
 
     // =================================================
-    // DELETE USER MESSAGES
+    // DELETE ALL USER MESSAGES
     // =================================================
 
     async function deleteAllMessages() {
@@ -2364,7 +2208,8 @@ console.log(
         }
 
         if (
-            !selectedUser?.id
+            !selectedUser ||
+            !selectedUser.id
         ) {
 
             alert(
@@ -2380,7 +2225,9 @@ console.log(
                 selectedUser.display_name +
                 "?"
             )
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             error
@@ -2426,7 +2273,9 @@ console.log(
         if (
             !db ||
             !currentUser
-        ) return;
+        ) {
+            return;
+        }
 
         const {
             error
@@ -2465,33 +2314,20 @@ console.log(
         status
     ) {
 
-        if (!statusButton)
+        if (!statusButton) {
             return;
-
-        const labels = {
-            Online:
-                "🟢 Online",
-
-            Away:
-                "🟡 Away",
-
-            Busy:
-                "🔴 Busy",
-
-            "Be Right Back":
-                "🟠 Be Right Back",
-
-            Invisible:
-                "⚫ Invisible"
-        };
+        }
 
         statusButton.textContent =
-            labels[status] ||
-            labels.Online;
+            statusIcon(status) +
+            (
+                status ||
+                "Online"
+            );
     }
 
     // =================================================
-    // PRIVATE MESSAGES
+    // PRIVATE CHAT
     // =================================================
 
     async function openPrivateChat(
@@ -2503,7 +2339,9 @@ console.log(
         if (
             !currentUser ||
             !userId
-        ) return;
+        ) {
+            return;
+        }
 
         if (
             userId ===
@@ -2518,7 +2356,6 @@ console.log(
         }
 
         privateChatUser = {
-
             id:
                 userId,
 
@@ -2536,8 +2373,9 @@ console.log(
                 "privateChatOverlay"
             );
 
-        if (!overlay)
+        if (!overlay) {
             return;
+        }
 
         const nameEl =
             document.getElementById(
@@ -2549,9 +2387,11 @@ console.log(
                 "privateChatAvatar"
             );
 
-        if (nameEl)
+        if (nameEl) {
+
             nameEl.textContent =
                 privateChatUser.name;
+        }
 
         setSafeImage(
             avatarEl,
@@ -2566,15 +2406,22 @@ console.log(
 
         enablePrivateRealtime();
 
-        document
-            .getElementById(
+        const input =
+            document.getElementById(
                 "privateChatInput"
-            )
-            ?.focus();
+            );
+
+        if (input) {
+            input.focus();
+        }
     }
 
     window.openPrivateChat =
         openPrivateChat;
+
+    // =================================================
+    // PRIVATE MESSAGE LOADING
+    // =================================================
 
     async function loadPrivateMessages() {
 
@@ -2585,15 +2432,18 @@ console.log(
             !db ||
             !currentUser ||
             !privateChatUser
-        ) return;
+        ) {
+            return;
+        }
 
         const box =
             document.getElementById(
                 "privateChatMessages"
             );
 
-        if (!box)
+        if (!box) {
             return;
+        }
 
         const {
             data,
@@ -2603,7 +2453,15 @@ console.log(
                 .from("private_messages")
                 .select("*")
                 .or(
-                    `and(sender_id.eq.${currentUser.id},recipient_id.eq.${privateChatUser.id}),and(sender_id.eq.${privateChatUser.id},recipient_id.eq.${currentUser.id})`
+                    "and(sender_id.eq." +
+                    currentUser.id +
+                    ",recipient_id.eq." +
+                    privateChatUser.id +
+                    "),and(sender_id.eq." +
+                    privateChatUser.id +
+                    ",recipient_id.eq." +
+                    currentUser.id +
+                    ")"
                 )
                 .order(
                     "created_at",
@@ -2620,8 +2478,11 @@ console.log(
                 error
             );
 
-            box.textContent =
-                "Unable to load private messages.";
+            box.innerHTML = `
+                <div class="private-chat-error">
+                    Unable to load messages.
+                </div>
+            `;
 
             return;
         }
@@ -2630,11 +2491,16 @@ console.log(
             "";
 
         if (
-            !data?.length
+            !data ||
+            data.length === 0
         ) {
 
-            box.textContent =
-                "💜 No private messages yet.";
+            box.innerHTML = `
+                <div class="private-chat-empty">
+                    💜 No private messages yet.<br>
+                    Start the conversation!
+                </div>
+            `;
 
             return;
         }
@@ -2645,6 +2511,10 @@ console.log(
 
         scrollPrivateMessages();
     }
+
+    // =================================================
+    // SHOW PRIVATE MESSAGE
+    // =================================================
 
     function showPrivateMessage(
         msg
@@ -2657,17 +2527,22 @@ console.log(
 
         if (
             !box ||
-            !msg
-        ) return;
+            !currentUser
+        ) {
+            return;
+        }
 
         const wrapper =
             document.createElement(
                 "div"
             );
 
-        wrapper.className =
+        const mine =
             msg.sender_id ===
-            currentUser.id
+            currentUser.id;
+
+        wrapper.className =
+            mine
                 ? "private-message mine"
                 : "private-message received";
 
@@ -2680,8 +2555,7 @@ console.log(
             "private-message-bubble";
 
         bubble.textContent =
-            msg.message ||
-            "";
+            msg.message || "";
 
         const time =
             document.createElement(
@@ -2700,7 +2574,6 @@ console.log(
                     {
                         hour:
                             "2-digit",
-
                         minute:
                             "2-digit"
                     }
@@ -2720,6 +2593,10 @@ console.log(
         );
     }
 
+    // =================================================
+    // SEND PRIVATE MESSAGE
+    // =================================================
+
     async function sendPrivateMessage() {
 
         const db =
@@ -2729,21 +2606,37 @@ console.log(
             !db ||
             !currentUser ||
             !privateChatUser
-        ) return;
+        ) {
+            return;
+        }
 
         const input =
             document.getElementById(
                 "privateChatInput"
             );
 
-        if (!input)
+        if (!input) {
             return;
+        }
 
         const text =
             input.value.trim();
 
-        if (!text)
+        if (!text) {
             return;
+        }
+
+        if (
+            text.length >
+            2000
+        ) {
+
+            alert(
+                "Private message is too long."
+            );
+
+            return;
+        }
 
         const {
             data,
@@ -2767,7 +2660,7 @@ console.log(
         if (error) {
 
             console.error(
-                "Private send:",
+                "Private message:",
                 error
             );
 
@@ -2794,6 +2687,10 @@ console.log(
         input.focus();
     }
 
+    // =================================================
+    // PRIVATE REALTIME
+    // =================================================
+
     function enablePrivateRealtime() {
 
         const db =
@@ -2803,11 +2700,11 @@ console.log(
             !db ||
             !currentUser ||
             !privateChatUser
-        ) return;
-
-        if (
-            privateChatChannel
         ) {
+            return;
+        }
+
+        if (privateChatChannel) {
 
             db.removeChannel(
                 privateChatChannel
@@ -2827,14 +2724,12 @@ console.log(
                     {
                         event:
                             "INSERT",
-
                         schema:
                             "public",
-
                         table:
                             "private_messages"
                     },
-                    payload => {
+                    function (payload) {
 
                         const msg =
                             payload.new;
@@ -2845,11 +2740,24 @@ console.log(
                                 privateChatUser.id &&
                                 msg.recipient_id ===
                                 currentUser.id
+                            ) ||
+                            (
+                                msg.sender_id ===
+                                currentUser.id &&
+                                msg.recipient_id ===
+                                privateChatUser.id
                             );
 
+                        if (!belongs) {
+                            return;
+                        }
+
                         if (
-                            !belongs
-                        ) return;
+                            msg.sender_id ===
+                            currentUser.id
+                        ) {
+                            return;
+                        }
 
                         showPrivateMessage(
                             msg
@@ -2860,6 +2768,10 @@ console.log(
                 )
                 .subscribe();
     }
+
+    // =================================================
+    // CLOSE PRIVATE CHAT
+    // =================================================
 
     function closePrivateChat() {
 
@@ -2879,8 +2791,8 @@ console.log(
         }
 
         if (
-            privateChatChannel &&
-            db
+            db &&
+            privateChatChannel
         ) {
 
             db.removeChannel(
@@ -2905,21 +2817,46 @@ console.log(
                 "privateChatMessages"
             );
 
-        if (!box)
+        if (!box) {
             return;
+        }
 
         box.scrollTop =
             box.scrollHeight;
     }
 
     // =================================================
-    // UI
+    // OPEN PRIVATE CHAT FOR SELECTED USER
+    // =================================================
+
+    function privateMessageSelectedUser() {
+
+        if (
+            !selectedUser ||
+            !selectedUser.id
+        ) {
+            alert(
+                "Select a user first."
+            );
+
+            return;
+        }
+
+        openPrivateChat(
+            selectedUser.id,
+            selectedUser.display_name,
+            selectedUser.avatar_url
+        );
+    }
+
+    // =================================================
+    // UI SETUP
     // =================================================
 
     function setupUI() {
 
         // =============================================
-        // SEND
+        // SEND BUTTON
         // =============================================
 
         if (sendBtn) {
@@ -2929,6 +2866,10 @@ console.log(
                 sendMessage
             );
         }
+
+        // =============================================
+        // MESSAGE INPUT
+        // =============================================
 
         if (messageInput) {
 
@@ -3002,8 +2943,10 @@ console.log(
                     const db =
                         getClient();
 
-                    if (db)
+                    if (db) {
+
                         await db.auth.signOut();
+                    }
 
                     window.location.href =
                         "index.html";
@@ -3012,12 +2955,10 @@ console.log(
         }
 
         // =============================================
-        // OWNER CLOSE
+        // OWNER PANEL
         // =============================================
 
-        if (
-            closeOwnerPanel
-        ) {
+        if (closeOwnerPanel) {
 
             closeOwnerPanel.addEventListener(
                 "click",
@@ -3048,26 +2989,56 @@ console.log(
         }
 
         // =============================================
-        // OWNER ROLES
+        // OWNER PRIVATE MESSAGE
+        // =============================================
+
+        const desktopPrivate =
+            document.getElementById(
+                "desktopPrivateMessageBtn"
+            );
+
+        if (desktopPrivate) {
+
+            desktopPrivate.addEventListener(
+                "click",
+                privateMessageSelectedUser
+            );
+        }
+
+        // =============================================
+        // MOBILE PRIVATE MESSAGE
+        // =============================================
+
+        const mobilePrivate =
+            document.getElementById(
+                "mobilePrivateMessageBtn"
+            );
+
+        if (mobilePrivate) {
+
+            mobilePrivate.addEventListener(
+                "click",
+                privateMessageSelectedUser
+            );
+        }
+
+        // =============================================
+        // ROLE BUTTONS
         // =============================================
 
         const roleButtons = [
-
-            [
-                "btnMakeDJ",
-                "dj"
-            ],
-
             [
                 "btnMakeAdmin",
                 "admin"
             ],
-
+            [
+                "btnMakeDJ",
+                "dj"
+            ],
             [
                 "btnMakeVIP",
                 "vip"
             ],
-
             [
                 "btnMember",
                 "member"
@@ -3075,9 +3046,7 @@ console.log(
         ];
 
         roleButtons.forEach(
-            function (
-                [id, role]
-            ) {
+            function ([id, role]) {
 
                 const button =
                     document.getElementById(
@@ -3117,17 +3086,17 @@ console.log(
         }
 
         // =============================================
-        // DELETE
+        // DELETE ALL
         // =============================================
 
-        const deleteBtn =
+        const deleteAllBtn =
             document.getElementById(
                 "btnDeleteMessages"
             );
 
-        if (deleteBtn) {
+        if (deleteAllBtn) {
 
-            deleteBtn.addEventListener(
+            deleteAllBtn.addEventListener(
                 "click",
                 deleteAllMessages
             );
@@ -3192,9 +3161,7 @@ console.log(
         // MOBILE PROFILE
         // =============================================
 
-        if (
-            mobileProfileClose
-        ) {
+        if (mobileProfileClose) {
 
             mobileProfileClose.addEventListener(
                 "click",
@@ -3202,9 +3169,7 @@ console.log(
             );
         }
 
-        if (
-            mobileProfileOverlay
-        ) {
+        if (mobileProfileOverlay) {
 
             mobileProfileOverlay.addEventListener(
                 "click",
@@ -3222,22 +3187,12 @@ console.log(
         }
 
         // =============================================
-        // PRIVATE CHAT
+        // PRIVATE CHAT CLOSE
         // =============================================
 
         const privateClose =
             document.getElementById(
                 "privateChatClose"
-            );
-
-        const privateSend =
-            document.getElementById(
-                "privateChatSend"
-            );
-
-        const privateInput =
-            document.getElementById(
-                "privateChatInput"
             );
 
         if (privateClose) {
@@ -3248,6 +3203,15 @@ console.log(
             );
         }
 
+        // =============================================
+        // PRIVATE CHAT SEND
+        // =============================================
+
+        const privateSend =
+            document.getElementById(
+                "privateChatSend"
+            );
+
         if (privateSend) {
 
             privateSend.addEventListener(
@@ -3255,6 +3219,15 @@ console.log(
                 sendPrivateMessage
             );
         }
+
+        // =============================================
+        // PRIVATE CHAT ENTER
+        // =============================================
+
+        const privateInput =
+            document.getElementById(
+                "privateChatInput"
+            );
 
         if (privateInput) {
 
@@ -3270,60 +3243,6 @@ console.log(
                         event.preventDefault();
 
                         sendPrivateMessage();
-                    }
-                }
-            );
-        }
-
-        // =============================================
-        // PRIVATE MESSAGE BUTTONS
-        // =============================================
-
-        const desktopPrivate =
-            document.getElementById(
-                "desktopPrivateMessageBtn"
-            );
-
-        if (desktopPrivate) {
-
-            desktopPrivate.addEventListener(
-                "click",
-                function () {
-
-                    if (
-                        selectedUser
-                    ) {
-
-                        openPrivateChat(
-                            selectedUser.id,
-                            selectedUser.display_name,
-                            selectedUser.avatar_url
-                        );
-                    }
-                }
-            );
-        }
-
-        const mobilePrivate =
-            document.getElementById(
-                "mobilePrivateMessageBtn"
-            );
-
-        if (mobilePrivate) {
-
-            mobilePrivate.addEventListener(
-                "click",
-                function () {
-
-                    if (
-                        selectedUser
-                    ) {
-
-                        openPrivateChat(
-                            selectedUser.id,
-                            selectedUser.display_name,
-                            selectedUser.avatar_url
-                        );
                     }
                 }
             );
@@ -3350,55 +3269,78 @@ console.log(
                 }
             );
 
-            // Your HTML currently contains the emojis
-            // as plain text rather than individual spans.
-            // Make each emoji clickable.
+            emojiPicker.addEventListener(
+                "click",
+                function (event) {
 
-            const emojiText =
-                emojiPicker.textContent.trim();
+                    const target =
+                        event.target;
 
-            emojiPicker.innerHTML =
-                "";
+                    if (
+                        target ===
+                        emojiPicker
+                    ) {
+                        return;
+                    }
 
-            Array.from(
-                emojiText
-            ).forEach(
-                function (emoji) {
+                    const emoji =
+                        target.textContent ||
+                        "";
 
-                    const span =
-                        document.createElement(
-                            "span"
-                        );
+                    if (
+                        messageInput &&
+                        emoji
+                    ) {
 
-                    span.textContent =
-                        emoji;
+                        messageInput.value +=
+                            emoji.trim();
 
-                    span.style.cursor =
-                        "pointer";
-
-                    span.addEventListener(
-                        "click",
-                        function () {
-
-                            if (
-                                messageInput
-                            ) {
-
-                                messageInput.value +=
-                                    emoji;
-
-                                messageInput.focus();
-                            }
-                        }
-                    );
-
-                    emojiPicker.appendChild(
-                        span
-                    );
+                        messageInput.focus();
+                    }
                 }
             );
         }
     }
+
+    // =================================================
+    // GLOBAL FUNCTIONS
+    // =================================================
+
+    window.sendMessage =
+        sendMessage;
+
+    window.deleteMessage =
+        deleteMessage;
+
+    window.openOwnerPanel =
+        openOwnerPanel;
+
+    window.openMobileProfile =
+        openMobileProfile;
+
+    window.closeMobileProfile =
+        closeMobileProfile;
+
+    window.mobileViewProfile =
+        mobileViewProfile;
+
+    window.openPrivateChat =
+        openPrivateChat;
+
+    window.closePrivateChat =
+        closePrivateChat;
+
+    window.sendPrivateMessage =
+        sendPrivateMessage;
+
+    window.setRole =
+        setRole;
+
+    window.banUser =
+        banUser;
+
+    window.deleteAllMessages =
+        deleteAllMessages;
 
     // =================================================
     // START AFTER DOM
