@@ -389,6 +389,27 @@
 
 <script src="/js/chat.js?v=13"></script>
 
+
+<script>
+window.onerror = function(message, source, line, col, error) {
+    alert(
+        "ERROR\n\n" +
+        message +
+        "\n\nFile:\n" + source +
+        "\n\nLine: " + line
+    );
+};
+
+window.onunhandledrejection = function(event) {
+    alert(
+        "PROMISE ERROR\n\n" +
+        event.reason +
+        "\n\n" +
+        (event.reason?.stack || "")
+    );
+};
+</script>
+
 </body>
 </html>
         
