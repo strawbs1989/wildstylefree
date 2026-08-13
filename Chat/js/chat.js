@@ -428,11 +428,11 @@
             // =========================================
 
             const {
-                data: profile,
-                error: profileError
-            } =
-                await db
-                    .from("profiles")
+    data: profile,
+    error: profileError
+} =
+    await client
+        .from("profiles")
                     .select(
                         `
                         id,
@@ -505,7 +505,7 @@
                     )
                 );
 
-                await db.auth.signOut();
+                await client.auth.signOut();
 
                 window.location.href =
                     "index.html";
