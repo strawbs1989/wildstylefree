@@ -357,36 +357,25 @@
     // START
     // =================================================
 
-    async function startChat() {
+    (async function startChat() {
+    try {
 
-        try {
-
-            console.log(
-                "🚀 Starting Wildstyle chat..."
+        if (
+            typeof client === "undefined" ||
+            !client
+        ) {
+            console.error(
+                "Supabase client is not available."
             );
+            return;
+        }
 
-            cacheDOM();
-
-            const db =
-                getClient();
-
-            if (!db) {
-
-                console.error(
-                    "❌ SUPABASE CLIENT NOT FOUND"
-                );
-
-                showChatError(
-                    "Chat could not connect to the server."
-                );
-
-                return;
-            }
-
-            console.log(
-                "✅ Supabase client found"
-            );
-
+        const {
+            data: {
+                user
+            },
+            error: authError
+        } = await client.auth.getUser();
             // =========================================
             // AUTH
             // =========================================
