@@ -109,6 +109,26 @@
         return null;
     }
 
+// =================================================
+// SUPABASE CLIENT
+// =================================================
+
+const db = getClient();
+
+if (!db) {
+
+    console.error(
+        "❌ WILDSTYLE: Supabase client could not be found."
+    );
+
+    return;
+
+}
+
+console.log(
+    "✅ WILDSTYLE: Supabase client connected."
+);
+
     // =================================================
     // DOM CACHE
     // =================================================
