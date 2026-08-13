@@ -380,53 +380,15 @@
 
 </div>
     
-<script src="/js/supabase.js?v=10"></script>
-<script src="/js/auth.js?v=10"></script>
+<!-- =====================================================
+     WILDSTYLE JAVASCRIPT
+===================================================== -->
 
-<script>
-(function () {
+<script src="/js/supabase.js?v=11"></script>
+<script src="/js/auth.js?v=11"></script>
 
-    const originalAlert = window.alert;
-
-    window.alert = function (message) {
-
-        console.error(
-            "🚨🚨🚨 WILDSTYLE ALERT CAUGHT 🚨🚨🚨",
-            "\nMESSAGE:",
-            message,
-            "\nSTACK:",
-            new Error().stack
-        );
-
-        originalAlert.call(window, message);
-    };
-
-})();
-</script>
-
-<script src="/js/chat.js?v=12"></script>
-
-<script>
-document
-.getElementById("messageInput")
-.addEventListener("keypress", function(e){
-
-    if(e.key==="Enter"){
-
-        document
-        .getElementById("sendBtn")
-        .click();
-
-    }
-
-});
-</script>
-
-<script>
-eruda.init();
-</script>
+<script src="/js/chat.js?v=13"></script>
 
 </body>
 </html>
-
         
