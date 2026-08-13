@@ -409,7 +409,49 @@ window.onunhandledrejection = function(event) {
     );
 };
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    console.log("🔥 CHAT VISIBILITY TEST");
+
+    const chat = document.querySelector(".chat-container");
+    const messages = document.getElementById("messages");
+    const input = document.getElementById("messageInput");
+    const button = document.getElementById("sendBtn");
+
+    console.log("CHAT:", chat);
+    console.log("MESSAGES:", messages);
+    console.log("INPUT:", input);
+    console.log("SEND:", button);
+
+    if (chat) {
+        chat.style.display = "flex";
+        chat.style.visibility = "visible";
+        chat.style.opacity = "1";
+    }
+
+    if (messages) {
+
+        messages.style.display = "flex";
+        messages.style.visibility = "visible";
+        messages.style.opacity = "1";
+
+        messages.innerHTML = `
+            <div style="
+                padding:20px;
+                margin:10px;
+                background:#6c3cff;
+                color:white;
+                border-radius:15px;
+                font-size:18px;
+            ">
+                🟣 CHAT TEST IS WORKING
+            </div>
+        `;
+    }
+
+});
+</script>
 </body>
 </html>
         
