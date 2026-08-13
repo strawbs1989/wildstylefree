@@ -1,5 +1,3 @@
-console.log("CHAT.JS LOADED - SAFE VERSION");
-
 // =====================================================
 // Wildstyle Community Chat
 // =====================================================
@@ -56,125 +54,56 @@ const usersList = document.getElementById("usersList");
 
 (async function () {
 
-    // =================================================
-    // WAIT FOR SUPABASE AUTHENTICATION
-    // =================================================
+const { data: { user } } = await client.auth.getUser();  
 
-    console.log(
-        "Wildstyle Chat: waiting for authentication..."
-    );
+if (!user) {  
 
-    if (window.wildstyleAuthReady) {
+    window.location.href = "index.html";  
+    return;  
 
-        try {
+}  
 
-            await window.wildstyleAuthReady;
-
-        } catch (error) {
-
-            console.error(
-                "Wildstyle Chat: authentication failed:",
-                error
-            );
-
-            return;
-        }
-    }
-
-
-    // =================================================
-    // AUTHENTICATION IS NOW READY
-    // =================================================
-
-    console.log(
-        "Wildstyle Chat: authentication ready."
-    );
-
-
-    const {
-        data: { user },
-        error: userError
-    } = await client.auth.getUser();
-
-
-    if (userError) {
-
-        console.error(
-            "Wildstyle Chat: getUser error:",
-            userError
-        );
-
-        return;
-    }
-
-
-    if (!user) {
-
-        console.error(
-            "Wildstyle Chat: NO USER AFTER AUTH."
-        );
-
-        window.location.href =
-            "index.html";
-
-        return;
-    }
-
-
-    // =================================================
-// USER CONFIRMED
-// =================================================
-
-console.log(
-    "Wildstyle Chat: user confirmed:",
-    user.email
-);
-
-
-// ==========================================
-// SET CURRENT USER
-// ==========================================
-
-currentUser = user;
-
-console.log(
-    "Current user set:",
-    currentUser.id
-);
-
-
-// ==========================================
-// LOAD CURRENT USER ROLE
-// ==========================================
-
+currentUser = user;  
 const {
-    data: currentProfile,
-    error: currentProfileError
+    data: profile,
+    error: profileError
 } = await client
     .from("profiles")
-    .select("role")
-    .eq("id", currentUser.id)
+    .select("role, status, banned, ban_reason")
+    .eq("id", user.id)
     .single();
 
-if (currentProfileError) {
+if (profile?.banned) {
 
-    console.error(
-        "Could not load current user role:",
-        currentProfileError
+    alert(
+        "🚫 You have been banned from Wildstyle Community.\n\n" +
+        "Reason:\n" +
+        (profile.ban_reason || "No reason supplied.")
     );
 
-    currentUserRole = "member";
+    await client.auth.signOut();
 
-} else {
+    window.location.href = "index.html";
 
-    currentUserRole =
-        currentProfile?.role || "member";
-
-    console.log(
-        "Current user role:",
-        currentUserRole
-    );
+    return;
 }
+
+if (profileError) {
+    console.error(profileError);
+}
+
+currentUserRole = profile?.role || "member";
+presenceStatus =
+    profile?.status || "Online";
+
+updateStatusButton(presenceStatus);
+await client
+.from("online_users")
+.upsert({
+user_id: currentUser.id,
+last_seen: new Date().toISOString()
+});
+
 // ==========================================
 // ONLINE HEARTBEAT
 // ==========================================
@@ -191,13 +120,11 @@ setInterval(async () => {
         });
 
     if (error) {
-        console.error(
-            "Online heartbeat error:",
-            error
-        );
+        console.error("Online heartbeat error:", error);
     }
 
 }, 30000);
+
 
 
 await client
@@ -213,7 +140,7 @@ await loadMessages();
 enableRealtime();
 
 enableTypingIndicator();
-// enableChatEvents();
+enableChatEvents();
 
 })();
 
@@ -312,16 +239,19 @@ default:
 let deleteButton = "";
 
 if (
-    currentUser.id === msg.user_id ||
-    currentUserRole === "owner"
+
+currentUser.id === msg.user_id ||
+
+currentUserRole === "owner" ||
+
+currentUserRole === "admin"
+
 ){
-    deleteButton = `
-        <button
-            class="delete-btn"
-            onclick="deleteMessage(${msg.id}, '${msg.user_id}')">
-            🗑️ Delete
-        </button>
-    `;
+
+deleteButton=`
+
+`;
+
 }
 
 const avatar =  
@@ -358,7 +288,12 @@ ${escapeHTML(msg.message)}
 </div>  <div class="chat-time">  
 ${time}  
 </div>  
-${deleteButton}  </div>  </div>  `;
+${deleteButton}  
+<button  
+    class="delete-btn"  
+    onclick="deleteMessage(${msg.id}, '${msg.user_id}')">  
+    🗑️  
+</button>  </div>  </div>  `;
 
 messagesDiv.appendChild(div);
 
@@ -699,79 +634,67 @@ span.addEventListener("click", () => {
 });
 
 });
-function enableChatEvents() {
+function enableChatEvents(){
 
-    client
+client
 
-        .channel("chat-events")
+.channel("chat-events")
 
-        .on(
-            "postgres_changes",
-            {
-                event: "INSERT",
-                schema: "public",
-                table: "chat_events"
-            },
-            (payload) => {
+.on(
 
-                const div =
-                    document.createElement("div");
+"postgres_changes",
 
-                div.className =
-                    "system-message";
+{
 
-                const pill =
-                    document.createElement("div");
+event:"INSERT",
 
-                pill.className =
-                    "system-pill";
+schema:"public",
 
-                // SECURITY FIX:
-                // Treat database content as TEXT,
-                // never executable HTML.
+table:"chat_events"
 
-                pill.textContent =
-                    payload.new.message || "";
+},
 
-                div.appendChild(pill);
+(payload)=>{
 
-                messagesDiv.appendChild(div);
+const div=document.createElement("div");
 
-                scrollBottom();
-            }
-        )
+div.className="system-message";
 
-        .subscribe();
+div.innerHTML=`
+
+<div class="system-pill">  ${payload.new.message}
+
+</div>  `;
+
+messagesDiv.appendChild(div);
+
+scrollBottom();
 
 }
-async function deleteMessage(id, userId) {
 
-    if (!currentUser) return;
+)
 
-    // Users can delete their own message.
-    // Only the OWNER can delete somebody else's message.
-    if (
-        userId !== currentUser.id &&
-        currentUserRole !== "owner"
-    ) {
-        alert("Only the owner can delete another member's message.");
-        return;
-    }
+.subscribe();
 
-    if (!confirm("Delete this message?")) return;
+}
+async function deleteMessage(id) {
 
-    const { error } = await client
-        .from("messages")
-        .delete()
-        .eq("id", id);
+if (!confirm("Delete this message?")) return;  
 
-    if (error) {
-        alert(error.message);
-        console.error(error);
-        return;
-    }
+const { error } = await client  
+    .from("messages")  
+    .delete()  
+    .eq("id", id);  
+
+if (error) {  
+
+    alert(error.message);  
+
+    return;  
+
 }
 
+}
 document.addEventListener("keydown", function(e){
 
 if(e.key==="F10" && currentUserRole==="owner"){  
@@ -845,28 +768,7 @@ ownerRole.textContent =
     "Role: " + (data.role || "member");  
 
 ownerStatus.textContent =  
-    "Status: " + (data.status || "Online");
-
-
-const desktopPrivateMessageBtn =
-    document.getElementById("desktopPrivateMessageBtn");
-
-if (desktopPrivateMessageBtn) {
-
-    desktopPrivateMessageBtn.style.display = "block";
-
-    desktopPrivateMessageBtn.onclick = () => {
-
-        openPrivateChat(
-            data.id,
-            data.display_name,
-            data.avatar_url
-        );
-
-    };
-
-}
-  
+    "Status: " + (data.status || "Online");  
 
 ownerPanel.classList.remove("hidden");  
 
@@ -2029,14 +1931,14 @@ async function banUser() {
     const reason = prompt("Reason for banning this user?");
 
     if (reason === null) return;
-    
+
 alert(
     "Selected User:\n\n" +
     selectedUser.display_name +
     "\n\nID:\n" +
     selectedUser.id
 );
-    
+
     const { data, error } = await client
     .from("profiles")
     .update({
