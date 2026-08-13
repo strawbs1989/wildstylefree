@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <a href="/schedule.html">Schedule</a>
 
-        <a href="/chat.html">Community</a>
+        
 
         <a href="/map.html">Listener Map</a>
 
