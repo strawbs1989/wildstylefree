@@ -354,17 +354,22 @@
   }
 
   // Live Subscription (Handles both inserts AND deletions)
-  function subscribeRealtime() {
-    db.channel('public:messages')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-        renderCard(payload.new);
-      })
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, payload => {
-        const deletedCard = document.getElementById(`msg-${payload.old.id}`);
-        if (deletedCard) deletedCard.remove();
-      })
-      .subscribe();
-  }
+function subscribeRealtime() {
+  db.channel('custom-all-channel')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'messages' },
+      (payload) => {
+        if (payload.eventType === 'INSERT') {
+          renderCard(payload.new);
+        } else if (payload.eventType === 'DELETE') {
+          const deletedCard = document.getElementById(`msg-${payload.old.id}`);
+          if (deletedCard) deletedCard.remove();
+        }
+      }
+    )
+    .subscribe();
+}
 
   // Render Card in Chat
   function renderCard(msg) {
