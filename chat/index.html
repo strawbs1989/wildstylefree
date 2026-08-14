@@ -406,6 +406,34 @@
   document.getElementById('message-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
   });
+
+let isCooldown = false;
+
+async function sendMessage() {
+  const input = document.getElementById('message-input');
+  const text = input.value.trim();
+  if (!text || !loggedInUser) return;
+
+  // Prevent spamming clicks
+  if (isCooldown) {
+    alert("Please wait a moment before sending another message!");
+    return;
+  }
+
+  isCooldown = true;
+  setTimeout(() => { isCooldown = false; }, 2000); // 2-second delay
+
+  const font = document.getElementById('font-family').value;
+  const color = document.getElementById('font-color').value;
+  const payload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
+
+  input.value = '';
+
+  await db.from('messages').insert([
+    { username: loggedInUser, formatted_text: payload }
+  ]);
+}
+
 </script>
 
 </body>
