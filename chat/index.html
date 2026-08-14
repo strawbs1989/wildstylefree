@@ -2,31 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MSN Messenger Chat</title>
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  <!-- Cloudflare Turnstile SDK -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSN Wildstyle Chat</title>
+  
+  <!-- 1. Supabase Client Library (No Terminal Needed!) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- 2. DOMPurify Library (XSS Anti-Spam / Anti-Hack Defense) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+
   <style>
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e6f0fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e6f0fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
     #chat-box { width: 400px; background: #fff; border: 2px solid #0055ea; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .header { background: #0055ea; color: white; padding: 10px 15px; font-weight: bold; }
+    .header { background: linear-gradient(to right, #0055ea, #0088ff); color: white; padding: 12px 15px; font-weight: bold; }
     .content { padding: 15px; }
     
-    /* Login Screen Elements */
-    #login-screen label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
-    #login-screen input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; margin-bottom: 12px; }
-    #join-btn { width: 100%; padding: 10px; background: #0055ea; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-    #join-btn:disabled { background: #ccc; cursor: not-allowed; }
-    #error-msg { color: red; font-size: 12px; margin-top: 8px; }
-
-    /* Chat Screen Elements */
-    #chat-screen { display: none; }
-    #messages { height: 280px; border: 1px solid #ccc; overflow-y: auto; padding: 10px; background: #f9fbfd; margin-bottom: 10px; }
-    .msg-item { margin-bottom: 8px; }
-    .username { font-weight: bold; color: #0055ea; }
-    #toolbar { background: #dbe8f9; padding: 6px; display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+    #messages { height: 300px; border: 1px solid #ccc; overflow-y: auto; padding: 10px; background: #f9fbfd; margin-bottom: 10px; border-radius: 4px; }
+    .msg-item { margin-bottom: 8px; line-height: 1.4; }
+    .username { font-weight: bold; color: #0055ea; margin-right: 5px; }
+    
+    #controls { background: #eee; padding: 10px; border-radius: 4px; }
+    #toolbar { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; }
+    #toolbar select, #toolbar input, #toolbar button { padding: 4px; font-size: 12px; }
+    
     #input-row { display: flex; gap: 6px; }
-    #message-input { flex: 1; padding: 6px; }
+    #message-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    #username-input { width: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    #send-btn { padding: 8px 15px; background: #0055ea; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    #send-btn:hover { background: #0044c4; }
   </style>
 </head>
 <body>
@@ -35,37 +37,25 @@
   <div class="header">MSN Wildstyle Chat</div>
   
   <div class="content">
-    <!-- STEP 1: LOGIN / TURNSTILE SCREEN -->
-    <div id="login-screen">
-      <label for="username">Screen Name:</label>
-      <input type="text" id="username" placeholder="e.g. CoolSk8r99" maxlength="20" />
+    <!-- Message History Window -->
+    <div id="messages"></div>
 
-      <!-- Turnstile Test Widget -->
-      <div class="cf-turnstile" 
-           data-sitekey="1x00000000000000000000AA" 
-           data-callback="onTurnstileSuccess">
-      </div>
-
-      <button id="join-btn" disabled>Connect to MSN</button>
-      <div id="error-msg"></div>
-    </div>
-
-    <!-- STEP 2: CHAT SCREEN (Hidden until verified) -->
-    <div id="chat-screen">
-      <div id="messages"></div>
-
-      <!-- Wildstyle Controls -->
+    <div id="controls">
+      <!-- Wildstyle Formatting Toolbar -->
       <div id="toolbar">
         <select id="font-family">
           <option value="Comic Sans MS">Comic Sans</option>
           <option value="Arial">Arial</option>
           <option value="Impact">Impact</option>
+          <option value="Courier New">Courier</option>
         </select>
-        <input type="color" id="font-color" value="#000000" />
+        <input type="color" id="font-color" value="#0055ea" />
       </div>
 
+      <!-- Inputs -->
       <div id="input-row">
-        <input type="text" id="message-input" placeholder="Type a message..." />
+        <input type="text" id="username-input" placeholder="Name..." maxlength="15" value="CoolSk8r99" />
+        <input type="text" id="message-input" placeholder="Type a message..." maxlength="200" />
         <button id="send-btn">Send</button>
       </div>
     </div>
@@ -73,74 +63,95 @@
 </div>
 
 <script>
-  let turnstileToken = null;
-  let socket = null;
+  // -------------------------------------------------------------
+  // STEP 3: REPLACE THESE TWO LINES WITH YOUR KEYS FROM SUPABASE
+  // -------------------------------------------------------------
+  const SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR-SUPABASE-ANON-KEY";
 
-  // 1. Triggered automatically by Cloudflare when verified
-  function onTurnstileSuccess(token) {
-    turnstileToken = token;
-    document.getElementById('join-btn').disabled = false;
-  }
+  // Initialize Supabase Client
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 2. Submit token to backend & retrieve JWT
-  document.getElementById('join-btn').onclick = async () => {
-    const username = document.getElementById('username').value.trim();
-    if (!username) return;
+  const messagesDiv = document.getElementById('messages');
+  const msgInput = document.getElementById('message-input');
+  const userInput = document.getElementById('username-input');
 
-    try {
-      const res = await fetch('/api/join-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, turnstileToken })
-      });
+  // 1. Fetch Existing Recent Messages on Load
+  async function loadInitialMessages() {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .order('id', { ascending: true })
+      .limit(50);
 
-      const data = await res.json();
-      if (!data.success) {
-        document.getElementById('error-msg').innerText = data.error;
-        return;
-      }
-
-      // Connect socket using retrieved JWT
-      startChatSession(data.token);
-    } catch (err) {
-      document.getElementById('error-msg').innerText = "Network error connecting to server.";
+    if (error) {
+      console.error('Error loading messages:', error);
+      return;
     }
-  };
 
-  // 3. Connect to WebSocket & attach handlers
-  function startChatSession(token) {
-    socket = io({ auth: { token } });
-
-    socket.on('connect', () => {
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('chat-screen').style.display = 'block';
-    });
-
-    socket.on('chat_message', (data) => {
-      const messagesDiv = document.getElementById('messages');
-      const item = document.createElement('div');
-      item.className = 'msg-item';
-      item.innerHTML = `<span class="username">${data.user}:</span> ${data.htmlMessage}`;
-      messagesDiv.appendChild(item);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
-
-    document.getElementById('send-btn').onclick = sendMessage;
-    document.getElementById('message-input').onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+    if (data) {
+      data.forEach(msg => appendMessageToScreen(msg));
+    }
   }
 
-  function sendMessage() {
-    const input = document.getElementById('message-input');
-    const text = input.value.trim();
-    if (!text || !socket) return;
+  // 2. Subscribe to Real-Time New Messages (Live WebSockets)
+  supabase
+    .channel('public:messages')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+      appendMessageToScreen(payload.new);
+    })
+    .subscribe();
+
+  // 3. Render Message Safely on Screen (Prevents XSS Security Hacks)
+  function appendMessageToScreen(msg) {
+    // Sanitize user name
+    const cleanUser = DOMPurify.sanitize(msg.username);
+    
+    // Sanitize formatted message (allows safe MSN styling tags, blocks dangerous scripts)
+    const cleanHTML = DOMPurify.sanitize(msg.formatted_text, {
+      ALLOWED_TAGS: ['span', 'b', 'i', 'u', 'font'],
+      ALLOWED_ATTR: ['style', 'color', 'size']
+    });
+
+    const msgElement = document.createElement('div');
+    msgElement.className = 'msg-item';
+    msgElement.innerHTML = `<span class="username">${cleanUser}:</span> ${cleanHTML}`;
+    
+    messagesDiv.appendChild(msgElement);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  // 4. Send Message to Supabase
+  async function sendMessage() {
+    const text = msgInput.value.trim();
+    const username = userInput.value.trim() || 'Anonymous';
+    if (!text) return;
 
     const font = document.getElementById('font-family').value;
     const color = document.getElementById('font-color').value;
-    const htmlPayload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
 
-    socket.emit('chat_message', { htmlMessage: htmlPayload });
-    input.value = '';
+    // Build wildstyle HTML payload
+    const formattedPayload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
+
+    // Clear input field immediately for speed
+    msgInput.value = '';
+
+    // Insert into Supabase database table
+    const { error } = await supabase
+      .from('messages')
+      .insert([{ username: username, formatted_text: formattedPayload }]);
+
+    if (error) console.error('Failed to send:', error);
   }
+
+  // Event Listeners
+  document.getElementById('send-btn').onclick = sendMessage;
+  msgInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  // Load chat on page launch
+  loadInitialMessages();
 </script>
 
 </body>
