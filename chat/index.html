@@ -2,106 +2,145 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MSN Wildstyle Secure Chat</title>
+  <title>MSN Messenger Chat</title>
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <!-- Cloudflare Turnstile SDK -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e6f0fa; padding: 20px; }
-    #chat-window { width: 450px; height: 500px; background: #fff; border: 2px solid #0055ea; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
-    #messages { flex: 1; padding: 15px; overflow-y: auto; background: #f9fbfd; }
-    .msg-item { margin-bottom: 10px; line-height: 1.4; }
-    .username { font-weight: bold; color: #0055ea; margin-right: 5px; }
-    .timestamp { font-size: 0.75em; color: #888; margin-left: 5px; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e6f0fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    #chat-box { width: 400px; background: #fff; border: 2px solid #0055ea; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .header { background: #0055ea; color: white; padding: 10px 15px; font-weight: bold; }
+    .content { padding: 15px; }
     
-    /* Wildstyle Control Toolbar */
-    #toolbar { background: #dbe8f9; padding: 8px; display: flex; gap: 8px; align-items: center; border-top: 1px solid #ccc; }
-    #toolbar select, #toolbar input, #toolbar button { padding: 4px; font-size: 12px; }
-    
-    #input-area { display: flex; padding: 10px; background: #eee; }
-    #message-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-    #send-btn { margin-left: 8px; padding: 8px 15px; background: #0055ea; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    #status { color: red; font-size: 12px; padding: 0 10px 5px 10px; display: none; }
+    /* Login Screen Elements */
+    #login-screen label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
+    #login-screen input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; margin-bottom: 12px; }
+    #join-btn { width: 100%; padding: 10px; background: #0055ea; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    #join-btn:disabled { background: #ccc; cursor: not-allowed; }
+    #error-msg { color: red; font-size: 12px; margin-top: 8px; }
+
+    /* Chat Screen Elements */
+    #chat-screen { display: none; }
+    #messages { height: 280px; border: 1px solid #ccc; overflow-y: auto; padding: 10px; background: #f9fbfd; margin-bottom: 10px; }
+    .msg-item { margin-bottom: 8px; }
+    .username { font-weight: bold; color: #0055ea; }
+    #toolbar { background: #dbe8f9; padding: 6px; display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+    #input-row { display: flex; gap: 6px; }
+    #message-input { flex: 1; padding: 6px; }
   </style>
 </head>
 <body>
 
-<div id="chat-window">
-  <div id="messages"></div>
-  <div id="status"></div>
+<div id="chat-box">
+  <div class="header">MSN Wildstyle Chat</div>
+  
+  <div class="content">
+    <!-- STEP 1: LOGIN / TURNSTILE SCREEN -->
+    <div id="login-screen">
+      <label for="username">Screen Name:</label>
+      <input type="text" id="username" placeholder="e.g. CoolSk8r99" maxlength="20" />
 
-  <!-- MSN Styling Toolbar -->
-  <div id="toolbar">
-    <select id="font-family">
-      <option value="Comic Sans MS">Comic Sans</option>
-      <option value="Arial">Arial</option>
+      <!-- Turnstile Test Widget -->
+      <div class="cf-turnstile" 
+           data-sitekey="1x00000000000000000000AA" 
+           data-callback="onTurnstileSuccess">
+      </div>
 
-      <option value="Impact">Impact</option>
-      <option value="Courier New">Courier</option>
-    </select>
-    
-    <input type="color" id="font-color" value="#000000">
-    <button id="btn-bold"><b>B</b></button>
-    <button id="btn-italic"><i>I</i></button>
-  </div>
+      <button id="join-btn" disabled>Connect to MSN</button>
+      <div id="error-msg"></div>
+    </div>
 
-  <div id="input-area">
-    <input type="text" id="message-input" placeholder="Type a wildstyle message..." />
-    <button id="send-btn">Send</button>
+    <!-- STEP 2: CHAT SCREEN (Hidden until verified) -->
+    <div id="chat-screen">
+      <div id="messages"></div>
+
+      <!-- Wildstyle Controls -->
+      <div id="toolbar">
+        <select id="font-family">
+          <option value="Comic Sans MS">Comic Sans</option>
+          <option value="Arial">Arial</option>
+          <option value="Impact">Impact</option>
+        </select>
+        <input type="color" id="font-color" value="#000000" />
+      </div>
+
+      <div id="input-row">
+        <input type="text" id="message-input" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-  // Demo JWT Token (In real app, fetch this from login API)
-  // Payload: { "userId": "user123", "username": "CoolSk8r99" }
-  const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyMTIzIiwidXNlcm5hbWUiOiJDb29sU2s4cjk5In0.YOUR_SIGNATURE";
+  let turnstileToken = null;
+  let socket = null;
 
-  const socket = io("http://localhost:3000", {
-    auth: { token: fakeToken }
-  });
+  // 1. Triggered automatically by Cloudflare when verified
+  function onTurnstileSuccess(token) {
+    turnstileToken = token;
+    document.getElementById('join-btn').disabled = false;
+  }
 
-  const messagesDiv = document.getElementById('messages');
-  const msgInput = document.getElementById('message-input');
-  const statusDiv = document.getElementById('status');
+  // 2. Submit token to backend & retrieve JWT
+  document.getElementById('join-btn').onclick = async () => {
+    const username = document.getElementById('username').value.trim();
+    if (!username) return;
 
-  let isBold = false;
-  let isItalic = false;
+    try {
+      const res = await fetch('/api/join-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, turnstileToken })
+      });
 
-  document.getElementById('btn-bold').onclick = () => isBold = !isBold;
-  document.getElementById('btn-italic').onclick = () => isItalic = !isItalic;
+      const data = await res.json();
+      if (!data.success) {
+        document.getElementById('error-msg').innerText = data.error;
+        return;
+      }
+
+      // Connect socket using retrieved JWT
+      startChatSession(data.token);
+    } catch (err) {
+      document.getElementById('error-msg').innerText = "Network error connecting to server.";
+    }
+  };
+
+  // 3. Connect to WebSocket & attach handlers
+  function startChatSession(token) {
+    socket = io({ auth: { token } });
+
+    socket.on('connect', () => {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('chat-screen').style.display = 'block';
+    });
+
+    socket.on('chat_message', (data) => {
+      const messagesDiv = document.getElementById('messages');
+      const item = document.createElement('div');
+      item.className = 'msg-item';
+      item.innerHTML = `<span class="username">${data.user}:</span> ${data.htmlMessage}`;
+      messagesDiv.appendChild(item);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    document.getElementById('send-btn').onclick = sendMessage;
+    document.getElementById('message-input').onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+  }
 
   function sendMessage() {
-    const text = msgInput.value.trim();
-    if (!text) return;
+    const input = document.getElementById('message-input');
+    const text = input.value.trim();
+    if (!text || !socket) return;
 
     const font = document.getElementById('font-family').value;
     const color = document.getElementById('font-color').value;
-
-    // Construct wildstyle HTML formatting
-    let formattedText = text;
-    if (isBold) formattedText = `<b>${formattedText}</b>`;
-    if (isItalic) formattedText = `<i>${formattedText}</i>`;
-    
-    const htmlPayload = `<span style="font-family: '${font}'; color: ${color};">${formattedText}</span>`;
+    const htmlPayload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
 
     socket.emit('chat_message', { htmlMessage: htmlPayload });
-    msgInput.value = '';
+    input.value = '';
   }
-
-  document.getElementById('send-btn').onclick = sendMessage;
-  msgInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-
-  socket.on('chat_message', (data) => {
-    const msgElement = document.createElement('div');
-    msgElement.className = 'msg-item';
-    msgElement.innerHTML = `<span class="username">${data.user}:</span> ${data.htmlMessage} <span class="timestamp">${data.timestamp}</span>`;
-    messagesDiv.appendChild(msgElement);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  });
-
-  socket.on('error_message', (err) => {
-    statusDiv.innerText = err;
-    statusDiv.style.display = 'block';
-    setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
-  });
 </script>
 
 </body>
