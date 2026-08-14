@@ -3,155 +3,409 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSN Wildstyle Chat</title>
+  <title>Wildstyle Community - MSN Chat</title>
   
-  <!-- 1. Supabase Client Library (No Terminal Needed!) -->
+  <!-- Supabase & DOMPurify CDNs -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- 2. DOMPurify Library (XSS Anti-Spam / Anti-Hack Defense) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
 
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e6f0fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-    #chat-box { width: 400px; background: #fff; border: 2px solid #0055ea; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .header { background: linear-gradient(to right, #0055ea, #0088ff); color: white; padding: 12px 15px; font-weight: bold; }
-    .content { padding: 15px; }
-    
-    #messages { height: 300px; border: 1px solid #ccc; overflow-y: auto; padding: 10px; background: #f9fbfd; margin-bottom: 10px; border-radius: 4px; }
-    .msg-item { margin-bottom: 8px; line-height: 1.4; }
-    .username { font-weight: bold; color: #0055ea; margin-right: 5px; }
-    
-    #controls { background: #eee; padding: 10px; border-radius: 4px; }
-    #toolbar { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; }
-    #toolbar select, #toolbar input, #toolbar button { padding: 4px; font-size: 12px; }
-    
-    #input-row { display: flex; gap: 6px; }
-    #message-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-    #username-input { width: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-    #send-btn { padding: 8px 15px; background: #0055ea; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-    #send-btn:hover { background: #0044c4; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0d0f1a;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+
+    /* Main Container with Mobile App Aspect Ratio */
+    .app-container {
+      width: 100%;
+      max-width: 410px;
+      height: 92vh;
+      max-height: 820px;
+      background: linear-gradient(180deg, #1d1838 0%, #121324 50%, #0d1e36 100%);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ---------------- 1. LOGIN SCREEN ---------------- */
+    #login-screen {
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
+    .brand-logo {
+      width: 70px;
+      height: 70px;
+      background: #7c3aed;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+    }
+    .brand-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .brand-subtitle { font-size: 13px; color: #a1a1aa; margin-bottom: 24px; }
+
+    .form-group { width: 100%; text-align: left; margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #e4e4e7; }
+    .form-input {
+      width: 100%;
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .form-input:focus { border-color: #00d2ff; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #7c3aed 0%, #00d2ff 100%);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+    }
+    .toggle-auth { font-size: 13px; color: #a1a1aa; margin-top: 16px; cursor: pointer; }
+    .toggle-auth span { color: #00d2ff; font-weight: 600; }
+    #auth-error { color: #ef4444; font-size: 12px; margin-top: 10px; }
+
+    /* ---------------- 2. LOBBY / CHAT SCREEN ---------------- */
+    #chat-screen {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+    }
+    .chat-header {
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-info { display: flex; align-items: center; gap: 10px; }
+    .header-title { font-weight: 700; font-size: 15px; }
+    .header-sub { font-size: 11px; color: #a1a1aa; }
+    .status-badge {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; }
+
+    /* Message Cards Stream */
+    #messages-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .msg-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 12px 14px;
+      position: relative;
+    }
+    .msg-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .user-name { font-weight: 700; font-size: 13px; color: #38bdf8; }
+    .role-badge {
+      background: #8b5cf6;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+    .msg-body { font-size: 14px; color: #f4f4f5; line-height: 1.4; word-break: break-word; }
+    .msg-time { font-size: 10px; color: #71717a; margin-top: 6px; }
+
+    /* MSN Styling Bar & Floating Input Row */
+    .chat-footer {
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .msn-toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .msn-toolbar select {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+    .msn-toolbar input[type="color"] {
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .input-wrapper { display: flex; gap: 8px; align-items: center; }
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
   </style>
 </head>
 <body>
 
-<div id="chat-box">
-  <div class="header">MSN Wildstyle Chat</div>
+<div class="app-container">
   
-  <div class="content">
-    <!-- Message History Window -->
-    <div id="messages"></div>
+  <!-- 1. LOGIN / SIGNUP VIEW -->
+  <div id="login-screen">
+    <div class="brand-logo">🦊</div>
+    <div class="brand-title">Wildstyle Community</div>
+    <div class="brand-subtitle">Sign in to chat with DJs and listeners.</div>
 
-    <div id="controls">
-      <!-- Wildstyle Formatting Toolbar -->
-      <div id="toolbar">
+    <div class="form-group">
+      <label for="auth-user">Username</label>
+      <input type="text" id="auth-user" class="form-input" placeholder="e.g. EchoFalls" maxlength="20" />
+    </div>
+
+    <div class="form-group">
+      <label for="auth-pass">Password</label>
+      <input type="password" id="auth-pass" class="form-input" placeholder="Password" />
+    </div>
+
+    <button id="submit-btn" class="btn-submit">Login</button>
+    
+    <div class="toggle-auth" id="toggle-auth-mode">
+      Don't have an account? <span id="mode-text">Create one</span>
+    </div>
+    <div id="auth-error"></div>
+  </div>
+
+  <!-- 2. MAIN CHAT / LOBBY VIEW -->
+  <div id="chat-screen">
+    <div class="chat-header">
+      <div class="header-info">
+        <div class="avatar" style="background: #8b5cf6;">🦊</div>
+        <div>
+          <div class="header-title">Wildstyle Community</div>
+          <div class="header-sub">Live Community Chat</div>
+        </div>
+      </div>
+      <div class="status-badge">
+        <div class="status-dot"></div> Online
+      </div>
+    </div>
+
+    <!-- Live Stream Cards -->
+    <div id="messages-list"></div>
+
+    <!-- Bottom Input & MSN Font Style Bar -->
+    <div class="chat-footer">
+      <div class="msn-toolbar">
         <select id="font-family">
+          <option value="Segoe UI">Segoe UI</option>
           <option value="Comic Sans MS">Comic Sans</option>
-          <option value="Arial">Arial</option>
           <option value="Impact">Impact</option>
-          <option value="Courier New">Courier</option>
+          <option value="Arial">Arial</option>
         </select>
-        <input type="color" id="font-color" value="#0055ea" />
+        <input type="color" id="font-color" value="#38bdf8" />
       </div>
 
-      <!-- Inputs -->
-      <div id="input-row">
-        <input type="text" id="username-input" placeholder="Name..." maxlength="15" value="CoolSk8r99" />
-        <input type="text" id="message-input" placeholder="Type a message..." maxlength="200" />
-        <button id="send-btn">Send</button>
+      <div class="input-wrapper">
+        <input type="text" id="message-input" class="chat-input" placeholder="Type your message..." maxlength="250" />
+        <button id="send-btn" class="send-btn">➤</button>
       </div>
     </div>
   </div>
+
 </div>
 
 <script>
-  // -------------------------------------------------------------
-  // STEP 3: REPLACE THESE TWO LINES WITH YOUR KEYS FROM SUPABASE
-  // -------------------------------------------------------------
-  const SUPABASE_URL = "https://ajecuaxfbjmztttgwzzk.supabase.co/rest/v1/";
-  const SUPABASE_ANON_KEY = "sb_publishable_f6GQq5p1V9QV4iHlhG_bbQ_cR6QPQWL";
+  // ===============================================================
+  // PASTE YOUR SUPABASE KEYS BELOW (PROJECT SETTINGS -> API)
+  // ===============================================================
+  const SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR-SUPABASE-ANON-KEY";
 
-  // Initialize Supabase Client
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  
+  let loggedInUser = "";
+  let isSignUpMode = false;
 
-  const messagesDiv = document.getElementById('messages');
-  const msgInput = document.getElementById('message-input');
-  const userInput = document.getElementById('username-input');
+  // Toggle Login vs Register Mode
+  document.getElementById('toggle-auth-mode').onclick = () => {
+    isSignUpMode = !isSignUpMode;
+    document.getElementById('submit-btn').innerText = isSignUpMode ? "Register" : "Login";
+    document.getElementById('mode-text').innerText = isSignUpMode ? "Sign in" : "Create one";
+  };
 
-  // 1. Fetch Existing Recent Messages on Load
-  async function loadInitialMessages() {
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .order('id', { ascending: true })
-      .limit(50);
+  // Auth Submission
+  document.getElementById('submit-btn').onclick = async () => {
+    const user = document.getElementById('auth-user').value.trim();
+    const pass = document.getElementById('auth-pass').value.trim();
+    const errDiv = document.getElementById('auth-error');
+    errDiv.innerText = "";
 
-    if (error) {
-      console.error('Error loading messages:', error);
-      return;
+    if (!user || !pass) return errDiv.innerText = "Please enter username and password.";
+
+    if (isSignUpMode) {
+      const { error } = await db.from('users').insert([{ username: user, password: pass }]);
+      if (error) {
+        errDiv.innerText = "Username taken or failed to register.";
+      } else {
+        errDiv.style.color = "#22c55e";
+        errDiv.innerText = "Account created! You can now log in.";
+        isSignUpMode = false;
+        document.getElementById('submit-btn').innerText = "Login";
+      }
+    } else {
+      const { data, error } = await db.from('users').select('*').eq('username', user).eq('password', pass);
+      if (error || !data || data.length === 0) {
+        errDiv.style.color = "#ef4444";
+        errDiv.innerText = "Invalid credentials.";
+      } else {
+        loggedInUser = user;
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('chat-screen').style.display = 'flex';
+        loadMessages();
+        subscribeRealtime();
+      }
     }
+  };
 
-    if (data) {
-      data.forEach(msg => appendMessageToScreen(msg));
-    }
+  // Load Past Messages
+  async function loadMessages() {
+    const { data } = await db.from('messages').select('*').order('id', { ascending: true }).limit(50);
+    if (data) data.forEach(msg => renderCard(msg));
   }
 
-  // 2. Subscribe to Real-Time New Messages (Live WebSockets)
-  supabase
-    .channel('public:messages')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-      appendMessageToScreen(payload.new);
-    })
-    .subscribe();
+  // Live Subscription
+  function subscribeRealtime() {
+    db.channel('public:messages')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+        renderCard(payload.new);
+      })
+      .subscribe();
+  }
 
-  // 3. Render Message Safely on Screen (Prevents XSS Security Hacks)
-  function appendMessageToScreen(msg) {
-    // Sanitize user name
+  // Render Card in Chat
+  function renderCard(msg) {
+    const list = document.getElementById('messages-list');
     const cleanUser = DOMPurify.sanitize(msg.username);
     
-    // Sanitize formatted message (allows safe MSN styling tags, blocks dangerous scripts)
-    const cleanHTML = DOMPurify.sanitize(msg.formatted_text, {
+    // Sanitize wildstyle MSN HTML font & color tags
+    const cleanBody = DOMPurify.sanitize(msg.formatted_text, {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u', 'font'],
-      ALLOWED_ATTR: ['style', 'color', 'size']
+      ALLOWED_ATTR: ['style', 'color']
     });
 
-    const msgElement = document.createElement('div');
-    msgElement.className = 'msg-item';
-    msgElement.innerHTML = `<span class="username">${cleanUser}:</span> ${cleanHTML}`;
-    
-    messagesDiv.appendChild(msgElement);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    const card = document.createElement('div');
+    card.className = 'msg-card';
+    card.innerHTML = `
+      <div class="msg-header">
+        <div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>
+        <div class="user-name">${cleanUser}</div>
+        <div class="role-badge">Member</div>
+      </div>
+      <div class="msg-body">${cleanBody}</div>
+    `;
+
+    list.appendChild(card);
+    list.scrollTop = list.scrollHeight;
   }
 
-  // 4. Send Message to Supabase
+  // Send Message
   async function sendMessage() {
-    const text = msgInput.value.trim();
-    const username = userInput.value.trim() || 'Anonymous';
-    if (!text) return;
+    const input = document.getElementById('message-input');
+    const text = input.value.trim();
+    if (!text || !loggedInUser) return;
 
     const font = document.getElementById('font-family').value;
     const color = document.getElementById('font-color').value;
+    const payload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
 
-    // Build wildstyle HTML payload
-    const formattedPayload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
+    input.value = '';
 
-    // Clear input field immediately for speed
-    msgInput.value = '';
-
-    // Insert into Supabase database table
-    const { error } = await supabase
-      .from('messages')
-      .insert([{ username: username, formatted_text: formattedPayload }]);
-
-    if (error) console.error('Failed to send:', error);
+    await db.from('messages').insert([
+      { username: loggedInUser, formatted_text: payload }
+    ]);
   }
 
-  // Event Listeners
   document.getElementById('send-btn').onclick = sendMessage;
-  msgInput.addEventListener('keypress', (e) => {
+  document.getElementById('message-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
   });
-
-  // Load chat on page launch
-  loadInitialMessages();
 </script>
 
 </body>
