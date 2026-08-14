@@ -1063,21 +1063,27 @@
         try {
 
             const {
-                error
-            } =
-                await db
-                    .from("messages")
-                    .insert({
-                        user_id:
-                            currentUser.id,
+    data: newMessage,
+    error
+} =
+    await db
+        .from("messages")
+        .insert({
+            user_id: currentUser.id,
+            message: text,
+            role: currentUserRole
+        })
+        .select()
+        .single();
+         if (newMessage) {
 
-                        message:
-                            text,
+    showMessage({
+        ...newMessage,
+        profiles: currentUserProfile
+    });
 
-                        role:
-                            currentUserRole
-                    });
-
+    scrollBottom();
+}
             if (error) {
 
                 console.error(
