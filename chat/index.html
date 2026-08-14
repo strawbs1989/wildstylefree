@@ -1,51 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Wildstyle Chat</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://wildstyle.vip/chat/style.css">
+  <meta charset="UTF-8">
+  <title>MSN Wildstyle Secure Chat</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e6f0fa; padding: 20px; }
+    #chat-window { width: 450px; height: 500px; background: #fff; border: 2px solid #0055ea; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    #messages { flex: 1; padding: 15px; overflow-y: auto; background: #f9fbfd; }
+    .msg-item { margin-bottom: 10px; line-height: 1.4; }
+    .username { font-weight: bold; color: #0055ea; margin-right: 5px; }
+    .timestamp { font-size: 0.75em; color: #888; margin-left: 5px; }
+    
+    /* Wildstyle Control Toolbar */
+    #toolbar { background: #dbe8f9; padding: 8px; display: flex; gap: 8px; align-items: center; border-top: 1px solid #ccc; }
+    #toolbar select, #toolbar input, #toolbar button { padding: 4px; font-size: 12px; }
+    
+    #input-area { display: flex; padding: 10px; background: #eee; }
+    #message-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    #send-btn { margin-left: 8px; padding: 8px 15px; background: #0055ea; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    #status { color: red; font-size: 12px; padding: 0 10px 5px 10px; display: none; }
+  </style>
 </head>
-
 <body>
 
-<header class="topbar">
-  <h1>Wildstyle Chat</h1>
-  <div class="player-status">
-    <button>▶ Play</button>
-    <span>Offline</span>
-  </div>
-</header>
-
-<!-- AUTH -->
-<div id="auth">
-  <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-
-  <button id="login">Login</button>
-  <button id="register">Register</button>
-</div>
-
-<!-- CHAT -->
-<div id="chat" class="hidden">
-
-  <div id="users">
-    <p>Users coming soon…</p>
-  </div>
-
+<div id="chat-window">
   <div id="messages"></div>
+  <div id="status"></div>
 
-  <div id="inputArea">
-    <input id="messageInput" placeholder="Type a message…">
-    <button id="send">Send</button>
+  <!-- MSN Styling Toolbar -->
+  <div id="toolbar">
+    <select id="font-family">
+      <option value="Comic Sans MS">Comic Sans</option>
+      <option value="Arial">Arial</option>
+
+      <option value="Impact">Impact</option>
+      <option value="Courier New">Courier</option>
+    </select>
+    
+    <input type="color" id="font-color" value="#000000">
+    <button id="btn-bold"><b>B</b></button>
+    <button id="btn-italic"><i>I</i></button>
   </div>
 
+  <div id="input-area">
+    <input type="text" id="message-input" placeholder="Type a wildstyle message..." />
+    <button id="send-btn">Send</button>
+  </div>
 </div>
 
-<script type="module" src="https://wildstyle.vip/chat/firebase.js"></script>
-<script type="module" src="https://wildstyle.vip/chat/chat.js"></script>
-<script type="module" src="https://wildstyle.vip/chat/admin.js"></script>
-<script type="module" src="https://wildstyle.vip/chat/player.js"></script>
-</body>
+<script>
+  // Demo JWT Token (In real app, fetch this from login API)
+  // Payload: { "userId": "user123", "username": "CoolSk8r99" }
+  const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyMTIzIiwidXNlcm5hbWUiOiJDb29sU2s4cjk5In0.YOUR_SIGNATURE";
 
+  const socket = io("http://localhost:3000", {
+    auth: { token: fakeToken }
+  });
+
+  const messagesDiv = document.getElementById('messages');
+  const msgInput = document.getElementById('message-input');
+  const statusDiv = document.getElementById('status');
+
+  let isBold = false;
+  let isItalic = false;
+
+  document.getElementById('btn-bold').onclick = () => isBold = !isBold;
+  document.getElementById('btn-italic').onclick = () => isItalic = !isItalic;
+
+  function sendMessage() {
+    const text = msgInput.value.trim();
+    if (!text) return;
+
+    const font = document.getElementById('font-family').value;
+    const color = document.getElementById('font-color').value;
+
+    // Construct wildstyle HTML formatting
+    let formattedText = text;
+    if (isBold) formattedText = `<b>${formattedText}</b>`;
+    if (isItalic) formattedText = `<i>${formattedText}</i>`;
+    
+    const htmlPayload = `<span style="font-family: '${font}'; color: ${color};">${formattedText}</span>`;
+
+    socket.emit('chat_message', { htmlMessage: htmlPayload });
+    msgInput.value = '';
+  }
+
+  document.getElementById('send-btn').onclick = sendMessage;
+  msgInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+  socket.on('chat_message', (data) => {
+    const msgElement = document.createElement('div');
+    msgElement.className = 'msg-item';
+    msgElement.innerHTML = `<span class="username">${data.user}:</span> ${data.htmlMessage} <span class="timestamp">${data.timestamp}</span>`;
+    messagesDiv.appendChild(msgElement);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+
+  socket.on('error_message', (err) => {
+    statusDiv.innerText = err;
+    statusDiv.style.display = 'block';
+    setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+  });
+</script>
+
+</body>
 </html>
