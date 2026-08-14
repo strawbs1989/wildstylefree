@@ -349,6 +349,32 @@
         try {
 
             // =============================================
+            // WAIT FOR WILDSTYLE AUTH TO FINISH
+            // =============================================
+            // auth.js creates window.wildstyleAuthReady and
+            // restores/checks the Supabase session. Chat must
+            // NOT call getUser() before that promise settles.
+            // This prevents the app WebView race that produced:
+            // "Unable to check your login."
+
+            if (
+                window.wildstyleAuthReady &&
+                typeof window.wildstyleAuthReady.then === "function"
+            ) {
+                try {
+                    await window.wildstyleAuthReady;
+                } catch (authReadyError) {
+                    console.warn(
+                        "⚠️ Wildstyle authentication did not become ready:",
+                        authReadyError
+                    );
+
+                    // auth.js handles the redirect to index.html.
+                    return;
+                }
+            }
+
+            // =============================================
             // AUTH
             // =============================================
 
@@ -1063,27 +1089,21 @@
         try {
 
             const {
-    data: newMessage,
-    error
-} =
-    await db
-        .from("messages")
-        .insert({
-            user_id: currentUser.id,
-            message: text,
-            role: currentUserRole
-        })
-        .select()
-        .single();
-         if (newMessage) {
+                error
+            } =
+                await db
+                    .from("messages")
+                    .insert({
+                        user_id:
+                            currentUser.id,
 
-    showMessage({
-        ...newMessage,
-        profiles: currentUserProfile
-    });
+                        message:
+                            text,
 
-    scrollBottom();
-}
+                        role:
+                            currentUserRole
+                    });
+
             if (error) {
 
                 console.error(
