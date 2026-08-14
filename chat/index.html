@@ -292,15 +292,13 @@
 </div>
 
 <script>
-  // ===============================================================
-  // PASTE YOUR SUPABASE KEYS BELOW (PROJECT SETTINGS -> API)
-  // ===============================================================
   const SUPABASE_URL = "https://ajecuaxfbjmztttgwzzk.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZWN1YXhmYmptenR0dGd3enprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzA2NDMsImV4cCI6MjEwMjMwNjY0M30.1_RWdO3gm2PljpYDVGxZPnQWBFrnU7DXjjmnFvij2_0";
 
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   
   let loggedInUser = "";
+  let loggedInRole = "member"; // Default role
   let isSignUpMode = false;
 
   // Toggle Login vs Register Mode
@@ -320,7 +318,8 @@
     if (!user || !pass) return errDiv.innerText = "Please enter username and password.";
 
     if (isSignUpMode) {
-      const { error } = await db.from('users').insert([{ username: user, password: pass }]);
+      // New users register with 'member' role by default
+      const { error } = await db.from('users').insert([{ username: user, password: pass, role: 'member' }]);
       if (error) {
         errDiv.innerText = "Username taken or failed to register.";
       } else {
@@ -335,9 +334,12 @@
         errDiv.style.color = "#ef4444";
         errDiv.innerText = "Invalid credentials.";
       } else {
-        loggedInUser = user;
+        loggedInUser = data[0].username;
+        loggedInRole = (data[0].role || "member").toLowerCase(); // Fetch role from database
+        
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('chat-screen').style.display = 'flex';
+        
         loadMessages();
         subscribeRealtime();
       }
@@ -346,15 +348,20 @@
 
   // Load Past Messages
   async function loadMessages() {
+    document.getElementById('messages-list').innerHTML = ''; // Clear list
     const { data } = await db.from('messages').select('*').order('id', { ascending: true }).limit(50);
     if (data) data.forEach(msg => renderCard(msg));
   }
 
-  // Live Subscription
+  // Live Subscription (Handles both inserts AND deletions)
   function subscribeRealtime() {
     db.channel('public:messages')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
         renderCard(payload.new);
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, payload => {
+        const deletedCard = document.getElementById(`msg-${payload.old.id}`);
+        if (deletedCard) deletedCard.remove();
       })
       .subscribe();
   }
@@ -363,26 +370,49 @@
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
     const cleanUser = DOMPurify.sanitize(msg.username);
+    const msgRole = (msg.role || "member").toLowerCase();
     
-    // Sanitize wildstyle MSN HTML font & color tags
+    // Sanitize message content
     const cleanBody = DOMPurify.sanitize(msg.formatted_text, {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u', 'font'],
       ALLOWED_ATTR: ['style', 'color']
     });
 
+    // Badge styling depending on user role
+    let badgeColor = "#6b7280"; // Gray for member
+    if (msgRole === 'owner') badgeColor = "#ef4444";      // Red
+    else if (msgRole === 'admin') badgeColor = "#dc2626"; // Dark Red
+    else if (msgRole === 'dj') badgeColor = "#ec4899";    // Pink
+    else if (msgRole === 'mod') badgeColor = "#eab308";   // Gold/Yellow
+
+    // Check if current user is allowed to delete (Admin, Mod, or Owner)
+    const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
+    const deleteBtnHtml = canDelete 
+      ? `<button onclick="deleteMessage(${msg.id})" style="background:none; border:none; color:#ef4444; font-size:11px; cursor:pointer; font-weight:bold; margin-left:auto;">🗑 Delete</button>`
+      : '';
+
     const card = document.createElement('div');
     card.className = 'msg-card';
+    card.id = `msg-${msg.id}`;
     card.innerHTML = `
-      <div class="msg-header">
+      <div class="msg-header" style="display:flex; align-items:center;">
         <div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>
         <div class="user-name">${cleanUser}</div>
-        <div class="role-badge">Member</div>
+        <div class="role-badge" style="background: ${badgeColor};">${msgRole.toUpperCase()}</div>
+        ${deleteBtnHtml}
       </div>
       <div class="msg-body">${cleanBody}</div>
     `;
 
     list.appendChild(card);
     list.scrollTop = list.scrollHeight;
+  }
+
+  // Delete Message Function (Admins / Mods / Owners)
+  async function deleteMessage(msgId) {
+    if (!confirm("Are you sure you want to delete this message?")) return;
+    const { error } = await db.from('messages').delete().eq('id', msgId);
+    if (error) alert("Failed to delete message.");
   }
 
   // Send Message
@@ -398,7 +428,7 @@
     input.value = '';
 
     await db.from('messages').insert([
-      { username: loggedInUser, formatted_text: payload }
+      { username: loggedInUser, role: loggedInRole, formatted_text: payload }
     ]);
   }
 
@@ -406,34 +436,6 @@
   document.getElementById('message-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
   });
-
-let isCooldown = false;
-
-async function sendMessage() {
-  const input = document.getElementById('message-input');
-  const text = input.value.trim();
-  if (!text || !loggedInUser) return;
-
-  // Prevent spamming clicks
-  if (isCooldown) {
-    alert("Please wait a moment before sending another message!");
-    return;
-  }
-
-  isCooldown = true;
-  setTimeout(() => { isCooldown = false; }, 2000); // 2-second delay
-
-  const font = document.getElementById('font-family').value;
-  const color = document.getElementById('font-color').value;
-  const payload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
-
-  input.value = '';
-
-  await db.from('messages').insert([
-    { username: loggedInUser, formatted_text: payload }
-  ]);
-}
-
 </script>
 
 </body>
