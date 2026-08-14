@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wildstyle Community - MSN Chat</title>
-  
+
   <!-- Supabase & DOMPurify CDNs -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
@@ -227,7 +227,7 @@
 <body>
 
 <div class="app-container">
-  
+
   <!-- 1. LOGIN / SIGNUP VIEW -->
   <div id="login-screen">
     <div class="brand-logo">🦊</div>
@@ -245,7 +245,7 @@
     </div>
 
     <button id="submit-btn" class="btn-submit">Login</button>
-    
+
     <div class="toggle-auth" id="toggle-auth-mode">
       Need an account? <span id="mode-text">Register</span>
     </div>
@@ -296,16 +296,16 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZWN1YXhmYmptenR0dGd3enprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzA2NDMsImV4cCI6MjEwMjMwNjY0M30.1_RWdO3gm2PljpYDVGxZPnQWBFrnU7DXjjmnFvij2_0";
 
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  
+
   let loggedInUser = "";
-  let loggedInRole = "member"; // Default role
+  let loggedInRole = "member";
   let isSignUpMode = false;
 
-  // Toggle Login vs Register Mode
+  // Toggle Auth Mode
   document.getElementById('toggle-auth-mode').onclick = () => {
     isSignUpMode = !isSignUpMode;
     document.getElementById('submit-btn').innerText = isSignUpMode ? "Register" : "Login";
-    document.getElementById('mode-text').innerText = isSignUpMode ? "Sign in" : "Create one";
+    document.getElementById('mode-text').innerText = isSignUpMode ? "Sign in" : "Register";
   };
 
   // Auth Submission
@@ -318,7 +318,6 @@
     if (!user || !pass) return errDiv.innerText = "Please enter username and password.";
 
     if (isSignUpMode) {
-      // New users register with 'member' role by default
       const { error } = await db.from('users').insert([{ username: user, password: pass, role: 'member' }]);
       if (error) {
         errDiv.innerText = "Username taken or failed to register.";
@@ -327,6 +326,7 @@
         errDiv.innerText = "Account created! You can now log in.";
         isSignUpMode = false;
         document.getElementById('submit-btn').innerText = "Login";
+        document.getElementById('mode-text').innerText = "Register";
       }
     } else {
       const { data, error } = await db.from('users').select('*').eq('username', user).eq('password', pass);
@@ -335,11 +335,11 @@
         errDiv.innerText = "Invalid credentials.";
       } else {
         loggedInUser = data[0].username;
-        loggedInRole = (data[0].role || "member").toLowerCase(); // Fetch role from database
-        
+        loggedInRole = (data[0].role || "member").toLowerCase();
+
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('chat-screen').style.display = 'flex';
-        
+
         loadMessages();
         subscribeRealtime();
       }
@@ -348,76 +348,79 @@
 
   // Load Past Messages
   async function loadMessages() {
-    document.getElementById('messages-list').innerHTML = ''; // Clear list
+    document.getElementById('messages-list').innerHTML = '';
     const { data } = await db.from('messages').select('*').order('id', { ascending: true }).limit(50);
     if (data) data.forEach(msg => renderCard(msg));
   }
 
-  // Live Subscription (Handles both inserts AND deletions)
-function subscribeRealtime() {
-  db.channel('custom-all-channel')
-    .on(
-      'postgres_changes',
-      { event: '*', schema: 'public', table: 'messages' },
-      (payload) => {
-        if (payload.eventType === 'INSERT') {
-          renderCard(payload.new);
-        } else if (payload.eventType === 'DELETE') {
-          const deletedCard = document.getElementById(`msg-${payload.old.id}`);
-          if (deletedCard) deletedCard.remove();
+  // Live Realtime Subscription
+  function subscribeRealtime() {
+    db.channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'messages' },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            renderCard(payload.new);
+          } else if (payload.eventType === 'DELETE') {
+            const deletedCard = document.getElementById(`msg-${payload.old.id}`);
+            if (deletedCard) deletedCard.remove();
+          }
         }
-      }
-    )
-    .subscribe();
-}
+      )
+      .subscribe();
+  }
 
   // Render Card in Chat
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
-    const cleanUser = DOMPurify.sanitize(msg.username);
+    if (!list) return;
+
+    // Prevent duplicate rendering
+    if (msg.id && document.getElementById(`msg-${msg.id}`)) return;
+
+    const cleanUser = DOMPurify.sanitize(msg.username || "Guest");
     const msgRole = (msg.role || "member").toLowerCase();
-    
-    // Sanitize message content
-    const cleanBody = DOMPurify.sanitize(msg.formatted_text, {
+
+    const cleanBody = DOMPurify.sanitize(msg.formatted_text || "", {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u', 'font'],
       ALLOWED_ATTR: ['style', 'color']
     });
 
-    // Badge styling depending on user role
-    let badgeColor = "#6b7280"; // Gray for member
-    if (msgRole === 'owner') badgeColor = "#ef4444";      // Red
-    else if (msgRole === 'admin') badgeColor = "#dc2626"; // Dark Red
-    else if (msgRole === 'dj') badgeColor = "#ec4899";    // Pink
-    else if (msgRole === 'mod') badgeColor = "#eab308";   // Gold/Yellow
+    let badgeColor = "#6b7280"; 
+    if (msgRole === 'owner') badgeColor = "#ef4444";      
+    else if (msgRole === 'admin') badgeColor = "#dc2626"; 
+    else if (msgRole === 'dj') badgeColor = "#ec4899";    
+    else if (msgRole === 'mod') badgeColor = "#eab308";   
 
-    // Check if current user is allowed to delete (Admin, Mod, or Owner)
     const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
-    const deleteBtnHtml = canDelete 
+    const deleteBtnHtml = (canDelete && msg.id)
       ? `<button onclick="deleteMessage(${msg.id})" style="background:none; border:none; color:#ef4444; font-size:11px; cursor:pointer; font-weight:bold; margin-left:auto;">🗑 Delete</button>`
       : '';
 
     const card = document.createElement('div');
     card.className = 'msg-card';
-    card.id = `msg-${msg.id}`;
+    if (msg.id) card.id = `msg-${msg.id}`;
+    
     card.innerHTML = `
-      <div class="msg-header" style="display:flex; align-items:center;">
+      <div class="msg-header" style="display:flex; align-items:center; gap:8px;">
         <div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>
         <div class="user-name">${cleanUser}</div>
         <div class="role-badge" style="background: ${badgeColor};">${msgRole.toUpperCase()}</div>
         ${deleteBtnHtml}
       </div>
-      <div class="msg-body">${cleanBody}</div>
+      <div class="msg-body" style="margin-top:6px;">${cleanBody}</div>
     `;
 
     list.appendChild(card);
     list.scrollTop = list.scrollHeight;
   }
 
-  // Delete Message Function (Admins / Mods / Owners)
+  // Delete Message Function
   async function deleteMessage(msgId) {
     if (!confirm("Are you sure you want to delete this message?")) return;
     const { error } = await db.from('messages').delete().eq('id', msgId);
-    if (error) alert("Failed to delete message.");
+    if (error) alert("Failed to delete message: " + error.message);
   }
 
   // Send Message
@@ -432,9 +435,17 @@ function subscribeRealtime() {
 
     input.value = '';
 
-    await db.from('messages').insert([
-      { username: loggedInUser, role: loggedInRole, formatted_text: payload }
-    ]);
+    const { data, error } = await db
+      .from('messages')
+      .insert([{ username: loggedInUser, role: loggedInRole, formatted_text: payload }])
+      .select();
+
+    if (error) {
+      console.error("Supabase Error:", error);
+      alert("Error sending message: " + error.message);
+    } else if (data && data[0]) {
+      renderCard(data[0]);
+    }
   }
 
   document.getElementById('send-btn').onclick = sendMessage;
