@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wildstyle Community - MSN Chat</title>
 
-  <!-- Supabase & DOMPurify CDNs -->
+  <!-- Supabase, DOMPurify, and hCaptcha CDNs -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,34 +40,35 @@
 
     /* 1. LOGIN SCREEN */
     #login-screen {
-      padding: 30px 24px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100%;
       text-align: center;
+      overflow-y: auto;
     }
     .brand-logo {
-      width: 70px;
-      height: 70px;
+      width: 60px;
+      height: 60px;
       background: #7c3aed;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
-      margin-bottom: 16px;
+      font-size: 28px;
+      margin-bottom: 12px;
       box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
     }
-    .brand-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
-    .brand-subtitle { font-size: 13px; color: #a1a1aa; margin-bottom: 24px; }
+    .brand-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .brand-subtitle { font-size: 12px; color: #a1a1aa; margin-bottom: 18px; }
 
-    .form-group { width: 100%; text-align: left; margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #e4e4e7; }
+    .form-group { width: 100%; text-align: left; margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #e4e4e7; }
     .form-input {
       width: 100%;
-      padding: 14px;
+      padding: 12px;
       background: rgba(0, 0, 0, 0.35);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
@@ -75,6 +77,14 @@
       outline: none;
     }
     .form-input:focus { border-color: #00d2ff; }
+
+    /* hCaptcha Container Styling */
+    #captcha-container {
+      margin: 10px 0;
+      display: none;
+      justify-content: center;
+      width: 100%;
+    }
 
     .btn-submit {
       width: 100%;
@@ -86,12 +96,12 @@
       font-weight: 700;
       font-size: 15px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 6px;
       box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
     }
-    .toggle-auth { font-size: 13px; color: #a1a1aa; margin-top: 16px; cursor: pointer; }
+    .toggle-auth { font-size: 13px; color: #a1a1aa; margin-top: 14px; cursor: pointer; }
     .toggle-auth span { color: #00d2ff; font-weight: 600; }
-    #auth-error { color: #ef4444; font-size: 12px; margin-top: 10px; }
+    #auth-error { color: #ef4444; font-size: 12px; margin-top: 10px; font-weight: 600; }
 
     /* 2. CHAT SCREEN */
     #chat-screen {
@@ -112,7 +122,6 @@
     .header-title { font-weight: 700; font-size: 14px; }
     .header-sub { font-size: 11px; color: #a1a1aa; }
 
-    /* Profile Bar with File Upload */
     .profile-bar {
       background: rgba(0, 0, 0, 0.2);
       padding: 8px 16px;
@@ -285,6 +294,11 @@
       <input type="password" id="auth-pass" class="form-input" placeholder="Password" />
     </div>
 
+    <!-- hCaptcha Widget Container (Only shown during Register) -->
+    <div id="captcha-container">
+      <div class="h-captcha" data-sitekey="d91e8fca-772c-44dc-a48a-57b88bce9082"></div>
+    </div>
+
     <button id="submit-btn" class="btn-submit">Login</button>
 
     <div class="toggle-auth" id="toggle-auth-mode">
@@ -363,7 +377,7 @@
         Status: <span id="modal-status" style="color:#4ade80; font-weight:600;">Online</span>
       </div>
 
-      <!-- Admin Role Assignment Tool -->
+      <!-- Role Assignment Tool for Admins/Owners -->
       <div id="role-assign-box" style="display:none; margin-top:14px; background:rgba(0,0,0,0.3); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
         <label style="font-size:11px; color:#a1a1aa; display:block; margin-bottom:6px; font-weight:600;">ASSIGN ROLE</label>
         <select id="role-assign-select" style="background:#121324; color:#fff; border:1px solid rgba(255,255,255,0.2); padding:6px 10px; border-radius:8px; font-size:12px; width:100%; font-weight:600; outline:none;" onchange="updateTargetUserRole()">
@@ -402,13 +416,16 @@
     offline: "#ef4444"
   };
 
+  // Toggle Login/Register Mode
   document.getElementById('toggle-auth-mode').onclick = () => {
     isSignUpMode = !isSignUpMode;
     document.getElementById('submit-btn').innerText = isSignUpMode ? "Register" : "Login";
     document.getElementById('mode-text').innerText = isSignUpMode ? "Sign in" : "Register";
+    document.getElementById('captcha-container').style.display = isSignUpMode ? 'flex' : 'none';
+    document.getElementById('auth-error').innerText = "";
   };
 
-  // Auth Handling
+  // Auth Handling with Captcha
   document.getElementById('submit-btn').onclick = async () => {
     const user = document.getElementById('auth-user').value.trim();
     const pass = document.getElementById('auth-pass').value.trim();
@@ -418,15 +435,26 @@
     if (!user || !pass) return errDiv.innerText = "Please enter username and password.";
 
     if (isSignUpMode) {
+      // Check hCaptcha token response
+      const captchaToken = typeof hcaptcha !== "undefined" ? hcaptcha.getResponse() : "";
+
+      if (!captchaToken) {
+        errDiv.innerText = "Please complete the CAPTCHA check.";
+        return;
+      }
+
       const { error } = await db.from('users').insert([{ username: user, password: pass, role: 'member' }]);
       if (error) {
         errDiv.innerText = "Username taken or failed to register.";
+        if (typeof hcaptcha !== "undefined") hcaptcha.reset();
       } else {
         errDiv.style.color = "#22c55e";
         errDiv.innerText = "Account created! You can now log in.";
         isSignUpMode = false;
         document.getElementById('submit-btn').innerText = "Login";
         document.getElementById('mode-text').innerText = "Register";
+        document.getElementById('captcha-container').style.display = 'none';
+        if (typeof hcaptcha !== "undefined") hcaptcha.reset();
       }
     } else {
       const { data, error } = await db.from('users').select('*').eq('username', user).eq('password', pass);
@@ -453,7 +481,7 @@
     }
   };
 
-  // Direct File Upload Logic to Supabase Storage
+  // File Upload Logic
   async function uploadAvatar(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -502,7 +530,7 @@
     }
   }
 
-  // Open Profile Modal & Show Admin Role Control Option
+  // Profile Modal
   async function openProfile(username, defaultRole, avatarUrl) {
     currentlyViewedUser = username;
     const modal = document.getElementById('profile-modal');
@@ -530,7 +558,6 @@
       modalAvatar.innerHTML = username.charAt(0).toUpperCase();
     }
 
-    // Fetch latest user details from Database
     const { data } = await db.from('users').select('avatar_url, role').eq('username', username).single();
     if (data) {
       if (data.avatar_url) {
@@ -542,7 +569,6 @@
       }
     }
 
-    // Show Role Dropdown ONLY for Admin & Owner
     const isOwnerOrAdmin = ['admin', 'owner'].includes(loggedInRole);
     if (isOwnerOrAdmin) {
       roleBox.style.display = 'block';
@@ -554,7 +580,6 @@
     modal.style.display = 'flex';
   }
 
-  // Update Selected User's Role in Supabase
   async function updateTargetUserRole() {
     if (!currentlyViewedUser) return;
     const newRole = document.getElementById('role-assign-select').value;
@@ -597,7 +622,7 @@
     if (data) data.forEach(msg => renderCard(msg));
   }
 
-  // Live Realtime Subscription
+  // Live Realtime Stream
   function subscribeRealtime() {
     db.channel('custom-all-channel')
       .on(
@@ -656,7 +681,7 @@
     }
   }
 
-  // Render Card with User Profile & Deletion Controls
+  // Render Message Cards
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
     if (!list) return;
@@ -718,7 +743,7 @@
     if (error) alert("Failed to delete message: " + error.message);
   }
 
-  // Delete ALL Messages From Target User
+  // Delete All Messages
   async function deleteAllUserMessages(targetUsername) {
     if (!confirm(`Are you sure you want to delete ALL messages sent by ${targetUsername}?`)) return;
 
@@ -731,7 +756,7 @@
     }
   }
 
-  // Send Message with Anti-Spam
+  // Send Message
   async function sendMessage() {
     const now = Date.now();
     if (now - lastMessageTime < 1500) {
