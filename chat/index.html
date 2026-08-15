@@ -112,47 +112,42 @@
     .header-title { font-weight: 700; font-size: 14px; }
     .header-sub { font-size: 11px; color: #a1a1aa; }
 
-    /* Profile Customizer Header Bar */
+    /* Profile Bar with File Upload */
     .profile-bar {
       background: rgba(0, 0, 0, 0.2);
-      padding: 6px 16px;
+      padding: 8px 16px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
     .profile-avatar-preview {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: #7c3aed;
       object-fit: cover;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: bold;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
     }
-    .avatar-input {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      padding: 4px 8px;
+    .upload-btn-label {
+      background: linear-gradient(90deg, #7c3aed 0%, #00d2ff 100%);
       color: #fff;
-      font-size: 11px;
-      outline: none;
-    }
-    .save-avatar-btn {
-      background: #00d2ff;
-      border: none;
-      color: #000;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
       border-radius: 8px;
       cursor: pointer;
+      display: inline-block;
+      transition: opacity 0.2s;
     }
+    .upload-btn-label:hover { opacity: 0.9; }
 
     #messages-list {
       flex: 1;
@@ -303,11 +298,17 @@
       </div>
     </div>
 
-    <!-- Live Profile / Image Editor Bar -->
+    <!-- Direct File Upload Bar -->
     <div class="profile-bar">
-      <div id="profile-preview-box" class="profile-avatar-preview">?</div>
-      <input type="text" id="avatar-url-input" class="avatar-input" placeholder="Paste Image URL for your Profile Pic..." />
-      <button onclick="saveAvatar()" class="save-avatar-btn">Save Pic</button>
+      <div id="profile-preview-box" class="profile-avatar-preview" onclick="document.getElementById('avatar-file-input').click()">?</div>
+      
+      <!-- Hidden File Input -->
+      <input type="file" id="avatar-file-input" accept="image/*" style="display: none;" onchange="uploadAvatar(event)" />
+      
+      <label for="avatar-file-input" class="upload-btn-label">
+        📷 Upload Profile Picture
+      </label>
+      <span id="upload-status" style="font-size: 11px; color: #a1a1aa;"></span>
     </div>
 
     <!-- Live Message Cards Stream -->
@@ -421,25 +422,49 @@
     }
   };
 
-  // Profile Avatar Update Logic
-  async function saveAvatar() {
-    const newUrl = document.getElementById('avatar-url-input').value.trim();
-    const { error } = await db.from('users').update({ avatar_url: newUrl }).eq('username', loggedInUser);
-    
-    if (error) {
-      alert("Failed to update avatar: " + error.message);
+  // Direct File Upload Logic to Supabase Storage
+  async function uploadAvatar(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const statusLabel = document.getElementById('upload-status');
+    statusLabel.innerText = "Uploading...";
+
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${loggedInUser}_${Date.now()}.${fileExt}`;
+
+    // 1. Upload to Supabase Storage Bucket 'avatars'
+    const { error: uploadErr } = await db.storage.from('avatars').upload(filePath, file, {
+      upsert: true
+    });
+
+    if (uploadErr) {
+      statusLabel.innerText = "";
+      alert("Error uploading image: " + uploadErr.message);
+      return;
+    }
+
+    // 2. Retrieve Public Image URL
+    const { data: publicUrlData } = db.storage.from('avatars').getPublicUrl(filePath);
+    const newAvatarUrl = publicUrlData.publicUrl;
+
+    // 3. Update Database Record
+    const { error: dbErr } = await db.from('users').update({ avatar_url: newAvatarUrl }).eq('username', loggedInUser);
+
+    if (dbErr) {
+      statusLabel.innerText = "";
+      alert("Failed to save image link: " + dbErr.message);
     } else {
-      userAvatarUrl = newUrl;
+      userAvatarUrl = newAvatarUrl;
       updateAvatarUI();
-      alert("Profile picture updated!");
+      statusLabel.innerText = "Saved!";
+      setTimeout(() => statusLabel.innerText = "", 3000);
     }
   }
 
   function updateAvatarUI() {
-    const input = document.getElementById('avatar-url-input');
     const preview = document.getElementById('profile-preview-box');
     const headerAvatar = document.getElementById('my-header-avatar');
-    if (input) input.value = userAvatarUrl;
 
     if (userAvatarUrl) {
       preview.innerHTML = `<img src="${userAvatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
@@ -457,7 +482,6 @@
     const modalUser = document.getElementById('modal-username');
     const modalRole = document.getElementById('modal-role');
     const modalAvatar = document.getElementById('modal-avatar');
-    const modalStatus = document.getElementById('modal-status');
 
     modalUser.innerText = username;
     modalRole.innerText = (defaultRole || 'MEMBER').toUpperCase();
