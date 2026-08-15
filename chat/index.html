@@ -112,18 +112,6 @@
     .header-info { display: flex; align-items: center; gap: 10px; }
     .header-title { font-weight: 700; font-size: 15px; }
     .header-sub { font-size: 11px; color: #a1a1aa; }
-    .status-badge {
-      background: rgba(34, 197, 94, 0.2);
-      color: #4ade80;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .status-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; }
 
     /* Message Cards Stream */
     #messages-list {
@@ -164,7 +152,6 @@
       text-transform: uppercase;
     }
     .msg-body { font-size: 14px; color: #f4f4f5; line-height: 1.4; word-break: break-word; }
-    .msg-time { font-size: 10px; color: #71717a; margin-top: 6px; }
 
     /* MSN Styling Bar & Floating Input Row */
     .chat-footer {
@@ -262,8 +249,16 @@
           <div class="header-sub">Live Community Chat</div>
         </div>
       </div>
-      <div class="status-badge">
-        <div class="status-dot"></div> Online
+      
+      <!-- User Presence Dropdown Status -->
+      <div class="status-container" style="display: flex; align-items: center; gap: 8px;">
+        <div id="status-dot" class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
+        <select id="user-status-select" onchange="updateUserStatus()" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer;">
+          <option value="online" style="background: #121324;">🟢 Online</option>
+          <option value="brb" style="background: #121324;">🟡 BRB</option>
+          <option value="afk" style="background: #121324;">🟠 AFK</option>
+          <option value="offline" style="background: #121324;">🔴 Invisible / Offline</option>
+        </select>
       </div>
     </div>
 
@@ -300,6 +295,16 @@
   let loggedInUser = "";
   let loggedInRole = "member";
   let isSignUpMode = false;
+  let presenceChannel = null;
+  let currentStatus = "online";
+  let lastMessageTime = 0;
+
+  const statusColors = {
+    online: "#22c55e",  // Green
+    brb: "#eab308",     // Yellow
+    afk: "#f97316",     // Orange
+    offline: "#ef4444"  // Red
+  };
 
   // Toggle Auth Mode
   document.getElementById('toggle-auth-mode').onclick = () => {
@@ -308,7 +313,7 @@
     document.getElementById('mode-text').innerText = isSignUpMode ? "Sign in" : "Register";
   };
 
-  // Auth Submission
+  // Auth Submission (Login / Register)
   document.getElementById('submit-btn').onclick = async () => {
     const user = document.getElementById('auth-user').value.trim();
     const pass = document.getElementById('auth-pass').value.trim();
@@ -330,9 +335,13 @@
       }
     } else {
       const { data, error } = await db.from('users').select('*').eq('username', user).eq('password', pass);
+      
       if (error || !data || data.length === 0) {
         errDiv.style.color = "#ef4444";
         errDiv.innerText = "Invalid credentials.";
+      } else if (data[0].is_banned) {
+        errDiv.style.color = "#ef4444";
+        errDiv.innerText = "This account has been permanently banned.";
       } else {
         loggedInUser = data[0].username;
         loggedInRole = (data[0].role || "member").toLowerCase();
@@ -342,6 +351,7 @@
 
         loadMessages();
         subscribeRealtime();
+        initPresence(); // <-- Presence tracker starts here
       }
     }
   };
@@ -353,7 +363,7 @@
     if (data) data.forEach(msg => renderCard(msg));
   }
 
-  // Live Realtime Subscription
+  // Live Realtime Message Subscription
   function subscribeRealtime() {
     db.channel('custom-all-channel')
       .on(
@@ -371,12 +381,54 @@
       .subscribe();
   }
 
+  // Presence Tracking
+  function initPresence() {
+    presenceChannel = db.channel('online-users', {
+      config: {
+        presence: { key: loggedInUser },
+      },
+    });
+
+    presenceChannel
+      .on('presence', { event: 'sync' }, () => {
+        const state = presenceChannel.presenceState();
+        console.log("Current Online Users:", state);
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await presenceChannel.track({
+            user: loggedInUser,
+            role: loggedInRole,
+            status: currentStatus,
+            online_at: new Date().toISOString()
+          });
+        }
+      });
+  }
+
+  // Dynamic Status Update
+  async function updateUserStatus() {
+    const select = document.getElementById('user-status-select');
+    currentStatus = select.value;
+
+    const dot = document.getElementById('status-dot');
+    if (dot) dot.style.background = statusColors[currentStatus] || "#22c55e";
+
+    if (presenceChannel) {
+      await presenceChannel.track({
+        user: loggedInUser,
+        role: loggedInRole,
+        status: currentStatus,
+        online_at: new Date().toISOString()
+      });
+    }
+  }
+
   // Render Card in Chat
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
     if (!list) return;
 
-    // Prevent duplicate rendering
     if (msg.id && document.getElementById(`msg-${msg.id}`)) return;
 
     const cleanUser = DOMPurify.sanitize(msg.username || "Guest");
@@ -423,11 +475,19 @@
     if (error) alert("Failed to delete message: " + error.message);
   }
 
-  // Send Message
+  // Send Message with Anti-Spam Cooldown
   async function sendMessage() {
+    const now = Date.now();
+    if (now - lastMessageTime < 1500) {
+      alert("Slow down! Please wait 1.5 seconds between messages.");
+      return;
+    }
+
     const input = document.getElementById('message-input');
     const text = input.value.trim();
     if (!text || !loggedInUser) return;
+
+    lastMessageTime = now;
 
     const font = document.getElementById('font-family').value;
     const color = document.getElementById('font-color').value;
