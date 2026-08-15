@@ -284,7 +284,7 @@
   <div id="chat-screen">
     <div class="chat-header">
       <div class="header-info">
-        <div id="my-header-avatar" class="avatar" style="background: #8b5cf6;">🦊</div>
+        <div id="my-header-avatar" class="avatar" style="background: #8b5cf6; cursor: pointer;" onclick="openProfile(loggedInUser, loggedInRole, userAvatarUrl)">🦊</div>
         <div>
           <div class="header-title">Wildstyle Community</div>
           <div class="header-sub">Live Community Chat</div>
@@ -328,6 +328,21 @@
       <div class="input-wrapper">
         <input type="text" id="message-input" class="chat-input" placeholder="Type your message..." maxlength="250" />
         <button id="send-btn" class="send-btn">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PROFILE MODAL POPUP -->
+  <div id="profile-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:1000; padding:20px;">
+    <div style="background:#1d1838; border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:24px; width:100%; max-width:300px; text-align:center; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+      <button onclick="closeProfileModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#a1a1aa; font-size:18px; cursor:pointer;">✕</button>
+      
+      <div id="modal-avatar" style="width:72px; height:72px; border-radius:50%; background:#7c3aed; margin:0 auto 12px auto; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:bold; overflow:hidden;">?</div>
+      <div id="modal-username" style="font-size:18px; font-weight:700; color:#fff; margin-bottom:4px;">Username</div>
+      <div id="modal-role" class="role-badge" style="display:inline-block; margin-bottom:12px;">MEMBER</div>
+      
+      <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; font-size:12px; color:#a1a1aa; margin-top:8px;">
+        Status: <span id="modal-status" style="color:#4ade80; font-weight:600;">Online</span>
       </div>
     </div>
   </div>
@@ -436,6 +451,43 @@
     }
   }
 
+  // Profile Modal Logic
+  async function openProfile(username, defaultRole, avatarUrl) {
+    const modal = document.getElementById('profile-modal');
+    const modalUser = document.getElementById('modal-username');
+    const modalRole = document.getElementById('modal-role');
+    const modalAvatar = document.getElementById('modal-avatar');
+    const modalStatus = document.getElementById('modal-status');
+
+    modalUser.innerText = username;
+    modalRole.innerText = (defaultRole || 'MEMBER').toUpperCase();
+
+    let badgeColor = "#6b7280"; 
+    const r = (defaultRole || '').toLowerCase();
+    if (r === 'owner') badgeColor = "#ef4444";      
+    else if (r === 'admin') badgeColor = "#dc2626"; 
+    else if (r === 'dj') badgeColor = "#ec4899";    
+    else if (r === 'mod') badgeColor = "#eab308";   
+    modalRole.style.background = badgeColor;
+
+    if (avatarUrl) {
+      modalAvatar.innerHTML = `<img src="${DOMPurify.sanitize(avatarUrl)}" style="width:100%; height:100%; object-fit:cover;" />`;
+    } else {
+      modalAvatar.innerHTML = username.charAt(0).toUpperCase();
+    }
+
+    const { data } = await db.from('users').select('avatar_url, role').eq('username', username).single();
+    if (data && data.avatar_url) {
+      modalAvatar.innerHTML = `<img src="${DOMPurify.sanitize(data.avatar_url)}" style="width:100%; height:100%; object-fit:cover;" />`;
+    }
+
+    modal.style.display = 'flex';
+  }
+
+  function closeProfileModal() {
+    document.getElementById('profile-modal').style.display = 'none';
+  }
+
   // Load Past Messages
   async function loadMessages() {
     document.getElementById('messages-list').innerHTML = '';
@@ -503,7 +555,7 @@
     }
   }
 
-  // Render Card with Dynamic Avatar
+  // Render Card with Dynamic Avatar & Clickable Profile Link
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
     if (!list) return;
@@ -529,7 +581,6 @@
       ? `<button onclick="deleteMessage(${msg.id})" style="background:none; border:none; color:#ef4444; font-size:11px; cursor:pointer; font-weight:bold; margin-left:auto;">🗑 Delete</button>`
       : '';
 
-    // Render avatar picture if present, otherwise initial letter
     const avatarHtml = msg.avatar_url 
       ? `<img src="${DOMPurify.sanitize(msg.avatar_url)}" class="avatar" style="object-fit:cover;" />` 
       : `<div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>`;
@@ -540,8 +591,12 @@
     
     card.innerHTML = `
       <div class="msg-header" style="display:flex; align-items:center; gap:8px;">
-        ${avatarHtml}
-        <div class="user-name">${cleanUser}</div>
+        <div onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
+          ${avatarHtml}
+        </div>
+        <div class="user-name" onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
+          ${cleanUser}
+        </div>
         <div class="role-badge" style="background: ${badgeColor};">${msgRole.toUpperCase()}</div>
         ${deleteBtnHtml}
       </div>
