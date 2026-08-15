@@ -22,7 +22,6 @@
       padding: 10px;
     }
 
-    /* Main Container with Mobile App Aspect Ratio */
     .app-container {
       width: 100%;
       max-width: 410px;
@@ -38,7 +37,7 @@
       position: relative;
     }
 
-    /* ---------------- 1. LOGIN SCREEN ---------------- */
+    /* 1. LOGIN SCREEN */
     #login-screen {
       padding: 30px 24px;
       display: flex;
@@ -94,14 +93,14 @@
     .toggle-auth span { color: #00d2ff; font-weight: 600; }
     #auth-error { color: #ef4444; font-size: 12px; margin-top: 10px; }
 
-    /* ---------------- 2. LOBBY / CHAT SCREEN ---------------- */
+    /* 2. CHAT SCREEN */
     #chat-screen {
       display: none;
       flex-direction: column;
       height: 100%;
     }
     .chat-header {
-      padding: 16px;
+      padding: 12px 16px;
       background: rgba(0, 0, 0, 0.25);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -110,10 +109,51 @@
       align-items: center;
     }
     .header-info { display: flex; align-items: center; gap: 10px; }
-    .header-title { font-weight: 700; font-size: 15px; }
+    .header-title { font-weight: 700; font-size: 14px; }
     .header-sub { font-size: 11px; color: #a1a1aa; }
 
-    /* Message Cards Stream */
+    /* Profile Customizer Header Bar */
+    .profile-bar {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 6px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .profile-avatar-preview {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #7c3aed;
+      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .avatar-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 4px 8px;
+      color: #fff;
+      font-size: 11px;
+      outline: none;
+    }
+    .save-avatar-btn {
+      background: #00d2ff;
+      border: none;
+      color: #000;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
     #messages-list {
       flex: 1;
       overflow-y: auto;
@@ -133,13 +173,15 @@
     .avatar {
       width: 32px;
       height: 32px;
-      background: #3b82f6;
       border-radius: 50%;
+      background: #3b82f6;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
       font-weight: 700;
+      object-fit: cover;
+      overflow: hidden;
     }
     .user-name { font-weight: 700; font-size: 13px; color: #38bdf8; }
     .role-badge {
@@ -153,7 +195,6 @@
     }
     .msg-body { font-size: 14px; color: #f4f4f5; line-height: 1.4; word-break: break-word; }
 
-    /* MSN Styling Bar & Floating Input Row */
     .chat-footer {
       padding: 12px 16px;
       background: rgba(0, 0, 0, 0.4);
@@ -243,29 +284,36 @@
   <div id="chat-screen">
     <div class="chat-header">
       <div class="header-info">
-        <div class="avatar" style="background: #8b5cf6;">🦊</div>
+        <div id="my-header-avatar" class="avatar" style="background: #8b5cf6;">🦊</div>
         <div>
           <div class="header-title">Wildstyle Community</div>
           <div class="header-sub">Live Community Chat</div>
         </div>
       </div>
       
-      <!-- User Presence Dropdown Status -->
+      <!-- Status Selector -->
       <div class="status-container" style="display: flex; align-items: center; gap: 8px;">
-        <div id="status-dot" class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
+        <div id="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
         <select id="user-status-select" onchange="updateUserStatus()" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer;">
           <option value="online" style="background: #121324;">🟢 Online</option>
           <option value="brb" style="background: #121324;">🟡 BRB</option>
           <option value="afk" style="background: #121324;">🟠 AFK</option>
-          <option value="offline" style="background: #121324;">🔴 Invisible / Offline</option>
+          <option value="offline" style="background: #121324;">🔴 Offline</option>
         </select>
       </div>
     </div>
 
-    <!-- Live Stream Cards -->
+    <!-- Live Profile / Image Editor Bar -->
+    <div class="profile-bar">
+      <div id="profile-preview-box" class="profile-avatar-preview">?</div>
+      <input type="text" id="avatar-url-input" class="avatar-input" placeholder="Paste Image URL for your Profile Pic..." />
+      <button onclick="saveAvatar()" class="save-avatar-btn">Save Pic</button>
+    </div>
+
+    <!-- Live Message Cards Stream -->
     <div id="messages-list"></div>
 
-    <!-- Bottom Input & MSN Font Style Bar -->
+    <!-- MSN Styling Bar & Input -->
     <div class="chat-footer">
       <div class="msn-toolbar">
         <select id="font-family">
@@ -294,26 +342,26 @@
 
   let loggedInUser = "";
   let loggedInRole = "member";
+  let userAvatarUrl = "";
   let isSignUpMode = false;
   let presenceChannel = null;
   let currentStatus = "online";
   let lastMessageTime = 0;
 
   const statusColors = {
-    online: "#22c55e",  // Green
-    brb: "#eab308",     // Yellow
-    afk: "#f97316",     // Orange
-    offline: "#ef4444"  // Red
+    online: "#22c55e",
+    brb: "#eab308",
+    afk: "#f97316",
+    offline: "#ef4444"
   };
 
-  // Toggle Auth Mode
   document.getElementById('toggle-auth-mode').onclick = () => {
     isSignUpMode = !isSignUpMode;
     document.getElementById('submit-btn').innerText = isSignUpMode ? "Register" : "Login";
     document.getElementById('mode-text').innerText = isSignUpMode ? "Sign in" : "Register";
   };
 
-  // Auth Submission (Login / Register)
+  // Auth Handling
   document.getElementById('submit-btn').onclick = async () => {
     const user = document.getElementById('auth-user').value.trim();
     const pass = document.getElementById('auth-pass').value.trim();
@@ -345,16 +393,48 @@
       } else {
         loggedInUser = data[0].username;
         loggedInRole = (data[0].role || "member").toLowerCase();
+        userAvatarUrl = data[0].avatar_url || "";
 
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('chat-screen').style.display = 'flex';
 
+        updateAvatarUI();
         loadMessages();
         subscribeRealtime();
-        initPresence(); // <-- Presence tracker starts here
+        initPresence();
       }
     }
   };
+
+  // Profile Avatar Update Logic
+  async function saveAvatar() {
+    const newUrl = document.getElementById('avatar-url-input').value.trim();
+    const { error } = await db.from('users').update({ avatar_url: newUrl }).eq('username', loggedInUser);
+    
+    if (error) {
+      alert("Failed to update avatar: " + error.message);
+    } else {
+      userAvatarUrl = newUrl;
+      updateAvatarUI();
+      alert("Profile picture updated!");
+    }
+  }
+
+  function updateAvatarUI() {
+    const input = document.getElementById('avatar-url-input');
+    const preview = document.getElementById('profile-preview-box');
+    const headerAvatar = document.getElementById('my-header-avatar');
+    if (input) input.value = userAvatarUrl;
+
+    if (userAvatarUrl) {
+      preview.innerHTML = `<img src="${userAvatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+      headerAvatar.innerHTML = `<img src="${userAvatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+    } else {
+      const initial = loggedInUser.charAt(0).toUpperCase();
+      preview.innerText = initial;
+      headerAvatar.innerText = initial;
+    }
+  }
 
   // Load Past Messages
   async function loadMessages() {
@@ -363,7 +443,7 @@
     if (data) data.forEach(msg => renderCard(msg));
   }
 
-  // Live Realtime Message Subscription
+  // Live Realtime Subscription
   function subscribeRealtime() {
     db.channel('custom-all-channel')
       .on(
@@ -384,21 +464,20 @@
   // Presence Tracking
   function initPresence() {
     presenceChannel = db.channel('online-users', {
-      config: {
-        presence: { key: loggedInUser },
-      },
+      config: { presence: { key: loggedInUser } },
     });
 
     presenceChannel
       .on('presence', { event: 'sync' }, () => {
         const state = presenceChannel.presenceState();
-        console.log("Current Online Users:", state);
+        console.log("Online Users:", state);
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await presenceChannel.track({
             user: loggedInUser,
             role: loggedInRole,
+            avatar: userAvatarUrl,
             status: currentStatus,
             online_at: new Date().toISOString()
           });
@@ -406,7 +485,6 @@
       });
   }
 
-  // Dynamic Status Update
   async function updateUserStatus() {
     const select = document.getElementById('user-status-select');
     currentStatus = select.value;
@@ -418,13 +496,14 @@
       await presenceChannel.track({
         user: loggedInUser,
         role: loggedInRole,
+        avatar: userAvatarUrl,
         status: currentStatus,
         online_at: new Date().toISOString()
       });
     }
   }
 
-  // Render Card in Chat
+  // Render Card with Dynamic Avatar
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
     if (!list) return;
@@ -450,13 +529,18 @@
       ? `<button onclick="deleteMessage(${msg.id})" style="background:none; border:none; color:#ef4444; font-size:11px; cursor:pointer; font-weight:bold; margin-left:auto;">🗑 Delete</button>`
       : '';
 
+    // Render avatar picture if present, otherwise initial letter
+    const avatarHtml = msg.avatar_url 
+      ? `<img src="${DOMPurify.sanitize(msg.avatar_url)}" class="avatar" style="object-fit:cover;" />` 
+      : `<div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>`;
+
     const card = document.createElement('div');
     card.className = 'msg-card';
     if (msg.id) card.id = `msg-${msg.id}`;
     
     card.innerHTML = `
       <div class="msg-header" style="display:flex; align-items:center; gap:8px;">
-        <div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>
+        ${avatarHtml}
         <div class="user-name">${cleanUser}</div>
         <div class="role-badge" style="background: ${badgeColor};">${msgRole.toUpperCase()}</div>
         ${deleteBtnHtml}
@@ -468,14 +552,13 @@
     list.scrollTop = list.scrollHeight;
   }
 
-  // Delete Message Function
   async function deleteMessage(msgId) {
     if (!confirm("Are you sure you want to delete this message?")) return;
     const { error } = await db.from('messages').delete().eq('id', msgId);
     if (error) alert("Failed to delete message: " + error.message);
   }
 
-  // Send Message with Anti-Spam Cooldown
+  // Send Message with Anti-Spam
   async function sendMessage() {
     const now = Date.now();
     if (now - lastMessageTime < 1500) {
@@ -497,7 +580,7 @@
 
     const { data, error } = await db
       .from('messages')
-      .insert([{ username: loggedInUser, role: loggedInRole, formatted_text: payload }])
+      .insert([{ username: loggedInUser, role: loggedInRole, avatar_url: userAvatarUrl, formatted_text: payload }])
       .select();
 
     if (error) {
