@@ -190,7 +190,6 @@
     }
     .msg-body { font-size: 14px; color: #f4f4f5; line-height: 1.4; word-break: break-word; }
 
-    /* Admin Action Controls */
     .admin-controls {
       margin-left: auto;
       display: flex;
@@ -363,6 +362,19 @@
       <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; font-size:12px; color:#a1a1aa; margin-top:8px;">
         Status: <span id="modal-status" style="color:#4ade80; font-weight:600;">Online</span>
       </div>
+
+      <!-- Admin Role Assignment Tool -->
+      <div id="role-assign-box" style="display:none; margin-top:14px; background:rgba(0,0,0,0.3); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
+        <label style="font-size:11px; color:#a1a1aa; display:block; margin-bottom:6px; font-weight:600;">ASSIGN ROLE</label>
+        <select id="role-assign-select" style="background:#121324; color:#fff; border:1px solid rgba(255,255,255,0.2); padding:6px 10px; border-radius:8px; font-size:12px; width:100%; font-weight:600; outline:none;" onchange="updateTargetUserRole()">
+          <option value="member">Member</option>
+          <option value="mod">MOD</option>
+          <option value="dj">DJ</option>
+          <option value="admin">Admin</option>
+          <option value="owner">Owner</option>
+        </select>
+        <div id="role-save-status" style="font-size:10px; color:#4ade80; margin-top:4px;"></div>
+      </div>
     </div>
   </div>
 
@@ -381,6 +393,7 @@
   let presenceChannel = null;
   let currentStatus = "online";
   let lastMessageTime = 0;
+  let currentlyViewedUser = "";
 
   const statusColors = {
     online: "#22c55e",
@@ -489,22 +502,26 @@
     }
   }
 
-  // Profile Modal Logic
+  // Open Profile Modal & Show Admin Role Control Option
   async function openProfile(username, defaultRole, avatarUrl) {
+    currentlyViewedUser = username;
     const modal = document.getElementById('profile-modal');
     const modalUser = document.getElementById('modal-username');
     const modalRole = document.getElementById('modal-role');
     const modalAvatar = document.getElementById('modal-avatar');
+    const roleBox = document.getElementById('role-assign-box');
+    const roleSelect = document.getElementById('role-assign-select');
+    document.getElementById('role-save-status').innerText = "";
 
     modalUser.innerText = username;
-    modalRole.innerText = (defaultRole || 'MEMBER').toUpperCase();
+    let targetRole = (defaultRole || 'member').toLowerCase();
+    modalRole.innerText = targetRole.toUpperCase();
 
     let badgeColor = "#6b7280"; 
-    const r = (defaultRole || '').toLowerCase();
-    if (r === 'owner') badgeColor = "#ef4444";      
-    else if (r === 'admin') badgeColor = "#dc2626"; 
-    else if (r === 'dj') badgeColor = "#ec4899";    
-    else if (r === 'mod') badgeColor = "#eab308";   
+    if (targetRole === 'owner') badgeColor = "#ef4444";      
+    else if (targetRole === 'admin') badgeColor = "#dc2626"; 
+    else if (targetRole === 'dj') badgeColor = "#ec4899";    
+    else if (targetRole === 'mod') badgeColor = "#eab308";   
     modalRole.style.background = badgeColor;
 
     if (avatarUrl) {
@@ -513,12 +530,60 @@
       modalAvatar.innerHTML = username.charAt(0).toUpperCase();
     }
 
+    // Fetch latest user details from Database
     const { data } = await db.from('users').select('avatar_url, role').eq('username', username).single();
-    if (data && data.avatar_url) {
-      modalAvatar.innerHTML = `<img src="${DOMPurify.sanitize(data.avatar_url)}" style="width:100%; height:100%; object-fit:cover;" />`;
+    if (data) {
+      if (data.avatar_url) {
+        modalAvatar.innerHTML = `<img src="${DOMPurify.sanitize(data.avatar_url)}" style="width:100%; height:100%; object-fit:cover;" />`;
+      }
+      if (data.role) {
+        targetRole = data.role.toLowerCase();
+        modalRole.innerText = targetRole.toUpperCase();
+      }
+    }
+
+    // Show Role Dropdown ONLY for Admin & Owner
+    const isOwnerOrAdmin = ['admin', 'owner'].includes(loggedInRole);
+    if (isOwnerOrAdmin) {
+      roleBox.style.display = 'block';
+      roleSelect.value = targetRole;
+    } else {
+      roleBox.style.display = 'none';
     }
 
     modal.style.display = 'flex';
+  }
+
+  // Update Selected User's Role in Supabase
+  async function updateTargetUserRole() {
+    if (!currentlyViewedUser) return;
+    const newRole = document.getElementById('role-assign-select').value;
+    const statusLabel = document.getElementById('role-save-status');
+
+    statusLabel.style.color = "#a1a1aa";
+    statusLabel.innerText = "Updating...";
+
+    const { error } = await db.from('users').update({ role: newRole }).eq('username', currentlyViewedUser);
+
+    if (error) {
+      statusLabel.style.color = "#ef4444";
+      statusLabel.innerText = "Error: " + error.message;
+    } else {
+      statusLabel.style.color = "#4ade80";
+      statusLabel.innerText = "Role updated successfully!";
+      
+      const modalRole = document.getElementById('modal-role');
+      modalRole.innerText = newRole.toUpperCase();
+      
+      let badgeColor = "#6b7280"; 
+      if (newRole === 'owner') badgeColor = "#ef4444";      
+      else if (newRole === 'admin') badgeColor = "#dc2626"; 
+      else if (newRole === 'dj') badgeColor = "#ec4899";    
+      else if (newRole === 'mod') badgeColor = "#eab308";   
+      modalRole.style.background = badgeColor;
+
+      loadMessages();
+    }
   }
 
   function closeProfileModal() {
@@ -542,7 +607,6 @@
           if (payload.eventType === 'INSERT') {
             renderCard(payload.new);
           } else if (payload.eventType === 'DELETE') {
-            // Delete either single card or reload if bulk wipe
             loadMessages();
           }
         }
