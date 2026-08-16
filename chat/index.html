@@ -294,7 +294,7 @@
       <input type="password" id="auth-pass" class="form-input" placeholder="Password" />
     </div>
 
-    <!-- hCaptcha Widget Container (Only shown during Register) -->
+    <!-- hCaptcha Widget Container -->
     <div id="captcha-container">
       <div class="h-captcha" data-sitekey="d91e8fca-772c-44dc-a48a-57b88bce9082"></div>
     </div>
@@ -318,7 +318,6 @@
         </div>
       </div>
       
-      <!-- Status Selector -->
       <div class="status-container" style="display: flex; align-items: center; gap: 8px;">
         <div id="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
         <select id="user-status-select" onchange="updateUserStatus()" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer;">
@@ -330,7 +329,6 @@
       </div>
     </div>
 
-    <!-- Direct File Upload Bar -->
     <div class="profile-bar">
       <div id="profile-preview-box" class="profile-avatar-preview" onclick="document.getElementById('avatar-file-input').click()">?</div>
       
@@ -342,10 +340,8 @@
       <span id="upload-status" style="font-size: 11px; color: #a1a1aa;"></span>
     </div>
 
-    <!-- Live Message Cards Stream -->
     <div id="messages-list"></div>
 
-    <!-- MSN Styling Bar & Input -->
     <div class="chat-footer">
       <div class="msn-toolbar">
         <select id="font-family">
@@ -377,7 +373,6 @@
         Status: <span id="modal-status" style="color:#4ade80; font-weight:600;">Online</span>
       </div>
 
-      <!-- Role Assignment Tool for Admins/Owners -->
       <div id="role-assign-box" style="display:none; margin-top:14px; background:rgba(0,0,0,0.3); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
         <label style="font-size:11px; color:#a1a1aa; display:block; margin-bottom:6px; font-weight:600;">ASSIGN ROLE</label>
         <select id="role-assign-select" style="background:#121324; color:#fff; border:1px solid rgba(255,255,255,0.2); padding:6px 10px; border-radius:8px; font-size:12px; width:100%; font-weight:600; outline:none;" onchange="updateTargetUserRole()">
@@ -416,7 +411,21 @@
     offline: "#ef4444"
   };
 
-  // Toggle Login/Register Mode
+  // Helper function to turn raw string safely into text without evaluating script tags
+  function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+      tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag)
+    );
+  }
+
+  // Toggle Auth Mode
   document.getElementById('toggle-auth-mode').onclick = () => {
     isSignUpMode = !isSignUpMode;
     document.getElementById('submit-btn').innerText = isSignUpMode ? "Register" : "Login";
@@ -425,7 +434,7 @@
     document.getElementById('auth-error').innerText = "";
   };
 
-  // Auth Handling with Captcha
+  // Auth Handling with Strict Captcha Enforcement
   document.getElementById('submit-btn').onclick = async () => {
     const user = document.getElementById('auth-user').value.trim();
     const pass = document.getElementById('auth-pass').value.trim();
@@ -435,7 +444,6 @@
     if (!user || !pass) return errDiv.innerText = "Please enter username and password.";
 
     if (isSignUpMode) {
-      // Check hCaptcha token response
       const captchaToken = typeof hcaptcha !== "undefined" ? hcaptcha.getResponse() : "";
 
       if (!captchaToken) {
@@ -481,7 +489,6 @@
     }
   };
 
-  // File Upload Logic
   async function uploadAvatar(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -521,16 +528,15 @@
     const headerAvatar = document.getElementById('my-header-avatar');
 
     if (userAvatarUrl) {
-      preview.innerHTML = `<img src="${userAvatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
-      headerAvatar.innerHTML = `<img src="${userAvatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+      preview.innerHTML = `<img src="${DOMPurify.sanitize(userAvatarUrl)}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+      headerAvatar.innerHTML = `<img src="${DOMPurify.sanitize(userAvatarUrl)}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
     } else {
-      const initial = loggedInUser.charAt(0).toUpperCase();
+      const initial = escapeHTML(loggedInUser.charAt(0).toUpperCase());
       preview.innerText = initial;
       headerAvatar.innerText = initial;
     }
   }
 
-  // Profile Modal
   async function openProfile(username, defaultRole, avatarUrl) {
     currentlyViewedUser = username;
     const modal = document.getElementById('profile-modal');
@@ -555,7 +561,7 @@
     if (avatarUrl) {
       modalAvatar.innerHTML = `<img src="${DOMPurify.sanitize(avatarUrl)}" style="width:100%; height:100%; object-fit:cover;" />`;
     } else {
-      modalAvatar.innerHTML = username.charAt(0).toUpperCase();
+      modalAvatar.innerText = username.charAt(0).toUpperCase();
     }
 
     const { data } = await db.from('users').select('avatar_url, role').eq('username', username).single();
@@ -615,14 +621,12 @@
     document.getElementById('profile-modal').style.display = 'none';
   }
 
-  // Load Past Messages
   async function loadMessages() {
     document.getElementById('messages-list').innerHTML = '';
     const { data } = await db.from('messages').select('*').order('id', { ascending: true }).limit(50);
     if (data) data.forEach(msg => renderCard(msg));
   }
 
-  // Live Realtime Stream
   function subscribeRealtime() {
     db.channel('custom-all-channel')
       .on(
@@ -639,17 +643,13 @@
       .subscribe();
   }
 
-  // Presence Tracking
   function initPresence() {
     presenceChannel = db.channel('online-users', {
       config: { presence: { key: loggedInUser } },
     });
 
     presenceChannel
-      .on('presence', { event: 'sync' }, () => {
-        const state = presenceChannel.presenceState();
-        console.log("Online Users:", state);
-      })
+      .on('presence', { event: 'sync' }, () => {})
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await presenceChannel.track({
@@ -681,19 +681,22 @@
     }
   }
 
-  // Render Message Cards
+  // Strictly sanitized card renderer preventing XSS popup injection
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
     if (!list) return;
 
     if (msg.id && document.getElementById(`msg-${msg.id}`)) return;
 
-    const cleanUser = DOMPurify.sanitize(msg.username || "Guest");
-    const msgRole = (msg.role || "member").toLowerCase();
+    const cleanUser = escapeHTML(msg.username || "Guest");
+    const msgRole = escapeHTML((msg.role || "member").toLowerCase());
 
+    // Fix Stored XSS: Strip all <script> and dangerous tags before outputting
     const cleanBody = DOMPurify.sanitize(msg.formatted_text || "", {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u', 'font'],
-      ALLOWED_ATTR: ['style', 'color']
+      ALLOWED_ATTR: ['style', 'color'],
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'link', 'style'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
     });
 
     let badgeColor = "#6b7280"; 
@@ -736,14 +739,12 @@
     list.scrollTop = list.scrollHeight;
   }
 
-  // Delete Single Message
   async function deleteMessage(msgId) {
     if (!confirm("Delete this single message?")) return;
     const { error } = await db.from('messages').delete().eq('id', msgId);
     if (error) alert("Failed to delete message: " + error.message);
   }
 
-  // Delete All Messages
   async function deleteAllUserMessages(targetUsername) {
     if (!confirm(`Are you sure you want to delete ALL messages sent by ${targetUsername}?`)) return;
 
@@ -756,11 +757,11 @@
     }
   }
 
-  // Send Message
   async function sendMessage() {
     const now = Date.now();
-    if (now - lastMessageTime < 1500) {
-      alert("Slow down! Please wait 1.5 seconds between messages.");
+    // Enforce 3-second delay between sending messages
+    if (now - lastMessageTime < 3000) {
+      alert("Slow down! Please wait 3 seconds between messages.");
       return;
     }
 
@@ -772,7 +773,10 @@
 
     const font = document.getElementById('font-family').value;
     const color = document.getElementById('font-color').value;
-    const payload = `<span style="font-family: '${font}'; color: ${color};">${text}</span>`;
+
+    // Escape input text before sending
+    const safeText = escapeHTML(text);
+    const payload = `<span style="font-family: '${font}'; color: ${color};">${safeText}</span>`;
 
     input.value = '';
 
