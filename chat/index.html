@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wildstyle Community - MSN Chat</title>
+  <title>Wildstyle Community - Live Chat</title>
 
   <!-- Supabase, DOMPurify, and hCaptcha CDNs -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,22 +20,30 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 10px;
     }
 
+    /* APP CONTAINER: Responsive Widths */
     .app-container {
       width: 100%;
-      max-width: 410px;
-      height: 92vh;
-      max-height: 820px;
+      height: 100vh;
       background: linear-gradient(180deg, #1d1838 0%, #121324 50%, #0d1e36 100%);
-      border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       position: relative;
+    }
+
+    /* Desktop View Adaptations */
+    @media (min-width: 768px) {
+      body { padding: 20px; }
+      .app-container {
+        max-width: 1100px;
+        height: 88vh;
+        max-height: 850px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      }
     }
 
     /* 1. LOGIN SCREEN */
@@ -48,6 +56,9 @@
       height: 100%;
       text-align: center;
       overflow-y: auto;
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
     }
     .brand-logo {
       width: 60px;
@@ -78,7 +89,6 @@
     }
     .form-input:focus { border-color: #00d2ff; }
 
-    /* hCaptcha Container Styling */
     #captcha-container {
       margin: 10px 0;
       display: none;
@@ -103,12 +113,77 @@
     .toggle-auth span { color: #00d2ff; font-weight: 600; }
     #auth-error { color: #ef4444; font-size: 12px; margin-top: 10px; font-weight: 600; }
 
-    /* 2. CHAT SCREEN */
+    /* 2. MAIN CHAT DASHBOARD */
     #chat-screen {
       display: none;
       flex-direction: column;
       height: 100%;
     }
+    
+    .chat-body-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* SIDEBAR (DESKTOP USER LIST) */
+    .sidebar {
+      width: 260px;
+      background: rgba(0, 0, 0, 0.25);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    @media (max-width: 767px) {
+      .sidebar {
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        width: 100%;
+        background: #121324;
+        display: none;
+      }
+      .sidebar.active { display: flex; }
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #a1a1aa;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+    }
+
+    /* MAIN CHAT AREA */
+    .main-chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
     .chat-header {
       padding: 12px 16px;
       background: rgba(0, 0, 0, 0.25);
@@ -119,8 +194,22 @@
       align-items: center;
     }
     .header-info { display: flex; align-items: center; gap: 10px; }
-    .header-title { font-weight: 700; font-size: 14px; }
+    .header-title { font-weight: 700; font-size: 15px; }
     .header-sub { font-size: 11px; color: #a1a1aa; }
+
+    .mobile-toggle-btn {
+      display: none;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    @media (max-width: 767px) {
+      .mobile-toggle-btn { display: block; }
+    }
 
     .profile-bar {
       background: rgba(0, 0, 0, 0.2);
@@ -154,9 +243,7 @@
       border-radius: 8px;
       cursor: pointer;
       display: inline-block;
-      transition: opacity 0.2s;
     }
-    .upload-btn-label:hover { opacity: 0.9; }
 
     #messages-list {
       flex: 1;
@@ -199,11 +286,7 @@
     }
     .msg-body { font-size: 14px; color: #f4f4f5; line-height: 1.4; word-break: break-word; }
 
-    .admin-controls {
-      margin-left: auto;
-      display: flex;
-      gap: 6px;
-    }
+    .admin-controls { margin-left: auto; display: flex; gap: 6px; }
     .admin-btn {
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.4);
@@ -213,9 +296,7 @@
       padding: 2px 6px;
       border-radius: 6px;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    .admin-btn:hover { background: rgba(239, 68, 68, 0.35); }
 
     .chat-footer {
       padding: 12px 16px;
@@ -225,11 +306,7 @@
       flex-direction: column;
       gap: 8px;
     }
-    .msn-toolbar {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    .msn-toolbar { display: flex; gap: 8px; align-items: center; }
     .msn-toolbar select {
       background: rgba(255, 255, 255, 0.1);
       color: #fff;
@@ -294,7 +371,6 @@
       <input type="password" id="auth-pass" class="form-input" placeholder="Password" />
     </div>
 
-    <!-- hCaptcha Widget Container -->
     <div id="captcha-container">
       <div class="h-captcha" data-sitekey="d91e8fca-772c-44dc-a48a-57b88bce9082"></div>
     </div>
@@ -318,7 +394,8 @@
         </div>
       </div>
       
-      <div class="status-container" style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="mobile-toggle-btn" onclick="toggleSidebar()">👥 Users</button>
         <div id="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
         <select id="user-status-select" onchange="updateUserStatus()" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer;">
           <option value="online" style="background: #121324;">🟢 Online</option>
@@ -331,36 +408,48 @@
 
     <div class="profile-bar">
       <div id="profile-preview-box" class="profile-avatar-preview" onclick="document.getElementById('avatar-file-input').click()">?</div>
-      
       <input type="file" id="avatar-file-input" accept="image/*" style="display: none;" onchange="uploadAvatar(event)" />
-      
-      <label for="avatar-file-input" class="upload-btn-label">
-        📷 Upload Profile Picture
-      </label>
+      <label for="avatar-file-input" class="upload-btn-label">📷 Upload Picture</label>
       <span id="upload-status" style="font-size: 11px; color: #a1a1aa;"></span>
     </div>
 
-    <div id="messages-list"></div>
-
-    <div class="chat-footer">
-      <div class="msn-toolbar">
-        <select id="font-family">
-          <option value="Segoe UI">Segoe UI</option>
-          <option value="Comic Sans MS">Comic Sans</option>
-          <option value="Impact">Impact</option>
-          <option value="Arial">Arial</option>
-        </select>
-        <input type="color" id="font-color" value="#38bdf8" />
+    <div class="chat-body-layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar" id="app-sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="sidebar-title">Active Members</div>
+          <button class="mobile-toggle-btn" onclick="toggleSidebar()">✕</button>
+        </div>
+        <div class="user-list" id="online-users-list">
+          <!-- Populated dynamically -->
+        </div>
       </div>
 
-      <div class="input-wrapper">
-        <input type="text" id="message-input" class="chat-input" placeholder="Type your message..." maxlength="250" />
-        <button id="send-btn" class="send-btn">➤</button>
+      <!-- MAIN CHAT -->
+      <div class="main-chat">
+        <div id="messages-list"></div>
+
+        <div class="chat-footer">
+          <div class="msn-toolbar">
+            <select id="font-family">
+              <option value="Segoe UI">Segoe UI</option>
+              <option value="Comic Sans MS">Comic Sans</option>
+              <option value="Impact">Impact</option>
+              <option value="Arial">Arial</option>
+            </select>
+            <input type="color" id="font-color" value="#38bdf8" />
+          </div>
+
+          <div class="input-wrapper">
+            <input type="text" id="message-input" class="chat-input" placeholder="Type your message..." maxlength="250" />
+            <button id="send-btn" class="send-btn">➤</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- 3. PROFILE MODAL POPUP -->
+  <!-- 3. PROFILE MODAL -->
   <div id="profile-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:1000; padding:20px;">
     <div style="background:#1d1838; border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:24px; width:100%; max-width:300px; text-align:center; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
       <button onclick="closeProfileModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#a1a1aa; font-size:18px; cursor:pointer;">✕</button>
@@ -404,28 +493,19 @@
   let lastMessageTime = 0;
   let currentlyViewedUser = "";
 
-  const statusColors = {
-    online: "#22c55e",
-    brb: "#eab308",
-    afk: "#f97316",
-    offline: "#ef4444"
-  };
+  const statusColors = { online: "#22c55e", brb: "#eab308", afk: "#f97316", offline: "#ef4444" };
 
-  // Helper function to turn raw string safely into text without evaluating script tags
-  function escapeHTML(str) {
-    if (!str) return '';
-    return str.replace(/[&<>'"]/g, 
-      tag => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
-      }[tag] || tag)
-    );
+  function toggleSidebar() {
+    document.getElementById('app-sidebar').classList.toggle('active');
   }
 
-  // Toggle Auth Mode
+  function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, tag => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+  }
+
   document.getElementById('toggle-auth-mode').onclick = () => {
     isSignUpMode = !isSignUpMode;
     document.getElementById('submit-btn').innerText = isSignUpMode ? "Register" : "Login";
@@ -434,7 +514,6 @@
     document.getElementById('auth-error').innerText = "";
   };
 
-  // Auth Handling with Strict Captcha Enforcement
   document.getElementById('submit-btn').onclick = async () => {
     const user = document.getElementById('auth-user').value.trim();
     const pass = document.getElementById('auth-pass').value.trim();
@@ -445,11 +524,7 @@
 
     if (isSignUpMode) {
       const captchaToken = typeof hcaptcha !== "undefined" ? hcaptcha.getResponse() : "";
-
-      if (!captchaToken) {
-        errDiv.innerText = "Please complete the CAPTCHA check.";
-        return;
-      }
+      if (!captchaToken) return errDiv.innerText = "Please complete the CAPTCHA check.";
 
       const { error } = await db.from('users').insert([{ username: user, password: pass, role: 'member' }]);
       if (error) {
@@ -500,27 +575,15 @@
     const filePath = `${loggedInUser}_${Date.now()}.${fileExt}`;
 
     const { error: uploadErr } = await db.storage.from('avatars').upload(filePath, file, { upsert: true });
-
-    if (uploadErr) {
-      statusLabel.innerText = "";
-      alert("Error uploading image: " + uploadErr.message);
-      return;
-    }
+    if (uploadErr) return alert("Error uploading image: " + uploadErr.message);
 
     const { data: publicUrlData } = db.storage.from('avatars').getPublicUrl(filePath);
-    const newAvatarUrl = publicUrlData.publicUrl;
+    userAvatarUrl = publicUrlData.publicUrl;
 
-    const { error: dbErr } = await db.from('users').update({ avatar_url: newAvatarUrl }).eq('username', loggedInUser);
-
-    if (dbErr) {
-      statusLabel.innerText = "";
-      alert("Failed to save image link: " + dbErr.message);
-    } else {
-      userAvatarUrl = newAvatarUrl;
-      updateAvatarUI();
-      statusLabel.innerText = "Saved!";
-      setTimeout(() => statusLabel.innerText = "", 3000);
-    }
+    await db.from('users').update({ avatar_url: userAvatarUrl }).eq('username', loggedInUser);
+    updateAvatarUI();
+    statusLabel.innerText = "Saved!";
+    setTimeout(() => statusLabel.innerText = "", 3000);
   }
 
   function updateAvatarUI() {
@@ -540,81 +603,21 @@
   async function openProfile(username, defaultRole, avatarUrl) {
     currentlyViewedUser = username;
     const modal = document.getElementById('profile-modal');
-    const modalUser = document.getElementById('modal-username');
-    const modalRole = document.getElementById('modal-role');
-    const modalAvatar = document.getElementById('modal-avatar');
-    const roleBox = document.getElementById('role-assign-box');
-    const roleSelect = document.getElementById('role-assign-select');
-    document.getElementById('role-save-status').innerText = "";
-
-    modalUser.innerText = username;
+    document.getElementById('modal-username').innerText = username;
+    
     let targetRole = (defaultRole || 'member').toLowerCase();
+    const modalRole = document.getElementById('modal-role');
     modalRole.innerText = targetRole.toUpperCase();
 
-    let badgeColor = "#6b7280"; 
-    if (targetRole === 'owner') badgeColor = "#ef4444";      
-    else if (targetRole === 'admin') badgeColor = "#dc2626"; 
-    else if (targetRole === 'dj') badgeColor = "#ec4899";    
-    else if (targetRole === 'mod') badgeColor = "#eab308";   
-    modalRole.style.background = badgeColor;
-
     if (avatarUrl) {
-      modalAvatar.innerHTML = `<img src="${DOMPurify.sanitize(avatarUrl)}" style="width:100%; height:100%; object-fit:cover;" />`;
+      document.getElementById('modal-avatar').innerHTML = `<img src="${DOMPurify.sanitize(avatarUrl)}" style="width:100%; height:100%; object-fit:cover;" />`;
     } else {
-      modalAvatar.innerText = username.charAt(0).toUpperCase();
-    }
-
-    const { data } = await db.from('users').select('avatar_url, role').eq('username', username).single();
-    if (data) {
-      if (data.avatar_url) {
-        modalAvatar.innerHTML = `<img src="${DOMPurify.sanitize(data.avatar_url)}" style="width:100%; height:100%; object-fit:cover;" />`;
-      }
-      if (data.role) {
-        targetRole = data.role.toLowerCase();
-        modalRole.innerText = targetRole.toUpperCase();
-      }
+      document.getElementById('modal-avatar').innerText = username.charAt(0).toUpperCase();
     }
 
     const isOwnerOrAdmin = ['admin', 'owner'].includes(loggedInRole);
-    if (isOwnerOrAdmin) {
-      roleBox.style.display = 'block';
-      roleSelect.value = targetRole;
-    } else {
-      roleBox.style.display = 'none';
-    }
-
+    document.getElementById('role-assign-box').style.display = isOwnerOrAdmin ? 'block' : 'none';
     modal.style.display = 'flex';
-  }
-
-  async function updateTargetUserRole() {
-    if (!currentlyViewedUser) return;
-    const newRole = document.getElementById('role-assign-select').value;
-    const statusLabel = document.getElementById('role-save-status');
-
-    statusLabel.style.color = "#a1a1aa";
-    statusLabel.innerText = "Updating...";
-
-    const { error } = await db.from('users').update({ role: newRole }).eq('username', currentlyViewedUser);
-
-    if (error) {
-      statusLabel.style.color = "#ef4444";
-      statusLabel.innerText = "Error: " + error.message;
-    } else {
-      statusLabel.style.color = "#4ade80";
-      statusLabel.innerText = "Role updated successfully!";
-      
-      const modalRole = document.getElementById('modal-role');
-      modalRole.innerText = newRole.toUpperCase();
-      
-      let badgeColor = "#6b7280"; 
-      if (newRole === 'owner') badgeColor = "#ef4444";      
-      else if (newRole === 'admin') badgeColor = "#dc2626"; 
-      else if (newRole === 'dj') badgeColor = "#ec4899";    
-      else if (newRole === 'mod') badgeColor = "#eab308";   
-      modalRole.style.background = badgeColor;
-
-      loadMessages();
-    }
   }
 
   function closeProfileModal() {
@@ -629,93 +632,69 @@
 
   function subscribeRealtime() {
     db.channel('custom-all-channel')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'messages' },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            renderCard(payload.new);
-          } else if (payload.eventType === 'DELETE') {
-            loadMessages();
-          }
-        }
-      )
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
+        if (payload.eventType === 'INSERT') renderCard(payload.new);
+        else if (payload.eventType === 'DELETE') loadMessages();
+      })
       .subscribe();
   }
 
   function initPresence() {
-    presenceChannel = db.channel('online-users', {
-      config: { presence: { key: loggedInUser } },
-    });
+    presenceChannel = db.channel('online-users', { config: { presence: { key: loggedInUser } } });
 
     presenceChannel
-      .on('presence', { event: 'sync' }, () => {})
+      .on('presence', { event: 'sync' }, () => {
+        const state = presenceChannel.presenceState();
+        renderUserList(state);
+      })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await presenceChannel.track({
-            user: loggedInUser,
-            role: loggedInRole,
-            avatar: userAvatarUrl,
-            status: currentStatus,
-            online_at: new Date().toISOString()
+            user: loggedInUser, role: loggedInRole, avatar: userAvatarUrl, status: currentStatus
           });
         }
       });
   }
 
-  async function updateUserStatus() {
-    const select = document.getElementById('user-status-select');
-    currentStatus = select.value;
+  function renderUserList(state) {
+    const list = document.getElementById('online-users-list');
+    list.innerHTML = '';
+    
+    Object.keys(state).forEach(key => {
+      const u = state[key][0];
+      const div = document.createElement('div');
+      div.className = 'user-item';
+      div.onclick = () => openProfile(u.user, u.role, u.avatar);
+      
+      div.innerHTML = `
+        <div style="width:8px; height:8px; border-radius:50%; background:${statusColors[u.status] || '#22c55e'}"></div>
+        <div style="font-size:13px; font-weight:600;">${escapeHTML(u.user)}</div>
+      `;
+      list.appendChild(div);
+    });
+  }
 
-    const dot = document.getElementById('status-dot');
-    if (dot) dot.style.background = statusColors[currentStatus] || "#22c55e";
+  async function updateUserStatus() {
+    currentStatus = document.getElementById('user-status-select').value;
+    document.getElementById('status-dot').style.background = statusColors[currentStatus] || "#22c55e";
 
     if (presenceChannel) {
-      await presenceChannel.track({
-        user: loggedInUser,
-        role: loggedInRole,
-        avatar: userAvatarUrl,
-        status: currentStatus,
-        online_at: new Date().toISOString()
-      });
+      await presenceChannel.track({ user: loggedInUser, role: loggedInRole, avatar: userAvatarUrl, status: currentStatus });
     }
   }
 
-  // Strictly sanitized card renderer preventing XSS popup injection
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
-    if (!list) return;
-
-    if (msg.id && document.getElementById(`msg-${msg.id}`)) return;
+    if (!list || (msg.id && document.getElementById(`msg-${msg.id}`))) return;
 
     const cleanUser = escapeHTML(msg.username || "Guest");
     const msgRole = escapeHTML((msg.role || "member").toLowerCase());
 
-    // Fix Stored XSS: Strip all <script> and dangerous tags before outputting
     const cleanBody = DOMPurify.sanitize(msg.formatted_text || "", {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u', 'font'],
       ALLOWED_ATTR: ['style', 'color'],
-      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'link', 'style'],
-      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'link', 'style']
     });
-
-    let badgeColor = "#6b7280"; 
-    if (msgRole === 'owner') badgeColor = "#ef4444";      
-    else if (msgRole === 'admin') badgeColor = "#dc2626"; 
-    else if (msgRole === 'dj') badgeColor = "#ec4899";    
-    else if (msgRole === 'mod') badgeColor = "#eab308";   
-
-    const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
-    const deleteControlsHtml = (canDelete && msg.id)
-      ? `<div class="admin-controls">
-           <button class="admin-btn" onclick="deleteMessage(${msg.id})">🗑 Msg</button>
-           <button class="admin-btn" onclick="deleteAllUserMessages('${cleanUser}')">🗑 All</button>
-         </div>`
-      : '';
-
-    const avatarHtml = msg.avatar_url 
-      ? `<img src="${DOMPurify.sanitize(msg.avatar_url)}" class="avatar" style="object-fit:cover;" />` 
-      : `<div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>`;
 
     const card = document.createElement('div');
     card.className = 'msg-card';
@@ -723,74 +702,32 @@
     
     card.innerHTML = `
       <div class="msg-header">
-        <div onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
-          ${avatarHtml}
-        </div>
-        <div class="user-name" onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
-          ${cleanUser}
-        </div>
-        <div class="role-badge" style="background: ${badgeColor};">${msgRole.toUpperCase()}</div>
-        ${deleteControlsHtml}
+        <div class="user-name" onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">${cleanUser}</div>
+        <div class="role-badge">${msgRole.toUpperCase()}</div>
       </div>
-      <div class="msg-body" style="margin-top:6px;">${cleanBody}</div>
+      <div class="msg-body">${cleanBody}</div>
     `;
 
     list.appendChild(card);
     list.scrollTop = list.scrollHeight;
   }
 
-  async function deleteMessage(msgId) {
-    if (!confirm("Delete this single message?")) return;
-    const { error } = await db.from('messages').delete().eq('id', msgId);
-    if (error) alert("Failed to delete message: " + error.message);
-  }
-
-  async function deleteAllUserMessages(targetUsername) {
-    if (!confirm(`Are you sure you want to delete ALL messages sent by ${targetUsername}?`)) return;
-
-    const { error } = await db.from('messages').delete().eq('username', targetUsername);
-
-    if (error) {
-      alert("Failed to delete user messages: " + error.message);
-    } else {
-      loadMessages();
-    }
-  }
-
   async function sendMessage() {
     const now = Date.now();
-    // Enforce 3-second delay between sending messages
-    if (now - lastMessageTime < 3000) {
-      alert("Slow down! Please wait 3 seconds between messages.");
-      return;
-    }
+    if (now - lastMessageTime < 3000) return alert("Please wait 3 seconds between messages.");
 
     const input = document.getElementById('message-input');
     const text = input.value.trim();
     if (!text || !loggedInUser) return;
 
     lastMessageTime = now;
-
     const font = document.getElementById('font-family').value;
     const color = document.getElementById('font-color').value;
 
-    // Escape input text before sending
-    const safeText = escapeHTML(text);
-    const payload = `<span style="font-family: '${font}'; color: ${color};">${safeText}</span>`;
-
+    const payload = `<span style="font-family: '${font}'; color: ${color};">${escapeHTML(text)}</span>`;
     input.value = '';
 
-    const { data, error } = await db
-      .from('messages')
-      .insert([{ username: loggedInUser, role: loggedInRole, avatar_url: userAvatarUrl, formatted_text: payload }])
-      .select();
-
-    if (error) {
-      console.error("Supabase Error:", error);
-      alert("Error sending message: " + error.message);
-    } else if (data && data[0]) {
-      renderCard(data[0]);
-    }
+    await db.from('messages').insert([{ username: loggedInUser, role: loggedInRole, avatar_url: userAvatarUrl, formatted_text: payload }]);
   }
 
   document.getElementById('send-btn').onclick = sendMessage;
