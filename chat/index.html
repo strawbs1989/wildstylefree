@@ -33,7 +33,6 @@
       position: relative;
     }
 
-    /* Desktop View Adaptations */
     @media (min-width: 768px) {
       body { padding: 20px; }
       .app-container {
@@ -80,10 +79,10 @@
     .form-input {
       width: 100%;
       padding: 12px;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      color: #fff;
+      color: #ffffff !important;
       font-size: 14px;
       outline: none;
     }
@@ -127,7 +126,7 @@
       position: relative;
     }
 
-    /* SIDEBAR (DESKTOP USER LIST) */
+    /* SIDEBAR */
     .sidebar {
       width: 260px;
       background: rgba(0, 0, 0, 0.25);
@@ -170,7 +169,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 6px;
+      padding: 8px;
       border-radius: 8px;
       background: rgba(255, 255, 255, 0.03);
       cursor: pointer;
@@ -286,17 +285,19 @@
     }
     .msg-body { font-size: 14px; color: #f4f4f5; line-height: 1.4; word-break: break-word; }
 
+    /* Admin Delete Buttons */
     .admin-controls { margin-left: auto; display: flex; gap: 6px; }
     .admin-btn {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.5);
       color: #fca5a5;
       font-size: 10px;
       font-weight: 600;
-      padding: 2px 6px;
+      padding: 3px 8px;
       border-radius: 6px;
       cursor: pointer;
     }
+    .admin-btn:hover { background: rgba(239, 68, 68, 0.4); }
 
     .chat-footer {
       padding: 12px 16px;
@@ -308,9 +309,9 @@
     }
     .msn-toolbar { display: flex; gap: 8px; align-items: center; }
     .msn-toolbar select {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
       color: #fff;
-      border: none;
+      border: 1px solid rgba(255,255,255,0.2);
       padding: 4px 8px;
       border-radius: 6px;
       font-size: 11px;
@@ -325,16 +326,21 @@
     }
 
     .input-wrapper { display: flex; gap: 8px; align-items: center; }
+    
+    /* INPUT FIX: Bright white readable text */
     .chat-input {
       flex: 1;
       padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 24px;
-      color: #fff;
+      color: #ffffff !important;
       font-size: 14px;
       outline: none;
     }
+    .chat-input::placeholder { color: #a1a1aa; }
+    .chat-input:focus { border-color: #00d2ff; background: rgba(255, 255, 255, 0.18); }
+
     .send-btn {
       width: 44px;
       height: 44px;
@@ -420,9 +426,7 @@
           <div class="sidebar-title">Active Members</div>
           <button class="mobile-toggle-btn" onclick="toggleSidebar()">✕</button>
         </div>
-        <div class="user-list" id="online-users-list">
-          <!-- Populated dynamically -->
-        </div>
+        <div class="user-list" id="online-users-list"></div>
       </div>
 
       <!-- MAIN CHAT -->
@@ -624,6 +628,29 @@
     document.getElementById('profile-modal').style.display = 'none';
   }
 
+  async function updateTargetUserRole() {
+    if (!currentlyViewedUser) return;
+    const newRole = document.getElementById('role-assign-select').value;
+    const statusLabel = document.getElementById('role-save-status');
+
+    statusLabel.style.color = "#a1a1aa";
+    statusLabel.innerText = "Updating...";
+
+    const { error } = await db.from('users').update({ role: newRole }).eq('username', currentlyViewedUser);
+
+    if (error) {
+      statusLabel.style.color = "#ef4444";
+      statusLabel.innerText = "Error: " + error.message;
+    } else {
+      statusLabel.style.color = "#4ade80";
+      statusLabel.innerText = "Role updated successfully!";
+      
+      const modalRole = document.getElementById('modal-role');
+      modalRole.innerText = newRole.toUpperCase();
+      loadMessages();
+    }
+  }
+
   async function loadMessages() {
     document.getElementById('messages-list').innerHTML = '';
     const { data } = await db.from('messages').select('*').order('id', { ascending: true }).limit(50);
@@ -696,20 +723,57 @@
       FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'link', 'style']
     });
 
+    let badgeColor = "#6b7280"; 
+    if (msgRole === 'owner') badgeColor = "#ef4444";      
+    else if (msgRole === 'admin') badgeColor = "#dc2626"; 
+    else if (msgRole === 'dj') badgeColor = "#ec4899";    
+    else if (msgRole === 'mod') badgeColor = "#eab308";   
+
+    const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
+    const deleteControlsHtml = (canDelete && msg.id)
+      ? `<div class="admin-controls">
+           <button class="admin-btn" onclick="deleteMessage(${msg.id})">🗑 Msg</button>
+           <button class="admin-btn" onclick="deleteAllUserMessages('${cleanUser}')">🗑 All</button>
+         </div>`
+      : '';
+
+    const avatarHtml = msg.avatar_url 
+      ? `<img src="${DOMPurify.sanitize(msg.avatar_url)}" class="avatar" style="object-fit:cover;" />` 
+      : `<div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>`;
+
     const card = document.createElement('div');
     card.className = 'msg-card';
     if (msg.id) card.id = `msg-${msg.id}`;
     
     card.innerHTML = `
       <div class="msg-header">
-        <div class="user-name" onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">${cleanUser}</div>
-        <div class="role-badge">${msgRole.toUpperCase()}</div>
+        <div onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
+          ${avatarHtml}
+        </div>
+        <div class="user-name" onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
+          ${cleanUser}
+        </div>
+        <div class="role-badge" style="background: ${badgeColor};">${msgRole.toUpperCase()}</div>
+        ${deleteControlsHtml}
       </div>
-      <div class="msg-body">${cleanBody}</div>
+      <div class="msg-body" style="margin-top:6px;">${cleanBody}</div>
     `;
 
     list.appendChild(card);
     list.scrollTop = list.scrollHeight;
+  }
+
+  async function deleteMessage(msgId) {
+    if (!confirm("Delete this single message?")) return;
+    const { error } = await db.from('messages').delete().eq('id', msgId);
+    if (error) alert("Failed to delete message: " + error.message);
+  }
+
+  async function deleteAllUserMessages(targetUsername) {
+    if (!confirm(`Are you sure you want to delete ALL messages sent by ${targetUsername}?`)) return;
+    const { error } = await db.from('messages').delete().eq('username', targetUsername);
+    if (error) alert("Failed to delete user messages: " + error.message);
+    else loadMessages();
   }
 
   async function sendMessage() {
