@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Wildstyle Community - Live Chat</title>
 
-  <!-- Supabase, DOMPurify, and hCaptcha CDNs -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
@@ -397,7 +396,7 @@
   <div id="chat-screen">
     <div class="chat-header">
       <div class="header-info">
-        <div id="my-header-avatar" class="avatar" style="background: #8b5cf6; cursor: pointer;" onclick="openProfile(loggedInUser, loggedInRole, userAvatarUrl)">🦊</div>
+        <div id="my-header-avatar" class="avatar" style="background: #8b5cf6; cursor: pointer;">🦊</div>
         <div>
           <div class="header-title">Wildstyle Community</div>
           <div class="header-sub">Live Community Chat</div>
@@ -500,6 +499,10 @@
   let currentlyViewedUser = "";
 
   const statusColors = { online: "#22c55e", brb: "#eab308", afk: "#f97316", offline: "#ef4444" };
+
+  document.getElementById('my-header-avatar').onclick = () => {
+    if (loggedInUser) openProfile(loggedInUser, loggedInRole, userAvatarUrl);
+  };
 
   function toggleSidebar() {
     document.getElementById('app-sidebar').classList.toggle('active');
@@ -719,10 +722,10 @@
     const list = document.getElementById('messages-list');
     if (!list || (msg.id && document.getElementById(`msg-${msg.id}`))) return;
 
-    const cleanUser = escapeHTML(msg.username || "Guest");
-    const msgRole = escapeHTML((msg.role || "member").toLowerCase());
+    const rawUser = msg.username || "Guest";
+    const rawRole = (msg.role || "member").toLowerCase();
+    const rawAvatar = msg.avatar_url || "";
 
-    // Strict DOMPurify Sanitization eliminating injected scripts and alert boxes
     const rawContent = msg.formatted_text || "";
     const cleanBody = DOMPurify.sanitize(rawContent, {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u'],
@@ -732,40 +735,72 @@
     });
 
     let badgeColor = "#6b7280"; 
-    if (msgRole === 'owner') badgeColor = "#ef4444";      
-    else if (msgRole === 'admin') badgeColor = "#dc2626"; 
-    else if (msgRole === 'dj') badgeColor = "#ec4899";    
-    else if (msgRole === 'mod') badgeColor = "#eab308";   
-
-    const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
-    const deleteControlsHtml = (canDelete && msg.id)
-      ? `<div class="admin-controls">
-           <button class="admin-btn" onclick="deleteMessage(${msg.id})">🗑 Msg</button>
-           <button class="admin-btn" onclick="deleteAllUserMessages('${cleanUser}')">🗑 All</button>
-         </div>`
-      : '';
-
-    const avatarHtml = msg.avatar_url 
-      ? `<img src="${DOMPurify.sanitize(msg.avatar_url)}" class="avatar" style="object-fit:cover;" />` 
-      : `<div class="avatar">${cleanUser.charAt(0).toUpperCase()}</div>`;
+    if (rawRole === 'owner') badgeColor = "#ef4444";      
+    else if (rawRole === 'admin') badgeColor = "#dc2626"; 
+    else if (rawRole === 'dj') badgeColor = "#ec4899";    
+    else if (rawRole === 'mod') badgeColor = "#eab308";   
 
     const card = document.createElement('div');
     card.className = 'msg-card';
     if (msg.id) card.id = `msg-${msg.id}`;
-    
-    card.innerHTML = `
-      <div class="msg-header">
-        <div onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
-          ${avatarHtml}
-        </div>
-        <div class="user-name" onclick="openProfile('${cleanUser}', '${msgRole}', '${msg.avatar_url || ''}')" style="cursor:pointer;">
-          ${cleanUser}
-        </div>
-        <div class="role-badge" style="background: ${badgeColor};">${msgRole.toUpperCase()}</div>
-        ${deleteControlsHtml}
-      </div>
-      <div class="msg-body" style="margin-top:6px;">${cleanBody}</div>
-    `;
+
+    const msgHeader = document.createElement('div');
+    msgHeader.className = 'msg-header';
+
+    const avatarWrapper = document.createElement('div');
+    avatarWrapper.style.cursor = 'pointer';
+    avatarWrapper.onclick = () => openProfile(rawUser, rawRole, rawAvatar);
+
+    if (rawAvatar) {
+      const cleanAvatar = DOMPurify.sanitize(rawAvatar);
+      avatarWrapper.innerHTML = `<img src="${cleanAvatar}" class="avatar" style="object-fit:cover;" />`;
+    } else {
+      avatarWrapper.className = 'avatar';
+      avatarWrapper.textContent = rawUser.charAt(0).toUpperCase();
+    }
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'user-name';
+    nameDiv.style.cursor = 'pointer';
+    nameDiv.textContent = rawUser;
+    nameDiv.onclick = () => openProfile(rawUser, rawRole, rawAvatar);
+
+    const badgeDiv = document.createElement('div');
+    badgeDiv.className = 'role-badge';
+    badgeDiv.style.background = badgeColor;
+    badgeDiv.textContent = rawRole.toUpperCase();
+
+    msgHeader.appendChild(avatarWrapper);
+    msgHeader.appendChild(nameDiv);
+    msgHeader.appendChild(badgeDiv);
+
+    const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
+    if (canDelete && msg.id) {
+      const adminControls = document.createElement('div');
+      adminControls.className = 'admin-controls';
+
+      const btnMsg = document.createElement('button');
+      btnMsg.className = 'admin-btn';
+      btnMsg.textContent = '🗑 Msg';
+      btnMsg.onclick = () => deleteMessage(msg.id);
+
+      const btnAll = document.createElement('button');
+      btnAll.className = 'admin-btn';
+      btnAll.textContent = '🗑 All';
+      btnAll.onclick = () => deleteAllUserMessages(rawUser);
+
+      adminControls.appendChild(btnMsg);
+      adminControls.appendChild(btnAll);
+      msgHeader.appendChild(adminControls);
+    }
+
+    const msgBody = document.createElement('div');
+    msgBody.className = 'msg-body';
+    msgBody.style.marginTop = '6px';
+    msgBody.innerHTML = cleanBody;
+
+    card.appendChild(msgHeader);
+    card.appendChild(msgBody);
 
     list.appendChild(card);
     list.scrollTop = list.scrollHeight;
@@ -796,7 +831,6 @@
     const font = escapeHTML(document.getElementById('font-family').value);
     const color = escapeHTML(document.getElementById('font-color').value);
 
-    // Secure payload generation preventing string breakout
     const payload = `<span style="font-family: ${font}; color: ${color};">${escapeHTML(text)}</span>`;
     input.value = '';
 
