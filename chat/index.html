@@ -15,7 +15,7 @@
     
     html, body {
       height: 100%;
-      overflow: hidden; /* Prevents whole page scrolling */
+      overflow: hidden;
       background: #0d0f1a;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       color: #ffffff;
@@ -27,10 +27,9 @@
       align-items: center;
     }
 
-    /* APP CONTAINER: Fixed Dynamic Viewport Height */
     .app-container {
       width: 100%;
-      height: 100dvh; /* Uses actual visible viewport height on mobile */
+      height: 100dvh;
       background: linear-gradient(180deg, #1d1838 0%, #121324 50%, #0d1e36 100%);
       display: flex;
       flex-direction: column;
@@ -195,7 +194,6 @@
       position: relative;
     }
 
-    /* SIDEBAR */
     .sidebar {
       width: 260px;
       background: rgba(0, 0, 0, 0.25);
@@ -244,7 +242,6 @@
       cursor: pointer;
     }
 
-    /* MAIN CHAT AREA */
     .main-chat {
       flex: 1;
       display: flex;
@@ -307,7 +304,6 @@
     }
     .admin-btn:hover { background: rgba(239, 68, 68, 0.4); }
 
-    /* FOOTER LOCKED TO BOTTOM */
     .chat-footer {
       padding: 10px 16px;
       background: rgba(0, 0, 0, 0.5);
@@ -369,7 +365,7 @@
 
 <div class="app-container">
 
-  <!-- 1. LOGIN / SIGNUP VIEW -->
+  <!-- LOGIN / SIGNUP VIEW -->
   <div id="login-screen">
     <div class="brand-logo">🦊</div>
     <div class="brand-title">Wildstyle Community</div>
@@ -397,7 +393,7 @@
     <div id="auth-error"></div>
   </div>
 
-  <!-- 2. MAIN CHAT VIEW -->
+  <!-- MAIN CHAT VIEW -->
   <div id="chat-screen">
     <div class="chat-header">
       <div class="header-info">
@@ -428,7 +424,6 @@
     </div>
 
     <div class="chat-body-layout">
-      <!-- SIDEBAR -->
       <div class="sidebar" id="app-sidebar">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div class="sidebar-title">Active Members</div>
@@ -437,7 +432,6 @@
         <div class="user-list" id="online-users-list"></div>
       </div>
 
-      <!-- MAIN CHAT -->
       <div class="main-chat">
         <div id="messages-list"></div>
 
@@ -461,7 +455,7 @@
     </div>
   </div>
 
-  <!-- 3. PROFILE MODAL -->
+  <!-- PROFILE MODAL -->
   <div id="profile-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:1000; padding:20px;">
     <div style="background:#1d1838; border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:24px; width:100%; max-width:300px; text-align:center; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
       <button onclick="closeProfileModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#a1a1aa; font-size:18px; cursor:pointer;">✕</button>
@@ -513,9 +507,12 @@
 
   function escapeHTML(str) {
     if (!str) return '';
-    return str.replace(/[&<>'"]/g, tag => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-    }[tag] || tag));
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   document.getElementById('toggle-auth-mode').onclick = () => {
@@ -725,10 +722,13 @@
     const cleanUser = escapeHTML(msg.username || "Guest");
     const msgRole = escapeHTML((msg.role || "member").toLowerCase());
 
-    const cleanBody = DOMPurify.sanitize(msg.formatted_text || "", {
-      ALLOWED_TAGS: ['span', 'b', 'i', 'u', 'font'],
-      ALLOWED_ATTR: ['style', 'color'],
-      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'link', 'style']
+    // Strict DOMPurify Sanitization eliminating injected scripts and alert boxes
+    const rawContent = msg.formatted_text || "";
+    const cleanBody = DOMPurify.sanitize(rawContent, {
+      ALLOWED_TAGS: ['span', 'b', 'i', 'u'],
+      ALLOWED_ATTR: ['style'],
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'link', 'style', 'img', 'svg'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
     });
 
     let badgeColor = "#6b7280"; 
@@ -793,13 +793,19 @@
     if (!text || !loggedInUser) return;
 
     lastMessageTime = now;
-    const font = document.getElementById('font-family').value;
-    const color = document.getElementById('font-color').value;
+    const font = escapeHTML(document.getElementById('font-family').value);
+    const color = escapeHTML(document.getElementById('font-color').value);
 
-    const payload = `<span style="font-family: '${font}'; color: ${color};">${escapeHTML(text)}</span>`;
+    // Secure payload generation preventing string breakout
+    const payload = `<span style="font-family: ${font}; color: ${color};">${escapeHTML(text)}</span>`;
     input.value = '';
 
-    await db.from('messages').insert([{ username: loggedInUser, role: loggedInRole, avatar_url: userAvatarUrl, formatted_text: payload }]);
+    await db.from('messages').insert([{ 
+      username: loggedInUser, 
+      role: loggedInRole, 
+      avatar_url: userAvatarUrl, 
+      formatted_text: payload 
+    }]);
   }
 
   document.getElementById('send-btn').onclick = sendMessage;
