@@ -553,7 +553,7 @@
       }
     } else {
       const { data, error } = await db.from('users').select('*').eq('username', user).eq('password', pass);
-      
+
       if (error || !data || data.length === 0) {
         errDiv.style.color = "#ef4444";
         errDiv.innerText = "Invalid credentials.";
@@ -616,7 +616,7 @@
     currentlyViewedUser = username;
     const modal = document.getElementById('profile-modal');
     document.getElementById('modal-username').innerText = username;
-    
+
     let targetRole = (defaultRole || 'member').toLowerCase();
     const modalRole = document.getElementById('modal-role');
     modalRole.innerText = targetRole.toUpperCase();
@@ -652,24 +652,46 @@
     } else {
       statusLabel.style.color = "#4ade80";
       statusLabel.innerText = "Role updated successfully!";
-      
+
       const modalRole = document.getElementById('modal-role');
       modalRole.innerText = newRole.toUpperCase();
       loadMessages();
     }
   }
 
+  /* --- FIXED LOAD & RENDER FUNCTIONS --- */
   async function loadMessages() {
-    document.getElementById('messages-list').innerHTML = '';
-    const { data } = await db.from('messages').select('*').order('id', { ascending: true }).limit(50);
-    if (data) data.forEach(msg => renderCard(msg));
+    const list = document.getElementById('messages-list');
+    list.innerHTML = '<div style="color:#a1a1aa; font-size:12px; text-align:center; padding:10px;">Loading messages...</div>';
+
+    // Fetch messages without strict ordering failures
+    const { data, error } = await db.from('messages').select('*').limit(100);
+
+    list.innerHTML = ''; // Clear loading indicator
+
+    if (error) {
+      console.error("Database Fetch Error:", error);
+      list.innerHTML = `<div style="color:#ef4444; font-size:12px; padding:10px;">Failed to load messages: ${escapeHTML(error.message)}</div>`;
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      list.innerHTML = '<div style="color:#a1a1aa; font-size:12px; text-align:center; padding:10px;">No messages yet. Say hello!</div>';
+      return;
+    }
+
+    // Sort manually by ID safely
+    data.sort((a, b) => (a.id || 0) - (b.id || 0));
+    data.forEach(msg => renderCard(msg));
   }
 
   function subscribeRealtime() {
-    db.channel('custom-all-channel')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
-        if (payload.eventType === 'INSERT') renderCard(payload.new);
-        else if (payload.eventType === 'DELETE') loadMessages();
+    db.channel('public:messages')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+        renderCard(payload.new);
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, () => {
+        loadMessages();
       })
       .subscribe();
   }
@@ -694,13 +716,13 @@
   function renderUserList(state) {
     const list = document.getElementById('online-users-list');
     list.innerHTML = '';
-    
+
     Object.keys(state).forEach(key => {
       const u = state[key][0];
       const div = document.createElement('div');
       div.className = 'user-item';
       div.onclick = () => openProfile(u.user, u.role, u.avatar);
-      
+
       div.innerHTML = `
         <div style="width:8px; height:8px; border-radius:50%; background:${statusColors[u.status] || '#22c55e'}"></div>
         <div style="font-size:13px; font-weight:600;">${escapeHTML(u.user)}</div>
@@ -720,13 +742,22 @@
 
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
-    if (!list || (msg.id && document.getElementById(`msg-${msg.id}`))) return;
+    if (!list) return;
+
+    // Remove empty state message if present
+    const emptyNotice = list.querySelector('div');
+    if (emptyNotice && emptyNotice.innerText.includes('No messages yet')) {
+      list.innerHTML = '';
+    }
+
+    if (msg.id && document.getElementById(`msg-${msg.id}`)) return;
 
     const rawUser = msg.username || "Guest";
     const rawRole = (msg.role || "member").toLowerCase();
     const rawAvatar = msg.avatar_url || "";
 
-    const rawContent = msg.formatted_text || "";
+    // Fallback to text column if formatted_text is empty
+    const rawContent = msg.formatted_text || msg.text || "";
     const cleanBody = DOMPurify.sanitize(rawContent, {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u'],
       ALLOWED_ATTR: ['style'],
@@ -797,7 +828,7 @@
     const msgBody = document.createElement('div');
     msgBody.className = 'msg-body';
     msgBody.style.marginTop = '6px';
-    msgBody.innerHTML = cleanBody;
+    msgBody.innerHTML = cleanBody || escapeHTML(rawContent);
 
     card.appendChild(msgHeader);
     card.appendChild(msgBody);
@@ -821,7 +852,7 @@
 
   async function sendMessage() {
     const now = Date.now();
-    if (now - lastMessageTime < 3000) return alert("Please wait 3 seconds between messages.");
+    if (now - lastMessageTime < 2000) return alert("Please wait 2 seconds between messages.");
 
     const input = document.getElementById('message-input');
     const text = input.value.trim();
@@ -834,12 +865,16 @@
     const payload = `<span style="font-family: ${font}; color: ${color};">${escapeHTML(text)}</span>`;
     input.value = '';
 
-    await db.from('messages').insert([{ 
+    const { error } = await db.from('messages').insert([{ 
       username: loggedInUser, 
       role: loggedInRole, 
       avatar_url: userAvatarUrl, 
       formatted_text: payload 
     }]);
+
+    if (error) {
+      alert("Error sending message: " + error.message);
+    }
   }
 
   document.getElementById('send-btn').onclick = sendMessage;
