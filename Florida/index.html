@@ -11,7 +11,7 @@
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     html, body {
       height: 100%;
       overflow: hidden;
@@ -122,7 +122,7 @@
       height: 100%;
       overflow: hidden;
     }
-    
+
     .chat-header {
       padding: 10px 16px;
       background: rgba(0, 0, 0, 0.3);
@@ -402,7 +402,7 @@
           <div class="header-sub">Live Community Chat</div>
         </div>
       </div>
-      
+
       <div style="display: flex; align-items: center; gap: 8px;">
         <button class="mobile-toggle-btn" onclick="toggleSidebar()">👥 Users</button>
         <div id="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
@@ -458,11 +458,11 @@
   <div id="profile-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:1000; padding:20px;">
     <div style="background:#1d1838; border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:24px; width:100%; max-width:300px; text-align:center; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
       <button onclick="closeProfileModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#a1a1aa; font-size:18px; cursor:pointer;">✕</button>
-      
+
       <div id="modal-avatar" style="width:72px; height:72px; border-radius:50%; background:#7c3aed; margin:0 auto 12px auto; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:bold; overflow:hidden;">?</div>
       <div id="modal-username" style="font-size:18px; font-weight:700; color:#fff; margin-bottom:4px;">Username</div>
       <div id="modal-role" class="role-badge" style="display:inline-block; margin-bottom:12px;">MEMBER</div>
-      
+
       <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; font-size:12px; color:#a1a1aa; margin-top:8px;">
         Status: <span id="modal-status" style="color:#4ade80; font-weight:600;">Online</span>
       </div>
@@ -485,7 +485,7 @@
 
 <script>
   const SUPABASE_URL = "https://ajecuaxfbjmztttgwzzk.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZWN1YXhmYmptenR0dGd3enprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzA2NDMsImV4cCI6MjEwMjMwNjY0M30.1_RWdO3gm2PljpYDVGxZPnQWBFrnU7DXjjmnFvij2_0";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZWN1YXhmYmptenR0dGd3enprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzA2NDMsImV4cCI6210MjMwNjY0M30.1_RWdO3gm2PljpYDVGxZPnQWBFrnU7DXjjmnFvij2_0";
 
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -540,7 +540,7 @@
 
       const { error } = await db.from('users').insert([{ username: user, password: pass, role: 'member' }]);
       if (error) {
-        errDiv.innerText = "Username taken or failed to register.";
+        errDiv.innerText = "Username taken or failed to register: " + error.message;
         if (typeof hcaptcha !== "undefined") hcaptcha.reset();
       } else {
         errDiv.style.color = "#22c55e";
@@ -553,7 +553,7 @@
       }
     } else {
       const { data, error } = await db.from('users').select('*').eq('username', user).eq('password', pass);
-      
+
       if (error || !data || data.length === 0) {
         errDiv.style.color = "#ef4444";
         errDiv.innerText = "Invalid credentials.";
@@ -616,7 +616,7 @@
     currentlyViewedUser = username;
     const modal = document.getElementById('profile-modal');
     document.getElementById('modal-username').innerText = username;
-    
+
     let targetRole = (defaultRole || 'member').toLowerCase();
     const modalRole = document.getElementById('modal-role');
     modalRole.innerText = targetRole.toUpperCase();
@@ -652,7 +652,7 @@
     } else {
       statusLabel.style.color = "#4ade80";
       statusLabel.innerText = "Role updated successfully!";
-      
+
       const modalRole = document.getElementById('modal-role');
       modalRole.innerText = newRole.toUpperCase();
       loadMessages();
@@ -661,17 +661,25 @@
 
   async function loadMessages() {
     document.getElementById('messages-list').innerHTML = '';
-    const { data } = await db.from('messages').select('*').order('id', { ascending: true }).limit(50);
+    const { data, error } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(50);
+    
+    if (error) {
+      console.error("Error loading messages:", error);
+      return;
+    }
+    
     if (data) data.forEach(msg => renderCard(msg));
   }
 
   function subscribeRealtime() {
-    db.channel('custom-all-channel')
+    db.channel('public:messages')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
         if (payload.eventType === 'INSERT') renderCard(payload.new);
         else if (payload.eventType === 'DELETE') loadMessages();
       })
-      .subscribe();
+      .subscribe((status) => {
+        console.log("Realtime connection status:", status);
+      });
   }
 
   function initPresence() {
@@ -694,13 +702,13 @@
   function renderUserList(state) {
     const list = document.getElementById('online-users-list');
     list.innerHTML = '';
-    
+
     Object.keys(state).forEach(key => {
       const u = state[key][0];
       const div = document.createElement('div');
       div.className = 'user-item';
       div.onclick = () => openProfile(u.user, u.role, u.avatar);
-      
+
       div.innerHTML = `
         <div style="width:8px; height:8px; border-radius:50%; background:${statusColors[u.status] || '#22c55e'}"></div>
         <div style="font-size:13px; font-weight:600;">${escapeHTML(u.user)}</div>
@@ -720,7 +728,10 @@
 
   function renderCard(msg) {
     const list = document.getElementById('messages-list');
-    if (!list || (msg.id && document.getElementById(`msg-${msg.id}`))) return;
+    if (!list) return;
+    
+    // Prevent rendering duplicates if message element exists
+    if (msg.id && document.getElementById(`msg-${msg.id}`)) return;
 
     const rawUser = msg.username || "Guest";
     const rawRole = (msg.role || "member").toLowerCase();
@@ -821,30 +832,49 @@
 
   async function sendMessage() {
     const now = Date.now();
-    if (now - lastMessageTime < 3000) return alert("Please wait 3 seconds between messages.");
+    if (now - lastMessageTime < 3000) {
+      alert("Please wait 3 seconds between messages.");
+      return;
+    }
 
     const input = document.getElementById('message-input');
     const text = input.value.trim();
-    if (!text || !loggedInUser) return;
+    if (!text) return;
+    if (!loggedInUser) {
+      alert("You must be logged in to send a message.");
+      return;
+    }
 
     lastMessageTime = now;
     const font = escapeHTML(document.getElementById('font-family').value);
     const color = escapeHTML(document.getElementById('font-color').value);
 
     const payload = `<span style="font-family: ${font}; color: ${color};">${escapeHTML(text)}</span>`;
+    
+    // Clear the input box right away
     input.value = '';
 
-    await db.from('messages').insert([{ 
+    const { data, error } = await db.from('messages').insert([{ 
       username: loggedInUser, 
       role: loggedInRole, 
       avatar_url: userAvatarUrl, 
       formatted_text: payload 
-    }]);
+    }]).select();
+
+    if (error) {
+      console.error("Supabase Error Sending Message:", error);
+      alert("Error sending message: " + error.message);
+      // Restore input text so user doesn't lose it
+      input.value = text;
+    }
   }
 
   document.getElementById('send-btn').onclick = sendMessage;
   document.getElementById('message-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
   });
 </script>
 
