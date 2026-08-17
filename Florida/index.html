@@ -11,7 +11,7 @@
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     html, body {
       height: 100%;
       overflow: hidden;
@@ -122,7 +122,7 @@
       height: 100%;
       overflow: hidden;
     }
-    
+
     .chat-header {
       padding: 10px 16px;
       background: rgba(0, 0, 0, 0.3);
@@ -402,7 +402,7 @@
           <div class="header-sub">Live Community Chat</div>
         </div>
       </div>
-      
+
       <div style="display: flex; align-items: center; gap: 8px;">
         <button class="mobile-toggle-btn" onclick="toggleSidebar()">👥 Users</button>
         <div id="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
@@ -458,11 +458,11 @@
   <div id="profile-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:1000; padding:20px;">
     <div style="background:#1d1838; border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:24px; width:100%; max-width:300px; text-align:center; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
       <button onclick="closeProfileModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#a1a1aa; font-size:18px; cursor:pointer;">✕</button>
-      
+
       <div id="modal-avatar" style="width:72px; height:72px; border-radius:50%; background:#7c3aed; margin:0 auto 12px auto; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:bold; overflow:hidden;">?</div>
       <div id="modal-username" style="font-size:18px; font-weight:700; color:#fff; margin-bottom:4px;">Username</div>
       <div id="modal-role" class="role-badge" style="display:inline-block; margin-bottom:12px;">MEMBER</div>
-      
+
       <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; font-size:12px; color:#a1a1aa; margin-top:8px;">
         Status: <span id="modal-status" style="color:#4ade80; font-weight:600;">Online</span>
       </div>
@@ -617,18 +617,26 @@
     const modal = document.getElementById('profile-modal');
     document.getElementById('modal-username').innerText = username;
 
-    let targetRole = (defaultRole || 'member').toLowerCase();
+    // Fetch live target user role from DB
+    const { data } = await db.from('users').select('role, avatar_url').eq('username', username).single();
+    let targetRole = (data && data.role ? data.role : (defaultRole || 'member')).toLowerCase();
+    let targetAvatar = (data && data.avatar_url ? data.avatar_url : avatarUrl);
+
     const modalRole = document.getElementById('modal-role');
     modalRole.innerText = targetRole.toUpperCase();
 
-    if (avatarUrl) {
-      document.getElementById('modal-avatar').innerHTML = `<img src="${DOMPurify.sanitize(avatarUrl)}" style="width:100%; height:100%; object-fit:cover;" />`;
+    if (targetAvatar) {
+      document.getElementById('modal-avatar').innerHTML = `<img src="${DOMPurify.sanitize(targetAvatar)}" style="width:100%; height:100%; object-fit:cover;" />`;
     } else {
       document.getElementById('modal-avatar').innerText = username.charAt(0).toUpperCase();
     }
 
     const isOwnerOrAdmin = ['admin', 'owner'].includes(loggedInRole);
     document.getElementById('role-assign-box').style.display = isOwnerOrAdmin ? 'block' : 'none';
+    if (isOwnerOrAdmin) {
+      document.getElementById('role-assign-select').value = targetRole;
+    }
+
     modal.style.display = 'flex';
   }
 
@@ -655,19 +663,20 @@
 
       const modalRole = document.getElementById('modal-role');
       modalRole.innerText = newRole.toUpperCase();
+
+      if (currentlyViewedUser === loggedInUser) {
+        loggedInRole = newRole.toLowerCase();
+      }
+
       loadMessages();
     }
   }
 
-  /* --- FIXED LOAD & RENDER FUNCTIONS --- */
   async function loadMessages() {
     const list = document.getElementById('messages-list');
-    list.innerHTML = '<div style="color:#a1a1aa; font-size:12px; text-align:center; padding:10px;">Loading messages...</div>';
+    list.innerHTML = '';
 
-    // Fetch messages without strict ordering failures
     const { data, error } = await db.from('messages').select('*').limit(100);
-
-    list.innerHTML = ''; // Clear loading indicator
 
     if (error) {
       console.error("Database Fetch Error:", error);
@@ -680,7 +689,6 @@
       return;
     }
 
-    // Sort manually by ID safely
     data.sort((a, b) => (a.id || 0) - (b.id || 0));
     data.forEach(msg => renderCard(msg));
   }
@@ -744,7 +752,6 @@
     const list = document.getElementById('messages-list');
     if (!list) return;
 
-    // Remove empty state message if present
     const emptyNotice = list.querySelector('div');
     if (emptyNotice && emptyNotice.innerText.includes('No messages yet')) {
       list.innerHTML = '';
@@ -756,7 +763,6 @@
     const rawRole = (msg.role || "member").toLowerCase();
     const rawAvatar = msg.avatar_url || "";
 
-    // Fallback to text column if formatted_text is empty
     const rawContent = msg.formatted_text || msg.text || "";
     const cleanBody = DOMPurify.sanitize(rawContent, {
       ALLOWED_TAGS: ['span', 'b', 'i', 'u'],
@@ -805,22 +811,25 @@
     msgHeader.appendChild(nameDiv);
     msgHeader.appendChild(badgeDiv);
 
+    // Guaranteed Admin Delete Controls
     const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
-    if (canDelete && msg.id) {
+    if (canDelete) {
       const adminControls = document.createElement('div');
       adminControls.className = 'admin-controls';
 
-      const btnMsg = document.createElement('button');
-      btnMsg.className = 'admin-btn';
-      btnMsg.textContent = '🗑 Msg';
-      btnMsg.onclick = () => deleteMessage(msg.id);
+      if (msg.id) {
+        const btnMsg = document.createElement('button');
+        btnMsg.className = 'admin-btn';
+        btnMsg.textContent = '🗑 Msg';
+        btnMsg.onclick = () => deleteMessage(msg.id);
+        adminControls.appendChild(btnMsg);
+      }
 
       const btnAll = document.createElement('button');
       btnAll.className = 'admin-btn';
       btnAll.textContent = '🗑 All';
       btnAll.onclick = () => deleteAllUserMessages(rawUser);
 
-      adminControls.appendChild(btnMsg);
       adminControls.appendChild(btnAll);
       msgHeader.appendChild(adminControls);
     }
@@ -852,7 +861,7 @@
 
   async function sendMessage() {
     const now = Date.now();
-    if (now - lastMessageTime < 2000) return alert("Please wait 2 seconds between messages.");
+    if (now - lastMessageTime < 1000) return alert("Please wait a moment between messages.");
 
     const input = document.getElementById('message-input');
     const text = input.value.trim();
@@ -874,6 +883,8 @@
 
     if (error) {
       alert("Error sending message: " + error.message);
+    } else {
+      loadMessages();
     }
   }
 
