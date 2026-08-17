@@ -1,12 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <title>Fake Chat</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #111827;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    .chat-wrapper {
+      width: 360px;
+      max-width: 95vw;
+      background: #1f2937;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-<title>Wildstyle Community Chat</title>
-<a href="https://hot-tunez.ucoz.com/index/requests/0-11" target="_blank" rel="noopener noreferrer" style="display:block;text-decoration:none;color:inherit;width:100%;max-width:460px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #dedede;box-shadow:0 1px 4px rgba(0,0,0,0.1);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif"><div style="width:100%;aspect-ratio:16 / 9;background:rgba(0,0,0,0.05);overflow:hidden"><img src="http://s05.flagcounter.com/count/3He5/bg=525252/txt=820101/border=FFF7F9/columns=5/maxflags=30/viewers=How+Many+People+Requested+/labels=0/" alt="" onerror="this.onerror=null;this.src='https://hot-tunez.ucoz.com/favicon.ico';this.style.objectFit='contain';this.style.padding='15%'" style="width:100%;height:100%;object-fit:cover;display:block" /></div><div style="padding:14px 16px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:15px"><img src="https://hot-tunez.ucoz.com/favicon.ico" alt="" style="width:15px;height:15px;border-radius:4px;flex-shrink:0" /><span style="font-size:11px;font-weight:400;color:#999999;letter-spacing:0.5px;text-transform:uppercase">ucoz.com</span></div><div style="font-size:16px;font-weight:400;color:#000000;line-height:1.4;margin:0">Hot-Tunez</div><div style="font-size:13px;color:#000000;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:0">Please Fill In The Information Below…</div></div></a>
+    .chat-header {
+      padding: 12px 16px;
+      background: #111827;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f97316, #22c55e, #3b82f6);
+    }
+
+    .chat-header-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .chat-header-status {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      background: radial-gradient(circle at top left, #111827, #020617);
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .msg.me {
+      align-self: flex-end;
+      background: #3b82f6;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+      background: #374151;
+      border-bottom-left-radius: 4px;
+    }
+
+    .timestamp {
+      font-size: 0.7rem;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      background: #111827;
+      border-top: 1px solid #1f2937;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: none;
+      outline: none;
+      font-size: 0.85rem;
+      background: #1f2937;
+      color: #e5e7eb;
+    }
+
+    .chat-input button {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: #22c55e;
+      color: #022c22;
+    }
+
+    .chat-input button:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-wrapper">
+    <div class="chat-header">
+      <div class="avatar"></div>
+      <div class="chat-header-info">
+        <div class="chat-header-title">FakeChat Bot</div>
+        <div class="chat-header-status">Online · pretending to be busy</div>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat">
+      <div class="msg bot">
+        Hey! I’m a totally fake chat bot. Type anything below and I’ll respond.
+        <div class="timestamp">just now</div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input id="input" type="text" placeholder="Type a message…" />
+      <button id="send">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+
+    const fakeReplies = [
+      "Love that. Totally noted in my imaginary database.",
+      "Interesting… if I were real, I’d have so many thoughts.",
+      "Let’s pretend I just solved all your problems.",
+      "That message has been forwarded to the Department of Vibes.",
+      "You’re chatting to a fake site, but the energy is real."
+    ];
+
+    function addMessage(text, who = 'me') {
+      const msg = document.createElement('div');
+      msg.className = `msg ${who}`;
+      msg.innerHTML = text + `<div class="timestamp">${new Date().toLocaleTimeString()}</div>`;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function replyFake() {
+      const reply =
+        fakeReplies[Math.floor(Math.random() * fakeReplies.length)];
+      setTimeout(() => addMessage(reply, 'bot'), 600);
+    }
+
+    sendBtn.addEventListener('click', () => {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage(text, 'me');
+      input.value = '';
+      replyFake();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendBtn.click();
+    });
+  </script>
 </body>
 </html>
-        
