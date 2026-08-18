@@ -538,9 +538,15 @@
       const captchaToken = typeof hcaptcha !== "undefined" ? hcaptcha.getResponse() : "";
       if (!captchaToken) return errDiv.innerText = "Please complete the CAPTCHA check.";
 
-      const { error } = await db.from('users').insert([{ username: user, password: pass, role: 'member' }]);
+      const { error } = await db.from('users').insert([{ 
+        username: user, 
+        password: pass, 
+        role: 'member' 
+      }]);
+
       if (error) {
-        errDiv.innerText = "Username taken or failed to register.";
+        console.error("Registration Error:", error);
+        errDiv.innerText = "Username taken or registration failed: " + error.message;
         if (typeof hcaptcha !== "undefined") hcaptcha.reset();
       } else {
         errDiv.style.color = "#22c55e";
@@ -552,9 +558,20 @@
         if (typeof hcaptcha !== "undefined") hcaptcha.reset();
       }
     } else {
-      const { data, error } = await db.from('users').select('*').eq('username', user).eq('password', pass);
+      const { data, error } = await db
+        .from('users')
+        .select('*')
+        .ilike('username', user)
+        .eq('password', pass);
 
-      if (error || !data || data.length === 0) {
+      if (error) {
+        console.error("Login Query Error:", error);
+        errDiv.style.color = "#ef4444";
+        errDiv.innerText = "Database error during login.";
+        return;
+      }
+
+      if (!data || data.length === 0) {
         errDiv.style.color = "#ef4444";
         errDiv.innerText = "Invalid credentials.";
       } else if (data[0].is_banned) {
@@ -617,7 +634,6 @@
     const modal = document.getElementById('profile-modal');
     document.getElementById('modal-username').innerText = username;
 
-    // Fetch live target user role from DB
     const { data } = await db.from('users').select('role, avatar_url').eq('username', username).single();
     let targetRole = (data && data.role ? data.role : (defaultRole || 'member')).toLowerCase();
     let targetAvatar = (data && data.avatar_url ? data.avatar_url : avatarUrl);
@@ -811,7 +827,6 @@
     msgHeader.appendChild(nameDiv);
     msgHeader.appendChild(badgeDiv);
 
-    // Guaranteed Admin Delete Controls
     const canDelete = ['admin', 'mod', 'owner'].includes(loggedInRole);
     if (canDelete) {
       const adminControls = document.createElement('div');
