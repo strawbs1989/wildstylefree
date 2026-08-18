@@ -1,253 +1,3684 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
   <title>Wildstyle Community - Live Chat</title>
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- DOMPurify -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+
+  <!-- hCaptcha -->
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
   <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:#0d0f1a;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#fff}
-body{display:flex;justify-content:center;align-items:center}
-.app-container{width:100%;height:100dvh;background:linear-gradient(180deg,#1d1838 0%,#121324 50%,#0d1e36 100%);display:flex;flex-direction:column;overflow:hidden;position:relative}
-@media(min-width:768px){body{padding:20px}.app-container{max-width:1100px;height:88vh;max-height:850px;border-radius:20px;border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 40px rgba(0,0,0,.6)}}
-#login-screen{padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;overflow-y:auto;max-width:400px;margin:0 auto;width:100%}
-.brand-logo{width:60px;height:60px;background:#7c3aed;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:12px;box-shadow:0 8px 20px rgba(124,58,237,.4)}
-.brand-title{font-size:22px;font-weight:700;margin-bottom:4px}.brand-subtitle{font-size:12px;color:#a1a1aa;margin-bottom:18px}
-.form-group{width:100%;text-align:left;margin-bottom:12px}.form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#e4e4e7}
-.form-input{width:100%;padding:12px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);border-radius:12px;color:#fff!important;font-size:14px;outline:none}.form-input:focus{border-color:#00d2ff}
-#captcha-container{margin:10px 0;display:none;justify-content:center;width:100%}
-.btn-submit{width:100%;padding:14px;background:linear-gradient(90deg,#7c3aed 0%,#00d2ff 100%);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:15px;cursor:pointer;margin-top:6px;box-shadow:0 4px 15px rgba(0,210,255,.3)}
-.btn-submit:disabled{opacity:.6;cursor:not-allowed}.toggle-auth{font-size:13px;color:#a1a1aa;margin-top:14px;cursor:pointer}.toggle-auth span{color:#00d2ff;font-weight:600}#auth-error{color:#ef4444;font-size:12px;margin-top:10px;font-weight:600}
-#chat-screen{display:none;flex-direction:column;height:100%;overflow:hidden}
-.chat-header{padding:10px 16px;background:rgba(0,0,0,.3);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.header-info{display:flex;align-items:center;gap:10px}.header-title{font-weight:700;font-size:15px}.header-sub{font-size:11px;color:#a1a1aa}
-.mobile-toggle-btn{display:none;background:rgba(255,255,255,.1);border:none;color:#fff;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer}@media(max-width:767px){.mobile-toggle-btn{display:block}}
-.profile-bar{background:rgba(0,0,0,.2);padding:6px 16px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:12px;flex-shrink:0}
-.profile-avatar-preview{width:32px;height:32px;border-radius:50%;background:#7c3aed;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
-.upload-btn-label{background:linear-gradient(90deg,#7c3aed 0%,#00d2ff 100%);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer;display:inline-block}
-.chat-body-layout{display:flex;flex:1;overflow:hidden;position:relative}.sidebar{width:260px;background:rgba(0,0,0,.25);border-right:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;padding:16px}
-@media(max-width:767px){.sidebar{position:absolute;inset:0;z-index:50;width:100%;background:#121324;display:none}.sidebar.active{display:flex}}
-.sidebar-title{font-size:12px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
-.user-list{display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1}.user-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:rgba(255,255,255,.03);cursor:pointer}
-.main-chat{flex:1;display:flex;flex-direction:column;height:100%;overflow:hidden}#messages-list{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.msg-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:12px 14px;position:relative}
-.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}.avatar{width:32px;height:32px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;object-fit:cover;overflow:hidden}
-.user-name{font-weight:700;font-size:13px;color:#38bdf8}.role-badge{background:#8b5cf6;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;text-transform:uppercase}.msg-body{font-size:14px;color:#f4f4f5;line-height:1.4;word-break:break-word}
-.admin-controls{margin-left:auto;display:flex;gap:6px}.admin-btn{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.5);color:#fca5a5;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;cursor:pointer}.admin-btn:hover{background:rgba(239,68,68,.4)}
-.chat-footer{padding:10px 16px;background:rgba(0,0,0,.5);border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:8px;flex-shrink:0}
-.msn-toolbar{display:flex;gap:8px;align-items:center}.msn-toolbar select{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);padding:4px 8px;border-radius:6px;font-size:11px}.msn-toolbar input[type=color]{border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;background:transparent}
-.input-wrapper{display:flex;gap:8px;align-items:center}.chat-input{flex:1;padding:12px 16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:24px;color:#fff!important;font-size:14px;outline:none}.chat-input::placeholder{color:#a1a1aa}.chat-input:focus{border-color:#00d2ff;background:rgba(255,255,255,.18)}
-.send-btn{width:44px;height:44px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;border-radius:50%;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(139,92,246,.4)}.send-btn:disabled{opacity:.5;cursor:not-allowed}
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#1f2937;border:1px solid rgba(255,255,255,.15);color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;z-index:3000;opacity:0;pointer-events:none;transition:.2s}.toast-show{opacity:1!important;transform:translateX(-50%) translateY(0)!important}
-</style>
- </head>
- <body>
-  <div class="app-container">
-   <div id="login-screen">
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      background: #0d0f1a;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: #ffffff;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100dvh;
+      background:
+        linear-gradient(
+          180deg,
+          #1d1838 0%,
+          #121324 50%,
+          #0d1e36 100%
+        );
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      .app-container {
+        max-width: 1100px;
+        height: 88vh;
+        max-height: 850px;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      }
+    }
+
+    /* =========================================================
+       LOGIN
+    ========================================================= */
+
+    #login-screen {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      overflow-y: auto;
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .brand-logo {
+      width: 60px;
+      height: 60px;
+      background: #7c3aed;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.4);
+    }
+
+    .brand-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: #a1a1aa;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #e4e4e7;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: #ffffff !important;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: #00d2ff;
+    }
+
+    #captcha-container {
+      margin: 10px 0;
+      display: none;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(
+        90deg,
+        #7c3aed 0%,
+        #00d2ff 100%
+      );
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 4px 15px rgba(0,210,255,0.3);
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.9;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .toggle-auth {
+      font-size: 13px;
+      color: #a1a1aa;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+
+    .toggle-auth span {
+      color: #00d2ff;
+      font-weight: 600;
+    }
+
+    #auth-error {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: 10px;
+      font-weight: 600;
+      min-height: 16px;
+    }
+
+    /* =========================================================
+       CHAT
+    ========================================================= */
+
+    #chat-screen {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .header-sub {
+      font-size: 11px;
+      color: #a1a1aa;
+    }
+
+    .mobile-toggle-btn {
+      display: none;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 767px) {
+      .mobile-toggle-btn {
+        display: block;
+      }
+    }
+
+    .profile-bar {
+      background: rgba(0,0,0,0.2);
+      padding: 6px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar-preview {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #7c3aed;
+      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .upload-btn-label {
+      background: linear-gradient(
+        90deg,
+        #7c3aed 0%,
+        #00d2ff 100%
+      );
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .chat-body-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* =========================================================
+       SIDEBAR
+    ========================================================= */
+
+    .sidebar {
+      width: 260px;
+      background: rgba(0,0,0,0.25);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    @media (max-width: 767px) {
+      .sidebar {
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        width: 100%;
+        background: #121324;
+        display: none;
+      }
+
+      .sidebar.active {
+        display: flex;
+      }
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #a1a1aa;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      cursor: pointer;
+    }
+
+    .user-item:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* =========================================================
+       MAIN CHAT
+    ========================================================= */
+
+    .main-chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #messages-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 12px 14px;
+      position: relative;
+    }
+
+    .msg-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #3b82f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      object-fit: cover;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .user-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #38bdf8;
+    }
+
+    .role-badge {
+      background: #8b5cf6;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+
+    .msg-body {
+      font-size: 14px;
+      color: #f4f4f5;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .admin-controls {
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .admin-btn {
+      background: rgba(239,68,68,0.2);
+      border: 1px solid rgba(239,68,68,0.5);
+      color: #fca5a5;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .admin-btn:hover {
+      background: rgba(239,68,68,0.4);
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    .chat-footer {
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.5);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .msn-toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .msn-toolbar select {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .msn-toolbar input[type="color"] {
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 24px;
+      color: #ffffff !important;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input::placeholder {
+      color: #a1a1aa;
+    }
+
+    .chat-input:focus {
+      border-color: #00d2ff;
+      background: rgba(255,255,255,0.18);
+    }
+
+    .chat-input:disabled {
+      opacity: 0.5;
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(
+        135deg,
+        #8b5cf6,
+        #3b82f6
+      );
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(139,92,246,0.4);
+      flex-shrink: 0;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    #chat-warning {
+      min-height: 14px;
+      font-size: 11px;
+      color: #fbbf24;
+      text-align: center;
+    }
+
+    /* =========================================================
+       PROFILE MODAL
+    ========================================================= */
+
+    #profile-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .profile-modal-inner {
+      background: #1d1838;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media (max-width: 500px) {
+      .chat-header {
+        padding: 8px 10px;
+      }
+
+      .profile-bar {
+        padding: 6px 10px;
+      }
+
+      #messages-list {
+        padding: 10px;
+      }
+
+      .chat-footer {
+        padding: 8px 10px;
+      }
+
+      .admin-controls {
+        width: 100%;
+        margin-left: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+  <!-- =======================================================
+       LOGIN / REGISTER
+  ======================================================== -->
+
+  <div id="login-screen">
+
     <div class="brand-logo">🦊</div>
-    <div class="brand-title">Wildstyle Community</div>
-    <div class="brand-subtitle">Sign in to chat with DJs and listeners.</div>
-    <div class="form-group">
-     <label for="auth-user">Username</label><input type="text" id="auth-user" class="form-input" placeholder="e.g. EchoFalls" maxlength="20" autocomplete="username">
+
+    <div class="brand-title">
+      Wildstyle Community
     </div>
-    <div class="form-group">
-     <label for="auth-pass">Password</label><input type="password" id="auth-pass" class="form-input" placeholder="Password" autocomplete="current-password">
+
+    <div class="brand-subtitle">
+      Sign in to chat with DJs and listeners.
     </div>
+
+    <div class="form-group">
+
+      <label for="auth-user">
+        Username
+      </label>
+
+      <input
+        type="text"
+        id="auth-user"
+        class="form-input"
+        placeholder="e.g. EchoFalls"
+        maxlength="50"
+        autocomplete="username"
+      />
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="auth-pass">
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="auth-pass"
+        class="form-input"
+        placeholder="Password"
+        maxlength="128"
+        autocomplete="current-password"
+      />
+
+    </div>
+
     <div id="captcha-container">
-     <div class="h-captcha" data-sitekey="d91e8fca-772c-44dc-a48a-57b88bce9082"></div>
+
+      <div
+        class="h-captcha"
+        data-sitekey="d91e8fca-772c-44dc-a48a-57b88bce9082">
+      </div>
+
     </div>
-    <button id="submit-btn" class="btn-submit">Login</button>
-    <div class="toggle-auth" id="toggle-auth-mode">
-     Need an account? <span id="mode-text">Register</span>
+
+    <button
+      id="submit-btn"
+      class="btn-submit">
+      Login
+    </button>
+
+    <div
+      class="toggle-auth"
+      id="toggle-auth-mode">
+
+      Need an account?
+      <span id="mode-text">
+        Register
+      </span>
+
     </div>
+
     <div id="auth-error"></div>
-   </div>
-   <div id="chat-screen">
+
+  </div>
+
+
+  <!-- =======================================================
+       CHAT
+  ======================================================== -->
+
+  <div id="chat-screen">
+
+    <!-- HEADER -->
+
     <div class="chat-header">
-     <div class="header-info">
-      <div id="my-header-avatar" class="avatar" style="background:#8b5cf6;cursor:pointer;">🦊</div>
-      <div>
-       <div class="header-title">Wildstyle Community</div>
-       <div class="header-sub">Live Community Chat</div>
+
+      <div class="header-info">
+
+        <div
+          id="my-header-avatar"
+          class="avatar"
+          style="background:#8b5cf6; cursor:pointer;">
+          🦊
+        </div>
+
+        <div>
+
+          <div class="header-title">
+            Wildstyle Community
+          </div>
+
+          <div class="header-sub">
+            Live Community Chat
+          </div>
+
+        </div>
+
       </div>
-     </div>
-     <div style="display:flex;align-items:center;gap:8px">
-      <button class="mobile-toggle-btn" onclick="toggleSidebar()">👥 Users</button>
-      <div id="status-dot" style="width:8px;height:8px;border-radius:50%;background:#22c55e"></div>
-      <select id="user-status-select" onchange="updateUserStatus()" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);padding:4px 8px;border-radius:12px;font-size:11px;font-weight:600;outline:none;cursor:pointer"><option value="online">🟢 Online</option><option value="brb">🟡 BRB</option><option value="afk">🟠 AFK</option><option value="offline">🔴 Offline</option></select>
-     </div>
+
+
+      <div
+        style="
+          display:flex;
+          align-items:center;
+          gap:8px;
+        ">
+
+        <button
+          class="mobile-toggle-btn"
+          onclick="toggleSidebar()">
+          👥 Users
+        </button>
+
+        <div
+          id="status-dot"
+          style="
+            width:8px;
+            height:8px;
+            border-radius:50%;
+            background:#22c55e;
+          ">
+        </div>
+
+        <select
+          id="user-status-select"
+          onchange="updateUserStatus()"
+          style="
+            background:rgba(255,255,255,0.1);
+            color:#fff;
+            border:1px solid rgba(255,255,255,0.2);
+            padding:4px 8px;
+            border-radius:12px;
+            font-size:11px;
+            font-weight:600;
+            outline:none;
+            cursor:pointer;
+          ">
+
+          <option value="online" style="background:#121324;">
+            🟢 Online
+          </option>
+
+          <option value="brb" style="background:#121324;">
+            🟡 BRB
+          </option>
+
+          <option value="afk" style="background:#121324;">
+            🟠 AFK
+          </option>
+
+          <option value="offline" style="background:#121324;">
+            🔴 Offline
+          </option>
+
+        </select>
+
+      </div>
+
     </div>
+
+
+    <!-- PROFILE BAR -->
+
     <div class="profile-bar">
-     <div id="profile-preview-box" class="profile-avatar-preview" onclick="document.getElementById('avatar-file-input').click()">?</div>
-     <input type="file" id="avatar-file-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="uploadAvatar(event)"><label for="avatar-file-input" class="upload-btn-label">📷 Upload Picture</label><span id="upload-status" style="font-size:11px;color:#a1a1aa"></span>
+
+      <div
+        id="profile-preview-box"
+        class="profile-avatar-preview"
+        onclick="
+          document
+            .getElementById('avatar-file-input')
+            .click()
+        ">
+        ?
+      </div>
+
+      <input
+        type="file"
+        id="avatar-file-input"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        style="display:none;"
+        onchange="uploadAvatar(event)"
+      />
+
+      <label
+        for="avatar-file-input"
+        class="upload-btn-label">
+        📷 Upload Picture
+      </label>
+
+      <span
+        id="upload-status"
+        style="
+          font-size:11px;
+          color:#a1a1aa;
+        ">
+      </span>
+
     </div>
+
+
+    <!-- BODY -->
+
     <div class="chat-body-layout">
-     <div class="sidebar" id="app-sidebar">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-       <div class="sidebar-title">Active Members</div>
-       <button class="mobile-toggle-btn" onclick="toggleSidebar()">✕</button>
+
+      <!-- SIDEBAR -->
+
+      <div
+        class="sidebar"
+        id="app-sidebar">
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+          ">
+
+          <div class="sidebar-title">
+            Active Members
+          </div>
+
+          <button
+            class="mobile-toggle-btn"
+            onclick="toggleSidebar()">
+            ✕
+          </button>
+
+        </div>
+
+        <div
+          class="user-list"
+          id="online-users-list">
+        </div>
+
       </div>
-      <div class="user-list" id="online-users-list"></div>
-     </div>
-     <div class="main-chat">
-      <div id="messages-list"></div>
-      <div class="chat-footer">
-       <div class="msn-toolbar">
-        <select id="font-family"><option value="Segoe UI">Segoe UI</option><option value="Comic Sans MS">Comic Sans</option><option value="Impact">Impact</option><option value="Arial">Arial</option></select><input type="color" id="font-color" value="#38bdf8">
-       </div>
-       <div class="input-wrapper">
-        <input type="text" id="message-input" class="chat-input" placeholder="Type your message..." maxlength="250" autocomplete="off">
-        <button id="send-btn" class="send-btn">➤</button>
-       </div>
+
+
+      <!-- MAIN CHAT -->
+
+      <div class="main-chat">
+
+        <div id="messages-list"></div>
+
+
+        <div class="chat-footer">
+
+          <div class="msn-toolbar">
+
+            <select id="font-family">
+
+              <option value="Segoe UI">
+                Segoe UI
+              </option>
+
+              <option value="Comic Sans MS">
+                Comic Sans
+              </option>
+
+              <option value="Impact">
+                Impact
+              </option>
+
+              <option value="Arial">
+                Arial
+              </option>
+
+            </select>
+
+            <input
+              type="color"
+              id="font-color"
+              value="#38bdf8"
+            />
+
+          </div>
+
+
+          <div id="chat-warning"></div>
+
+
+          <div class="input-wrapper">
+
+            <input
+              type="text"
+              id="message-input"
+              class="chat-input"
+              placeholder="Type your message..."
+              maxlength="250"
+              autocomplete="off"
+            />
+
+            <button
+              id="send-btn"
+              class="send-btn">
+              ➤
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
-     </div>
+
     </div>
-   </div>
+
   </div>
-  <div id="profile-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:1000;padding:20px">
-   <div style="background:#1d1838;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:24px;width:100%;max-width:300px;text-align:center;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.5)">
-    <button onclick="closeProfileModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:#a1a1aa;font-size:18px;cursor:pointer">✕</button>
-    <div id="modal-avatar" style="width:72px;height:72px;border-radius:50%;background:#7c3aed;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;overflow:hidden">?</div>
-    <div id="modal-username" style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">Username</div>
-    <div id="modal-role" class="role-badge" style="display:inline-block;margin-bottom:12px">MEMBER</div>
-    <div style="background:rgba(255,255,255,.05);padding:10px;border-radius:12px;font-size:12px;color:#a1a1aa;margin-top:8px">
-     Status: <span id="modal-status" style="color:#4ade80;font-weight:600">Online</span>
+
+
+  <!-- =======================================================
+       PROFILE MODAL
+  ======================================================== -->
+
+  <div id="profile-modal">
+
+    <div class="profile-modal-inner">
+
+      <button
+        onclick="closeProfileModal()"
+        style="
+          position:absolute;
+          top:12px;
+          right:16px;
+          background:none;
+          border:none;
+          color:#a1a1aa;
+          font-size:18px;
+          cursor:pointer;
+        ">
+        ✕
+      </button>
+
+
+      <div
+        id="modal-avatar"
+        style="
+          width:72px;
+          height:72px;
+          border-radius:50%;
+          background:#7c3aed;
+          margin:0 auto 12px auto;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:28px;
+          font-weight:bold;
+          overflow:hidden;
+        ">
+        ?
+      </div>
+
+
+      <div
+        id="modal-username"
+        style="
+          font-size:18px;
+          font-weight:700;
+          color:#fff;
+          margin-bottom:4px;
+        ">
+        Username
+      </div>
+
+
+      <div
+        id="modal-role"
+        class="role-badge"
+        style="
+          display:inline-block;
+          margin-bottom:12px;
+        ">
+        MEMBER
+      </div>
+
+
+      <div
+        style="
+          background:rgba(255,255,255,0.05);
+          padding:10px;
+          border-radius:12px;
+          font-size:12px;
+          color:#a1a1aa;
+          margin-top:8px;
+        ">
+
+        Status:
+
+        <span
+          id="modal-status"
+          style="
+            color:#4ade80;
+            font-weight:600;
+          ">
+          Online
+        </span>
+
+      </div>
+
+
+      <div
+        id="role-assign-box"
+        style="
+          display:none;
+          margin-top:14px;
+          background:rgba(0,0,0,0.3);
+          padding:10px;
+          border-radius:12px;
+          border:1px solid rgba(255,255,255,0.1);
+        ">
+
+        <label
+          style="
+            font-size:11px;
+            color:#a1a1aa;
+            display:block;
+            margin-bottom:6px;
+            font-weight:600;
+          ">
+          ASSIGN ROLE
+        </label>
+
+        <select
+          id="role-assign-select"
+          style="
+            background:#121324;
+            color:#fff;
+            border:1px solid rgba(255,255,255,0.2);
+            padding:6px 10px;
+            border-radius:8px;
+            font-size:12px;
+            width:100%;
+            font-weight:600;
+            outline:none;
+          "
+          onchange="updateTargetUserRole()">
+
+          <option value="member">
+            Member
+          </option>
+
+          <option value="mod">
+            MOD
+          </option>
+
+          <option value="dj">
+            DJ
+          </option>
+
+          <option value="admin">
+            Admin
+          </option>
+
+          <option value="owner">
+            Owner
+          </option>
+
+        </select>
+
+        <div
+          id="role-save-status"
+          style="
+            font-size:10px;
+            color:#4ade80;
+            margin-top:4px;
+          ">
+        </div>
+
+      </div>
+
     </div>
-    <div id="role-assign-box" style="display:none;margin-top:14px;background:rgba(0,0,0,.3);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.1)">
-     <label style="font-size:11px;color:#a1a1aa;display:block;margin-bottom:6px;font-weight:600">ASSIGN ROLE</label><select id="role-assign-select" style="background:#121324;color:#fff;border:1px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:8px;font-size:12px;width:100%;font-weight:600;outline:none" onchange="updateTargetUserRole()"><option value="member">Member</option><option value="mod">MOD</option><option value="dj">DJ</option><option value="admin">Admin</option><option value="owner">Owner</option></select>
-     <div id="role-save-status" style="font-size:10px;color:#4ade80;margin-top:4px"></div>
-    </div>
-   </div>
+
   </div>
-  <div id="toast"></div>
-  <script>
-const SUPABASE_URL="https://ajecuaxfbjmztttgwzzk.supabase.co";
-const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZWN1YXhmYmptenR0dGd3enprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzA2NDMsImV4cCI6MjEwMjMwNjY0M30.1_RWdO3gm2PljpYDVGxZPnQWBFrnU7DXjjmnFvij2_0";
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-let loggedInUser="",loggedInRole="member",userAvatarUrl="",isSignUpMode=false,presenceChannel=null,currentStatus="online",lastMessageTime=0,currentUserPassword="",currentlyViewedUser="";
-const statusColors={online:"#22c55e",brb:"#eab308",afk:"#f97316",offline:"#ef4444"};
-const $=id=>document.getElementById(id);
-function escapeHTML(str){return String(str??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function showToast(msg){const t=$("toast");t.textContent=msg;t.classList.add("toast-show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove("toast-show"),3000)}
-function setBusy(b){$("submit-btn").disabled=b;$("send-btn").disabled=b}
-function toggleSidebar(){$("app-sidebar").classList.toggle("active")}
-$("my-header-avatar").onclick=()=>{if(loggedInUser)openProfile(loggedInUser,loggedInRole,userAvatarUrl)}
-$("toggle-auth-mode").onclick=()=>{isSignUpMode=!isSignUpMode;$("submit-btn").innerText=isSignUpMode?"Register":"Login";$("mode-text").innerText=isSignUpMode?"Sign in":"Register";$("captcha-container").style.display=isSignUpMode?"flex":"none";$("auth-error").innerText="";$("auth-error").style.color="#ef4444";if(typeof hcaptcha!=="undefined")hcaptcha.reset()}
-async function authSubmit(){
- const user=$("auth-user").value.trim(),pass=$("auth-pass").value,err=$("auth-error");err.innerText="";
- if(!/^[A-Za-z0-9_-]{3,20}$/.test(user))return err.innerText="Username must be 3–20 letters, numbers, _ or -.";
- if(pass.length<6||pass.length>100)return err.innerText="Password must be between 6 and 100 characters.";
- setBusy(true);
- try{
-  if(isSignUpMode){
-   const token=typeof hcaptcha!=="undefined"?hcaptcha.getResponse():"";
-   if(!token){err.innerText="Please complete the CAPTCHA check.";return}
-   const {data,error}=await db.rpc("register_user",{p_username:user,p_password:pass});
-   if(error||!data?.success){err.innerText=data?.message||"Username taken or registration failed.";if(typeof hcaptcha!=="undefined")hcaptcha.reset();return}
-   err.style.color="#22c55e";err.innerText="Account created! You can now log in.";isSignUpMode=false;$("submit-btn").innerText="Login";$("mode-text").innerText="Register";$("captcha-container").style.display="none";if(typeof hcaptcha!=="undefined")hcaptcha.reset();
-  }else{
-   const {data,error}=await db.rpc("login_user",{p_username:user,p_password:pass});
-   if(error||!data?.success){err.innerText=data?.message||"Invalid credentials.";return}
-   if(data.is_banned){err.innerText="This account has been permanently banned.";return}
-   loggedInUser=data.username;loggedInRole=(data.role||"member").toLowerCase();userAvatarUrl=data.avatar_url||"";currentUserPassword=pass;
-   $("login-screen").style.display="none";$("chat-screen").style.display="flex";updateAvatarUI();loadMessages();subscribeRealtime();initPresence();
+
+
+<script>
+/* ============================================================
+   SUPABASE
+============================================================ */
+
+const SUPABASE_URL =
+  "https://ajecuaxfbjmztttgwzzk.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZWN1YXhmYmptenR0dGd3enprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzA2NDMsImV4cCI6MjEwMjMwNjY0M30.1_RWdO3gm2PljpYDVGxZPnQWBFrnU7DXjjmnFvij2_0";
+
+const db =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* ============================================================
+   GLOBAL STATE
+============================================================ */
+
+let loggedInUser = "";
+let loggedInRole = "member";
+let userAvatarUrl = "";
+
+let isSignUpMode = false;
+
+let presenceChannel = null;
+let messagesChannel = null;
+
+let currentStatus = "online";
+
+let currentlyViewedUser = "";
+
+let loginBusy = false;
+
+let sendingMessage = false;
+
+/*
+  SPAM PROTECTION
+  Minimum 5 seconds between messages.
+*/
+const MESSAGE_COOLDOWN = 5000;
+
+let lastMessageTime = 0;
+
+let lastMessageText = "";
+
+let failedSendCount = 0;
+
+
+/* ============================================================
+   STATUS COLOURS
+============================================================ */
+
+const statusColors = {
+  online: "#22c55e",
+  brb: "#eab308",
+  afk: "#f97316",
+  offline: "#ef4444"
+};
+
+
+/* ============================================================
+   DOM HELPERS
+============================================================ */
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+
+/* ============================================================
+   HTML ESCAPING
+============================================================ */
+
+function escapeHTML(str) {
+
+  if (str === null || str === undefined) {
+    return "";
   }
- }finally{setBusy(false)}
+
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
-$("submit-btn").onclick=authSubmit;
-$("auth-pass").addEventListener("keypress",e=>{if(e.key==="Enter")authSubmit()});
-async function uploadAvatar(event){
- const file=event.target.files[0];if(!file||!loggedInUser)return;
- if(file.size>2*1024*1024){showToast("Picture must be 2MB or smaller.");return}
- if(!["image/jpeg","image/png","image/webp"].includes(file.type)){showToast("Please use JPG, PNG or WebP.");return}
- $("upload-status").innerText="Uploading...";
- const filePath=`${loggedInUser}_${Date.now()}.${file.type.split("/")[1].replace("jpeg","jpg")}`;
- const {error:uploadErr}=await db.storage.from("avatars").upload(filePath,file,{upsert:true,contentType:file.type});
- if(uploadErr){$("upload-status").innerText="";showToast("Upload failed: "+uploadErr.message);return}
- const {data:pub}=db.storage.from("avatars").getPublicUrl(filePath);userAvatarUrl=pub.publicUrl;
- const {error}=await db.rpc("update_avatar",{p_username:loggedInUser,p_password:currentUserPassword,p_avatar_url:userAvatarUrl});
- if(error){showToast("Could not save picture: "+error.message);return}
- updateAvatarUI();$("upload-status").innerText="Saved!";setTimeout(()=>$("upload-status").innerText="",2500)
+
+
+/* ============================================================
+   SAFE AVATAR URL
+============================================================ */
+
+function safeAvatarURL(url) {
+
+  if (!url) {
+    return "";
+  }
+
+  try {
+
+    const parsed =
+      new URL(url);
+
+    if (
+      parsed.protocol !== "https:" &&
+      parsed.protocol !== "http:"
+    ) {
+      return "";
+    }
+
+    return escapeHTML(parsed.href);
+
+  } catch (e) {
+
+    return "";
+  }
 }
-function updateAvatarUI(){
- const p=$("profile-preview-box"),h=$("my-header-avatar");
- if(userAvatarUrl){const u=DOMPurify.sanitize(userAvatarUrl);p.innerHTML=`<img src="${u}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;h.innerHTML=`<img src="${u}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`}
- else{const i=escapeHTML(loggedInUser.charAt(0).toUpperCase());p.textContent=i;h.textContent=i}
+
+
+/* ============================================================
+   LOGIN AVATAR CLICK
+============================================================ */
+
+$("my-header-avatar").onclick = () => {
+
+  if (loggedInUser) {
+
+    openProfile(
+      loggedInUser,
+      loggedInRole,
+      userAvatarUrl
+    );
+
+  }
+
+};
+
+
+/* ============================================================
+   MOBILE SIDEBAR
+============================================================ */
+
+function toggleSidebar() {
+
+  $("app-sidebar")
+    .classList
+    .toggle("active");
+
 }
-async function openProfile(username,defaultRole,avatarUrl){
- currentlyViewedUser=username;const modal=$("profile-modal");$("modal-username").textContent=username;
- const {data}=await db.rpc("get_public_profile",{p_username:username});
- const targetRole=(data?.role||defaultRole||"member").toLowerCase(),targetAvatar=data?.avatar_url||avatarUrl||"";
- $("modal-role").textContent=targetRole.toUpperCase();
- $("modal-status").textContent="Online";
- if(targetAvatar)$("modal-avatar").innerHTML=`<img src="${DOMPurify.sanitize(targetAvatar)}" style="width:100%;height:100%;object-fit:cover">`;else $("modal-avatar").textContent=username.charAt(0).toUpperCase();
- const canManage=["admin","owner"].includes(loggedInRole);
- $("role-assign-box").style.display=canManage&&username!==loggedInUser?"block":"none";
- if(canManage&&username!==loggedInUser)$("role-assign-select").value=targetRole;
- modal.style.display="flex";
+
+
+/* ============================================================
+   LOGIN / REGISTER MODE
+============================================================ */
+
+$("toggle-auth-mode").onclick = () => {
+
+  if (loginBusy) {
+    return;
+  }
+
+  isSignUpMode =
+    !isSignUpMode;
+
+  $("submit-btn").innerText =
+    isSignUpMode
+      ? "Register"
+      : "Login";
+
+  $("mode-text").innerText =
+    isSignUpMode
+      ? "Sign in"
+      : "Register";
+
+  $("captcha-container").style.display =
+    isSignUpMode
+      ? "flex"
+      : "none";
+
+  $("auth-error").innerText = "";
+
+  $("auth-error").style.color =
+    "#ef4444";
+
+};
+
+
+/* ============================================================
+   LOGIN
+============================================================ */
+
+$("submit-btn").onclick =
+  handleAuthentication;
+
+
+$("auth-pass").addEventListener(
+  "keypress",
+  function(e) {
+
+    if (e.key === "Enter") {
+
+      handleAuthentication();
+
+    }
+
+  }
+);
+
+
+$("auth-user").addEventListener(
+  "keypress",
+  function(e) {
+
+    if (e.key === "Enter") {
+
+      $("auth-pass").focus();
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   AUTHENTICATION HANDLER
+============================================================ */
+
+async function handleAuthentication() {
+
+  if (loginBusy) {
+    return;
+  }
+
+  const user =
+    $("auth-user")
+      .value
+      .trim();
+
+  const pass =
+    $("auth-pass")
+      .value;
+
+  const errDiv =
+    $("auth-error");
+
+  errDiv.innerText = "";
+  errDiv.style.color =
+    "#ef4444";
+
+
+  if (!user || !pass) {
+
+    errDiv.innerText =
+      "Please enter username and password.";
+
+    return;
+  }
+
+
+  if (user.length < 3) {
+
+    errDiv.innerText =
+      "Username must be at least 3 characters.";
+
+    return;
+  }
+
+
+  if (user.length > 50) {
+
+    errDiv.innerText =
+      "Username is too long.";
+
+    return;
+  }
+
+
+  if (isSignUpMode) {
+
+    await registerUser(
+      user,
+      pass
+    );
+
+  } else {
+
+    await loginUser(
+      user,
+      pass
+    );
+
+  }
+
 }
-function closeProfileModal(){$("profile-modal").style.display="none"}
-async function updateTargetUserRole(){
- if(!currentlyViewedUser||currentlyViewedUser===loggedInUser)return;
- const newRole=$("role-assign-select").value,s=$("role-save-status");s.style.color="#a1a1aa";s.textContent="Updating...";
- const {data,error}=await db.rpc("update_user_role",{p_actor_username:loggedInUser,p_actor_password:currentUserPassword,p_target_username:currentlyViewedUser,p_new_role:newRole});
- if(error||!data?.success){s.style.color="#ef4444";s.textContent=data?.message||error?.message||"Update failed";return}
- s.style.color="#4ade80";s.textContent="Role updated successfully!";$("modal-role").textContent=newRole.toUpperCase();loadMessages()
+
+
+/* ============================================================
+   SECURE LOGIN
+============================================================ */
+
+async function loginUser(
+  user,
+  pass
+) {
+
+  loginBusy = true;
+
+  $("submit-btn").disabled =
+    true;
+
+  $("submit-btn").innerText =
+    "Signing in...";
+
+
+  try {
+
+    /*
+      IMPORTANT:
+
+      This calls the Supabase RPC that we
+      just tested successfully in SQL Editor.
+
+      The RPC expects:
+
+      p_username
+      p_password
+    */
+
+    const {
+      data,
+      error
+    } = await db.rpc(
+      "login_user",
+      {
+        p_username: user,
+        p_password: pass
+      }
+    );
+
+
+    console.log(
+      "login_user response:",
+      data
+    );
+
+
+    if (error) {
+
+      console.error(
+        "LOGIN RPC ERROR:",
+        error
+      );
+
+      $("auth-error").innerText =
+        "Login error: " +
+        error.message;
+
+      return;
+    }
+
+
+    /*
+      Your tested RPC returns an object
+      containing success, username, role
+      and is_banned.
+    */
+
+    if (
+      !data ||
+      data.success !== true
+    ) {
+
+      $("auth-error").innerText =
+        data?.message ||
+        "Invalid credentials.";
+
+      return;
+    }
+
+
+    /* ======================================================
+       BAN CHECK
+    ====================================================== */
+
+    if (data.is_banned === true) {
+
+      $("auth-error").innerText =
+        "This account has been banned.";
+
+      return;
+    }
+
+
+    /* ======================================================
+       SUCCESS
+    ====================================================== */
+
+    loggedInUser =
+      data.username ||
+      user;
+
+    loggedInRole =
+      (
+        data.role ||
+        "member"
+      ).toLowerCase();
+
+    userAvatarUrl =
+      data.avatar_url ||
+      "";
+
+
+    $("login-screen")
+      .style
+      .display = "none";
+
+    $("chat-screen")
+      .style
+      .display = "flex";
+
+
+    updateAvatarUI();
+
+    await loadMessages();
+
+    subscribeRealtime();
+
+    initPresence();
+
+
+  } catch (err) {
+
+    console.error(
+      "Unexpected login error:",
+      err
+    );
+
+    $("auth-error").innerText =
+      "Unable to sign in. Please try again.";
+
+  } finally {
+
+    loginBusy = false;
+
+    $("submit-btn").disabled =
+      false;
+
+    $("submit-btn").innerText =
+      isSignUpMode
+        ? "Register"
+        : "Login";
+
+  }
+
 }
-async function loadMessages(){
- const list=$("messages-list");list.innerHTML="";
- const {data,error}=await db.from("messages").select("id,username,role,avatar_url,formatted_text,text").order("id",{ascending:true}).limit(100);
- if(error){list.innerHTML=`<div style="color:#ef4444;font-size:12px;padding:10px">Failed to load messages: ${escapeHTML(error.message)}</div>`;return}
- if(!data?.length){list.innerHTML='<div style="color:#a1a1aa;font-size:12px;text-align:center;padding:10px">No messages yet. Say hello!</div>';return}
- data.forEach(renderCard)
+
+
+/* ============================================================
+   REGISTER
+============================================================ */
+
+async function registerUser(
+  user,
+  pass
+) {
+
+  const errDiv =
+    $("auth-error");
+
+
+  /*
+    hCaptcha is required for registration.
+  */
+
+  const captchaToken =
+    typeof hcaptcha !== "undefined"
+      ? hcaptcha.getResponse()
+      : "";
+
+
+  if (!captchaToken) {
+
+    errDiv.innerText =
+      "Please complete the CAPTCHA check.";
+
+    return;
+  }
+
+
+  loginBusy = true;
+
+  $("submit-btn").disabled =
+    true;
+
+  $("submit-btn").innerText =
+    "Registering...";
+
+
+  try {
+
+    /*
+      Use the database registration RPC
+      if it exists.
+
+      This keeps password hashing inside
+      Supabase instead of putting plaintext
+      passwords into the database.
+    */
+
+    const {
+      data,
+      error
+    } = await db.rpc(
+      "register_user",
+      {
+        p_username: user,
+        p_password: pass
+      }
+    );
+
+
+    if (error) {
+
+      console.error(
+        "REGISTER RPC ERROR:",
+        error
+      );
+
+      errDiv.innerText =
+        error.message ||
+        "Unable to create account.";
+
+      return;
+    }
+
+
+    if (
+      data &&
+      data.success === false
+    ) {
+
+      errDiv.innerText =
+        data.message ||
+        "Unable to create account.";
+
+      return;
+    }
+
+
+    /*
+      Registration successful.
+    */
+
+    errDiv.style.color =
+      "#22c55e";
+
+    errDiv.innerText =
+      "Account created! You can now log in.";
+
+
+    isSignUpMode = false;
+
+
+    $("submit-btn").innerText =
+      "Login";
+
+    $("mode-text").innerText =
+      "Register";
+
+    $("captcha-container")
+      .style
+      .display = "none";
+
+
+    $("auth-pass").value = "";
+
+
+    if (
+      typeof hcaptcha !== "undefined"
+    ) {
+
+      hcaptcha.reset();
+
+    }
+
+
+  } catch (err) {
+
+    console.error(
+      "Registration error:",
+      err
+    );
+
+    errDiv.style.color =
+      "#ef4444";
+
+    errDiv.innerText =
+      "Unable to create account.";
+
+  } finally {
+
+    loginBusy = false;
+
+    $("submit-btn").disabled =
+      false;
+
+    $("submit-btn").innerText =
+      isSignUpMode
+        ? "Register"
+        : "Login";
+
+  }
+
 }
-function subscribeRealtime(){
- db.channel("public:messages").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},p=>renderCard(p.new)).on("postgres_changes",{event:"DELETE",schema:"public",table:"messages"},()=>loadMessages()).subscribe()
+
+
+/* ============================================================
+   AVATAR UPLOAD
+============================================================ */
+
+async function uploadAvatar(event) {
+
+  const file =
+    event.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+
+  if (!loggedInUser) {
+    return;
+  }
+
+
+  /*
+    Basic image security.
+  */
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif"
+  ];
+
+
+  if (
+    !allowedTypes.includes(
+      file.type
+    )
+  ) {
+
+    alert(
+      "Please upload a JPG, PNG, WEBP or GIF image."
+    );
+
+    event.target.value = "";
+
+    return;
+  }
+
+
+  /*
+    Maximum avatar size:
+    5MB.
+  */
+
+  if (
+    file.size > 5 * 1024 * 1024
+  ) {
+
+    alert(
+      "Avatar must be smaller than 5MB."
+    );
+
+    event.target.value = "";
+
+    return;
+  }
+
+
+  const statusLabel =
+    $("upload-status");
+
+  statusLabel.innerText =
+    "Uploading...";
+
+
+  try {
+
+    const fileExt =
+      file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+
+    const safeUsername =
+      loggedInUser
+        .replace(/[^a-zA-Z0-9_-]/g, "_");
+
+
+    const filePath =
+      `${safeUsername}_${Date.now()}.${fileExt}`;
+
+
+    const {
+      error: uploadErr
+    } = await db.storage
+      .from("avatars")
+      .upload(
+        filePath,
+        file,
+        {
+          upsert: true,
+          contentType: file.type
+        }
+      );
+
+
+    if (uploadErr) {
+
+      console.error(
+        "Avatar upload error:",
+        uploadErr
+      );
+
+      statusLabel.innerText =
+        "Upload failed.";
+
+      return;
+    }
+
+
+    const {
+      data: publicUrlData
+    } = db.storage
+      .from("avatars")
+      .getPublicUrl(
+        filePath
+      );
+
+
+    userAvatarUrl =
+      publicUrlData.publicUrl;
+
+
+    const {
+      error: updateErr
+    } = await db
+      .from("users")
+      .update({
+        avatar_url:
+          userAvatarUrl
+      })
+      .eq(
+        "username",
+        loggedInUser
+      );
+
+
+    if (updateErr) {
+
+      console.error(
+        "Avatar database update:",
+        updateErr
+      );
+
+      statusLabel.innerText =
+        "Uploaded, but profile update failed.";
+
+      return;
+    }
+
+
+    updateAvatarUI();
+
+    statusLabel.innerText =
+      "Saved!";
+
+
+    setTimeout(
+      () => {
+        statusLabel.innerText = "";
+      },
+      3000
+    );
+
+
+  } catch (err) {
+
+    console.error(
+      "Avatar error:",
+      err
+    );
+
+    statusLabel.innerText =
+      "Upload failed.";
+
+  }
+
 }
-function initPresence(){
- presenceChannel=db.channel("online-users",{config:{presence:{key:loggedInUser}}});
- presenceChannel.on("presence",{event:"sync"},()=>renderUserList(presenceChannel.presenceState())).subscribe(async status=>{if(status==="SUBSCRIBED")await trackPresence()})
+
+
+/* ============================================================
+   UPDATE OWN AVATAR UI
+============================================================ */
+
+function updateAvatarUI() {
+
+  const preview =
+    $("profile-preview-box");
+
+  const headerAvatar =
+    $("my-header-avatar");
+
+
+  if (userAvatarUrl) {
+
+    const safeURL =
+      safeAvatarURL(
+        userAvatarUrl
+      );
+
+
+    if (safeURL) {
+
+      preview.innerHTML = "";
+
+      const img1 =
+        document.createElement("img");
+
+      img1.src = safeURL;
+
+      img1.alt = "";
+
+      img1.style.width = "100%";
+      img1.style.height = "100%";
+      img1.style.borderRadius = "50%";
+      img1.style.objectFit = "cover";
+
+      preview.appendChild(img1);
+
+
+      headerAvatar.innerHTML = "";
+
+      const img2 =
+        document.createElement("img");
+
+      img2.src = safeURL;
+
+      img2.alt = "";
+
+      img2.style.width = "100%";
+      img2.style.height = "100%";
+      img2.style.borderRadius = "50%";
+      img2.style.objectFit = "cover";
+
+      headerAvatar.appendChild(img2);
+
+      return;
+    }
+
+  }
+
+
+  const initial =
+    loggedInUser
+      ? loggedInUser
+          .charAt(0)
+          .toUpperCase()
+      : "?";
+
+
+  preview.innerText =
+    initial;
+
+  headerAvatar.innerText =
+    initial;
+
 }
-async function trackPresence(){if(presenceChannel)await presenceChannel.track({user:loggedInUser,role:loggedInRole,avatar:userAvatarUrl,status:currentStatus})}
-function renderUserList(state){
- const list=$("online-users-list");list.innerHTML="";
- Object.keys(state).forEach(key=>{const u=state[key][0];if(!u?.user)return;const d=document.createElement("div");d.className="user-item";d.onclick=()=>openProfile(u.user,u.role,u.avatar);d.innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:${statusColors[u.status]||"#22c55e"}"></div><div style="font-size:13px;font-weight:600">${escapeHTML(u.user)}</div>`;list.appendChild(d)})
+
+
+/* ============================================================
+   OPEN PROFILE
+============================================================ */
+
+async function openProfile(
+  username,
+  defaultRole,
+  avatarUrl
+) {
+
+  currentlyViewedUser =
+    username;
+
+
+  const modal =
+    $("profile-modal");
+
+
+  $("modal-username")
+    .innerText =
+    username;
+
+
+  let targetRole =
+    (
+      defaultRole ||
+      "member"
+    ).toLowerCase();
+
+
+  let targetAvatar =
+    avatarUrl ||
+    "";
+
+
+  try {
+
+    const {
+      data
+    } = await db
+      .from("users")
+      .select(
+        "role, avatar_url"
+      )
+      .eq(
+        "username",
+        username
+      )
+      .maybeSingle();
+
+
+    if (data) {
+
+      targetRole =
+        (
+          data.role ||
+          targetRole
+        ).toLowerCase();
+
+
+      targetAvatar =
+        data.avatar_url ||
+        targetAvatar;
+
+    }
+
+  } catch (err) {
+
+    console.error(
+      "Profile lookup:",
+      err
+    );
+
+  }
+
+
+  $("modal-role")
+    .innerText =
+    targetRole.toUpperCase();
+
+
+  const modalAvatar =
+    $("modal-avatar");
+
+
+  modalAvatar.innerHTML = "";
+
+
+  const safeURL =
+    safeAvatarURL(
+      targetAvatar
+    );
+
+
+  if (safeURL) {
+
+    const img =
+      document.createElement("img");
+
+    img.src = safeURL;
+
+    img.alt = "";
+
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.style.objectFit = "cover";
+
+    modalAvatar.appendChild(img);
+
+  } else {
+
+    modalAvatar.innerText =
+      username
+        .charAt(0)
+        .toUpperCase();
+
+  }
+
+
+  const isOwnerOrAdmin =
+    [
+      "admin",
+      "owner"
+    ].includes(
+      loggedInRole
+    );
+
+
+  $("role-assign-box")
+    .style
+    .display =
+    isOwnerOrAdmin
+      ? "block"
+      : "none";
+
+
+  if (isOwnerOrAdmin) {
+
+    $("role-assign-select")
+      .value =
+      targetRole;
+
+  }
+
+
+  modal.style.display =
+    "flex";
+
 }
-async function updateUserStatus(){currentStatus=$("user-status-select").value;$("status-dot").style.background=statusColors[currentStatus]||"#22c55e";await trackPresence()}
-function renderCard(msg){
- const list=$("messages-list");if(!list)return;
- const empty=list.querySelector("div");if(empty&&empty.textContent.includes("No messages yet"))list.innerHTML="";
- if(msg.id&&$("msg-"+msg.id))return;
- const rawUser=msg.username||"Guest",rawRole=(msg.role||"member").toLowerCase(),rawAvatar=msg.avatar_url||"",rawContent=msg.formatted_text||msg.text||"";
- const cleanBody=DOMPurify.sanitize(rawContent,{ALLOWED_TAGS:["span","b","i","u"],ALLOWED_ATTR:["style"],FORBID_TAGS:["script","iframe","object","embed","link","style","img","svg"],FORBID_ATTR:["onerror","onload","onclick","onmouseover"]});
- let badgeColor="#6b7280";if(rawRole==="owner")badgeColor="#ef4444";else if(rawRole==="admin")badgeColor="#dc2626";else if(rawRole==="dj")badgeColor="#ec4899";else if(rawRole==="mod")badgeColor="#eab308";
- const card=document.createElement("div");card.className="msg-card";if(msg.id)card.id="msg-"+msg.id;
- const header=document.createElement("div");header.className="msg-header";const av=document.createElement("div");av.style.cursor="pointer";av.onclick=()=>openProfile(rawUser,rawRole,rawAvatar);
- if(rawAvatar)av.innerHTML=`<img src="${DOMPurify.sanitize(rawAvatar)}" class="avatar" style="object-fit:cover">`;else{av.className="avatar";av.textContent=rawUser.charAt(0).toUpperCase()}
- const name=document.createElement("div");name.className="user-name";name.style.cursor="pointer";name.textContent=rawUser;name.onclick=()=>openProfile(rawUser,rawRole,rawAvatar);
- const badge=document.createElement("div");badge.className="role-badge";badge.style.background=badgeColor;badge.textContent=rawRole.toUpperCase();header.append(av,name,badge);
- if(["admin","mod","owner"].includes(loggedInRole)){const controls=document.createElement("div");controls.className="admin-controls";if(msg.id){const b=document.createElement("button");b.className="admin-btn";b.textContent="🗑 Msg";b.onclick=()=>deleteMessage(msg.id);controls.appendChild(b)}const a=document.createElement("button");a.className="admin-btn";a.textContent="🗑 All";a.onclick=()=>deleteAllUserMessages(rawUser);controls.appendChild(a);header.appendChild(controls)}
- const body=document.createElement("div");body.className="msg-body";body.style.marginTop="6px";body.innerHTML=cleanBody||escapeHTML(rawContent);card.append(header,body);list.appendChild(card);list.scrollTop=list.scrollHeight
+
+
+/* ============================================================
+   CLOSE PROFILE
+============================================================ */
+
+function closeProfileModal() {
+
+  $("profile-modal")
+    .style
+    .display = "none";
+
 }
-async function deleteMessage(msgId){if(!confirm("Delete this single message?"))return;const {data,error}=await db.rpc("delete_message",{p_actor_username:loggedInUser,p_actor_password:currentUserPassword,p_message_id:msgId});if(error||!data?.success)showToast(data?.message||error?.message||"Delete failed")}
-async function deleteAllUserMessages(targetUsername){if(!confirm(`Are you sure you want to delete ALL messages sent by ${targetUsername}?`))return;const {data,error}=await db.rpc("delete_user_messages",{p_actor_username:loggedInUser,p_actor_password:currentUserPassword,p_target_username:targetUsername});if(error||!data?.success)showToast(data?.message||error?.message||"Delete failed");else loadMessages()}
-async function sendMessage(){
- const input=$("message-input"),text=input.value.trim();if(!text||!loggedInUser)return;
- if(text.length>250)return showToast("Message is too long.");
- if(Date.now()-lastMessageTime<1000)return showToast("Please wait a moment.");
- lastMessageTime=Date.now();$("send-btn").disabled=true;
- const font=$("font-family").value.replace(/[^a-zA-Z0-9 ,'-]/g,""),color=$("font-color").value;
- const formatted=`<span style="font-family:${escapeHTML(font)};color:${escapeHTML(color)};">${escapeHTML(text)}</span>`;
- input.value="";
- const {data,error}=await db.rpc("send_message",{p_username:loggedInUser,p_password:currentUserPassword,p_formatted_text:formatted});
- if(error||!data?.success){input.value=text;showToast(data?.message||error?.message||"Message blocked.");}
- $("send-btn").disabled=false;
+
+
+/* ============================================================
+   UPDATE ROLE
+============================================================ */
+
+async function updateTargetUserRole() {
+
+  if (!currentlyViewedUser) {
+    return;
+  }
+
+
+  if (
+    ![
+      "admin",
+      "owner"
+    ].includes(
+      loggedInRole
+    )
+  ) {
+
+    return;
+  }
+
+
+  const newRole =
+    $("role-assign-select")
+      .value;
+
+
+  const statusLabel =
+    $("role-save-status");
+
+
+  statusLabel.style.color =
+    "#a1a1aa";
+
+  statusLabel.innerText =
+    "Updating...";
+
+
+  try {
+
+    const {
+      error
+    } = await db
+      .from("users")
+      .update({
+        role: newRole
+      })
+      .eq(
+        "username",
+        currentlyViewedUser
+      );
+
+
+    if (error) {
+
+      statusLabel.style.color =
+        "#ef4444";
+
+      statusLabel.innerText =
+        "Error: " +
+        error.message;
+
+      return;
+    }
+
+
+    statusLabel.style.color =
+      "#4ade80";
+
+    statusLabel.innerText =
+      "Role updated successfully!";
+
+
+    $("modal-role")
+      .innerText =
+      newRole.toUpperCase();
+
+
+    if (
+      currentlyViewedUser ===
+      loggedInUser
+    ) {
+
+      loggedInRole =
+        newRole.toLowerCase();
+
+    }
+
+
+    await loadMessages();
+
+
+  } catch (err) {
+
+    console.error(
+      "Role update:",
+      err
+    );
+
+    statusLabel.style.color =
+      "#ef4444";
+
+    statusLabel.innerText =
+      "Unable to update role.";
+
+  }
+
 }
-$("send-btn").onclick=sendMessage;$("message-input").addEventListener("keypress",e=>{if(e.key==="Enter")sendMessage()});
-window.addEventListener("beforeunload",()=>{try{presenceChannel?.untrack()}catch(e){}});
+
+
+/* ============================================================
+   LOAD MESSAGES
+============================================================ */
+
+async function loadMessages() {
+
+  const list =
+    $("messages-list");
+
+
+  list.innerHTML = "";
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await db
+      .from("messages")
+      .select("*")
+      .order(
+        "id",
+        {
+          ascending: true
+        }
+      )
+      .limit(100);
+
+
+    if (error) {
+
+      console.error(
+        "Database Fetch Error:",
+        error
+      );
+
+      list.innerHTML =
+        `<div style="color:#ef4444;font-size:12px;padding:10px;">
+          Failed to load messages.
+        </div>`;
+
+      return;
+    }
+
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
+
+      list.innerHTML =
+        `<div
+          style="
+            color:#a1a1aa;
+            font-size:12px;
+            text-align:center;
+            padding:10px;
+          ">
+          No messages yet. Say hello!
+        </div>`;
+
+      return;
+    }
+
+
+    data.forEach(
+      msg => renderCard(msg)
+    );
+
+
+    list.scrollTop =
+      list.scrollHeight;
+
+
+  } catch (err) {
+
+    console.error(
+      "Load messages:",
+      err
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   REALTIME SUBSCRIPTION
+============================================================ */
+
+function subscribeRealtime() {
+
+  if (messagesChannel) {
+
+    try {
+
+      db.removeChannel(
+        messagesChannel
+      );
+
+    } catch (e) {}
+
+  }
+
+
+  messagesChannel =
+    db.channel(
+      "public:messages:" +
+      Date.now()
+    );
+
+
+  messagesChannel
+
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "messages"
+      },
+      payload => {
+
+        renderCard(
+          payload.new
+        );
+
+      }
+    )
+
+    .on(
+      "postgres_changes",
+      {
+        event: "DELETE",
+        schema: "public",
+        table: "messages"
+      },
+      () => {
+
+        loadMessages();
+
+      }
+    )
+
+    .subscribe();
+
+}
+
+
+/* ============================================================
+   PRESENCE
+============================================================ */
+
+function initPresence() {
+
+  if (presenceChannel) {
+
+    try {
+
+      db.removeChannel(
+        presenceChannel
+      );
+
+    } catch (e) {}
+
+  }
+
+
+  /*
+    Use username as presence key.
+  */
+
+  presenceChannel =
+    db.channel(
+      "online-users",
+      {
+        config: {
+          presence: {
+            key: loggedInUser
+          }
+        }
+      }
+    );
+
+
+  presenceChannel
+
+    .on(
+      "presence",
+      {
+        event: "sync"
+      },
+      () => {
+
+        const state =
+          presenceChannel
+            .presenceState();
+
+        renderUserList(
+          state
+        );
+
+      }
+    )
+
+    .subscribe(
+      async status => {
+
+        if (
+          status ===
+          "SUBSCRIBED"
+        ) {
+
+          await trackPresence();
+
+        }
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   TRACK PRESENCE
+============================================================ */
+
+async function trackPresence() {
+
+  if (!presenceChannel) {
+    return;
+  }
+
+
+  try {
+
+    await presenceChannel.track({
+      user: loggedInUser,
+      role: loggedInRole,
+      avatar: userAvatarUrl,
+      status: currentStatus
+    });
+
+  } catch (err) {
+
+    console.error(
+      "Presence tracking:",
+      err
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   USER LIST
+============================================================ */
+
+function renderUserList(state) {
+
+  const list =
+    $("online-users-list");
+
+
+  list.innerHTML = "";
+
+
+  Object.keys(state)
+    .forEach(key => {
+
+      const entries =
+        state[key];
+
+
+      if (
+        !entries ||
+        !entries.length
+      ) {
+        return;
+      }
+
+
+      const u =
+        entries[0];
+
+
+      if (!u.user) {
+        return;
+      }
+
+
+      const div =
+        document.createElement("div");
+
+
+      div.className =
+        "user-item";
+
+
+      div.onclick = () => {
+
+        openProfile(
+          u.user,
+          u.role,
+          u.avatar
+        );
+
+        if (
+          window.innerWidth <
+          768
+        ) {
+
+          toggleSidebar();
+
+        }
+
+      };
+
+
+      const dot =
+        document.createElement("div");
+
+
+      dot.style.width =
+        "8px";
+
+      dot.style.height =
+        "8px";
+
+      dot.style.borderRadius =
+        "50%";
+
+      dot.style.background =
+        statusColors[
+          u.status
+        ] ||
+        "#22c55e";
+
+
+      const name =
+        document.createElement("div");
+
+
+      name.style.fontSize =
+        "13px";
+
+      name.style.fontWeight =
+        "600";
+
+      name.innerText =
+        u.user;
+
+
+      div.appendChild(dot);
+
+      div.appendChild(name);
+
+      list.appendChild(div);
+
+    });
+
+}
+
+
+/* ============================================================
+   UPDATE STATUS
+============================================================ */
+
+async function updateUserStatus() {
+
+  currentStatus =
+    $("user-status-select")
+      .value;
+
+
+  $("status-dot")
+    .style
+    .background =
+    statusColors[
+      currentStatus
+    ] ||
+    "#22c55e";
+
+
+  await trackPresence();
+
+}
+
+
+/* ============================================================
+   RENDER MESSAGE
+============================================================ */
+
+function renderCard(msg) {
+
+  const list =
+    $("messages-list");
+
+
+  if (!list) {
+    return;
+  }
+
+
+  /*
+    Prevent duplicate realtime
+    messages.
+  */
+
+  if (
+    msg.id &&
+    document.getElementById(
+      `msg-${msg.id}`
+    )
+  ) {
+
+    return;
+  }
+
+
+  /*
+    Remove "No messages yet".
+  */
+
+  const emptyNotice =
+    Array.from(
+      list.children
+    ).find(
+      el =>
+        el.innerText &&
+        el.innerText.includes(
+          "No messages yet"
+        )
+    );
+
+
+  if (emptyNotice) {
+
+    list.innerHTML = "";
+
+  }
+
+
+  const rawUser =
+    msg.username ||
+    "Guest";
+
+
+  const rawRole =
+    (
+      msg.role ||
+      "member"
+    ).toLowerCase();
+
+
+  const rawAvatar =
+    msg.avatar_url ||
+    "";
+
+
+  const rawContent =
+    msg.formatted_text ||
+    msg.text ||
+    "";
+
+
+  /*
+    Only allow formatting tags.
+  */
+
+  const cleanBody =
+    DOMPurify.sanitize(
+      rawContent,
+      {
+        ALLOWED_TAGS: [
+          "span",
+          "b",
+          "i",
+          "u"
+        ],
+
+        ALLOWED_ATTR: [
+          "style"
+        ],
+
+        FORBID_TAGS: [
+          "script",
+          "iframe",
+          "object",
+          "embed",
+          "link",
+          "style",
+          "img",
+          "svg"
+        ],
+
+        FORBID_ATTR: [
+          "onerror",
+          "onload",
+          "onclick",
+          "onmouseover",
+          "onmouseenter",
+          "onfocus"
+        ]
+      }
+    );
+
+
+  /* ========================================================
+     ROLE COLOURS
+  ======================================================== */
+
+  let badgeColor =
+    "#6b7280";
+
+
+  if (
+    rawRole === "owner"
+  ) {
+
+    badgeColor =
+      "#ef4444";
+
+  } else if (
+    rawRole === "admin"
+  ) {
+
+    badgeColor =
+      "#dc2626";
+
+  } else if (
+    rawRole === "dj"
+  ) {
+
+    badgeColor =
+      "#ec4899";
+
+  } else if (
+    rawRole === "mod"
+  ) {
+
+    badgeColor =
+      "#eab308";
+
+  }
+
+
+  /* ========================================================
+     CARD
+  ======================================================== */
+
+  const card =
+    document.createElement("div");
+
+
+  card.className =
+    "msg-card";
+
+
+  if (msg.id) {
+
+    card.id =
+      `msg-${msg.id}`;
+
+  }
+
+
+  /* ========================================================
+     HEADER
+  ======================================================== */
+
+  const msgHeader =
+    document.createElement("div");
+
+
+  msgHeader.className =
+    "msg-header";
+
+
+  /* ========================================================
+     AVATAR
+  ======================================================== */
+
+  const avatarWrapper =
+    document.createElement("div");
+
+
+  avatarWrapper.style.cursor =
+    "pointer";
+
+
+  avatarWrapper.onclick =
+    () => {
+
+      openProfile(
+        rawUser,
+        rawRole,
+        rawAvatar
+      );
+
+    };
+
+
+  const safeURL =
+    safeAvatarURL(
+      rawAvatar
+    );
+
+
+  if (safeURL) {
+
+    avatarWrapper.className =
+      "avatar";
+
+
+    const img =
+      document.createElement("img");
+
+
+    img.src =
+      safeURL;
+
+    img.alt = "";
+
+    img.className =
+      "avatar";
+
+    img.style.objectFit =
+      "cover";
+
+
+    avatarWrapper.appendChild(
+      img
+    );
+
+
+  } else {
+
+    avatarWrapper.className =
+      "avatar";
+
+
+    avatarWrapper.textContent =
+      rawUser
+        .charAt(0)
+        .toUpperCase();
+
+  }
+
+
+  /* ========================================================
+     USERNAME
+  ======================================================== */
+
+  const nameDiv =
+    document.createElement("div");
+
+
+  nameDiv.className =
+    "user-name";
+
+
+  nameDiv.style.cursor =
+    "pointer";
+
+
+  nameDiv.textContent =
+    rawUser;
+
+
+  nameDiv.onclick =
+    () => {
+
+      openProfile(
+        rawUser,
+        rawRole,
+        rawAvatar
+      );
+
+    };
+
+
+  /* ========================================================
+     ROLE BADGE
+  ======================================================== */
+
+  const badgeDiv =
+    document.createElement("div");
+
+
+  badgeDiv.className =
+    "role-badge";
+
+
+  badgeDiv.style.background =
+    badgeColor;
+
+
+  badgeDiv.textContent =
+    rawRole.toUpperCase();
+
+
+  msgHeader.appendChild(
+    avatarWrapper
+  );
+
+  msgHeader.appendChild(
+    nameDiv
+  );
+
+  msgHeader.appendChild(
+    badgeDiv
+  );
+
+
+  /* ========================================================
+     ADMIN CONTROLS
+  ======================================================== */
+
+  const canDelete =
+    [
+      "admin",
+      "mod",
+      "owner"
+    ].includes(
+      loggedInRole
+    );
+
+
+  if (canDelete) {
+
+    const adminControls =
+      document.createElement(
+        "div"
+      );
+
+
+    adminControls.className =
+      "admin-controls";
+
+
+    /*
+      DELETE MESSAGE
+    */
+
+    if (msg.id) {
+
+      const btnMsg =
+        document.createElement(
+          "button"
+        );
+
+
+      btnMsg.className =
+        "admin-btn";
+
+
+      btnMsg.textContent =
+        "🗑 Msg";
+
+
+      btnMsg.onclick =
+        () => {
+
+          deleteMessage(
+            msg.id
+          );
+
+        };
+
+
+      adminControls.appendChild(
+        btnMsg
+      );
+
+    }
+
+
+    /*
+      DELETE ALL USER MESSAGES
+    */
+
+    const btnAll =
+      document.createElement(
+        "button"
+      );
+
+
+    btnAll.className =
+      "admin-btn";
+
+
+    btnAll.textContent =
+      "🗑 All";
+
+
+    btnAll.onclick =
+      () => {
+
+        deleteAllUserMessages(
+          rawUser
+        );
+
+      };
+
+
+    adminControls.appendChild(
+      btnAll
+    );
+
+
+    msgHeader.appendChild(
+      adminControls
+    );
+
+  }
+
+
+  /* ========================================================
+     MESSAGE BODY
+  ======================================================== */
+
+  const msgBody =
+    document.createElement("div");
+
+
+  msgBody.className =
+    "msg-body";
+
+
+  msgBody.style.marginTop =
+    "6px";
+
+
+  if (cleanBody) {
+
+    msgBody.innerHTML =
+      cleanBody;
+
+  } else {
+
+    msgBody.textContent =
+      rawContent;
+
+  }
+
+
+  card.appendChild(
+    msgHeader
+  );
+
+
+  card.appendChild(
+    msgBody
+  );
+
+
+  list.appendChild(
+    card
+  );
+
+
+  /*
+    Keep chat at bottom when
+    new messages arrive.
+  */
+
+  list.scrollTop =
+    list.scrollHeight;
+
+}
+
+
+/* ============================================================
+   DELETE ONE MESSAGE
+============================================================ */
+
+async function deleteMessage(
+  msgId
+) {
+
+  if (
+    ![
+      "admin",
+      "mod",
+      "owner"
+    ].includes(
+      loggedInRole
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !confirm(
+      "Delete this single message?"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const {
+    error
+  } = await db
+    .from("messages")
+    .delete()
+    .eq(
+      "id",
+      msgId
+    );
+
+
+  if (error) {
+
+    alert(
+      "Failed to delete message: " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   DELETE ALL USER MESSAGES
+============================================================ */
+
+async function deleteAllUserMessages(
+  targetUsername
+) {
+
+  if (
+    ![
+      "admin",
+      "mod",
+      "owner"
+    ].includes(
+      loggedInRole
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !confirm(
+      `Are you sure you want to delete ALL messages sent by ${targetUsername}?`
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const {
+    error
+  } = await db
+    .from("messages")
+    .delete()
+    .eq(
+      "username",
+      targetUsername
+    );
+
+
+  if (error) {
+
+    alert(
+      "Failed to delete user messages: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await loadMessages();
+
+}
+
+
+/* ============================================================
+   SPAM WARNING
+============================================================ */
+
+function showChatWarning(
+  message
+) {
+
+  const warning =
+    $("chat-warning");
+
+
+  warning.innerText =
+    message;
+
+
+  clearTimeout(
+    showChatWarning.timer
+  );
+
+
+  showChatWarning.timer =
+    setTimeout(
+      () => {
+
+        warning.innerText =
+          "";
+
+      },
+      3000
+    );
+
+}
+
+
+/* ============================================================
+   SEND MESSAGE
+============================================================ */
+
+async function sendMessage() {
+
+  /*
+    Prevent double-clicking.
+  */
+
+  if (sendingMessage) {
+    return;
+  }
+
+
+  if (!loggedInUser) {
+    return;
+  }
+
+
+  const input =
+    $("message-input");
+
+
+  const text =
+    input.value.trim();
+
+
+  if (!text) {
+    return;
+  }
+
+
+  /*
+    Maximum length.
+  */
+
+  if (
+    text.length > 250
+  ) {
+
+    showChatWarning(
+      "Messages are limited to 250 characters."
+    );
+
+    return;
+  }
+
+
+  const now =
+    Date.now();
+
+
+  /*
+    HARD CLIENT COOLDOWN
+  */
+
+  const timeSinceLast =
+    now -
+    lastMessageTime;
+
+
+  if (
+    timeSinceLast <
+    MESSAGE_COOLDOWN
+  ) {
+
+    const seconds =
+      Math.ceil(
+        (
+          MESSAGE_COOLDOWN -
+          timeSinceLast
+        ) / 1000
+      );
+
+
+    showChatWarning(
+      `Please wait ${seconds} second${seconds === 1 ? "" : "s"} before sending another message.`
+    );
+
+    return;
+  }
+
+
+  /*
+    DUPLICATE MESSAGE PROTECTION
+  */
+
+  if (
+    text ===
+    lastMessageText
+  ) {
+
+    showChatWarning(
+      "Please don't send the same message repeatedly."
+    );
+
+    return;
+  }
+
+
+  /*
+    Extra flood protection.
+
+    If several sends fail rapidly,
+    temporarily stop sending.
+  */
+
+  if (
+    failedSendCount >= 3
+  ) {
+
+    showChatWarning(
+      "Sending temporarily paused. Please try again shortly."
+    );
+
+    setTimeout(
+      () => {
+        failedSendCount = 0;
+      },
+      15000
+    );
+
+    return;
+  }
+
+
+  sendingMessage =
+    true;
+
+
+  $("send-btn")
+    .disabled = true;
+
+  input.disabled = true;
+
+
+  lastMessageTime =
+    now;
+
+  lastMessageText =
+    text;
+
+
+  const font =
+    $("font-family")
+      .value;
+
+
+  const color =
+    $("font-color")
+      .value;
+
+
+  /*
+    Font and colour values come
+    from our own select/color inputs.
+  */
+
+  const safeFont =
+    escapeHTML(
+      font
+    );
+
+
+  const safeColor =
+    escapeHTML(
+      color
+    );
+
+
+  const payload =
+    `<span style="font-family:${safeFont};color:${safeColor};">${escapeHTML(text)}</span>`;
+
+
+  input.value = "";
+
+
+  try {
+
+    const {
+      error
+    } = await db
+      .from("messages")
+      .insert([
+        {
+          username:
+            loggedInUser,
+
+          role:
+            loggedInRole,
+
+          avatar_url:
+            userAvatarUrl,
+
+          formatted_text:
+            payload
+        }
+      ]);
+
+
+    if (error) {
+
+      console.error(
+        "Message send error:",
+        error
+      );
+
+
+      failedSendCount++;
+
+
+      /*
+        Give the user back their
+        message if database rejected it.
+      */
+
+      input.value =
+        text;
+
+
+      showChatWarning(
+        "Message could not be sent."
+      );
+
+
+      return;
+    }
+
+
+    /*
+      Successful message.
+    */
+
+    failedSendCount = 0;
+
+
+    /*
+      We don't call loadMessages()
+      here anymore.
+
+      Realtime subscription will
+      deliver the message and prevents
+      duplicate rendering.
+    */
+
+
+  } catch (err) {
+
+    console.error(
+      "Send message:",
+      err
+    );
+
+
+    failedSendCount++;
+
+
+    input.value =
+      text;
+
+
+    showChatWarning(
+      "Unable to send message."
+    );
+
+
+  } finally {
+
+    sendingMessage =
+      false;
+
+
+    $("send-btn")
+      .disabled = false;
+
+    input.disabled =
+      false;
+
+
+    input.focus();
+
+  }
+
+}
+
+
+/* ============================================================
+   SEND BUTTON
+============================================================ */
+
+$("send-btn").onclick =
+  sendMessage;
+
+
+/* ============================================================
+   ENTER TO SEND
+============================================================ */
+
+$("message-input")
+  .addEventListener(
+    "keypress",
+    function(e) {
+
+      if (
+        e.key === "Enter" &&
+        !e.shiftKey
+      ) {
+
+        e.preventDefault();
+
+        sendMessage();
+
+      }
+
+    }
+  );
+
+
+/* ============================================================
+   PROFILE MODAL BACKDROP
+============================================================ */
+
+$("profile-modal")
+  .addEventListener(
+    "click",
+    function(e) {
+
+      if (
+        e.target ===
+        $("profile-modal")
+      ) {
+
+        closeProfileModal();
+
+      }
+
+    }
+  );
+
+
+/* ============================================================
+   CLEANUP WHEN PAGE IS CLOSED
+============================================================ */
+
+window.addEventListener(
+  "beforeunload",
+  () => {
+
+    if (presenceChannel) {
+
+      try {
+
+        db.removeChannel(
+          presenceChannel
+        );
+
+      } catch (e) {}
+
+    }
+
+
+    if (messagesChannel) {
+
+      try {
+
+        db.removeChannel(
+          messagesChannel
+        );
+
+      } catch (e) {}
+
+    }
+
+  }
+);
+
 </script>
- </body>
+
+</div>
+
+</body>
 </html>
