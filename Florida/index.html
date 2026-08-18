@@ -527,6 +527,7 @@
   };
 
   document.getElementById('submit-btn').onclick = async () => {
+    // FIX: Trim whitespace from both username AND password
     const user = document.getElementById('auth-user').value.trim();
     const pass = document.getElementById('auth-pass').value.trim();
     const errDiv = document.getElementById('auth-error');
@@ -558,6 +559,7 @@
         if (typeof hcaptcha !== "undefined") hcaptcha.reset();
       }
     } else {
+      // FIX: Standardized query with console diagnostics
       const { data, error } = await db
         .from('users')
         .select('*')
@@ -567,9 +569,11 @@
       if (error) {
         console.error("Login Query Error:", error);
         errDiv.style.color = "#ef4444";
-        errDiv.innerText = "Database error during login.";
+        errDiv.innerText = "Database error: " + error.message;
         return;
       }
+
+      console.log("Returned User Data:", data);
 
       if (!data || data.length === 0) {
         errDiv.style.color = "#ef4444";
